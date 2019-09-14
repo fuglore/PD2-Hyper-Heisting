@@ -1,0 +1,179 @@
+<?xml version="1.0"?>
+<assets base_path="assets/"> <!--spaghetti time yum yum-->
+
+	<group name="units/pd2_dlc_gitgud/characters/">
+	
+	
+		<!--Vanilla ZEAL SWAT Replacement-->	
+		<file :name="ene_zeal_swat/ene_zeal_swat.unit" load="true" force="true"/>
+		<file :name="ene_zeal_swat/ene_zeal_swat_husk.unit" load="true" force="true"/>
+		
+		<!--Better But Still Bad Taser-->
+		<file :name="ene_zeal_tazer/ene_zeal_tazer.unit" load="true" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer_husk.unit" load="true" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer_contour.material_config" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer.material_config" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer.object" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer.cooked_physics" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer.model" force="true"/>
+
+		<!--ZEAL SWAT Shield-->
+		<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield.unit" load="true" force="true"/>
+		<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield_husk.unit" load="true" force="true"/>
+		<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield_contour.material_config" force="true"/>
+		<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield.material_config" force="true"/>
+		<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield.object" force="true"/>
+		<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield.cooked_physics" force="true"/>
+		<file :name="ene_zeal_swat_shield/ene_zeal_swat_shield.model" force="true"/>	
+		
+		<!--ZEAL SWAT Light AR-->	
+		<file :name="ene_zeal_city_1/ene_zeal_city_1.unit" load="true" force="false"/>
+		<file :name="ene_zeal_city_1/ene_zeal_city_1_husk.unit" load="true" force="false"/>
+		<file :name="ene_zeal_city_1/ene_zeal_city_1.material_config" force="false"/>
+		<file :name="ene_zeal_city_1/ene_zeal_city_1_contour.material_config" force="false"/>
+		<file :name="ene_zeal_city_1/ene_zeal_city_1.object" force="false"/>
+		<file :name="ene_zeal_city_1/ene_zeal_city_1.cooked_physics" force="false"/>
+		<file :name="ene_zeal_city_1/ene_zeal_city_1.model" force="false"/>
+
+		<!--ZEAL Heavy SWAT AR-->	
+		<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy.unit" load="true" force="true"/>
+		<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy_husk.unit" load="true" force="true"/>
+		<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy_contour.material_config" force="true"/>
+		<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy.material_config" force="true"/>
+		<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy.object" force="true"/>
+
+		<!--ZEAL Heavy SWAT Shotgunner-->	
+		<file :name="ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870.unit" load="true" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870_husk.unit" load="true" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870_contour.material_config" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870.material_config" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870.object" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870.cooked_physics" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870.model" force="false"/>	
+		
+		<!--ZEAL SWAT Shotgunner-->	
+		<file :name="ene_zeal_city_2/ene_zeal_city_2.unit" load="true" force="false"/>
+		<file :name="ene_zeal_city_2/ene_zeal_city_2_husk.unit" load="true" force="false"/>
+		<file :name="ene_zeal_city_2/ene_zeal_city_2.material_config" force="false"/>
+		<file :name="ene_zeal_city_2/ene_zeal_city_2_contour.material_config" force="false"/>
+		<file :name="ene_zeal_city_2/ene_zeal_city_2.object" force="false"/>
+		<file :name="ene_zeal_city_2/ene_zeal_city_2.cooked_physics" force="false"/>
+		<file :name="ene_zeal_city_2/ene_zeal_city_2.model" force="false"/>
+		
+		<!--ZEAL CHAD UMP-->	
+		<file :name="ene_zeal_city_3/ene_zeal_city_3.unit" load="true" force="false"/>
+		<file :name="ene_zeal_city_3/ene_zeal_city_3_husk.unit" load="true" force="false"/>
+		<file :name="ene_zeal_city_3/ene_zeal_city_3.material_config" force="false"/>
+		<file :name="ene_zeal_city_3/ene_zeal_city_3_contour.material_config" force="false"/>
+		<file :name="ene_zeal_city_3/ene_zeal_city_3.object" force="false"/>
+		<file :name="ene_zeal_city_3/ene_zeal_city_3.cooked_physics" force="false"/>
+		<file :name="ene_zeal_city_3/ene_zeal_city_3.model" force="false"/>
+		
+		<!--ZEAL CHAD Hat-->	
+		<file :name="ene_acc_zeal_city_3_hat/ene_acc_zeal_city_3_hat.unit" load="true" force="false"/>
+		<file :name="ene_acc_zeal_city_3_hat/ene_acc_zeal_city_3_hat.material_config" force="false"/>
+		<file :name="ene_acc_zeal_city_3_hat/ene_acc_zeal_city_3_hat.object" force="false"/>
+		<file :name="ene_acc_zeal_city_3_hat/ene_acc_zeal_city_3_hat.cooked_physics" force="false"/>
+		<file :name="ene_acc_zeal_city_3_hat/ene_acc_zeal_city_3_hat.model" force="false"/>
+
+		<!--ZEAL Taser acc since otherwise it locks the effin' game for some reason-->	
+		<file :name="ene_acc_zeal_tazer_helmet/ene_acc_zeal_tazer_helmet.unit" load="true" force="true"/>
+		<file :name="ene_acc_zeal_tazer_helmet/ene_acc_zeal_tazer_helmet.material_config" force="true"/>
+		<file :name="ene_acc_zeal_tazer_helmet/ene_acc_zeal_tazer_helmet.object" force="true"/>
+		<file :name="ene_acc_zeal_tazer_helmet/ene_acc_zeal_tazer_helmet.cooked_physics" force="true"/>
+		<file :name="ene_acc_zeal_tazer_helmet/ene_acc_zeal_tazer_helmet.model" force="true"/>	
+
+		<!--Default ZEAL Helmet-->	
+		<file :name="ene_acc_zeal_city_1_helmet/ene_acc_zeal_city_1_helmet.unit" load="true" force="false"/>
+		<file :name="ene_acc_zeal_city_1_helmet/ene_acc_zeal_city_1_helmet.material_config" force="false"/>
+		<file :name="ene_acc_zeal_city_1_helmet/ene_acc_zeal_city_1_helmet.object" force="false"/>
+		<file :name="ene_acc_zeal_city_1_helmet/ene_acc_zeal_city_1_helmet.cooked_physics" force="false"/>
+		<file :name="ene_acc_zeal_city_1_helmet/ene_acc_zeal_city_1_helmet.model" force="false"/>		
+		
+		<!--ZEAL Shield acc since otherwise it locks the effin' game for some reason-->	
+		<file :name="ene_acc_shield_new_swat/ene_acc_shield_new_swat.material_config" force="true"/>
+		<file :name="ene_acc_shield_new_swat/ene_acc_shield_new_swat.object" force="true"/>
+		<file :name="ene_acc_shield_new_swat/ene_acc_shield_new_swat.cooked_physics" force="true"/>
+		<file :name="ene_acc_shield_new_swat/ene_acc_shield_new_swat.model" force="true"/>
+		<file :name="ene_acc_shield_new_swat/ene_acc_shield_new_swat.unit" load="true"/>
+		<file :name="ene_acc_shield_new_swat/ene_acc_shield_new_swat.sequence_manager" load="true"/>
+		
+		<!--ZEAL Dozer Material Configs-->	
+		<file :name="ene_zeal_bulldozer/ene_zeal_bulldozer.material_config" force="true"/>
+		<file :name="ene_zeal_bulldozer_2/ene_zeal_bulldozer_2.material_config" force="true"/>
+		<file :name="ene_zeal_bulldozer_3/ene_zeal_bulldozer_3.material_config" force="true"/>
+		
+		
+		<!--Textures-->	
+		<file :name="shared_textures/ene_zeal_city_df.texture" force="false"/>
+		<file :name="shared_textures/ene_zeal_city_riflesmg_il.texture" force="false"/>
+		<file :name="shared_textures/ene_zeal_city_head_df.texture" force="false"/>
+		<file :name="shared_textures/helmets_shotgun_df.texture" force="false"/>
+		<file :name="shared_textures/ene_zeal_city_head_riflesmg_il.texture" force="false"/>
+		<file :name="shared_textures/ene_zeal_city_head_shotgun_il.texture" force="false"/>
+		<file :name="shared_textures/ene_zeal_city_shotgun_il.texture" force="false"/>
+		<file :name="shared_textures/helmets_shotgun_il.texture" force="false"/>
+		<file :name="shared_textures/bulldozer_il.texture" force="false"/>
+		<file :name="ene_zeal_swat_heavy/swat_heavy_df.texture" force="true"/>
+		<file :name="ene_zeal_swat_heavy/swat_heavy_head_df.texture" force="true"/>
+		<file :name="ene_zeal_swat_heavy/swat_heavy_il.texture" force="false"/>
+		<file :name="ene_zeal_swat_heavy/helmets_atlas_il.texture" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/helmets_atlas_df.texture" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/helmets_atlas_nm.texture" force="false"/>		
+		<file :name="ene_zeal_swat_heavy_r870/helmets_atlas_il.texture" force="false"/>
+		<file :name="ene_zeal_swat_heavy_r870/swat_heavy_il.texture" force="false"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer_df.texture" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer_il.texture" force="false"/>		
+		<file :name="ene_zeal_tazer/ene_zeal_tazer_head_df.texture" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer_head_il.texture" force="false"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer_head_nm.texture" force="true"/>
+		<file :name="ene_zeal_tazer/ene_zeal_tazer_nm.texture" force="true"/>
+		<file :name="ene_acc_shield_new_swat/shield_il.texture" force="true"/>
+		<file :name="ene_acc_shield_new_swat/shield_df.texture" force="true"/>
+	</group>
+	
+	<group name="units/pd2_dlc_drm/characters/">
+		<file :name="ene_bulldozer_medic/ene_bulldozer_medic.material_config" force="true"/>
+		<file :name="ene_bulldozer_minigun/ene_bulldozer_minigun.material_config" force="true"/>
+		<file :name="ene_bulldozer_medic/ene_bulldozer_medic_df.texture" force="true"/>
+		<file :name="shared_textures/minigun_bulldozer_il.texture" force="true"/>
+		
+	</group>
+	
+	<group name="units/pd2_dlc_gitgud/weapons/">
+		<file :name="wpn_npc_s553/wpn_npc_s553.unit" load="true" force="false"/>
+		<file :name="wpn_npc_s553/wpn_npc_s553.model" force="false"/>
+		<file :name="wpn_npc_s553/wpn_npc_s553.object" force="false"/>
+		<file :name="wpn_npc_s553/wpn_npc_s553.cooked_physics" force="false"/>		
+		<file :name="wpn_npc_s553/wpn_npc_s553.material_config" force="false"/>
+		<file :name="wpn_npc_s553/wpn_npc_s553_contour.material_config" force="false"/>	
+		
+		<file :name="wpn_npc_lazer/wpn_npc_lazer.unit" load="true" force="false"/>
+		<file :name="wpn_npc_lazer/wpn_npc_lazer.model" force="false"/>
+		<file :name="wpn_npc_lazer/wpn_npc_lazer.object" force="false"/>
+		<file :name="wpn_npc_lazer/wpn_npc_lazer.cooked_physics" force="false"/>		
+		<file :name="wpn_npc_lazer/wpn_npc_lazer.material_config" force="false"/>
+		<file :name="wpn_npc_lazer/wpn_npc_lazer.sequence_manager" force="false"/>
+		
+		<file :name="wpn_npc_blazter/wpn_npc_blazter.unit" load="true" force="false"/>
+		<file :name="wpn_npc_blazter/wpn_npc_blazter.model" force="false"/>
+		<file :name="wpn_npc_blazter/wpn_npc_blazter.object" force="false"/>
+		<file :name="wpn_npc_blazter/wpn_npc_blazter.cooked_physics" force="false"/>		
+		<file :name="wpn_npc_blazter/wpn_npc_blazter.material_config" force="false"/>
+		
+		<file :name="wpn_npc_s553/sg_zeal_nm.texture" force="false"/>
+		<file :name="wpn_npc_s553/sg_zeal_df.texture" force="false"/>
+		
+		<file :name="wpn_npc_lazer/wpn_npc_smoke_df.texture" force="false"/>
+		<file :name="wpn_npc_lazer/wpn_npc_smoke_il.texture" force="false"/>
+		<file :name="wpn_npc_lazer/wpn_npc_smoke_nm.texture" force="false"/>
+		
+		<file :name="wpn_npc_blazter/wpn_npc_blazter_df.texture" force="false"/>
+		<file :name="wpn_npc_blazter/wpn_npc_blazter_nm.texture" force="false"/>
+		<file :name="wpn_npc_blazter/wpn_npc_blazter_il.texture" force="false"/>
+	</group>
+	
+	<file name="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak.effect" load="false" force="true"/>
+	<file name="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b.effect" load="false" force="true"/>
+	<file name="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r.effect" load="false" force="true"/>
+</assets>

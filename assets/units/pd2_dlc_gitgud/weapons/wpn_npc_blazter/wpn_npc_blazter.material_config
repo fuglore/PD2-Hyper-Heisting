@@ -1,0 +1,10 @@
+<materials version="3">
+    <material name="lambert1" render_template="generic" version="2"/>
+    <material name="mtr_benelli" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" version="2">
+        <diffuse_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_blazter/wpn_npc_blazter_df"/>
+        <bump_normal_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_blazter/wpn_npc_blazter_nm"/>
+		<self_illumination_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_blazter/wpn_npc_blazter_il"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
+    </material>
+</materials>

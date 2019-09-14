@@ -1,0 +1,6 @@
+<materials version="3">
+	<material name="mtr_helmet" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS" version="2">
+		<bump_normal_texture 	file="units/pd2_mod_psc/characters/shared_textures/helmet_NH_murks_nm"/>
+		<diffuse_texture 		file="units/pd2_mod_psc/characters/shared_textures/helmet_NH_murks_df"/>
+	</material>
+</materials>

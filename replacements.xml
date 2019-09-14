@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<assets base_path="assets/"> <!--spaghetti time yum yum-->
+
+	<group name="units/payday2/characters/">
+	
+		<!--Light SWAT Rifle-->
+		<file :name="ene_swat_1/ene_swat_1.unit" load="true" force="true"/>
+		<file :name="ene_swat_1/ene_swat_1_husk.unit" load="true" force="true"/>
+		
+		<!--Light SWAT MP5-->
+		<file :name="ene_cop_3/ene_cop_3.unit" load="true" force="true"/>
+		<file :name="ene_cop_3/ene_cop_3_husk.unit" load="true" force="true"/>
+		
+	</group>
+	
+	<group name="units/payday2/weapons/">
+		<file :name="wpn_npc_ump/wpn_npc_ump.unit" load="true" force="true"/>
+	</group>
+	
+	<group name="units/pd2_dlc_mad/characters/">
+	
+		<!--Light FBI Akan SMG-->
+		<file :name="ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg_husk.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg.material_config" force="false"/>
+		<file :name="ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg_contour.material_config" force="false"/>
+		<file :name="ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg.object" force="false"/>
+		<file :name="ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg.cooked_physics" force="false"/>
+		<file :name="ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg.model" force="false"/>
+		
+		<!--Light SWAT Akan SMG-->
+		<file :name="ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg_husk.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg.material_config" force="false"/>
+		<file :name="ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg_contour.material_config" force="false"/>
+		<file :name="ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg.object" force="false"/>
+		<file :name="ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg.cooked_physics" force="false"/>
+		<file :name="ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg.model" force="false"/>
+		
+		<!--FBI Ninja Akan M4-->
+		<file :name="ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass_husk.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass.material_config" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass_contour.material_config" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass.object" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass.cooked_physics" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass.model" force="false"/>
+		
+		<!--FBI Ninja Akan C45-->
+		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45_husk.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45.material_config" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45_contour.material_config" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45.object" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45.cooked_physics" force="false"/>
+		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45.model" force="false"/>
+		
+		<!--FBI Ninja Akan C45-->
+		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield_husk.unit" load="true" force="false"/>
+		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.material_config" force="false"/>
+		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield_contour.material_config" force="false"/>
+		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.object" force="false"/>
+		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.cooked_physics" force="false"/>
+		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.model" force="false"/>
+		
+		
+		<!--Textures-->	
+		<file :name="shared_textures/fbi_akmsu_df.texture" force="false"/>
+		<file :name="shared_textures/fbininja_c45_df.texture" force="false"/>
+		<file :name="shared_textures/fbininja_m4_df.texture" force="false"/>
+		
+	</group>
+	
+	<group name="units/pd2_dlc_mad/weapons/">
+		<file :name="wpn_npc_rpk/wpn_npc_rpk.unit" load="true" force="true"/>
+		<file :name="wpn_npc_sr2/wpn_npc_sr2.unit" load="true" force="true"/>
+	</group>
+	
+	<group name="units/pd2_dlc_hvh/characters/">
+	
+		<!--Light SWAT Zombie MP5-->
+		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.unit" load="true" force="true"/>
+		<file :name="ene_cop_hvh_3/ene_cop_hvh_3_husk.unit" load="true" force="true"/>
+		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.material_config" force="true"/>
+		<file :name="ene_cop_hvh_3/ene_cop_hvh_3_contour.material_config" force="true"/>
+		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.object" force="true"/>
+		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.cooked_physics" force="true"/>
+		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.model" force="true"/>
+		
+		<!--Light SWAT Zombie Rifle-->
+		<file :name="ene_swat_hvh_1/ene_swat_hvh_1.unit" load="true" force="true"/>
+		<file :name="ene_swat_hvh_1/ene_swat_hvh_1_husk.unit" load="true" force="true"/>
+		<file :name="ene_swat_hvh_1/ene_swat_hvh_1.material_config" force="true"/>
+		<file :name="ene_swat_hvh_1/ene_swat_hvh_1_contour.material_config" force="true"/>
+		<file :name="ene_swat_hvh_1/ene_swat_hvh_1.object" force="true"/>
+		<file :name="ene_swat_hvh_1/ene_swat_hvh_1.cooked_physics" force="true"/>
+		<file :name="ene_swat_hvh_1/ene_swat_hvh_1.model" force="true"/>
+		
+		<!--Zombie Armoured Shield-->
+		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.unit" load="true" force="true"/>
+		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh_husk.unit" load="true" force="true"/>
+		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.material_config" force="true"/>
+		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh_contour.material_config" force="true"/>
+		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.object" force="true"/>
+		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.cooked_physics" force="true"/>
+		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.model" force="true"/>
+		<!--Textures-->	
+		<file :name="ene_shield_armoured_hvh/swat_heavy_df.texture" force="false"/>
+		<file :name="ene_shield_armoured_hvh/swat_heavy_il.texture" force="false"/>
+		<file :name="ene_shield_armoured_hvh/swat_heavy_head_df.texture" force="false"/>
+		<file :name="ene_shield_armoured_hvh/swat_heavy_head_il.texture" force="false"/>	
+	</group>
+	
+	<group name="units/pd2_dlc_uno/characters/"> <!--YOU HAAAAAAVE UNOOOOOOOOOOOOOOOOOOOOOOOOO YOU FUCKIN DIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIICK-->
+		<file :name="ene_shadow_cloaker_1/ene_shadow_cloaker_1.unit" load="true" force="true"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_cloaker_1_husk.unit" load="true" force="true"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_cloaker_1.material_config" force="true"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_cloaker_1_contour.material_config" force="true"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_cloaker_1.object" force="true"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_cloaker_1.cooked_physics" force="true"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_cloaker_1.model" force="true"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_cloaker_1.sequence_manager" load="true" force="true"/>
+		
+		<file :name="ene_shadow_cloaker_1/blue_mask_df.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_1/blue_mask_il.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_1/blue_mask_nm.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_blue_df.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_blue_il.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_1/eyes_blue_il.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_1/ene_shadow_body_nm.texture" force="false"/>
+		
+		<file :name="ene_shadow_cloaker_2/ene_shadow_cloaker_2.unit" load="true" force="true"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_cloaker_2_husk.unit" load="true" force="true"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_cloaker_2.material_config" force="true"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_cloaker_2_contour.material_config" force="true"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_cloaker_2.object" force="true"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_cloaker_2.cooked_physics" force="true"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_cloaker_2.model" force="true"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_cloaker_2.sequence_manager" load="true" force="true"/>
+		
+		<file :name="ene_shadow_cloaker_2/mask_red_df.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_2/mask_red_il.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_2/mask_red_nm.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_red_df.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_2/ene_shadow_red_il.texture" force="false"/>
+		<file :name="ene_shadow_cloaker_2/red_eyes_il.texture" force="false"/>
+	</group>
+	
+</assets>

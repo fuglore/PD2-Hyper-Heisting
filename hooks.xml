@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<hooks script_path="lua/" hook_id="lib/">
+	<!-- imagine being me and not fucking testing anything -->
+	
+	<post :script_path="tweak_data/charactertweakdata.lua" :hook_id="tweak_data/charactertweakdata"/>
+	<post :script_path="tweak_data/groupaitweakdata.lua" :hook_id="tweak_data/groupaitweakdata"/>
+	<post :script_path="tweak_data/weapontweakdata.lua" :hook_id="tweak_data/weapontweakdata"/>
+	
+	<post :script_path="tweak_data/playertweakdata.lua" :hook_id="tweak_data/playertweakdata"/>
+	<post :script_path="tweak_data/skirmishtweakdata.lua" :hook_id="tweak_data/skirmishtweakdata"/>
+	<post :script_path="tweak_data/dramatweakdata.lua" :hook_id="tweak_data/dramatweakdata"/>
+	<post :script_path="tweak_data/tweakdata.lua" :hook_id="tweak_data/tweakdata"/>
+	
+	
+	<post :script_path="elementspawnenemygroup.lua" :hook_id="managers/mission/elementspawnenemygroup"/> <!-- Custom spawn group enabler -->
+	
+	<post :script_path="networkmatchmakingsteam.lua" :hook_id="network/matchmaking/networkmatchmakingsteam"/>
+	
+	<post :script_path="playerdamage.lua" :hook_id="units/beings/player/playerdamage"/> <!-- Reduced I-frame Damage -->
+	
+	<post :script_path="localizationmanager.lua" :hook_id="managers/localizationmanager"/>
+	
+	<post :script_path="dialogmanager.lua" :hook_id="managers/dialogmanager"/>
+	
+	<post :script_path="firemanager.lua" :hook_id="managers/firemanager"/>
+	
+	<post :script_path="playermanager.lua" :hook_id="managers/playermanager"/>
+	
+	<!-- Tweaks for enemy AI and other weirdness starts here. -->	
+	<post :script_path="aitweaks/groupaistatebesiege.lua" :hook_id="managers/group_ai_states/groupaistatebesiege"/>
+	<post :script_path="aitweaks/groupaistatebase.lua" :hook_id="managers/group_ai_states/groupaistatebase"/>
+	<post :script_path="aitweaks/player/playerbase.lua" :hook_id="units/beings/player/playerbase"/>
+	<post :script_path="aitweaks/playertased.lua" :hook_id="units/beings/player/states/playertased"/>
+	<post :script_path="aitweaks/raycastweaponbase.lua" :hook_id="units/weapons/raycastweaponbase"/>
+	<post :script_path="aitweaks/npcraycastweaponbase.lua" :hook_id="units/weapons/npcraycastweaponbase"/>
+	<post :script_path="sentrygunweapon.lua" :hook_id="units/equipment/sentry_gun/sentrygunweapon"/>
+	<post :script_path="hudmanager.lua" :hook_id="managers/hudmanager"/>	
+	<group :script_path="aitweaks/" :hook_id="units/enemies/">
+		
+		<post :script_path="spooc/spooclogicattack.lua" :hook_id="spooc/logics/spooclogicattack"/>
+		<post :script_path="spooc/actionspooc.lua" :hook_id="spooc/actions/lower_body/actionspooc"/>
+		
+		<post :script_path="taser/copactiontase.lua" :hook_id="cop/actions/upper_body/copactiontase"/>
+		<post :script_path="taser/taserlogicattack.lua" :hook_id="taser/logics/taserlogicattack"/>
+		
+		<post :script_path="shield/shieldlogicattack.lua" :hook_id="shield/logics/shieldlogicattack"/>
+		
+		<post :script_path="tank/tankcoplogicattack.lua" :hook_id="tank/logics/tankcoplogicattack"/>
+		
+		<post :script_path="copdamage.lua" :hook_id="cop/copdamage"/>
+		<post :script_path="copbrain.lua" :hook_id="cop/copbrain"/>
+		<post :script_path="huskcopdamage.lua" :hook_id="cop/huskcopdamage"/>
+		<post :script_path="copactionshoot.lua" :hook_id="cop/actions/upper_body/copactionshoot"/>
+		<post :script_path="coplogicidle.lua" :hook_id="cop/logics/coplogicidle"/>
+		<post :script_path="coplogictravel.lua" :hook_id="cop/logics/coplogictravel"/>
+		<post :script_path="coplogicattack.lua" :hook_id="cop/logics/coplogicattack"/>
+		<post :script_path="coplogicbase.lua" :hook_id="cop/logics/coplogicbase"/>
+		<post :script_path="coplogicsniper.lua" :hook_id="cop/logics/coplogicsniper"/>
+		<post :script_path="coplogicphalanxminion.lua" :hook_id="cop/logics/coplogicphalanxminion"/>
+		<post :script_path="coplogicflee.lua" :hook_id="cop/logics/coplogicflee"/>
+		
+	</group>
+	
+</hooks>
