@@ -639,18 +639,18 @@ function CopLogicAttack._upd_combat_movement(data)
 	local enemy_visible_soft = nil
 	
 	if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
-		enemy_visible_soft = not focus_enemy.verified --fuck you <3
+		enemy_visible_soft = focus_enemy and focus_enemy.verified
 	else
 		if diff_index <= 5 then
 			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(1.05, 1.4)
 		else
-			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(0.7, 1.05)
+			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(0.35 1.05)
 		end
 	end
 	
 	local enemy_visible_mild_soft = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 2
 	local flank_cover_charge_time = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4 or focus_enemy.verified
-	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 15
+	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 6
 	local antipassivecheck = nil
 	
 	if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
@@ -720,7 +720,6 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 	
 	if not action_taken and antiexpmovementqualify then
-		--log("oh no my pee pee fuck i spilled it")
 		action_taken = CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 	end
 	

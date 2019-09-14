@@ -6770,13 +6770,13 @@ function CharacterTweakData:_presets(tweak_data)
 			0,
 			0
 		},
-		focus_delay = 1, --1 sec focus delay buildup, unfair, but hey, its only a few enemies
+		focus_delay = 0.7,
 		focus_dis = 500, --focus delay starts after 5m
 		spread = 20, 
-		miss_dis = 10,
+		miss_dis = 10, --experimental change, might make damage feel less forced with the reduced accuracy now
 		RELOAD_SPEED = 0.9, --DW style.
 		melee_speed = 1,
-		melee_dmg = 15, --150 damage on melee
+		melee_dmg = 10, --100 damage on melee
 		melee_retry_delay = {
 			1,
 			1
@@ -6788,8 +6788,8 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		tase_sphere_cast_radius = 30,
 		range = {
-			optimal = 4000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
-			far = 5000, 
+			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
+			far = 4000, 
 			close = 2000
 		},
 		autofire_rounds = { --yes.
@@ -6798,11 +6798,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 7.5, --75
+				dmg_mul = 7.5, --75 damage for vet boyes
 				r = 100,
 				acc = { 
-					0.01,
-					0.05
+					0,
+					0.3
 				},
 				recoil = { --increased recoil a tiiiiny bit to make sure it doesn't get too ballistic
 					0.2,
@@ -6819,8 +6819,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 7.5,
 				r = 500,
 				acc = {
-					0.01, --increased from simple to create consistency at close ranges in regards to danger
-					0.05
+					0,
+					0.3
 				},
 				recoil = {
 					0.2,
@@ -6834,14 +6834,14 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 7.5, --recoil and acc falloff begins, really good still, powerful, even
+				dmg_mul = 7.5, --no damage falloff
 				r = 1000,
 				acc = { 
 					0,
-					0.03
+					0.3
 				},
 				recoil = {
-					0.2,
+					0.1,
 					0.2 
 				},
 				mode = {
@@ -6852,11 +6852,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 6, --light falloff
+				dmg_mul = 7.5, --light falloff
 				r = 2000,
 				acc = { 
 					0,
-					0.03
+					0.25
 				},
 				recoil = { 
 					0.25,
@@ -6870,11 +6870,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 6, --no damage reduction
+				dmg_mul = 6,
 				r = 3000,
 				acc = {
 					0,
-					0.02 --acc increased a bit
+					0.2 --acc drops
 				},
 				recoil = {
 					0.25,
