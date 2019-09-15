@@ -7,6 +7,9 @@
 		<file :name="ene_swat_1/ene_swat_1.unit" load="true" force="true"/>
 		<file :name="ene_swat_1/ene_swat_1_husk.unit" load="true" force="true"/>
 		
+		<!--Heavy SWAT R870 fix-->
+		<file :name="ene_swat_heavy_r870/ene_swat_heavy_r870_husk.unit" load="true" force="true"/>
+		
 		<!--Light SWAT MP5-->
 		<file :name="ene_cop_3/ene_cop_3.unit" load="true" force="true"/>
 		<file :name="ene_cop_3/ene_cop_3_husk.unit" load="true" force="true"/>
