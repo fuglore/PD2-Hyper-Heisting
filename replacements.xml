@@ -58,7 +58,7 @@
 		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45.cooked_physics" force="false"/>
 		<file :name="ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45.model" force="false"/>
 		
-		<!--FBI Ninja Akan C45-->
+		<!--DS Shield Akan-->
 		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.unit" load="true" force="false"/>
 		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield_husk.unit" load="true" force="false"/>
 		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.material_config" force="false"/>
