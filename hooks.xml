@@ -61,4 +61,13 @@
 		
 	</group>
 	
+	<group :script_path="modifiers/" :hook_id="modifiers/">
+		
+		<post :script_path="modifierdozermedic.lua" :hook_id="modifierdozermedic"/>
+		<post :script_path="modifierdozerminigun.lua" :hook_id="modifierdozerminigun"/>
+		<post :script_path="modifierheavies.lua" :hook_id="modifierheavies"/>
+		<post :script_path="modifiernohurtanims.lua" :hook_id="modifiernohurtanims"/>
+		<post :script_path="modifierskulldozers.lua" :hook_id="modifierskulldozers"/>
+	</group>
+	
 </hooks>
