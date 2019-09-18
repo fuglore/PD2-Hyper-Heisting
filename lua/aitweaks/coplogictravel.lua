@@ -294,7 +294,7 @@ function CopLogicTravel.upd_advance(data)
 			end
 			
 			--CopLogicTravel.chk_slide_conditions(data)
-			CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
+			--CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 
 			if my_data ~= data.internal_data then
 				return
@@ -633,7 +633,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					if no_cover_search_dis_change or not is_mook then
 						cover_search_dis = 100
 					else
-						cover_search_dis = 500
+						cover_search_dis = 50
 					end
 					
 					--if cover_search_dis == 200 then
@@ -654,9 +654,9 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			local cover_search_dis = nil
 					
 			if no_cover_search_dis_change or not is_mook then
-				cover_search_dis = 200
+				cover_search_dis = 100
 			else
-				cover_search_dis = 500
+				cover_search_dis = 50
 			end
 			
 			if dis > cover_search_dis then
