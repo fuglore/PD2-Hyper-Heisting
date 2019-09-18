@@ -644,7 +644,7 @@ function CopLogicAttack._upd_combat_movement(data)
 		if diff_index <= 5 then
 			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(1.05, 1.4)
 		else
-			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(0.35 1.05)
+			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(0.35, 1.05)
 		end
 	end
 	
