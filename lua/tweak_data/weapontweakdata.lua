@@ -79,7 +79,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.blazter_npc.r_trail = true
 	self.lazer_npc.b_trail = true
 	
-	
 	--Sniper stuff starts here
 	self.m14_sniper_npc.suppression = 5 --this gets boosted more and more as difficulties go up.
 	self.m14_sniper_npc.armor_piercing = false --New type of sniper that works differently, I don't really dig how cheap the current ones feel.

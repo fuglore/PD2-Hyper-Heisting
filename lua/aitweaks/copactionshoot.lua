@@ -180,8 +180,6 @@ function CopActionShoot:update(t)
 						end
 						
 						self._shoot_t = t + aim_delay
-					elseif fire_line.distance > 300 then
-						shoot = true
 					end
 				else
 					if t - self._line_of_sight_t > 0.25 and not self._last_vis_check_status then
