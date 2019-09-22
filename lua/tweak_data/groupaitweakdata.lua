@@ -341,8 +341,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		acrobatic = true,
 		walk = true
 	}
-
-	if difficulty_index <= 2 then
+	if Global.game_settings.use_intense_AI then -- spicy
+		self.special_unit_spawn_limits = {
+			shield = 8,
+			medic = 8,
+			taser = 3,
+			tank = 1,
+			spooc = 3
+		}
+	elseif difficulty_index <= 2 then
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
 			shield = 4,
 			medic = 0,
@@ -1718,8 +1725,56 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	}
 	self.enemy_spawn_groups = {}
-
-	if difficulty_index <= 2 then
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_swat_shotgun_rush = {
+			amount = {
+				4,
+				6
+			},
+			spawn = {
+				{
+					amount_min = 2,
+					freq = 2,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.swat_shotgun_rush
+				},
+				{
+					amount_min = 2,
+					freq = 2,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_heavy_R870",
+					tactics = self._tactics.swat_shotgun_rush
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_R870",
+					tactics = self._tactics.swat_shotgun_rush
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 1,
+					rank = 3,
+					unit = "CS_tazer",
+					tactics = self._tactics.tazer_flanking --Pinch.
+				},
+				{
+					amount_min = 0,
+					freq = 1.9,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_R870", --They're just heavies.
+					tactics = self._tactics.swat_shotgun_flank_civil
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_swat_shotgun_rush = {
 			amount = {
 				3,
@@ -1975,8 +2030,55 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_swat_shotgun_flank = {
+			amount = {
+				4,
+				7
+			},
+			spawn = {
+				{
+					amount_min = 2,
+					freq = 1,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_heavy_G36",
+					tactics = self._tactics.swat_rifle
+				},
+				{
+					freq = 0.5,
+					rank = 3,
+					unit = "FBI_suit_M4_MP5", 
+					tactics = self._tactics.swat_rifle
+				},
+				{
+					amount_min = 2,
+					freq = 3,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_heavy_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					amount_min = 0,
+					freq = 0.35,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					amount_min = 0,
+					freq = 0.35,
+					amount_max = 1,
+					rank = 3,
+					unit = "FBI_tank",
+					tactics = self._tactics.tank_rush --Basically your worst nightmare.
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_swat_shotgun_flank = {
 			amount = {
 				3,
@@ -2232,8 +2334,41 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_swat_rifle = { --spamming three heavies is not interesting fuck off, no changes needed otherwise tbh
+			amount = {
+				4,
+				5
+			},
+			spawn = {
+				{
+					amount_min = 2,
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_M4",
+					tactics = self._tactics.swat_rifle
+				},
+				{
+					amount_min = 2,
+					freq = 3,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_heavy_G36",
+					tactics = self._tactics.swat_rifle
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_M4",
+					tactics = self._tactics.swat_rifle
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_swat_rifle = {
 			amount = {
 				3,
@@ -2457,8 +2592,55 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_swat_rifle_flank = { --spamming 3 heavies is not interesting fuck off
+			amount = {
+				4,
+				6
+			},
+			spawn = {
+				{
+					amount_min = 2,
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_M4",
+					tactics = self._tactics.swat_rifle_flank
+				},
+				{
+					freq = 0.5,
+					rank = 1,
+					unit = "FBI_suit_M4_MP5",
+					tactics = self._tactics.swat_rifle_flank
+				},
+				{
+					amount_min = 2,
+					freq = 3,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_heavy_G36", 
+					tactics = self._tactics.swat_rifle
+				},
+				{
+					amount_min = 0,
+					freq = 0.35,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_M4",
+					tactics = self._tactics.swat_rifle --others push while medic and heavies distract
+				},
+				{
+					amount_min = 0,
+					freq = 0.35,
+					amount_max = 1,
+					rank = 2,
+					unit = "CS_tazer",
+					tactics = self._tactics.tazer_flanking --asshole-brand taser
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_swat_rifle_flank = {
 			amount = {
 				3,
@@ -2716,8 +2898,57 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_shield_wall_ranged = { --surprisingly im fine with this, its a fairly balanced spawn group
+			amount = {
+				4,
+				6
+			},
+			spawn = {
+				{
+					amount_min = 2,
+					freq = 2,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_heavy_G36",
+					tactics = self._tactics.shield_support_ranged
+				},
+				{
+					amount_min = 2,
+					freq = 2,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall_ranged
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "medic_M4",
+					tactics = self._tactics.shield_support_ranged
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 1,
+					rank = 2,
+					unit = "spooc",
+					tactics = self._tactics.spoocavoidance
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_shield_wall_ranged = {
 			amount = {
 				4,
@@ -2981,8 +3212,57 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_shield_wall_charge = {
+			amount = {
+				4,
+				7
+			},
+			spawn = {
+				{
+					amount_min = 2,
+					freq = 2,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.shield_support_charge
+				},
+				{
+					amount_min = 2,
+					freq = 2,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall_charge
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_R870",
+					tactics = self._tactics.shield_support_charge
+				},
+				{
+					amount_min = 0,
+					freq = 0.35,
+					amount_max = 1,
+					rank = 3,
+					unit = "CS_tazer",
+					tactics = self._tactics.tazer_flanking --pinch boi
+				},
+				{
+					amount_min = 0,
+					freq = 0.35,
+					amount_max = 1,
+					rank = 3,
+					unit = "FBI_heavy_G36",
+					tactics = self._tactics.swat_rifle --distant support
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_shield_wall_charge = {
 			amount = {
 				4,
@@ -3238,8 +3518,49 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_shield_wall = {
+			amount = {
+				6,
+				6
+			},
+			spawn = {
+				{
+					amount_min = 3,
+					freq = 3,
+					amount_max = 3,
+					rank = 3,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall
+				},
+				{
+					amount_min = 0,
+					freq = 0.8,
+					amount_max = 1,
+					rank = 2,
+					unit = "spooc",
+					tactics = self._tactics.spoocaggressiveelite
+				},
+				{
+					amount_min = 0,
+					freq = 0.8,
+					amount_max = 1,
+					rank = 3,
+					unit = "FBI_tank",
+					tactics = self._tactics.tank_rush
+				},
+				{
+					amount_min = 2,
+					freq = 2,
+					amount_max = 3,
+					rank = 2,
+					unit = "FBI_heavy_G36",
+					tactics = self._tactics.shield_support_ranged
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_shield_wall = {
 			amount = {
 				4,
@@ -3437,8 +3758,47 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_tazer_flanking = {
+			amount = {
+				1,
+				4
+			},
+			spawn = {
+				{
+					amount_min = 1,
+					freq = 2,
+					amount_max = 2,
+					rank = 2,
+					unit = "CS_tazer",
+					tactics = self._tactics.tazer_flanking
+				},
+				{
+					freq = 0.5,
+					rank = 1,
+					unit = "FBI_suit_M4_MP5",
+					tactics = self._tactics.swat_rifle_civil
+				},
+				{
+					amount_min = 0,
+					freq = 0.2,
+					amount_max = 1,
+					rank = 2,
+					unit = "spooc",
+					tactics = self._tactics.spoocelite
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_M4",
+					tactics = self._tactics.swat_rifle_flank_civil
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_tazer_flanking = {
 			amount = {
 				1,
@@ -3623,7 +3983,52 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 
-	if difficulty_index <= 2 then
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_tazer_charge = {
+			amount = {
+				1,
+				5
+			},
+			spawn = {
+				{
+					amount_min = 1,
+					freq = 2,
+					amount_max = 2,
+					rank = 2,
+					unit = "CS_tazer",
+					tactics = self._tactics.shield_support_charge
+				},
+				{
+					freq = 0.5,
+					rank = 1,
+					unit = "FBI_suit_M4_MP5",
+					tactics = self._tactics.swat_rifle_flank_civil
+				},
+				{
+					freq = 0.5,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.shield_support_charge
+				},
+				{
+					amount_min = 0,
+					freq = 0.25,
+					amount_max = 1,
+					rank = 3,
+					unit = "FBI_tank",
+					tactics = self._tactics.tank_rush
+				},
+				{
+					amount_min = 0,
+					freq = 0.35,
+					amount_max = 1,
+					rank = 4,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall_charge
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_tazer_charge = {
 			amount = {
 				1,
@@ -3760,8 +4165,47 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.tac_bull_rush = {
+			amount = {
+				1,
+				5
+			},
+			spawn = {
+				{
+					amount_min = 1,
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_tank",
+					tactics = self._tactics.tank_rush
+				},
+				{
+					amount_min = 0,
+					freq = 2,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall_charge
+				},
+				{
+					freq = 0.5,
+					rank = 2,
+					unit = "FBI_heavy_R870",
+					tactics = self._tactics.tank_rush
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 1,
+					rank = 1,
+					unit = "medic_R870",
+					tactics = self._tactics.tank_rush
+				}
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.enemy_spawn_groups.tac_bull_rush = {
 			amount = {
 				1,
@@ -3922,7 +4366,34 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 	}
 	
 	--have to work with this unholy mess of bile because otherwise, cloakers don't spawn right
-	if difficulty_index <= 4 then
+	if Global.game_settings.use_intense_AI then
+		self.enemy_spawn_groups.FBI_spoocs = {
+			amount = {
+				2, --guaranteed two on DS
+				3 
+			},
+			spawn = {
+				{
+					freq = 1.25,
+					rank = 1,
+					unit = "spooc",
+					tactics = self._tactics.spoocelite
+				},
+				{
+					freq = 1.25,
+					rank = 1,
+					unit = "spooc",
+					tactics = self._tactics.spoocaggressiveelite
+				},
+				{
+					freq = 1.25,
+					rank = 1,
+					unit = "spooc",
+					tactics = self._tactics.spooccreep --pretty much jerks, they'll hide from sight once aimed at, will otherwise attempt to rush you
+				}
+			}
+		}
+	elseif difficulty_index <= 4 then
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				1,

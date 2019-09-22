@@ -115,7 +115,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	local delay = nil
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
-	if diff_index <= 5 then
+	if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 		delay = 0.7
 	else
 		delay = 0.35
@@ -422,7 +422,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						if not is_detection_persistent and mvector3.distance(attention_pos, attention_info.criminal_record.pos) > 700 then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else
-							if diff_index >= 6 then --this is actually a vanilla thing which lets cops use fellow teammates' recorded positions, i personally think that with hyper heisting's faster updates, this should be limited to higher difficulties
+							if diff_index >= 6 or Global.game_settings.use_intense_AI then --this is actually a vanilla thing which lets cops use fellow teammates' recorded positions, i personally think that with hyper heisting's faster updates, this should be limited to higher difficulties
 								attention_info.verified_pos = mvector3.copy( attention_info.criminal_record.pos )
 								attention_info.verified_dis = dis
 							end

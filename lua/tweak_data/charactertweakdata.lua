@@ -9416,6 +9416,17 @@ end
 
 function CharacterTweakData:character_map()
 	local char_map = origin_charmap(self)
+	char_map.drm = {
+		path = "units/pd2_dlc_drm/characters/",
+		list = {
+			"ene_bulldozer_medic",
+			"ene_bulldozer_minigun",
+			"ene_bulldozer_minigun_classic",
+			"ene_zeal_swat_heavy_sniper",
+			"ene_murky_heavy_ump",
+			"ene_fbi_heavy_ump"
+		}
+	}
 	char_map.gitgud = {
 		path = "units/pd2_dlc_gitgud/characters/",
 		list = {

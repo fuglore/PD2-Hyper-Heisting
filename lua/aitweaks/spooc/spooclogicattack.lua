@@ -6,7 +6,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data) --TODO: Optimize it *
 		
 		local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 		
-		if difficulty_index <= 5 then
+		if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
 			--Nothing, do not execute quick-kicks outside of MH and up.
 		else
 			--If they're close, just do the kick, no raycast needed, I tested this, and it didn't have any negative effects, just made them kick more often.
@@ -34,7 +34,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data) --TODO: Optimize it *
 		--This works great, I'm not sure whether 15m is too little, the original was set to 15m if the cloaker was in cover, and 20m if he wasn't, but this was inconsistent.
 		if focus_enemy.verified and focus_enemy.nav_tracker and ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", focus_enemy.unit, "report") then
 			
-			if difficulty_index <= 5 then
+			if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
 				if focus_enemy.dis <= 1000 then --On OVK and below, cloakers can only kick if the player is 10m or closer.
 					if my_data.attention_unit ~= focus_enemy.u_key then
 						CopLogicBase._set_attention(data, focus_enemy)

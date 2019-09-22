@@ -133,11 +133,28 @@
 	</group>
 	
 	<group name="units/pd2_dlc_drm/characters/">
+		<!--bulldozer textures-->
 		<file :name="ene_bulldozer_medic/ene_bulldozer_medic.material_config" force="true"/>
 		<file :name="ene_bulldozer_minigun/ene_bulldozer_minigun.material_config" force="true"/>
 		<file :name="ene_bulldozer_medic/ene_bulldozer_medic_df.texture" force="true"/>
 		<file :name="shared_textures/minigun_bulldozer_il.texture" force="true"/>
 		
+		<!--crime spree smg heavies-->
+		<file :name="ene_murky_heavy_ump/ene_murky_heavy_ump.unit" load="true" force="false"/>
+		<file :name="ene_murky_heavy_ump/ene_murky_heavy_ump_husk.unit" load="true" force="false"/>
+		<file :name="ene_murky_heavy_ump/ene_murky_heavy_ump_contour.material_config" force="false"/>
+		<file :name="ene_murky_heavy_ump/ene_murky_heavy_ump.material_config" force="false"/>
+		<file :name="ene_murky_heavy_ump/ene_murky_heavy_ump.object" force="false"/>
+		<file :name="ene_murky_heavy_ump/ene_murky_heavy_ump.cooked_physics" force="false"/>
+		<file :name="ene_murky_heavy_ump/ene_murky_heavy_ump.model" force="false"/>
+		
+		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.unit" load="true" force="false"/>
+		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump_husk.unit" load="true" force="false"/>
+		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump_contour.material_config" force="false"/>
+		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.material_config" force="false"/>
+		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.object" force="false"/>
+		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.cooked_physics" force="false"/>
+		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.model" force="false"/>	
 	</group>
 	
 	<group name="units/pd2_dlc_gitgud/weapons/">

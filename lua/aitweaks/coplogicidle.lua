@@ -178,7 +178,7 @@ function CopLogicIdle._upd_stance_and_pose(data, my_data, objective)
 	
 	if not data.is_converted then
 		if data.is_suppressed then
-			if diff_index <= 5 then
+			if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 				if not data.unit:anim_data().crouch and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) then
 					CopLogicAttack._chk_request_action_crouch(data)
 					agg_pose = true
@@ -193,7 +193,7 @@ function CopLogicIdle._upd_stance_and_pose(data, my_data, objective)
 				end
 			end
 		elseif data.attention_obj and data.attention_obj.verified and data.attention_obj.aimed_at and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.is_person then
-			if diff_index <= 5 then
+			if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 				--nothing
 			else
 				if not data.unit:anim_data().crouch and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) then
@@ -291,7 +291,7 @@ function CopLogicIdle._update_haste(data, my_data)
 	
 	local haste = nil
 	
-	if my_data.cover_path or my_data.chase_path then	
+	if my_data.cover_path or my_data.charge_path or my_data.chase_path then	
 		if is_mook then
 			if data.unit:movement():cool() then
 				haste = "walk"
@@ -307,7 +307,6 @@ function CopLogicIdle._update_haste(data, my_data)
 				 
 			local crouch_roll = math.random(0.01, 1)
 			local stand_chance = nil
-			local end_pose = nil
 			
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 2000 then
 				stand_chance = 0.75
@@ -318,15 +317,37 @@ function CopLogicIdle._update_haste(data, my_data)
 			elseif my_data.moving_to_cover and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) then
 				stand_chance = 0.5
 			else
-				stand_chance = 1
+				stand_chance = 0.5
 			end
-		
+			
 			--randomize enemy crouching to make enemies feel less easy to aim at, the fact they're always crouching all over the place always bugged me, plus, they shouldn't need to crouch so often when you're at long distances from them
 			
 			if not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
-				if crouch_roll > stand_chance then
+				if crouch_roll > stand_chance and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) then
 					end_pose = "crouch"
+					pose = "crouch"
+					should_crouch = true
 				end
+			end
+			
+			local pose = nil
+			pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or should_crouch and "crouch" or "stand"
+
+			if not data.unit:anim_data()[pose] then
+				CopLogicAttack["_chk_request_action_" .. pose](data)
+			end
+			
+			if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
+				local randomwalkchance = math.random(0.01, 1)
+				if randomwalkchance > 0.10 then
+					haste = "walk"
+				else
+					haste = haste
+				end
+			end
+			
+			if not pose then
+				pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or "stand"
 			end
 		elseif data.unit:base()._tweak_table == "tank" or data.unit:base()._tweak_table == "tank_medic" then
 			local run_dist = nil
@@ -348,7 +369,7 @@ function CopLogicIdle._update_haste(data, my_data)
 	end	
 	 
 	if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and haste then
-		local path = my_data.chase_path or my_data.cover_path
+		local path = my_data.chase_path or my_data.charge_path or my_data.cover_path
 		if not my_data.has_reset_walk_cycle then
 			local new_action = {
 				body_part = 2,
@@ -363,6 +384,7 @@ function CopLogicIdle._update_haste(data, my_data)
 				body_part = 2,
 				nav_path = path,
 				variant = haste,
+				pose = pose,
 				end_pose = end_pose
 			}
 			my_data.cover_path = nil
@@ -450,7 +472,7 @@ function CopLogicIdle._upd_scan(data, my_data)
 	
 	local reaction_time = nil
 	
-	if diff_index <= 7 then
+	if diff_index <= 7 and not Global.game_settings.use_intense_AI then
 		reaction_time = 1.4
 	else
 		reaction_time = 0.7
