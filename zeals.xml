@@ -154,7 +154,18 @@
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.material_config" force="false"/>
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.object" force="false"/>
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.cooked_physics" force="false"/>
-		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.model" force="false"/>	
+		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.model" force="false"/>
+
+		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.unit" load="true" force="false"/>
+		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper_husk.unit" load="true" force="false"/>
+		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper_contour.material_config" force="false"/>
+		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.material_config" force="false"/>
+		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.object" force="false"/>
+		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.cooked_physics" force="false"/>
+		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.model" force="false"/>
+		<file :name="ene_bulldozer_sniper/snozer_cap_df.texture" force="false"/>
+		<file :name="ene_bulldozer_sniper/snozer_cap_nm.texture" force="false"/>
+		<file :name="ene_bulldozer_sniper/snozer_df.texture" force="false"/>
 	</group>
 	
 	<group name="units/pd2_dlc_gitgud/weapons/">

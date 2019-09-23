@@ -49,6 +49,7 @@
 		
 		<post :script_path="copdamage.lua" :hook_id="cop/copdamage"/>
 		<post :script_path="copbrain.lua" :hook_id="cop/copbrain"/>
+		<post :script_path="copmovement.lua" :hook_id="cop/copmovement"/>
 		<post :script_path="huskcopdamage.lua" :hook_id="cop/huskcopdamage"/>
 		<post :script_path="copactionshoot.lua" :hook_id="cop/actions/upper_body/copactionshoot"/>
 		<post :script_path="coplogicidle.lua" :hook_id="cop/logics/coplogicidle"/>
@@ -68,6 +69,7 @@
 		<post :script_path="modifierheavies.lua" :hook_id="modifierheavies"/>
 		<post :script_path="modifiernohurtanims.lua" :hook_id="modifiernohurtanims"/>
 		<post :script_path="modifierskulldozers.lua" :hook_id="modifierskulldozers"/>
+		<post :script_path="modifierheavysniper.lua" :hook_id="modifierheavysniper"/>
 	</group>
 	
 </hooks>

@@ -341,7 +341,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		acrobatic = true,
 		walk = true
 	}
-	if Global.game_settings.use_intense_AI then -- spicy
+	if Global.game_settings and Global.game_settings.use_intense_AI then -- spicy
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
@@ -1725,7 +1725,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	}
 	self.enemy_spawn_groups = {}
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_swat_shotgun_rush = {
 			amount = {
 				4,
@@ -2031,7 +2031,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_swat_shotgun_flank = {
 			amount = {
 				4,
@@ -2335,7 +2335,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_swat_rifle = { --spamming three heavies is not interesting fuck off, no changes needed otherwise tbh
 			amount = {
 				4,
@@ -2593,7 +2593,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_swat_rifle_flank = { --spamming 3 heavies is not interesting fuck off
 			amount = {
 				4,
@@ -2899,7 +2899,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_shield_wall_ranged = { --surprisingly im fine with this, its a fairly balanced spawn group
 			amount = {
 				4,
@@ -3213,7 +3213,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_shield_wall_charge = {
 			amount = {
 				4,
@@ -3519,7 +3519,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_shield_wall = {
 			amount = {
 				6,
@@ -3759,7 +3759,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_tazer_flanking = {
 			amount = {
 				1,
@@ -3983,7 +3983,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_tazer_charge = {
 			amount = {
 				1,
@@ -4166,7 +4166,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.tac_bull_rush = {
 			amount = {
 				1,
@@ -4366,7 +4366,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 	}
 	
 	--have to work with this unholy mess of bile because otherwise, cloakers don't spawn right
-	if Global.game_settings.use_intense_AI then
+	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				2, --guaranteed two on DS

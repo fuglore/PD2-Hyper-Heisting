@@ -136,10 +136,17 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_mini.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_mini.always_face_enemy = true
 	
+	self.tank_ftsu = deep_clone(self.tank) --and just like that, ive turned a meme into a real thing
+	self.tank_ftsu.weapon = presets.weapon.rhythmsniper
+	self.tank_ftsu.move_speed = presets.move_speed.mini_consistency
+	self.tank_ftsu.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
+	self.tank_ftsu.always_face_enemy = nil
+	
 	table.insert(self._enemy_list, "tank")
 	table.insert(self._enemy_list, "tank_hw")
 	table.insert(self._enemy_list, "tank_medic")
 	table.insert(self._enemy_list, "tank_mini")
+	table.insert(self._enemy_list, "tank_ftsu")
 end
 
 function CharacterTweakData:_init_spooc(presets) --Can't make this into a post hook, dodge with grenades gets re-enabled if I do, which isn't good for anybody, destroys framerates and doesn't let him use ninja_complex dodges.
@@ -9424,7 +9431,8 @@ function CharacterTweakData:character_map()
 			"ene_bulldozer_minigun_classic",
 			"ene_zeal_swat_heavy_sniper",
 			"ene_murky_heavy_ump",
-			"ene_fbi_heavy_ump"
+			"ene_fbi_heavy_ump",
+			"ene_bulldozer_sniper"
 		}
 	}
 	char_map.gitgud = {
@@ -9525,4 +9533,141 @@ function CharacterTweakData:character_map()
 		}
 	}	
 	return char_map
+end
+
+function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
+	self.fbi.HEALTH_INIT = self.fbi.HEALTH_INIT * hp_mul
+	self.swat.HEALTH_INIT = self.swat.HEALTH_INIT * hp_mul
+	self.heavy_swat.HEALTH_INIT = self.heavy_swat.HEALTH_INIT * hp_mul
+	self.fbi_heavy_swat.HEALTH_INIT = self.fbi_heavy_swat.HEALTH_INIT * hp_mul
+	self.sniper.HEALTH_INIT = self.sniper.HEALTH_INIT * hp_mul
+	self.gangster.HEALTH_INIT = self.gangster.HEALTH_INIT * hp_mul
+	self.biker.HEALTH_INIT = self.biker.HEALTH_INIT * hp_mul
+	self.tank.HEALTH_INIT = self.tank.HEALTH_INIT * hp_mul
+	self.tank_mini.HEALTH_INIT = self.tank_mini.HEALTH_INIT * hp_mul
+	self.tank_ftsu.HEALTH_INIT = self.tank_ftsu.HEALTH_INIT * hp_mul
+	self.tank_medic.HEALTH_INIT = self.tank_medic.HEALTH_INIT * hp_mul
+	self.spooc.HEALTH_INIT = self.spooc.HEALTH_INIT * hp_mul
+	self.shadow_spooc.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT * hp_mul
+	self.shield.HEALTH_INIT = self.shield.HEALTH_INIT * hp_mul
+	self.phalanx_minion.HEALTH_INIT = self.phalanx_minion.HEALTH_INIT * hp_mul
+	self.phalanx_vip.HEALTH_INIT = self.phalanx_vip.HEALTH_INIT * hp_mul
+	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * hp_mul
+	self.city_swat.HEALTH_INIT = self.city_swat.HEALTH_INIT * hp_mul
+	self.biker_escape.HEALTH_INIT = self.biker_escape.HEALTH_INIT * hp_mul
+	self.fbi_swat.HEALTH_INIT = self.fbi_swat.HEALTH_INIT * hp_mul
+	self.tank_hw.HEALTH_INIT = self.tank_hw.HEALTH_INIT * hp_mul
+	self.medic.HEALTH_INIT = self.medic.HEALTH_INIT * hp_mul
+	self.bolivian.HEALTH_INIT = self.bolivian.HEALTH_INIT * hp_mul
+	self.bolivian_indoors.HEALTH_INIT = self.bolivian_indoors.HEALTH_INIT * hp_mul
+	self.drug_lord_boss.HEALTH_INIT = self.drug_lord_boss.HEALTH_INIT * hp_mul
+	self.drug_lord_boss_stealth.HEALTH_INIT = self.drug_lord_boss_stealth.HEALTH_INIT * hp_mul
+
+	if self.security.headshot_dmg_mul then
+		self.security.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
+	end
+
+	if self.cop.headshot_dmg_mul then
+		self.cop.headshot_dmg_mul = self.cop.headshot_dmg_mul * hs_mul
+	end
+
+	if self.fbi.headshot_dmg_mul then
+		self.fbi.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
+	end
+
+	if self.swat.headshot_dmg_mul then
+		self.swat.headshot_dmg_mul = self.swat.headshot_dmg_mul * hs_mul
+	end
+
+	if self.heavy_swat.headshot_dmg_mul then
+		self.heavy_swat.headshot_dmg_mul = self.heavy_swat.headshot_dmg_mul * hs_mul
+	end
+
+	if self.fbi_heavy_swat.headshot_dmg_mul then
+		self.fbi_heavy_swat.headshot_dmg_mul = self.fbi_heavy_swat.headshot_dmg_mul * hs_mul
+	end
+
+	if self.sniper.headshot_dmg_mul then
+		self.sniper.headshot_dmg_mul = self.sniper.headshot_dmg_mul * hs_mul
+	end
+
+	if self.gangster.headshot_dmg_mul then
+		self.gangster.headshot_dmg_mul = self.gangster.headshot_dmg_mul * hs_mul
+	end
+
+	if self.biker.headshot_dmg_mul then
+		self.biker.headshot_dmg_mul = self.biker.headshot_dmg_mul * hs_mul
+	end
+
+	if self.tank.headshot_dmg_mul then
+		self.tank.headshot_dmg_mul = self.tank.headshot_dmg_mul * hs_mul
+	end
+
+	if self.shadow_spooc.headshot_dmg_mul then
+		self.shadow_spooc.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul * hs_mul
+	end
+
+	if self.spooc.headshot_dmg_mul then
+		self.spooc.headshot_dmg_mul = self.spooc.headshot_dmg_mul * hs_mul
+	end
+
+	if self.shield.headshot_dmg_mul then
+		self.shield.headshot_dmg_mul = self.shield.headshot_dmg_mul * hs_mul
+	end
+
+	if self.phalanx_minion.headshot_dmg_mul then
+		self.phalanx_minion.headshot_dmg_mul = self.phalanx_minion.headshot_dmg_mul * hs_mul
+	end
+
+	if self.phalanx_vip.headshot_dmg_mul then
+		self.phalanx_vip.headshot_dmg_mul = self.phalanx_vip.headshot_dmg_mul * hs_mul
+	end
+
+	if self.taser.headshot_dmg_mul then
+		self.taser.headshot_dmg_mul = self.taser.headshot_dmg_mul * hs_mul
+	end
+
+	if self.biker_escape.headshot_dmg_mul then
+		self.biker_escape.headshot_dmg_mul = self.biker_escape.headshot_dmg_mul * hs_mul
+	end
+
+	if self.city_swat.headshot_dmg_mul then
+		self.city_swat.headshot_dmg_mul = self.city_swat.headshot_dmg_mul * hs_mul
+	end
+
+	if self.fbi_swat.headshot_dmg_mul then
+		self.fbi_swat.headshot_dmg_mul = self.fbi_swat.headshot_dmg_mul * hs_mul
+	end
+
+	if self.tank_hw.headshot_dmg_mul then
+		self.tank_hw.headshot_dmg_mul = self.tank_hw.headshot_dmg_mul * hs_mul
+	end
+
+	if self.medic.headshot_dmg_mul then
+		self.medic.headshot_dmg_mul = self.medic.headshot_dmg_mul * hs_mul
+	end
+
+	if self.drug_lord_boss.headshot_dmg_mul then
+		self.drug_lord_boss.headshot_dmg_mul = self.drug_lord_boss.headshot_dmg_mul * hs_mul
+	end
+
+	if self.bolivian.headshot_dmg_mul then
+		self.bolivian.headshot_dmg_mul = self.bolivian.headshot_dmg_mul * hs_mul
+	end
+
+	if self.bolivian_indoors.headshot_dmg_mul then
+		self.bolivian_indoors.headshot_dmg_mul = self.bolivian_indoors.headshot_dmg_mul * hs_mul
+	end
+
+	if self.tank_medic.headshot_dmg_mul then
+		self.tank_medic.headshot_dmg_mul = self.tank_medic.headshot_dmg_mul * hs_mul
+	end
+
+	if self.tank_mini.headshot_dmg_mul then
+		self.tank_mini.headshot_dmg_mul = self.tank_mini.headshot_dmg_mul * hs_mul
+	end
+	
+	if self.tank_ftsu.headshot_dmg_mul then
+		self.tank_ftsu.headshot_dmg_mul = self.tank_ftsu.headshot_dmg_mul * hs_mul
+	end
 end
