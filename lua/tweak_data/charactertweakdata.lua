@@ -34,6 +34,43 @@ function CharacterTweakData:_set_characters_weapon_preset(preset)
 	end
 end
 
+function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, heavy_swat_chance, common_chance)
+	local heavy_units ={
+		"fbi_heavy_swat",
+		"heavy_swat",
+	}
+	
+	local light_units = {
+		"swat",
+		"fbi_swat",
+		"city_swat"
+	}
+	
+	local common_units = {
+		"security",
+		"cop",
+		"cop_female",
+		"gangster",
+		"bolivian",
+		"mobster",
+		"biker"
+	}
+
+	for _, cname in ipairs(common_units) do
+		self[cname].crumble_chance = common_chance
+		self[cname].allow_pass_out = true
+	end
+	
+	for _, lname in ipairs(light_units) do
+		self[lname].crumble_chance = light_swat_chance
+		self[lname].allow_pass_out = true
+	end
+	
+	for _, hname in ipairs(heavy_units) do
+		self[hname].crumble_chance = heavy_swat_chance
+	end
+end
+
 function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't make this a post hook due to the melee glitch fix, figure something out later to fix it WITH posthooks if possible.
 	self.tank = deep_clone(presets.base)
 	self.tank.tags = {
@@ -172,6 +209,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	}
 	self.spooc.damage.no_suppression_crouch = true
 	self.spooc.suppression = presets.suppression.stalwart_nil
+	self.spooc.no_fumbling = true
 	self.spooc.surrender = presets.surrender.special
 	self.spooc.priority_shout = "f33"
 	self.spooc.priority_shout_max_dis = 700
@@ -226,6 +264,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 		6
 	}
 	self.shadow_spooc.suppression = nil
+	self.shadow_spooc.no_fumbling = true
 	self.shadow_spooc.surrender = nil
 	self.shadow_spooc.silent_priority_shout = "f37"
 	self.shadow_spooc.priority_shout_max_dis = 700
@@ -327,6 +366,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.medic.damage.no_suppression_crouch = true
 	self.medic.suppression = presets.suppression.stalwart_nil
+	self.medic.no_fumbling = true
 	self.medic.surrender = presets.surrender.special
 	self.medic.move_speed = presets.move_speed.civil_consistency
 	self.medic.surrender_break_time = {
@@ -367,6 +407,7 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.taser.move_speed = presets.move_speed.civil_consistency
 	self.taser.suppression = presets.suppression.stalwart_nil
+	self.taser.no_fumbling = true
 	self.taser.no_retreat = false
 	self.taser.no_arrest = true
 	self.taser.surrender = presets.surrender.special
@@ -434,6 +475,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.experience = {}
 	self.fbi.weapon = presets.weapon.complex
 	self.fbi.detection = presets.detection.enemymook
+	self.fbi.no_fumbling = true
 	self.fbi.HEALTH_INIT = 16
 	self.fbi.headshot_dmg_mul = 6
 	self.fbi.move_speed = presets.move_speed.civil_consistency
@@ -6987,6 +7029,7 @@ end
 function CharacterTweakData:_set_normal()
 	self:_multiply_all_hp(2, 3)
 	self:_multiply_all_speeds(1, 1)
+	self:_set_characters_crumble_chance(0.5, 0.3, 0.9)
 
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
 		{
@@ -7116,7 +7159,8 @@ end
 function CharacterTweakData:_set_hard()
 	self:_multiply_all_hp(2, 3)
 	self:_multiply_all_speeds(1, 1)
-
+	self:_set_characters_crumble_chance(0.5, 0.3, 0.9)
+	
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
 		{
 			dmg_mul = 2.2,
@@ -7246,6 +7290,7 @@ end
 function CharacterTweakData:_set_overkill()
 	self:_multiply_all_hp(4, 3)
 	self:_multiply_all_speeds(1, 1)
+	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
 	self.tank_mini.HEALTH_INIT = 1800
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
@@ -7394,6 +7439,7 @@ end
 
 function CharacterTweakData:_set_overkill_145()	
 	self:_multiply_all_hp(4, 3)
+	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
 	self.tank_mini.HEALTH_INIT = 1800
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
@@ -7544,6 +7590,7 @@ end
 
 function CharacterTweakData:_set_easy_wish()
 	self:_multiply_all_hp(4, 2)
+	self:_set_characters_crumble_chance(0.3, 0.15, 0.75)
 	
 	self.tank_mini.HEALTH_INIT = 1800
 	self.hector_boss.HEALTH_INIT = 900
@@ -8055,7 +8102,8 @@ end
 
 function CharacterTweakData:_set_overkill_290()
 	self:_multiply_all_hp(4, 2)
-
+	self:_set_characters_crumble_chance(0.3, 0.15, 0.75)
+	
 	self.tank_mini.HEALTH_INIT = 1800
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
 		{
@@ -8660,6 +8708,7 @@ end
 
 function CharacterTweakData:_set_sm_wish()
 	self:_multiply_all_hp(4, 1.5)
+	self:_set_characters_crumble_chance(0.25, 0.15, 0.6)
 	
 	self.tank.HEALTH_INIT = 1400
 	self.tank_mini.HEALTH_INIT = 2100
@@ -9447,9 +9496,12 @@ function CharacterTweakData:character_map()
 			"ene_zeal_city_2",
 			"ene_zeal_city_3",
 			"ene_zeal_swat_heavy",
+			"ene_zeal_swat_heavy_hh",
 			"ene_zeal_swat_heavy_r870",			
 			"ene_zeal_swat_shield",
-			"ene_zeal_tazer"
+			"ene_zeal_swat_shield_hh",
+			"ene_zeal_tazer",
+			"ene_zeal_tazer_hh"
 		}
 	}
 	char_map.psc = {

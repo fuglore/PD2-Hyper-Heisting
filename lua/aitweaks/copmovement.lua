@@ -1,3 +1,16 @@
+local mvec3_set = mvector3.set
+local mvec3_set_z = mvector3.set_z
+local mvec3_lerp = mvector3.lerp
+local mvec3_add = mvector3.add
+local mvec3_sub = mvector3.subtract
+local mvec3_mul = mvector3.multiply
+local mvec3_norm = mvector3.normalize
+local mvec3_len = mvector3.length
+local mrot_set = mrotation.set_yaw_pitch_roll
+local temp_vec1 = Vector3()
+local temp_vec2 = Vector3()
+local temp_vec3 = Vector3()
+
 local old_init = CopMovement.init
 local action_variants = {
 	security = {
@@ -54,24 +67,41 @@ function CopMovement:on_suppressed(state)
 		if self._tweak_data.allowed_poses and (self._tweak_data.allowed_poses.crouch or self._tweak_data.allowed_poses.stand) or self:chk_action_forbidden("walk") then
 			--nothing
 		else
-			if state == "panic" and not self:chk_action_forbidden("act") then
+			local crumble_chance = self._tweak_data and self._tweak_data.crumble_chance or 0.25
+			-- the fact i need to do this is why i hate everything about the panic effect
+			if state == "panic" and not self:chk_action_forbidden("act") and math.random() < crumble_chance and not self._tweak_data.no_fumbling then
 				if self._ext_anim.run and self._ext_anim.move_fwd then
-					local action_desc = {
-						clamp_to_graph = true,
-						type = "act",
-						body_part = 1,
-						variant = "e_so_sup_fumble_run_fwd",
-						blocks = {
-							action = -1,
-							walk = -1
+					if Global.game_settings.one_down then
+						local action_desc = {
+							clamp_to_graph = true,
+							type = "act",
+							body_part = 1,
+							variant = "e_nl_slide_fwd_4m",
+							blocks = {
+								action = -1,
+								walk = -1
+							}
 						}
-					}
 
-					self:action_request(action_desc)
+						self:action_request(action_desc)
+					else
+						local action_desc = {
+							clamp_to_graph = true,
+							type = "act",
+							body_part = 1,
+							variant = "e_so_sup_fumble_run_fwd",
+							blocks = {
+								action = -1,
+								walk = -1
+							}
+						}
+
+						self:action_request(action_desc)
+					end
 				else
 					local function debug_fumble(result, from, to)
 					end
-
+					
 					local vec_from = temp_vec1
 					local vec_to = temp_vec2
 					local ray_params = {
@@ -82,10 +112,14 @@ function CopMovement:on_suppressed(state)
 						pos_to = vec_to
 					}
 					local allowed_fumbles = {
-						"e_so_sup_fumble_inplace_3"
+						"e_so_sup_fumble_inplace_3",
 					}
+					
+					if self._tweak_data.allow_pass_out and math.random() < 0.25 then
+						table.insert(allowed_fumbles, "e_sp_dizzy_fall_get_up") --light swats and commons have a decent chance of doing this, heavies and up dont
+					end
+					
 					local allow = nil
-
 					mvec3_set(vec_from, self:m_pos())
 					mvec3_set(vec_to, self:m_rot():y())
 					mvec3_mul(vec_to, -100)
@@ -140,12 +174,39 @@ function CopMovement:on_suppressed(state)
 					end
 				end
 			elseif self._ext_anim.idle and (not self._active_actions[2] or self._active_actions[2]:type() == "idle") and not self:chk_action_forbidden("act") then
+				if Global.game_settings.one_down then
+					local action_desc = {
+						clamp_to_graph = true,
+						type = "act",
+						body_part = 1,
+						variant = "suppressed_reaction", --they crouch into cover instead of freezing on shin shootout.
+						blocks = {
+							walk = -1
+						}
+					}
+					
+					self:action_request(action_desc)
+				else
+					local action_desc = {
+						clamp_to_graph = true,
+						type = "act",
+						body_part = 1,
+						variant = "surprised", --they freeze in their spot and play the "surprised" animation when out of shin shootout.
+						blocks = {
+							walk = -1
+						}
+					}
+
+					self:action_request(action_desc)
+				end
+			elseif self._ext_anim.run and self._ext_anim.move_fwd and not self:chk_action_forbidden("act") and Global.game_settings.one_down then
 				local action_desc = {
 					clamp_to_graph = true,
 					type = "act",
 					body_part = 1,
-					variant = "suppressed_reaction",
+					variant = "e_nl_slide_fwd_4m",
 					blocks = {
+						action = -1,
 						walk = -1
 					}
 				}

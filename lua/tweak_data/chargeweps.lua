@@ -1,6 +1,6 @@
 Hooks:PostHook(WeaponTweakData, "init", "wep_init", function(self, tweakdata)
 	--local reb = true
-	
+	--currently disabled, unfinished code, playable though
 	if reb then
 		--STK Heavies assuming perkdeck boosts:
 		--31(32) = 3 hits
@@ -34,7 +34,7 @@ Hooks:PostHook(WeaponTweakData, "init", "wep_init", function(self, tweakdata)
 		self.mp9.stats.spread = 20
 		self.mp9.stats.spread_moving = 20
 		self.mp9.stats.recoil = 22
-		self.mp9.AMMO_PICKUP = {4.5, 4.5}
+		self.mp9.AMMO_PICKUP = {12, 12}
 		
 		--60-SMGs begin here
 		--Krinkov, not particularly close to their other brethren, very powerful ammo-pickup and damage-wise, but lacks in stats.
@@ -75,9 +75,9 @@ Hooks:PostHook(WeaponTweakData, "init", "wep_init", function(self, tweakdata)
 		self.new_m4.stats.spread = 20
 		self.new_m4.stats.spread_moving = 18
 		self.new_m4.stats.recoil = 18
-		self.new_m4.AMMO_PICKUP = {2.75, 2.75} --Ammo pickup is evened and consistent amongst weapons, rather than remain to random chance, all weapoons have...decent ammo economy, outta ammo? Switch! Ammo bags are given value by allowing usage of high damage auto-fire weapons without switching
+		self.new_m4.AMMO_PICKUP = {5, 5} --Ammo pickup is evened and consistent amongst weapons, rather than remain to random chance, all weapoons have...decent ammo economy, outta ammo? Switch! Ammo bags are given value by allowing usage of high damage auto-fire weapons without switching
 		
-		--AMCAR, player starter weapon, versatile bullet hose.
+		--AMCAR, player starter weapon, generalist, versatile bullet hose.
 		self.amcar.kick.standing = self.new_m4.kick.standing
 		self.amcar.kick.crouching = self.new_m4.kick.crouching
 		self.amcar.kick.steelsight = self.new_m4.kick.steelsight
@@ -98,15 +98,15 @@ Hooks:PostHook(WeaponTweakData, "init", "wep_init", function(self, tweakdata)
 		self.m16.stats.damage = 59 --Kills heavies in one headshot with perkdeck boosts.
 		self.m16.stats.spread = 16
 		self.m16.stats.spread_moving = 16
-		self.m16.stats.recoil = 16
+		self.m16.stats.recoil = 17
 		self.m16.AMMO_PICKUP = {2.6, 2.6} --Careful switching between auto-fire and non-autofire will result in overall better ammo-consumption, alternatively, spray, and switch to a safer, less risky weapon.
 		
 		--LMGs begin here
 		
 		--KSP, death to the LMG meta, high-risk, high-reward, a weapon for people who think they can handle the ride, base for all LMGs.
 		self.m249.kick.standing = {
-			1.6,
-			1.6,
+			1.2,
+			1.2,
 			-1,
 			1
 		}
@@ -156,10 +156,10 @@ Hooks:PostHook(WeaponTweakData, "init", "wep_init", function(self, tweakdata)
 			0.5
 		}
 		self.r870.stats.spread = 12
-		self.r870.stats.spread_moving = 9
+		--self.r870.stats.spread_moving = 9
 		self.r870.stats.recoil = 12
 		self.r870.stats.damage = 106
-		self.r870.AMMO_PICKUP = {2, 2} --If players are actively getting multi-kills, the net-gain will make up for any loss.
+		self.r870.AMMO_PICKUP = {3, 3} --If players are actively getting multi-kills, the net-gain will make up for any loss.
 		
 		--Locomotive, simple changes to make it comparable to a secondary r870, with less horde-control, but more single-target capabilities for things like slugs.
 		self.serbu.spread.standing = self.r870.spread.standing 
@@ -172,15 +172,15 @@ Hooks:PostHook(WeaponTweakData, "init", "wep_init", function(self, tweakdata)
 		self.serbu.kick.crouching = self.r870.kick.standing
 		self.serbu.kick.steelsight = self.r870.kick.steelsight
 		self.serbu.stats.spread = 18
-		self.serbu.stats.spread_moving = 17
+		--self.serbu.stats.spread_moving = 17
 		self.serbu.stats.recoil = 8
 		self.serbu.stats.damage = 106
-		self.serbu.AMMO_PICKUP = {3, 3}
+		self.serbu.AMMO_PICKUP = {2, 2}
 		
 		--Snipers begin here
 		
 		--Platypus, base for all sniper rifles, little to no changes needed.
-		self.model70.AMMO_PICKUP = {1, 1} --Stabilized ammo pickup, no more randomness, higher than vanilla, snipers struggle aplenty with enemy control in Hyper Heisting, and I want them to at the very least, have stable sustenance.
+		self.model70.AMMO_PICKUP = {3, 3} --Stabilized ammo pickup, no more randomness, higher than vanilla, snipers struggle aplenty with enemy control in Hyper Heisting, and I want them to at the very least, have stable sustenance.
 		
 		
 		--Pistols begin here

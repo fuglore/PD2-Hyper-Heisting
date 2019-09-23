@@ -1,5 +1,5 @@
 <unit type="chl" slot="8">
-	<object file="units/pd2_dlc_gitgud/characters/ene_acc_shield_new_swat/ene_acc_shield_new_swat" />
+	<object file="units/pd2_dlc_gitgud/characters/ene_acc_shield_new_swat_hh/ene_acc_shield_new_swat_hh" />
 	
 	<dependencies>
 		<depends_on effect="effects/particles/dest/security_camera_dest"/>

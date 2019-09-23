@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <unit type="debris" slot="18">
-	<object file="units/pd2_dlc_gitgud/characters/ene_acc_zeal_tazer_helmet/ene_acc_zeal_tazer_helmet" />
+	<object file="units/pd2_dlc_gitgud/characters/ene_acc_zeal_tazer_helmet_hh/ene_acc_zeal_tazer_helmet_hh" />
 	<extensions>
 		<extension name="unit_data" class="ScriptUnitData" />
 	</extensions>
