@@ -17,6 +17,13 @@ ModifierHeavies.unit_swaps = {
 
 function ModifierHeavies:init(data)
 	ModifierHeavies.super.init(self, data)
+	
+	--evening out chances of heavy umps
+	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.america, Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"))
+	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.america, Idstring("units/pd2_dlc_drm/characters/ene_fbi_heavy_ump/ene_fbi_heavy_ump"))
+	
+	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.murkywater, Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"))
+	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.murkywater, Idstring("units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"))
 
 	for group, unit_group in pairs(tweak_data.group_ai.unit_categories) do
 		if unit_group.unit_types then

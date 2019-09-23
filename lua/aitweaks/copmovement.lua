@@ -115,7 +115,7 @@ function CopMovement:on_suppressed(state)
 						"e_so_sup_fumble_inplace_3",
 					}
 					
-					if self._tweak_data.allow_pass_out and math.random() < 0.25 then
+					if self._tweak_data.allow_pass_out and math.random() < 0.3 then
 						table.insert(allowed_fumbles, "e_sp_dizzy_fall_get_up") --light swats and commons have a decent chance of doing this, heavies and up dont
 					end
 					
