@@ -8,6 +8,10 @@
 		<file :name="ene_zeal_swat/ene_zeal_swat.unit" load="true" force="true"/>
 		<file :name="ene_zeal_swat/ene_zeal_swat_husk.unit" load="true" force="true"/>
 		
+		<!--Vanilla ZEAL Heavy Replacement-->	
+		<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy.unit" load="true" force="true"/>
+		<file :name="ene_zeal_swat_heavy/ene_zeal_swat_heavy_husk.unit" load="true" force="true"/>
+		
 		<!--Better But Still Bad Taser-->
 		<file :name="ene_zeal_tazer_hh/ene_zeal_tazer_hh.unit" load="true" force="true"/>
 		<file :name="ene_zeal_tazer_hh/ene_zeal_tazer_hh_husk.unit" load="true" force="true"/>
@@ -100,11 +104,10 @@
 		<file :name="ene_acc_shield_new_swat_hh/ene_acc_shield_new_swat_hh.unit" load="true"/>
 		<file :name="ene_acc_shield_new_swat_hh/ene_acc_shield_new_swat_hh.sequence_manager" load="true"/>
 		
-		<!--ZEAL Dozer Material Configs-->	
+		<!--ZEAL Dozer Material Configs-->
 		<file :name="ene_zeal_bulldozer/ene_zeal_bulldozer.material_config" force="true"/>
 		<file :name="ene_zeal_bulldozer_2/ene_zeal_bulldozer_2.material_config" force="true"/>
 		<file :name="ene_zeal_bulldozer_3/ene_zeal_bulldozer_3.material_config" force="true"/>
-		
 		
 		<!--Textures-->	
 		<file :name="shared_textures/ene_zeal_city_df.texture" force="false"/>
@@ -135,7 +138,7 @@
 	</group>
 	
 	<group name="units/pd2_dlc_drm/characters/">
-		<!--bulldozer textures-->
+		<!--ZEAL Dozer Material Configs-->
 		<file :name="ene_bulldozer_medic/ene_bulldozer_medic.material_config" force="true"/>
 		<file :name="ene_bulldozer_minigun/ene_bulldozer_minigun.material_config" force="true"/>
 		<file :name="ene_bulldozer_medic/ene_bulldozer_medic_df.texture" force="true"/>
