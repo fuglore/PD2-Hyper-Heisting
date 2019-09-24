@@ -290,18 +290,25 @@ function CopLogicIdle._update_haste(data, my_data)
 	end
 	
 	local haste = nil
+	local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
+	local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
+	local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
+	local should_crouch = nil	
 	
 	if my_data.cover_path or my_data.charge_path or my_data.chase_path then	
 		if is_mook then
 			if data.unit:movement():cool() then
 				haste = "walk"
-			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + (enemyseeninlast4secs and 500 or 0) and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() and data.unit:anim_data().move and is_mook then
+			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() and data.unit:anim_data().move and is_mook then
 				haste = "run"
 				my_data.has_reset_walk_cycle = nil
-			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 700 or 0) and is_mook and data.tactics and not data.tactics.hitnrun and data.unit:anim_data().run then
+			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0) and is_mook and data.tactics and not data.tactics.hitnrun and data.unit:anim_data().run then
 				haste = "walk"
 				my_data.has_reset_walk_cycle = nil
 			 else
+				if data.unit:anim_data().move then
+					my_data.has_reset_walk_cycle = nil
+				end
 				haste = "run"
 			 end
 				 

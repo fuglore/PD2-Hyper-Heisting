@@ -538,9 +538,9 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 		
 		if data.unit:movement():cool() then
 			haste = "walk"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + (enemyseeninlast4secs and 500 or 0) and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 700 or 0) and is_mook and data.tactics and not data.tactics.hitnrun then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0) and is_mook and data.tactics and not data.tactics.hitnrun then
 			haste = "walk"
 		else
 			haste = "run"
@@ -639,7 +639,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 			haste = "walk"
 		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + (enemyseeninlast4secs and 500 or 0) and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 700 or 0) and is_mook and data.tactics and not data.tactics.hitnrun then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0) and is_mook and data.tactics and not data.tactics.hitnrun then
 			haste = "walk"
 		else
 			haste = "run"
