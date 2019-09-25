@@ -40,12 +40,13 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 
 			local tar_aim_dot = mvec3_dot(direction, tar_vec)
 
-			if tar_aim_dot > 0 and (not max_dist or tar_aim_dot < max_dist) then
+			if tar_aim_dot > 0 and (not max_dist or tar_aim_dot < 6000) then
 				local tar_vec_len = math_clamp(mvec3_norm(tar_vec), 1, far_dis)
 				local error_dot = mvec3_dot(direction, tar_vec)
 				local error_angle = math.acos(error_dot)
 				local dis_lerp = math.pow(tar_aim_dot / far_dis, 0.25)
-				local suppression_min_angle = math_lerp(suppression_near_angle, suppression_far_angle, dis_lerp)
+				local dis_lerp_sup = math.pow(tar_aim_dot / 6000, 0.25)
+				local suppression_min_angle = math_lerp(suppression_near_angle, suppression_far_angle, dis_lerp_sup)
 
 				if error_angle < suppression_min_angle then
 					suppression_enemies = suppression_enemies or {}

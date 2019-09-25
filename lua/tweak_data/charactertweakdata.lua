@@ -6433,11 +6433,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.3, --12 damage, acc, recoil and falloff destroy themselves past 4000 no matter what weapon, to keep maps like birth of sky bearable and make open areas less of a pain in the fucking ass 
+				dmg_mul = 0, --12 damage, acc, recoil and falloff destroy themselves past 4000 no matter what weapon, to keep maps like birth of sky bearable and make open areas less of a pain in the fucking ass 
 				r = 4000,
 				acc = {
 					0,
-					0.01
+					0
 				},
 				recoil = {
 					4,
@@ -7547,7 +7547,7 @@ function CharacterTweakData:_set_overkill_145()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 1
+	self.presets.gang_member_damage.REGENERATE_TIME = 120
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 0.2
 	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35

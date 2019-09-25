@@ -199,7 +199,7 @@ function CopMovement:on_suppressed(state)
 
 					self:action_request(action_desc)
 				end
-			elseif self._ext_anim.run and self._ext_anim.move_fwd and not self:chk_action_forbidden("act") and Global.game_settings.one_down then
+			elseif self._ext_anim.run and not self:chk_action_forbidden("act") and Global.game_settings.one_down then
 				local action_desc = {
 					clamp_to_graph = true,
 					type = "act",

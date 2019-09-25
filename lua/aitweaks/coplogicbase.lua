@@ -64,15 +64,19 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 			new_att_obj.acquire_t = data.t
 		end
 		
-		if AIAttentionObject.REACT_SHOOT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and (data.unit:anim_data().idle or data.unit:anim_data().move) and new_att_obj.is_person and data.char_tweak.chatter.contact then
-			if data.unit:base()._tweak_table == "gensec" then
-				data.unit:sound():say("a01", true)			
-			elseif data.unit:base()._tweak_table == "security" then
-				data.unit:sound():say("a01", true)
-			elseif data.unit:base()._tweak_table == "shield" then
-				data.unit:sound():say(shield_sound, true)
-			else
-				data.unit:sound():say("c01", true)
+		local not_acting = data.unit:anim_data().idle or data.unit:anim_data().move
+		
+		if AIAttentionObject.REACT_SHOOT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and not_acting and new_att_obj.is_person and data.char_tweak.chatter.contact then --the fact i have to do this is just hghghghg
+			if not data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") then
+				if data.unit:base()._tweak_table == "gensec" then
+					data.unit:sound():say("a01", true)			
+				elseif data.unit:base()._tweak_table == "security" then
+					data.unit:sound():say("a01", true)
+				elseif data.unit:base()._tweak_table == "shield" then
+					data.unit:sound():say(shield_sound, true)
+				else
+					data.unit:sound():say("c01", true)
+				end
 			end
 		end
 	elseif old_att_obj and old_att_obj.criminal_record then

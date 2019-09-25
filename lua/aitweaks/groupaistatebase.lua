@@ -8,6 +8,18 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
+	local drama_tweak = tweak_data.drama
+	self._drama_data = {
+		amount = 0,
+		zone = "low",
+		last_calculate_t = 0,
+		decay_period = tweak_data.drama.decay_period,
+		low_p = drama_tweak.low,
+		high_p = drama_tweak.peak,
+		actions = drama_tweak.drama_actions,
+		max_dis = drama_tweak.max_dis,
+		dis_mul = drama_tweak.max_dis_mul
+	}
 	self._special_unit_types = self._special_unit_types or {}
 	self._special_unit_types['tank_mini'] = true
 	self._special_unit_types['tank_hw'] = true
@@ -26,6 +38,18 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
+	local drama_tweak = tweak_data.drama
+	self._drama_data = {
+		amount = 0,
+		zone = "low",
+		last_calculate_t = 0,
+		decay_period = tweak_data.drama.decay_period,
+		low_p = drama_tweak.low,
+		high_p = drama_tweak.peak,
+		actions = drama_tweak.drama_actions,
+		max_dis = drama_tweak.max_dis,
+		dis_mul = drama_tweak.max_dis_mul
+	}
 	self._special_unit_types = self._special_unit_types or {}
 	self._special_unit_types['tank_mini'] = true
 	self._special_unit_types['tank_hw'] = true
@@ -56,6 +80,7 @@ function GroupAIStateBase:update(t, dt)
 
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
+	self:_check_drama_low_p()
 	
 	if self._draw_drama then
 		self:_debug_draw_drama(t)
@@ -63,6 +88,17 @@ function GroupAIStateBase:update(t, dt)
 
 	self:_upd_debug_draw_attentions()
 	self:upd_team_AI_distance()
+end
+
+function GroupAIStateBase:_check_drama_low_p()
+	local drama_tweak = tweak_data.drama
+	if not self._assault_number or self._assault_number and self._assault_number == 1 then
+		self._drama_data.low_p = drama_tweak.low
+	elseif self._assault_number == 2 then
+		self._drama_data.low_p = drama_tweak.low_2nd
+	elseif self._assault_number >= 3 then
+		self._drama_data.low_p = drama_tweak.low_3rd
+	end
 end
 
 function GroupAIStateBase:chk_random_drama_comment()

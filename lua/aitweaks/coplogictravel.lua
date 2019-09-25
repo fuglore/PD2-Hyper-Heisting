@@ -228,8 +228,9 @@ function CopLogicTravel.queued_update(data)
     	delay = 0.35
     end
 	
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t < 5
     if my_data.coarse_path and not data.unit:base():has_tag("special") then
-    	if data.char_tweak.chatter.clear and data.unit:anim_data().idle and not ( data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t < 5 ) then
+    	if data.char_tweak.chatter.clear and data.unit:anim_data().idle and not cant_say_clear then
 			if data.unit:movement():cool() then
 				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
 			else
@@ -247,7 +248,7 @@ function CopLogicTravel.queued_update(data)
     end
 	
 	if my_data.coarse_path and data.unit:base():has_tag("special") and not data.unit:base()._tweak_table == "gensec" and not data.unit:base()._tweak_table == "security" then
-    	if data.char_tweak.chatter.aggressive and data.unit:anim_data().idle and not ( data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t < 5 ) then
+    	if data.char_tweak.chatter.aggressive and not cant_say_clear then
 			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "aggressive" )
 		end
     end
