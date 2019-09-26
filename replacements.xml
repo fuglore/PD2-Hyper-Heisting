@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<assets base_path="assets/"> <!--spaghetti time yum yum-->
+<assets base_path="assets/"> <!--I Gotta try making this shit use Breadlib Loading Brother!!!!! ~ Nelson01023-->
 
 	<group name="units/payday2/characters/">
 	
@@ -19,6 +19,21 @@
 	<group name="units/payday2/weapons/">
 		<file :name="wpn_npc_ump/wpn_npc_ump.unit" load="true" force="true"/>
 	</group>
+
+	<group name="units/pd2_dlc_flat/characters/"> <!--impact fix for panic room brosephs-->
+		<file :name="npc_chavez/npc_chavez.object" force="true"/>
+		<file :name="npc_jamaican/npc_jamaican.object" force="true"/>
+	</group>	
+	
+	<group name="units/pd2_dlc_friend/characters/"> <!-- scarface guys impact fix -->
+		<file :name="ene_bolivian_thug_outdoor_01/ene_bolivian_thug_outdoor_01.object" force="true"/>
+		<file :name="ene_bolivian_thug_outdoor_02/ene_bolivian_thug_outdoor_02.object" force="true"/>
+		<file :name="ene_drug_lord_boss/ene_drug_lord_boss.object" force="true"/>
+		<file :name="ene_drug_lord_boss_stealth/ene_drug_lord_boss_stealth.object" force="true"/>
+		<file :name="ene_security_manager/ene_security_manager.object" force="true"/>		
+		<file :name="ene_thug_indoor_01/ene_thug_indoor_01.object" force="true"/>
+		<file :name="ene_thug_indoor_02/ene_thug_indoor_02.object" force="true"/>
+	</group>	
 	
 	<group name="units/pd2_dlc_mad/characters/">
 	
@@ -66,6 +81,22 @@
 		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.object" force="false"/>
 		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.cooked_physics" force="false"/>
 		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.model" force="false"/>
+		
+		<!--cum-->
+		<file :name="ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass.object" force="true"/>
+		<file :name="ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg.object" force="true"/>
+		<file :name="ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg.object" force="true"/>
+		<file :name="ene_akan_cs_cop_r870/ene_akan_cs_cop_r870.object" force="true"/>
+		<file :name="ene_akan_cs_heavy_ak47_ass/ene_akan_cs_heavy_ak47_ass.object" force="true"/>
+		<file :name="ene_akan_cs_shield_c45/ene_akan_cs_shield_c45.object" force="true"/>
+		<file :name="ene_akan_cs_swat_ak47_ass/ene_akan_cs_swat_ak47_ass.object" force="true"/>
+		<file :name="ene_akan_cs_swat_r870/ene_akan_cs_swat_r870.object" force="true"/>
+		<file :name="ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp.object" force="true"/>
+		<file :name="ene_akan_fbi_shield_sr2_smg/ene_akan_fbi_shield_sr2_smg.object" force="true"/>
+		<file :name="ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass.object" force="true"/>
+		<file :name="ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass.object" force="true"/>
+		<file :name="ene_akan_fbi_swat_dw_r870/ene_akan_fbi_swat_dw_r870.object" force="true"/>	
+		<file :name="ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870.object" force="true"/>				
 		
 		
 		<!--Textures-->	
