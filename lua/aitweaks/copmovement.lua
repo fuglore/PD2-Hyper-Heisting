@@ -39,6 +39,121 @@ function CopMovement:init(unit)
 	old_init(self, unit)
 end
 
+function CopMovement:_change_stance(stance_code, instant)
+	if self._tweak_data.allowed_stances then
+		if stance_code == 1 and not self._tweak_data.allowed_stances.ntl then
+			return
+		elseif stance_code == 2 and not self._tweak_data.allowed_stances.hos then
+			return
+		elseif stance_code == 3 and not self._tweak_data.allowed_stances.cbt then
+			return
+		end
+	end
+
+	local stance = self._stance
+
+	if instant then
+		if stance.transition or stance.code ~= stance_code then
+			stance.transition = nil
+			stance.code = stance_code
+			stance.name = CopMovement._stance.names[stance_code]
+
+			for i = 1, 3, 1 do
+				stance.values[i] = 0
+			end
+
+			stance.values[stance_code] = 1
+
+			for i, v in ipairs(stance.values) do
+				self._machine:set_global(CopMovement._stance.names[i], v)
+			end
+		end
+	else
+		local end_values = {}
+
+		if stance_code == 4 then
+			if stance.transition then
+				end_values = stance.transition.end_values
+			else
+				for i, value in ipairs(stance.values) do
+					end_values[i] = value
+				end
+			end
+		elseif stance.transition then
+			end_values = {
+				0,
+				0,
+				0,
+				stance.transition.end_values[4]
+			}
+		else
+			end_values = {
+				0,
+				0,
+				0,
+				stance.values[4]
+			}
+		end
+
+		end_values[stance_code] = 1
+
+		if stance_code ~= 4 then
+			stance.code = stance_code
+			stance.name = CopMovement._stance.names[stance_code]
+		end
+
+		local delay = nil
+		local vis_state = self._ext_base:lod_stage()
+
+		if vis_state then
+			delay = CopMovement._stance.blend[stance_code]
+
+			if vis_state > 2 then
+				delay = delay * 0.5
+			end
+		else
+			stance.transition = nil
+
+			if stance_code ~= 1 then
+				self:_chk_play_equip_weapon()
+			end
+
+			local names = CopMovement._stance.names
+
+			for i, v in ipairs(end_values) do
+				if v ~= stance.values[i] then
+					stance.values[i] = v
+
+					self._machine:set_global(names[i], v)
+				end
+			end
+
+			return
+		end
+
+		local start_values = {}
+
+		for _, value in ipairs(stance.values) do
+			table.insert(start_values, value)
+		end
+
+		local t = TimerManager:game():time()
+		local transition = {
+			end_values = end_values,
+			start_values = start_values,
+			duration = delay,
+			start_t = t,
+			next_upd_t = t + 0.033
+		}
+		stance.transition = transition
+	end
+
+	if stance_code ~= 1 then
+		self:_chk_play_equip_weapon()
+	end
+
+	self:enable_update()
+end
 
 function CopMovement:on_suppressed(state)
 	local suppression = self._suppression
@@ -52,7 +167,7 @@ function CopMovement:on_suppressed(state)
 			start_val = suppression.value,
 			duration = duration,
 			start_t = t,
-			next_upd_t = t + 0.07
+			next_upd_t = t + 0.033
 		}
 	else
 		suppression.transition = nil

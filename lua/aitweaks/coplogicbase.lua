@@ -602,3 +602,15 @@ function CopLogicBase.chk_start_action_dodge(data, reason)
 	end
 	return action
 end
+
+function CopLogicBase.on_suppressed_state(data)
+	if not Global.game_settings.one_down then
+		if data.is_suppressed and data.objective then
+			local allow_trans, interrupt = CopLogicBase.is_obstructed(data, data.objective, nil, nil)
+
+			if interrupt then
+				data.objective_failed_clbk(data.unit, data.objective)
+			end
+		end
+	end
+end
