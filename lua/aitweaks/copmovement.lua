@@ -36,6 +36,8 @@ function CopMovement:init(unit)
 	
 	CopMovement._action_variants.tank_ftsu = clone(security_variant)
 	CopMovement._action_variants.tank_ftsu.walk = TankCopActionWalk
+	CopMovement._action_variants.spooc_heavy = security_variant
+	
 	old_init(self, unit)
 end
 

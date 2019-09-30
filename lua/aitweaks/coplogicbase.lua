@@ -327,7 +327,21 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						delta_prog = 1
 					else
 						local min_delay = my_data.detection.delay[1]
+						
+						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
+							min_delay = math.max(my_data.detection.delay[1], 0.7)
+						else
+							min_delay = math.min(my_data.detection.delay[1], 0.35)
+						end
+						
 						local max_delay = my_data.detection.delay[2]
+						
+						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
+							min_delay = math.max(my_data.detection.delay[2], 1)
+						else
+							min_delay = math.min(my_data.detection.delay[2], 0.5)
+						end
+						
 						local angle_mul_mod = 0.25 * math.min(angle / my_data.detection.angle_max, 1)
 						local dis_mul_mod = 0.75 * dis_multiplier
 						local notice_delay_mul = attention_info.settings.notice_delay_mul or 1

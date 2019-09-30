@@ -104,7 +104,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.crouch_move = false
 	self.tank.no_run_start = true
 	self.tank.no_run_stop = true
-	self.tank.no_retreat = false
+	self.tank.no_retreat = nil
 	self.tank.no_arrest = true
 	self.tank.surrender = nil
 	self.tank.ecm_vulnerability = 0 --no more dozer weirdness due to ecms, also a buff I guess.
@@ -200,7 +200,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.HEALTH_INIT = 20
 	self.spooc.headshot_dmg_mul = 6
 	self.spooc.move_speed = presets.move_speed.lightning_constant
-	self.spooc.no_retreat = false
+	self.spooc.no_retreat = nil
 	self.spooc.no_arrest = true
 	self.spooc.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.spooc.surrender_break_time = {
@@ -240,6 +240,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 		detect_stop = "cloaker_detect_stop",
 		detect = "cloaker_detect_mono"
 	}
+	self.spooc_heavy = deep_clone(self.spooc)
 
 	table.insert(self._enemy_list, "spooc")
 end
@@ -325,7 +326,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.move_speed = presets.move_speed.shield_sim
 	self.shield.no_run_start = true
 	self.shield.no_run_stop = true
-	self.shield.no_retreat = false
+	self.shield.no_retreat = nil
 	self.shield.no_arrest = true
 	self.shield.surrender = nil
 	self.shield.priority_shout = "f31"
@@ -367,6 +368,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.damage.no_suppression_crouch = true
 	self.medic.suppression = presets.suppression.stalwart_nil
 	self.medic.no_fumbling = true
+	self.medic.no_retreat = nil
 	self.medic.surrender = presets.surrender.special
 	self.medic.move_speed = presets.move_speed.civil_consistency
 	self.medic.surrender_break_time = {
@@ -408,7 +410,7 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.move_speed = presets.move_speed.civil_consistency
 	self.taser.suppression = presets.suppression.stalwart_nil
 	self.taser.no_fumbling = true
-	self.taser.no_retreat = false
+	self.taser.no_retreat = nil
 	self.taser.no_arrest = true
 	self.taser.surrender = presets.surrender.special
 	self.taser.ecm_vulnerability = 0.9
@@ -459,6 +461,7 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.access = "swat"
 	self.swat.dodge = presets.dodge.athletic
 	self.swat.no_arrest = true
+	self.swat.no_retreat = nil
 	self.swat.chatter = presets.enemy_chatter.swat
 	self.swat.melee_weapon_dmg_multiplier = 1
 	self.swat.steal_loot = true
@@ -476,6 +479,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.weapon = presets.weapon.complex
 	self.fbi.detection = presets.detection.enemymook
 	self.fbi.no_fumbling = true
+	self.fbi.no_retreat = nil
 	self.fbi.HEALTH_INIT = 16
 	self.fbi.headshot_dmg_mul = 6
 	self.fbi.move_speed = presets.move_speed.civil_consistency
@@ -530,6 +534,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.access = "swat"
 	self.heavy_swat.dodge = presets.dodge.heavy
 	self.heavy_swat.no_arrest = true
+	self.heavy_swat.no_retreat = nil
 	self.heavy_swat.chatter = presets.enemy_chatter.swat
 	self.heavy_swat.steal_loot = true
 	self.heavy_swat_sniper = deep_clone(self.heavy_swat)
@@ -558,6 +563,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.access = "swat"
 	self.fbi_swat.dodge = presets.dodge.athletic
 	self.fbi_swat.no_arrest = true
+	self.fbi_swat.no_retreat = nil
 	self.fbi_swat.chatter = presets.enemy_chatter.swat
 	self.fbi_swat.melee_weapon = "knife_1"
 	self.fbi_swat.steal_loot = true
@@ -583,6 +589,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.access = "swat"
 	self.fbi_heavy_swat.dodge = presets.dodge.heavy
 	self.fbi_heavy_swat.no_arrest = true
+	self.fbi_heavy_swat.no_retreat = nil
 	self.fbi_heavy_swat.chatter = presets.enemy_chatter.swat
 	self.fbi_heavy_swat.melee_weapon = "knife_1"
 	self.fbi_heavy_swat.steal_loot = true
@@ -607,6 +614,7 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	self.city_swat.speech_prefix_p2 = "n"
 	self.city_swat.speech_prefix_count = 4
 	self.city_swat.access = "swat"
+	self.city_swat.no_retreat = nil
 	self.city_swat.dodge = presets.dodge.athletic
 	self.city_swat.chatter = presets.enemy_chatter.swat
 	self.city_swat.melee_weapon = "knife_1"
@@ -9481,7 +9489,8 @@ function CharacterTweakData:character_map()
 			"ene_zeal_swat_heavy_sniper",
 			"ene_murky_heavy_ump",
 			"ene_fbi_heavy_ump",
-			"ene_bulldozer_sniper"
+			"ene_bulldozer_sniper",
+			"ene_spook_heavy"
 		}
 	}
 	char_map.gitgud = {
@@ -9600,6 +9609,7 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.tank_ftsu.HEALTH_INIT = self.tank_ftsu.HEALTH_INIT * hp_mul
 	self.tank_medic.HEALTH_INIT = self.tank_medic.HEALTH_INIT * hp_mul
 	self.spooc.HEALTH_INIT = self.spooc.HEALTH_INIT * hp_mul
+	self.spooc_heavy.HEALTH_INIT = self.spooc_heavy.HEALTH_INIT * hp_mul
 	self.shadow_spooc.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT * hp_mul
 	self.shield.HEALTH_INIT = self.shield.HEALTH_INIT * hp_mul
 	self.phalanx_minion.HEALTH_INIT = self.phalanx_minion.HEALTH_INIT * hp_mul
@@ -9662,7 +9672,11 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	if self.spooc.headshot_dmg_mul then
 		self.spooc.headshot_dmg_mul = self.spooc.headshot_dmg_mul * hs_mul
 	end
-
+	
+	if self.spooc_heavy.headshot_dmg_mul then
+		self.spooc_heavy.headshot_dmg_mul = self.spooc_heavy.headshot_dmg_mul * hs_mul
+	end
+	
 	if self.shield.headshot_dmg_mul then
 		self.shield.headshot_dmg_mul = self.shield.headshot_dmg_mul * hs_mul
 	end

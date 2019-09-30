@@ -82,7 +82,7 @@
 		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.cooked_physics" force="false"/>
 		<file :name="ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield.model" force="false"/>
 		
-		<!--cum-->
+		<!--cum and blood impact fixes for russian enemies-->
 		<file :name="ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass.object" force="true"/>
 		<file :name="ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg.object" force="true"/>
 		<file :name="ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg.object" force="true"/>

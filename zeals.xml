@@ -160,6 +160,19 @@
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.object" force="false"/>
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.cooked_physics" force="false"/>
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.model" force="false"/>
+		
+		<file :name="ene_spook_heavy/ene_spook_heavy.unit" load="true" force="false"/>
+		<file :name="ene_spook_heavy/ene_spook_heavy_husk.unit" load="true" force="false"/>
+		<file :name="ene_spook_heavy/ene_spook_heavy_contour.material_config" force="false"/>
+		<file :name="ene_spook_heavy/ene_spook_heavy.material_config" force="false"/>
+		<file :name="ene_spook_heavy/ene_spook_heavy.object" force="false"/>
+		<file :name="ene_spook_heavy/ene_spook_heavy.cooked_physics" force="false"/>
+		<file :name="ene_spook_heavy/ene_spook_heavy.model" force="false"/>
+		<file :name="ene_spook_heavy/ene_spook_heavy.sequence_manager" load="true"/>
+		<file :name="ene_spook_heavy/nvg_df.texture" force="false"/>
+		<file :name="ene_spook_heavy/nvg_nm.texture" force="false"/>
+		<file :name="ene_spook_heavy/spook_il.texture" force="false"/>
+		<file :name="ene_spook_heavy/spookyboy_df.texture" force="false"/>
 
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.unit" load="true" force="false"/>
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper_husk.unit" load="true" force="false"/>

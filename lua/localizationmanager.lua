@@ -24,6 +24,6 @@ Hooks:Add("LocalizationManagerPostInit", "shin_assaultcornertext", function(loc)
 		["hud_assault_FG_cover4"] = "FIGHT ON",
 		["hud_assault_FG_cover5"] = "THE WHEEL OF FATE IS TURNING",
 		["hud_assault_FG_cover6"] = "THIS IS TUNA WITH BACON",
-		["hud_assault_FG_cover7"] = "THIS IS TRUE LOVE WE MAKIN'"
+		["hud_assault_FG_cover7"] = "THIS IS TRUE LOVE WE MAKIN"
 	})
 end)
