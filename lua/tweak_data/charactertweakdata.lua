@@ -9490,7 +9490,8 @@ function CharacterTweakData:character_map()
 			"ene_murky_heavy_ump",
 			"ene_fbi_heavy_ump",
 			"ene_bulldozer_sniper",
-			"ene_spook_heavy"
+			"ene_spook_heavy",
+			"ene_city_swat_saiga"
 		}
 	}
 	char_map.gitgud = {

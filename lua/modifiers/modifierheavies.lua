@@ -11,7 +11,9 @@ ModifierHeavies.unit_swaps = {
 	["units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"] = "units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump",
 		
 	["units/payday2/characters/ene_fbi_swat_2/ene_fbi_swat_2"] = "units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870",
-	["units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"] = "units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"	
+	["units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"] = "units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870",
+
+	["units/payday2/characters/ene_spook_1/ene_spook_1"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy"
 	
 }
 
@@ -24,7 +26,9 @@ function ModifierHeavies:init(data)
 	
 	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.murkywater, Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"))
 	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.murkywater, Idstring("units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"))
-
+	
+	Global.game_settings.heavymutator = true --used to track various things related to unit distribution as to keep stuff consistent
+	
 	for group, unit_group in pairs(tweak_data.group_ai.unit_categories) do
 		if unit_group.unit_types then
 			for continent, units in pairs(unit_group.unit_types) do

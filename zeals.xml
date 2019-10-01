@@ -161,6 +161,14 @@
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.cooked_physics" force="false"/>
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.model" force="false"/>
 		
+		<file :name="ene_city_swat_saiga/ene_city_swat_saiga.unit" load="true" force="false"/>
+		<file :name="ene_city_swat_saiga/ene_city_swat_saiga_husk.unit" load="true" force="false"/>
+		<file :name="ene_city_swat_saiga/ene_city_swat_saiga_contour.material_config" force="false"/>
+		<file :name="ene_city_swat_saiga/ene_city_swat_saiga.material_config" force="false"/>
+		<file :name="ene_city_swat_saiga/ene_city_swat_saiga.object" force="false"/>
+		<file :name="ene_city_swat_saiga/ene_city_swat_saiga.cooked_physics" force="false"/>
+		<file :name="ene_city_swat_saiga/ene_city_swat_saiga.model" force="false"/>
+		
 		<file :name="ene_spook_heavy/ene_spook_heavy.unit" load="true" force="false"/>
 		<file :name="ene_spook_heavy/ene_spook_heavy_husk.unit" load="true" force="false"/>
 		<file :name="ene_spook_heavy/ene_spook_heavy_contour.material_config" force="false"/>

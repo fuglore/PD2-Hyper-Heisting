@@ -73,6 +73,7 @@
 		<post :script_path="modifiernohurtanims.lua" :hook_id="modifiernohurtanims"/>
 		<post :script_path="modifierskulldozers.lua" :hook_id="modifierskulldozers"/>
 		<post :script_path="modifierheavysniper.lua" :hook_id="modifierheavysniper"/>
+		<post :script_path="modifiershieldphalanx.lua" :hook_id="modifiershieldphalanx"/>
 	</group>
 	
 </hooks>
