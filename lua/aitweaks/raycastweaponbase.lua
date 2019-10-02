@@ -26,7 +26,7 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 	local slotmask = self._bullet_slotmask
 	local enemies = managers.enemy:all_enemies()
 	local suppression_near_angle = 500
-	local suppression_far_angle = 100
+	local suppression_far_angle = 200
 	local suppression_enemies = nil
 
 	for u_key, enemy_data in pairs(enemies) do

@@ -229,6 +229,7 @@ function CopLogicTravel.queued_update(data)
     end
 	
 	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t < 5
+	
     if my_data.coarse_path and not data.unit:base():has_tag("special") then
     	if data.char_tweak.chatter.clear and data.unit:anim_data().idle and not cant_say_clear then
 			if data.unit:movement():cool() then

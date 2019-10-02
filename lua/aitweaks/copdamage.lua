@@ -25,6 +25,10 @@ function CopDamage:_on_damage_received(damage_info)
 			attacker_unit = attacker_unit:base():get_owner()
 		end
 	end
+	
+	local sup_build_amount = math.ceil(1, damage_info.damage / 0.25)
+	
+	self:build_suppression(sup_build_amount, nil)
 
 	if attacker_unit == managers.player:player_unit() and damage_info then
 		managers.player:on_damage_dealt(self._unit, damage_info)

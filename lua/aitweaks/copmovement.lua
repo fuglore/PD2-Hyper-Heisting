@@ -196,7 +196,13 @@ function CopMovement:on_suppressed(state)
 							variant = "e_nl_slide_fwd_4m",
 							blocks = {
 								action = -1,
-								walk = -1
+								act = -1,
+								tase = -1,
+								bleedout = -1,
+								dodge = -1,
+								walk = -1,
+								hurt = -1,
+								heavy_hurt = -1
 							}
 						}
 
@@ -324,7 +330,13 @@ function CopMovement:on_suppressed(state)
 					variant = "e_nl_slide_fwd_4m",
 					blocks = {
 						action = -1,
-						walk = -1
+						act = -1,
+						tase = -1,
+						bleedout = -1,
+						dodge = -1,
+						walk = -1,
+						hurt = -1,
+						heavy_hurt = -1
 					}
 				}
 

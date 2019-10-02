@@ -777,12 +777,12 @@ function CharacterTweakData:_presets(tweak_data)
 				10
 			},
 			react_point = {
-				1,
+				0,
 				1
 			},
 			brown_point = {
 				2,
-				3
+				2
 			}
 		},
 		hard_agg = {
@@ -792,12 +792,12 @@ function CharacterTweakData:_presets(tweak_data)
 				8
 			},
 			react_point = {
-				1,
-				1
+				3,
+				4
 			},
 			brown_point = {
-				3,
-				3
+				5,
+				6
 			}
 		},
 		no_supress = {

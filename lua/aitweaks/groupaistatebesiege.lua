@@ -93,20 +93,37 @@ function GroupAIStateBesiege:update(t, dt)
 	end
 end
 
-Hooks:PostHook(GroupAIStateBase, "_get_special_unit_type_count", "shin_special_unit_type_count", function(self, special_type, ...)
-	local okcool = false
-	if special_type == 'tank_mini' or special_type == 'tank_medic' or special_type == 'phalanx_minion' then
-		okcool = true
+-- Fix for the bug when there is too many dozers/specials thank you andole im sorry
+local fixed = false
+local origfunc2 = GroupAIStateBesiege._get_special_unit_type_count
+function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
+	if special_type == 'tank_mini' and special_type == 'tank_medic' and special_type == 'tank_ftsu' and special_type == 'spooc_heavy' and special_type == 'phalanx_minion' and special_type == 'tank_hw' then
+		fixed = true
 	end
 	
-	if not okcool and special_type == 'tank' then
-		local dozerincluded = count(self, 'tank', ...) or 0
-		dozerincluded = dozerincluded + (count(self, 'tank_mini', ...) or 0)
-		dozerincluded = dozerincluded + (count(self, 'tank_medic', ...) or 0)
-		return dozerincluded
+	if not fixed and special_type == 'tank' then
+		local res1 = origfunc2(self, 'tank', ...) or 0
+		res1 = res1 + (origfunc2(self, 'tank_mini', ...) or 0)
+		res1 = res1 + (origfunc2(self, 'tank_medic', ...) or 0)
+		res1 = res1 + (origfunc2(self, 'tank_ftsu', ...) or 0)
+		res1 = res1 + (origfunc2(self, 'tank_hw', ...) or 0)
+		return res1
 	end
 	
-end)
+	if not fixed and special_type == 'spooc' then
+		local res2 = origfunc2(self, 'spooc', ...) or 0
+		res2 = res2 + (origfunc2(self, 'spooc_heavy', ...) or 0)
+		return res2
+	end
+	
+	if not fixed and special_type == 'shield' then 
+		local res3 = origfunc2(self, 'shield', ...) or 0
+		res3 = res3 + (origfunc2(self, 'phalanx_minion', ...) or 0)
+		return res3
+	end
+	
+	return origfunc2(self, special_type, ...)
+end
 
 function GroupAIStateBesiege:chk_high_fed_density()
 
@@ -309,7 +326,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	elseif task_data.phase == "sustain" then
 		local end_t = self:assault_phase_end_time()
-		local clutch_out_t = end_t * 2
 		task_spawn_allowance = managers.modifiers:modify_value("GroupAIStateBesiege:SustainSpawnAllowance", task_spawn_allowance, force_pool)
 
 		if task_spawn_allowance <= 0 then
@@ -328,7 +344,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 						end					   
 					end	
 				end	
-		elseif end_t < t and not self._hunt_mode and self._enemies_killed_sustain > 50 or clutch_out_t < t and not self._hunt_mode then
+		elseif end_t < t and not self._hunt_mode and self._enemies_killed_sustain > 50 then
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
 			local time = self._t
@@ -404,7 +420,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			end
 
 			if task_data.force_end or end_assault then
-				print("assault task clear")
+				--print("assault task clear")
 
 				task_data.active = nil
 				task_data.phase = nil
@@ -615,6 +631,14 @@ end
 function GroupAIStateBesiege:_voice_looking_for_angle(group)
 	for u_key, unit_data in pairs(group.units) do
 		if unit_data.char_tweak.chatter.ready and self:chk_say_enemy_chatter(unit_data.unit, unit_data.m_pos, "look_for_angle") then
+			else
+		end
+	end
+end
+
+function GroupAIStateBesiege:_voice_friend_dead(group)
+	for u_key, unit_data in pairs(group.units) do
+		if unit_data.char_tweak.chatter.enemyidlepanic and self:chk_say_enemy_chatter(unit_data.unit, unit_data.m_pos, "assaultpanic") then
 			else
 		end
 	end

@@ -326,6 +326,9 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 
 	if e_data.group then
 		self:_remove_group_member(e_data.group, u_key, dead)
+		if dead and self._task_data and self._task_data.assault then
+			self:_voice_friend_dead(e_data.group)
+		end
 	end
 	
 	if dead and managers.groupai:state():whisper_mode() then

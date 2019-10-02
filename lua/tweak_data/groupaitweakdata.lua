@@ -63,7 +63,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 40,
 		duration = {3, 4},
-		interval = {0.75, 1.5},
+		interval = {4, 8},
 		group_min = 0,
 		queue = "g90"
 	}
