@@ -232,14 +232,15 @@
 		</constraint>
 	</constraints>
 
-	<decal_surfaces default_material="flesh" >
+	<decal_surfaces default_material="heavy_swat_steel_no_decal" >
 		<decal_mesh name="dm_helmet_plate" 		enabled="false" 		material="steel_no_decal" />
 		<decal_mesh name="dm_helmet_glass" 		enabled="false" 	material="glass_no_decal" />
 
-		<decal_mesh name="dm_armor_chest" 		enabled="true" 	material="steel_no_decal" />
-		<decal_mesh name="dm_armor_stomache" 	enabled="true" 	material="steel_no_decal" />
-		<decal_mesh name="dm_armor_back" 		enabled="true" 	material="steel_no_decal" />
-		<decal_mesh name="dm_helmet" 			enabled="false" 	material="steel_no_decal" />
+		<decal_mesh name="dm_armor_chest" 		enabled="true" 	material="heavy_swat_steel_no_decal" />
+		<decal_mesh name="dm_armor_stomache" 	enabled="true" 	material="heavy_swat_steel_no_decal" />
+		<decal_mesh name="dm_armor_back" 		enabled="true" 	material="heavy_swat_steel_no_decal" />
+		<decal_mesh name="dm_helmet" 			enabled="true" 	material="flesh" />
+		<decal_mesh name="g_head" 				enabled="true" 	material="flesh" />
 	</decal_surfaces>
 
 	<graphics>

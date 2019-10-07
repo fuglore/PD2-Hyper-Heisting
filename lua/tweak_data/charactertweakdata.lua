@@ -18,6 +18,7 @@ function CharacterTweakData:_set_characters_weapon_preset(preset)
 		"heavy_swat",
 		"medic",
 		"spooc",
+		"spooc_heavy",
 		"taser",
 		"tank",
 		"tank_mini",
@@ -243,6 +244,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc_heavy = deep_clone(self.spooc)
 
 	table.insert(self._enemy_list, "spooc")
+	table.insert(self._enemy_list, "spooc_heavy")
 end
 
 Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", function(self, presets)
@@ -7570,28 +7572,111 @@ function CharacterTweakData:_set_overkill_145()
 		3.5,
 		5
 	}
-	--fbi setup.
-	self.fbi.weapon = self.presets.weapon.complex
-	self.fbi.dodge = self.presets.dodge.heavy_complex
-	self.fbi.move_speed = self.presets.move_speed.complex_consistency
-	--sniper setup.
-	self.sniper.weapon.is_rifle.focus_delay = 2
-	--Shield speed setup
-	self.shield.move_speed = self.presets.move_speed.shield_civ
-	--Movespeed setups.
-	self.swat.move_speed = self.presets.move_speed.civil_consistency
-	self.city_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
-	--special movespeed
-	self.taser.move_speed = self.presets.move_speed.civil_consistency
-	self.medic.move_speed = self.presets.move_speed.civil_consistency
-	--cop health
-	self.cop.HEALTH_INIT = 8
-	self.cop_female.HEALTH_INIT = 8
-	self.flashbang_multiplier = 1.75
-	self.concussion_multiplier = 1
+	if Global.game_settings and Global.game_settings.use_intense_AI then
+		--fbi setup
+		self.fbi.dodge = self.presets.dodge.ninja_complex
+		self.fbi.weapon = self.presets.weapon.fbigod
+		self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+		--sniper setup
+		self.sniper.weapon.is_rifle.focus_delay = 1.5
+		self.sniper.weapon.is_rifle.aim_delay = {0, 0}
+		self.sniper.weapon.is_rifle.FALLOFF = {
+			{
+				dmg_mul = 3.75,
+				r = 700,
+				acc = {
+					0,
+					1
+				},
+				recoil = {
+					0.64,
+					0.64
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3.75,
+				r = 3500,
+				acc = {
+					0,
+					0.75
+				},
+				recoil = {
+					0.64,
+					0.64
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3.75,
+				r = 6000,
+				acc = {
+					0,
+					0.5
+				},
+				recoil = {
+					0.64,
+					0.64
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			}
+		}
+		--Movespeed setups.
+		self.swat.move_speed = self.presets.move_speed.anarchy_consistency
+		self.city_swat.move_speed = self.presets.move_speed.anarchy_consistency
+		self.fbi_swat.move_speed = self.presets.move_speed.anarchy_consistency
+		self.heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
+		self.fbi_heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
+		--special movespeed
+		self.taser.move_speed = self.presets.move_speed.anarchy_consistency
+		self.medic.move_speed = self.presets.move_speed.anarchy_consistency
+		self.shield.move_speed = self.presets.move_speed.shield_anarch
+		--dodge setup.
+		self.swat.dodge = self.presets.dodge.athletic_complex
+		self.fbi_swat.dodge = self.presets.dodge.athletic_complex
+		self.city_swat.dodge = self.presets.dodge.athletic_complex
+		self.heavy_swat.dodge = self.presets.dodge.heavy_complex
+		self.fbi_heavy_swat.dodge = self.presets.dodge.heavy_complex
+		self.spooc.dodge = self.presets.dodge.ninja_complex
+	else
+		--fbi setup.
+		self.fbi.weapon = self.presets.weapon.complex
+		self.fbi.dodge = self.presets.dodge.heavy_complex
+		self.fbi.move_speed = self.presets.move_speed.complex_consistency
+		--sniper setup.
+		self.sniper.weapon.is_rifle.focus_delay = 2
+		--Shield speed setup
+		self.shield.move_speed = self.presets.move_speed.shield_civ
+		--Movespeed setups.
+		self.swat.move_speed = self.presets.move_speed.civil_consistency
+		self.city_swat.move_speed = self.presets.move_speed.civil_consistency
+		self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
+		self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
+		self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
+		--special movespeed
+		self.taser.move_speed = self.presets.move_speed.civil_consistency
+		self.medic.move_speed = self.presets.move_speed.civil_consistency
+		--cop health
+		self.cop.HEALTH_INIT = 8
+		self.cop_female.HEALTH_INIT = 8
+		self.flashbang_multiplier = 1.75
+		self.concussion_multiplier = 1
+	end
 end
 
 --MH setup, landmark (1ST ATT)
