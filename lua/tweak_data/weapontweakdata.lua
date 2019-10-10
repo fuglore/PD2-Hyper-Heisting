@@ -74,10 +74,15 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	
 	--heheheheheh
 	self.smoke_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
-	self.blazter_npc = deep_clone(self.benelli_npc)
 	self.lazer_npc = deep_clone(self.g36_npc)
-	self.blazter_npc.r_trail = true
+	self.lazer_npc.sounds.prefix = "tecci_npc"
+	self.lazer_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"
 	self.lazer_npc.b_trail = true
+	self.blazter_npc = deep_clone(self.benelli_npc)
+	self.blazter_npc.sounds.prefix = "boot_npc"
+	self.blazter_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"
+	self.blazter_npc.r_trail = true
+
 	
 	--Sniper stuff starts here
 	self.m14_sniper_npc.suppression = 5 --this gets boosted more and more as difficulties go up.
@@ -111,8 +116,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.asval_smg_npc.has_suppressor = "suppressed_a"
 	self.mac11_npc.sounds.prefix = "mac10_npc"
 	self.benelli_npc.sounds.prefix = "benelli_m4_npc"
-	self.blazter_npc.sounds.prefix = "boot_npc"
-	self.lazer_npc.sounds.prefix = "tecci_npc"
 	
 	--LMG weapon usage fix for Dozers and other enemies, this will do some damn good with NPC bosses.
 	self.m249_npc.hold = "rifle"
@@ -137,6 +140,16 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.saiga_npc.hivis = true
 	self.m249_npc.hivis = true
 	self.rpk_lmg_npc.hivis = true
+	self.m14_sniper_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.svd_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.svdsil_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.heavy_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.mini_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.r870_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.saiga_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.m249_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.rpk_lmg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	
 end)
 

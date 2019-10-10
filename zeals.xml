@@ -181,6 +181,7 @@
 		<file :name="ene_spook_heavy/nvg_nm.texture" force="false"/>
 		<file :name="ene_spook_heavy/spook_il.texture" force="false"/>
 		<file :name="ene_spook_heavy/spookyboy_df.texture" force="false"/>
+		<file :name="ene_spook_heavy/spooky_glow.effect" load="false" force="true"/>
 
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.unit" load="true" force="false"/>
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper_husk.unit" load="true" force="false"/>
@@ -230,4 +231,7 @@
 	<file name="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak.effect" load="false" force="true"/>
 	<file name="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b.effect" load="false" force="true"/>
 	<file name="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r.effect" load="false" force="true"/>
+	<file name="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle.effect" load="false" force="true"/>
+	<file name="effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle.effect" load="false" force="true"/>
+	<file name="effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle.effect" load="false" force="true"/>
 </assets>

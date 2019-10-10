@@ -126,12 +126,12 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	local head = self._head_body_name and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 	local damage = attack_data.damage
 	
-	if is_civilian or self._unit:base():has_tag("special") and attack_data and not attack_data.attacker_unit:base()._tweak_table == "tank_mini" and not attack_data.attacker_unit:base()._tweak_table == "tank" and not attack_data.attacker_unit:base()._tweak_table == "tank_medic" then
+	if is_civilian or self._unit:base():has_tag("special") and attack_data and not attack_data.attacker_unit:base()._tweak_table == "tank_mini" and not attack_data.attacker_unit:base()._tweak_table == "tank" and not attack_data.attacker_unit:base()._tweak_table == "tank_medic" and not attack_data.attacker_unit:base()._tweak_table == "tank_ftsu" then
 		if self:is_friendly_fire(attack_data.attacker_unit) then
 			return "friendly_fire"
 		end
 	elseif self:is_friendly_fire(attack_data.attacker_unit) and not is_civilian then
-		if attack_data.attacker_unit:base()._tweak_table == "tank_mini" or attack_data.attacker_unit:base()._tweak_table == "tank" or attack_data.attacker_unit:base()._tweak_table == "tank_medic" then
+		if attack_data.attacker_unit:base()._tweak_table == "tank_mini" or attack_data.attacker_unit:base()._tweak_table == "tank" or attack_data.attacker_unit:base()._tweak_table == "tank_medic" and not attack_data.attacker_unit:base()._tweak_table == "tank_ftsu" then
 			damage = damage * 9
 		else
 			damage = damage * 0.25

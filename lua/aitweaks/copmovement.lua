@@ -181,7 +181,7 @@ function CopMovement:on_suppressed(state)
 	self._action_common_data.is_suppressed = state and true or nil
 
 	if Network:is_server() and state then
-		if self._tweak_data.allowed_poses and (self._tweak_data.allowed_poses.crouch or self._tweak_data.allowed_poses.stand) or self:chk_action_forbidden("walk") then
+		if self._tweak_data.allowed_poses and (self._tweak_data.allowed_poses.crouch or self._tweak_data.allowed_poses.stand) or self:chk_action_forbidden("walk") or not self._unit:base():has_tag("law") then
 			--nothing
 		else
 			local crumble_chance = self._tweak_data and self._tweak_data.crumble_chance or 0.25
