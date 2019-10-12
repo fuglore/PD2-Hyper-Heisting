@@ -655,19 +655,23 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local target_priority_slot = 0
 				
 				if visible then
+					local murderorspooctargeting = data.tactics and data.tactics.murder or data.tactics and data.tactics.spooctargeting
+					local justmurder = data.tactics and data.tactics.murder
+					local justharass = data.tactics and data.tactics.harass
+					
 					if data.tactics and data.tactics.spooctargeting and distance < 1500 then
 						target_priority_slot = 1
-					elseif distance < 500 and not (data.tactics and data.tactics.murder or data.tactics and data.tactics.spooctargeting) then
+					elseif distance < 500 and not murderorspooctargeting then
 						target_priority_slot = 2
-					elseif distance < 1500 and not (data.tactics and data.tactics.murder or data.tactics and data.tactics.spooctargeting) then
+					elseif distance < 1500 and not murderorspooctargeting then
 						target_priority_slot = 4
-					elseif not (data.tactics and data.tactics.murder) then
+					elseif not justmurder then
 						target_priority_slot = 6
 					end
 
-					if has_damaged and not (data.tactics and data.tactics.murder or data.tactics and data.tactics.spooctargeting) then
+					if has_damaged and not murderorspooctargeting then
 						target_priority_slot = target_priority_slot - 2
-					elseif has_alerted and not (data.tactics and data.tactics.murder or data.tactics and data.tactics.spooctargeting) then
+					elseif has_alerted and not murderorspooctargeting then
 						target_priority_slot = target_priority_slot - 1
 					elseif data.tactics and data.tactics.harass and pantsdownchk then
 						target_priority_slot = 1
@@ -681,7 +685,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					end
 					
 					target_priority_slot = math.clamp(target_priority_slot, 1, 10)
-				elseif free_status and not (data.tactics and data.tactics.murder) or pantsdownchk and not (data.tactics and data.tactics.harass) then
+				elseif free_status and not justmurder or pantsdownchk and not justharass then
 					target_priority_slot = 7
 				end
 				

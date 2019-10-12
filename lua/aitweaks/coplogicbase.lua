@@ -24,8 +24,10 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 			if old_att_obj.u_key == new_att_obj.u_key then
 				is_same_obj = true
 				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 2
-
-				if new_att_obj.stare_expire_t and new_att_obj.stare_expire_t < data.t and (not new_att_obj.settings.pause or data.t + math.lerp(new_att_obj.settings.pause[1], new_att_obj.settings.pause[2], math.random())) or new_att_obj.pause_expire_t and new_att_obj.pause_expire_t < data.t then
+				
+				local notnewobjpauseorrandompauset = not new_att_obj.settings.pause or data.t + math.lerp(new_att_obj.settings.pause[1], new_att_obj.settings.pause[2], math.random())
+				
+				if new_att_obj.stare_expire_t and new_att_obj.stare_expire_t < data.t and notnewobjpauseorrandompauset or new_att_obj.pause_expire_t and new_att_obj.pause_expire_t < data.t then
 					if not new_att_obj.settings.attract_chance or math.random() < new_att_obj.settings.attract_chance then
 						new_att_obj.pause_expire_t = nil
 						new_att_obj.stare_expire_t = data.t + math.lerp(new_att_obj.settings.duration[1], new_att_obj.settings.duration[2], math.random())
@@ -275,7 +277,8 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	end
 
 	for u_key, attention_info in pairs(all_attention_objects) do
-		if u_key ~= my_key and not detected_obj[u_key] and (not attention_info.nav_tracker or chk_vis_func(my_tracker, attention_info.nav_tracker)) then
+		local notattinfonavtrackorchkvisfunc = not attention_info.nav_tracker or chk_vis_func(my_tracker, attention_info.nav_tracker)
+		if u_key ~= my_key and not detected_obj[u_key] and notattinfonavtrackorchkvisfunc then
 			local settings = attention_info.handler:get_attention(my_access, min_reaction, max_reaction, data.team)
 
 			if settings then

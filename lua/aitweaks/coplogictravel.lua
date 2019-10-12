@@ -749,8 +749,9 @@ function CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, s
 
 		if my_data.advancing then
 			data.brain:rem_pos_rsrv("path")
-
-			if my_data.nearest_cover and (not my_data.delayed_clbks or not my_data.delayed_clbks[my_data.cover_update_task_key]) then
+			
+			local notdelayclbksornotdlclbks_chk = not my_data.delayed_clbks or not my_data.delayed_clbks[my_data.cover_update_task_key]
+			if my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
 				CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t)
 			end
 		end
