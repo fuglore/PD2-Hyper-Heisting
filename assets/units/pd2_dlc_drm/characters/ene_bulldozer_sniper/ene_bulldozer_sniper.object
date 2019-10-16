@@ -233,8 +233,8 @@
 	</constraints>
 
 	<decal_surfaces default_material="heavy_swat_steel_no_decal" >
-		<decal_mesh name="dm_helmet_plate" 		enabled="false" 		material="steel_no_decal" />
-		<decal_mesh name="dm_helmet_glass" 		enabled="false" 	material="glass_no_decal" />
+		<decal_mesh name="dm_helmet_plate" 		enabled="false" 		material="flesh" />
+		<decal_mesh name="dm_helmet_glass" 		enabled="false" 	material="flesh" />
 
 		<decal_mesh name="dm_armor_chest" 		enabled="true" 	material="heavy_swat_steel_no_decal" />
 		<decal_mesh name="dm_armor_stomache" 	enabled="true" 	material="heavy_swat_steel_no_decal" />

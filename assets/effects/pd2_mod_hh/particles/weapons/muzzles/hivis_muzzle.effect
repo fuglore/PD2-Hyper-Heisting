@@ -9,7 +9,7 @@
             <worldtransform transform_rotations="false"/>
         </simulatorstack>
         <visualizerstack>
-            <billboard texture="effects/textures/bullet_hit/e_dist_heat" intensity="" billboard_type="camera_facing" rotation_channel="rotation" blend_mode="normal" render_template="heat_shimmer" origo="0.5 0.5" per_particle_age="false" size_input="scaled_channel" color_input="constant" color="255 255 255" opacity_input="keys" rotation_input="scaled_channel" rotation_axis="0 0 1" uv_size="1 1" uv_offset_input="constant" uv_offset="0 0">
+            <billboard texture="effects/textures/bullet_hit/e_dist_heat" intensity="megatron" billboard_type="camera_facing" rotation_channel="rotation" blend_mode="normal" render_template="heat_shimmer" origo="0.5 0.5" per_particle_age="false" size_input="scaled_channel" color_input="constant" color="255 255 255" opacity_input="keys" rotation_input="scaled_channel" rotation_axis="0 0 1" uv_size="1 1" uv_offset_input="constant" uv_offset="0 0">
                 <size_scale_keys loop="false">
                     <key t="0" v="0.30000001192093 0.30000001192093"/>
                     <key t="0.057530000805855" v="2.5 2.5"/>

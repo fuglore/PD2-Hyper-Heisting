@@ -26,7 +26,7 @@ function ModifierHeavySniper:init(data)
 end
 
 function ModifierHeavySniper:modify_value(id, value)
-	if managers and managers.skirmish and managers.skirmish:is_skirmish()then
+	if dont then --dont
 		if id == "GroupAIStateBesiege:SpawningUnit" then
 			local is_heavy = table.contains(ModifierHeavySniper.heavy_units, value)
 
