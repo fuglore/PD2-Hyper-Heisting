@@ -1413,14 +1413,53 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	end
 end
 
+function GroupAIStateBesiege:_end_regroup_task()
+	if self._task_data.regroup.active then
+		self._task_data.regroup.active = nil
+
+		managers.trade:set_trade_countdown(true)
+		self:set_assault_mode(false)
+
+		if not self._smoke_grenade_ignore_control then
+			managers.network:session():send_to_peers_synched("sync_smoke_grenade_kill")
+			self:sync_smoke_grenade_kill()
+		end
+
+		local dmg = self._downs_during_assault
+		local limits = tweak_data.group_ai.bain_assault_praise_limits
+		local result = dmg < limits[1] and 0 or dmg < limits[2] and 1 or 2
+		
+		if self._downs_during_assault > 4 then
+			self._assault_was_hell = true
+		end
+
+		managers.mission:call_global_event("end_assault_late")
+		managers.groupai:dispatch_event("end_assault_late", self._assault_number)
+		managers.hud:end_assault(result)
+		self:_mark_hostage_areas_as_unsafe()
+		self:_set_rescue_state(true)
+
+		if not self._task_data.assault.next_dispatch_t then
+			local assault_delay = self._tweak_data.assault.delay
+			local breaktime = self._assault_was_hell and 15 or 0
+			self._task_data.assault.next_dispatch_t = self._t + self:_get_difficulty_dependent_value(assault_delay) + breaktime
+		end
+
+		if self._draw_drama then
+			self._draw_drama.regroup_hist[#self._draw_drama.regroup_hist][2] = self._t
+		end
+
+		self._task_data.recon.next_dispatch_t = self._t
+	end
+end
+
 function GroupAIStateBesiege:_upd_regroup_task()
 	local regroup_task = self._task_data.regroup
-	local low_carnage = self:_count_criminals_engaged_force(4) <= 1
 	
 	if regroup_task.active then
 		self:_assign_assault_groups_to_retire()
 
-		if regroup_task.end_t < self._t or self._drama_data.zone == "low" and low_carnage then
+		if regroup_task.end_t < self._t and self._drama_data.amount < tweak_data.drama.consistentcombat then
 			self:_end_regroup_task()
 		end
 	end

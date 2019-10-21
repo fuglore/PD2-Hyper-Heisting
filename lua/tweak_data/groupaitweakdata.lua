@@ -4683,8 +4683,8 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 
 	if difficulty_index <= 2 then
 		self.besiege.assault.delay = {
-			60,
 			45,
+			35,
 			30
 		}
 	elseif difficulty_index == 3 then
@@ -4695,21 +4695,21 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	elseif difficulty_index == 4 then
 		self.besiege.assault.delay = {
-			40,
-			30,
+			45,
+			35,
 			30
 		}
 	elseif difficulty_index == 5 then
 		self.besiege.assault.delay = {
-			30,
-			30,
+			45,
+			35,
 			30
 		}
 	else
 		self.besiege.assault.delay = {
-			25,
-			25,
-			25
+			45,
+			35,
+			30
 		}
 	end
 
@@ -5284,9 +5284,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		0
 	}
 	self.besiege.reenforce.interval = {
-		20,
-		20,
-		20
+		5,
+		5,
+		5
 	}
 
 	if difficulty_index <= 2 then
@@ -5407,9 +5407,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	end
 
 	self.besiege.recon.interval = {
-		5,
-		5,
-		5
+		15,
+		15,
+		15
 	}
 	self.besiege.recon.interval_variation = 20
 
@@ -5429,117 +5429,92 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 
 	if difficulty_index <= 2 then
 		self.besiege.recon.groups = {
-			tac_swat_shotgun_rush = {
-				25,
-				25,
-				25
-			},
 			tac_swat_shotgun_flank = {
-				25,
-				25,
-				25
-			},
-			tac_swat_rifle = {
-				25,
-				25,
-				25
+				50,
+				50,
+				50
 			},
 			tac_swat_rifle_flank = {
-				25,
-				25,
-				25
+				50,
+				50,
+				50
 			}
 		}
 	elseif difficulty_index == 3 then
 		self.besiege.recon.groups = {
-			tac_swat_shotgun_rush = {
-				25,
-				25,
-				25
-			},
 			tac_swat_shotgun_flank = {
-				25,
-				25,
-				25
-			},
-			tac_swat_rifle = {
-				25,
-				25,
-				25
+				50,
+				50,
+				50
 			},
 			tac_swat_rifle_flank = {
-				25,
-				25,
-				25
+				50,
+				50,
+				50
 			}
 		}
 	elseif difficulty_index == 4 then
 		self.besiege.recon.groups = {
-			tac_swat_shotgun_rush = {
-				25,
-				25,
-				25
-			},
 			tac_swat_shotgun_flank = {
-				25,
-				25,
-				25
-			},
-			tac_swat_rifle = {
-				25,
-				25,
-				25
+				50,
+				50,
+				50
 			},
 			tac_swat_rifle_flank = {
-				25,
-				25,
-				25
+				50,
+				50,
+				50
 			}
 		}
 	elseif difficulty_index == 5 then
 		self.besiege.recon.groups = {
-			tac_swat_shotgun_rush = {
-				25,
-				25,
-				25
+			FBI_spoocs = {
+				10,
+				10,
+				10
+			},
+			tac_tazer_flanking = {
+				10,
+				10,
+				10
 			},
 			tac_swat_shotgun_flank = {
-				25,
-				25,
-				25
-			},
-			tac_swat_rifle = {
-				25,
-				25,
-				25
+				40,
+				40,
+				40
 			},
 			tac_swat_rifle_flank = {
-				25,
-				25,
-				25
+				40,
+				40,
+				40
 			}
 		}
 	else
 		self.besiege.recon.groups = {
 			tac_tazer_flanking = {
-				25,
-				25,
-				25
+				15,
+				15,
+				15
 			},
 			tac_swat_shotgun_flank = {
-				25,
-				25,
-				25
+				30,
+				30,
+				30
 			},
 			tac_tazer_charge = {
-				25,
-				25,
-				25
+				12.5,
+				12.5,
+				12.5
+			},
+			FBI_spoocs = {
+				12.5,
+				12.5,
+				12.5
 			},
 			tac_swat_rifle_flank = {
-				25,
-				25,
-				25
+				30,
+				30,
+				30
 			}
 		}
 	end
