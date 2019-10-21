@@ -4936,14 +4936,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				15
 			},
 			tac_swat_rifle = {
-				15,
-				15,
-				15
+				15.25,
+				15.25,
+				15.25
 			},
 			tac_swat_rifle_flank = {
-				15,
-				15,
-				15
+				15.25,
+				15.25,
+				15.25
 			},
 			tac_shield_wall_ranged = {
 				4,
@@ -4976,9 +4976,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				8
 			},
 			tac_bull_rush = {
-				8,
-				8,
-				8
+				7.75,
+				7.75,
+				7.75,
 			}
 		}
 	elseif difficulty_index == 5 then
@@ -4994,14 +4994,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				15
 			},
 			tac_swat_rifle = {
-				15,
-				15,
-				15
+				15.25,
+				15.25,
+				15.25
 			},
 			tac_swat_rifle_flank = {
-				15,
-				15,
-				15
+				15.25,
+				15.25,
+				15.25
 			},
 			tac_shield_wall_ranged = {
 				3,
@@ -5024,9 +5024,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				6
 			},
 			tac_tazer_charge = {
-				7,
-				7,
-				7
+				6.75,
+				6.75,
+				6.75
 			},
 			FBI_spoocs = {
 				9,
@@ -5052,14 +5052,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				15
 			},
 			tac_swat_rifle = {
-				15,
-				15,
-				15
+				15.25,
+				15.25,
+				15.25
 			},
 			tac_swat_rifle_flank = {
-				15,
-				15,
-				15
+				15.25,
+				15.25,
+				15.25
 			},
 			tac_shield_wall_ranged = {
 				3,
@@ -5082,9 +5082,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				6
 			},
 			tac_tazer_charge = {
-				7,
-				7,
-				7
+				6.75,
+				6.75,
+				6.75
 			},
 			FBI_spoocs = {
 				9,
@@ -5163,14 +5163,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				15.25
 			},
 			tac_swat_shotgun_flank = {
-				14.75,
-				14.75,
-				14.75
+				15,
+				15,
+				15
 			},
 			tac_swat_rifle = {
-				14.75,
-				14.75,
-				14.75
+				15,
+				15,
+				15
 			},
 			tac_swat_rifle_flank = {
 				15.25,
@@ -5203,9 +5203,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				6
 			},
 			FBI_spoocs = {
-				10,
-				10,
-				10
+				9.75,
+				9.75,
+				9.75
 			},
 			tac_bull_rush = {
 				9,
