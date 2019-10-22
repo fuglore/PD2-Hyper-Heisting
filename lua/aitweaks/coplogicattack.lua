@@ -1172,18 +1172,15 @@ end
 
 function CopLogicAttack.queue_update(data, my_data)
 	local focus_enemy = data.attention_obj
-	local in_combat = focus_enemy and focus_enemy.dis <= 2000 and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction
 	local is_close = focus_enemy and focus_enemy.dis <= 3000 and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction
 	local too_far = focus_enemy and focus_enemy.dis > 5000 and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction
 	local delay = nil
-	if in_combat then
-		delay = 0
-	elseif is_close then
+	if in_close then
 		delay = 0
 	elseif too_far then
-		delay = 0.5
+		delay = 0.7
 	else
-		delay = 0.25
+		delay = 0.35
 	end
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay)
 end
