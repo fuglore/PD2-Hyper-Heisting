@@ -17,6 +17,6 @@ function DramaTweakData:init()
 	self.low = 0.05
 	self.assaultstart = 0.15
 	self.peak = 0.95
-	self.consistentcombat = 0.4
+	self.consistentcombat = 0.2
 	self.assault_fade_end = 0.25
 end
