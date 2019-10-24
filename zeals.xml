@@ -182,6 +182,17 @@
 		<file :name="ene_spook_heavy/spook_il.texture" force="false"/>
 		<file :name="ene_spook_heavy/spookyboy_df.texture" force="false"/>
 		<file :name="ene_spook_heavy/spooky_glow.effect" load="false" force="true"/>
+		
+		<file :name="ene_taser_heavy/ene_taser_heavy.unit" load="true" force="false"/>
+		<file :name="ene_taser_heavy/ene_taser_heavy_husk.unit" load="true" force="false"/>
+		<file :name="ene_taser_heavy/ene_taser_heavy_contour.material_config" force="false"/>
+		<file :name="ene_taser_heavy/ene_taser_heavy.material_config" force="false"/>
+		<file :name="ene_taser_heavy/ene_taser_heavy.object" force="false"/>
+		<file :name="ene_taser_heavy/ene_taser_heavy.cooked_physics" force="false"/>
+		<file :name="ene_taser_heavy/ene_taser_heavy.model" force="false"/>
+		<file :name="ene_taser_heavy/heavy_taser_df.texture" force="false"/>
+		<file :name="ene_taser_heavy/heavy_taser_head_df.texture" force="false"/>
+		<file :name="ene_taser_heavy/heavy_taser_head_nm.texture" force="false"/>
 
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.unit" load="true" force="false"/>
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper_husk.unit" load="true" force="false"/>

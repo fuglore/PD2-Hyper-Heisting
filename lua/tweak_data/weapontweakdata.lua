@@ -21,15 +21,20 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 
 	for _, rname in ipairs(all_rifles) do
 		self[rname].spread = rifle_spread
+		self[rname].fanpcwep = true
 	end
 	
 	for _, sname in ipairs(all_smgs) do
 		self[sname].spread = smg_spread
+		self[sname].fanpcwep = true
 	end
 	
 	self.m249_npc.spread = lmg_spread
+	self.m249_npc.fanpcwep = true
 	self.rpk_lmg_npc.spread = lmg_spread
+	self.rpk_lmg_npc.fanpcwep = true
 	self.mini_npc.spread = mini_spread
+	self.mini_npc.fanpcwep = true
 	
 	self.r870_npc.spread = 1
 	self.blazter_npc.spread = 1
@@ -150,7 +155,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.saiga_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.m249_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.rpk_lmg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
-	
 end)
 
 --TODO: it is done

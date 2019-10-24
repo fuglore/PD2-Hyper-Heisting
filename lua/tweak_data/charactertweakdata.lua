@@ -9576,6 +9576,7 @@ function CharacterTweakData:character_map()
 			"ene_fbi_heavy_ump",
 			"ene_bulldozer_sniper",
 			"ene_spook_heavy",
+			"ene_taser_heavy",
 			"ene_city_swat_saiga"
 		}
 	}

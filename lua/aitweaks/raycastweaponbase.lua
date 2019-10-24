@@ -178,8 +178,18 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 		else
 			managers.game_play_central:physics_push(col_ray)
 		end
-
-		if play_impact_flesh then
+		
+		local fullautonpc = alive(weapon_unit) and weapon_unit:base().weapon_tweak_data and weapon_unit:base():weapon_tweak_data() and weapon_unit:base():weapon_tweak_data().fullautonpc ~= nil
+		
+		if fullautonpc then --no more destroying my framerate you figgin' fuggin' goose
+			if math.random() < 0.25 then
+				managers.game_play_central:play_impact_flesh({
+					col_ray = col_ray,
+					no_sound = no_sound
+				})
+				self:play_impact_sound_and_effects(weapon_unit, col_ray, no_sound)
+			end
+		elseif play_impact_flesh then
 			managers.game_play_central:play_impact_flesh({
 				col_ray = col_ray,
 				no_sound = no_sound
@@ -189,4 +199,26 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 	end
 
 	return result
+end
+
+function InstantBulletBase:on_collision_effects(col_ray, weapon_unit, user_unit, damage, blank, no_sound)
+	local hit_unit = col_ray.unit
+	local play_impact_flesh = not hit_unit:character_damage() or not hit_unit:character_damage()._no_blood
+	local fullautonpc = alive(weapon_unit) and weapon_unit:base().weapon_tweak_data and weapon_unit:base():weapon_tweak_data() and weapon_unit:base():weapon_tweak_data().fullautonpc ~= nil
+	
+	if fullautonpc then
+		if math.random() < 0.25 then
+			managers.game_play_central:play_impact_flesh({
+				col_ray = col_ray,
+				no_sound = no_sound
+			})
+			self:play_impact_sound_and_effects(weapon_unit, col_ray, no_sound)
+		end
+	elseif play_impact_flesh then
+		managers.game_play_central:play_impact_flesh({
+			col_ray = col_ray,
+			no_sound = no_sound
+		})
+		self:play_impact_sound_and_effects(weapon_unit, col_ray, no_sound)
+	end
 end
