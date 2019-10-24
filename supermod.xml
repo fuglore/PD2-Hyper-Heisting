@@ -4,4 +4,5 @@
 	<:include src="zeals.xml" />
 	<:include src="psc.xml" />
 	<:include src="replacements.xml" />
+	<tweak definition="damagesyncing.xml" />
 </mod>

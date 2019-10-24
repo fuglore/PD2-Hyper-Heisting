@@ -45,7 +45,7 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		local activedrama = self._drama_data.amount >= tweak_data.drama.consistentcombat
 		
-		self._max_fedfuck_t_add = math.ceil(4 * self._feddensityhighfrequency)
+		self._max_fedfuck_t_add = 5
 		
 		--if not self._feddensity_reset_t then
 			--log("noresettime")
@@ -59,7 +59,7 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		if not self._max_fedfuck_t and activedrama and not self._feddensityhigh then
 			--log("tick tock")
-			self._max_fedfuck_t = self._t + (self._max_fedfuck_t_add * self._downleniency)
+			self._max_fedfuck_t = self._t + 5
 		end
 		
 		if not activedrama and self._max_fedfuck_t then
@@ -1459,7 +1459,7 @@ function GroupAIStateBesiege:_upd_regroup_task()
 	if regroup_task.active then
 		self:_assign_assault_groups_to_retire()
 
-		if regroup_task.end_t < self._t and self._drama_data.amount < tweak_data.drama.consistentcombat then
+		if regroup_task.end_t < self._t and self._drama_data.amount < tweak_data.drama.assault_fade_end then
 			self:_end_regroup_task()
 		end
 	end

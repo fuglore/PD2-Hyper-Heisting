@@ -304,12 +304,15 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	for u_key, attention_info in pairs(detected_obj) do
 		if t < attention_info.next_verify_t then
 			if AIAttentionObject.REACT_SUSPICIOUS <= attention_info.reaction then
-				local close_delay = math.min(attention_info.next_verify_t - t, delay)
+				local next_verify = attention_info.next_verify_t - t
+				local next_verify_x2 = next_verify * 2
 				local delay_multid = delay * 2
-				if attention_info.dis > 2000 then 
-					delay = delay * 2
-				else
+				local close_delay = math.min(next_verify, delay)
+				local far_delay = math.min(next_verify_x2, delay_multid)
+				if attention_info.dis <= 2000 then 
 					delay = close_delay
+				else
+					delay = far_delay
 				end
 			end
 		else
