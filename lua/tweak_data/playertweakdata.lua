@@ -107,6 +107,8 @@ function PlayerTweakData:_set_easy_wish()
 		--Nothing.
 	else
 		self.damage.LIVES_INIT = 3 --This increases complexity immediately, effectively and satisfyingly, requires more scrutinity though.
+		self.damage.INCAPACITATED_TIME = 25
+		self.damage.DOWNED_TIME = 25
 	end 
 end
 
@@ -132,6 +134,8 @@ function PlayerTweakData:_set_overkill_290()
 		--Nothing.
 	else
 		self.damage.LIVES_INIT = 3
+		self.damage.INCAPACITATED_TIME = 25
+		self.damage.DOWNED_TIME = 25
 	end
 end
 
@@ -154,9 +158,15 @@ function PlayerTweakData:_set_sm_wish()
 		max_value = 20,
 		autohit_chance_mul = 1
 	}
-	self.damage.TASED_TIME = 5
+	self.damage.TASED_TIME = 3
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
-	self.damage.LIVES_INIT = 3
+	if Global.game_settings.single_player then
+		self.damage.LIVES_INIT = 3
+	else
+		self.damage.LIVES_INIT = 2
+		self.damage.INCAPACITATED_TIME = 20
+		self.damage.DOWNED_TIME = 20
+	end
 end
 
 function PlayerTweakData:_set_singleplayer()
