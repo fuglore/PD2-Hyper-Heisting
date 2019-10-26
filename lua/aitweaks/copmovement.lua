@@ -364,6 +364,12 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		hurt_type = "heavy_hurt"
 	end
 
+	if hurt_type == "hurt" or hurt_type == "heavy_hurt" or hurt_type == "knock_down" then
+		if self._anim_global and self._anim_global == "shield" then
+			hurt_type = "expl_hurt"
+		end
+	end
+
 	local block_type = hurt_type
 
 	if hurt_type == "knock_down" or hurt_type == "expl_hurt" or hurt_type == "fire_hurt" or hurt_type == "poison_hurt" or hurt_type == "taser_tased" then
