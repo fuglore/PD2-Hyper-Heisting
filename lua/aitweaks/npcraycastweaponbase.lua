@@ -59,7 +59,7 @@ function NPCRaycastWeaponBase:_get_spread(user_unit)
 	if weapon_tweak.spread then
 		return weapon_tweak.spread
 	else
-		return 3
+		return 1
 	end
 end
 
