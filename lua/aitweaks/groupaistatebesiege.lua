@@ -232,7 +232,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local task_data = self._task_data.assault
 	local assault_number_sustain_t_mul = nil
 	
-	if task_data.force_anticipation and task_data.phase == "anticipation" then
+	if task_data.force_anticipation and task_data.phase == "anticipation" and task_data.phase_end_t > t then
 		self._task_data.assault.force = task_data.force_anticipation
 	else
 		if task_data.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
