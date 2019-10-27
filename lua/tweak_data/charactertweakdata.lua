@@ -60,15 +60,18 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 	for _, cname in ipairs(common_units) do
 		self[cname].crumble_chance = common_chance
 		self[cname].allow_pass_out = true
+		self[cname].damage.fire_damage_mul = 3
 	end
 	
 	for _, lname in ipairs(light_units) do
 		self[lname].crumble_chance = light_swat_chance
 		self[lname].allow_pass_out = true
+		self[lname].damage.fire_damage_mul = 2
 	end
 	
 	for _, hname in ipairs(heavy_units) do
 		self[hname].crumble_chance = heavy_swat_chance
+		self[hname].damage.fire_damage_mul = 1.5
 	end
 end
 
@@ -95,6 +98,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.HEALTH_INIT = 300
 	self.tank.headshot_dmg_mul = 4
 	self.tank.damage.explosion_damage_mul = 1 --lowered from base, was 1.1 now just 1, dunno why they thought it was a good idea to make explosives more powerful against him.
+	self.tank.damage.fire_damage_mul = 2
 	self.tank.move_speed = presets.move_speed.slow_consistency
 	self.tank.allowed_stances = {
 		cbt = true
@@ -173,6 +177,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_mini.move_speed = presets.move_speed.mini_consistency --New movement presets.
 	self.tank_mini.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_mini.always_face_enemy = true
+	self.tank_mini.damage.fire_damage_mul = 1
 	
 	self.tank_ftsu = deep_clone(self.tank) --and just like that, ive turned a meme into a real thing
 	self.tank_ftsu.weapon = presets.weapon.rhythmsniper
@@ -200,6 +205,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.detection = presets.detection.enemymook
 	self.spooc.HEALTH_INIT = 20
 	self.spooc.headshot_dmg_mul = 6
+	self.spooc.damage.fire_damage_mul = 2
 	self.spooc.move_speed = presets.move_speed.lightning_constant
 	self.spooc.no_retreat = nil
 	self.spooc.no_arrest = true
@@ -408,6 +414,7 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.detection = presets.detection.enemymook
 	self.taser.HEALTH_INIT = 28
 	self.taser.headshot_dmg_mul = 1.5 --Lowered from 3 to 1.5 based on testing with Syn.
+	self.taser.damage.fire_damage_mul = 0.5
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.taser.move_speed = presets.move_speed.civil_consistency
 	self.taser.suppression = presets.suppression.stalwart_nil
@@ -2063,7 +2070,7 @@ function CharacterTweakData:_presets(tweak_data)
 			health_reference = "current",
 			zones = {
 				{
-					fire = 1
+					fire = 0.05
 				}
 			}
 		},
@@ -2071,7 +2078,7 @@ function CharacterTweakData:_presets(tweak_data)
 			health_reference = "current",
 			zones = {
 				{
-					poison = 1,
+					poison = 0.25,
 					none = 0
 				}
 			}
