@@ -2436,8 +2436,8 @@ function CopDamage:damage_tase(attack_data)
 						self._tased_down_time = self._char_tweak.damage.tased_response.light.down_time
 						result.variant = "light"
 					else
-						self._tased_time = 5
-						self._tased_down_time = 10
+						self._tased_time = 1
+						self._tased_down_time = 5
 						result.variant = nil
 					end
 				end
@@ -2571,8 +2571,8 @@ function CopDamage:sync_damage_tase(attacker_unit, damage_percent, variant, deat
 		elseif variant == 3 then
 			result_type = "hurt"
 			attack_data.variant = "tase"
-			self._tased_time = 5
-			self._tased_down_time = 10
+			self._tased_time = 1
+			self._tased_down_time = 5
 		elseif variant == 4 then
 			result_type = "taser_tased"
 		else

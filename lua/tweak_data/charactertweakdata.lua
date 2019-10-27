@@ -2175,6 +2175,17 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	--no more weirdness with gangsters
 	presets.hurt_severities.base = deep_clone(presets.hurt_severities.hordemook)
+	
+	presets.base.damage.tased_response = {
+		light = {
+			down_time = nil,
+			tased_time = 1
+		},
+		heavy = {
+			down_time = nil,
+			tased_time = 5
+		}
+	}
 		
 	--Custom sniper preset to make them work differently, they work as a mini turret of sorts, dealing big damage with good accuracy, standing in their line of fire isn't wise as they'll suppress the shit out of you and take off armor very quickly.
 	presets.weapon.rhythmsniper = deep_clone(presets.weapon.sniper)

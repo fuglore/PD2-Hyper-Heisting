@@ -1024,7 +1024,7 @@ function CopActionHurt:_upd_tased(t)
 	end
 
 	if not self._tased_time or self._tased_time < t then
-		if self._tased_down_time and t < self._tased_down_time then
+		if dont and self._tased_down_time and t < self._tased_down_time then --leaving this with a dummy check for now until i figure out some reason to use this
 			local redir_res = self._ext_movement:play_redirect("fatal")
 
 			if not redir_res then

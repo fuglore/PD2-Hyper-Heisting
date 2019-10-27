@@ -153,7 +153,7 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.phase = "anticipation"
 	assault_task.start_t = self._t
 	local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.is_first)
-	assault_task.force_anticipation = 24
+	assault_task.force_anticipation = 16
 	assault_task.is_first = nil
 	self._enemies_killed_sustain = 0
 	assault_task.phase_end_t = self._t + anticipation_duration
@@ -232,7 +232,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local task_data = self._task_data.assault
 	local assault_number_sustain_t_mul = nil
 	
-	if task_data.force_anticipation and task_data.phase == "anticipation" and task_data.phase_end_t > t then
+	if task_data.phase == "anticipation" then
 		self._task_data.assault.force = task_data.force_anticipation
 	else
 		if task_data.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
@@ -300,18 +300,20 @@ function GroupAIStateBesiege:_upd_assault_task()
 					local best_group = nil
 
 					for _, group in pairs(self._groups) do
-						if not best_group or group.objective.type == "reenforce_area" then
+						if group.objective.type == "reenforce_area" then
 							best_group = group
-						elseif best_group.objective.type ~= "reenforce_area" and group.objective.type ~= "retire" then
+						elseif group.objective.type ~= "reenforce_area" and group.objective.type ~= "retire" then
+							best_group = group
+						elseif not best_group then
 							best_group = group
 						end
 					end
 
 					if best_group and self:_voice_delay_assault(best_group) then
-						task_data.is_hesitating = nil
+						self._task_data.assault.is_hesitating = nil
 					end
 				else
-					task_data.is_hesitating = nil
+					self._task_data.assault.is_hesitating = nil
 				end
 			end
 		end
@@ -336,8 +338,8 @@ function GroupAIStateBesiege:_upd_assault_task()
 			
 			managers.modifiers:run_func("OnEnterSustainPhase", sustain_duration)
 
-			task_data.phase = "sustain"
-			task_data.phase_end_t = t + sustain_duration
+			self._task_data.assault.phase = "sustain"
+			self._task_data.assault.phase_end_t = t + sustain_duration
 		end
 	elseif task_data.phase == "sustain" then
 		local end_t = self:assault_phase_end_time()
@@ -395,7 +397,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			self:_assign_assault_groups_to_retire()
 			if enemies_defeated and fade_time_over or taking_too_long then
 				if not task_data.said_retreat then
-					task_data.said_retreat = true
+					self._task_data.assault.said_retreat = true
 
 					self:_police_announce_retreat()
 					self:_assign_assault_groups_to_retire()
@@ -1626,15 +1628,4 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 	end
 end
 
-function GroupAIStateBesiege:_verify_anticipation_spawn_point(sp_data)
-	local sp_nav_seg = sp_data.nav_seg
-	local area = self:get_area_from_nav_seg_id(sp_nav_seg)
 
-	for criminal_key, c_data in pairs(self._criminals) do
-		if not c_data.is_deployable and math.abs(sp_data.pos.z - c_data.m_pos.z) < 250 and mvector3.distance(sp_data.pos, c_data.m_pos) < 2000 or not c_data.is_deployable and mvector3.distance(sp_data.pos, c_data.m_pos) < 1000 then
-			return
-		end
-	end
-	
-	return true
-end
