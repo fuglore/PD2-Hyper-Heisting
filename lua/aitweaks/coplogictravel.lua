@@ -377,11 +377,11 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	end
 	
 	if data.tactics and data.tactics.obstacle and CopLogicTravel._chk_close_to_criminal(data, my_data) then
-		return false
+		return 
 	end
 	
 	if CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_high_fed_density() and dense_mook then
-		return false
+		return
 	end
 	
 	local my_dis = mvector3.distance_sq(my_objective.area.pos, data.m_pos)

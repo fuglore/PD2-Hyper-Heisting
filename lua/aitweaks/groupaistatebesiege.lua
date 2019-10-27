@@ -153,6 +153,7 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.phase = "anticipation"
 	assault_task.start_t = self._t
 	local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.is_first)
+	assault_task.force_anticipation = 24
 	assault_task.is_first = nil
 	self._enemies_killed_sustain = 0
 	assault_task.phase_end_t = self._t + anticipation_duration
@@ -230,6 +231,20 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local low_carnage = self:_count_criminals_engaged_force(4) <= 4  
 	local task_data = self._task_data.assault
 	local assault_number_sustain_t_mul = nil
+	
+	if task_data.force_anticipation and task_data.phase == "anticipation" then
+		self._task_data.assault.force = task_data.force_anticipation
+	else
+		if task_data.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
+			self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		elseif self._assault_number == 2 then
+			self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.85 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		elseif self._assault_number == 3 then
+			self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.9 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		else
+			self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		end
+	end
 	
 	if task_data.is_first or self._assault_number and self._assault_number <= 2 or not self._assault_number then
 		assault_number_sustain_t_mul = 0.75 
@@ -1609,4 +1624,17 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 			self._groups[spawn_task.group.id] = nil
 		end
 	end
+end
+
+function GroupAIStateBesiege:_verify_anticipation_spawn_point(sp_data)
+	local sp_nav_seg = sp_data.nav_seg
+	local area = self:get_area_from_nav_seg_id(sp_nav_seg)
+
+	for criminal_key, c_data in pairs(self._criminals) do
+		if not c_data.is_deployable and math.abs(sp_data.pos.z - c_data.m_pos.z) < 250 and mvector3.distance(sp_data.pos, c_data.m_pos) < 2000 or not c_data.is_deployable and mvector3.distance(sp_data.pos, c_data.m_pos) < 1000 then
+			return
+		end
+	end
+	
+	return true
 end

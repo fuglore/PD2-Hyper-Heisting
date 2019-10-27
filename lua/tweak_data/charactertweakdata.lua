@@ -636,6 +636,9 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.sniper.weapon = presets.weapon.rhythmsniper --this is important, makes them use the mini turret sniper mode.
 	self.sniper.detection = presets.detection.sniper
 	self.sniper.damage.hurt_severity = presets.hurt_severities.no_hurts --minimize sniper annoyance, just shoot the cunts.
+	self.sniper.allowed_stances = {
+		cbt = true
+	}
 	self.sniper.HEALTH_INIT = 1
 	self.sniper.headshot_dmg_mul = 2	
 	self.sniper.move_speed = presets.move_speed.simple_consistency
