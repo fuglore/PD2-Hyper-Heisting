@@ -898,14 +898,8 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 	
-	if diff_index <= 7 and not Global.game_settings.use_intense_AI then	
-		if not action_taken and want_to_take_cover and not best_cover or not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
-			action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, false)
-		end
-	else
-		if not action_taken and want_to_take_cover and not best_cover or hitnrunmovementqualify and not pantsdownchk or eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
-			action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, false)
-		end
+	if not action_taken and want_to_take_cover and not best_cover or not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
+		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, false)
 	end
 	
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
