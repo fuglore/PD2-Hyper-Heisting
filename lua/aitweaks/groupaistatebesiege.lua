@@ -232,19 +232,19 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local task_data = self._task_data.assault
 	local assault_number_sustain_t_mul = nil
 	
-	if task_data.phase == "anticipation" then
-		self._task_data.assault.force = task_data.force_anticipation
-	else
-		if task_data.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
-			self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-		elseif self._assault_number == 2 then
-			self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.85 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-		elseif self._assault_number == 3 then
-			self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.9 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-		else
-			self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-		end
-	end
+	--if task_data.phase == "anticipation" then
+		--self._task_data.assault.force = task_data.force_anticipation
+	--else
+		--if task_data.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
+			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		--elseif self._assault_number == 2 then
+			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.85 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		--elseif self._assault_number == 3 then
+			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.9 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		--else
+			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		--end
+	--end
 	
 	if task_data.is_first or self._assault_number and self._assault_number <= 2 or not self._assault_number then
 		assault_number_sustain_t_mul = 0.75 
