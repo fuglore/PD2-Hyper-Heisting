@@ -709,8 +709,8 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	local body_index = self._unit:get_body_index(attack_data.col_ray.body:name())
 	local head = self._head_body_name and not self._unit:in_slot(16) and not self._char_tweak.ignore_headshot and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 
-	--prevent headshots against Dozers unless shot from the front, for consistency with faceplates/visors
-	if head and self._unit:base():has_tag("tank") and not attack_data.weapon_unit:base().thrower_unit then
+	--prevent headshots against these units unless shot from the front, used for bulldozers
+	if head and self._unit:base():has_tag("protected") and not attack_data.weapon_unit:base().thrower_unit then
 		mvector3.set(mvec_1, attack_data.col_ray.body:position())
 		mvector3.subtract(mvec_1, attack_data.attacker_unit:position())
 		mvector3.normalize(mvec_1)

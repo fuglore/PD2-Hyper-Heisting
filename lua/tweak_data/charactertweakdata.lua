@@ -80,7 +80,8 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.tags = {
 		"law",
 		"tank",
-		"special"
+		"special",
+		"protected"
 	}
 	self.tank.experience = {}
 	self.tank.damage.tased_response = {
@@ -151,6 +152,11 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.immune_to_concussion = true
 	
 	self.tank_hw = deep_clone(self.tank)
+	self.tank_hw.tags = {
+		"law",
+		"tank",
+		"special"
+	}
 	self.tank_hw.move_speed = presets.move_speed.slow_consistency --lol stop
 	self.tank_hw.HEALTH_INIT = 40 --1600 on top difficulty, encourage teamfire against these guys since they're gonna be on the halloween maps
 	self.tank_hw.headshot_dmg_mul = 1
@@ -169,7 +175,8 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		"law",
 		"tank",
 		"medic",
-		"special"
+		"special",
+		"protected"
 	}
 
 	self.tank_mini = deep_clone(self.tank)
@@ -180,6 +187,11 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_mini.damage.fire_damage_mul = 1
 	
 	self.tank_ftsu = deep_clone(self.tank) --and just like that, ive turned a meme into a real thing
+	self.tank_ftsu.tags = {
+		"law",
+		"tank",
+		"special"
+	}
 	self.tank_ftsu.weapon = presets.weapon.rhythmsniper
 	self.tank_ftsu.move_speed = presets.move_speed.mini_consistency
 	self.tank_ftsu.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
@@ -1795,6 +1807,66 @@ function CharacterTweakData:_presets(tweak_data)
 					strafe = 800,
 					fwd = 800,
 					bwd = 800
+				}
+			}
+		}
+	}
+	
+	presets.move_speed.speedofsoundsonic = { 
+		stand = {
+			walk = {
+				ntl = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
+				},
+				hos = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
+				},
+				cbt = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
+				}
+			},
+			run = {
+				hos = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
+				},
+				cbt = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
+				}
+			}
+		},
+		crouch = {
+			walk = {
+				hos = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
+				},
+				cbt = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
+				}
+			},
+			run = {
+				hos = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
+				},
+				cbt = {
+					strafe = 1000,
+					fwd = 1000,
+					bwd = 1000
 				}
 			}
 		}
@@ -7593,6 +7665,7 @@ function CharacterTweakData:_set_overkill_145()
 		3.5,
 		5
 	}
+	
 	if Global.game_settings and Global.game_settings.use_intense_AI then
 		--fbi setup
 		self.fbi.dodge = self.presets.dodge.ninja_complex
@@ -7697,6 +7770,10 @@ function CharacterTweakData:_set_overkill_145()
 		self.cop_female.HEALTH_INIT = 8
 		self.flashbang_multiplier = 1.75
 		self.concussion_multiplier = 1
+	end
+	
+	if Global.mutators and Global.mutators.telespooc then
+		self.spooc.move_speed = self.presets.move_speed.speedofsoundsonic
 	end
 end
 
@@ -9598,6 +9675,7 @@ function CharacterTweakData:character_map()
 			"ene_bulldozer_sniper",
 			"ene_spook_heavy",
 			"ene_taser_heavy",
+			"ene_shield_heavy",
 			"ene_city_swat_saiga"
 		}
 	}
