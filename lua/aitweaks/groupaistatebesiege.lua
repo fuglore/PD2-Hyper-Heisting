@@ -549,7 +549,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 					local grp_objective = {
 						attitude = "avoid",
 						stance = "hos",
-						pose = "crouch",
+						pose = "stand",
 						type = "assault_area",
 						area = spawn_group.area,
 						coarse_path = {

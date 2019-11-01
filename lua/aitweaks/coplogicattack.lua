@@ -200,10 +200,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 				end
 			end
 			
-			if focus_enemy.dis <= 1500 and data.unit:base()._tweak_table == "spooc" or focus_enemy.dis <= 250 and focus_enemy.verified then
-				shoot = false
-			end
-			
 			--harass: attempt to engage enemies who are leaving themselves open, with things like interactions, changing weapons or reloading 
 	
 			--this is important for harass.
@@ -223,19 +219,12 @@ function CopLogicAttack._upd_aim(data, my_data)
 				end
 			end
 			
-			local reaction_time = nil
-			
 			if not shoot and focus_enemy and focus_enemy.verified and data.tactics and data.tactics.harass and pantsdownchk and not outoffov then 
 				if managers.groupai:state():chk_high_fed_density() then
 					--log("not firing due to FEDS")
 				else
 					shoot = true
 				end
-			end
-			
-			if managers.groupai:state():chk_high_fed_density() and dense_mook then
-				shoot = false
-				--log("not firing due to FEDS")
 			end
 
 			if aim == nil and AIAttentionObject.REACT_AIM <= focus_enemy.reaction then
@@ -248,12 +237,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 						maxrange = data.internal_data.weapon_range.far
 					else
 						debug_pause_unit(data.unit, "[CopLogicAttack]: Unit doesn't have data.internal_data.weapon_range")
-					end
-					
-					if managers.groupai:state():whisper_mode() then
-						if focus_enemy.verified and focus_enemy.verified_t > 1.05 then
-							shoot = true
-						end
 					end
 					
 					if not managers.groupai:state():whisper_mode() then
@@ -294,7 +277,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 									--log("not hunting due to FEDS")
 								else
 									--they'll start pathing ahead of time to hunt
-									if not (data.tactics and data.tactics.obstacle) and focus_enemy.is_person then
+									if data.tactics and data.tactics.charge and focus_enemy.is_person then
 										data.brain:search_for_path_to_unit("hunt" .. tostring(my_data.key), focus_enemy.unit)
 									end
 								end
@@ -489,6 +472,31 @@ function CopLogicAttack._upd_aim(data, my_data)
 			my_data.attention_unit = nil
 		end
 	end
+	
+	if focus_enemy and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT then
+		if focus_enemy and focus_enemy.dis <= 1500 and data.unit:base()._tweak_table == "spooc" then
+			shoot = nil
+		end
+		
+		local reaction_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 1.05
+		
+		local loud_react_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 0.2
+		
+		if managers.groupai:state():whisper_mode() then
+			if not reaction_comply then
+				shoot = nil
+			end
+		else
+			if not loud_react_comply then
+				shoot = nil
+			end
+		end
+		
+		if managers.groupai:state():chk_high_fed_density() and dense_mook then
+			shoot = nil
+			--log("not firing due to FEDS")
+		end
+	end
 
 	CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 end
@@ -499,6 +507,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 	local haste = nil
 	
 	local can_perform_walking_action = not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos
+	local pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or should_crouch and "crouch" or "stand"
 	
 	local mook_units = {
 		"security",
@@ -580,9 +589,6 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 				should_crouch = true
 			end
 		end
-	
-		local pose = nil
-		pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or should_crouch and "crouch" or "stand"
 
 		if not data.unit:anim_data()[pose] then
 			CopLogicAttack["_chk_request_action_" .. pose](data)
@@ -903,7 +909,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 	
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
-	if action_taken or my_data.stay_out_time then
+	if action_taken or my_data.stay_out_time and my_data.stay_out_time > t then
 		-- Nothing
 	elseif want_to_take_cover then
 		if data.tactics and data.tactics.flank then
@@ -966,7 +972,7 @@ function CopLogicAttack._upd_combat_movement(data)
 					else
 						my_data.cover_test_step = my_data.cover_test_step + 1
 					end
-				elseif data.tactics and data.tactics.flank then
+				elseif not enemy_visible_softer and math.random() < 0.05 then
 					move_to_cover = true
 					want_flank_cover = true
 				end
@@ -979,7 +985,7 @@ function CopLogicAttack._upd_combat_movement(data)
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "inpos")
 					end
 				end
-				if my_data.stay_out_time < t then
+				if my_data.stay_out_time and my_data.stay_out_time < t then
 					if data.tactics and data.tactics.flank then
 						want_flank_cover = true 
 						--i went ahead and included these to make sure flankers are always getting flanking positions instead of regular ones, it helps them stay predictable in regards to their choices of movement, you can tell a flank team by 1. smoke grenades being present 2. their chatter and 3. how they prefer to move around the map.
@@ -1020,7 +1026,7 @@ function CopLogicAttack._upd_combat_movement(data)
 				sign = sign
 			}
 			my_data.taken_flank_cover = true --this helps them qualify for charging behavior after acquiring a flank, which is not vanilla behavior btw
-			want_flank_cover = false
+			want_flank_cover = nil
 			if not data.unit:in_slot(16) then --flankers signal their presence whenever they move around
 				if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.look_for_angle then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")

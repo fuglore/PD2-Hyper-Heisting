@@ -657,20 +657,17 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	end
 		
 	
-	if not Global.game_settings.one_down then
-			if objective.interrupt_suppression and data.is_suppressed then
-				if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
-					my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
+	if objective.interrupt_suppression and data.is_suppressed then
+		if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
+			my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
 					
-					return true, true
-				else
-				
-					return true, false
-				end
-			end
+			return true, true
+		else	
+			return true, false
 		end
+	end
 
-		strictness = strictness or 0
+	strictness = strictness or 0
 
 	if objective.interrupt_health and not data.unit:in_slot(16) then
 			local health_ratio = data.unit:character_damage():health_ratio()

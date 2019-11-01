@@ -213,10 +213,6 @@ function CopLogicTravel.queued_update(data)
     
     CopLogicTravel.upd_advance(data)
 	CopLogicIdle._update_haste(data, my_data)
-	
-	--if CopLogicTravel.chk_slide_conditions(data) then 
-	--	data.unit:movement():play_redirect("e_nl_button_slide_under")
-	--end
     
     if data.internal_data ~= my_data then
     	return
@@ -295,7 +291,6 @@ function CopLogicTravel.upd_advance(data)
 				CopLogicTravel._try_anounce(data, my_data)
 			end
 			
-			--CopLogicTravel.chk_slide_conditions(data)
 			--CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 
 			if my_data ~= data.internal_data then
@@ -304,7 +299,6 @@ function CopLogicTravel.upd_advance(data)
 		end
 	elseif my_data.advance_path then
 		CopLogicTravel._chk_begin_advance(data, my_data)
-		--CopLogicTravel.chk_slide_conditions(data)
 
 		if my_data.advancing and my_data.path_ahead then
 			CopLogicTravel._check_start_path_ahead(data)
@@ -329,7 +323,6 @@ function CopLogicTravel.upd_advance(data)
 				return
 			else
 				CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
-				--CopLogicTravel.chk_slide_conditions(data)
 			end
 		else
 			CopLogicTravel._begin_coarse_pathing(data, my_data)
@@ -699,7 +692,11 @@ function CopLogicTravel._update_cover(ignore_this, data)
 	if not is_mook then
 		cover_release_dis = 100
 	else
-		cover_release_dis = 75
+		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 10000 then
+			cover_release_dis = 500
+		else
+			cover_release_dis = 75
+		end
 	end
 	
 	local nearest_cover = my_data.nearest_cover

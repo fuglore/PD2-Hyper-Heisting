@@ -5052,29 +5052,29 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				15
 			},
 			tac_swat_rifle = {
-				15.25,
-				15.25,
-				15.25
+				15,
+				15,
+				15
 			},
 			tac_swat_rifle_flank = {
-				15.25,
-				15.25,
-				15.25
+				15,
+				15,
+				15
 			},
 			tac_shield_wall_ranged = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall_charge = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_tazer_flanking = {
 				6,
@@ -5082,19 +5082,19 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				6
 			},
 			tac_tazer_charge = {
-				6.75,
-				6.75,
-				6.75
+				6,
+				6,
+				6
 			},
 			FBI_spoocs = {
-				9,
-				9,
-				9
+				9.5,
+				9.5,
+				9.5
 			},
 			tac_bull_rush = {
-				9,
-				9,
-				9
+				8.25,
+				8.25,
+				8.25
 			}
 		}
 	elseif difficulty_index == 7 then
@@ -5120,19 +5120,19 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				15
 			},
 			tac_shield_wall_ranged = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall_charge = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_tazer_flanking = {
 				6,
@@ -5140,27 +5140,27 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				6
 			},
 			tac_tazer_charge = {
-				7,
-				7,
-				7
+				6,
+				6,
+				6
 			},
 			FBI_spoocs = {
-				9,
-				9,
-				9
+				9.5,
+				9.5,
+				9.5
 			},
 			tac_bull_rush = {
-				9,
-				9,
-				9
+				8.25,
+				8.25,
+				8.25
 			}
 		}
 	elseif difficulty_index == 8 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				15.25,
-				15.25,
-				15.25
+				15,
+				15,
+				15
 			},
 			tac_swat_shotgun_flank = {
 				15,
@@ -5173,24 +5173,24 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				15
 			},
 			tac_swat_rifle_flank = {
-				15.25,
-				15.25,
-				15.25
+				15,
+				15,
+				15
 			},
 			tac_shield_wall_ranged = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall_charge = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_tazer_flanking = {
 				6,
@@ -5203,52 +5203,52 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				6
 			},
 			FBI_spoocs = {
-				9.75,
-				9.75,
-				9.75
+				9.5,
+				9.5,
+				9.5
 			},
 			tac_bull_rush = {
-				9,
-				9,
-				9
+				8.25,
+				8.25,
+				8.25
 			}
 		}
 	else
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				15.25,
-				15.25,
-				15.25
+				15,
+				15,
+				15
 			},
 			tac_swat_shotgun_flank = {
-				14.75,
-				14.75,
-				14.75
+				15,
+				15,
+				15
 			},
 			tac_swat_rifle = {
-				14.75,
-				14.75,
-				14.75
+				15,
+				15,
+				15
 			},
 			tac_swat_rifle_flank = {
-				15.25,
-				15.25,
-				15.25
+				15,
+				15,
+				15
 			},
 			tac_shield_wall_ranged = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall_charge = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_tazer_flanking = {
 				6,
@@ -5261,14 +5261,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				6
 			},
 			FBI_spoocs = {
-				10,
-				10,
-				10
+				9.5,
+				9.5,
+				9.5
 			},
 			tac_bull_rush = {
-				9,
-				9,
-				9
+				8.25,
+				8.25,
+				8.25
 			}
 		}
 	end

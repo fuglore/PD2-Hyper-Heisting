@@ -194,6 +194,7 @@
 		<file :name="ene_taser_heavy/heavy_taser_head_df.texture" force="false"/>
 		<file :name="ene_taser_heavy/heavy_taser_head_nm.texture" force="false"/>
 		
+		<!--Classic Shield ty jarey <33333-->	
 		<file :name="ene_shield_heavy/ene_shield_heavy.unit" load="true" force="false"/>
 		<file :name="ene_shield_heavy/ene_shield_heavy_husk.unit" load="true" force="false"/>
 		<file :name="ene_shield_heavy/ene_shield_heavy_contour.material_config" force="false"/>
@@ -205,7 +206,6 @@
 		<file :name="ene_shield_heavy/mask_df.texture" force="false"/>
 		<file :name="ene_shield_heavy/classic2_nm.texture" force="false"/>
 		
-		<!--Classic Shield ty jarey <33333-->	
 		<file :name="ene_acc_classic_shield/ene_acc_classic_shield.material_config" force="true"/>
 		<file :name="ene_acc_classic_shield/ene_acc_classic_shield.object" force="true"/>
 		<file :name="ene_acc_classic_shield/ene_acc_classic_shield.cooked_physics" force="true"/>

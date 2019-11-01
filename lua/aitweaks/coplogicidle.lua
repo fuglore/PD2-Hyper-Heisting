@@ -661,6 +661,8 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					
 					if data.tactics and data.tactics.spooctargeting and distance < 1500 then
 						target_priority_slot = 1
+					elseif distance < 250 and not murderorspooctargeting then
+						target_priority_slot = 1
 					elseif distance < 500 and not murderorspooctargeting then
 						target_priority_slot = 2
 					elseif distance < 1500 and not murderorspooctargeting then
@@ -675,9 +677,8 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						target_priority_slot = target_priority_slot - 1
 					elseif data.tactics and data.tactics.harass and pantsdownchk then
 						target_priority_slot = 1
-						--log("oh god oh fuck here comes the locusts")
-					elseif free_status and assault_reaction then
-						target_priority_slot = 5
+					else
+						target_priority_slot = target_priority_slot
 					end
 					
 					if old_enemy then
@@ -689,12 +690,16 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					target_priority_slot = 7
 				end
 				
-				if old_enemy and data.tactics and data.tactics.murder and reaction >= AIAttentionObject.REACT_COMBAT then
+				if old_enemy and data.tactics and data.tactics.murder then
 					target_priority_slot = 1
 					--log("*heavy breathing*")
 				end
+				
+				if assault_reaction and data.unit:base()._tweak_table == "taser" and distance < 1500 then
+					target_priority_slot = 1
+				end
 
-				if reaction < AIAttentionObject.REACT_COMBAT then
+				if reaction < AIAttentionObject.REACT_COMBAT or data.tactics and data.tactics.murder and not old_enemy then
 					target_priority_slot = 20 + target_priority_slot + math.max(0, AIAttentionObject.REACT_COMBAT - reaction)
 				end
 
