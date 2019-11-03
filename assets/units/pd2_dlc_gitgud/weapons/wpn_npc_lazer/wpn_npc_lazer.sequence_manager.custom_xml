@@ -1,8 +1,0 @@
-<table>
-	<unit>
-		<sequence name="'enable_body'" triggable="true">
-			<body enabled="true" name="'body'"/>
-			<graphic_group name="'lod_group'" visibility="false"/>
-		</sequence>
-	</unit>
-</table>

@@ -9,20 +9,15 @@ ModifierNoHurtAnims.IgnoredHurtTypes = {
 
 function ModifierNoHurtAnims:init(data)
 	ModifierNoHurtAnims.super.init(self, data)
-	if managers and managers.skirmish and managers.skirmish:is_skirmish() then
-		--nothing
-	elseif not Global.game_settings.one_down then
+	if not Global.game_settings.one_down then
 		Global.game_settings.one_down = true
 	end
 end
 
 function ModifierNoHurtAnims:modify_value(id, value)
-	if id == "CopMovement:HurtType" and table.contains(ModifierNoHurtAnims.IgnoredHurtTypes, value) then
-		if managers and managers.skirmish and managers.skirmish:is_skirmish() then
-			return nil, true
-		else
-			return value
-		end
+	--dont
+	if dont and id == "CopMovement:HurtType" and table.contains(ModifierNoHurtAnims.IgnoredHurtTypes, value) then
+		return value
 	end
 	
 	return value
