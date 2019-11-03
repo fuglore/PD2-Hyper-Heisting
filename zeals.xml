@@ -161,6 +161,7 @@
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.cooked_physics" force="false"/>
 		<file :name="ene_fbi_heavy_ump/ene_fbi_heavy_ump.model" force="false"/>
 		
+		<!--saiga gensec swat-->
 		<file :name="ene_city_swat_saiga/ene_city_swat_saiga.unit" load="true" force="false"/>
 		<file :name="ene_city_swat_saiga/ene_city_swat_saiga_husk.unit" load="true" force="false"/>
 		<file :name="ene_city_swat_saiga/ene_city_swat_saiga_contour.material_config" force="false"/>
@@ -169,6 +170,7 @@
 		<file :name="ene_city_swat_saiga/ene_city_swat_saiga.cooked_physics" force="false"/>
 		<file :name="ene_city_swat_saiga/ene_city_swat_saiga.model" force="false"/>
 		
+		<!--heavy cloaker-->
 		<file :name="ene_spook_heavy/ene_spook_heavy.unit" load="true" force="false"/>
 		<file :name="ene_spook_heavy/ene_spook_heavy_husk.unit" load="true" force="false"/>
 		<file :name="ene_spook_heavy/ene_spook_heavy_contour.material_config" force="false"/>
@@ -183,6 +185,7 @@
 		<file :name="ene_spook_heavy/spookyboy_df.texture" force="false"/>
 		<file :name="ene_spook_heavy/spooky_glow.effect" load="false" force="true"/>
 		
+		<!--heavy tazer-->
 		<file :name="ene_taser_heavy/ene_taser_heavy.unit" load="true" force="false"/>
 		<file :name="ene_taser_heavy/ene_taser_heavy_husk.unit" load="true" force="false"/>
 		<file :name="ene_taser_heavy/ene_taser_heavy_contour.material_config" force="false"/>
@@ -194,7 +197,28 @@
 		<file :name="ene_taser_heavy/heavy_taser_head_df.texture" force="false"/>
 		<file :name="ene_taser_heavy/heavy_taser_head_nm.texture" force="false"/>
 		
-		<!--Classic Shield ty jarey <33333-->	
+		<!--heavy medics-->
+		<file :name="ene_medic_heavy_m4/ene_medic_heavy_m4.unit" load="true" force="false"/>
+		<file :name="ene_medic_heavy_m4/ene_medic_heavy_m4_husk.unit" load="true" force="false"/>
+		<file :name="ene_medic_heavy_m4/ene_medic_heavy_m4_contour.material_config" force="false"/>
+		<file :name="ene_medic_heavy_m4/ene_medic_heavy_m4.material_config" force="false"/>
+		<file :name="ene_medic_heavy_m4/ene_medic_heavy_m4.object" force="false"/>
+		<file :name="ene_medic_heavy_m4/ene_medic_heavy_m4.cooked_physics" force="false"/>
+		<file :name="ene_medic_heavy_m4/ene_medic_heavy_m4.model" force="false"/>
+		<file :name="ene_medic_heavy_m4/heavy_medic_df.texture" force="false"/>
+		<file :name="ene_medic_heavy_m4/heavy_medic_nm.texture" force="false"/>
+		<file :name="ene_medic_heavy_m4/heavy_medic_head_df.texture" force="false"/>
+		<file :name="ene_medic_heavy_m4/heavy_medic_head_nm.texture" force="false"/>
+		
+		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870.unit" load="true" force="false"/>
+		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870_husk.unit" load="true" force="false"/>
+		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870_contour.material_config" force="false"/>
+		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870.material_config" force="false"/>
+		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870.object" force="false"/>
+		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870.cooked_physics" force="false"/>
+		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870.model" force="false"/>
+		
+		<!--Classic Heavy Shield ty jarey <33333-->	
 		<file :name="ene_shield_heavy/ene_shield_heavy.unit" load="true" force="false"/>
 		<file :name="ene_shield_heavy/ene_shield_heavy_husk.unit" load="true" force="false"/>
 		<file :name="ene_shield_heavy/ene_shield_heavy_contour.material_config" force="false"/>
@@ -214,7 +238,8 @@
 		<file :name="ene_acc_classic_shield/ene_acc_classic_shield.sequence_manager" load="true"/>
 		<file :name="ene_acc_classic_shield/ene_acc_classic_shield_df.texture" force="false"/>
 		<file :name="ene_acc_classic_shield/ene_acc_classic_shield_nm.texture" force="false"/>
-
+		
+		<!--sniperdozer-->
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper.unit" load="true" force="false"/>
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper_husk.unit" load="true" force="false"/>
 		<file :name="ene_bulldozer_sniper/ene_bulldozer_sniper_contour.material_config" force="false"/>

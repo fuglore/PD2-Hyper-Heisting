@@ -9676,6 +9676,8 @@ function CharacterTweakData:character_map()
 			"ene_spook_heavy",
 			"ene_taser_heavy",
 			"ene_shield_heavy",
+			"ene_medic_heavy_m4",
+			"ene_medic_heavy_r870",
 			"ene_city_swat_saiga"
 		}
 	}

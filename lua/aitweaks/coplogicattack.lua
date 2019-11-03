@@ -474,9 +474,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 	end
 	
 	if focus_enemy and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT then
-		if focus_enemy and focus_enemy.dis <= 1500 and data.unit:base()._tweak_table == "spooc" then
-			shoot = nil
-		end
 		
 		local reaction_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 1.05
 		
@@ -487,7 +484,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 				shoot = nil
 			end
 		else
-			if not loud_react_comply then
+			if not loud_react_comply and not data.unit:base()._tweak_table == "spooc" and not data.unit:base()._tweak_table == "taser" and not data.unit:base()._tweak_table == "spooc_heavy" and not data.unit:base()._tweak_table == "shadow_spooc" then
 				shoot = nil
 			end
 		end

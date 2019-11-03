@@ -1,0 +1,9 @@
+<table name="Welcome to Hyper Heisting">
+    <Localization directory="loc" default="en.txt"/>
+    <HeistMusic id="insertcredit" directory="assets\music\insertcredit" volume="0.9">
+        <event name="setup" start_source= "stealthintro.ogg" source="stealth.ogg"/>
+        <event name="anticipation" start_source="anticipation.ogg" source="anticiloop.ogg"/>
+        <event name="assault" start_source="assaultintro.ogg" source="assault.ogg" alt_source="assaultalt.ogg"/>
+        <event name="control" start_source="controlintro.ogg" source="control.ogg"/>
+    </HeistMusic>
+</table>
