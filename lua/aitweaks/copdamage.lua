@@ -270,7 +270,7 @@ function CopDamage:damage_melee(attack_data)
 		damage_effect_percent = math.ceil(damage_effect / self._HEALTH_INIT_PRECENT)
 		damage_effect_percent = math.clamp(damage_effect_percent, 1, self._HEALTH_GRANULARITY)
 
-		local result_type = nil
+		local result_type = self:get_damage_type(damage_effect_percent, "melee")
 		local variant = attack_data.variant
 
 		if attack_data.shield_knock and self._char_tweak.damage.shield_knocked and not self._unit:base().is_phalanx and not self:is_immune_to_shield_knockback() then
@@ -282,7 +282,7 @@ function CopDamage:damage_melee(attack_data)
 		elseif attack_data.variant == "counter_spooc" and not self._unit:base():has_tag("tank") or attack_data.variant == "counter_spooc" and not self._unit:base():has_tag("boss") then
 			result_type = "expl_hurt"
 		else
-			self:get_damage_type(damage_effect_percent, "melee")
+			result_type = self:get_damage_type(damage_effect_percent, "melee")
 		end
 
 		if result_type == "taser_tased" and not self._unit:base():has_tag("shield") then --shields get tased as usual, other enemies get tased similarly to bots
