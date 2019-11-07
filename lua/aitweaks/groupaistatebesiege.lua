@@ -443,13 +443,15 @@ function GroupAIStateBesiege:_upd_assault_task()
 				task_data.phase = nil
 				task_data.said_retreat = nil
 				task_data.force_end = nil
+				local force_regroup = task_data.force_regroup
+				task_data.force_regroup = nil
 
 				if self._draw_drama then
 					self._draw_drama.assault_hist[#self._draw_drama.assault_hist][2] = t
 				end
 
 				managers.mission:call_global_event("end_assault")
-				self:_begin_regroup_task()
+				self:_begin_regroup_task(force_regroup)
 
 				return
 			end
