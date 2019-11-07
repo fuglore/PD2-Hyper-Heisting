@@ -4,7 +4,7 @@ function GroupAITweakData:init(tweak_data)
 	local difficulty = Global.game_settings and Global.game_settings.difficulty or "normal"
 	local difficulty_index = tweak_data:difficulty_to_index(difficulty)
 
-	print("[GroupAITweakData:init] difficulty", difficulty, "difficulty_index", difficulty_index)
+	--print("[GroupAITweakData:init] difficulty", difficulty, "difficulty_index", difficulty_index)
 
 	self.ai_tick_rate = 0.01194
 
@@ -828,7 +828,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
+					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1")
 				}
 			},
 			access = access_type_all

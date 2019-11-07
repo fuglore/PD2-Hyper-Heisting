@@ -99,14 +99,14 @@
 		<file :name="acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret.cooked_physics" force="false"/>
 		<file :name="acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret.model" force="false"/>	
 		
-		<!--Murky M4 FBI Ninja-->
+		<!--Murky M4 FBI Ninja
 		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.unit" load="true" force="false"/>
 		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4_husk.unit" load="true" force="false"/>
 		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.material_config" force="false"/>
 		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4_contour.material_config" force="false"/>
 		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.object" force="false"/>
 		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.cooked_physics" force="false"/>
-		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.model" force="false"/>
+		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.model" force="false"/>-->
 		
 		<!--Murky Armoured Shield-->
 		<file :name="ene_murky_DS_shield/ene_murky_DS_shield.unit" load="true" force="false"/>

@@ -9005,7 +9005,7 @@ function CharacterTweakData:_set_sm_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 30
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 350
+	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.presets.weapon.gang_member.is_pistol.FALLOFF = {
 		{
