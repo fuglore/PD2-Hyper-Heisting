@@ -805,7 +805,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
+					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				}
 			},
