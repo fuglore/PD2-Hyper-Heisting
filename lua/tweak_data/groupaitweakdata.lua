@@ -805,7 +805,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				}
 			},
@@ -828,7 +828,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
 				}
 			},
 			access = access_type_all
@@ -4755,9 +4755,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		if difficulty_index <= 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
+				20,
 				24,
-				32,
-				32
+				24
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
@@ -4767,10 +4767,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			}
 		else
 			self.besiege.assault.force_balance_mul = {
+				20,
 				24,
-				32,
-				44,
-				44
+				28,
+				28
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
