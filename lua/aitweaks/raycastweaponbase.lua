@@ -13,7 +13,9 @@ local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_rot1 = Rotation()
 
---technically a player-side change but also not really.
+local MIN_KNOCK_BACK = 200
+local KNOCK_BACK_CHANCE = 0.8
+
 function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_assist, autohit_override_data)
 	local autohit = use_aim_assist and self._aim_assist_data or self._autohit_data
 	autohit = autohit_override_data or autohit
@@ -25,14 +27,14 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 	local ignore_units = self._setup.ignore_units
 	local slotmask = self._bullet_slotmask
 	local enemies = managers.enemy:all_enemies()
-	local suppression_near_angle = 500
-	local suppression_far_angle = 200
+	local suppression_near_angle = 75
+	local suppression_far_angle = 10
 	local suppression_enemies = nil
 
 	for u_key, enemy_data in pairs(enemies) do
 		local enemy = enemy_data.unit
 
-		if not enemy:in_slot(16) then --fuck off, enemies at all ranges get suppressed
+		if not enemy:in_slot(16) then
 			local com = enemy:movement():m_com()
 
 			mvec3_set(tar_vec, com)
@@ -40,7 +42,7 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 
 			local tar_aim_dot = mvec3_dot(direction, tar_vec)
 
-			if tar_aim_dot > 0 and (not max_dist or tar_aim_dot < 6000) then
+			if tar_aim_dot > 0 and (not max_dist or tar_aim_dot < max_dist) then
 				local tar_vec_len = math_clamp(mvec3_norm(tar_vec), 1, far_dis)
 				local error_dot = mvec3_dot(direction, tar_vec)
 				local error_angle = math.acos(error_dot)
@@ -92,8 +94,6 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 	return closest_ray, suppression_enemies
 end
 
-local MIN_KNOCK_BACK = 200
-local KNOCK_BACK_CHANCE = 0.8
 
 --Fix for duplicated bullets below, thank you Hoxi <3
 function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, blank, no_sound)

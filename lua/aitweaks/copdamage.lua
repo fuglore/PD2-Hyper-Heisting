@@ -156,8 +156,8 @@ function CopDamage:_on_damage_received(damage_info)
 	
 	local sup_build_amount = damage_info.damage / 0.25
 	
-	if sup_build_amount < 1 then
-		sup_build_amount = 1
+	if sup_build_amount < 0.1 then
+		sup_build_amount = 0.1
 	end
 	
 	self:build_suppression(sup_build_amount, nil)
