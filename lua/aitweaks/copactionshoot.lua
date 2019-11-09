@@ -169,7 +169,7 @@ function CopActionShoot:update(t)
 						local aim_delay_minmax = self._w_usage_tweak.aim_delay
 						local lerp_dis = math.min(1, target_vec:length() / self._falloff[#self._falloff].r)
 						local aim_delay = math.lerp(aim_delay_minmax[1], aim_delay_minmax[2], lerp_dis)
-						aim_delay = aim_delay + self:_pseudorandom() * aim_delay * 0.3
+						aim_delay = aim_delay + self:_pseudorandom() * aim_delay
 						
 						if not Global.game_settings.one_down then
 							if self._common_data.is_suppressed then --aim delay is not affected by suppression on shin mode

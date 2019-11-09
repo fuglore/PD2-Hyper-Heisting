@@ -196,13 +196,6 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 	end
 end)
 
-Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self, attack_data)
-	local armor_subtracted = self:_calc_armor_damage(attack_data)
-	if not self._bleed_out and armor_subtracted > 0 then
-		managers.groupai:state():criminal_hurt_drama_armor(self._unit, attacker)
-	end
-end)
-
 function PlayerDamage:clbk_kill_taunt(attack_data) -- just a nice little detail
 	if attack_data.attacker_unit and attack_data.attacker_unit:alive() then
 		if not attack_data.attacker_unit:base()._tweak_table then
@@ -236,6 +229,13 @@ function PlayerDamage:_chk_dmg_too_soon(damage, ...)
 		self._old_next_allowed_dmg_t = next_allowed_dmg_t
 	end
 end
+
+Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self, attack_data)
+	local armor_subtracted = self:_calc_armor_damage(attack_data)
+	if not self._bleed_out and armor_subtracted > 0 then
+		managers.groupai:state():criminal_hurt_drama_armor(self._unit, attacker)
+	end
+end)
 
 local _calc_armor_damage_original = PlayerDamage._calc_armor_damage
 function PlayerDamage:_calc_armor_damage(attack_data, ...)

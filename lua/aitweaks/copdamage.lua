@@ -61,18 +61,25 @@ function CopDamage:die(attack_data)
 
 	if self._unit:base():has_tag("spooc") then
 		if self._char_tweak.die_sound_event then
-			self._unit:sound():play(self._char_tweak.die_sound_event, nil, nil)
+			self._unit:sound():play(self._char_tweak.die_sound_event, nil, nil, true, nil)
 		end
 
 		if not self._unit:movement():cool() then
-			self._unit:sound():say("x02a_any_3p", nil, nil)
+			self._unit:sound():say("x02a_any_3p", nil, nil, true, nil)
 		end
 	else
 		if not self._unit:movement():cool() then
 			if self._char_tweak.die_sound_event then
-				self._unit:sound():say(self._char_tweak.die_sound_event, nil, nil)
+				self._unit:sound():say(self._char_tweak.die_sound_event, nil, nil, true, nil)
 			else
-				self._unit:sound():say("x02a_any_3p", nil, nil)
+				local voice_prefix = self._unit:sound():chk_voice_prefix()
+				if voice_prefix == "l2d" then
+					self._unit:sound():say("x01a_any_3p", nil, nil, true, nil)
+				elseif voice_prefix == "l4n" then
+					self._unit:sound():say("x02a_any_3p_03", nil, nil, true, nil)
+				else
+					self._unit:sound():say("x02a_any_3p", nil, nil, true, nil)
+				end
 			end
 		end
 	end
@@ -125,7 +132,33 @@ function CopDamage:_on_damage_received(damage_info)
 		end
 	end
 	
-	local sup_build_amount = math.ceil(1, damage_info.damage / 0.25)
+	local common_cop = self._unit:base():has_tag("law") and not self._unit:base():has_tag("special")
+	
+	if damage_info.damage > 2 and not damage_info.result.type == "death" then
+	
+		if not damage_info.result.type == "death" then
+			self._unit:sound():say("x01a_any_3p", true, nil, nil, nil)
+		else
+			if self._char_tweak.die_sound_event then
+				self._unit:sound():say(self._char_tweak.die_sound_event, nil, nil, true, nil)
+			else
+				local voice_prefix = self._unit:sound():chk_voice_prefix()
+				if voice_prefix == "l2d" then
+					self._unit:sound():say("x01a_any_3p", nil, nil, true, nil)
+				elseif voice_prefix == "l4n" then
+					self._unit:sound():say("x02a_any_3p_03", nil, nil, true, nil)
+				else
+					self._unit:sound():say("x02a_any_3p", nil, nil, true, nil)
+				end
+			end
+		end
+	end
+	
+	local sup_build_amount = damage_info.damage / 0.25
+	
+	if sup_build_amount < 1 then
+		sup_build_amount = 1
+	end
 	
 	self:build_suppression(sup_build_amount, nil)
 

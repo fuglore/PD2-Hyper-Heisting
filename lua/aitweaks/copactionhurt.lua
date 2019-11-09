@@ -288,6 +288,7 @@ function CopActionHurt:init(action_desc, common_data)
 	local action_type = action_desc.hurt_type
 	local ignite_character = action_desc.ignite_character
 	local start_dot_dance_antimation = action_desc.fire_dot_data and action_desc.fire_dot_data.start_dot_dance_antimation
+	local common_cop = self._unit:base():has_tag("law") and not self._unit:base():has_tag("special")
 
 	if action_type == "knock_down" then
 		action_type = "heavy_hurt"
@@ -863,7 +864,7 @@ function CopActionHurt:init(action_desc, common_data)
 				self._unit:sound():say("x01a_any_3p", true)
 			end
 		elseif action_type == "hurt_sick" then
-			local common_cop = self._unit:base():has_tag("law") and not self._unit:base():has_tag("special")
+			
 
 			if common_cop or self._unit:base():has_tag("shield") then
 				self._unit:sound():say("ch3", true)

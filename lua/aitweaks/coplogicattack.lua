@@ -475,7 +475,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	
 	if focus_enemy and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT then
 		
-		local reaction_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 1.05
+		local reaction_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 0.35
 		
 		local loud_react_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 0.2
 		

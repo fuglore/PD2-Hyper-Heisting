@@ -56,9 +56,9 @@ function CopBrain:on_suppressed(state)
 			local chance_heeeeelpp = 50
 			
 			if roll <= chance_heeeeelpp then
-                self._unit:sound():say("hlp", true)
+                --self._unit:sound():say("hlp", true)
 			else --hopefully some variety here now
-                self._unit:sound():say("lk3b", true) 
+                --self._unit:sound():say("lk3b", true) 
 			end		
         end
     end

@@ -245,6 +245,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.weapon_voice = "3"
 	self.spooc.experience.cable_tie = "tie_swat"
 	self.spooc.speech_prefix_p1 = self._prefix_data_p1.cloaker()
+	self.spooc.speech_prefix_p2 = nil
 	self.spooc.speech_prefix_count = nil
 	self.spooc.access = "spooc"
 	self.spooc.melee_weapon = "baton"
@@ -302,6 +303,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	self.shadow_spooc.weapon_voice = "3"
 	self.shadow_spooc.experience.cable_tie = "tie_swat"
 	self.shadow_spooc.speech_prefix_p1 = "uno_clk"
+	self.shadow_spooc.speech_prefix_p2 = nil
 	self.shadow_spooc.speech_prefix_count = nil
 	self.shadow_spooc.access = "spooc"
 	self.shadow_spooc.use_radio = nil
@@ -404,6 +406,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	}
 	self.medic.experience.cable_tie = "tie_swat"
 	self.medic.speech_prefix_p1 = self._prefix_data_p1.medic()
+	self.medic.speech_prefix_p2 = nil
 	self.medic.speech_prefix_count = nil
 	self.medic.spawn_sound_event = self._prefix_data_p1.medic() .. "_entrance"
 	self.medic.silent_priority_shout = "f37"
