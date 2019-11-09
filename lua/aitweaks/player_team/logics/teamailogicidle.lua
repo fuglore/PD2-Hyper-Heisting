@@ -22,7 +22,7 @@ function TeamAILogicIdle.is_available_for_assignment(data, new_objective)
 			return
 		elseif old_objective_type == "follow" and data.objective.called then
 			return
-			log("aight")
+			--log("aight")
 		end
 	end
 
