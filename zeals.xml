@@ -293,4 +293,6 @@
 	<file name="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle.effect" load="false" force="true"/>
 	<file name="effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle.effect" load="false" force="true"/>
 	<file name="effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle.effect" load="false" force="true"/>
+	<file name= "guis/dlcs/drm/textures/pd2/crime_spree/modifiers_atlas_2.texture" force="true"/>
+	<file name= "guis/dlcs/cee/textures/pd2/crime_spree/modifiers_atlas.texture" force="true"/>
 </assets>
