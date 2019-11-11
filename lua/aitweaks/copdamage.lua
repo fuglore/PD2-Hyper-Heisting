@@ -70,9 +70,9 @@ function CopDamage:die(attack_data)
 	else
 		if not self._unit:movement():cool() then
 			if self._char_tweak.die_sound_event then
-				self._unit:sound():say(self._char_tweak.die_sound_event, nil, nil)
+				self._unit:sound():say(self._char_tweak.die_sound_event, true)
 			else
-				self._unit:sound():say("x02a_any_3p", nil, nil)
+				self._unit:sound():say("x02a_any_3p", true)
 			end
 		end
 	end
