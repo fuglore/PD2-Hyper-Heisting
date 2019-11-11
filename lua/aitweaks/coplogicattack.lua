@@ -459,14 +459,13 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 	else
-		if my_data.shooting then
+		if my_data.shooting and not data.unit:anim_data().reload then
 			local new_action = {
 				body_part = 3,
 				type = "idle"
 			}
-			if not data.unit:anim_data().reload and not data.unit:movement():chk_action_forbidden("action") then
-				data.unit:brain():action_request(new_action)
-			end
+
+			data.unit:brain():action_request(new_action)
 		end
 
 		if my_data.attention_unit then
@@ -631,6 +630,35 @@ end
 function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, speed)
 	local can_perform_walking_action = not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos
 	
+	local mook_units = {
+		"security",
+		"security_undominatable",
+		"cop",
+		"cop_scared",
+		"cop_female",
+		"gensec",
+		"fbi",
+		"swat",
+		"heavy_swat",
+		"fbi_swat",
+		"fbi_heavy_swat",
+		"city_swat",
+		"gangster",
+		"biker",
+		"mobster",
+		"bolivian",
+		"bolivian_indoors",
+		"medic",
+		"taser",
+		"shield"
+	}
+	local is_mook = nil
+	for _, name in ipairs(mook_units) do
+		if data.unit:base()._tweak_table == name then
+			is_mook = true
+		end
+	end
+	
 	if can_perform_walking_action then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
@@ -645,7 +673,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 			haste = "walk"
 		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + (enemyseeninlast4secs and 500 or 0) and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0) and is_mook and data.tactics and not data.tactics.hitnrun then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0) and is_mook and data.tactics and not data.tactics.hitnrun and is_mook then
 			haste = "walk"
 		else
 			haste = "run"
@@ -1458,20 +1486,65 @@ function CopLogicAttack._update_cover(data)
 	end
 end
 
-function CopLogicAttack._chk_request_action_turn_to_cover(data, my_data, my_pos, cover_pos)
+function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos, enemy_pos)
 	local fwd = data.unit:movement():m_rot():y()
-	local target_vec = cover_pos - my_pos
+	local target_vec = enemy_pos - my_pos
 	local error_spin = target_vec:to_polar_with_reference(fwd, math.UP).spin
-
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local mook_units = {
+		"security",
+		"security_undominatable",
+		"cop",
+		"cop_scared",
+		"cop_female",
+		"gensec",
+		"fbi",
+		"swat",
+		"heavy_swat",
+		"fbi_swat",
+		"fbi_heavy_swat",
+		"city_swat",
+		"gangster",
+		"biker",
+		"mobster",
+		"bolivian",
+		"bolivian_indoors",
+		"medic",
+		"taser",
+		"shield"
+	}
+	local is_mook = nil
+	for _, name in ipairs(mook_units) do
+		if data.unit:base()._tweak_table == name then
+			is_mook = true
+		end
+	end
+	
+	local speed = nil
+	
+	if data.is_converted or data.unit:in_slot(16) then
+		speed = 2.5
+	elseif Global.game_settings.one_down then
+		speed = 2
+	elseif diff_index == 8 and is_mook then
+		speed = 1.75
+	elseif diff_index == 6 and is_mook or diff_index == 7 and is_mook then
+		speed = 1.5
+	elseif diff_index <= 5 and is_mook then
+		speed = 1.25
+	end
+	
 	if math.abs(error_spin) > 27 then
 		local new_action_data = {
 			type = "turn",
 			body_part = 2,
+			speed = speed or 1,
 			angle = error_spin
 		}
 
 		if data.unit:brain():action_request(new_action_data) then
 			my_data.turning = new_action_data.angle
+			my_data.turning = new_action_data.speed
 
 			return true
 		end
