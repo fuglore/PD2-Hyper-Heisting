@@ -124,7 +124,7 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 						if data.unit:base():has_tag("medic") and not data.unit:base():has_tag("tank") then
 							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
 						elseif data.unit:base():has_tag("shield") then
-							local shield_knock_cooldown = math.random(5, 8)
+							local shield_knock_cooldown = math.random(3, 6)
 							if not data.attack_sound_t or data.t - data.attack_sound_t > shield_knock_cooldown then
 								data.unit:sound():say("shield_identification", true)
 							end
@@ -252,7 +252,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 							else
 								shoot = true
 							end
-						elseif focus_enemy.verified and focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 2 then
+						elseif focus_enemy.verified and focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 4 then
 							if dense_mook and managers.groupai:state():chk_high_fed_density() and not my_data.firing then
 								--log("not firing due to FEDS")
 							else
@@ -295,10 +295,13 @@ function CopLogicAttack._upd_aim(data, my_data)
 					end
 
 					aim = aim or shoot
-
-					if not aim and focus_enemy.verified_dis < maxrange then
-						aim = true
+					
+					if diff_index > 5 then
+						if focus_enemy.verified and not shoot then
+							shoot = true
+						end
 					end
+					
 				else
 					aim = true
 				end
@@ -360,7 +363,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 					else
 						aim = true
 						
-						if focus_enemy and aim and focus_enemy.alert_t and data.t - focus_enemy.alert_t < 1 and focus_enemy.verified_t and data.t - focus_enemy.verified_t < 5 and data.tactics and data.tactics.harass then
+						if focus_enemy and aim and focus_enemy.verified_t and data.t - focus_enemy.verified_t < 5 and data.tactics and data.tactics.harass then
 							if dense_mook and managers.groupai:state():chk_high_fed_density() then
 								--log("not firing due to FEDS")
 							else

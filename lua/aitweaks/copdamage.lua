@@ -61,25 +61,18 @@ function CopDamage:die(attack_data)
 
 	if self._unit:base():has_tag("spooc") then
 		if self._char_tweak.die_sound_event then
-			self._unit:sound():play(self._char_tweak.die_sound_event, nil, nil, true, nil)
+			self._unit:sound():play(self._char_tweak.die_sound_event, nil, nil)
 		end
 
 		if not self._unit:movement():cool() then
-			self._unit:sound():say("x02a_any_3p", nil, nil, true, nil)
+			self._unit:sound():say("x02a_any_3p", nil, nil)
 		end
 	else
 		if not self._unit:movement():cool() then
 			if self._char_tweak.die_sound_event then
-				self._unit:sound():say(self._char_tweak.die_sound_event, nil, nil, true, nil)
+				self._unit:sound():say(self._char_tweak.die_sound_event, nil, nil)
 			else
-				local voice_prefix = self._unit:sound():chk_voice_prefix()
-				if voice_prefix == "l2d" then
-					self._unit:sound():say("x01a_any_3p", nil, nil, true, nil)
-				elseif voice_prefix == "l4n" then
-					self._unit:sound():say("x02a_any_3p_03", nil, nil, true, nil)
-				else
-					self._unit:sound():say("x02a_any_3p", nil, nil, true, nil)
-				end
+				self._unit:sound():say("x02a_any_3p", nil, nil)
 			end
 		end
 	end
@@ -107,7 +100,13 @@ end
 function CopDamage:_on_damage_received(damage_info)
 	self:_call_listeners(damage_info)
 	CopDamage._notify_listeners("on_damage", damage_info)
+	
+	--local common_cop = not self._unit:base():has_tag("special")
 
+	if damage_info.damage and damage_info.damage > 0.01 then
+		self._unit:sound():say("x01a_any_3p", nil, nil)
+	end
+	
 	if damage_info.result.type == "death" then
 		managers.enemy:on_enemy_died(self._unit, damage_info)
 
@@ -132,29 +131,7 @@ function CopDamage:_on_damage_received(damage_info)
 		end
 	end
 	
-	local common_cop = self._unit:base():has_tag("law") and not self._unit:base():has_tag("special")
-	
-	if damage_info.damage > 2 and not damage_info.result.type == "death" then
-	
-		if not damage_info.result.type == "death" then
-			self._unit:sound():say("x01a_any_3p", true, nil, nil, nil)
-		else
-			if self._char_tweak.die_sound_event then
-				self._unit:sound():say(self._char_tweak.die_sound_event, nil, nil, true, nil)
-			else
-				local voice_prefix = self._unit:sound():chk_voice_prefix()
-				if voice_prefix == "l2d" then
-					self._unit:sound():say("x01a_any_3p", nil, nil, true, nil)
-				elseif voice_prefix == "l4n" then
-					self._unit:sound():say("x02a_any_3p_03", nil, nil, true, nil)
-				else
-					self._unit:sound():say("x02a_any_3p", nil, nil, true, nil)
-				end
-			end
-		end
-	end
-	
-	local sup_build_amount = damage_info.damage / 0.25
+	local sup_build_amount = damage_info.damage * 0.25
 	
 	if sup_build_amount < 0.1 then
 		sup_build_amount = 0.1
@@ -1892,7 +1869,7 @@ function CopDamage:damage_explosion(attack_data)
 	if self._marked_dmg_mul then
 		damage = damage * self._marked_dmg_mul
 
-		if self._marked_dmg_dist_mul and valid_attacker then
+		if self._marked_dmg_dist_mul then
 			local attacking_unit = attack_data.attacker_unit
 
 			if attacking_unit and attacking_unit:base() and attacking_unit:base().thrower_unit then
@@ -2108,7 +2085,7 @@ function CopDamage:sync_damage_explosion(attacker_unit, damage_percent, i_attack
 			elseif i_attack_variant == 5 then
 				result_type = "dmg_rcv"
 			else
-				self:get_damage_type(damage_percent, "explosion")
+				result_type = self:get_damage_type(damage_percent, "explosion")
 			end
 		end
 

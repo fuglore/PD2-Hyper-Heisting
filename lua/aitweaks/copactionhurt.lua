@@ -856,7 +856,7 @@ function CopActionHurt:init(action_desc, common_data)
 				end
 			end
 		elseif action_type == "death" then
-			--nothing
+			self._unit:sound():say("x02a_any_3p", nil, nil) --im sorry but i need to make sure this shit actually goddamn plays
 		elseif action_type == "counter_tased" or action_type == "taser_tased" then
 			if self._unit:base():has_tag("taser") then
 				self._unit:sound():say("tasered", true)
