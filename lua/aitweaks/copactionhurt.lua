@@ -850,13 +850,13 @@ function CopActionHurt:init(action_desc, common_data)
 				self._unit:sound():say("burnhurt", true)
 			elseif action_desc.hurt_type == "death" then
 				if self._unit:base():has_tag("tank") then
-					self._unit:sound():say("x02a_any_3p", true)
+					self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
 				else
 					self._unit:sound():say("burndeath", true)
 				end
 			end
 		elseif action_type == "death" then
-			self._unit:sound():say("x02a_any_3p", nil, nil) --im sorry but i need to make sure this shit actually goddamn plays
+			self._unit:sound():say("x02a_any_3p", true, nil, true, nil) --im sorry but i need to make sure this shit actually goddamn plays
 		elseif action_type == "counter_tased" or action_type == "taser_tased" then
 			if self._unit:base():has_tag("taser") then
 				self._unit:sound():say("tasered", true)

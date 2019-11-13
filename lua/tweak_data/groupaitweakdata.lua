@@ -815,8 +815,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.FBI_suit_M4_MP5 = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
-					Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2")
+					Idstring("units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4"),
+					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass"),

@@ -38,6 +38,16 @@
 		<file :name="ene_zeal_city_1/ene_zeal_city_1.object" force="false"/>
 		<file :name="ene_zeal_city_1/ene_zeal_city_1.cooked_physics" force="false"/>
 		<file :name="ene_zeal_city_1/ene_zeal_city_1.model" force="false"/>
+		
+		<!--COOL JEROME-->	
+		<file :name="ene_fbigod_m4/ene_fbigod_m4.unit" load="true" force="false"/>
+		<file :name="ene_fbigod_m4/ene_fbigod_m4_husk.unit" load="true" force="false"/>
+		<file :name="ene_fbigod_m4/ene_fbigod_m4.material_config" force="false"/>
+		<file :name="ene_fbigod_m4/ene_fbigod_m4_contour.material_config" force="false"/>
+		<file :name="ene_fbigod_m4/ene_fbigod_m4.object" force="false"/>
+		<file :name="ene_fbigod_m4/ene_fbigod_m4.cooked_physics" force="false"/>
+		<file :name="ene_fbigod_m4/ene_fbigod_m4.model" force="false"/>
+		<file :name="ene_fbigod_m4/pants_df.texture" force="false"/>
 
 		<!--ZEAL Heavy SWAT AR-->	
 		<file :name="ene_zeal_swat_heavy_hh/ene_zeal_swat_heavy_hh.unit" load="true" force="true"/>

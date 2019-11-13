@@ -58,6 +58,8 @@ function CopDamage:die(attack_data)
 			debug_pause_unit(self._unit, "[CopDamage:die] does not have death sequence", self._death_sequence, self._unit)
 		end
 	end
+	
+	local faction = tweak_data.levels:get_ai_group_type()
 
 	if self._unit:base():has_tag("spooc") then
 		if self._char_tweak.die_sound_event then
@@ -65,14 +67,22 @@ function CopDamage:die(attack_data)
 		end
 
 		if not self._unit:movement():cool() then
-			self._unit:sound():say("x02a_any_3p", nil, nil)
+			self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
 		end
 	else
 		if not self._unit:movement():cool() then
 			if self._char_tweak.die_sound_event then
-				self._unit:sound():say(self._char_tweak.die_sound_event, true)
+				if self._unit:base():has_tag("special") then
+					self._unit:sound():say(self._char_tweak.die_sound_event, true, nil, true, nil)
+				else
+					self._unit:sound():say(self._char_tweak.die_sound_event, true, nil, true, nil)
+				end
 			else
-				self._unit:sound():say("x02a_any_3p", true)
+				if self._unit:base():has_tag("special") then
+					self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
+				else
+					self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
+				end
 			end
 		end
 	end
@@ -101,15 +111,10 @@ function CopDamage:_on_damage_received(damage_info)
 	self:_call_listeners(damage_info)
 	CopDamage._notify_listeners("on_damage", damage_info)
 	
-	--local common_cop = not self._unit:base():has_tag("special")
-
-	if damage_info.damage and damage_info.damage > 0.01 then
-		self._unit:sound():say("x01a_any_3p", nil, nil)
-	end
-	
 	if damage_info.result.type == "death" then
 		managers.enemy:on_enemy_died(self._unit, damage_info)
-
+		
+		
 		for c_key, c_data in pairs(managers.groupai:state():all_char_criminals()) do
 			if c_data.engaged[self._unit:key()] then
 				debug_pause_unit(self._unit:key(), "dead AI engaging player", self._unit, c_data.unit)
@@ -142,6 +147,17 @@ function CopDamage:_on_damage_received(damage_info)
 	if attacker_unit == managers.player:player_unit() and damage_info then
 		managers.player:on_damage_dealt(self._unit, damage_info)
 	end
+
+	local dmg_chk = not self._dead and not self._unit:base():has_tag("special") and self._health > 0
+	
+	local t = TimerManager:game():time()
+
+	if damage_info.damage and damage_info.damage > 0.01 and dmg_chk then
+		if not damage_info.result_type or damage_info.result_type ~= "healed" and damage_info.result_type ~= "death" then
+			self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+		end
+	end
+	
 
 	if damage_info.variant == "melee" then
 		managers.statistics:register_melee_hit()

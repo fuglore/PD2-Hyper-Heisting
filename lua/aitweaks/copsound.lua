@@ -10,6 +10,8 @@ Hooks:PostHook(CopSound, "say", "shit_say", function(self, sound_name, sync, ski
 		skip_prefix = true
 	end
 	
+	local full_sound = nil
+	
 	if self._prefix == "l5d" then
 		if sound_name == "c01" or sound_name == "att" then
 			sound_name = "g90"
@@ -20,11 +22,15 @@ Hooks:PostHook(CopSound, "say", "shit_say", function(self, sound_name, sync, ski
 		elseif sound_name == "h01" then
 			sound_name = "h10"
 		end
-	elseif self._prefix == "l3d" then
+	end
+	
+	if self._prefix == "l3d" then
 		if sound_name == "burnhurt" or "burndeath" then
 			sound_name = "x02a_any_3p"
 		end
-	elseif self._prefix == "l1n" or self._prefix == "l2n" or self._prefix == "l3n" or self._prefix == "l4n" then
+	end
+	
+	if self._prefix == "l1n" or self._prefix == "l2n" or self._prefix == "l3n" or self._prefix == "l4n" then
 		if sound_name == "x02a_any_3p" then
 			sound_name = "x01a_any_3p"
 			--log("help")
@@ -38,21 +44,6 @@ Hooks:PostHook(CopSound, "say", "shit_say", function(self, sound_name, sync, ski
 	if self._last_speech then
 		self._last_speech:stop()
 	end
-
-	local full_sound = nil
-	
-	if skip_prefix then
-		full_sound = sound_name
-	else
-		full_sound = self._prefix .. sound_name
-	end
-	
-	local event_id = nil
-
-	if type(full_sound) == "number" then
-		event_id = full_sound
-		full_sound = nil
-	end
 	
 	local faction = tweak_data.levels:get_ai_group_type()
 	
@@ -64,33 +55,44 @@ Hooks:PostHook(CopSound, "say", "shit_say", function(self, sound_name, sync, ski
 				else
 					full_sound = "clk_x02a_any_3p"
 				end
-			elseif self._unit:base():has_tag("taser") then
+			end
+			
+			if self._unit:base():has_tag("taser") then
 				if faction == "russia" then
 					full_sound = "rtsr_x02a_any_3p"
 				else
 					full_sound = "tsr_x02a_any_3p"
 				end
-			elseif self._unit:base():has_tag("tank") then
+			end
+			
+			if self._unit:base():has_tag("tank") then
 				full_sound = "bdz_x02a_any_3p"
-			elseif self._unit:base():has_tag("medic") then
+			end
+			
+			if self._unit:base():has_tag("medic") then
 				full_sound = "mdc_x02a_any_3p"
 			end
-		elseif sound_name == "x01a_any_3p" then
+		end
+		
+		if sound_name == "x01a_any_3p" then
 			if self._unit:base():has_tag("spooc") then
 				if faction == "russia" then
 					full_sound = "rclk_x01a_any_3p" --weird he has hurt noises but the regular cloaker doesnt
 				else
 					full_sound = full_sound
 				end
-			elseif self._unit:base():has_tag("taser") then
+			end
+			if self._unit:base():has_tag("taser") then
 				if faction == "russia" then
 					full_sound = "rtsr_x01a_any_3p"
 				else
 					full_sound = "tsr_x01a_any_3p"
 				end
-			elseif self._unit:base():has_tag("tank") then
+			end
+			if self._unit:base():has_tag("tank") then
 				full_sound = "bdz_x01a_any_3p"
-			elseif self._unit:base():has_tag("medic") then
+			end
+			if self._unit:base():has_tag("medic") then
 				full_sound = "mdc_x01a_any_3p"
 			end
 		end
@@ -100,6 +102,21 @@ Hooks:PostHook(CopSound, "say", "shit_say", function(self, sound_name, sync, ski
 		if sound_name == "x02a_any_3p" then
 			full_sound = "shd_x02a_any_3p_01"
 		end
+	end
+	
+	if not full_sound then
+		if skip_prefix then
+			full_sound = sound_name
+		else
+			full_sound = self._prefix .. sound_name
+		end
+	end
+	
+	local event_id = nil
+
+	if type(full_sound) == "number" then
+		event_id = full_sound
+		full_sound = nil
 	end
 
 	if sync then

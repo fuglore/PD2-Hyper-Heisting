@@ -1511,7 +1511,10 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 		"bolivian_indoors",
 		"medic",
 		"taser",
-		"shield"
+		"shield",
+		"spooc",
+		"spooc_heavy",
+		"shadow_spooc"
 	}
 	local is_mook = nil
 	for _, name in ipairs(mook_units) do
@@ -1522,7 +1525,7 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 	
 	local speed = nil
 	
-	if data.is_converted or data.unit:in_slot(16) then
+	if data.is_converted or data.unit:in_slot(16) or data.unit:base()._tweak_table == "sniper" then
 		speed = 2.5
 	elseif Global.game_settings.one_down then
 		speed = 2
@@ -1532,6 +1535,8 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 		speed = 1.5
 	elseif diff_index <= 5 and is_mook then
 		speed = 1.25
+	else
+		speed = 1
 	end
 	
 	if math.abs(error_spin) > 27 then
