@@ -370,7 +370,6 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.announce_incomming = "incomming_shield"
 	self.shield.steal_loot = nil
 	self.shield.use_animation_on_fire_damage = false
-	self.shield.die_sound_event = "shd_x02a_any_3p_01"
 
 	table.insert(self._enemy_list, "shield")
 end)
@@ -9701,7 +9700,8 @@ function CharacterTweakData:character_map()
 			"ene_zeal_swat_shield",
 			"ene_zeal_swat_shield_hh",
 			"ene_zeal_tazer",
-			"ene_zeal_tazer_hh"
+			"ene_zeal_tazer_hh",
+			"ene_fbigod_m4" --COOL JEROME
 		}
 	}
 	char_map.psc = {
