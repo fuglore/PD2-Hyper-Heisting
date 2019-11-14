@@ -9687,7 +9687,8 @@ function CharacterTweakData:character_map()
 			"ene_shield_heavy",
 			"ene_medic_heavy_m4",
 			"ene_medic_heavy_r870",
-			"ene_city_swat_saiga"
+			"ene_city_swat_saiga",
+			"ene_swat_bronco"
 		}
 	}
 	char_map.gitgud = {

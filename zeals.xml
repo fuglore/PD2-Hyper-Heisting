@@ -228,7 +228,17 @@
 		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870.cooked_physics" force="false"/>
 		<file :name="ene_medic_heavy_r870/ene_medic_heavy_r870.model" force="false"/>
 		
-		
+		<!--heavy medics-->
+		<file :name="ene_swat_bronco/ene_swat_bronco.unit" load="true" force="false"/>
+		<file :name="ene_swat_bronco/ene_swat_bronco_husk.unit" load="true" force="false"/>
+		<file :name="ene_swat_bronco/ene_swat_bronco_contour.material_config" force="false"/>
+		<file :name="ene_swat_bronco/ene_swat_bronco.material_config" force="false"/>
+		<file :name="ene_swat_bronco/ene_swat_bronco.object" force="false"/>
+		<file :name="ene_swat_bronco/ene_swat_bronco.cooked_physics" force="false"/>
+		<file :name="ene_swat_bronco/ene_swat_bronco.model" force="false"/>
+		<file :name="ene_swat_bronco/swat_bronco_head_df.texture" force="false"/>
+		<file :name="ene_swat_bronco/swat_bronco_df.texture" force="false"/>
+		<file :name="ene_swat_bronco/swat_bronco_head_nm.texture" force="false"/>
 		
 		<!--Classic Heavy Shield ty jarey <33333-->	
 		<file :name="ene_shield_heavy/ene_shield_heavy.unit" load="true" force="false"/>

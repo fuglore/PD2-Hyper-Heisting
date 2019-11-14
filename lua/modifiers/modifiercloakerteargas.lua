@@ -3,6 +3,14 @@ ModifierCloakerTearGas._type = "ModifierCloakerTearGas"
 ModifierCloakerTearGas.name_id = "none"
 ModifierCloakerTearGas.desc_id = "menu_cs_modifier_cloaker_tear_gas"
 
+function ModifierCloakerTearGas:init(data)
+	ModifierCloakerTearGas.super.init(self, data)
+	
+	if not Global.mutators.telespooc then
+		Global.mutators.telespooc = true
+	end	
+end
+
 function ModifierCloakerTearGas:OnEnemyDied(unit, damage_info)
 	if Network:is_client() then
 		return

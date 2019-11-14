@@ -30,6 +30,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_assaultcornertext", function(loc)
 		["menu_cs_modifier_heavies"] = "All enemies except Bulldozers and FBIs now have body armor.",
 		["menu_cs_modifier_heavy_sniper"] = "Adds a chance for Sniperdozers to spawn.",
 		["menu_cs_modifier_dozer_lmg"] = "EVERYTHING IS HORRIBLE!",
+		["menu_cs_modifier_dozer_rage"] = "Adds a chance for Swat Bronco Ninja Marksmen to spawn.",
 		["menu_cs_modifier_dozer_immune"] = "Enemies are much more aggressive.",
 		["menu_cs_modifier_shield_phalanx"] = "Shotgunners have a chance to be replaced by a Gensec Saiga SWAT.",
 		["menu_cs_modifier_no_hurt"] = "SHIN SHOOTOUT is now enabled.",
