@@ -363,6 +363,16 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 			hit_chance = hit_chance * self._common_data.active_actions[2]:accuracy_multiplier()
 		end
 	end
+	
+	local gamemode_chk = game_state_machine:gamemode() 
+	
+	if gamemode_chk == "crime_spree" then
+		if managers.crime_spree then
+			local copaccmultcs = managers.crime_spree:get_acc_mult() or 1
+			
+			hit_chance = hitchance * getcopaccmultcs
+		end
+	end
 
 	hit_chance = hit_chance * self._unit:character_damage():accuracy_multiplier()
 

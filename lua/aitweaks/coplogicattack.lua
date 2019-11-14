@@ -120,17 +120,15 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 						end
 					end
 				else
-					if not data.unit:base()._tweak_table == "gensec" and not data.unit:base()._tweak_table == "security" then
-						if data.unit:base():has_tag("medic") and not data.unit:base():has_tag("tank") then
-							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
-						elseif data.unit:base():has_tag("shield") then
-							local shield_knock_cooldown = math.random(3, 6)
-							if not data.attack_sound_t or data.t - data.attack_sound_t > shield_knock_cooldown then
-								data.unit:sound():say("shield_identification", true)
-							end
-						else
-							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "contact")
+					if not data.unit:base():has_tag("shield") and data.unit:base():has_tag("special") then
+						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
+					elseif data.unit:base():has_tag("shield") then
+						local shield_knock_cooldown = math.random(3, 6)
+						if not data.attack_sound_t or data.t - data.attack_sound_t > shield_knock_cooldown then
+							data.unit:sound():say("shield_identification", true)
 						end
+					else
+						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "contact")
 					end
 				end
 			end
@@ -1527,8 +1525,6 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 	
 	if data.is_converted or data.unit:in_slot(16) or data.unit:base()._tweak_table == "sniper" then
 		speed = 2.5
-	elseif Global.game_settings.one_down then
-		speed = 2
 	elseif diff_index == 8 and is_mook then
 		speed = 1.75
 	elseif diff_index == 6 and is_mook or diff_index == 7 and is_mook then
@@ -1537,6 +1533,14 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 		speed = 1.25
 	else
 		speed = 1
+	end
+	
+	local gamemode_chk = game_state_machine:gamemode() 
+	if gamemode_chk == "crime_spree" then
+		if managers.crime_spree then
+			local copturnspdadd = managers.crime_spree:get_turn_spd_add()
+			speed = speed + copturnspdadd
+		end
 	end
 	
 	if math.abs(error_spin) > 27 then

@@ -48,3 +48,26 @@ function PlayerBase:update(unit, t, dt)
 		end
 	end
 end
+
+function PlayerBase:_setup_suspicion_and_detection_data()
+	self._suspicion_settings = deep_clone(tweak_data.player.suspicion)
+	self._suspicion_settings.multipliers = {}
+	local gamemode_chk = game_state_machine:gamemode() 
+	self._suspicion_settings.init_buildup_mul = self._suspicion_settings.buildup_mul
+	self._suspicion_settings.init_range_mul = self._suspicion_settings.range_mul
+	if gamemode_chk == "crime_spree" then
+		if managers.crime_spree then
+			local copdetmult = managers.crime_spree:get_cop_det_mult()
+			self._suspicion_settings.init_buildup_mul = self._suspicion_settings.init_buildup_mul + copdetmult
+			log("uhuh")
+		end
+	end
+
+	self:setup_hud_offset()
+
+	self._detection_settings = {
+		multipliers = {},
+		init_delay_mul = 1,
+		init_range_mul = 1
+	}
+end

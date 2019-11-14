@@ -8,8 +8,69 @@ function CopSound:init(unit)
 	self._unit = unit
 	self._speak_expire_t = 0
 	local char_tweak = tweak_data.character[unit:base()._tweak_table]
+	
+	local tasers = {
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1"),
+		Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_tazer_ak47_ass/ene_akan_cs_tazer_ak47_ass"),
+		Idstring("units/payday2/characters/ene_tazer_1/ene_tazer_1"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer")
+	}
+	local is_taser = nil
+	
+	for _, unit_name in ipairs(tasers) do
+		if self._unit:name() == unit_name then
+			is_taser = true
+		end
+	end
+	
+	local tanks = {
+		Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
+		Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
+		Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"),
+		Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
+		Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
+		Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"),
+		Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3"),
+		Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic"),
+		Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun"),
+		Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_r870/ene_akan_fbi_tank_r870"),
+		Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_saiga/ene_akan_fbi_tank_saiga"),
+		Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_rpk_lmg/ene_akan_fbi_tank_rpk_lmg"),
+		Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_r870/ene_akan_fbi_tank_r870"),
+		Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_saiga/ene_akan_fbi_tank_saiga"),
+		Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_rpk_lmg/ene_akan_fbi_tank_rpk_lmg"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_1/ene_bulldozer_hvh_1"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_2/ene_bulldozer_hvh_2"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_3/ene_bulldozer_hvh_3"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_1/ene_bulldozer_hvh_1"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_2/ene_bulldozer_hvh_2"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_3/ene_bulldozer_hvh_3"),
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
+		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic")
+		
+	}
+	local is_tank = nil
+	for _, tank_name in ipairs(tanks) do
+		if self._unit:name() == unit_name then
+			is_tank = true
+		end
+	end
 
-	self:set_voice_prefix(nil)
+	--self:set_voice_prefix(nil)
 
 	local nr_variations = char_tweak.speech_prefix_count
 	self._prefix = (char_tweak.speech_prefix_p1 or "") .. (nr_variations and tostring(math.random(nr_variations)) or "") .. (char_tweak.speech_prefix_p2 or "") .. "_"
@@ -20,6 +81,36 @@ function CopSound:init(unit)
 	
 	if self._unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870") then
 		self._prefix = ("l3d") .. "_"
+	end
+	
+	local faction = tweak_data.levels:get_ai_group_type()
+	
+	if self._unit:name() == Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4") or self._unit:name() == Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic") or self._unit:name() == Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_m4/ene_medic_hvh_m4") or self._unit:name() == Idstring("units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4") then
+		self._prefix = ("mdc") .. "_"
+	end
+	
+	if self._unit:name() == Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870") or self._unit:name() == Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic_r870") or self._unit:name() == Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_r870/ene_medic_hvh_r870") or self._unit:name() == Idstring("units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870") then
+		self._prefix = ("mdc") .. "_"
+	end
+	
+	if self._unit:name() == Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_ak47_ass") or self._unit:name() == Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_r870/ene_akan_medic_r870") then
+		self._prefix = ("rmdc") .. "_"
+	end
+	
+	if self._unit:base()._tweak_table == "tank" or self._unit:base()._tweak_table == "tank_mini" or self._unit:base()._tweak_table == "tank_medic" or self._unit:base()._tweak_table == "tank_ftsu" or is_tank then
+		if faction == "russia" then
+			self._prefix = ("rbdz") .. "_"
+		else
+			self._prefix = ("bdz") .. "_"
+		end
+	end
+	
+	if self._unit:base()._tweak_table == "taser" or is_taser then
+		if faction == "russia" then
+			self._prefix = ("rtsr") .. "_"
+		else
+			self._prefix = ("tsr") .. "_"
+		end
 	end
 	
 	if char_tweak.speech_prefix_p1 and char_tweak.speech_prefix_p1 == "r" then
@@ -54,26 +145,64 @@ end
 function CopSound:set_voice_prefix(index)
 	local char_tweak = tweak_data.character[self._unit:base()._tweak_table]
 	local nr_variations = char_tweak.speech_prefix_count
-
+	
 	if index and (index < 1 or nr_variations < index) then
 		debug_pause_unit(self._unit, "[CopSound:set_voice_prefix] Invalid prefix index:", index, ". nr_variations:", nr_variations)
 	end
 
 	self._prefix = (char_tweak.speech_prefix_p1 or "") .. (nr_variations and tostring(index or math.random(nr_variations)) or "") .. (char_tweak.speech_prefix_p2 or "") .. "_"
 	
+	if self._unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar") or self._unit:name() == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3") then
+		self._prefix = ("l1d") .. "_"
+	end
+	
+	if self._unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870") then
+		self._prefix = ("l3d") .. "_"
+	end
+	
+	local faction = tweak_data.levels:get_ai_group_type()
+	
+	if self._unit:name() == Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4") or self._unit:name() == Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic") or self._unit:name() == Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_m4/ene_medic_hvh_m4") or self._unit:name() == Idstring("units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4") then
+		self._prefix = ("mdc") .. "_"
+	end
+	
+	if self._unit:name() == Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870") or self._unit:name() == Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic_r870") or self._unit:name() == Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_r870/ene_medic_hvh_r870") or self._unit:name() == Idstring("units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870") then
+		self._prefix = ("mdc") .. "_"
+	end
+	
+	if self._unit:name() == Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_ak47_ass") or self._unit:name() == Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_r870/ene_akan_medic_r870") then
+		self._prefix = ("rmdc") .. "_"
+	end
+	
+	if self._unit:base()._tweak_table == "tank" or self._unit:base()._tweak_table == "tank_mini" or self._unit:base()._tweak_table == "tank_medic" or self._unit:base()._tweak_table == "tank_ftsu" then
+		if faction == "russia" then
+			self._prefix = ("rbdz") .. "_"
+		else
+			self._prefix = ("bdz") .. "_"
+		end
+	end
+	
+	if self._unit:base()._tweak_table == "taser" then
+		if faction == "russia" then
+			self._prefix = ("rtsr") .. "_"
+		else
+			self._prefix = ("tsr") .. "_"
+		end
+	end
+	
 	if char_tweak.speech_prefix_p1 and char_tweak.speech_prefix_p1 == "r" then
 		self._russian = true
 	end
 	
-	if char_tweak.speech_prefix_p1 and char_tweak.speech_prefix_p1 == "f" then
+	if self._prefix == "f11n_" or char_tweak.speech_prefix_p1 and char_tweak.speech_prefix_p1 == "f" then
 		self._fem = true
 	end
-	
+		
 	if self._unit:base():char_tweak().speech_prefix_count ~= nil then
 		self._randomizedvcset = true
 	end
-	
-	if char_tweak.speech_prefix_p2 and char_tweak.speech_prefix_p2 == "d" then
+		
+	if self._prefix == "l1d_" or self._prefix == "l2d_" or self._prefix == "l3d_" or self._prefix == "l4d_" or self._prefix == "l5d_" or char_tweak.speech_prefix_p2 and char_tweak.speech_prefix_p2 == "d" then
 		self._radiovc = true
 	end
 	

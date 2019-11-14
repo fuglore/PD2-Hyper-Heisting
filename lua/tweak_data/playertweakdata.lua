@@ -3,7 +3,7 @@ function PlayerTweakData:_set_normal()
 	self.damage.automatic_respawn_time = 120
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.suspicion.range_mul = 0.8
-	self.suspicion.max_value = 6
+	self.suspicion.max_value = 10
 	self.suspicion.buildup_mul = 0.8
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.8
@@ -26,7 +26,7 @@ function PlayerTweakData:_set_hard()
 	self.damage.DOWNED_TIME_MIN = 5
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.suspicion.range_mul = 0.8
-	self.suspicion.max_value = 6
+	self.suspicion.max_value = 10
 	self.suspicion.buildup_mul = 0.8
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.8
@@ -48,7 +48,7 @@ function PlayerTweakData:_set_overkill()
 	self.damage.DOWNED_TIME_MIN = 5
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.suspicion.range_mul = 0.8
-	self.suspicion.max_value = 6
+	self.suspicion.max_value = 10
 	self.suspicion.buildup_mul = 0.8
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.6
@@ -70,7 +70,7 @@ function PlayerTweakData:_set_overkill_145()
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.suspicion.range_mul = 0.8
-	self.suspicion.max_value = 6
+	self.suspicion.max_value = 10
 	self.suspicion.buildup_mul = 0.8
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.6

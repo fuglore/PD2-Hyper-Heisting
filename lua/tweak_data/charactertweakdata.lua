@@ -403,6 +403,9 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 			min_duration = 8
 		}
 	}
+	self.medic.chatter = {
+		aggressive = true
+	}
 	self.medic.experience.cable_tie = "tie_swat"
 	self.medic.speech_prefix_p1 = self._prefix_data_p1.medic()
 	self.medic.speech_prefix_p2 = nil
@@ -454,6 +457,10 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.spawn_sound_event = self._prefix_data_p1.taser() .. "_entrance"
 	self.taser.access = "taser"
 	self.taser.melee_weapon = "fists"
+	self.taser.chatter = {
+		aggressive = true,
+		contact = true
+	}
 	self.taser.dodge = presets.dodge.athletic
 	self.taser.priority_shout = "f32"
 	self.taser.rescue_hostages = false
