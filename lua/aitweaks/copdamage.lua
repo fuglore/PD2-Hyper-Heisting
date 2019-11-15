@@ -1488,10 +1488,6 @@ function CopDamage:damage_fire(attack_data)
 		end
 	end
 
-	if self._unit:base():char_tweak().fire_damage_mul then
-		damage = damage * self._unit:base():char_tweak().fire_damage_mul
-	end
-
 	if self._marked_dmg_mul then
 		damage = damage * self._marked_dmg_mul
 
@@ -1511,6 +1507,10 @@ function CopDamage:damage_fire(attack_data)
 				end
 			end
 		end
+	end
+	
+	if self._unit:base():char_tweak().fire_damage_mul then
+		damage = damage * self._unit:base():char_tweak().fire_damage_mul
 	end
 
 	damage = self:_apply_damage_reduction(damage)
