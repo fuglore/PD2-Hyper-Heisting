@@ -95,7 +95,7 @@ function TankCopLogicAttack.update(data)
 			local walk = data.attention_obj.verified_dis < run_dist
 			
 			if not data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") then 
-				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
+				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "approachingspecial")
 			end
 			
 			TankCopLogicAttack._chk_request_action_walk_to_chase_pos(data, my_data, walk and "walk" or "run")

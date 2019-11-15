@@ -120,7 +120,7 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 						end
 					end
 				else
-					if not data.unit:base():has_tag("shield") and data.unit:base():has_tag("special") then
+					if not data.unit:base():has_tag("tank") and data.unit:base():has_tag("medic") then
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
 					elseif data.unit:base():has_tag("shield") then
 						local shield_knock_cooldown = math.random(3, 6)

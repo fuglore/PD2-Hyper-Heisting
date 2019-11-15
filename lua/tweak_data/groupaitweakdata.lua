@@ -35,6 +35,14 @@ function GroupAITweakData:_init_chatter_data()
 		group_min = 0,
 		queue = "g90"
 	}
+	self.enemy_chatter.approachingspecial = {
+		radius = 4000,
+		max_nr = 40,
+		duration = {3, 4},
+		interval = {5, 15},
+		group_min = 0,
+		queue = "g90"
+	}
 	self.enemy_chatter.aggressivecontrolsurprised1 = {
 		radius = 2000,
 	    max_nr = 4,
@@ -96,7 +104,7 @@ function GroupAITweakData:_init_chatter_data()
 		max_nr = 20,
 		duration = {1, 3},
 		interval = {0.75, 1.5},
-		group_min = 2,
+		group_min = 0,
 		queue = "c01"
 	}
 	self.enemy_chatter.controlpanic = {

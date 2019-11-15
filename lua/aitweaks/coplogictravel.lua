@@ -244,9 +244,9 @@ function CopLogicTravel.queued_update(data)
 		end
     end
 	
-	if my_data.coarse_path and data.unit:base():has_tag("special") and not data.unit:base()._tweak_table == "gensec" and not data.unit:base()._tweak_table == "security" then
-    	if data.char_tweak.chatter.aggressive and not cant_say_clear then
-			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "aggressive" )
+	if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
+    	if not cant_say_clear then
+			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
 		end
     end
 	
@@ -257,7 +257,7 @@ function CopLogicTravel.queued_update(data)
 	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic then
 		if managers.groupai:state():chk_assault_active_atm() then
 			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
-				if data.attention_obj.verified and data.attention_obj.dis <= 700 or data.is_suppressed then
+				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed then
 					local roll = math.random(1, 100)
 					local chance_suppanic = 30
 					
