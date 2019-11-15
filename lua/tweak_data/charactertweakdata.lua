@@ -356,6 +356,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.deathguard = true
 	self.shield.no_equip_anim = true
 	self.shield.damage.explosion_damage_mul = 0.8
+	self.shield.damage.fire_damage_mul = 0.5
 	self.shield.calls_in = nil
 	self.shield.ignore_medic_revive_animation = true
 	self.shield.damage.shield_knocked = true
