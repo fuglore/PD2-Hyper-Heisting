@@ -213,10 +213,6 @@ function CopLogicTravel.queued_update(data)
     
     CopLogicTravel.upd_advance(data)
 	CopLogicIdle._update_haste(data, my_data)
-	
-	--if CopLogicTravel.chk_slide_conditions(data) then 
-	--	data.unit:movement():play_redirect("e_nl_button_slide_under")
-	--end
     
     if data.internal_data ~= my_data then
     	return
@@ -228,8 +224,10 @@ function CopLogicTravel.queued_update(data)
     	delay = 0.35
     end
 	
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t < 5
+	
     if my_data.coarse_path and not data.unit:base():has_tag("special") then
-    	if data.char_tweak.chatter.clear and data.unit:anim_data().idle and not ( data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t < 5 ) then
+    	if data.char_tweak.chatter.clear and data.unit:anim_data().idle and not cant_say_clear then
 			if data.unit:movement():cool() then
 				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
 			else
@@ -246,9 +244,9 @@ function CopLogicTravel.queued_update(data)
 		end
     end
 	
-	if my_data.coarse_path and data.unit:base():has_tag("special") and not data.unit:base()._tweak_table == "gensec" and not data.unit:base()._tweak_table == "security" then
-    	if data.char_tweak.chatter.aggressive and data.unit:anim_data().idle and not ( data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t < 5 ) then
-			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "aggressive" )
+	if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
+    	if not cant_say_clear then
+			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
 		end
     end
 	
@@ -259,7 +257,24 @@ function CopLogicTravel.queued_update(data)
 	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic then
 		if managers.groupai:state():chk_assault_active_atm() then
 			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
-				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed then
+					local roll = math.random(1, 100)
+					local chance_suppanic = 30
+					
+					if roll <= chance_suppanic then
+						local nroll = math.random(1, 100)
+						local chance_help = 50
+						if roll <= chance_suppanic then
+							data.unit:sound():say("hlp", true)
+						else
+							data.unit:sound():say("lk3b	", true)
+						end
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+					end
+				else
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+				end
 			end
 		end
 	end
@@ -293,8 +308,7 @@ function CopLogicTravel.upd_advance(data)
 				CopLogicTravel._try_anounce(data, my_data)
 			end
 			
-			--CopLogicTravel.chk_slide_conditions(data)
-			CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
+			--CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 
 			if my_data ~= data.internal_data then
 				return
@@ -302,7 +316,6 @@ function CopLogicTravel.upd_advance(data)
 		end
 	elseif my_data.advance_path then
 		CopLogicTravel._chk_begin_advance(data, my_data)
-		--CopLogicTravel.chk_slide_conditions(data)
 
 		if my_data.advancing and my_data.path_ahead then
 			CopLogicTravel._check_start_path_ahead(data)
@@ -327,7 +340,6 @@ function CopLogicTravel.upd_advance(data)
 				return
 			else
 				CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
-				--CopLogicTravel.chk_slide_conditions(data)
 			end
 		else
 			CopLogicTravel._begin_coarse_pathing(data, my_data)
@@ -341,6 +353,10 @@ end
 
 function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	local my_objective = data.objective
+	
+	if data.is_converted then
+		return true
+	end
 	
 	local dense_units = {
 		"security",
@@ -375,65 +391,17 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	end
 	
 	if data.tactics and data.tactics.obstacle and CopLogicTravel._chk_close_to_criminal(data, my_data) then
-		return false
+		return 
 	end
 	
 	if CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_high_fed_density() and dense_mook then
-		return false
-	end
-	
-	local pantsdownchk = nil
-	--checks whether players are reloading or interacting with something, or etc.
-	if data.attention_obj and data.attention_obj.is_person and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and not data.unit:in_slot(16) then
-		if data.attention_obj.is_local_player then
-			local e_movement_state = data.attention_obj.unit:movement():current_state()
-
-			if e_movement_state:_is_reloading() or e_movement_state:_interacting() or e_movement_state:is_equipping() then
-				pantsdownchk = true
-			end
-		else
-			local e_anim_data = data.attention_obj.unit:anim_data()
-
-			if not (e_anim_data.move or e_anim_data.idle) or e_anim_data.reload then
-				pantsdownchk = true
-			end
-		end
-	end
-
-	if data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and not data.attention_obj.verified or not CopLogicTravel._chk_close_to_criminal(data, my_data) and data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 800 and data.attention_obj.verified or data.attention_obj and data.attention_obj.is_person and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and pantsdownchk then --if the player is not verified, or i am NOT in a navseg that is near the criminal/player navseg, and their position is 800 meters away, and they are verified, or the player/criminal is reloading, then i am allowed to continue moving
-		if not (data.tactics and data.tactics.obstacle) then
-			if dense_mook then
-				if managers.groupai:state():chk_high_fed_density() then
-					return false
-				else
-					return true
-				end
-			else
-				return true
-			end
-		end
+		return
 	end
 	
 	local my_dis = mvector3.distance_sq(my_objective.area.pos, data.m_pos)
 
 	if my_dis > 2000 * 2000 and not managers.groupai:state():chk_high_fed_density() then
 		return true
-	end
-
-	my_dis = my_dis * 1.15 * 1.15
-
-	for u_key, u_data in pairs(data.group.units) do
-		if u_key ~= data.key then
-			local his_objective = u_data.unit:brain():objective()
-
-			if his_objective and his_objective.grp_objective == my_objective.grp_objective and not his_objective.in_place then
-				local his_dis = mvector3.distance_sq(his_objective.area.pos, u_data.m_pos)
-
-				if my_dis < his_dis then
-					return false
-				end
-			end
-		end
 	end
 
 	return true
@@ -455,7 +423,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	else
 		local optimal_threat_dis, threat_pos = nil
 		if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "taser" then --make sure these two boys are getting appropriate ranges
-			if diff_index <= 5 and data.unit:base()._tweak_table == "spooc" then
+			if diff_index <= 5 and data.unit:base()._tweak_table == "spooc" and not Global.game_settings.use_intense_AI then
 				optimal_threat_dis = 900
 			else
 				optimal_threat_dis = 1400
@@ -463,7 +431,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" then --charge is an aggressive tactic, so i want it actually being aggressive as possible
 			optimal_threat_dis = data.internal_data.weapon_range.close * 0.5
 		elseif data.objective.attitude == "engage" and data.tactics and not data.tactics.charge then --everything else is not required to find it.
-			if diff_index <= 5 then
+			if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 				optimal_threat_dis = data.internal_data.weapon_range.optimal
 			else
 				optimal_threat_dis = data.internal_data.weapon_range.close
@@ -616,7 +584,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					cover_wait_time = math.random(0.35, 0.5) --Keep enemies aggressive and active while still preserving some semblance of what used to be the original pacing while not in Shin Shootout mode
 				end
 				
-				if not is_mook or Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() or managers.skirmish:is_skirmish() and not managers.groupai:state():chk_high_fed_density() or data.unit:base():has_tag("takedown") then
+				if not is_mook or Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() or managers.skirmish:is_skirmish() and not managers.groupai:state():chk_high_fed_density() or data.unit:base():has_tag("takedown") or data.is_converted then
 					my_data.cover_leave_t = data.t + 0
 				else
 					my_data.cover_leave_t = data.t + cover_wait_time
@@ -633,7 +601,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					if no_cover_search_dis_change or not is_mook then
 						cover_search_dis = 100
 					else
-						cover_search_dis = 500
+						cover_search_dis = 50
 					end
 					
 					--if cover_search_dis == 200 then
@@ -654,9 +622,9 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			local cover_search_dis = nil
 					
 			if no_cover_search_dis_change or not is_mook then
-				cover_search_dis = 200
+				cover_search_dis = 100
 			else
-				cover_search_dis = 500
+				cover_search_dis = 75
 			end
 			
 			if dis > cover_search_dis then
@@ -709,7 +677,6 @@ end
 
 function CopLogicTravel._update_cover(ignore_this, data)
 	local my_data = data.internal_data
-	local enemy_nearby = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 10 and data.attention_obj.dis <= 2000 and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction
 	
 	local mook_units = {
 		"security",
@@ -743,10 +710,14 @@ function CopLogicTravel._update_cover(ignore_this, data)
 
 	local cover_release_dis = nil
 	
-	if enemy_nearby or not is_mook then
-		cover_release_dis = 200
+	if not is_mook then
+		cover_release_dis = 100
 	else
-		cover_release_dis = 500
+		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 10000 then
+			cover_release_dis = 500
+		else
+			cover_release_dis = 75
+		end
 	end
 	
 	local nearest_cover = my_data.nearest_cover
@@ -796,8 +767,9 @@ function CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, s
 
 		if my_data.advancing then
 			data.brain:rem_pos_rsrv("path")
-
-			if my_data.nearest_cover and (not my_data.delayed_clbks or not my_data.delayed_clbks[my_data.cover_update_task_key]) then
+			
+			local notdelayclbksornotdlclbks_chk = not my_data.delayed_clbks or not my_data.delayed_clbks[my_data.cover_update_task_key]
+			if my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
 				CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t)
 			end
 		end
@@ -849,9 +821,9 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	
 	if data.unit:movement():cool() then
 		haste = "walk"
-	elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + (enemyseeninlast4secs and 500 or 0) and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+	elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 		haste = "run"
-	elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 700 or 0) and is_mook and data.tactics and not data.tactics.hitnrun then
+	elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - (math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0) and is_mook and data.tactics and not data.tactics.hitnrun then
 		haste = "walk"
 	else
 		haste = "run"
@@ -1105,7 +1077,7 @@ function CopLogicTravel.get_pathing_prio(data)
 			end
 		end
 		
-		if data.team.id == tweak_data.levels:get_default_team_ID("player") then
+		if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted then
 			prio = prio + 2
 		end	
 	end

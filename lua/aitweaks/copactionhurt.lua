@@ -288,6 +288,7 @@ function CopActionHurt:init(action_desc, common_data)
 	local action_type = action_desc.hurt_type
 	local ignite_character = action_desc.ignite_character
 	local start_dot_dance_antimation = action_desc.fire_dot_data and action_desc.fire_dot_data.start_dot_dance_antimation
+	local common_cop = self._unit:base():has_tag("law") and not self._unit:base():has_tag("special")
 
 	if action_type == "knock_down" then
 		action_type = "heavy_hurt"
@@ -304,15 +305,56 @@ function CopActionHurt:init(action_desc, common_data)
 
 		managers.hud:set_mugshot_downed(self._unit:unit_data().mugshot_id)
 	elseif action_desc.variant == "tase" then
-		redir_res = self._ext_movement:play_redirect("tased")
+		if not managers.groupai:state():is_unit_team_AI(self._unit) then
+			local tase_time = self._unit:character_damage() ~= nil and self._unit:character_damage()._tased_time
+			local down_time = self._unit:character_damage() ~= nil and self._unit:character_damage()._tased_down_time --in case you want to set it up
 
-		if not redir_res then
-			debug_pause("[CopActionHurt:init] tased redirect failed in", self._machine:segment_state(Idstring("base")))
+			if tase_time then
+				self._tased_time = t + tase_time
+				self._unit:character_damage()._tased_time = nil
 
-			return
+				if down_time then
+					self._tased_down_time = t + down_time
+					self._unit:character_damage()._tased_down_time = nil
+				end
+
+				redir_res = self._ext_movement:play_redirect("tased")
+
+				if not redir_res then
+					debug_pause("[CopActionHurt:init] tased redirect failed in", self._machine:segment_state(Idstring("base")))
+
+					return
+				end
+
+				if self._unit:base():has_tag("taser") then
+					self._unit:sound():say("tasered", true)
+				else
+					self._unit:sound():say("x01a_any_3p", true) --standard hurt line
+				end
+
+				self._tased_effect = nil
+				local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
+
+				--spawn blue tase effect
+				if tase_effect_table then
+					self._tased_effect = World:effect_manager():spawn(tase_effect_table)
+				end
+
+				self.update = self._upd_tased
+			else
+				return
+			end
+		else
+			redir_res = self._ext_movement:play_redirect("tased")
+
+			if not redir_res then
+				debug_pause("[CopActionHurt:init] tased redirect failed in", self._machine:segment_state(Idstring("base")))
+
+				return
+			end
+
+			managers.hud:set_mugshot_tased(self._unit:unit_data().mugshot_id)
 		end
-
-		managers.hud:set_mugshot_tased(self._unit:unit_data().mugshot_id)
 	elseif action_type == "fire_hurt" or action_type == "light_hurt" and action_desc.variant == "fire" then
 		local char_tweak = tweak_data.character[self._unit:base()._tweak_table]
 		local use_animation_on_fire_damage = nil
@@ -339,7 +381,7 @@ function CopActionHurt:init(action_desc, common_data)
 
 						if fwd_dot < 0 then
 							local hit_pos = action_desc.hit_pos
-							local hit_vec = hit_pos - common_data.pos:with_z(0):normalized()
+							local hit_vec = (hit_pos - common_data.pos):with_z(0):normalized()
 
 							if mvector3.dot(hit_vec, common_data.right) > 0 then
 								dir_str = "r"
@@ -377,9 +419,22 @@ function CopActionHurt:init(action_desc, common_data)
 				dir_str = "fwd"
 			end
 
+			self._tased_effect = nil
+			local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
+
+			--add tase effect for the usual tase (like against Shields)
+			if tase_effect_table then
+				self._tased_effect = World:effect_manager():spawn(tase_effect_table)
+			end
+
 			self._machine:set_parameter(redir_res, dir_str, 1)
 		end
 	elseif action_type == "light_hurt" then
+		--prevent light_hurt from showing when doing animations like climbing, etc
+		if (self._unit:anim_data() and self._unit:anim_data().act) then
+			return
+		end
+
 		if not self._ext_anim.upper_body_active or self._ext_anim.upper_body_empty or self._ext_anim.recoil then
 			redir_res = self._ext_movement:play_redirect(action_type)
 
@@ -394,7 +449,7 @@ function CopActionHurt:init(action_desc, common_data)
 
 			if fwd_dot < 0 then
 				local hit_pos = action_desc.hit_pos
-				local hit_vec = hit_pos - common_data.pos:with_z(0):normalized()
+				local hit_vec = (hit_pos - common_data.pos):with_z(0):normalized()
 
 				if mvector3.dot(hit_vec, common_data.right) > 0 then
 					dir_str = "r"
@@ -744,16 +799,24 @@ function CopActionHurt:init(action_desc, common_data)
 
 	local shoot_chance = nil
 
-	if self._ext_inventory and not self._weapon_dropped and common_data.char_tweak.shooting_death and not self._ext_movement:cool() and t - self._ext_movement:not_cool_t() > 3 then
+	if self._ext_inventory and not self._weapon_dropped and common_data.char_tweak.shooting_death and not self._ext_movement:cool() then
 		local weapon_unit = self._ext_inventory:equipped_unit()
 
 		if weapon_unit then
-			if action_type == "counter_tased" or action_type == "taser_tased" then
-				weapon_unit:base():on_reload()
-
+			if action_type == "counter_tased" or action_type == "taser_tased" or action_desc.variant == "tase" then
 				shoot_chance = 1
-			elseif action_type == "death" or action_type == "hurt" or action_type == "heavy_hurt" then
-				shoot_chance = 0.1
+			else
+				local difficulty = Global.game_settings and Global.game_settings.difficulty
+
+				if difficulty == "overkill_290" or difficulty == "sm_wish" then
+					if managers.groupai:state():whisper_mode() and action_type == "hurt" or action_type == "heavy_hurt" or action_type == "expl_hurt" or action_type == "fire_hurt" then
+						shoot_chance = 1
+					end
+				else
+					if not managers.groupai:state():whisper_mode() and action_type == "death" or action_type == "hurt" or action_type == "heavy_hurt" or action_type == "expl_hurt" or action_type == "fire_hurt" then
+						shoot_chance = 0.1
+					end
+				end
 			end
 		end
 	end
@@ -783,21 +846,37 @@ function CopActionHurt:init(action_desc, common_data)
 
 	if not self._unit:base().nick_name then
 		if action_desc.variant == "fire" then
-			if tweak_table ~= "tank" and tweak_table ~= "tank_hw" and tweak_table ~= "shield" then
-				if action_desc.hurt_type == "fire_hurt" and tweak_table ~= "spooc" then
-					self._unit:sound():say("burnhurt")
-				elseif action_desc.hurt_type == "death" then
-					self._unit:sound():say("burndeath")
+			if action_desc.hurt_type == "fire_hurt" then
+				self._unit:sound():say("burnhurt", true)
+			elseif action_desc.hurt_type == "death" then
+				if self._unit:base():has_tag("tank") then
+					self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
+				else
+					self._unit:sound():say("burndeath", true)
 				end
 			end
 		elseif action_type == "death" then
-			self._unit:sound():say("x02a_any_3p", true)
+			self._unit:sound():say("x02a_any_3p", true, nil, true, nil) --im sorry but i need to make sure this shit actually goddamn plays
 		elseif action_type == "counter_tased" or action_type == "taser_tased" then
-			self._unit:sound():say("tasered")
+			if self._unit:base():has_tag("taser") then
+				self._unit:sound():say("tasered", true)
+			else
+				self._unit:sound():say("x01a_any_3p", true)
+			end
+		elseif action_type == "hurt_sick" then
+			
+
+			if common_cop or self._unit:base():has_tag("shield") then
+				self._unit:sound():say("ch3", true)
+			elseif self._unit:base():has_tag("medic") or self._unit:base():has_tag("taser") then
+				self._unit:sound():say("burndeath", true)
+			else
+				self._unit:sound():say("x01a_any_3p", true)
+			end
 		else
 			self._unit:sound():say("x01a_any_3p", true)
 		end
-		
+
 		local char_tweak = tweak_data.character[self._unit:base()._tweak_table]
 		local speed_mul = nil
 		
@@ -806,12 +885,12 @@ function CopActionHurt:init(action_desc, common_data)
 		else
 			--
 		end
-		
+
 		if speed_mul then
 			self._machine:set_speed(redir_res, speed_mul)
 		end
 
-		if (tweak_table == "tank" or tweak_table == "tank_hw") and action_type == "death" then
+		if self._unit:base():has_tag("tank") and action_type == "death" then
 			local unit_id = self._unit:id()
 
 			managers.fire:remove_dead_dozer_from_overgrill(unit_id)
@@ -869,6 +948,137 @@ function CopActionHurt:init(action_desc, common_data)
 		}
 
 		self._common_data.ext_network:send("action_hurt_start", unpack(params))
+	end
+
+	return true
+end
+
+function CopActionHurt:on_exit()
+	if self._shooting_hurt then
+		self._shooting_hurt = false
+
+		self._weapon_unit:base():stop_autofire()
+	end
+
+	--remove tase effect from tased enemies whenever they exit a hurt (like death if killed while being tased)
+	if not managers.groupai:state():is_unit_team_AI(self._unit) then
+		if self._tased_effect then
+			World:effect_manager():fade_kill(self._tased_effect)
+		end
+	end
+
+	if self._delayed_shooting_hurt_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._delayed_shooting_hurt_clbk_id)
+
+		self._delayed_shooting_hurt_clbk_id = nil
+	end
+
+	if self._friendly_fire then
+		self._unit:movement():set_friendly_fire(false)
+
+		self._friendly_fire = nil
+	end
+
+	if self._modifier_on then
+		self._machine:allow_modifier(self._head_modifier_name)
+		self._machine:allow_modifier(self._arm_modifier_name)
+	end
+
+	if self._expired then
+		CopActionWalk._chk_correct_pose(self)
+	end
+
+	if not self._expired and Network:is_server() then
+		if self._hurt_type == "bleedout" or self._hurt_type == "fatal" or self._variant == "tase" then
+			self._unit:network():send("action_hurt_end")
+		end
+
+		if self._hurt_type == "bleedout" or self._hurt_type == "fatal" then
+			self._ext_inventory:equip_selection(2, true)
+		end
+	end
+
+	if self._hurt_type == "fatal" or self._variant == "tase" then
+		managers.hud:set_mugshot_normal(self._unit:unit_data().mugshot_id)
+	end
+
+	if self._unit and alive(self._unit) and self._unit.character_damage and self._unit:character_damage().call_listener then
+		self._unit:character_damage():call_listener("on_exit_hurt")
+	end
+end
+
+function CopActionHurt:_upd_tased(t)
+	--allow wild (harmless) shooting while being tased (singleshot weapons only fire once as usual, still better than no firing)
+	if self._shooting_hurt then
+		local weap_unit = self._weapon_unit
+		local weap_unit_base = weap_unit:base()
+		local shoot_from_pos = weap_unit:position()
+		local shoot_fwd = weap_unit:rotation():y()
+
+		weap_unit_base:trigger_held(shoot_from_pos, shoot_fwd, 3)
+
+		if weap_unit_base.clip_empty and weap_unit_base:clip_empty() then
+			self._shooting_hurt = false
+
+			weap_unit_base:stop_autofire()
+		end
+	end
+
+	if not self._tased_time or self._tased_time < t then
+		if dont and self._tased_down_time and t < self._tased_down_time then --leaving this with a dummy check for now until i figure out some reason to use this
+			local redir_res = self._ext_movement:play_redirect("fatal")
+
+			if not redir_res then
+				debug_pause("[CopActionHurt:init] fatal redirect failed in", self._machine:segment_state(Idstring("base")))
+			end
+
+			self.update = self._upd_tased_down
+		else
+			--don't use self._tased_down_time on cops as they'll go into fatal and immediately get back up because it's not set up for them
+
+			--remove tase effect from tased enemies when the tase stops
+			if not managers.groupai:state():is_unit_team_AI(self._unit) then
+				if self._tased_effect then
+					World:effect_manager():fade_kill(self._tased_effect)
+				end
+			end
+
+			--stop the tase and let the unit regain control again
+			self._expired = true
+		end
+	end
+end
+
+--prevent some hurt animations from overlapping/replaying until they actually expire (shield_knock is the most noticeable one)
+function CopActionHurt:chk_block(action_type, t)
+	if CopActionAct.chk_block(self, action_type, t) then
+		return true
+	elseif action_type == "death" then
+		-- Nothing
+	elseif (action_type == "hurt" or action_type == "heavy_hurt" or action_type == "stagger" or action_type == "knock_down" or action_type == "hurt_sick" or action_type == "poison_hurt" or action_type == "shield_knock") and not self._ext_anim.hurt_exit then
+		return true
+	elseif action_type == "turn" then
+		return true
+	end
+end
+
+function CopActionHurt:is_network_allowed(action_desc)
+	if not CopActionHurt.network_allowed_hurt_types[action_desc.hurt_type] then
+		return false
+	else
+		--allow enemy tase to sync properly through copdamage alone
+		if action_desc.variant == "tase" and not managers.groupai:state():is_unit_team_AI(self._unit) then
+			return false
+		end
+	end
+
+	--prevent synced damage hurts from syncing right back
+	if action_desc.allow_network == false or action_desc.is_synced then
+		return false
+	end
+
+	if self._unit:in_slot(managers.slot:get_mask("criminals")) then
+		return false
 	end
 
 	return true

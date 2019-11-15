@@ -129,6 +129,8 @@
 		<!--Textures-->	
 		<file :name="shared_textures/heads_atlas_df.texture" force="false"/>
 		<file :name="shared_textures/heads_atlas_nm.texture" force="false"/>
+		<file :name="shared_textures/sam_head_df.texture" force="false"/>
+		<file :name="shared_textures/sam_head_nm.texture" force="false"/>
 		<file :name="shared_textures/shotgun_hood_df.texture" force="false"/>
 		<file :name="shared_textures/shotgun_hood_nm.texture" force="false"/>
 		<file :name="shared_textures/helmet_tanker_df.texture" force="false"/>
@@ -156,6 +158,13 @@
 		<file :name="ene_murkywater_cloaker/material_body_df.texture" force="true"/>
 		<file :name="ene_murkywater_medic/material_body_df.texture" force="true"/>
 		<file :name="ene_murkywater_medic/material_head_df.texture" force="true"/>
+		
+		<!-- hey buddy, you brought a taser to a sword fight? fuckin' cri- *gunshot*-->
+		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.unit" load="true" force="true"/>
+		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.material_config" force="true"/>
+		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.object" force="true"/>
+		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.cooked_physics" force="true"/>
+		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.model" force="true"/>
 		
 		<!--the people who mucked up the bulldozers are my mortal enemies-->	
 		<file :name="ene_murkywater_bulldozer_3/material_v3_df.texture" force="true"/>

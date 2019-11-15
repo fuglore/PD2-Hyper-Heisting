@@ -151,7 +151,11 @@ function ActionSpooc:init(action_desc, common_data)
 	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
 	if difficulty_index <= 7 then
-		self._unit:sound():play(self:get_sound_event("detect"))
+		if Global.mutators and Global.mutators.telespooc then
+			--nothing
+		else
+			self._unit:sound():play(self:get_sound_event("detect"))
+		end
 	end
 	
 	self._unit:damage():run_sequence_simple("turn_on_spook_lights")
@@ -173,7 +177,7 @@ function ActionSpooc:init(action_desc, common_data)
 	return true
 end
 
-function ActionSpooc:complete() --TODO: Nothing currently.
+function ActionSpooc:complete()
 	return (self._beating_end_t and self._beating_end_t < TimerManager:game():time()) or (self._beating_end_t and self._last_vel_z >= 0) --https://www.youtube.com/watch?v=XvGRaxtPb3Y
 end
 

@@ -45,7 +45,7 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		local activedrama = self._drama_data.amount >= tweak_data.drama.consistentcombat
 		
-		self._max_fedfuck_t_add = math.ceil(4 * self._feddensityhighfrequency)
+		self._max_fedfuck_t_add = 5
 		
 		--if not self._feddensity_reset_t then
 			--log("noresettime")
@@ -59,7 +59,7 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		if not self._max_fedfuck_t and activedrama and not self._feddensityhigh then
 			--log("tick tock")
-			self._max_fedfuck_t = self._t + (self._max_fedfuck_t_add * self._downleniency)
+			self._max_fedfuck_t = self._t + 5
 		end
 		
 		if not activedrama and self._max_fedfuck_t then
@@ -93,20 +93,37 @@ function GroupAIStateBesiege:update(t, dt)
 	end
 end
 
-Hooks:PostHook(GroupAIStateBase, "_get_special_unit_type_count", "shin_special_unit_type_count", function(self, special_type, ...)
-	local okcool = false
-	if special_type == 'tank_mini' or special_type == 'tank_medic' or special_type == 'phalanx_minion' then
-		okcool = true
+-- Fix for the bug when there is too many dozers/specials thank you andole im sorry
+local fixed = false
+local origfunc2 = GroupAIStateBesiege._get_special_unit_type_count
+function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
+	if special_type == 'tank_mini' and special_type == 'tank_medic' and special_type == 'tank_ftsu' and special_type == 'spooc_heavy' and special_type == 'phalanx_minion' and special_type == 'tank_hw' then
+		fixed = true
 	end
 	
-	if not okcool and special_type == 'tank' then
-		local dozerincluded = count(self, 'tank', ...) or 0
-		dozerincluded = dozerincluded + (count(self, 'tank_mini', ...) or 0)
-		dozerincluded = dozerincluded + (count(self, 'tank_medic', ...) or 0)
-		return dozerincluded
+	if not fixed and special_type == 'tank' then
+		local res1 = origfunc2(self, 'tank', ...) or 0
+		res1 = res1 + (origfunc2(self, 'tank_mini', ...) or 0)
+		res1 = res1 + (origfunc2(self, 'tank_medic', ...) or 0)
+		res1 = res1 + (origfunc2(self, 'tank_ftsu', ...) or 0)
+		res1 = res1 + (origfunc2(self, 'tank_hw', ...) or 0)
+		return res1
 	end
 	
-end)
+	if not fixed and special_type == 'spooc' then
+		local res2 = origfunc2(self, 'spooc', ...) or 0
+		res2 = res2 + (origfunc2(self, 'spooc_heavy', ...) or 0)
+		return res2
+	end
+	
+	if not fixed and special_type == 'shield' then 
+		local res3 = origfunc2(self, 'shield', ...) or 0
+		res3 = res3 + (origfunc2(self, 'phalanx_minion', ...) or 0)
+		return res3
+	end
+	
+	return origfunc2(self, special_type, ...)
+end
 
 function GroupAIStateBesiege:chk_high_fed_density()
 
@@ -136,6 +153,7 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.phase = "anticipation"
 	assault_task.start_t = self._t
 	local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.is_first)
+	assault_task.force_anticipation = 16
 	assault_task.is_first = nil
 	self._enemies_killed_sustain = 0
 	assault_task.phase_end_t = self._t + anticipation_duration
@@ -214,6 +232,20 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local task_data = self._task_data.assault
 	local assault_number_sustain_t_mul = nil
 	
+	--if task_data.phase == "anticipation" then
+		--self._task_data.assault.force = task_data.force_anticipation
+	--else
+		--if task_data.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
+			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		--elseif self._assault_number == 2 then
+			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.85 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		--elseif self._assault_number == 3 then
+			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.9 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		--else
+			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+		--end
+	--end
+	
 	if task_data.is_first or self._assault_number and self._assault_number <= 2 or not self._assault_number then
 		assault_number_sustain_t_mul = 0.75 
 	elseif self._assault_number >= 3 then
@@ -268,18 +300,20 @@ function GroupAIStateBesiege:_upd_assault_task()
 					local best_group = nil
 
 					for _, group in pairs(self._groups) do
-						if not best_group or group.objective.type == "reenforce_area" then
+						if group.objective.type == "reenforce_area" then
 							best_group = group
-						elseif best_group.objective.type ~= "reenforce_area" and group.objective.type ~= "retire" then
+						elseif group.objective.type ~= "reenforce_area" and group.objective.type ~= "retire" then
+							best_group = group
+						elseif not best_group then
 							best_group = group
 						end
 					end
 
 					if best_group and self:_voice_delay_assault(best_group) then
-						task_data.is_hesitating = nil
+						self._task_data.assault.is_hesitating = nil
 					end
 				else
-					task_data.is_hesitating = nil
+					self._task_data.assault.is_hesitating = nil
 				end
 			end
 		end
@@ -304,8 +338,8 @@ function GroupAIStateBesiege:_upd_assault_task()
 			
 			managers.modifiers:run_func("OnEnterSustainPhase", sustain_duration)
 
-			task_data.phase = "sustain"
-			task_data.phase_end_t = t + sustain_duration
+			self._task_data.assault.phase = "sustain"
+			self._task_data.assault.phase_end_t = t + sustain_duration
 		end
 	elseif task_data.phase == "sustain" then
 		local end_t = self:assault_phase_end_time()
@@ -363,7 +397,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			self:_assign_assault_groups_to_retire()
 			if enemies_defeated and fade_time_over or taking_too_long then
 				if not task_data.said_retreat then
-					task_data.said_retreat = true
+					self._task_data.assault.said_retreat = true
 
 					self:_police_announce_retreat()
 					self:_assign_assault_groups_to_retire()
@@ -403,19 +437,21 @@ function GroupAIStateBesiege:_upd_assault_task()
 			end
 
 			if task_data.force_end or end_assault then
-				print("assault task clear")
+				--print("assault task clear")
 
 				task_data.active = nil
 				task_data.phase = nil
 				task_data.said_retreat = nil
 				task_data.force_end = nil
+				local force_regroup = task_data.force_regroup
+				task_data.force_regroup = nil
 
 				if self._draw_drama then
 					self._draw_drama.assault_hist[#self._draw_drama.assault_hist][2] = t
 				end
 
 				managers.mission:call_global_event("end_assault")
-				self:_begin_regroup_task()
+				self:_begin_regroup_task(force_regroup)
 
 				return
 			end
@@ -515,7 +551,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 					local grp_objective = {
 						attitude = "avoid",
 						stance = "hos",
-						pose = "crouch",
+						pose = "stand",
 						type = "assault_area",
 						area = spawn_group.area,
 						coarse_path = {
@@ -614,6 +650,14 @@ end
 function GroupAIStateBesiege:_voice_looking_for_angle(group)
 	for u_key, unit_data in pairs(group.units) do
 		if unit_data.char_tweak.chatter.ready and self:chk_say_enemy_chatter(unit_data.unit, unit_data.m_pos, "look_for_angle") then
+			else
+		end
+	end
+end
+
+function GroupAIStateBesiege:_voice_friend_dead(group)
+	for u_key, unit_data in pairs(group.units) do
+		if unit_data.char_tweak.chatter.enemyidlepanic and self:chk_say_enemy_chatter(unit_data.unit, unit_data.m_pos, "assaultpanic") then
 			else
 		end
 	end
@@ -1388,14 +1432,53 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	end
 end
 
+function GroupAIStateBesiege:_end_regroup_task()
+	if self._task_data.regroup.active then
+		self._task_data.regroup.active = nil
+
+		managers.trade:set_trade_countdown(true)
+		self:set_assault_mode(false)
+
+		if not self._smoke_grenade_ignore_control then
+			managers.network:session():send_to_peers_synched("sync_smoke_grenade_kill")
+			self:sync_smoke_grenade_kill()
+		end
+
+		local dmg = self._downs_during_assault
+		local limits = tweak_data.group_ai.bain_assault_praise_limits
+		local result = dmg < limits[1] and 0 or dmg < limits[2] and 1 or 2
+		
+		if self._downs_during_assault > 4 then
+			self._assault_was_hell = true
+		end
+
+		managers.mission:call_global_event("end_assault_late")
+		managers.groupai:dispatch_event("end_assault_late", self._assault_number)
+		managers.hud:end_assault(result)
+		self:_mark_hostage_areas_as_unsafe()
+		self:_set_rescue_state(true)
+
+		if not self._task_data.assault.next_dispatch_t then
+			local assault_delay = self._tweak_data.assault.delay
+			local breaktime = self._assault_was_hell and 15 or 0
+			self._task_data.assault.next_dispatch_t = self._t + self:_get_difficulty_dependent_value(assault_delay) + breaktime
+		end
+
+		if self._draw_drama then
+			self._draw_drama.regroup_hist[#self._draw_drama.regroup_hist][2] = self._t
+		end
+
+		self._task_data.recon.next_dispatch_t = self._t
+	end
+end
+
 function GroupAIStateBesiege:_upd_regroup_task()
 	local regroup_task = self._task_data.regroup
-	local low_carnage = self:_count_criminals_engaged_force(4) <= 1
 	
 	if regroup_task.active then
 		self:_assign_assault_groups_to_retire()
 
-		if regroup_task.end_t < self._t or self._drama_data.zone == "low" and low_carnage then
+		if regroup_task.end_t < self._t and self._drama_data.amount < tweak_data.drama.assault_fade_end then
 			self:_end_regroup_task()
 		end
 	end
@@ -1546,3 +1629,5 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 		end
 	end
 end
+
+

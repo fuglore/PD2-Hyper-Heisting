@@ -69,7 +69,7 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 	local aim_delay = weapon_usage_tweak.aim_delay
 	local lerp_dis = math.min(1, target_vec:length() / self._falloff[#self._falloff].r)
 	local shoot_delay = math.lerp(aim_delay[1], aim_delay[2], lerp_dis)
-	if difficulty_index <= 5 then
+	if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
 		self._mod_enable_t = t + 0.4
 	else
 		self._mod_enable_t = t + 0.2
@@ -82,7 +82,7 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 
 		if not attention_unit:base().is_husk_player then
 		
-			if difficulty_index <= 5 then --keep it consistent, tase is executed first, if it fails, then open fire, on MH and up, the tase check is executed much faster.
+			if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then --keep it consistent, tase is executed first, if it fails, then open fire, on MH and up, the tase check is executed much faster.
 				self._shoot_t = TimerManager:game():time() + 0.45
 			else
 				self._shoot_t = TimerManager:game():time() + 0.25
@@ -94,7 +94,7 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 		end
 	elseif attention_unit:base().is_local_player then
 		
-		if difficulty_index <= 5 then --keep it consistent, tase is executed first, if it fails, then open fire, on MH and up, the tase check is executed much faster.
+		if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then --keep it consistent, tase is executed first, if it fails, then open fire, on MH and up, the tase check is executed much faster.
 				self._shoot_t = TimerManager:game():time() + 0.45
 			else
 				self._shoot_t = TimerManager:game():time() + 0.25
@@ -136,7 +136,7 @@ function CopActionTase:update(t)
 			self._machine:force_modifier(self._modifier_name)
 			local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 			
-			if difficulty_index <= 5 then
+			if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
 				self._mod_enable_t = t + 0.4 --execute tase check first, but slower than MH and up
 			else
 				self._mod_enable_t = t + 0.2 --execute tase check first

@@ -21,22 +21,42 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 
 	for _, rname in ipairs(all_rifles) do
 		self[rname].spread = rifle_spread
+		self[rname].fanpcwep = true
 	end
 	
 	for _, sname in ipairs(all_smgs) do
 		self[sname].spread = smg_spread
+		self[sname].fanpcwep = true
 	end
 	
 	self.m249_npc.spread = lmg_spread
+	self.m249_npc.fanpcwep = true
 	self.rpk_lmg_npc.spread = lmg_spread
+	self.rpk_lmg_npc.fanpcwep = true
 	self.mini_npc.spread = mini_spread
+	self.mini_npc.fanpcwep = true
 	
 	self.r870_npc.spread = 1
 	self.blazter_npc.spread = 1
 	self.benelli_npc.spread = 1
+	self.silserbu_npc.spread = 1
 end
 
 Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
+	
+	--begin new weapon setup
+	self.silserbu_npc = deep_clone(self.r870_npc)
+	self.silserbu_npc.sounds.prefix = "serbu_npc"
+	self.silserbu_npc.has_suppressor = "suppressed_a"
+	self.smoke_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
+	self.lazer_npc = deep_clone(self.g36_npc)
+	self.lazer_npc.sounds.prefix = "tecci_npc"
+	self.lazer_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"
+	self.lazer_npc.b_trail = true
+	self.blazter_npc = deep_clone(self.benelli_npc)
+	self.blazter_npc.sounds.prefix = "boot_npc"
+	self.blazter_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"
+	self.blazter_npc.r_trail = true
 	
 	self.ak47_ass_npc.DAMAGE = 1
 	self.mp5_npc.DAMAGE = 1
@@ -66,19 +86,15 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.g36_npc.suppression = 1
 	self.smoke_npc.suppression = 1
 	self.mp5_npc.suppression = 5
+	self.ump_npc.suppression = 5
+	self.mp9_npc.suppression = 5
 	self.saiga_npc.suppression = 1
 	self.r870_npc.suppression = 2
+	self.blazter_npc.suppression = 2
+	self.silserbu_npc.suppression = 2
 	self.benelli_npc.suppression = 2
 	self.m249_npc.suppression = 5
 	self.mini_npc.suppression = 5
-	
-	--heheheheheh
-	self.smoke_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
-	self.blazter_npc = deep_clone(self.benelli_npc)
-	self.lazer_npc = deep_clone(self.g36_npc)
-	self.blazter_npc.r_trail = true
-	self.lazer_npc.b_trail = true
-	
 	
 	--Sniper stuff starts here
 	self.m14_sniper_npc.suppression = 5 --this gets boosted more and more as difficulties go up.
@@ -112,8 +128,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.asval_smg_npc.has_suppressor = "suppressed_a"
 	self.mac11_npc.sounds.prefix = "mac10_npc"
 	self.benelli_npc.sounds.prefix = "benelli_m4_npc"
-	self.blazter_npc.sounds.prefix = "boot_npc"
-	self.lazer_npc.sounds.prefix = "tecci_npc"
 	
 	--LMG weapon usage fix for Dozers and other enemies, this will do some damn good with NPC bosses.
 	self.m249_npc.hold = "rifle"
@@ -138,7 +152,18 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.saiga_npc.hivis = true
 	self.m249_npc.hivis = true
 	self.rpk_lmg_npc.hivis = true
-	
+	self.silserbu_npc.hi_vis = true
+	self.m14_sniper_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.svd_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.svdsil_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.heavy_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.mini_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.r870_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.silserbu_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.saiga_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.m249_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.rpk_lmg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 end)
 
 --TODO: it is done
@@ -167,6 +192,7 @@ function WeaponTweakData:_set_normal()
 	self.smoke_npc.CLIP_AMMO_MAX = 16
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 16
 	self.ak47_npc.CLIP_AMMO_MAX = 16
+	self.lazer_npc.CLIP_AMMO_MAX = 16
 	
 	self:_set_characters_weapon_preset(40, 20, 20, 100)
 	
@@ -211,6 +237,7 @@ function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
 	self.smoke_npc.CLIP_AMMO_MAX = 16
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 16
 	self.ak47_npc.CLIP_AMMO_MAX = 16
+	self.lazer_npc.CLIP_AMMO_MAX = 16
 	
 	self:_set_characters_weapon_preset(40, 20, 20, 100) --setting enemy weapon spread
 	
@@ -251,6 +278,7 @@ function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried abo
 	self.smoke_npc.CLIP_AMMO_MAX = 25
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 25
 	self.ak47_npc.CLIP_AMMO_MAX = 25
+	self.lazer_npc.CLIP_AMMO_MAX = 25
 	
 	self:_set_characters_weapon_preset(30, 15, 40, 80) --setting enemy weapon spread
 	
@@ -299,6 +327,7 @@ function WeaponTweakData:_set_overkill_145()
 	self.smoke_npc.CLIP_AMMO_MAX = 25
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 25
 	self.ak47_npc.CLIP_AMMO_MAX = 25
+	self.lazer_npc.CLIP_AMMO_MAX = 25
 	
 	self:_set_characters_weapon_preset(30, 15, 40, 80) --setting enemy weapon spread
 	
@@ -351,6 +380,7 @@ function WeaponTweakData:_set_easy_wish()
 	self.smoke_npc.CLIP_AMMO_MAX = 30
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 30
 	self.ak47_npc.CLIP_AMMO_MAX = 30
+	self.lazer_npc.CLIP_AMMO_MAX = 30
 	
 	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
 	
@@ -417,6 +447,7 @@ function WeaponTweakData:_set_overkill_290()
 	self.smoke_npc.CLIP_AMMO_MAX = 30
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 30
 	self.ak47_npc.CLIP_AMMO_MAX = 30
+	self.lazer_npc.CLIP_AMMO_MAX = 30
 	
 	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
 	
@@ -483,6 +514,7 @@ function WeaponTweakData:_set_sm_wish()
 	self.smoke_npc.CLIP_AMMO_MAX = 45
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 45
 	self.ak47_npc.CLIP_AMMO_MAX = 45
+	self.lazer_npc.CLIP_AMMO_MAX = 45
 	
 	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
 	
@@ -506,6 +538,7 @@ function WeaponTweakData:_set_sm_wish()
 	self.g36_npc.DAMAGE = 1
 	self.ak47_npc.DAMAGE = 1
 	self.smoke_npc.DAMAGE = 1
+	self.lazer_npc.DAMAGE = 1
 	
 	--Turret tweaks.
 	self.swat_van_turret_module.HEALTH_INIT = 25000

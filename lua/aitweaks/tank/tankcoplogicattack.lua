@@ -85,7 +85,7 @@ function TankCopLogicAttack.update(data)
 			local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 			local run_dist = nil
 			
-			if difficulty_index == 8 then
+			if difficulty_index == 8 or Global.game_settings.use_intense_AI then
 				run_dist = 900
 				--log("aggressive dozer active")
 			else
@@ -93,6 +93,10 @@ function TankCopLogicAttack.update(data)
 			end
 			
 			local walk = data.attention_obj.verified_dis < run_dist
+			
+			if not data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") then 
+				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "approachingspecial")
+			end
 			
 			TankCopLogicAttack._chk_request_action_walk_to_chase_pos(data, my_data, walk and "walk" or "run")
 		elseif my_data.chase_pos then

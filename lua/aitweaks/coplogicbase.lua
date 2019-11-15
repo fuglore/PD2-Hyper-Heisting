@@ -24,8 +24,10 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 			if old_att_obj.u_key == new_att_obj.u_key then
 				is_same_obj = true
 				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 2
-
-				if new_att_obj.stare_expire_t and new_att_obj.stare_expire_t < data.t and (not new_att_obj.settings.pause or data.t + math.lerp(new_att_obj.settings.pause[1], new_att_obj.settings.pause[2], math.random())) or new_att_obj.pause_expire_t and new_att_obj.pause_expire_t < data.t then
+				
+				local notnewobjpauseorrandompauset = not new_att_obj.settings.pause or data.t + math.lerp(new_att_obj.settings.pause[1], new_att_obj.settings.pause[2], math.random())
+				
+				if new_att_obj.stare_expire_t and new_att_obj.stare_expire_t < data.t and notnewobjpauseorrandompauset or new_att_obj.pause_expire_t and new_att_obj.pause_expire_t < data.t then
 					if not new_att_obj.settings.attract_chance or math.random() < new_att_obj.settings.attract_chance then
 						new_att_obj.pause_expire_t = nil
 						new_att_obj.stare_expire_t = data.t + math.lerp(new_att_obj.settings.duration[1], new_att_obj.settings.duration[2], math.random())
@@ -64,15 +66,19 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 			new_att_obj.acquire_t = data.t
 		end
 		
-		if AIAttentionObject.REACT_SHOOT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and (data.unit:anim_data().idle or data.unit:anim_data().move) and new_att_obj.is_person and data.char_tweak.chatter.contact then
-			if data.unit:base()._tweak_table == "gensec" then
-				data.unit:sound():say("a01", true)			
-			elseif data.unit:base()._tweak_table == "security" then
-				data.unit:sound():say("a01", true)
-			elseif data.unit:base()._tweak_table == "shield" then
-				data.unit:sound():say(shield_sound, true)
-			else
-				data.unit:sound():say("c01", true)
+		local not_acting = data.unit:anim_data().idle or data.unit:anim_data().move
+		
+		if AIAttentionObject.REACT_SHOOT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and not_acting and new_att_obj.is_person and data.char_tweak.chatter.contact then --the fact i have to do this is just hghghghg
+			if not data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") then
+				if data.unit:base()._tweak_table == "gensec" then
+					data.unit:sound():say("a01", true)			
+				elseif data.unit:base()._tweak_table == "security" then
+					data.unit:sound():say("a01", true)
+				elseif data.unit:base()._tweak_table == "shield" then
+					data.unit:sound():say(shield_sound, true)
+				else
+					data.unit:sound():say("c01", true)
+				end
 			end
 		end
 	elseif old_att_obj and old_att_obj.criminal_record then
@@ -115,7 +121,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	local delay = nil
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
-	if diff_index <= 5 then
+	if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 		delay = 0.7
 	else
 		delay = 0.35
@@ -271,7 +277,8 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	end
 
 	for u_key, attention_info in pairs(all_attention_objects) do
-		if u_key ~= my_key and not detected_obj[u_key] and (not attention_info.nav_tracker or chk_vis_func(my_tracker, attention_info.nav_tracker)) then
+		local notattinfonavtrackorchkvisfunc = not attention_info.nav_tracker or chk_vis_func(my_tracker, attention_info.nav_tracker)
+		if u_key ~= my_key and not detected_obj[u_key] and notattinfonavtrackorchkvisfunc then
 			local settings = attention_info.handler:get_attention(my_access, min_reaction, max_reaction, data.team)
 
 			if settings then
@@ -297,10 +304,23 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	for u_key, attention_info in pairs(detected_obj) do
 		if t < attention_info.next_verify_t then
 			if AIAttentionObject.REACT_SUSPICIOUS <= attention_info.reaction then
-				delay = math.min(attention_info.next_verify_t - t, delay)
+				local next_verify = attention_info.next_verify_t - t
+				local next_verify_x2 = next_verify * 2
+				local delay_multid = delay * 2
+				local close_delay = math.min(next_verify, delay)
+				local far_delay = math.min(next_verify_x2, delay_multid)
+				if attention_info.dis <= 2000 then 
+					delay = close_delay
+				else
+					delay = far_delay
+				end
 			end
 		else
-			attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and attention_info.settings.verification_interval or attention_info.settings.notice_interval or attention_info.settings.verification_interval)
+			if attention_info.dis > 2000 then --optimizations, yay
+				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and 1 or 2)
+			else
+				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and attention_info.settings.verification_interval or attention_info.settings.notice_interval or attention_info.settings.verification_interval)
+			end
 
 			if not attention_info.identified then
 				local noticable = nil
@@ -323,7 +343,21 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						delta_prog = 1
 					else
 						local min_delay = my_data.detection.delay[1]
+						
+						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
+							min_delay = math.max(my_data.detection.delay[1], 0.7)
+						else
+							min_delay = math.min(my_data.detection.delay[1], 0.35)
+						end
+						
 						local max_delay = my_data.detection.delay[2]
+						
+						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
+							max_delay = math.max(my_data.detection.delay[2], 1)
+						else
+							max_delay = math.min(my_data.detection.delay[2], 0.5)
+						end
+						
 						local angle_mul_mod = 0.25 * math.min(angle / my_data.detection.angle_max, 1)
 						local dis_mul_mod = 0.75 * dis_multiplier
 						local notice_delay_mul = attention_info.settings.notice_delay_mul or 1
@@ -422,7 +456,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						if not is_detection_persistent and mvector3.distance(attention_pos, attention_info.criminal_record.pos) > 700 then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else
-							if diff_index >= 6 then --this is actually a vanilla thing which lets cops use fellow teammates' recorded positions, i personally think that with hyper heisting's faster updates, this should be limited to higher difficulties
+							if diff_index >= 6 or Global.game_settings.use_intense_AI then --this is actually a vanilla thing which lets cops use fellow teammates' recorded positions, i personally think that with hyper heisting's faster updates, this should be limited to higher difficulties
 								attention_info.verified_pos = mvector3.copy( attention_info.criminal_record.pos )
 								attention_info.verified_dis = dis
 							end
@@ -598,3 +632,118 @@ function CopLogicBase.chk_start_action_dodge(data, reason)
 	end
 	return action
 end
+
+function CopLogicBase.on_suppressed_state(data)
+	if not Global.game_settings.one_down then
+		if data.is_suppressed and data.objective then
+			local allow_trans, interrupt = CopLogicBase.is_obstructed(data, data.objective, nil, nil)
+
+			if interrupt then
+				data.objective_failed_clbk(data.unit, data.objective)
+			end
+		end
+	end
+end
+
+function CopLogicBase.is_obstructed(data, objective, strictness, attention)
+	--bots should no longer get interrupted by objectives on a whim, now cops are simply given the option of receiving new objectives rather than being FORCED into another objective which should make them feel less dumb
+	local my_data = data.internal_data
+	attention = attention or data.attention_obj
+	local t = data.t
+	local mid_fight = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified
+
+	if not objective or objective.is_default or (objective.in_place or not objective.nav_seg) and not objective.action then
+		return true, false
+	end
+		
+	
+	if objective.interrupt_suppression and data.is_suppressed and not data.unit:in_slot(16) then
+		if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
+			my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
+					
+			return true, true
+		else	
+			return true, false
+		end
+	end
+
+	strictness = strictness or 0
+
+	if objective.interrupt_health and not data.unit:in_slot(16) then
+			local health_ratio = data.unit:character_damage():health_ratio()
+			local too_much_damage = health_ratio < 1 and health_ratio * (1 - strictness) < objective.interrupt_health
+			local is_dead = data.unit:character_damage():dead()
+
+		if too_much_damage or is_dead then
+			if not is_dead then 
+				if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
+					my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
+					
+					return true, true
+				end
+			else
+				
+				return true, false
+			end
+		end
+	end
+
+	if objective.interrupt_dis and not data.unit:in_slot(16) then
+		if attention and (AIAttentionObject.REACT_COMBAT <= attention.reaction or data.cool and AIAttentionObject.REACT_SURPRISED <= attention.reaction) then
+			if objective.interrupt_dis == -1 then 
+				if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
+					my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
+					
+					return true, true
+				else
+					
+					return true, false
+				end
+			elseif math.abs(attention.m_pos.z - data.m_pos.z) < 250 then
+				local enemy_dis = attention.dis * (1 - strictness)
+
+				if not attention.verified then
+					enemy_dis = 3 * attention.dis * (1 - strictness)
+				end
+
+				if attention.is_very_dangerous then
+					enemy_dis = enemy_dis * 0.5
+				end
+
+				if enemy_dis < objective.interrupt_dis and attention.verified then						
+					if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
+						my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
+						
+						return true, true
+					else
+						return true, false
+					end
+				end
+			end
+
+			if objective.pos and math.abs(attention.m_pos.z - objective.pos.z) < 250 then
+				local enemy_dis = mvector3.distance(objective.pos, attention.m_pos) * (1 - strictness)
+
+				if enemy_dis < objective.interrupt_dis then
+					if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
+						return true, true
+					else
+						return true, false
+					end
+				end
+			end
+		elseif objective.interrupt_dis == -1 and not data.unit:movement():cool() and not data.unit:in_slot(16) then
+			if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
+				my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
+				
+				return true, true
+			else
+				
+				return true, false
+			end
+		end
+	end
+	
+	return false, false
+end
+

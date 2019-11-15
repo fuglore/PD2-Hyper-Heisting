@@ -1,3 +1,50 @@
+require("lib/units/enemies/cop/logics/CopLogicBase")
+require("lib/units/enemies/cop/logics/CopLogicInactive")
+require("lib/units/enemies/cop/logics/CopLogicIdle")
+require("lib/units/enemies/cop/logics/CopLogicAttack")
+require("lib/units/enemies/cop/logics/CopLogicIntimidated")
+require("lib/units/enemies/cop/logics/CopLogicTravel")
+require("lib/units/enemies/cop/logics/CopLogicArrest")
+require("lib/units/enemies/cop/logics/CopLogicGuard")
+require("lib/units/enemies/cop/logics/CopLogicFlee")
+require("lib/units/enemies/cop/logics/CopLogicSniper")
+require("lib/units/enemies/cop/logics/CopLogicTrade")
+require("lib/units/enemies/cop/logics/CopLogicPhalanxMinion")
+require("lib/units/enemies/cop/logics/CopLogicPhalanxVip")
+require("lib/units/enemies/tank/logics/TankCopLogicAttack")
+require("lib/units/enemies/shield/logics/ShieldLogicAttack")
+require("lib/units/enemies/spooc/logics/SpoocLogicIdle")
+require("lib/units/enemies/spooc/logics/SpoocLogicAttack")
+require("lib/units/enemies/taser/logics/TaserLogicAttack")
+local old_init = CopBrain.post_init
+local logic_variants = {
+	security = {
+		idle = CopLogicIdle,
+		attack = CopLogicAttack,
+		travel = CopLogicTravel,
+		inactive = CopLogicInactive,
+		intimidated = CopLogicIntimidated,
+		arrest = CopLogicArrest,
+		guard = CopLogicGuard,
+		flee = CopLogicFlee,
+		sniper = CopLogicSniper,
+		trade = CopLogicTrade,
+		phalanx = CopLogicPhalanxMinion
+	}
+}
+local security_variant = logic_variants.security
+function CopBrain:post_init()
+	
+	CopBrain._logic_variants.tank_ftsu = clone(security_variant)
+	CopBrain._logic_variants.tank_ftsu.attack = TankCopLogicAttack
+	CopBrain._logic_variants.spooc_heavy = clone(security_variant)
+	CopBrain._logic_variants.spooc_heavy.idle = SpoocLogicIdle
+	CopBrain._logic_variants.spooc_heavy.attack = SpoocLogicAttack
+
+	old_init(self)
+end
+
+
 function CopBrain:on_suppressed(state)
     self._logic_data.is_suppressed = state or nil
 
@@ -9,9 +56,9 @@ function CopBrain:on_suppressed(state)
 			local chance_heeeeelpp = 50
 			
 			if roll <= chance_heeeeelpp then
-                self._unit:sound():say("hlp", true)
+                --self._unit:sound():say("hlp", true)
 			else --hopefully some variety here now
-                self._unit:sound():say("lk3b", true) 
+                --self._unit:sound():say("lk3b", true) 
 			end		
         end
     end

@@ -8,10 +8,24 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
+	local drama_tweak = tweak_data.drama
+	self._drama_data = {
+		amount = 0,
+		zone = "low",
+		last_calculate_t = 0,
+		decay_period = tweak_data.drama.decay_period,
+		low_p = drama_tweak.low,
+		high_p = drama_tweak.peak,
+		actions = drama_tweak.drama_actions,
+		max_dis = drama_tweak.max_dis,
+		dis_mul = drama_tweak.max_dis_mul
+	}
 	self._special_unit_types = self._special_unit_types or {}
 	self._special_unit_types['tank_mini'] = true
 	self._special_unit_types['tank_hw'] = true
 	self._special_unit_types['tank_medic'] = true
+	self._special_unit_types['tank_ftsu'] = true
+	self._special_unit_types['spooc_heavy'] = true
 	self._special_unit_types['phalanx_minion'] = true
 	self._rolled_dramatalk_chance = nil
 end
@@ -25,10 +39,24 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
+	local drama_tweak = tweak_data.drama
+	self._drama_data = {
+		amount = 0,
+		zone = "low",
+		last_calculate_t = 0,
+		decay_period = tweak_data.drama.decay_period,
+		low_p = drama_tweak.low,
+		high_p = drama_tweak.peak,
+		actions = drama_tweak.drama_actions,
+		max_dis = drama_tweak.max_dis,
+		dis_mul = drama_tweak.max_dis_mul
+	}
 	self._special_unit_types = self._special_unit_types or {}
 	self._special_unit_types['tank_mini'] = true
 	self._special_unit_types['tank_hw'] = true
 	self._special_unit_types['tank_medic'] = true
+	self._special_unit_types['tank_ftsu'] = true
+	self._special_unit_types['spooc_heavy'] = true
 	self._special_unit_types['phalanx_minion'] = true
 	self._rolled_dramatalk_chance = nil
 end
@@ -54,6 +82,7 @@ function GroupAIStateBase:update(t, dt)
 
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
+	self:_check_drama_low_p()
 	
 	if self._draw_drama then
 		self:_debug_draw_drama(t)
@@ -61,6 +90,17 @@ function GroupAIStateBase:update(t, dt)
 
 	self:_upd_debug_draw_attentions()
 	self:upd_team_AI_distance()
+end
+
+function GroupAIStateBase:_check_drama_low_p()
+	local drama_tweak = tweak_data.drama
+	if not self._assault_number or self._assault_number and self._assault_number == 1 then
+		self._drama_data.low_p = drama_tweak.low
+	elseif self._assault_number == 2 then
+		self._drama_data.low_p = drama_tweak.low_2nd
+	elseif self._assault_number >= 3 then
+		self._drama_data.low_p = drama_tweak.low_3rd
+	end
 end
 
 function GroupAIStateBase:chk_random_drama_comment()
@@ -286,6 +326,9 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 
 	if e_data.group then
 		self:_remove_group_member(e_data.group, u_key, dead)
+		if dead and self._task_data and self._task_data.assault then
+			self:_voice_friend_dead(e_data.group)
+		end
 	end
 	
 	if dead and managers.groupai:state():whisper_mode() then
@@ -297,14 +340,14 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		self._enemies_killed_sustain = self._enemies_killed_sustain + 1
 	end
 	
-	if e_data.assigned_area and dead then
+	if dead then
 		local spawn_point = unit:unit_data().mission_element
 		
 		if spawn_point and not level == "sah" then
 			local spawn_pos = spawn_point:value("position")
 			local u_pos = e_data.m_pos
 
-			if mvector3.distance(spawn_pos, u_pos) < 2000 then
+			if mvector3.distance(spawn_pos, u_pos) < 3000 then
 				local found = nil
 
 				for area_id, area_data in pairs(self._area_data) do
@@ -315,8 +358,10 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 							if sp_data.spawn_point == spawn_point then
 								found = true
 								if level == "chew" then --fuck.
+									sp_data.interval = self._t + math.random(15, 20)
 									sp_data.delay_t = self._t + math.random(15, 20)
 								else
+									sp_data.interval = self._t + math.random(7.5, 10)
 									sp_data.delay_t = self._t + math.random(7.5, 10)
 								end
 
@@ -336,57 +381,13 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 							if sp_data.spawn_point == spawn_point then
 								found = true
 								if level == "chew" then
+									sp_data.interval = self._t + math.random(15, 20)
 									sp_data.delay_t = self._t + math.random(15, 20)
 								else
+									sp_data.interval = self._t + math.random(7.5, 10)
 									sp_data.delay_t = self._t + math.random(7.5, 10)
 								end
 								
-								break
-							end
-						end
-
-						if found then
-							break
-						end
-					end
-				end
-			elseif mvector3.distance(spawn_pos, u_pos) < 3000 and mvector3.distance(spawn_pos, u_pos) > 2000 then
-				local found = nil
-
-				for area_id, area_data in pairs(self._area_data) do
-					local area_spawn_points = area_data.spawn_points
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then
-									sp_data.delay_t = self._t + math.random(10, 15)
-								else
-									sp_data.delay_t = self._t + math.random(5, 7.5)
-								end
-
-								break
-							end
-						end
-
-						if found then
-							break
-						end
-					end
-
-					local area_spawn_points = area_data.spawn_groups
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then
-									sp_data.delay_t = self._t + math.random(10, 15)
-								else
-									sp_data.delay_t = self._t + math.random(5, 7.5)
-								end
-
 								break
 							end
 						end
@@ -407,11 +408,13 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 							if sp_data.spawn_point == spawn_point then
 								found = true
 								if level == "chew" then
-									sp_data.delay_t = self._t + math.random(7.5, 10)
+									sp_data.interval = self._t + math.random(10, 15)
+									sp_data.interval = self._t + math.random(10, 15)
 								else
-									sp_data.delay_t = self._t + math.random(2.5, 5)
+									sp_data.interval = self._t + math.random(5, 7.5)
+									sp_data.delay = self._t + math.random(5, 7.5)
 								end
-								
+
 								break
 							end
 						end
@@ -428,9 +431,11 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 							if sp_data.spawn_point == spawn_point then
 								found = true
 								if level == "chew" then
-									sp_data.delay_t = self._t + math.random(7.5, 10)
+									sp_data.interval = self._t + math.random(10, 15)
+									sp_data.delay_t = self._t + math.random(10, 15)
 								else
-									sp_data.delay_t = self._t + math.random(2.5, 5)
+									sp_data.interval = self._t + math.random(5, 7.5)
+									sp_data.delay_t = self._t + math.random(5, 7.5)
 								end
 
 								break
@@ -442,7 +447,7 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 						end
 					end
 				end
-			elseif mvector3.distance(spawn_pos, u_pos) < 5000 and mvector3.distance(spawn_pos, u_pos) > 3000 then
+			elseif mvector3.distance(spawn_pos, u_pos) < 5000 and mvector3.distance(spawn_pos, u_pos) > 4000 then
 				local found = nil
 
 				for area_id, area_data in pairs(self._area_data) do
@@ -453,9 +458,61 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 							if sp_data.spawn_point == spawn_point then
 								found = true
 								if level == "chew" then
-									sp_data.delay_t = self._t + 5
+									sp_data.interval = self._t + math.random(7.5, 10)
+									sp_data.delay_t = self._t + math.random(7.5, 10)
 								else
-									sp_data.delay_t = self._t + 2.5
+									sp_data.interval = self._t + math.random(5, 7.5)
+									sp_data.delay_t = self._t + math.random(5, 7.5)
+								end
+								
+								break
+							end
+						end
+
+						if found then
+							break
+						end
+					end
+
+					local area_spawn_points = area_data.spawn_groups
+
+					if area_spawn_points then
+						for _, sp_data in ipairs(area_spawn_points) do
+							if sp_data.spawn_point == spawn_point then
+								found = true
+								if level == "chew" then
+									sp_data.interval = self._t + math.random(7.5, 10)
+									sp_data.delay_t = self._t + math.random(7.5, 10)
+								else
+									sp_data.interval = self._t + math.random(5, 7.5)
+									sp_data.delay_t = self._t + math.random(5, 7.5)
+								end
+
+								break
+							end
+						end
+
+						if found then
+							break
+						end
+					end
+				end
+			elseif mvector3.distance(spawn_pos, u_pos) < 6000 and mvector3.distance(spawn_pos, u_pos) > 4000 then
+				local found = nil
+
+				for area_id, area_data in pairs(self._area_data) do
+					local area_spawn_points = area_data.spawn_points
+
+					if area_spawn_points then
+						for _, sp_data in ipairs(area_spawn_points) do
+							if sp_data.spawn_point == spawn_point then
+								found = true
+								if level == "chew" then
+									sp_data.delay_t = self._t + 10
+									sp_data.interval = self._t + 10
+								else
+									sp_data.delay_t = self._t + 5
+									sp_data.interval = self._t + 5
 								end
 
 								break
@@ -475,9 +532,11 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 								found = true
 								
 								if level == "chew" then
-									sp_data.delay_t = self._t + 5
+									sp_data.delay_t = self._t + 10
+									sp_data.interval = self._t + 10
 								else
-									sp_data.delay_t = self._t + 2.5
+									sp_data.delay_t = self._t + 5
+									sp_data.interval = self._t + 5
 								end
 
 								break
@@ -490,6 +549,48 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 					end
 				end
 			end
+		end
+	end
+end
+
+function GroupAIStateBase:_map_spawn_points_to_respective_areas(id, spawn_points)
+	local nav_manager = managers.navigation
+
+	for _, new_spawn_point in ipairs(spawn_points) do
+		local pos = new_spawn_point:value("position")
+		local interval = new_spawn_point:value("interval")
+		local amount = new_spawn_point:get_random_table_value(new_spawn_point:value("amount"))
+		local nav_seg = nav_manager:get_nav_seg_from_pos(pos, true)
+		local area = self:get_area_from_nav_seg_id(nav_seg)
+		local accessibility = new_spawn_point:accessibility()
+		local corrected_interval = nil
+		
+		if interval < 2.5 then
+			corrected_interval = 2.5
+		else
+			corrected_interval = interval
+		end
+		
+		local new_spawn_point_data = {
+			delay_t = -1,
+			id = id,
+			pos = pos,
+			nav_seg = nav_seg,
+			area = area,
+			spawn_point = new_spawn_point,
+			amount = amount > 0 and amount,
+			interval = corrected_interval,
+			accessibility = accessibility ~= "any" and accessibility
+		}
+		local area_spawn_points = area.spawn_points
+
+		if area_spawn_points then
+			table.insert(area_spawn_points, new_spawn_point_data)
+		else
+			area_spawn_points = {
+				new_spawn_point_data
+			}
+			area.spawn_points = area_spawn_points
 		end
 	end
 end

@@ -169,10 +169,12 @@ function CopActionShoot:update(t)
 						local aim_delay_minmax = self._w_usage_tweak.aim_delay
 						local lerp_dis = math.min(1, target_vec:length() / self._falloff[#self._falloff].r)
 						local aim_delay = math.lerp(aim_delay_minmax[1], aim_delay_minmax[2], lerp_dis)
-						aim_delay = aim_delay + self:_pseudorandom() * aim_delay * 0.3
-
-						if self._common_data.is_suppressed and not Global.game_settings.one_down then --aim delay is not affected by suppression on shin mode
-							aim_delay = aim_delay * 1.5
+						aim_delay = aim_delay + self:_pseudorandom() * aim_delay
+						
+						if not Global.game_settings.one_down then
+							if self._common_data.is_suppressed then --aim delay is not affected by suppression on shin mode
+								aim_delay = aim_delay * 1.5
+							end
 						end
 						
 						if managers.groupai:state():chk_high_fed_density() then
@@ -180,11 +182,9 @@ function CopActionShoot:update(t)
 						end
 						
 						self._shoot_t = t + aim_delay
-					elseif fire_line.distance > 300 then
-						shoot = true
 					end
 				else
-					if t - self._line_of_sight_t > 0.25 and not self._last_vis_check_status then
+					if t - self._line_of_sight_t > 0.35 and not self._last_vis_check_status then
 						local shoot_hist = self._shoot_history
 						local displacement = mvector3.distance(target_pos, shoot_hist.m_last_pos)
 						local mult = displacement / self._w_usage_tweak.focus_dis
@@ -341,21 +341,37 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 		local prev_range_hit_chance = math.lerp(prev_falloff.acc[1], prev_falloff.acc[2], focus_prog)
 		hit_chance = math.lerp(prev_range_hit_chance, math.lerp(hit_chances[1], hit_chances[2], focus_prog), dis_lerp)
 	end
-
-	if self._common_data.is_suppressed and not Global.game_settings.one_down then --their accuracy is not affected by suppression on shin mode
-		hit_chance = hit_chance * 0.5
+	
+	if not Global.game_settings.one_down then
+		if self._common_data.is_suppressed then --their accuracy is not affected by suppression on shin mode
+			hit_chance = hit_chance * 0.5
+		end
 	end
 	
 	if managers.groupai:state():chk_high_fed_density() then
 		hit_chance = hit_chance * 0.5
 	end
 	
-	if self._common_data.ext_anim.move or self._common_data.ext_anim.run then
-		hit_chance = hit_chance * 0.75
+	if not Global.game_settings.one_down then
+		if self._common_data.ext_anim.move or self._common_data.ext_anim.run then
+			hit_chance = hit_chance * 0.75
+		end
 	end
-
-	if self._common_data.active_actions[2] and self._common_data.active_actions[2]:type() == "dodge" and not Global.game_settings.one_down then --their accuracy is not affected while dodging on shin mode
-		hit_chance = hit_chance * self._common_data.active_actions[2]:accuracy_multiplier()
+	
+	if not Global.game_settings.one_down then
+		if self._common_data.active_actions[2] and self._common_data.active_actions[2]:type() == "dodge" then --their accuracy is not affected while dodging on shin mode
+			hit_chance = hit_chance * self._common_data.active_actions[2]:accuracy_multiplier()
+		end
+	end
+	
+	local gamemode_chk = game_state_machine:gamemode() 
+	
+	if gamemode_chk == "crime_spree" then
+		if managers.crime_spree then
+			local copaccmultcs = managers.crime_spree:get_acc_mult() or 1
+			
+			hit_chance = hitchance * getcopaccmultcs
+		end
 	end
 
 	hit_chance = hit_chance * self._unit:character_damage():accuracy_multiplier()
