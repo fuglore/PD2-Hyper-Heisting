@@ -1553,7 +1553,6 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 
 		if data.unit:brain():action_request(new_action_data) then
 			my_data.turning = new_action_data.angle
-			my_data.turning = new_action_data.speed
 
 			return true
 		end
