@@ -154,7 +154,14 @@ function CopDamage:_on_damage_received(damage_info)
 
 	if damage_info.damage and damage_info.damage > 0.01 and dmg_chk then
 		if not damage_info.result_type or damage_info.result_type ~= "healed" and damage_info.result_type ~= "death" then
-			self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+			if damage_info.is_fire_dot_damage then
+				if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
+					self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+					self._next_allowed_burnhurt_t = t + 8
+				else
+					self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+				end
+			end
 		end
 	end
 	
