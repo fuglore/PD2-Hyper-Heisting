@@ -46,14 +46,14 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 					managers.groupai:state():on_enemy_engaging(data.unit, new_att_obj.u_key)
 				end
 
-				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 7
+				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 10
 			end
 		else
 			if new_crim_rec then
 				managers.groupai:state():on_enemy_engaging(data.unit, new_att_obj.u_key)
 			end
 
-			contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 7
+			contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 10
 			
 		end
 

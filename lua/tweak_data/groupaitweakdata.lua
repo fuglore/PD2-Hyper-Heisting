@@ -37,9 +37,9 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.approachingspecial = {
 		radius = 4000,
-		max_nr = 40,
-		duration = {3, 4},
-		interval = {5, 15},
+		max_nr = 4,
+		duration = {1, 1},
+		interval = {10, 15},
 		group_min = 0,
 		queue = "g90"
 	}

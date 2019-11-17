@@ -21,6 +21,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._downcountleniency = 0
 	self._feddensity_active_t = nil
 	self._next_allowed_hunter_upd_t = nil
+	self._next_allowed_drama_reveal_t = nil
 end
 
 function GroupAIStateBesiege:_queue_police_upd_task()
@@ -459,14 +460,16 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 	
 	local assaultactive = task_data.phase == "build" or task_data.phase == "sustain"
+	local revealchk = not self._next_allowed_drama_reveal_t or self._next_allowed_drama_reveal_t < t
 	
-	if low_carnage and assaultactive and not self._feddensityhigh or self._drama_data.amount <= tweak_data.drama.low and assaultactive and not self._feddensityhigh then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
+	if low_carnage and assaultactive and not self._feddensityhigh and revealchk or self._drama_data.amount <= tweak_data.drama.low and assaultactive and not self._feddensityhigh then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
 		if not assaultactive then
 			--log("AAAAAAAA FUCK YOU")
 		end
 		--if low_carnage then
 			--log("YOU...WILL...FIIIIIIIIIIIIIIGHT!!!!!!")
 		--end
+		self._next_allowed_drama_reveal_t = t + 10
 		for criminal_key, criminal_data in pairs(self._player_criminals) do
 			self:criminal_spotted(criminal_data.unit)
 			--this is some insane over-weight code for some chatter randomness but hot damn am i happy with it

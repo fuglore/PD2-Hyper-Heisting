@@ -300,7 +300,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 					aim = aim or shoot
 					
-					if diff_index > 5 then
+					if diff_index > 5 and managers.groupai:state():whisper_mode() then
 						if focus_enemy.verified and not shoot then
 							shoot = true
 						end
@@ -316,10 +316,10 @@ function CopLogicAttack._upd_aim(data, my_data)
 			local same_z = math.abs(focus_enemy.verified_pos.z - data.m_pos.z) < 250
 
 			if running then
-				if time_since_verification and time_since_verification < 1 and same_z then
+				if time_since_verification and time_since_verification < 0.5 and same_z then
 					aim = true
 				end
-			else
+			elseif time_since_verification and time_since_verification < 1 then
 				aim = true
 			end
 

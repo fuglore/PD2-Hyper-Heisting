@@ -154,7 +154,7 @@ function CopDamage:_on_damage_received(damage_info)
 
 	if damage_info.damage and damage_info.damage > 0.01 and dmg_chk then
 		if not damage_info.result_type or damage_info.result_type ~= "healed" and damage_info.result_type ~= "death" then
-			if damage_info.is_fire_dot_damage then
+			if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
 				if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
 					self._unit:sound():say("burnhurt", nil, nil, nil, nil)
 					self._next_allowed_burnhurt_t = t + 8
@@ -749,7 +749,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		mvector3.normalize(mvec_1)
 		mvector3.set(mvec_2, self._unit:rotation():y())
 
-		local not_from_the_front = mvector3.dot(mvec_1, mvec_2) >= 0
+		local not_from_the_front = mvector3.dot(mvec_1, mvec_2) > -40
 
 		if not_from_the_front then
 			head = false
