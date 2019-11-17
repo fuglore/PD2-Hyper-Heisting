@@ -749,7 +749,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		mvector3.normalize(mvec_1)
 		mvector3.set(mvec_2, self._unit:rotation():y())
 
-		local not_from_the_front = mvector3.dot(mvec_1, mvec_2) > -40
+		local not_from_the_front = mvector3.dot(mvec_1, mvec_2) >= 0
 
 		if not_from_the_front then
 			head = false
