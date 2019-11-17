@@ -346,7 +346,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						
 						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 							if managers.groupai:state():whisper_mode() then
-								min_delay = math.min(my_data.detection.delay[1], 0.35)
+								min_delay = math.max(my_data.detection.delay[1], 0.35)
 							else
 								min_delay = math.max(my_data.detection.delay[1], 0.7)
 							end
@@ -358,12 +358,12 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						
 						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 							if managers.groupai:state():whisper_mode() then
-								max_delay = math.min(my_data.detection.delay[2], 1)
+								max_delay = math.max(my_data.detection.delay[2], 1.05)
 							else
-								max_delay = math.max(my_data.detection.delay[2], 0.5)
+								max_delay = math.max(my_data.detection.delay[2], 1.05)
 							end
 						else
-							max_delay = math.max(my_data.detection.delay[2], 0.5)
+							max_delay = math.max(my_data.detection.delay[2], 0.7)
 						end
 						
 						local angle_mul_mod = 0.5 * math.min(angle / my_data.detection.angle_max, 1)

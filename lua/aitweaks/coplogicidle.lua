@@ -484,8 +484,13 @@ function CopLogicIdle._upd_scan(data, my_data)
 	else
 		reaction_time = 0.7
 	end
+	
+	if managers.groupai:state():whisper_mode() then
+		my_data.next_scan_t = data.t + math.random(2, 5)
+	else
+		my_data.next_scan_t = data.t + reaction_time * math.random(1, 3)
+	end
 
-	my_data.next_scan_t = data.t + reaction_time
 end
 
 function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_func)
