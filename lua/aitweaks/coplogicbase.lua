@@ -317,7 +317,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 			end
 		else
 			if attention_info.dis > 2000 then --optimizations, yay
-				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and 1 or 2)
+				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and 1 or 1)
 			else
 				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and attention_info.settings.verification_interval or attention_info.settings.notice_interval or attention_info.settings.verification_interval)
 			end
@@ -345,21 +345,32 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						local min_delay = my_data.detection.delay[1]
 						
 						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-							min_delay = math.max(my_data.detection.delay[1], 0.7)
+							if managers.groupai:state():whisper_mode() then
+								min_delay = math.min(my_data.detection.delay[1], 0.35)
+							else
+								min_delay = math.max(my_data.detection.delay[1], 0.7)
+							end
 						else
-							min_delay = math.min(my_data.detection.delay[1], 0.35)
+							min_delay = math.max(my_data.detection.delay[1], 0.35)
 						end
 						
 						local max_delay = my_data.detection.delay[2]
 						
 						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-							max_delay = math.max(my_data.detection.delay[2], 1)
+							if managers.groupai:state():whisper_mode() then
+								max_delay = math.min(my_data.detection.delay[2], 1)
+							else
+								max_delay = math.max(my_data.detection.delay[2], 0.5)
+							end
 						else
-							max_delay = math.min(my_data.detection.delay[2], 0.5)
+							max_delay = math.max(my_data.detection.delay[2], 0.5)
 						end
 						
-						local angle_mul_mod = 0.25 * math.min(angle / my_data.detection.angle_max, 1)
-						local dis_mul_mod = 0.75 * dis_multiplier
+						local angle_mul_mod = 0.5 * math.min(angle / my_data.detection.angle_max, 1)
+						local dis_mul_mod = 1 * dis_multiplier
+						if diff_index < 7 then
+							dis_mul_mod = 2 * dis_multiplier
+						end
 						local notice_delay_mul = attention_info.settings.notice_delay_mul or 1
 
 						if attention_info.settings.detection and attention_info.settings.detection.delay_mul then

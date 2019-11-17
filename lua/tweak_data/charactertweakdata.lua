@@ -1936,11 +1936,24 @@ function CharacterTweakData:_presets(tweak_data)
 		0.35,
 		0.35
 	}
-	presets.detection.enemymook.ntl.dis_max = 4000
-	presets.detection.enemymook.ntl.angle_max = 60
+	presets.detection.enemymook.ntl.dis_max = 2000
+	presets.detection.enemymook.ntl.angle_max = 55
 	presets.detection.enemymook.ntl.delay = {
-		0.7,
-		0.7
+		0.1,
+		0.1
+	}
+	presets.detection.civilian.cbt.dis_max = 700
+	presets.detection.civilian.cbt.angle_max = 360
+	presets.detection.civilian.cbt.delay = {
+		0,
+		0
+	}
+	presets.detection.civilian.cbt.use_uncover_range = true
+	presets.detection.civilian.ntl.dis_max = 2000
+	presets.detection.civilian.ntl.angle_max = 55
+	presets.detection.civilian.ntl.delay = {
+		0.1,
+		0.1
 	}
 	
 	--make normal clone my new preset to keep enemies not currently set here capable of detecting people too
