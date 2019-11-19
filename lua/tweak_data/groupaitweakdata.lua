@@ -103,9 +103,25 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 20,
 		duration = {1, 3},
-		interval = {0.75, 1.5},
+		interval = {2, 4},
 		group_min = 0,
 		queue = "c01"
+	}
+	self.enemy_chatter.cloakercontact = {
+		radius = 1500,
+		max_nr = 4,
+		duration = {1, 1},
+		interval = {2, 4},
+		group_min = 0,
+		queue = "c01x_plu"
+	}
+	self.enemy_chatter.cloakeravoidance = {
+		radius = 4000,
+		max_nr = 4,
+		duration = {1, 1},
+		interval = {2, 4},
+		group_min = 0,
+		queue = "m01x_plu"
 	}
 	self.enemy_chatter.controlpanic = {
 		radius = 2000,
@@ -4957,7 +4973,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" then
+	if level == "sah" or level == "chew" or level == "help" then
 		self.besiege.assault.force = {
 			1,
 			1,
@@ -4981,7 +4997,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" then
+	if level == "sah" or level == "chew" or level == "help" then
 		if difficulty_index <= 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
@@ -4999,8 +5015,8 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			self.besiege.assault.force_balance_mul = {
 				20,
 				24,
-				28,
-				28
+				32,
+				32
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,

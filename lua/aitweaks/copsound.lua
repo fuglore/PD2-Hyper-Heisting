@@ -155,6 +155,10 @@ function CopSound:init(unit)
 	if self._unit:base():char_tweak().spawn_sound_event then
 		self._unit:sound():play(self._unit:base():char_tweak().spawn_sound_event, nil, nil)
 	end
+	
+	if self._unit:base():char_tweak().spawn_scream then
+		self._unit:sound():say(self._unit:base():char_tweak().spawn_scream, true, nil, nil, nil)
+	end
 
 	unit:base():post_init()
 end
@@ -349,6 +353,20 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 	end
 	
 	local faction = tweak_data.levels:get_ai_group_type()
+	
+	if self._prefix == "z1n_" or self._prefix == "z2n_" or self._prefix == "z3n_" or self._prefix == "z4n_" then
+		if sound_name == "x02a_any_3p" then
+			full_sound = "shd_x02a_any_3p_01"
+		end
+		
+		if sound_name == "x01a_any_3p" then
+			full_sound = "bdz_x01a_any_3p"
+		end
+		
+		if sound_name ~= "x01a_any_3p" and sound_name ~= "x02a_any_3p" and not full_sound then
+			sound_name = "g90"
+		end
+	end
 	
 	if self._unit:base():has_tag("special") and not sound_name == "g90" and not sound_name == "c01" then
 	

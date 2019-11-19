@@ -4,6 +4,7 @@ local origin_charmap = CharacterTweakData.character_map
 
 function CharacterTweakData:init(tweak_data)
 	local presets = self:_presets(tweak_data)
+	self._speech_prefix_p2 = "n"
 	origin_init(self, tweak_data)
 end
 
@@ -137,11 +138,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	}
 	self.tank.die_sound_event = "bdz_x02a_any_3p"
 	self.tank.damage.hurt_severity = presets.hurt_severities.no_hurts
-	self.tank.chatter = {
-		retreat = true,
-		aggressive = true,
-		contact = true
-	}
+	self.tank.chatter = presets.enemy_chatter.bulldozer
 	self.tank.announce_incomming = "incomming_tank"
 	self.tank.steal_loot = nil
 	self.tank.calls_in = nil
@@ -252,7 +249,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.use_animation_on_fire_damage = true
 	self.spooc.flammable = true
 	self.spooc.dodge = presets.dodge.ninja
-	self.spooc.chatter = presets.enemy_chatter.no_chatter
+	self.spooc.chatter = presets.enemy_chatter.spooc
 	self.spooc.steal_loot = nil
 	self.spooc.spawn_sound_event = "cloaker_presence_loop"
 	self.spooc.die_sound_event = "cloaker_presence_stop"
@@ -404,9 +401,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 			min_duration = 8
 		}
 	}
-	self.medic.chatter = {
-		aggressive = true
-	}
+	self.medic.chatter = presets.enemy_chatter.medic
 	self.medic.experience.cable_tie = "tie_swat"
 	self.medic.speech_prefix_p1 = self._prefix_data_p1.medic()
 	self.medic.speech_prefix_p2 = nil
@@ -458,10 +453,7 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.spawn_sound_event = self._prefix_data_p1.taser() .. "_entrance"
 	self.taser.access = "taser"
 	self.taser.melee_weapon = "fists"
-	self.taser.chatter = {
-		aggressive = true,
-		contact = true
-	}
+	self.taser.chatter = presets.enemy_chatter.taser
 	self.taser.dodge = presets.dodge.athletic
 	self.taser.priority_shout = "f32"
 	self.taser.rescue_hostages = false
@@ -7123,7 +7115,7 @@ function CharacterTweakData:_presets(tweak_data)
 			dodge = true
 		},
 		shield = {
-			entry = true,
+            entry = true,
 			aggressive = true,
 			enemyidlepanic = true,
 			retreat = true,
@@ -7143,6 +7135,28 @@ function CharacterTweakData:_presets(tweak_data)
 			deathguard = true,
 			open_fire = true,
 			suppress = true
+        },
+		bulldozer = {
+			contact = true,
+			aggressive = true,
+			retreat = true,
+			approachingspecial = true
+			
+		},
+		taser = {
+			contact = true,
+			aggressive = true,
+			retreat = true,
+			approachingspecial = true
+		},
+		medic = {
+			aggressive = true,
+			contact = true
+		},
+		spooc = {
+			cloakercontact = true,
+			go_go = true, --only used for russian cloaker
+			cloakeravoidance = true --only used for russian cloaker
 		}
 	}
 	return presets
@@ -9555,13 +9569,25 @@ function CharacterTweakData:_set_sm_wish()
 	--This is weird, but makes snipers technically be active sooner, which is good.
 	self.sniper.move_speed = self.presets.move_speed.lightning_constant
 	--SWAT Speech prefixes to get some voice variety from ZEALs 'n Gensecs.
-	self.swat.speech_prefix_p2 = "d"
-	self.swat.speech_prefix_count = 5	
-	self.heavy_swat.speech_prefix_p2 = "d"
-	self.heavy_swat.speech_prefix_count = 5	
-	self.fbi.speech_prefix_p2 = "n"
-	self.fbi_swat.speech_prefix_p2 = "n"
-	self.city_swat.speech_prefix_p2 = "n"
+	if self.tweak_data and self.tweak_data.levels then
+		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "america" then
+			self.swat.speech_prefix_p2 = "d"
+			self.swat.speech_prefix_count = 5	
+			self.heavy_swat.speech_prefix_p2 = "d"
+			self.heavy_swat.speech_prefix_count = 5	
+			self.fbi.speech_prefix_p2 = "n"
+			self.fbi_swat.speech_prefix_p2 = "n"
+			self.city_swat.speech_prefix_p2 = "n"
+		end
+		if faction == "zombie" then
+			self.swat.spawn_scream = "g90"
+			self.heavy_swat.spawn_scream = "g90"
+			self.fbi_swat.spawn_scream = "g90"
+			self.fbi_heavy_swat.spawn_scream = "g90"
+			self.city_swat.spawn_scream = "g90"
+		end
+	end
 	self.shield.spawn_sound_event = "hos_shield_identification" --Come with me if you want to live.
 	--Movespeed setups.
 	self.swat.move_speed = self.presets.move_speed.anarchy_consistency

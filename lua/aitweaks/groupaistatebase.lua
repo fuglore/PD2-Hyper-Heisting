@@ -222,13 +222,18 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 	record.arrest_timeout = 0
 
 	if Network:is_server() then
-			if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.active and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
+		if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.active and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
 			self._assault_number = self._assault_number + 1
 
 			managers.mission:call_global_event("start_assault")
 			managers.hud:start_assault(self._assault_number)
 			managers.groupai:dispatch_event("start_assault", self._assault_number)
 			self:_set_rescue_state(false)
+			for group_id, group in pairs(self._groups) do
+				for u_key, u_data in pairs(group.units) do
+					u_data.unit:sound():say("g90", true)
+				end
+			end
 
 			self._task_data.assault.phase = "build"
 			self._task_data.assault.phase_end_t = self._t + self._tweak_data.assault.build_duration
@@ -298,6 +303,11 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		managers.hud:start_assault(self._assault_number)
 		managers.groupai:dispatch_event("start_assault", self._assault_number)
 		self:_set_rescue_state(false)
+		for group_id, group in pairs(self._groups) do
+			for u_key, u_data in pairs(group.units) do
+				u_data.unit:sound():say("g90", true)
+			end
+		end
 
 		self._task_data.assault.phase = "build"
 		self._task_data.assault.phase_end_t = self._t + self._tweak_data.assault.build_duration

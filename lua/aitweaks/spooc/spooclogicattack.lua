@@ -3,8 +3,12 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data) --TODO: Optimize it *
 	
 	--Some changes included to make this a bit less weird, I don't know why it calls to the want_to_take_cover but it doesn't do anything good and delays the kick unescessarily.
 	if focus_enemy.is_person and focus_enemy.criminal_record and not focus_enemy.criminal_record.status and not my_data.spooc_attack and AIAttentionObject.REACT_SHOOT <= focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") and not SpoocLogicAttack._is_last_standing_criminal(focus_enemy) and not focus_enemy.unit:movement():zipline_unit() and focus_enemy.unit:movement():is_SPOOC_attack_allowed() then
-		
+	
 		local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		
+		if focus_enemy.verified and focus_enemy.dis <= 1500 then
+			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakercontact")
+		end
 		
 		if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
 			--Nothing, do not execute quick-kicks outside of MH and up.

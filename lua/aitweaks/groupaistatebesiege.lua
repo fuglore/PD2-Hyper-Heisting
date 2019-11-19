@@ -285,6 +285,12 @@ function GroupAIStateBesiege:_upd_assault_task()
 			managers.hud:start_assault(self._assault_number)
 			managers.groupai:dispatch_event("start_assault", self._assault_number)
 			self:_set_rescue_state(false)
+			
+			for group_id, group in pairs(self._groups) do
+				for u_key, u_data in pairs(group.units) do
+					u_data.unit:sound():say("g90", true)
+				end
+			end
 
 			task_data.phase = "build"
 			task_data.phase_end_t = self._t + self._tweak_data.assault.build_duration
