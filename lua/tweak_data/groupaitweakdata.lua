@@ -6,7 +6,7 @@ function GroupAITweakData:init(tweak_data)
 
 	--print("[GroupAITweakData:init] difficulty", difficulty, "difficulty_index", difficulty_index)
 
-	self.ai_tick_rate = 0.01194
+	self.ai_tick_rate =  0.012499990
 
 	self:_read_mission_preset(tweak_data)
 	self:_create_table_structure()
@@ -39,7 +39,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 4000,
 		max_nr = 4,
 		duration = {1, 1},
-		interval = {10, 15},
+		interval = {6, 10},
 		group_min = 0,
 		queue = "g90"
 	}
@@ -71,7 +71,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 40,
 		duration = {3, 4},
-		interval = {4, 8},
+		interval = {3, 6},
 		group_min = 0,
 		queue = "g90"
 	}
@@ -95,15 +95,15 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 5,
 		duration = {2, 4},
-		interval = {2, 3},
+		interval = {0.5, 3},
 		group_min = 0,
-		queue = "r01"
+		queue = "rdy"
 	}
 	self.enemy_chatter.contact = {
 		radius = 2000,
 		max_nr = 20,
 		duration = {1, 3},
-		interval = {2, 4},
+		interval = {4, 6},
 		group_min = 0,
 		queue = "c01"
 	}
@@ -135,8 +135,8 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 1,
 	    duration = {60, 60},
-	    interval = {2, 2.5},
-	    group_min = 3,
+	    interval = {4, 5},
+	    group_min = 2,
 	    queue = "clr"
 	}
 	self.enemy_chatter.csalpha = {
@@ -223,7 +223,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 40,
 		duration = {2, 2},
-		interval = {0.75, 1},
+		interval = {3, 6},
 		group_min = 0,
 		queue = "mov"
 	}
@@ -231,7 +231,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 40,
 		duration = {2, 4},
-		interval = {0.75, 1.5},
+		interval = {3, 6},
 		group_min = 0,
 		queue = "pus"
 	}
@@ -247,7 +247,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 40,
 		duration = {2, 4},
-		interval = {2, 2.5},
+		interval = {2, 3},
 		group_min = 0,
 		queue = "t01"
 	}
@@ -255,7 +255,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 16,
 		duration = {2, 4},
-		interval = {0.75, 1.5},
+		interval = {1, 3.5},
 		group_min = 1,
 		queue = "rdy"
 	}
@@ -4973,7 +4973,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" then
 		self.besiege.assault.force = {
 			1,
 			1,
@@ -4997,7 +4997,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" then
 		if difficulty_index <= 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
@@ -5056,24 +5056,24 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	if difficulty_index <= 2 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				15,
-				15,
-				15
+				14.9,
+				14.9,
+				14.9
 			},
 			tac_swat_shotgun_flank = {
-				15,
-				15,
-				15
+				14.9,
+				14.9,
+				14.9
 			},
 			tac_swat_rifle = {
-				15,
-				15,
-				15
+				15.1,
+				15.1,
+				15.1
 			},
 			tac_swat_rifle_flank = {
-				15,
-				15,
-				15
+				15.1,
+				15.1,
+				15.1
 			},
 			tac_shield_wall_ranged = {
 				20,
@@ -5114,24 +5114,24 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	elseif difficulty_index == 3 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				10,
-				10,
-				10
+				9.9,
+				9.9,
+				9.9
 			},
 			tac_swat_shotgun_flank = {
-				10,
-				10,
-				10
+				9.9,
+				9.9,
+				9.9
 			},
 			tac_swat_rifle = {
-				10,
-				10,
-				10
+				10.1,
+				10.1,
+				10.1
 			},
 			tac_swat_rifle_flank = {
-				10,
-				10,
-				10
+				10.1,
+				10.1,
+				10.1
 			},
 			tac_shield_wall_ranged = {
 				10,

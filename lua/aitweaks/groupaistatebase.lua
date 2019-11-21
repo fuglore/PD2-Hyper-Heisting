@@ -354,207 +354,48 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		local spawn_point = unit:unit_data().mission_element
 		
 		if spawn_point and not level == "sah" then
-			local spawn_pos = spawn_point:value("position")
-			local u_pos = e_data.m_pos
 
-			if mvector3.distance(spawn_pos, u_pos) < 3000 then
-				local found = nil
+			for area_id, area_data in pairs(self._area_data) do
+				local area_spawn_points = area_data.spawn_points
 
-				for area_id, area_data in pairs(self._area_data) do
-					local area_spawn_points = area_data.spawn_points
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then --fuck.
-									sp_data.interval = self._t + math.random(15, 20)
-									sp_data.delay_t = self._t + math.random(15, 20)
-								else
-									sp_data.interval = self._t + math.random(7.5, 10)
-									sp_data.delay_t = self._t + math.random(7.5, 10)
-								end
-
-								break
+				if area_spawn_points then
+					for _, sp_data in ipairs(area_spawn_points) do
+						if sp_data.spawn_point then
+							--found = true
+							local spawn_pos = sp_data.spawn_point:value("position")
+							local u_pos = e_data.m_pos
+							if mvector3.distance(spawn_pos, u_pos) < 3000 then
+								sp_data.delay_t = self._t + math.random(7.5, 10)
+								sp_data.interval = self._t + math.random(7.5, 10)
+							elseif mvector3.distance(spawn_pos, u_pos) > 3000 and mvector3.distance(spawn_pos, u_pos) < 4000 then
+								sp_data.delay_t = self._t + math.random(5, 10)
+								sp_data.interval = self._t + math.random(5, 10)
+							elseif mvector3.distance(spawn_pos, u_pos) > 4000 then
+								sp_data.delay_t = self._t + math.random(5, 7.5)
+								sp_data.interval = self._t + math.random(5, 7.5)
 							end
-						end
-
-						if found then
-							break
-						end
-					end
-
-					local area_spawn_points = area_data.spawn_groups
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then
-									sp_data.interval = self._t + math.random(15, 20)
-									sp_data.delay_t = self._t + math.random(15, 20)
-								else
-									sp_data.interval = self._t + math.random(7.5, 10)
-									sp_data.delay_t = self._t + math.random(7.5, 10)
-								end
-								
-								break
-							end
-						end
-
-						if found then
-							break
 						end
 					end
 				end
-			elseif mvector3.distance(spawn_pos, u_pos) < 4000 and mvector3.distance(spawn_pos, u_pos) > 3000 then
-				local found = nil
 
-				for area_id, area_data in pairs(self._area_data) do
-					local area_spawn_points = area_data.spawn_points
+				local area_spawn_groups = area_data.spawn_groups
 
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then
-									sp_data.interval = self._t + math.random(10, 15)
-									sp_data.interval = self._t + math.random(10, 15)
-								else
-									sp_data.interval = self._t + math.random(5, 7.5)
-									sp_data.delay = self._t + math.random(5, 7.5)
-								end
-
-								break
-							end
-						end
-
-						if found then
-							break
-						end
-					end
-
-					local area_spawn_points = area_data.spawn_groups
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then
-									sp_data.interval = self._t + math.random(10, 15)
-									sp_data.delay_t = self._t + math.random(10, 15)
-								else
-									sp_data.interval = self._t + math.random(5, 7.5)
-									sp_data.delay_t = self._t + math.random(5, 7.5)
-								end
-
-								break
-							end
-						end
-
-						if found then
-							break
-						end
-					end
-				end
-			elseif mvector3.distance(spawn_pos, u_pos) < 5000 and mvector3.distance(spawn_pos, u_pos) > 4000 then
-				local found = nil
-
-				for area_id, area_data in pairs(self._area_data) do
-					local area_spawn_points = area_data.spawn_points
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then
-									sp_data.interval = self._t + math.random(7.5, 10)
-									sp_data.delay_t = self._t + math.random(7.5, 10)
-								else
-									sp_data.interval = self._t + math.random(5, 7.5)
-									sp_data.delay_t = self._t + math.random(5, 7.5)
-								end
-								
-								break
-							end
-						end
-
-						if found then
-							break
-						end
-					end
-
-					local area_spawn_points = area_data.spawn_groups
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then
-									sp_data.interval = self._t + math.random(7.5, 10)
-									sp_data.delay_t = self._t + math.random(7.5, 10)
-								else
-									sp_data.interval = self._t + math.random(5, 7.5)
-									sp_data.delay_t = self._t + math.random(5, 7.5)
-								end
-
-								break
-							end
-						end
-
-						if found then
-							break
-						end
-					end
-				end
-			elseif mvector3.distance(spawn_pos, u_pos) < 6000 and mvector3.distance(spawn_pos, u_pos) > 4000 then
-				local found = nil
-
-				for area_id, area_data in pairs(self._area_data) do
-					local area_spawn_points = area_data.spawn_points
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								if level == "chew" then
-									sp_data.delay_t = self._t + 10
-									sp_data.interval = self._t + 10
-								else
-									sp_data.delay_t = self._t + 5
-									sp_data.interval = self._t + 5
-								end
-
-								break
-							end
-						end
-
-						if found then
-							break
-						end
-					end
-
-					local area_spawn_points = area_data.spawn_groups
-
-					if area_spawn_points then
-						for _, sp_data in ipairs(area_spawn_points) do
-							if sp_data.spawn_point == spawn_point then
-								found = true
-								
-								if level == "chew" then
-									sp_data.delay_t = self._t + 10
-									sp_data.interval = self._t + 10
-								else
-									sp_data.delay_t = self._t + 5
-									sp_data.interval = self._t + 5
-								end
-
-								break
-							end
-						end
-
-						if found then
-							break
+				if area_spawn_groups then
+					for _, sp_data in ipairs(area_spawn_groups) do
+						if sp_data.spawn_point then
+							--found = true
+							local spawn_pos = sp_data.spawn_point:value("position")
+							local u_pos = e_data.m_pos
+							if mvector3.distance(spawn_pos, u_pos) < 3000 then
+								sp_data.delay_t = self._t + math.random(7.5, 10)
+								sp_data.interval = self._t + math.random(7.5, 10)
+							elseif mvector3.distance(spawn_pos, u_pos) > 3000 and mvector3.distance(spawn_pos, u_pos) < 4000 then
+								sp_data.delay_t = self._t + math.random(5, 10)
+								sp_data.interval = self._t + math.random(5, 10)
+							elseif mvector3.distance(spawn_pos, u_pos) > 4000 then
+								sp_data.delay_t = self._t + math.random(5, 7.5)
+								sp_data.interval = self._t + math.random(5, 7.5)
+							end 
 						end
 					end
 				end

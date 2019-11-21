@@ -104,7 +104,6 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 		end
 	end
 
-
 	if shoot_player and self._hit_player then
 		player_hit, player_ray_data = self:damage_player(col_ray, from_pos, direction, result)
 

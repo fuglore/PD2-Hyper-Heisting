@@ -57,6 +57,21 @@ end
 function TaserLogicAttack._upd_aim(data, my_data, reaction)
 	local shoot, aim = nil
 	local focus_enemy = data.attention_obj
+	local tase_length = data.internal_data.tase_distance or 1500 --fix for better bots crash
+	local my_data = data.internal_data
+
+	local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") 
+	
+	if (data.attention_obj.is_human_player or not data.attention_obj.unit:movement():chk_action_forbidden("hurt")) and data.attention_obj.verified and data.attention_obj.verified_dis <= tase_length and data.tase_delay_t < data.t then
+		if (my_data.last_charge_snd_play_t and data.t - my_data.last_charge_snd_play_t < 0.5) then
+			reaction = AIAttentionObject.REACT_SPECIAL_ATTACK --christ this was surprisingly way simpler than i thought it was
+		else
+			my_data.last_charge_snd_play_t = data.t --force tasers to play buzzing before beginning tase
+			data.unit:sound():play("taser_charge", nil, true)
+			reaction = AIAttentionObject.REACT_SPECIAL_ATTACK
+		end
+	end
+	
 	local tase = reaction == AIAttentionObject.REACT_SPECIAL_ATTACK
 
 	if focus_enemy then
@@ -83,7 +98,7 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 		elseif focus_enemy.verified_t and data.t - focus_enemy.verified_t < 10 then
 			aim = true
 
-			if my_data.shooting and data.t - focus_enemy.verified_t < 1 then
+			if my_data.shooting and data.t - focus_enemy.verified_t < 3 then
 				shoot = true
 			end
 		elseif focus_enemy.verified_dis <= 1500 and my_data.walking_to_cover_shoot_pos then
@@ -91,7 +106,7 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 		end
 	end
 
-	if shoot and (my_data.walking_to_cover_shoot_pos or tase and my_data.moving_to_cover) and not data.unit:movement():chk_action_forbidden("walk") then
+	if tase and (my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover) and not data.unit:movement():chk_action_forbidden("walk") then
 		local new_action = {
 			body_part = 2,
 			type = "idle"
@@ -303,6 +318,6 @@ function TaserLogicAttack._chk_play_charge_weapon_sound(data, my_data, focus_ene
 	elseif not my_data.tasing and (not my_data.last_charge_snd_play_t or data.t - my_data.last_charge_snd_play_t > 5) and focus_enemy.dis <= 2000 and math.abs(data.m_pos.z - focus_enemy.m_pos.z) < 300 then
 		my_data.last_charge_snd_play_t = data.t
 		
-		data.unit:sound():say("g90", true, nil, true, nil)
+		--data.unit:sound():say("g90", true, nil, true, nil)
 	end
 end

@@ -390,7 +390,7 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 		mrot_axis_angle(temp_rot1, enemy_vec, math.random(360))
 		mvec3_rot(error_vec, temp_rot1)
 
-		local miss_min_dis = shooting_local_player and 10 or 80
+		local miss_min_dis = shooting_local_player and 10 or 40
 		local error_vec_len = nil
 		
 		if shooting_local_player then

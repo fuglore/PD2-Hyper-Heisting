@@ -176,10 +176,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 		local last_sup_t = data.unit:character_damage():last_suppression_t()
 
 		if focus_enemy.verified or focus_enemy.nearly_visible then
-		
-			if focus_enemy.dis > my_data.weapon_range.far then
-				shoot = false
-			end
 			
 			if data.unit:anim_data().run and math.lerp(my_data.weapon_range.close, my_data.weapon_range.optimal, 0) < focus_enemy.dis then
 				local walk_to_pos = data.unit:movement():get_walk_to_pos()
@@ -191,8 +187,8 @@ function CopLogicAttack._upd_aim(data, my_data)
 					local dot = mvector3.dot(temp_vec1, temp_vec2)
 
 					if dot < 0.6 then
-						shoot = false
-						aim = false
+						shoot = nil
+						aim = nil
 						outoffov = true
 					end
 				end
@@ -499,6 +495,10 @@ function CopLogicAttack._upd_aim(data, my_data)
 			shoot = nil
 			--log("not firing due to FEDS")
 		end
+	end
+	
+	if not my_data.weapon_range and focus_enemy and focus_enemy.dis > 6000 or my_data.weapon_range and focus_enemy and focus_enemy.dis > my_data.weapon_range.far then
+		shoot = nil
 	end
 
 	CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
@@ -951,7 +951,9 @@ function CopLogicAttack._upd_combat_movement(data)
 	
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
 	if action_taken or my_data.stay_out_time and my_data.stay_out_time > t then
-		-- Nothing
+		-- Nothing		
+	elseif my_data.walking_to_cover_shoot_pos then
+		--nothing
 	elseif want_to_take_cover then
 		if data.tactics and data.tactics.flank then
 			want_flank_cover = true
@@ -961,21 +963,22 @@ function CopLogicAttack._upd_combat_movement(data)
 		if not data.objective or data.objective and not data.objective.type == "follow" then
 			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or not enemy_visible_mild_soft and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or data.tactics and data.tactics.flank and my_data.flank_cover and in_cover and focus_enemy and focus_enemy.dis <= 2500 and my_data.taken_flank_cover and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 4) then
 				if my_data.charge_path then
-					if not data.objective or data.objective and not data.objective.type == "follow" then
+					if data.objective and not data.objective.type == "follow" then
 						local path = my_data.charge_path
-						my_data.charge_path = nil
 						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path)
-						taken_flank_cover = nil
+						my_data.charge_path = nil
+						my_data.taken_flank_cover = nil
 					end
 				elseif not my_data.charge_path_search_id and data.attention_obj.nav_tracker then
-					if not data.objective or data.objective and not data.objective.type == "follow" then
+					if data.objective and not data.objective.type == "follow" then
 						my_data.charge_pos = CopLogicTravel._get_pos_on_wall(data.attention_obj.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil)
 
 						if my_data.charge_pos then
 							my_data.charge_path_search_id = "charge" .. tostring(data.key)
 
 							unit:brain():search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
-							taken_flank_cover = nil
+							
+							--my_data.taken_flank_cover = nil
 						else
 							debug_pause_unit(data.unit, "failed to find charge_pos", data.unit)
 
@@ -1017,8 +1020,6 @@ function CopLogicAttack._upd_combat_movement(data)
 					move_to_cover = true
 					want_flank_cover = true
 				end
-			elseif my_data.walking_to_cover_shoot_pos then
-				--NOTHING
 			elseif my_data.at_cover_shoot_pos then
 				--ranged fire cops also signal the END of their movement and positioning
 				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then

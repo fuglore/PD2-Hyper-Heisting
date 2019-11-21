@@ -1,4 +1,4 @@
-<table name="Welcome to Hyper Heisting">
+<table name="PAYDAY 2 Hyper Heisting">
     <Localization directory="loc" default="en.txt"/>
     <HeistMusic id="insertcredit" directory="assets\music\insertcredit" volume="0.9">
         <event name="setup" start_source= "stealthintro.ogg" source="stealth.ogg"/>

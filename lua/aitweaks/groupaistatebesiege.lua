@@ -60,7 +60,7 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		if not self._max_fedfuck_t and activedrama and not self._feddensityhigh then
 			--log("tick tock")
-			self._max_fedfuck_t = self._t + 5
+			self._max_fedfuck_t = self._t + 3
 		end
 		
 		if not activedrama and self._max_fedfuck_t then
@@ -683,7 +683,6 @@ function GroupAIStateBesiege:_voice_saw()
 		end
 	end
 end
-
 
 function GroupAIStateBesiege:_voice_sentry()
 	for group_id, group in pairs(self._groups) do

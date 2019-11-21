@@ -249,6 +249,12 @@ end
 local _calc_health_damage_original = PlayerDamage._calc_health_damage
 function PlayerDamage:_calc_health_damage(attack_data, ...)
 	attack_data.damage = attack_data.damage - (self._old_last_received_dmg or 0)
+	if self._unit then
+		local state = self._unit:movement():current_state_name()
+		if state == "driving" or self._unit:movement():zipline_unit() then
+			attack_data.damage = attack_data.damage * 0.5
+		end
+	end
 	self._next_allowed_dmg_t = self._old_next_allowed_dmg_t and Application:digest_value(self._old_next_allowed_dmg_t, true) or self._next_allowed_dmg_t
 	self._old_last_received_dmg = nil
 	self._old_next_allowed_dmg_t = nil

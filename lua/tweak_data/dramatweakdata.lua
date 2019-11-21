@@ -3,7 +3,7 @@ function DramaTweakData:init()
 
 	self.drama_actions = {
 		criminal_hurt = 0.25,
-		criminal_dead = 0.39,
+		criminal_dead = 0.4,
 		criminal_disabled = 0.1,
 		--enemy_dead = 0.2
 	}
