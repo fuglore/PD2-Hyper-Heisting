@@ -22,6 +22,9 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._feddensity_active_t = nil
 	self._next_allowed_hunter_upd_t = nil
 	self._next_allowed_drama_reveal_t = nil
+	self._activeassaultbreak = nil
+	self._activeassaultnextbreak_t = nil
+	self._stopassaultbreak_t = nil
 end
 
 function GroupAIStateBesiege:_queue_police_upd_task()
@@ -75,7 +78,7 @@ function GroupAIStateBesiege:update(t, dt)
 				self:chk_random_drama_comment()
 				self._feddensity_reset_t = self._t + self._feddensity_active_t
 				self._feddensityhighfrequency = self._feddensityhighfrequency + 0.5
-				log("feddensityhigh active")
+				--log("feddensityhigh active")
 			end
 		end
 		
@@ -84,8 +87,35 @@ function GroupAIStateBesiege:update(t, dt)
 			self._feddensity_reset_t = nil
 			self._max_fedfuck_t = nil
 			self._rolled_dramatalk_chance = nil
-			log("resetting feddensity")
+			--log("resetting feddensity")
 		end
+		
+		if self._task_data.assault and self._task_data.assault.phase == "build" or self._task_data.assault and self._task_data.assault.phase == "sustain" then
+			if not self._activeassaultbreak then
+				if not self._activeassaultnextbreak_t then
+					--log("assaultstartedbreakset")
+					self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
+				end
+			end
+			
+			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t then
+				self._activeassaultbreak = true
+				self._stopassaultbreak_t = self._t + math.random(5, 10)
+				--log("assaultbreakon")
+			end
+			
+			if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+				self._stopassaultbreak_t = nil
+				self._activeassaultbreak = nil
+				self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
+				--log("assaultbreakreset")
+			end
+		else
+			self._stopassaultbreak_t = nil
+			self._activeassaultbreak = nil
+			self._activeassaultnextbreak_t = nil
+		end
+		
 
 		if managers.navigation:is_data_ready() and self._draw_enabled then
 			self:_draw_enemy_activity(t)
@@ -136,9 +166,18 @@ function GroupAIStateBesiege:chk_high_fed_density()
 	return true
 end
 
+function GroupAIStateBesiege:chk_active_assault_break()
+
+	if not self._activeassaultbreak then
+		return
+	end
+	
+	return true
+end
+
 function GroupAIStateBesiege:chk_assault_active_atm()
 
-	if not self._task_data.assault.active then
+	if not self._task_data.assault.phase == "build" or not self._task_data.assault.phase == "sustain" then
 		return
 		--log("not assault active")
 	end
@@ -468,7 +507,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local assaultactive = task_data.phase == "build" or task_data.phase == "sustain"
 	local revealchk = not self._next_allowed_drama_reveal_t or self._next_allowed_drama_reveal_t < t
 	
-	if low_carnage and assaultactive and not self._feddensityhigh and revealchk or self._drama_data.amount <= tweak_data.drama.low and assaultactive and not self._feddensityhigh then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
+	if low_carnage and assaultactive and not self._feddensityhigh and revealchk and not self._activeassaultbreak or self._drama_data.amount <= tweak_data.drama.low and assaultactive and not self._feddensityhigh and not self._activeassaultbreak then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
 		if not assaultactive then
 			--log("AAAAAAAA FUCK YOU")
 		end
@@ -764,7 +803,7 @@ function GroupAIStateBesiege:_voice_dont_delay_assault(group)
 end
 
 function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, detonate_pos)
-	if task_data.use_smoke and not self:is_smoke_grenade_active() then
+	if task_data.use_smoke and not self:is_smoke_grenade_active() and not self._activeassaultbreak then
 		local shooter_pos, shooter_u_data = nil
 		local duration = tweak_data.group_ai.smoke_grenade_lifetime
 
@@ -814,7 +853,7 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 end
 
 function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, detonate_pos)
-	if task_data.use_smoke and not self:is_smoke_grenade_active() then
+	if task_data.use_smoke and not self:is_smoke_grenade_active() and not self._activeassaultbreak then
 		local shooter_pos, shooter_u_data = nil
 		local duration = tweak_data.group_ai.flash_grenade_lifetime
 
@@ -1180,7 +1219,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 						end
 					end
 					self._next_allowed_hunter_upd_t = self._t + 1.5
-			elseif tactic_name == "charge" and not current_objective.moving_out and group.in_place_t and (self._t - group.in_place_t > 5 and assaultactive or self._t - group.in_place_t > 2 and self._drama_data.amount <= tweak_data.drama.low and assaultactive) and next(current_objective.area.criminal.units) and group.is_chasing and not current_objective.charge and not self._feddensityhigh and not tactics_map.obstacle then
+			elseif tactic_name == "charge" and not current_objective.moving_out and group.in_place_t and (self._t - group.in_place_t > 5 and assaultactive and self._activeassaultbreak or self._t - group.in_place_t > 2 and self._drama_data.amount <= tweak_data.drama.low and assaultactive) and not self._activeassaultbreak and next(current_objective.area.criminal.units) and group.is_chasing and not current_objective.charge and not self._feddensityhigh and not tactics_map.obstacle then
 				charge = true
 				if not assaultactive then
 					--log("AAAAAAAA FUCK YOU")
@@ -1193,10 +1232,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 	if obstructed_area then
 		if current_objective.moving_out then
-			if not current_objective.open_fire and not self._feddensityhigh then
+			if not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				open_fire = true
 			end
-		elseif not current_objective.pushed and not self._feddensityhigh or charge and not current_objective.charge and not self._feddensityhigh then
+		elseif not current_objective.pushed and not self._feddensityhigh and not self._activeassaultbreak or charge and not current_objective.charge and not self._feddensityhigh and not self._activeassaultbreak then
 			push = true
 		end
 	else
@@ -1220,16 +1259,16 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 			
-			if charge and not self._feddensityhigh or low_carnage and not self._feddensityhigh then
+			if charge and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not self._feddensityhigh and not self._activeassaultbreak then
 				push = true
-			elseif not group.in_place_t and not self._feddensityhigh or phase_is_anticipation then
+			elseif not group.in_place_t and not self._feddensityhigh and not self._activeassaultbreak or phase_is_anticipation then
 				approach = true
-			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh then
+			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				open_fire = true
 				self:_voice_open_fire_start(group)
-			elseif phase_is_anticipation and group.in_place_t and not self._feddensityhigh and (group.is_chasing or not tactics_map or not tactics_map.ranged_fire or not tactics_map.elite_ranged_fire or not tactics_map.obstacle or self._t - group.in_place_t > 4) then
+			elseif phase_is_anticipation and group.in_place_t and not self._feddensityhigh and (group.is_chasing or not tactics_map or not tactics_map.ranged_fire or not tactics_map.elite_ranged_fire or not tactics_map.obstacle or self._t - group.in_place_t > 4) and not self._activeassaultbreak then
 				push = true
-			elseif phase_is_anticipation and current_objective.open_fire or self._feddensityhigh then
+			elseif phase_is_anticipation and current_objective.open_fire or self._feddensityhigh or self._activeassaultbreak then
 				pull_back = true
 			end
 		end

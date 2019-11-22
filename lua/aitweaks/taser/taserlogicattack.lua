@@ -59,22 +59,20 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 	local focus_enemy = data.attention_obj
 	local tase_length = data.internal_data.tase_distance or 1500 --fix for better bots crash
 	local my_data = data.internal_data
-
-	local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") 
-	
-	if (data.attention_obj.is_human_player or not data.attention_obj.unit:movement():chk_action_forbidden("hurt")) and data.attention_obj.verified and data.attention_obj.verified_dis <= tase_length and data.tase_delay_t < data.t then
-		if (my_data.last_charge_snd_play_t and data.t - my_data.last_charge_snd_play_t < 0.5) then
-			reaction = AIAttentionObject.REACT_SPECIAL_ATTACK --christ this was surprisingly way simpler than i thought it was
-		else
-			my_data.last_charge_snd_play_t = data.t --force tasers to play buzzing before beginning tase
-			data.unit:sound():play("taser_charge", nil, true)
-			reaction = AIAttentionObject.REACT_SPECIAL_ATTACK
-		end
-	end
-	
 	local tase = reaction == AIAttentionObject.REACT_SPECIAL_ATTACK
 
 	if focus_enemy then
+	
+		if data.attention_obj and (data.attention_obj.is_human_player or not data.attention_obj.unit:movement():chk_action_forbidden("hurt")) and data.attention_obj.verified and data.attention_obj.dis <= 1500 then
+			if (my_data.last_charge_snd_play_t and data.t - my_data.last_charge_snd_play_t < 0.5) then
+				reaction = AIAttentionObject.REACT_SPECIAL_ATTACK --christ this was surprisingly way simpler than i thought it was
+			else
+				my_data.last_charge_snd_play_t = data.t --force tasers to play buzzing before beginning tase
+				data.unit:sound():play("taser_charge", nil, true)
+				reaction = AIAttentionObject.REACT_SPECIAL_ATTACK
+			end
+		end
+		
 		if tase then
 			shoot = true
 		elseif focus_enemy.verified then
@@ -106,7 +104,7 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 		end
 	end
 
-	if tase and (my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover) and not data.unit:movement():chk_action_forbidden("walk") then
+	if tase and (my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover or data.unit:anim_data().run or data.unit:anim_data().move) and not data.unit:movement():chk_action_forbidden("walk") then
 		local new_action = {
 			body_part = 2,
 			type = "idle"
@@ -183,7 +181,7 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 		elseif not data.unit:anim_data().run then
 			local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
 
-			if ammo / ammo_max < 0.2 then
+			if ammo / ammo_max < 0.05 then
 				local new_action = {
 					body_part = 3,
 					type = "reload"

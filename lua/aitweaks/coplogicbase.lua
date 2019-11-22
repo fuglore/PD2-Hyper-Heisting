@@ -367,9 +367,9 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						end
 						
 						local angle_mul_mod = 0.5 * math.min(angle / my_data.detection.angle_max, 1)
-						local dis_mul_mod = 1 * dis_multiplier
+						local dis_mul_mod = 2 * dis_multiplier
 						if diff_index < 7 then
-							dis_mul_mod = 2 * dis_multiplier
+							dis_mul_mod = 4 * dis_multiplier
 						end
 						local notice_delay_mul = attention_info.settings.notice_delay_mul or 1
 

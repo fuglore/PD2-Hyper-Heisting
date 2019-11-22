@@ -261,7 +261,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 						end
 					end
 
-					if not shoot and not managers.groupai:state():whisper_mode() and my_data.attitude == "engage" or not shoot and focus_enemy.dis <= 800 and not managers.groupai:state():whisper_mode() then
+					if not shoot and not managers.groupai:state():whisper_mode() and my_data.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() or not shoot and focus_enemy.dis <= 800 and not managers.groupai:state():whisper_mode() and not managers.groupai:state():chk_active_assault_break() then
 						if focus_enemy.verified_dis < firing_range * (height_difference and 0.75 or 1) or focus_enemy.reaction == AIAttentionObject.REACT_SHOOT then
 							if dense_mook and managers.groupai:state():chk_high_fed_density() and not my_data.firing then
 									--log("not firing due to FEDS")
@@ -818,6 +818,10 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 	
+	if not managers.groupai:state():chk_active_assault_break() then
+		my_data.has_retreated = nil
+	end
+	
 	local alert_soft = data.is_suppressed
 	local action_taken = data.logic.action_taken(data, my_data)
 	
@@ -943,7 +947,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 	
 	if not action_taken and want_to_take_cover and not best_cover or not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
-		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, false)
+		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
 		if data.char_tweak.chatter.cloakeravoidance then
 			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
 		end
@@ -954,12 +958,17 @@ function CopLogicAttack._upd_combat_movement(data)
 		-- Nothing		
 	elseif my_data.walking_to_cover_shoot_pos then
 		--nothing
+	elseif managers.groupai:state():chk_active_assault_break() and not my_data.has_retreated then
+		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, true)
+		my_data.has_retreated = true
+	elseif managers.groupai:state():chk_active_assault_break() and my_data.has_retreated then
+		--Nothing
 	elseif want_to_take_cover then
 		if data.tactics and data.tactics.flank then
 			want_flank_cover = true
 		end
 		move_to_cover = true
-	elseif not enemy_visible_soft and not (data.tactics and data.tactics.obstacle) and not managers.groupai:state():chk_high_fed_density() or antipassivecheck and not managers.groupai:state():chk_high_fed_density() then 
+	elseif not enemy_visible_soft and not (data.tactics and data.tactics.obstacle) and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() or antipassivecheck and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
 		if not data.objective or data.objective and not data.objective.type == "follow" then
 			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or not enemy_visible_mild_soft and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or data.tactics and data.tactics.flank and my_data.flank_cover and in_cover and focus_enemy and focus_enemy.dis <= 2500 and my_data.taken_flank_cover and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 4) then
 				if my_data.charge_path then
@@ -1083,7 +1092,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	action_taken = action_taken or CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 end
 
-function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, engage)
+function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, engage, assault_break)
 
 	local pantsdownchk = nil
 	
@@ -1115,10 +1124,14 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 			local max_walk_dis = nil
 			local vis_required = engage
 				
-			if data.tactics and data.tactics.hitnrun then
+			if assault_break then 	
+				max_walk_dis = 5000
+				vis_required = nil
+			elseif data.tactics and data.tactics.hitnrun then
 				max_walk_dis = 800
 			elseif data.tactics and data.tactics.elite_ranged_fire then
-				max_walk_dis = 1000
+				max_walk_dis = 2000
+				vis_required = true
 			elseif data.tactics and data.tactics.spoocavoidance then
 				max_walk_dis = 1500
 			elseif data.tactics and data.tactics.reloadingretreat then

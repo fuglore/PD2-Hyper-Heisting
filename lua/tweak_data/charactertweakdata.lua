@@ -231,8 +231,8 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.priority_shout_max_dis = 700
 	self.spooc.rescue_hostages = false
 	self.spooc.spooc_attack_timeout = {
-		10,
-		10
+		0.35,
+		0.35
 	}
 	self.spooc.spooc_attack_beating_time = {
 		3,
@@ -412,7 +412,6 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.dodge = presets.dodge.athletic
 	self.medic.melee_weapon = "knife_1"
 	self.medic.deathguard = true
-	self.medic.no_retreat = false --Just making sure.
 	self.medic.no_arrest = true
 end)
 
@@ -681,7 +680,7 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.sniper.speech_prefix_count = 4
 	self.sniper.priority_shout = "f34"
 	self.sniper.access = "sniper"
-	self.sniper.no_retreat = true
+	self.sniper.no_retreat = nil
 	self.sniper.no_arrest = true
 	self.sniper.chatter = presets.enemy_chatter.no_chatter
 	self.sniper.steal_loot = nil
@@ -7285,12 +7284,12 @@ function CharacterTweakData:_set_normal()
 	self.cop.HEALTH_INIT = 8 --Their health is sorta pathetic otherwise.
 	self.cop_female.HEALTH_INIT = 8
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
-		8,
-		10
+		0.35,
+		0.35
 	}
 	self.spooc.spooc_attack_timeout = {
-		8,
-		10
+		0.35,
+		0.35
 	}
 end
 
@@ -7416,17 +7415,16 @@ function CharacterTweakData:_set_hard()
 	self.cop.HEALTH_INIT = 8 --Their health is sorta pathetic otherwise.
 	self.cop_female.HEALTH_INIT = 8
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
-		8,
-		10
+		0.35,
+		0.35
 	}
 	self.spooc.spooc_attack_timeout = {
-		8,
-		10
+		0.35,
+		0.35
 	}
 end
 
 --VH setup, landmark (DOG)
-
 function CharacterTweakData:_set_overkill()
 	self:_multiply_all_hp(4, 3)
 	self:_multiply_all_speeds(1, 1)
@@ -7544,12 +7542,12 @@ function CharacterTweakData:_set_overkill()
 	self:_set_characters_weapon_preset("civil")
 
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
-		3.5,
-		5
+		0.35,
+		0.35
 	}
 	self.spooc.spooc_attack_timeout = {
-		3.5,
-		5
+		0.35,
+		0.35
 	}
 	--fbi setup.
 	self.fbi.weapon = self.presets.weapon.complex
@@ -7695,12 +7693,12 @@ function CharacterTweakData:_set_overkill_145()
 	self:_set_characters_weapon_preset("civil")
 
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
-		3.5,
-		5
+		0.35,
+		0.35
 	}
 	self.spooc.spooc_attack_timeout = {
-		3.5,
-		5
+		0.35,
+		0.35
 	}
 	
 	if Global.game_settings and Global.game_settings.use_intense_AI then
@@ -8271,12 +8269,12 @@ function CharacterTweakData:_set_easy_wish()
 	self:_set_characters_weapon_preset("complex")
 
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
-		3,
-		4
+		0.35,
+		0.35
 	}
 	self.spooc.spooc_attack_timeout = {
-		3,
-		4
+		0.35,
+		0.35
 	}
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
@@ -8876,12 +8874,12 @@ function CharacterTweakData:_set_overkill_290()
 	self:_set_characters_weapon_preset("complex")
 
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
-		3,
-		4
+		0.35,
+		0.35
 	}
 	self.spooc.spooc_attack_timeout = {
-		3,
-		4
+		0.35,
+		0.35
 	}
 	
 	--STEALTH CHANGES WOO
@@ -9483,13 +9481,13 @@ function CharacterTweakData:_set_sm_wish()
 
 	self:_set_characters_weapon_preset("anarchy")
 
-	self.spooc.spooc_attack_timeout = {
-		3,
-		4
-	}
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
-		3,
-		4
+		0.35,
+		0.35
+	}
+	self.spooc.spooc_attack_timeout = {
+		0.35,
+		0.35
 	}
 	
 	--STEALTH CHANGES WOO
