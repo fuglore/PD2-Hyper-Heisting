@@ -31,7 +31,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data) --TODO: Optimize it *
 					my_data.attention_unit = focus_enemy.u_key
 				end
 
-				local action = SpoocLogicAttack._chk_request_action_spooc_attack(data, my_data, true)
+				local action = SpoocLogicAttack._chk_request_action_spooc_attack(data, my_data)
 
 				if action then
 					my_data.spooc_attack = {

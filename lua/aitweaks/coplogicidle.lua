@@ -154,6 +154,8 @@ end
 
 function CopLogicIdle._update_haste(data, my_data)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local is_mook = data.unit:base():has_tag("law") and not data.unit:base():has_tag("special")
+	local pose = nil
 	local mook_units = {
 		"security",
 		"security_undominatable",
@@ -223,15 +225,16 @@ function CopLogicIdle._update_haste(data, my_data)
 			--randomize enemy crouching to make enemies feel less easy to aim at, the fact they're always crouching all over the place always bugged me, plus, they shouldn't need to crouch so often when you're at long distances from them
 			
 			if not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
-				if crouch_roll > stand_chance and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) then
+				if stand_chance ~= 1 and crouch_roll > stand_chance and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) then
 					end_pose = "crouch"
 					pose = "crouch"
 					should_crouch = true
 				end
 			end
 			
-			local pose = nil
-			pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or should_crouch and "crouch" or "stand"
+			if not pose then
+				pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or should_crouch and "crouch" or "stand"
+			end
 
 			if not data.unit:anim_data()[pose] then
 				CopLogicAttack["_chk_request_action_" .. pose](data)
@@ -244,10 +247,6 @@ function CopLogicIdle._update_haste(data, my_data)
 				else
 					haste = haste
 				end
-			end
-			
-			if not pose then
-				pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or "stand"
 			end
 		elseif data.unit:base()._tweak_table == "tank" or data.unit:base()._tweak_table == "tank_medic" then
 			local run_dist = nil

@@ -163,9 +163,6 @@ function CopDamage:_on_damage_received(damage_info)
 						self._next_allowed_burnhurt_t = t + 8
 						self._next_allowed_hurt_t = t + math.random(2, 4)
 					end
-				else
-					self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
-					self._next_allowed_hurt_t = t + math.random(2, 4)
 				end
 			else
 				if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
