@@ -168,7 +168,7 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 		elseif not data.unit:anim_data().run then
 			local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
 
-			if ammo / ammo_max < 0.05 then
+			if ammo / ammo_max < 0.01 then
 				local new_action = {
 					body_part = 3,
 					type = "reload"
