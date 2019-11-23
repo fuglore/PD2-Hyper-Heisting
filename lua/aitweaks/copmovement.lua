@@ -41,6 +41,10 @@ function CopMovement:init(unit)
 	old_init(self, unit)
 end
 
+function CopMovement:is_taser_attack_allowed() --lol
+	return
+end
+
 function CopMovement:_change_stance(stance_code, instant)
 	if self._tweak_data.allowed_stances then
 		if stance_code == 1 and not self._tweak_data.allowed_stances.ntl then

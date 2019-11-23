@@ -40,6 +40,7 @@ function GroupAIStateBesiege:update(t, dt)
 	
 	if Network:is_server() then
 		self:_queue_police_upd_task()
+		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 		
 		if self._downcountleniency > 5 then
 			self._downcountleniency = 5
@@ -95,12 +96,18 @@ function GroupAIStateBesiege:update(t, dt)
 				if not self._activeassaultnextbreak_t then
 					--log("assaultstartedbreakset")
 					self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
+					if diff_index >= 6 or Global.game_settings.aggroAI then
+						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20)
+					end
 				end
 			end
 			
 			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t then
 				self._activeassaultbreak = true
 				self._stopassaultbreak_t = self._t + math.random(5, 10)
+				if diff_index >= 6 or Global.game_settings.aggroAI then
+					self._stopassaultbreak_t = self._stopassaultbreak_t * 0.5
+				end
 				--log("assaultbreakon")
 			end
 			
@@ -108,6 +115,9 @@ function GroupAIStateBesiege:update(t, dt)
 				self._stopassaultbreak_t = nil
 				self._activeassaultbreak = nil
 				self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
+				if diff_index >= 6 or Global.game_settings.aggroAI then
+					self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20) 
+				end
 				--log("assaultbreakreset")
 			end
 		else
