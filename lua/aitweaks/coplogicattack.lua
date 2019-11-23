@@ -261,7 +261,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 						end
 					end
 
-					if not shoot and not managers.groupai:state():whisper_mode() and my_data.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() or not shoot and focus_enemy.dis <= 800 and not managers.groupai:state():whisper_mode() and not managers.groupai:state():chk_active_assault_break() then
+					if not shoot and not managers.groupai:state():whisper_mode() and my_data.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() then
 						if focus_enemy.verified_dis < firing_range * (height_difference and 0.75 or 1) or focus_enemy.reaction == AIAttentionObject.REACT_SHOOT then
 							if dense_mook and managers.groupai:state():chk_high_fed_density() and not my_data.firing then
 									--log("not firing due to FEDS")

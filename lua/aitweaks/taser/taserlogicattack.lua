@@ -202,7 +202,7 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 	local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", attention_data.unit, "report") 
 	
 	if is_valid_target and attention_data.verified and attention_data.verified_dis <= tase_length then
-		log("guvvyfuvvynuff")
+		--log("yeah.")
 		if (my_data.last_charge_snd_play_t and data.t - my_data.last_charge_snd_play_t < 0.5) then
 			return AIAttentionObject.REACT_SPECIAL_ATTACK --christ this was surprisingly way simpler than i thought it was
 		else
