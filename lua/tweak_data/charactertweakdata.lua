@@ -9765,6 +9765,13 @@ function CharacterTweakData:character_map()
 			"ene_murky_DS_shield"
 		}
 	}
+	char_map.ftsu = {
+		path = "units/pd2_mod_psc/characters/",
+		list = {
+			"ene_gensec_fbigod_c45",
+			"ene_gensec_fbigod_m4"
+		}
+	}
 	char_map.hvh = {
 			path = "units/pd2_dlc_hvh/characters/",
 			list = {

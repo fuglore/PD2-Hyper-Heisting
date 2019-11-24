@@ -864,12 +864,46 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		access = access_type_all
 	}
 	
-	if difficulty_index < 8 then
+	if difficulty_index < 6 then
 		self.unit_categories.FBI_suit_M4_MP5 = {
 			unit_types = {
 				america = {
 					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
 					Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2"),
+					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1"),
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_2/ene_fbi_hvh_2"),
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+					Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2"),
+					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+				}
+			},
+			access = access_type_all
+		}
+	elseif difficulty_index == 6 or difficulty_index == 7 then
+		self.unit_categories.FBI_suit_M4_MP5 = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4"),
 					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3")
 				},
 				russia = {
