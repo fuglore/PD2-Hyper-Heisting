@@ -392,14 +392,14 @@ function CopLogicAttack._upd_aim(data, my_data)
 		end
 	end
 		
-	--cops call out player reloads if they've seen the player in the last 6 seconds on difficulties above overkill
-	if focus_enemy and focus_enemy.is_person and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT and not data.unit:in_slot(16) then
+	--cops call out player reloads if they've seen the player in the last 2 seconds if they have the harass tactic
+	if focus_enemy and focus_enemy.is_person and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT and not data.unit:in_slot(16) and data.tactics and data.tactics.harass then
 		if focus_enemy.is_local_player then
 			local time_since_verify = data.attention_obj.verified_t and data.t - data.attention_obj.verified_t
 			local e_movement_state = focus_enemy.unit:movement():current_state()
 			
-			if e_movement_state:_is_reloading() and time_since_verify and time_since_verify < 6 then
-				if not data.unit:in_slot(16) and data.char_tweak.chatter.reload and diff_index >= 6 or not data.unit:in_slot(16) and data.char_tweak.chatter.reload and Global.game_settings.use_intense_AI then
+			if e_movement_state:_is_reloading() and time_since_verify and time_since_verify < 2 then
+				if not data.unit:in_slot(16) and data.char_tweak.chatter.reload then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "reload")
 				end
 			end
@@ -407,7 +407,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 			local e_anim_data = focus_enemy.unit:anim_data()
 			local time_since_verify = data.attention_obj.verified_t and data.t - data.attention_obj.verified_t
 
-			if e_anim_data.reload and time_since_verify and time_since_verify < 6 and diff_index >= 6 or not data.unit:in_slot(16) and data.char_tweak.chatter.reload and Global.game_settings.use_intense_AI then
+			if e_anim_data.reload and time_since_verify and time_since_verify < 2 then
 				if not data.unit:in_slot(16) and data.char_tweak.chatter.reload then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "reload")
 				end			
@@ -854,6 +854,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	
 	if not managers.groupai:state():chk_active_assault_break() then
 		my_data.has_retreated = nil
+		my_data.in_retreat_pos = nil
 	end
 	
 	local alert_soft = data.is_suppressed
@@ -996,7 +997,12 @@ function CopLogicAttack._upd_combat_movement(data)
 		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, true)
 		my_data.has_retreated = true
 	elseif managers.groupai:state():chk_active_assault_break() and my_data.has_retreated then
-		--Nothing
+		if my_data.in_retreat_pos then
+			if data.tactics and data.tactics.flank then
+				want_flank_cover = true
+			end
+			move_to_cover = true
+		end
 	elseif want_to_take_cover then
 		if data.tactics and data.tactics.flank then
 			want_flank_cover = true
@@ -1004,7 +1010,7 @@ function CopLogicAttack._upd_combat_movement(data)
 		move_to_cover = true
 	elseif not enemy_visible_soft and not (data.tactics and data.tactics.obstacle) and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() or antipassivecheck and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
 		if not data.objective or data.objective and not data.objective.type == "follow" then
-			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or not enemy_visible_mild_soft and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or data.tactics and data.tactics.flank and my_data.flank_cover and in_cover and focus_enemy and focus_enemy.dis <= 2500 and my_data.taken_flank_cover and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 4) then
+			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or data.tactics and data.tactics.flank and my_data.flank_cover and in_cover and focus_enemy and focus_enemy.dis <= 4000 and my_data.taken_flank_cover and flank_cover_charge_qualify and (not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t) and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) then
 				if my_data.charge_path then
 					if data.objective and not data.objective.type == "follow" then
 						local path = my_data.charge_path
@@ -1111,6 +1117,7 @@ function CopLogicAttack._upd_combat_movement(data)
 				sign = sign
 			}
 			my_data.taken_flank_cover = true --this helps them qualify for charging behavior after acquiring a flank, which is not vanilla behavior btw
+			my_data.next_allowed_flank_charge_t = data.t + 4
 			want_flank_cover = nil
 			if not data.unit:in_slot(16) then --flankers signal their presence whenever they move around
 				if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.look_for_angle then
@@ -1220,7 +1227,9 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
 		CopLogicIdle._update_haste(data, my_data)
-		if my_data.surprised then
+		if my_data.has_retreated and managers.groupai:state():chk_active_assault_break() then
+			my_data.in_retreat_pos = true
+		elseif my_data.surprised then
 			my_data.surprised = false
 		elseif my_data.moving_to_cover then
 			if action:expired() then

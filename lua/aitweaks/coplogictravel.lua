@@ -398,6 +398,10 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 		return
 	end
 	
+	if CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_active_assault_break() and dense_mook then
+		return
+	end
+	
 	local my_dis = mvector3.distance_sq(my_objective.area.pos, data.m_pos)
 
 	if my_dis > 2000 * 2000 and not managers.groupai:state():chk_high_fed_density() then
