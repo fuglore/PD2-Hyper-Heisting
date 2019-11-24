@@ -233,7 +233,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 						debug_pause_unit(data.unit, "[CopLogicAttack]: Unit doesn't have data.internal_data.weapon_range")
 					end
 					
-					if not managers.groupai:state():whisper_mode() and managers.groupai:state():chk_high_fed_density()  then
+					if not managers.groupai:state():whisper_mode() then
 						if focus_enemy.verified and focus_enemy.alert_t and data.t - focus_enemy.alert_t < 7 and managers.groupai:state():chk_assault_active_atm() then
 							if dense_mook and managers.groupai:state():chk_high_fed_density() and not my_data.firing then
 								--log("not firing due to FEDS")
@@ -261,7 +261,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 						end
 					end
 
-					if not shoot and not managers.groupai:state():whisper_mode() and my_data.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() then
+					if not shoot and not managers.groupai:state():whisper_mode() and my_data.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() then
 						if focus_enemy.verified_dis < firing_range * (height_difference and 0.75 or 1) or focus_enemy.reaction == AIAttentionObject.REACT_SHOOT then
 							if dense_mook and managers.groupai:state():chk_high_fed_density() and not my_data.firing then
 									--log("not firing due to FEDS")
