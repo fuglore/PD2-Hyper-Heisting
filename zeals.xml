@@ -128,7 +128,7 @@
 		<file :name="shared_textures/ene_zeal_city_head_shotgun_il.texture" force="false"/>
 		<file :name="shared_textures/ene_zeal_city_shotgun_il.texture" force="false"/>
 		<file :name="shared_textures/helmets_shotgun_il.texture" force="false"/>
-		<file :name="shared_textures/bulldozer_il.texture" force="false"/>
+		<file :name="shared_textures/bulldozer_il.texture" load="true" force="true"/>
 		<file :name="ene_zeal_swat_heavy_hh/swat_heavy_df.texture" force="true"/>
 		<file :name="ene_zeal_swat_heavy_hh/swat_heavy_head_df.texture" force="true"/>
 		<file :name="ene_zeal_swat_heavy_hh/swat_heavy_il.texture" force="false"/>
@@ -152,7 +152,7 @@
 		<file :name="ene_bulldozer_medic/ene_bulldozer_medic.material_config" force="true"/>
 		<file :name="ene_bulldozer_minigun/ene_bulldozer_minigun.material_config" force="true"/>
 		<file :name="ene_bulldozer_medic/ene_bulldozer_medic_df.texture" force="true"/>
-		<file :name="shared_textures/minigun_bulldozer_il.texture" force="true"/>
+		<file :name="shared_textures/minigun_bulldozer_il.texture" load="true" force="true"/>
 		
 		<!--crime spree smg heavies-->
 		<file :name="ene_murky_heavy_ump/ene_murky_heavy_ump.unit" load="true" force="false"/>

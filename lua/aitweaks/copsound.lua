@@ -320,11 +320,8 @@ function CopSound:set_voice_prefix(index)
 	
 end
 
-function CopSound:say(sound_name, sync, skip_prefix, important, callback)
-	if self._last_speech then
-		self._last_speech:stop()
-	end
-	
+Hooks:PostHook(CopSound, "say", "hh_say", function(self, sound_name, sync, skip_prefix, important, callback)
+
 	local full_sound = nil
 	
 	if self._prefix == "l5d_" then
@@ -456,25 +453,5 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 			full_sound = self._prefix .. sound_name
 		end
 	end
-	
-	local event_id = nil
 
-	if type(full_sound) == "number" then
-		event_id = full_sound
-		full_sound = nil
-	end
-
-	if sync then
-		event_id = event_id or SoundDevice:string_to_id(full_sound)
-
-		self._unit:network():send("say", event_id)
-	end
-
-	self._last_speech = self:_play(full_sound or event_id)
-
-	if not self._last_speech then
-		return
-	end
-
-	self._speak_expire_t = TimerManager:game():time() + 2
-end
+end)

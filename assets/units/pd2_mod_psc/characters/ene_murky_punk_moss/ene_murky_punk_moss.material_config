@@ -1,0 +1,28 @@
+<materials version="3" group="ene_murky_punk_moss">
+    <material name="mtr_body" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_CIVILIANS:SKINNED_3WEIGHTS" version="2">
+        <diffuse_texture 		file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_df"/>
+        <bump_normal_texture 	file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_nm"/>
+    </material>
+    <material name="mtr_body_lod1" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_CIVILIANS:SKINNED_3WEIGHTS" version="2">
+        <diffuse_texture 		file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_df" mip="1"/>
+        <bump_normal_texture 	file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_nm" mip="1"/>
+    </material>
+    <material name="mtr_body_lod2" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_CIVILIANS:SKINNED_3WEIGHTS" version="2">
+        <diffuse_texture 		file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_df" mip="4"/>
+        <bump_normal_texture 	file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_nm" mip="4"/>
+    </material>
+
+    <material name="mtr_head" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_CIVILIANS:SKINNED_3WEIGHTS" version="2">
+        <diffuse_texture 		file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_df"/>
+        <bump_normal_texture 	file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_nm"/>
+    </material>
+    <material name="mtr_head_lod1" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_CIVILIANS:SKINNED_3WEIGHTS" version="2">
+        <diffuse_texture 		file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_df" mip="1"/>
+        <bump_normal_texture 	file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_nm" mip="1"/>
+    </material>
+    <material name="mtr_head_lod2" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_CIVILIANS:SKINNED_3WEIGHTS" version="2">
+        <diffuse_texture 		file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_df" mip="4"/>
+        <bump_normal_texture 	file="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_nm" mip="4"/>
+    </material>
+    <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
+</materials>

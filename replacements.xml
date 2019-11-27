@@ -14,6 +14,21 @@
 		<file :name="ene_cop_3/ene_cop_3.unit" load="true" force="true"/>
 		<file :name="ene_cop_3/ene_cop_3_husk.unit" load="true" force="true"/>
 		
+		<!--Light SWAT MP5-->
+		<file :name="ene_cop_4/ene_cop_4.unit" load="true" force="true"/>
+		<file :name="ene_cop_4/ene_cop_4_husk.unit" load="true" force="true"/>
+		
+		<!--Cop Punk Double-Barrel-->
+		<file :name="ene_cop_5/ene_cop_5.unit" load="true" force="false"/>
+		<file :name="ene_cop_5/ene_cop_5_husk.unit" load="true" force="false"/>
+		<file :name="ene_cop_5/ene_cop_5.material_config" force="false"/>
+		<file :name="ene_cop_5/ene_cop_5_contour.material_config" force="false"/>
+		<file :name="ene_cop_5/ene_cop_5.object" force="false"/>
+		<file :name="ene_cop_5/ene_cop_5.cooked_physics" force="false"/>
+		<file :name="ene_cop_5/ene_cop_5.model" force="false"/>
+		
+		<file :name="shared_textures/police_df.texture" load="true" force="true"/>
+			
 	</group>
 	
 	<group name="units/payday2/weapons/">

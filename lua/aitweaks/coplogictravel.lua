@@ -354,7 +354,7 @@ end
 function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	local my_objective = data.objective
 	
-	if data.is_converted then
+	if data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 		return true
 	end
 	
@@ -588,7 +588,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					cover_wait_time = math.random(0.35, 0.5) --Keep enemies aggressive and active while still preserving some semblance of what used to be the original pacing while not in Shin Shootout mode
 				end
 				
-				if not is_mook or Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() or managers.skirmish:is_skirmish() and not managers.groupai:state():chk_high_fed_density() or data.unit:base():has_tag("takedown") or data.is_converted then
+				if not is_mook or Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() or managers.skirmish:is_skirmish() and not managers.groupai:state():chk_high_fed_density() or data.unit:base():has_tag("takedown") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 					my_data.cover_leave_t = data.t + 0
 				else
 					my_data.cover_leave_t = data.t + cover_wait_time
@@ -1083,7 +1083,7 @@ function CopLogicTravel.get_pathing_prio(data)
 			end
 		end
 		
-		if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted then
+		if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 			prio = prio + 2
 		end	
 	end

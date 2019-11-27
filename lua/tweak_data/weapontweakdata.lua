@@ -111,6 +111,10 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.heavy_snp_npc.spread = 1 --Spread for internal changes
 	
 	--A bunch of NPC weapon clone/consistency issues, fixed in minutes back when I made fixed weapon preset scaling because OVERKILL sucks.
+	self.s552_npc = deep_clone(self.m4_npc)
+	self.s552_npc.sounds.prefix = "sig552_npc"
+	self.s552_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
+	self.s552_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
 	self.ak47_ass_npc = deep_clone(self.m4_npc)
 	self.ak47_ass_npc.sounds.prefix = "akm_npc"
 	self.ak47_ass_npc.muzzleflash = "effects/payday2/particles/weapons/762_auto"
