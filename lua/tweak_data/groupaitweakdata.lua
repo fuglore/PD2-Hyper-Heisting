@@ -493,7 +493,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.punk_group = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5"),
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
 					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
 					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
 				},
@@ -519,7 +519,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.punk_group = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5"),
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
 					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
 					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
 				},
@@ -546,7 +546,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.punk_group = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5"),
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
 					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
 					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
 				},
@@ -572,7 +572,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.punk_group = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5"),
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
 					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
 					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
 				},
@@ -812,7 +812,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				america = {
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_ak47_ass/ene_akan_cs_swat_ak47_ass"),
@@ -822,7 +822,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1"),
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3")				
+					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5")				
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
@@ -835,7 +835,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"),
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_5"),
 				}	
 			},
 			access = access_type_all
@@ -2382,7 +2382,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					freq = 1.5,
-					amount_min = 1,
+					amount_min = 2,
 					amount_max = 2,
 					rank = 2,
 					unit = "punk_group",
@@ -2404,7 +2404,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				},
 				{
 					amount_min = 0,
-					freq = 2,
+					freq = 1,
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_shield",
@@ -2415,7 +2415,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.punks_B = {
 			amount = {
 				4,
-				4
+				5
 			},
 			spawn = {
 				{
@@ -2435,9 +2435,9 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle_civil
 				},
 				{
-					freq = 1.5,
-					amount_min = 1,
-					amount_max = 2,
+					freq = 2.25,
+					amount_min = 2,
+					amount_max = 3,
 					rank = 1,
 					unit = "punk_group",
 					tactics = self._tactics.swat_shotgun_rush_civil
@@ -2455,7 +2455,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.punks_C = {
 			amount = {
 				3,
-				4
+				5
 			},
 			spawn = {
 				{
@@ -2484,7 +2484,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				},
 				{
 					freq = 1,
-					amount_min = 1,
+					amount_min = 2,
 					amount_max = 2,
 					rank = 1,
 					unit = "punk_group",
@@ -2501,7 +2501,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					freq = 1.5,
-					amount_min = 1,
+					amount_min = 2,
 					amount_max = 2,
 					rank = 2,
 					unit = "punk_group",
@@ -2523,7 +2523,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				},
 				{
 					amount_min = 0,
-					freq = 2,
+					freq = 1,
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_shield",
@@ -2534,7 +2534,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.punks_B = {
 			amount = {
 				4,
-				4
+				5
 			},
 			spawn = {
 				{
@@ -2554,9 +2554,9 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle_civil
 				},
 				{
-					freq = 1.5,
-					amount_min = 1,
-					amount_max = 2,
+					freq = 2.25,
+					amount_min = 2,
+					amount_max = 3,
 					rank = 1,
 					unit = "punk_group",
 					tactics = self._tactics.swat_shotgun_rush_civil
@@ -2574,7 +2574,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.punks_C = {
 			amount = {
 				3,
-				4
+				5
 			},
 			spawn = {
 				{
@@ -2603,7 +2603,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				},
 				{
 					freq = 1,
-					amount_min = 1,
+					amount_min = 2,
 					amount_max = 2,
 					rank = 1,
 					unit = "punk_group",
