@@ -585,7 +585,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 		nr_wanted = task_data.force - self:_count_police_force("assault")
 	end
 
-	if nr_wanted > 0 and task_data.phase ~= "fade" then
+	if nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil
 
 		if task_data.use_spawn_event and task_data.phase ~= "anticipation" then
@@ -1548,6 +1548,10 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 	local spawn_points = spawn_task.spawn_group.spawn_pts
 
 	local function _try_spawn_unit(u_type_name, spawn_entry)
+		if self._feddensityhigh or self._activeassaultbreak then
+			return
+		end
+		
 		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
 			return
 		end
