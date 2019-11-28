@@ -6,7 +6,7 @@ ModifierCloakerTearGas.desc_id = "menu_cs_modifier_cloaker_tear_gas"
 function ModifierCloakerTearGas:init(data)
 	ModifierCloakerTearGas.super.init(self, data)
 	
-	local gamemode_chk = game_state_machine:gamemode() 
+	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
 	if gamemode_chk == "crime_spree" or managers.skirmish and managers.skirmish:is_skirmish() then
 		if not Global.mutators.telespooc then
 			Global.mutators.telespooc = true

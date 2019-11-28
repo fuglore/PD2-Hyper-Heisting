@@ -7,7 +7,7 @@ ModifierTaserOvercharge.default_value = "speed"
 function ModifierTaserOvercharge:init(data)
 	ModifierTaserOvercharge.super.init(self, data)
 	
-	local gamemode_chk = game_state_machine:gamemode() 
+	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
 	if gamemode_chk == "crime_spree" or managers.skirmish and managers.skirmish:is_skirmish() then
 		if not Global.mutators.tase_t_reduction then
 			Global.mutators.tase_t_reduction = 0.5

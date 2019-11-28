@@ -126,7 +126,7 @@
 		<file :name="ene_acc_shield_lights/material_df.texture" force="false"/>
 		<file :name="ene_acc_shield_lights/material_nm.texture" force="false"/>
 		
-		<!--Jovanny-->
+		<!--Jovanny/Sawed-Off Murky Punk-->
 		<file :name="ene_murky_punk_moss/ene_murky_punk_moss.unit" load="true" force="false"/>
 		<file :name="ene_murky_punk_moss/ene_murky_punk_moss_husk.unit" load="true" force="false"/>
 		<file :name="ene_murky_punk_moss/ene_murky_punk_moss.material_config" force="false"/>
@@ -139,7 +139,34 @@
 		<file :name="ene_murky_punk_moss/science_head_df.texture" force="false"/>
 		<file :name="ene_murky_punk_moss/science_head_nm.texture" force="false"/>
 		
-		<!--Textures-->	
+		<!--MP5 Murky Punk-->
+		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.unit" load="true" force="false"/>
+		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5_husk.unit" load="true" force="false"/>
+		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.material_config" force="false"/>
+		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5_contour.material_config" force="false"/>
+		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.object" force="false"/>
+		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.cooked_physics" force="false"/>
+		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.model" force="false"/>
+		
+		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.unit" load="true" force="false"/>
+		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.material_config" force="false"/>
+		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.object" force="false"/>
+		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.cooked_physics" force="false"/>
+		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.model" force="false"/>
+		
+		<!--Bronco Murky Punk-->
+		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.unit" load="true" force="false"/>
+		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco_husk.unit" load="true" force="false"/>
+		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.material_config" force="false"/>
+		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco_contour.material_config" force="false"/>
+		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.object" force="false"/>
+		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.cooked_physics" force="false"/>
+		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.model" force="false"/>
+		
+		<!--Textures-->
+		<file :name="shared_textures/punk_df.texture" force="false"/>
+		<file :name="shared_textures/punk_head_df.texture" force="false"/>
+		<file :name="shared_textures/punk_head_nm.texture" force="false"/>
 		<file :name="shared_textures/heads_atlas_df.texture" force="false"/>
 		<file :name="shared_textures/heads_atlas_nm.texture" force="false"/>
 		<file :name="shared_textures/sam_head_df.texture" force="false"/>

@@ -10,10 +10,10 @@ ModifierSkulldozers.unit_swaps = { --replace jerome with cool jerome when everyt
 function ModifierSkulldozers:init(data)
 	ModifierSkulldozers.super.init(self, data)
 	
-	local gamemode_chk = game_state_machine:gamemode() 
+	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
 	if gamemode_chk == "crime_spree" or managers.skirmish and managers.skirmish:is_skirmish() then
 		local current_wave = managers.skirmish:current_wave_number()
-		if not Global.game_settings.use_intense_AI and gamemode_chk == "crime_spree" or current_wave >= 3 and not Global.game_settings.use_intense_AI then
+		if not Global.game_settings.use_intense_AI and gamemode_chk == "crime_spree" or current_wave and current_wave ~= nil and current_wave >= 3 and not Global.game_settings.use_intense_AI then
 			Global.game_settings.use_intense_AI = true
 		end
 	else
