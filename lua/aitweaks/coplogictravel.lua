@@ -787,7 +787,7 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 
 	local objective = data.objective
 	local haste = nil
-	local pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or should_crouch and "crouch" or "stand"
+	local pose = nil
 	
 	local mook_units = {
 		"security",
@@ -867,13 +867,19 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	--randomize enemy crouching to make enemies feel less easy to aim at, the fact they're always crouching all over the place always bugged me, plus, they shouldn't need to crouch so often when you're at long distances from them
 	
 	if not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
-		if stand_chance ~= 1 and crouch_roll > stand_chance and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) then
+		if stand_chance ~= 1 and crouch_roll > stand_chance and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) or data.char_tweak.allowed_poses and data.char_tweak.allowed_poses.crouch then
 			end_pose = "crouch"
 			pose = "crouch"
-			should_crouch = true
+		else
+			end_pose = "stand"
+			pose = "stand"
 		end
 	end
-
+	
+	if not pose then
+		pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or "stand"
+	end
+	
 	if not data.unit:anim_data()[pose] then
 		CopLogicAttack["_chk_request_action_" .. pose](data)
 	end
@@ -885,10 +891,6 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		else
 			haste = haste
 		end
-	end
-	
-	if not pose then
-		pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or "stand"
 	end
 
 	CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, haste, end_rot, no_strafe, pose, end_pose)

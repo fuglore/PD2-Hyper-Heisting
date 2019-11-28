@@ -21,6 +21,10 @@ TeamAIDamage.set_invulnerable = CopDamage.set_invulnerable
 TeamAIDamage._hurt_severities = CopDamage._hurt_severities
 TeamAIDamage.get_damage_type = CopDamage.get_damage_type
 
+function TeamAIDamage:on_recon()
+	self:_regenerated()
+end
+
 function TeamAIDamage:damage_tase(attack_data)
 	local diff_index = Global.game_settings and tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local tase_down_time = nil

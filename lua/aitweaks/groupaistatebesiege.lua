@@ -49,8 +49,9 @@ function GroupAIStateBesiege:update(t, dt)
 		self:_claculate_drama_value()
 		
 		local activedrama = self._drama_data.amount >= tweak_data.drama.consistentcombat
+		local highdrama = self._drama_data.amount == tweak_data.drama.peak
 		
-		self._max_fedfuck_t_add = 5
+		self._max_fedfuck_t_add = 3 * self._feddensityhighfrequency
 		
 		--if not self._feddensity_reset_t then
 			--log("noresettime")
@@ -64,7 +65,7 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		if not self._max_fedfuck_t and activedrama and not self._feddensityhigh then
 			--log("tick tock")
-			self._max_fedfuck_t = self._t + 3
+			self._max_fedfuck_t = self._t + self._max_fedfuck_t_add
 		end
 		
 		if not activedrama and self._max_fedfuck_t then
@@ -73,7 +74,7 @@ function GroupAIStateBesiege:update(t, dt)
 		end
 		
 		if not self._feddensityhigh then
-			if activedrama and self._max_fedfuck_t and self._max_fedfuck_t < self._t then
+			if activedrama and self._max_fedfuck_t and self._max_fedfuck_t < self._t or highdrama then
 				self._feddensityhigh = true
 				self._max_fedfuck_t = nil
 				self:chk_random_drama_comment()
@@ -98,6 +99,7 @@ function GroupAIStateBesiege:update(t, dt)
 					self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
 					if diff_index >= 6 or Global.game_settings.aggroAI then
 						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20)
+						--log("breaksetforDW")
 					end
 				end
 			end
@@ -505,7 +507,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 				managers.mission:call_global_event("end_assault")
 				self:_begin_regroup_task(force_regroup)
-
+				
 				return
 			end
 		end
