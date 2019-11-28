@@ -480,7 +480,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 					--end
 					
 					--if taking_too_long then 
-						--log("i cant believe he kited cops fuglore would never do this im literally shaking and crying right now")
+						--log("i cant believe they kited cops fuglore would never do this im literally shaking and crying right now")
 					--end
 					
 					if drama_pass and engagement_pass and t > task_data.phase_end_t or taking_too_long then

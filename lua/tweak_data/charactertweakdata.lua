@@ -7266,7 +7266,7 @@ function CharacterTweakData:_set_normal()
 	self.mobster_boss.HEALTH_INIT = 600
 	self.biker_boss.HEALTH_INIT = 600
 	self.chavez_boss.HEALTH_INIT = 600
-	self.presets.gang_member_damage.REGENERATE_TIME = 30
+	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 350
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
@@ -7396,7 +7396,7 @@ function CharacterTweakData:_set_hard()
 	self.mobster_boss.HEALTH_INIT = 600
 	self.biker_boss.HEALTH_INIT = 600
 	self.chavez_boss.HEALTH_INIT = 600
-	self.presets.gang_member_damage.REGENERATE_TIME = 30
+	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 350
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
@@ -7534,7 +7534,7 @@ function CharacterTweakData:_set_overkill()
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 800
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
 	
-	self.presets.gang_member_damage.REGENERATE_TIME = 30
+	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 350
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
@@ -7685,7 +7685,7 @@ function CharacterTweakData:_set_overkill_145()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 30
+	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 350
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
@@ -7826,7 +7826,7 @@ function CharacterTweakData:_set_easy_wish()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 30
+	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 350
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
@@ -8430,7 +8430,7 @@ function CharacterTweakData:_set_overkill_290()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 30
+	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 350
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
@@ -9038,7 +9038,7 @@ function CharacterTweakData:_set_sm_wish()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 30
+	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
