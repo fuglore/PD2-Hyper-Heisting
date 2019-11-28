@@ -22,7 +22,7 @@ function ModifierSkulldozers:init(data)
 	
 	if managers.skirmish then
 		local current_wave = managers.skirmish:current_wave_number()
-		if current_wave < 3 then
+		if current_wave and current_wave ~= nil and current_wave < 3 then
 			Global.game_settings.use_intense_AI = nil
 		end
 	end
