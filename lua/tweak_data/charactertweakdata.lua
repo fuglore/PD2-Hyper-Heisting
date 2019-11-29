@@ -9788,6 +9788,7 @@ function CharacterTweakData:character_map()
 			"ene_cop_hvh_2",
 			"ene_cop_hvh_3",
 			"ene_cop_hvh_4",
+			"ene_cop_hvh_5",
 			"ene_swat_hvh_1",
 			"ene_swat_hvh_2",
 			"ene_fbi_hvh_1",

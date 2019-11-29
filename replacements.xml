@@ -10,15 +10,15 @@
 		<!--Heavy SWAT R870 fix-->
 		<file :name="ene_swat_heavy_r870/ene_swat_heavy_r870_husk.unit" load="true" force="true"/>
 		
-		<!--Light SWAT MP5-->
+		<!--Punk Mosconi-->
 		<file :name="ene_cop_3/ene_cop_3.unit" load="true" force="true"/>
 		<file :name="ene_cop_3/ene_cop_3_husk.unit" load="true" force="true"/>
 		
-		<!--Light SWAT MP5-->
+		<!--Punk MP5-->
 		<file :name="ene_cop_4/ene_cop_4.unit" load="true" force="true"/>
 		<file :name="ene_cop_4/ene_cop_4_husk.unit" load="true" force="true"/>
 		
-		<!--Cop Punk Double-Barrel-->
+		<!--Light SWAT MP5-->
 		<file :name="ene_cop_5/ene_cop_5.unit" load="true" force="false"/>
 		<file :name="ene_cop_5/ene_cop_5_husk.unit" load="true" force="false"/>
 		<file :name="ene_cop_5/ene_cop_5.material_config" force="false"/>
@@ -129,6 +129,15 @@
 	<group name="units/pd2_dlc_hvh/characters/">
 	
 		<!--Light SWAT Zombie MP5-->
+		<file :name="ene_cop_hvh_5/ene_cop_hvh_5.unit" load="true" force="true"/>
+		<file :name="ene_cop_hvh_5/ene_cop_hvh_5_husk.unit" load="true" force="true"/>
+		<file :name="ene_cop_hvh_5/ene_cop_hvh_5.material_config" force="true"/>
+		<file :name="ene_cop_hvh_5/ene_cop_hvh_5_contour.material_config" force="true"/>
+		<file :name="ene_cop_hvh_5/ene_cop_hvh_5.object" force="true"/>
+		<file :name="ene_cop_hvh_5/ene_cop_hvh_5.cooked_physics" force="true"/>
+		<file :name="ene_cop_hvh_5/ene_cop_hvh_5.model" force="true"/>
+		
+		<!--Punk Mosconi-->
 		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.unit" load="true" force="true"/>
 		<file :name="ene_cop_hvh_3/ene_cop_hvh_3_husk.unit" load="true" force="true"/>
 		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.material_config" force="true"/>
@@ -154,7 +163,9 @@
 		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.object" force="true"/>
 		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.cooked_physics" force="true"/>
 		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.model" force="true"/>
-		<!--Textures-->	
+		
+		<!--Textures-->
+		<file :name="ene_cop_hvh_1/police_hvh_df.texture" load="true" force="true"/>
 		<file :name="ene_shield_armoured_hvh/swat_heavy_df.texture" force="false"/>
 		<file :name="ene_shield_armoured_hvh/swat_heavy_il.texture" force="false"/>
 		<file :name="ene_shield_armoured_hvh/swat_heavy_head_df.texture" force="false"/>

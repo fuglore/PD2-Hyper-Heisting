@@ -7,7 +7,8 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 		"g36_npc",
 		"smoke_npc",
 		"scar_npc",
-		"lazer_npc"
+		"lazer_npc",
+		"s552_npc"
 	}
 	
 	local all_smgs = {
@@ -40,6 +41,7 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 	self.blazter_npc.spread = 1
 	self.benelli_npc.spread = 1
 	self.silserbu_npc.spread = 1
+	self.mossberg_npc.spread = 1
 end
 
 Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
@@ -141,6 +143,8 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.rpk_lmg_npc.sounds.prefix = "rpk_npc"
 	self.rpk_lmg_npc.usage = "is_lmg"
 	self.rpk_lmg_npc.auto.fire_rate = 0.08
+	self.mossberg_npc.usage = "is_shotgun_mag"
+	self.mossberg_npc.DAMAGE = 1.5
 	
 	self.mini_npc.CLIP_AMMO_MAX = 100000 --new minigun dozer buff setup
 	self.mini_npc.NR_CLIPS_MAX = 1
@@ -157,6 +161,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.m249_npc.hivis = true
 	self.rpk_lmg_npc.hivis = true
 	self.silserbu_npc.hi_vis = true
+	self.mossberg_npc.hi_vis = true
 	self.m14_sniper_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.svd_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.svdsil_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
@@ -168,6 +173,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.saiga_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.m249_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.rpk_lmg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.mossberg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	
 	self.swat_van_turret_module.DAMAGE_MUL_RANGE = {
 		{
