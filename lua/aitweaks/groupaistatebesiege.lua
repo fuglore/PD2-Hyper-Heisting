@@ -107,6 +107,7 @@ function GroupAIStateBesiege:update(t, dt)
 			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t then
 				self._activeassaultbreak = true
 				self._stopassaultbreak_t = self._t + math.random(5, 10)
+				self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
 				--log("assaultbreakon")
 			end
 			

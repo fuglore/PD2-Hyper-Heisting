@@ -1819,7 +1819,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_shield_armoured_hvh/ene_shield_armoured_hvh")
+					Idstring("units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield")
@@ -3051,7 +3051,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_R870",
-					tactics = self._tactics.swat_shotgun_rush
+					tactics = self._tactics.swat_shotgun_rush_civil
 				},
 				{
 					freq = 1,
@@ -3076,7 +3076,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "punk_group",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_complex
 				},
 				{
 					freq = 0.75,
@@ -3114,7 +3114,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_rush_civil
+					tactics = self._tactics.swat_shotgun_rush_complex
 				},
 				{
 					amount_min = 1,
@@ -3122,7 +3122,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "FBI_swat_M4",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_complex
 				},
 				{
 					freq = 2.25,
@@ -3130,7 +3130,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 3,
 					rank = 1,
 					unit = "punk_group",
-					tactics = self._tactics.swat_shotgun_rush_civil
+					tactics = self._tactics.swat_shotgun_rush_complex
 				},
 				{
 					amount_min = 0,
@@ -3138,7 +3138,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "medic_M4",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_complex
 				}
 			}
 		}
@@ -3154,7 +3154,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_LHmix",
-					tactics = self._tactics.swat_shotgun_rifle_civil
+					tactics = self._tactics.swat_rifle_complex
 				},
 				{
 					amount_min = 0,
@@ -3169,8 +3169,16 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					amount_max = 1,
 					rank = 2,
+					unit = "FBI_tank",
+					tactics = self._tactics.tank_rush
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
 					unit = "medic_R870",
-					tactics = self._tactics.swat_shotgun_rush
+					tactics = self._tactics.swat_shotgun_rush_complex
 				},
 				{
 					freq = 1,

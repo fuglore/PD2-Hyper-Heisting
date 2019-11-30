@@ -156,20 +156,19 @@
 		<file :name="ene_swat_hvh_1/ene_swat_hvh_1.model" force="true"/>
 		
 		<!--Zombie Armoured Shield-->
-		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.unit" load="true" force="true"/>
-		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh_husk.unit" load="true" force="true"/>
-		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.material_config" force="true"/>
-		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh_contour.material_config" force="true"/>
-		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.object" force="true"/>
-		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.cooked_physics" force="true"/>
-		<file :name="ene_shield_armoured_hvh/ene_shield_armoured_hvh.model" force="true"/>
+		<file :name="ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh.unit" load="true" force="true"/>
+		<file :name="ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh_husk.unit" load="true" force="true"/>
+		<file :name="ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh.material_config" force="true"/>
+		<file :name="ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh_contour.material_config" force="true"/>
+		<file :name="ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh.object" force="true"/>
+		<file :name="ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh.cooked_physics" force="true"/>
+		<file :name="ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh.model" force="true"/>
 		
 		<!--Textures-->
 		<file :name="ene_cop_hvh_1/police_hvh_df.texture" load="true" force="true"/>
-		<file :name="ene_shield_armoured_hvh/swat_heavy_df.texture" force="false"/>
-		<file :name="ene_shield_armoured_hvh/swat_heavy_il.texture" force="false"/>
-		<file :name="ene_shield_armoured_hvh/swat_heavy_head_df.texture" force="false"/>
-		<file :name="ene_shield_armoured_hvh/swat_heavy_head_il.texture" force="false"/>	
+		<file :name="ene_zeal_swat_shield_hvh/material_head_df.texture" force="false"/>
+		<file :name="ene_zeal_swat_shield_hvh/swat_heavy_df.texture" force="false"/>
+		<file :name="ene_zeal_swat_shield_hvh/swat_heavy_il.texture" force="false"/>	
 	</group>
 	
 	<group name="units/pd2_dlc_uno/characters/"> <!--YOU HAAAAAAVE UNOOOOOOOOOOOOOOOOOOOOOOOOO YOU FUCKIN DIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIICK-->
