@@ -1229,7 +1229,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 						end
 					end
 					self._next_allowed_hunter_upd_t = self._t + 1.5
-			elseif tactic_name == "charge" and not current_objective.moving_out and group.in_place_t and (self._t - group.in_place_t > 5 and assaultactive and self._activeassaultbreak or self._t - group.in_place_t > 2 and self._drama_data.amount <= tweak_data.drama.low and assaultactive) and not self._activeassaultbreak and next(current_objective.area.criminal.units) and group.is_chasing and not current_objective.charge and not self._feddensityhigh and not tactics_map.obstacle then
+			elseif tactic_name == "charge" and not current_objective.moving_out and not self._activeassaultbreak and next(current_objective.area.criminal.units) and group.is_chasing and not current_objective.charge and not self._feddensityhigh and not tactics_map.obstacle then
 				charge = true
 				if not assaultactive then
 					--log("AAAAAAAA FUCK YOU")
@@ -1258,6 +1258,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			pull_back = true
 		elseif not current_objective.moving_out then
 			local has_criminals_close = nil
+			local is_ranged_fire_group = tactics_map.ranged_fire or tactics_map.elite_ranged_fire
 
 			if not current_objective.moving_out then
 				for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
@@ -1269,17 +1270,19 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 			
-			if charge and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not self._feddensityhigh and not self._activeassaultbreak then
+			if phase_is_anticipation and current_objective.open_fire or self._feddensityhigh or self._activeassaultbreak then
+				pull_back = true
+			elseif charge and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not self._feddensityhigh and not self._activeassaultbreak then
 				push = true
-			elseif not group.in_place_t and not self._feddensityhigh and not self._activeassaultbreak or phase_is_anticipation then
+			elseif not self._feddensityhigh and not self._activeassaultbreak or phase_is_anticipation then
 				approach = true
 			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				open_fire = true
 				self:_voice_open_fire_start(group)
-			elseif phase_is_anticipation and group.in_place_t and not self._feddensityhigh and (group.is_chasing or not tactics_map or not tactics_map.ranged_fire or not tactics_map.elite_ranged_fire or not tactics_map.obstacle or self._t - group.in_place_t > 4) and not self._activeassaultbreak then
+			elseif not self._feddensityhigh and not tactics_map.ranged_fire and not tactics_map.elite_ranged_fire and not tactics_map.obstacle and not self._activeassaultbreak then
 				push = true
-			elseif phase_is_anticipation and current_objective.open_fire or self._feddensityhigh or self._activeassaultbreak then
-				pull_back = true
+			elseif is_ranged_fire_group and low_carnage then
+				push = true
 			end
 		end
 	end
