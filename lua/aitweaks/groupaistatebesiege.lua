@@ -31,7 +31,7 @@ function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		self._police_upd_task_queued = true
 
-		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + (next(self._spawning_groups) and 0.01 or 0.1)) --please dont let your own algorithms implode like that, ovk, thanks
+		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + (next(self._spawning_groups) and 0.4 or 0.4)) --please dont let your own algorithms implode like that, ovk, thanks
 	end
 end
 

@@ -193,6 +193,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 			0
 		}
 	}
+	self.swat_van_turret_module.dontsuppressonmiss = true
 	self.ceiling_turret_module.DAMAGE_MUL_RANGE = {
 		{
 			800,
@@ -207,6 +208,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 			0.5
 		}
 	}
+	self.ceiling_turret_module.dontsuppressonmiss = true
 	self.aa_turret_module.DAMAGE_MUL_RANGE = {
 		{
 			800,
@@ -221,6 +223,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 			1
 		}
 	}
+	self.aa_turret_module.dontsuppressonmiss = true
 	self.crate_turret_module.DAMAGE_MUL_RANGE = {
 		{
 			800,
@@ -235,6 +238,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 			1
 		}
 	}
+	self.crate_turret_module.dontsuppressonmiss = true
 end)
 
 --TODO: it is done

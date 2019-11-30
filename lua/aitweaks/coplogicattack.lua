@@ -814,9 +814,9 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 	
 	local enemy_visible_mild_soft = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 2
-	local flank_cover_charge_time = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4 or focus_enemy.verified
-	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 6
+	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4
 	local antipassivecheck = nil
+	local flank_cover_charge_qualify = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t > 2 or focus_enemy.verified
 	
 	if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
@@ -992,13 +992,13 @@ function CopLogicAttack._upd_combat_movement(data)
 			move_to_cover = true
 		end
 	elseif want_to_take_cover then
-		if data.tactics and data.tactics.flank then
+		if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
 			want_flank_cover = true
 		end
 		move_to_cover = true
 	elseif not enemy_visible_soft and not (data.tactics and data.tactics.obstacle) and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() or antipassivecheck and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
 		if not data.objective or data.objective and not data.objective.type == "follow" then
-			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or data.tactics and data.tactics.flank and my_data.flank_cover and in_cover and focus_enemy and focus_enemy.dis <= 4000 and my_data.taken_flank_cover and flank_cover_charge_qualify and (not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t) and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) then
+			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or data.tactics and data.tactics.flank and my_data.flank_cover and in_cover and focus_enemy and focus_enemy.dis <= 4000 and my_data.taken_flank_cover and flank_cover_charge_qualify and (not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t) and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 2) then
 				if my_data.charge_path then
 					if data.objective and not data.objective.type == "follow" then
 						local path = my_data.charge_path
@@ -1065,14 +1065,14 @@ function CopLogicAttack._upd_combat_movement(data)
 					end
 				end
 				if my_data.stay_out_time and my_data.stay_out_time < t then
-					if data.tactics and data.tactics.flank then
+					if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
 						want_flank_cover = true 
 						--i went ahead and included these to make sure flankers are always getting flanking positions instead of regular ones, it helps them stay predictable in regards to their choices of movement, you can tell a flank team by 1. smoke grenades being present 2. their chatter and 3. how they prefer to move around the map.
 					end
 					move_to_cover = true
 				end				
 			else
-				if data.tactics and data.tactics.flank then
+				if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
 					want_flank_cover = true
 				end
 				move_to_cover = true
@@ -1105,7 +1105,7 @@ function CopLogicAttack._upd_combat_movement(data)
 				sign = sign
 			}
 			my_data.taken_flank_cover = true --this helps them qualify for charging behavior after acquiring a flank, which is not vanilla behavior btw
-			my_data.next_allowed_flank_charge_t = data.t + 4
+			my_data.next_allowed_flank_charge_t = data.t + 2
 			want_flank_cover = nil
 			if not data.unit:in_slot(16) then --flankers signal their presence whenever they move around
 				if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.look_for_angle then
@@ -1141,7 +1141,7 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 		end
 	end
 	
-	local can_perform_walking_action = not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos
+	local can_perform_walking_action = not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action
 	
 	if can_perform_walking_action then
 	--what the fuck is my code rn tbh
@@ -1152,7 +1152,7 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 			local threat_head_pos = focus_enemy.m_head_pos
 			local max_walk_dis = nil
 			local vis_required = engage
-				
+			
 			if assault_break then 	
 				max_walk_dis = 5000
 				vis_required = nil
@@ -1173,6 +1173,14 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 
 			if retreat_to then
 				CopLogicAttack._cancel_cover_pathing(data, my_data)
+				
+				if data.unit:anim_data().move or data.unit:anim_data().run then
+					local new_action = {
+						body_part = 2,
+						type = "idle"
+					}
+					data.unit:brain():action_request(new_action)
+				end
 					
 				--if data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.elite_ranged_fire then
 					--log("hitnrun or eliteranged just backed up properly")

@@ -7142,6 +7142,14 @@ end)
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
 	self.cop.HEALTH_INIT = 2
 	self.cop.headshot_dmg_mul = 12
+	if self.tweak_data and self.tweak_data.levels then
+		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "america" then
+			self.cop.melee_weapon = "baton"
+		else
+			self.cop.melee_weapon = nil
+		end
+	end
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
@@ -9719,6 +9727,12 @@ end
 
 function CharacterTweakData:character_map()
 	local char_map = origin_charmap(self)
+	char_map.additions = {
+		path = "units/payday2/characters/",
+		list = {
+			"ene_cop_5"
+		}
+	}
 	char_map.drm = {
 		path = "units/pd2_dlc_drm/characters/",
 		list = {
@@ -9778,7 +9792,7 @@ function CharacterTweakData:character_map()
 		}
 	}
 	char_map.ftsu = {
-		path = "units/pd2_mod_psc/characters/",
+		path = "units/pd2_mod_ftsu/characters/",
 		list = {
 			"ene_gensec_fbigod_c45",
 			"ene_gensec_fbigod_m4"
@@ -9813,7 +9827,7 @@ function CharacterTweakData:character_map()
 			"ene_fbi_heavy_hvh_1",
 			"ene_fbi_heavy_hvh_r870",
 			"ene_sniper_hvh_2",
-			"ene_shield_armoured_hvh"
+			"ene_zeal_swat_shield_hvh"
 		}
 	}
 	char_map.mad = {

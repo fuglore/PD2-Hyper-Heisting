@@ -146,6 +146,19 @@
 		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.cooked_physics" force="true"/>
 		<file :name="ene_cop_hvh_3/ene_cop_hvh_3.model" force="true"/>
 		
+		<!--help me-->
+		<!--Punk Mosconi-->
+		<file :name="ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1.unit" load="true" force="true"/>
+		<file :name="ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1_husk.unit" load="true" force="true"/>
+		<file :name="ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1.material_config" force="true"/>
+		<file :name="ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1_contour.material_config" force="true"/>
+		<file :name="ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1.object" force="true"/>
+		<file :name="ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1.cooked_physics" force="true"/>
+		<file :name="ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1.model" force="true"/>
+		
+		<file :name="ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870.unit" load="true" force="true"/>
+		<file :name="ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870_husk.unit" load="true" force="true"/>
+		
 		<!--Light SWAT Zombie Rifle-->
 		<file :name="ene_swat_hvh_1/ene_swat_hvh_1.unit" load="true" force="true"/>
 		<file :name="ene_swat_hvh_1/ene_swat_hvh_1_husk.unit" load="true" force="true"/>
