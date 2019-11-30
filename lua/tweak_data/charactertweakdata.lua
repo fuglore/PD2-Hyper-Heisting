@@ -9771,7 +9771,10 @@ function CharacterTweakData:character_map()
 			"ene_murky_light_ump",
 			"ene_murky_fbigod_m4",
 			"ene_murky_fbigod_c45",
-			"ene_murky_DS_shield"
+			"ene_murky_DS_shield",
+			"ene_murky_punk_bronco",
+			"ene_murky_punk_mp5",
+			"ene_murky_punk_moss"
 		}
 	}
 	char_map.ftsu = {
