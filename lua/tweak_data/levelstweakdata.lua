@@ -22,6 +22,19 @@ function LevelsTweakData:init()
 		murkywater = murkywater
 	}
     self.chill_combat.group_ai_state = "besiege"
+	self.mad.package = {"packages/hhnewreapers", "packages/lvl_mad"}	
+	
+	-- Murkywater Heists
+	self.shoutout_raid.package = {"packages/hhmurkies", "packages/vlad_shout"}
+	self.pbr.package = {"packages/hhmurkies", "packages/narr_jerry1"}
+	self.des.package = {"packages/hhmurkies", "packages/job_des"}
+	self.bph.package = {"packages/hhmurkies", "packages/dlcs/bph/job_bph"}
+	self.vit.package = {"packages/hhmurkies", "packages/dlcs/vit/job_vit"}
+	self.wwh.package = {"packages/hhmurkies", "packages/lvl_wwh"}
+	self.arm_for.package = {"packages/hhmurkies", "packages/narr_arm_for"}
+	self.mex.package = {"packages/hhmurkies", "packages/job_mex"}
+	self.mex_cooking.package = {"packages/hhmurkies", "packages/job_mex2"}	
+	
 	local gamemode_chk = game_state_machine and game_state_machine:gamemode()
 	if not gamemode_chk or gamemode_chk and not gamemode_chk == "crime_spree" then
 		self.haunted.package = {

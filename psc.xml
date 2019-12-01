@@ -1,217 +1,186 @@
-<?xml version="1.0"?>
-<assets base_path="assets/"> <!--spaghetti time yum yum-->
+<table directory="assets"> <!-- I GOT A PLAN ARTHUR -->
+	<!--Murky Light Rifleman-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"/>	
 
-	<group name="units/pd2_mod_psc/characters/">
-	
-		<!--Murky Light Rifle-->
-		<file :name="ene_murky_light_rifle/ene_murky_light_rifle.unit" load="true" force="false"/>
-		<file :name="ene_murky_light_rifle/ene_murky_light_rifle_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_light_rifle/ene_murky_light_rifle.material_config" force="false"/>
-		<file :name="ene_murky_light_rifle/ene_murky_light_rifle_contour.material_config" force="false"/>
-		<file :name="ene_murky_light_rifle/ene_murky_light_rifle.object" force="false"/>
-		<file :name="ene_murky_light_rifle/ene_murky_light_rifle.cooked_physics" force="false"/>
-		<file :name="ene_murky_light_rifle/ene_murky_light_rifle.model" force="false"/>
-		
-		<!--Murky Light UMP-->
-		<file :name="ene_murky_light_ump/ene_murky_light_ump.unit" load="true" force="false"/>
-		<file :name="ene_murky_light_ump/ene_murky_light_ump_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_light_ump/ene_murky_light_ump.material_config" force="false"/>
-		<file :name="ene_murky_light_ump/ene_murky_light_ump_contour.material_config" force="false"/>
-		<file :name="ene_murky_light_ump/ene_murky_light_ump.object" force="false"/>
-		<file :name="ene_murky_light_ump/ene_murky_light_ump.cooked_physics" force="false"/>
-		<file :name="ene_murky_light_ump/ene_murky_light_ump.model" force="false"/>
-		
-		<!--Murky Light Shotgun-->
-		<file :name="ene_murky_light_r870/ene_murky_light_r870.unit" load="true" force="false"/>
-		<file :name="ene_murky_light_r870/ene_murky_light_r870_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_light_r870/ene_murky_light_r870.material_config" force="false"/>
-		<file :name="ene_murky_light_r870/ene_murky_light_r870_contour.material_config" force="false"/>
-		<file :name="ene_murky_light_r870/ene_murky_light_r870.object" force="false"/>
-		<file :name="ene_murky_light_r870/ene_murky_light_r870.cooked_physics" force="false"/>
-		<file :name="ene_murky_light_r870/ene_murky_light_r870.model" force="false"/>
-		
-		<file :name="acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat.unit" load="true" force="false"/>
-		<file :name="acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat.material_config" force="false"/>
-		<file :name="acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat.object" force="false"/>
-		<file :name="acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat.cooked_physics" force="false"/>
-		<file :name="acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat.model" force="false"/>	
-		
-		<!--Murky Armorless Heavy Rifle-->	
-		<file :name="ene_murky_NH_rifle/ene_murky_NH_rifle.unit" load="true" force="false"/>
-		<file :name="ene_murky_NH_rifle/ene_murky_NH_rifle_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_NH_rifle/ene_murky_NH_rifle_contour.material_config" force="false"/>
-		<file :name="ene_murky_NH_rifle/ene_murky_NH_rifle.material_config" force="false"/>
-		<file :name="ene_murky_NH_rifle/ene_murky_NH_rifle.object" force="false"/>
-		<file :name="ene_murky_NH_rifle/ene_murky_NH_rifle.cooked_physics" force="false"/>
-		<file :name="ene_murky_NH_rifle/ene_murky_NH_rifle.model" force="false"/>
-		
-		<file :name="acc_murky_NH_beret/acc_murky_NH_beret.unit" load="true" force="false"/>
-		<file :name="acc_murky_NH_beret/acc_murky_NH_beret.material_config" force="false"/>
-		<file :name="acc_murky_NH_beret/acc_murky_NH_beret.object" force="false"/>
-		<file :name="acc_murky_NH_beret/acc_murky_NH_beret.cooked_physics" force="false"/>
-		<file :name="acc_murky_NH_beret/acc_murky_NH_beret.model" force="false"/>
-		
-		<!--Murky Armorless Heavy Shotgun-->	
-		<file :name="ene_murky_NH_r870/ene_murky_NH_r870.unit" load="true" force="false"/>
-		<file :name="ene_murky_NH_r870/ene_murky_NH_r870_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_NH_r870/ene_murky_NH_r870_contour.material_config" force="false"/>
-		<file :name="ene_murky_NH_r870/ene_murky_NH_r870.material_config" force="false"/>
-		<file :name="ene_murky_NH_r870/ene_murky_NH_r870.object" force="false"/>
-		<file :name="ene_murky_NH_r870/ene_murky_NH_r870.cooked_physics" force="false"/>
-		<file :name="ene_murky_NH_r870/ene_murky_NH_r870.model" force="false"/>
-		
-		<file :name="acc_murky_NH_cap/acc_murky_NH_cap.unit" load="true" force="false"/>
-		<file :name="acc_murky_NH_cap/acc_murky_NH_cap.material_config" force="false"/>
-		<file :name="acc_murky_NH_cap/acc_murky_NH_cap.object" force="false"/>
-		<file :name="acc_murky_NH_cap/acc_murky_NH_cap.cooked_physics" force="false"/>
-		<file :name="acc_murky_NH_cap/acc_murky_NH_cap.model" force="false"/>	
+	<!--Murky Light UMP-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"/>	
 
-		<!--Murky Heavy Rifle-->	
-		<file :name="ene_murky_heavy_scar/ene_murky_heavy_scar.unit" load="true" force="false"/>
-		<file :name="ene_murky_heavy_scar/ene_murky_heavy_scar_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_heavy_scar/ene_murky_heavy_scar_contour.material_config" force="false"/>
-		<file :name="ene_murky_heavy_scar/ene_murky_heavy_scar.material_config" force="false"/>
-		<file :name="ene_murky_heavy_scar/ene_murky_heavy_scar.object" force="false"/>
-		<file :name="ene_murky_heavy_scar/ene_murky_heavy_scar.cooked_physics" force="false"/>
-		<file :name="ene_murky_heavy_scar/ene_murky_heavy_scar.model" force="false"/>
-		
-		<!--Murky Heavy Shotgunner-->	
-		<file :name="ene_murky_heavy_r870/ene_murky_heavy_r870.unit" load="true" force="false"/>
-		<file :name="ene_murky_heavy_r870/ene_murky_heavy_r870_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_heavy_r870/ene_murky_heavy_r870_contour.material_config" force="false"/>
-		<file :name="ene_murky_heavy_r870/ene_murky_heavy_r870.material_config" force="false"/>
-		<file :name="ene_murky_heavy_r870/ene_murky_heavy_r870.object" force="false"/>
-		<file :name="ene_murky_heavy_r870/ene_murky_heavy_r870.cooked_physics" force="false"/>
-		<file :name="ene_murky_heavy_r870/ene_murky_heavy_r870.model" force="false"/>
-		
-		<!--Murky Pistol FBI Ninja-->
-		<file :name="ene_murky_fbigod_c45/ene_murky_fbigod_c45.unit" load="true" force="false"/>
-		<file :name="ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_fbigod_c45/ene_murky_fbigod_c45.material_config" force="false"/>
-		<file :name="ene_murky_fbigod_c45/ene_murky_fbigod_c45_contour.material_config" force="false"/>
-		<file :name="ene_murky_fbigod_c45/ene_murky_fbigod_c45.object" force="false"/>
-		<file :name="ene_murky_fbigod_c45/ene_murky_fbigod_c45.cooked_physics" force="false"/>
-		<file :name="ene_murky_fbigod_c45/ene_murky_fbigod_c45.model" force="false"/>
-		
-		<file :name="acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret.unit" load="true" force="false"/>
-		<file :name="acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret.material_config" force="false"/>
-		<file :name="acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret.object" force="false"/>
-		<file :name="acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret.cooked_physics" force="false"/>
-		<file :name="acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret.model" force="false"/>	
-		
-		<!--Murky M4 FBI Ninja-->
-		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.unit" load="true" force="false"/>
-		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.material_config" force="false"/>
-		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4_contour.material_config" force="false"/>
-		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.object" force="false"/>
-		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.cooked_physics" force="false"/>
-		<file :name="ene_murky_fbigod_m4/ene_murky_fbigod_m4.model" force="false"/>
-		
-		<!--Murky Armoured Shield-->
-		<file :name="ene_murky_DS_shield/ene_murky_DS_shield.unit" load="true" force="false"/>
-		<file :name="ene_murky_DS_shield/ene_murky_DS_shield_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_DS_shield/ene_murky_DS_shield_contour.material_config" force="false"/>
-		<file :name="ene_murky_DS_shield/ene_murky_DS_shield.material_config" force="false"/>
-		<file :name="ene_murky_DS_shield/ene_murky_DS_shield.object" force="false"/>
-		<file :name="ene_murky_DS_shield/ene_murky_DS_shield.cooked_physics" force="false"/>
-		<file :name="ene_murky_DS_shield/ene_murky_DS_shield.model" force="false"/>
-		
-		<file :name="ene_acc_shield_lights/ene_acc_shield_lights.unit" load="true" force="false"/>
-		<file :name="ene_acc_shield_lights/ene_acc_shield_lights.material_config" force="false"/>
-		<file :name="ene_acc_shield_lights/ene_acc_shield_lights.object" force="false"/>
-		<file :name="ene_acc_shield_lights/ene_acc_shield_lights.cooked_physics" force="false"/>
-		<file :name="ene_acc_shield_lights/ene_acc_shield_lights.model" force="false"/>
-		<file :name="ene_acc_shield_lights/ene_acc_shield_lights.sequence_manager" load="true"/>
-		<file :name="ene_acc_shield_lights/material_df.texture" force="false"/>
-		<file :name="ene_acc_shield_lights/material_nm.texture" force="false"/>
-		
-		<!--Jovanny/Sawed-Off Murky Punk-->
-		<file :name="ene_murky_punk_moss/ene_murky_punk_moss.unit" load="true" force="false"/>
-		<file :name="ene_murky_punk_moss/ene_murky_punk_moss_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_punk_moss/ene_murky_punk_moss.material_config" force="false"/>
-		<file :name="ene_murky_punk_moss/ene_murky_punk_moss_contour.material_config" force="false"/>
-		<file :name="ene_murky_punk_moss/ene_murky_punk_moss.object" force="false"/>
-		<file :name="ene_murky_punk_moss/ene_murky_punk_moss.cooked_physics" force="false"/>
-		<file :name="ene_murky_punk_moss/ene_murky_punk_moss.model" force="false"/>
-		<file :name="ene_murky_punk_moss/science_body_df.texture" force="false"/>
-		<file :name="ene_murky_punk_moss/science_body_nm.texture" force="false"/>
-		<file :name="ene_murky_punk_moss/science_head_df.texture" force="false"/>
-		<file :name="ene_murky_punk_moss/science_head_nm.texture" force="false"/>
-		
-		<!--MP5 Murky Punk-->
-		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.unit" load="true" force="false"/>
-		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.material_config" force="false"/>
-		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5_contour.material_config" force="false"/>
-		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.object" force="false"/>
-		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.cooked_physics" force="false"/>
-		<file :name="ene_murky_punk_mp5/ene_murky_punk_mp5.model" force="false"/>
-		
-		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.unit" load="true" force="false"/>
-		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.material_config" force="false"/>
-		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.object" force="false"/>
-		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.cooked_physics" force="false"/>
-		<file :name="ene_acc_punk_cap/ene_acc_punk_cap.model" force="false"/>
-		
-		<!--Bronco Murky Punk-->
-		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.unit" load="true" force="false"/>
-		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco_husk.unit" load="true" force="false"/>
-		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.material_config" force="false"/>
-		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco_contour.material_config" force="false"/>
-		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.object" force="false"/>
-		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.cooked_physics" force="false"/>
-		<file :name="ene_murky_punk_bronco/ene_murky_punk_bronco.model" force="false"/>
-		
-		<!--Textures-->
-		<file :name="shared_textures/punk_df.texture" force="false"/>
-		<file :name="shared_textures/punk_head_df.texture" force="false"/>
-		<file :name="shared_textures/punk_head_nm.texture" force="false"/>
-		<file :name="shared_textures/heads_atlas_df.texture" force="false"/>
-		<file :name="shared_textures/heads_atlas_nm.texture" force="false"/>
-		<file :name="shared_textures/sam_head_df.texture" force="false"/>
-		<file :name="shared_textures/sam_head_nm.texture" force="false"/>
-		<file :name="shared_textures/shotgun_hood_df.texture" force="false"/>
-		<file :name="shared_textures/shotgun_hood_nm.texture" force="false"/>
-		<file :name="shared_textures/helmet_tanker_df.texture" force="false"/>
-		<file :name="shared_textures/helmet_tanker_nm.texture" force="false"/>
-		<file :name="shared_textures/murky_fbi_iclonic_df.texture" force="false"/>
-		<file :name="shared_textures/murky_fbi_chonk_df.texture" force="false"/>
-		<file :name="shared_textures/ene_soldier_akan_head_df.texture" force="false"/>
-		<file :name="shared_textures/DS_murky_shield_head_df.texture" force="false"/>
-		<file :name="shared_textures/helmet_NH_murks_df.texture" force="false"/>
-		<file :name="shared_textures/murky_swat_heavy_df.texture" force="false"/>
-		<file :name="shared_textures/helmet_NH_murks_nm.texture" force="false"/>
-		<file :name="shared_textures/murky_swat_heavy_nm.texture" force="false"/>
-		<file :name="shared_textures/murky_heavy_df.texture" force="false"/>
-		<file :name="shared_textures/murky_shotgun_heavy_df.texture" force="false"/>
-		<file :name="shared_textures/murky_shotgun_heavy_nm.texture" force="false"/>
-		<file :name="shared_textures/murky_light_df.texture" force="false"/>
-	</group>
+	<!--Murky Light Shotgunner-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"/>	
+
+	<unit path="units/pd2_mod_psc/characters/acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat" load="true"/>
+	<material_config path="units/pd2_mod_psc/characters/acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat"/>
+	<object path="units/pd2_mod_psc/characters/acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat" />
+	<model path="units/pd2_mod_psc/characters/acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/acc_murky_r870_tanker_hat/acc_murky_r870_tanker_hat"/>	
+
+	<!--Murky Armorless Heavy Rifleman-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle"/>	
+
+	<unit path="units/pd2_mod_psc/characters/acc_murky_NH_beret/acc_murky_NH_beret" load="true"/>
+	<material_config path="units/pd2_mod_psc/characters/acc_murky_NH_beret/acc_murky_NH_beret"/>
+	<object path="units/pd2_mod_psc/characters/acc_murky_NH_beret/acc_murky_NH_beret" />
+	<model path="units/pd2_mod_psc/characters/acc_murky_NH_beret/acc_murky_NH_beret" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/acc_murky_NH_beret/acc_murky_NH_beret"/>	
+
+	<!--Murky Armorless Heavy Shotgunner-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870"/>	
+
+	<unit path="units/pd2_mod_psc/characters/acc_murky_NH_cap/acc_murky_NH_cap" load="true"/>
+	<material_config path="units/pd2_mod_psc/characters/acc_murky_NH_cap/acc_murky_NH_cap"/>
+	<object path="units/pd2_mod_psc/characters/acc_murky_NH_cap/acc_murky_NH_cap" />
+	<model path="units/pd2_mod_psc/characters/acc_murky_NH_cap/acc_murky_NH_cap" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/acc_murky_NH_cap/acc_murky_NH_cap"/>	
+
+	<!--Murky Heavy Shotgunner-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"/>
+	<model path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"/>	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"/>
+
+	<!--Murky Heavy M4-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>
+	<model path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>	
+
+	<!--Murky Pistol FBI Ninja-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"/>
+	<model path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"/>	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"/>	
+
+	<unit path="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret" load="true"/>
+	<material_config path="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret"/>	
+	<object path="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret" />
+	<model path="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret"/>	
+
+	<!--Murky M4 FBI Ninja-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"/>	
+
+	<!--Murky Armoured Shield-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield"/>	
+
+	<unit path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>
+	<sequence_manager path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
+	<object path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" />
+	<model path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
+	<texture path="units/pd2_mod_psc/characters/ene_acc_shield_lights/material_df" />	
+	<texture path="units/pd2_mod_psc/characters/ene_acc_shield_lights/material_nm" />
+
+	<!--Jovanny/Sawed-Off Murky Punk-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"/>	
+	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_df" />	
+	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_nm" />
+	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_df" />	
+	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_nm" />
+
+	<!--MP5 Murky Punk-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"/>	
+
+	<unit path="units/pd2_mod_psc/characters/ene_acc_punk_cap/ene_acc_punk_cap" load="true"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_acc_punk_cap/ene_acc_punk_cap"/>	
+	<object path="units/pd2_mod_psc/characters/ene_acc_punk_cap/ene_acc_punk_cap" />
+	<model path="units/pd2_mod_psc/characters/ene_acc_punk_cap/ene_acc_punk_cap" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_acc_punk_cap/ene_acc_punk_cap"/>	
+
+	<!--Bronco Murky Punk-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"/>	
 	
-	<group name="units/pd2_dlc_bph/characters/">
-		
-		<!--Mildly Improved Murky Special Textures-->	
-		<file :name="ene_murkywater_light/material_df.texture" force="true"/>
-		<file :name="ene_murkywater_tazer/material_head_df.texture" force="true"/>
-		<file :name="ene_murkywater_tazer/material_body_df.texture" force="true"/>
-		<file :name="ene_murkywater_cloaker/material_body_df.texture" force="true"/>
-		<file :name="ene_murkywater_medic/material_body_df.texture" force="true"/>
-		<file :name="ene_murkywater_medic/material_head_df.texture" force="true"/>
-		
-		<!-- hey buddy, you brought a taser to a sword fight? fuckin' cri- *gunshot*-->
-		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.unit" load="true" force="true"/>
-		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.material_config" force="true"/>
-		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.object" force="true"/>
-		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.cooked_physics" force="true"/>
-		<file :name="ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet.model" force="true"/>
-		
-		<!--the people who mucked up the bulldozers are my mortal enemies-->	
-		<file :name="ene_murkywater_bulldozer_3/material_v3_df.texture" force="true"/>
-		<file :name="ene_murkywater_bulldozer_2/material_v2_df.texture" force="true"/>
-		<file :name="ene_murkywater_bulldozer_4/material_v4_df.texture" force="true"/>
-		<file :name="ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4_contour.material_config" force="true"/>
-		
-	</group>
-	
-</assets>
+	<!-- SHARED TEXTURES -->
+	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_df" />	
+	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_head_df" />	
+	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_head_nm" />
+	<texture path="units/pd2_mod_psc/characters/shared_textures/heads_atlas_df" />	
+	<texture path="units/pd2_mod_psc/characters/shared_textures/heads_atlas_nm" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/sam_head_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/sam_head_nm" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/shotgun_hood_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/shotgun_hood_nm" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/helmet_tanker_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/helmet_tanker_nm" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_fbi_iclonic_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_fbi_chonk_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/ene_soldier_akan_head_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/DS_murky_shield_head_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/helmet_NH_murks_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_swat_heavy_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/helmet_NH_murks_nm" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_swat_heavy_nm" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_heavy_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_shotgun_heavy_df" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_shotgun_heavy_nm" />		
+	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_light_df" />		
+</table>

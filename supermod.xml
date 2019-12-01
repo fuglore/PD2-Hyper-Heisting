@@ -1,9 +1,5 @@
 <?xml version="1.0"?>
 <mod name="PD2THHSHIN" global_key="PD2THHSHIN">
 	<:include src="hooks.xml" />
-	<:include src="zeals.xml" />
-	<:include src="psc.xml" />
-	<:include src="ftsu.xml" />
-	<:include src="replacements.xml" />
 	<tweak definition="damagesyncing.xml" />
 </mod>
