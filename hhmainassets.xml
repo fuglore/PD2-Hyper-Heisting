@@ -260,7 +260,7 @@
 	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic" force="true"/>
 	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun" force="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic_df" force="true"/>
-	<texture path="units/pd2_dlc_drm/characters/shared_textures/minigun_bulldozer_il"/>
+	<texture path="units/pd2_dlc_drm/characters/shared_textures/minigun_bulldozer_il" load="true"/>
 	
 	<!--crime spree smg heavies-->	
 	<unit path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" load="true"/>
