@@ -1258,7 +1258,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			pull_back = true
 		elseif not current_objective.moving_out then
 			local has_criminals_close = nil
-			local is_ranged_fire_group = tactics_map.ranged_fire or tactics_map.elite_ranged_fire
+			local is_ranged_fire_group = tactics_map and tactics_map.ranged_fire or tactics_map.elite_ranged_fire
 
 			if not current_objective.moving_out then
 				for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
