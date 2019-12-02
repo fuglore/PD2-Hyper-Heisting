@@ -509,7 +509,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 	
 	local haste = nil
 	
-	local can_perform_walking_action = not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos
+	local can_perform_walking_action = not data.unit:movement():chk_action_forbidden("walk") and not my_data.turning or data.unit:anim_data().act_idle
 	local pose = nil
 	
 	local mook_units = {
@@ -643,7 +643,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 end
 
 function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, speed)
-	local can_perform_walking_action = not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos
+	local can_perform_walking_action = not data.unit:movement():chk_action_forbidden("walk") and not my_data.turning or data.unit:anim_data().act_idle
 	
 	local pose = nil
 	
@@ -675,6 +675,8 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 			is_mook = true
 		end
 	end
+	
+	local haste = nil
 	
 	if can_perform_walking_action then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)

@@ -1656,7 +1656,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 1.8, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
+		RELOAD_SPEED = 0.6, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -1788,7 +1788,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 20,
 		miss_dis = 50,
-		RELOAD_SPEED = 2.2, --slightly reduced from simple
+		RELOAD_SPEED = 0.3, --slightly reduced from simple
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -1902,7 +1902,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 100,
 		spread = 40, 
 		miss_dis = 1,
-		RELOAD_SPEED = 1.4, --lowered slightly from simple
+		RELOAD_SPEED = 0.8,
 		melee_speed = 1,
 		melee_dmg = 2.5, --100 damage on melee, no joke
 		melee_retry_delay = {
@@ -2045,7 +2045,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay only starts past 5m, cqc maps become dangerous fun houses while long-range maps encourage players to kite and keep enemies away
 		spread = 20,
 		miss_dis = 20,
-		RELOAD_SPEED = 3.22, --lowered reload speed
+		RELOAD_SPEED = 0.4, --lowered reload speed
 		melee_speed = 1,
 		melee_dmg = 10, --100 damage on melee, no joke, keep as is
 		melee_retry_delay = {
@@ -2159,7 +2159,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --im sure its unescessary for me to keep commenting this now.
 		spread = 20, --increased spread from regular shotgun
 		miss_dis = 20,
-		RELOAD_SPEED = 1.2, --saiga only has 7 shots per clip which forces a reload animation once depleted, justifying the rather quick reload
+		RELOAD_SPEED = 0.9, --saiga only has 7 shots per clip which forces a reload animation once depleted, justifying the rather quick reload
 		melee_speed = 1,
 		melee_dmg = 2,
 		melee_retry_delay = {
@@ -2278,7 +2278,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --then again, so was destroying all the spawngroups in housewarming update
 		spread = 20,
 		miss_dis = 20,
-		RELOAD_SPEED = 1.5, --decreased slightly from normal
+		RELOAD_SPEED = 1.1, --decreased slightly from normal
 		melee_speed = 1,
 		melee_dmg = 2.5,
 		melee_retry_delay = {
@@ -2396,7 +2396,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 200,
 		spread = 20,
 		miss_dis = 50,
-		RELOAD_SPEED = 1.4, --faster reloads than shotguns
+		RELOAD_SPEED = 0.9, --faster reloads than shotguns
 		melee_speed = 1,
 		melee_dmg = 2,
 		melee_retry_delay = {
@@ -2664,7 +2664,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 200,
 		spread = 20,
 		miss_dis = 40,
-		RELOAD_SPEED = 2.1, --2 second pause after a full burst, theres 200 ammo in the fucking thing, it'll take time to empty, believe me.
+		RELOAD_SPEED = 0.5, --2 second pause after a full burst, theres 200 ammo in the fucking thing, it'll take time to empty, believe me.
 		melee_speed = 1,
 		melee_dmg = 15,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
@@ -2796,7 +2796,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 1.8, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
+		RELOAD_SPEED = 0.8, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -2928,7 +2928,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 20,
 		miss_dis = 50,
-		RELOAD_SPEED = 2.2, --slightly reduced from simple
+		RELOAD_SPEED = 0.5, --slightly reduced from simple
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -3042,7 +3042,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay starts after 5m
 		spread = 30, --lowered slightly from simple
 		miss_dis = 1,
-		RELOAD_SPEED = 1.4, --lowered slightly from simple
+		RELOAD_SPEED = 1, --lowered slightly from simple
 		melee_speed = 1,
 		melee_dmg = 10, --100 damage on melee, no joke
 		melee_retry_delay = {
@@ -3185,7 +3185,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay only starts past 5m, cqc maps become dangerous fun houses while long-range maps encourage players to kite and keep enemies away
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 3.22, --lowered reload speed
+		RELOAD_SPEED = 0.8, --lowered reload speed
 		melee_speed = 1,
 		melee_dmg = 10, --100 damage on melee, no joke, keep as is
 		melee_retry_delay = {
@@ -3299,7 +3299,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --im sure its unescessary for me to keep commenting this now.
 		spread = 20, --increased spread from regular shotgun
 		miss_dis = 20,
-		RELOAD_SPEED = 1.2, --saiga only has 7 shots per clip which forces a reload animation once depleted, justifying the rather quick reload
+		RELOAD_SPEED = 1.25, --saiga only has 7 shots per clip which forces a reload animation once depleted, justifying the rather quick reload
 		melee_speed = 1,
 		melee_dmg = 2,
 		melee_retry_delay = {
@@ -3400,7 +3400,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --then again, so was destroying all the spawngroups in housewarming update
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 1.5, --decreased slightly from normal
+		RELOAD_SPEED = 1.5,
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -3750,7 +3750,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 200,
 		spread = 40,
 		miss_dis = 1,
-		RELOAD_SPEED = 2.1, --2 second pause after a full burst, theres 200 ammo in the fucking thing, it'll take time to empty, believe me.
+		RELOAD_SPEED = 0.6, --2 second pause after a full burst, theres 200 ammo in the fucking thing, it'll take time to empty, believe me.
 		melee_speed = 1,
 		melee_dmg = 15,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
@@ -3883,7 +3883,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 1.4, --slight reduction from civil
+		RELOAD_SPEED = 1,
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -4129,7 +4129,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay starts after 5m
 		spread = 20, --lowered slightly from civil
 		miss_dis = 5,
-		RELOAD_SPEED = 1.4, --lowered slightly from simple
+		RELOAD_SPEED = 1.25,
 		melee_speed = 1,
 		melee_dmg = 10, --100 damage on melee, no joke
 		melee_retry_delay = {
@@ -4272,7 +4272,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay only starts past 5m, unchanged from civil
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 2.8, --lowered reload speed greatly from civil, shit starts getting dangerous
+		RELOAD_SPEED = 1, --lowered reload speed greatly from civil, shit starts getting dangerous
 		melee_speed = 1,
 		melee_dmg = 10, --100 damage on melee, no joke, keep as is from civil and up
 		melee_retry_delay = {
@@ -4386,7 +4386,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --unchanged from civil.
 		spread = 20, --spread unchanged from civil.
 		miss_dis = 20,
-		RELOAD_SPEED = 1.2, --saiga no longer has 7 shots per clip, but the animation is still justified because this is "complex"
+		RELOAD_SPEED = 1.25, --saiga no longer has 7 shots per clip, but the animation is still justified because this is "complex"
 		melee_speed = 1,
 		melee_dmg = 2,
 		melee_retry_delay = {
@@ -4505,7 +4505,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, 
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 1.5, --decreased slightly from normal
+		RELOAD_SPEED = 1.5,
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -4623,7 +4623,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 200,
 		spread = 20,
 		miss_dis = 50,
-		RELOAD_SPEED = 0.9, --FAST reload.
+		RELOAD_SPEED = 1.4, --FAST reload.
 		melee_speed = 1,
 		melee_dmg = 2,
 		melee_retry_delay = {
@@ -4855,7 +4855,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 200,
 		spread = 20,
 		miss_dis = 5,
-		RELOAD_SPEED = 2.1, --decently long pause after burst
+		RELOAD_SPEED = 0.9, --decently long pause after burst
 		melee_speed = 1,
 		melee_dmg = 15,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
@@ -5121,7 +5121,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 20,
 		miss_dis = 50,
-		RELOAD_SPEED = 2, --slightly reduced from civil
+		RELOAD_SPEED = 1, --slightly reduced from civil
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -5235,7 +5235,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay starts after 5m
 		spread = 20, 
 		miss_dis = 5, --experimental change, might make damage feel less forced with the reduced accuracy now
-		RELOAD_SPEED = 0.9, --DW style.
+		RELOAD_SPEED = 1.4, --DW style.
 		melee_speed = 1,
 		melee_dmg = 10, --100 damage on melee
 		melee_retry_delay = {
@@ -5492,7 +5492,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --unchanged from civil.
 		spread = 20, --spread unchanged from civil.
 		miss_dis = 20,
-		RELOAD_SPEED = 0.9, --whew.
+		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 1,
 		melee_dmg = 2,
 		melee_retry_delay = {
@@ -5611,7 +5611,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, 
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 0.9, --whew.
+		RELOAD_SPEED = 2, --whew.
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -5730,7 +5730,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 20,
 		miss_dis = 50,
-		RELOAD_SPEED = 0.9, --FAST reload.
+		RELOAD_SPEED = 1.8, --FAST reload.
 		melee_speed = 1,
 		melee_dmg = 2,
 		melee_retry_delay = {
@@ -5962,7 +5962,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 200,
 		spread = 20,
 		miss_dis = 10,
-		RELOAD_SPEED = 1.4, --1.4 second pause after a full burst, theres 200 ammo in the fucking thing, it'll take time to empty
+		RELOAD_SPEED = 1.4, --theres 200 ammo in the fucking thing, it'll take time to empty
 		melee_speed = 1,
 		melee_dmg = 15,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
@@ -6092,7 +6092,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 25,
 		miss_dis = 10,
-		RELOAD_SPEED = 0.9, --Fast reloads.
+		RELOAD_SPEED = 2.1, --Fast reloads.
 		melee_speed = 1,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -6224,7 +6224,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay starts after 5m
 		spread = 20, 
 		miss_dis = 10, --experimental change, might make damage feel less forced with the reduced accuracy now
-		RELOAD_SPEED = 0.9, --DW style.
+		RELOAD_SPEED = 1.8, --DW style.
 		melee_speed = 1,
 		melee_dmg = 10, --100 damage on melee
 		melee_retry_delay = {
@@ -6862,8 +6862,8 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	}
 	self.taser.weapon = presets.weapon.simple
 	self.taser.detection = presets.detection.enemymook
-	self.taser.HEALTH_INIT = 28
-	self.taser.headshot_dmg_mul = 1.5 --Lowered from 3 to 1.5 based on testing with Syn.
+	self.taser.HEALTH_INIT = 24 
+	self.taser.headshot_dmg_mul = 2
 	self.taser.damage.fire_damage_mul = 0.5
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.taser.move_speed = presets.move_speed.civil_consistency
@@ -7128,7 +7128,7 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_gangster", "hhpost_gangster", function(self, presets)
-	self.gangster.HEALTH_INIT = 2
+	self.gangster.HEALTH_INIT = 6
 	self.gangster.headshot_dmg_mul = 12
 end)
 
@@ -7140,7 +7140,7 @@ Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", 
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
-	self.cop.HEALTH_INIT = 2
+	self.cop.HEALTH_INIT = 6
 	self.cop.headshot_dmg_mul = 12
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
@@ -7153,12 +7153,12 @@ Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, pre
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
-	self.gensec.HEALTH_INIT = 2
+	self.gensec.HEALTH_INIT = 6
 	self.gensec.headshot_dmg_mul = 12
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
-	self.security.HEALTH_INIT = 2
+	self.security.HEALTH_INIT = 6
 	self.security.headshot_dmg_mul = 12
 end)
 
@@ -8295,10 +8295,11 @@ function CharacterTweakData:_set_easy_wish()
 	}
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 16
+	self.security.HEALTH_INIT = 10
 	self.security.no_arrest = true
+	self.cop.HEALTH_INIT = 10
 	self.cop.no_arrest = true
-	self.gensec.HEALTH_INIT = 16
+	self.gensec.HEALTH_INIT = 10
 	self.gensec.no_arrest = true
 	--headshot mults for taser, which needs to be put here otherwise he completely loses survivability on difficulties below DS which isnt good
 	self.taser.headshot_dmg_mul = 1.5
@@ -8901,10 +8902,11 @@ function CharacterTweakData:_set_overkill_290()
 	
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 16
+	self.security.HEALTH_INIT = 10
 	self.security.no_arrest = true
+	self.cop.HEALTH_INIT = 10
 	self.cop.no_arrest = true
-	self.gensec.HEALTH_INIT = 16
+	self.gensec.HEALTH_INIT = 10
 	self.gensec.no_arrest = true
 	--sniper stuff
 	self.sniper.weapon.is_rifle.focus_delay = 2
@@ -9509,10 +9511,11 @@ function CharacterTweakData:_set_sm_wish()
 	
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 16
+	self.security.HEALTH_INIT = 10
 	self.security.no_arrest = true
 	self.cop.no_arrest = true
-	self.gensec.HEALTH_INIT = 16
+	self.cop.HEALTH_INIT = 10
+	self.gensec.HEALTH_INIT = 10
 	self.gensec.no_arrest = true
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.ninja_complex
@@ -9578,9 +9581,9 @@ function CharacterTweakData:_set_sm_wish()
 		}
 	}
 	--Anti-Fire DOT setup
-	self.taser.DAMAGE_CLAMP_FIREDOT = 200 --Tasers and Shields need significant resistance to fire.
-	self.tank.DAMAGE_CLAMP_FIREDOT = 800
-	self.shield.DAMAGE_CLAMP_FIREDOT = 150
+	self.taser.DAMAGE_CLAMP_FIREDOT = 50 --Tasers and Shields need significant resistance to fire.
+	self.tank.DAMAGE_CLAMP_FIREDOT = 100
+	self.shield.DAMAGE_CLAMP_FIREDOT = 50
 	--This is weird, but makes snipers technically be active sooner, which is good.
 	self.sniper.move_speed = self.presets.move_speed.lightning_constant
 	--SWAT Speech prefixes to get some voice variety from ZEALs 'n Gensecs.

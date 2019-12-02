@@ -145,6 +145,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.rpk_lmg_npc.auto.fire_rate = 0.08
 	self.mossberg_npc.usage = "is_shotgun_mag"
 	self.mossberg_npc.DAMAGE = 1.5
+	self.mossberg_npc.CLIP_AMMO_MAX = 2
 	
 	self.mini_npc.CLIP_AMMO_MAX = 100000 --new minigun dozer buff setup
 	self.mini_npc.NR_CLIPS_MAX = 1

@@ -353,7 +353,7 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 	if dead then
 		local spawn_point = unit:unit_data().mission_element
 		
-		if spawn_point and not level == "sah" then
+		if spawn_point and not level == "sah" and not level == "chew" and not level == "help" and not level == "peta" and not level == "hox_1" and not level == "mad" then
 
 			for area_id, area_data in pairs(self._area_data) do
 				local area_spawn_points = area_data.spawn_points
@@ -388,13 +388,10 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 							local u_pos = e_data.m_pos
 							if mvector3.distance(spawn_pos, u_pos) < 3000 then
 								sp_data.delay_t = self._t + math.random(7.5, 10)
-								sp_data.interval = self._t + math.random(7.5, 10)
 							elseif mvector3.distance(spawn_pos, u_pos) > 3000 and mvector3.distance(spawn_pos, u_pos) < 4000 then
 								sp_data.delay_t = self._t + math.random(5, 10)
-								sp_data.interval = self._t + math.random(5, 10)
 							elseif mvector3.distance(spawn_pos, u_pos) > 4000 then
 								sp_data.delay_t = self._t + math.random(5, 7.5)
-								sp_data.interval = self._t + math.random(5, 7.5)
 							end 
 						end
 					end
@@ -418,6 +415,8 @@ function GroupAIStateBase:_map_spawn_points_to_respective_areas(id, spawn_points
 		
 		if interval < 2.5 then
 			corrected_interval = 2.5
+		elseif level == "sah" or level == "mad" and interval > 5 then
+			corrected_interval = 5
 		else
 			corrected_interval = interval
 		end

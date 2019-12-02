@@ -6191,7 +6191,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" then
 		self.besiege.assault.force = {
 			1,
 			1,
@@ -6215,7 +6215,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" then
 		if difficulty_index <= 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
