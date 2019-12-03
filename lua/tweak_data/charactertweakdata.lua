@@ -7584,8 +7584,8 @@ function CharacterTweakData:_set_overkill()
 	self.taser.move_speed = self.presets.move_speed.civil_consistency
 	self.medic.move_speed = self.presets.move_speed.civil_consistency
 	--cop health
-	self.cop.HEALTH_INIT = 8
-	self.cop_female.HEALTH_INIT = 8
+	self.cop.HEALTH_INIT = 10
+	self.cop_female.HEALTH_INIT = 10
 	self.flashbang_multiplier = 1.75
 	self.concussion_multiplier = 1
 end
@@ -7799,6 +7799,11 @@ function CharacterTweakData:_set_overkill_145()
 		self.heavy_swat.dodge = self.presets.dodge.heavy_complex
 		self.fbi_heavy_swat.dodge = self.presets.dodge.heavy_complex
 		self.spooc.dodge = self.presets.dodge.ninja_complex
+		--cop health
+		self.cop.HEALTH_INIT = 10
+		self.cop_female.HEALTH_INIT = 10
+		self.flashbang_multiplier = 2
+		self.concussion_multiplier = 1
 	else
 		--fbi setup.
 		self.fbi.weapon = self.presets.weapon.complex
@@ -8301,8 +8306,6 @@ function CharacterTweakData:_set_easy_wish()
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 10
 	self.gensec.no_arrest = true
-	--headshot mults for taser, which needs to be put here otherwise he completely loses survivability on difficulties below DS which isnt good
-	self.taser.headshot_dmg_mul = 1.5
 	--fbi setup
 	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
@@ -8328,10 +8331,7 @@ function CharacterTweakData:_set_easy_wish()
 	self.fbi_swat.dodge = self.presets.dodge.heavy_complex
 	self.city_swat.dodge = self.presets.dodge.heavy_complex
 	--Shield explosive resist
-	self.shield.damage.explosion_damage_mul = 0.75
-	--cop health
-	self.cop.HEALTH_INIT = 16
-	self.cop_female.HEALTH_INIT = 16
+	self.shield.damage.explosion_damage_mul = 0.5
 	self.phalanx_minion.HEALTH_INIT = 200
 	self.phalanx_minion.DAMAGE_CLAMP_BULLET = 400
 	self.phalanx_minion.DAMAGE_CLAMP_EXPLOSION = self.phalanx_minion.DAMAGE_CLAMP_BULLET
@@ -8911,15 +8911,25 @@ function CharacterTweakData:_set_overkill_290()
 	--sniper stuff
 	self.sniper.weapon.is_rifle.focus_delay = 2
 	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
-	--headshot mults for taser, which needs to be put here otherwise he completely loses survivability on this difficulty
-	self.taser.headshot_dmg_mul = 1.5
 	--fbi setup
 	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
 	--MFR has radio static in this difficulty.
-	self.fbi_heavy_swat.speech_prefix_p2 = "d"
-	self.fbi_heavy_swat.speech_prefix_count = 5	
+	if self.tweak_data and self.tweak_data.levels then
+		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "america" then
+			self.fbi_heavy_swat.speech_prefix_p2 = "d"
+			self.fbi_heavy_swat.speech_prefix_count = 5
+		end
+		if faction == "zombie" then
+			self.swat.spawn_scream = "g90"
+			self.heavy_swat.spawn_scream = "g90"
+			self.fbi_swat.spawn_scream = "g90"
+			self.fbi_heavy_swat.spawn_scream = "g90"
+			self.city_swat.spawn_scream = "g90"
+		end
+	end
 	--Movespeed setups.
 	self.swat.move_speed = self.presets.move_speed.complex_consistency
 	self.city_swat.move_speed = self.presets.move_speed.complex_consistency
@@ -8935,10 +8945,7 @@ function CharacterTweakData:_set_overkill_290()
 	self.fbi_swat.dodge = self.presets.dodge.heavy_complex
 	self.city_swat.dodge = self.presets.dodge.heavy_complex
 	--Shield explosive resist
-	self.shield.damage.explosion_damage_mul = 0.75
-	--Cop health
-	self.cop.HEALTH_INIT = 15
-	self.cop_female.HEALTH_INIT = 15
+	self.shield.damage.explosion_damage_mul = 0.5
 	self.phalanx_minion.HEALTH_INIT = 200
 	self.phalanx_minion.DAMAGE_CLAMP_BULLET = 400
 	self.phalanx_minion.DAMAGE_CLAMP_EXPLOSION = self.phalanx_minion.DAMAGE_CLAMP_BULLET
@@ -9626,14 +9633,11 @@ function CharacterTweakData:_set_sm_wish()
 	self.spooc.dodge = self.presets.dodge.ninja_complex
 	--Explosive resist for certain enemies.
 	self.shield.damage.explosion_damage_mul = 0.25
-	self.heavy_swat.damage.explosion_damage_mul = 0.25
-	self.fbi_heavy_swat.damage.explosion_damage_mul = 0.25
-	self.tank.damage.explosion_damage_mul = 0.5
-	self.tank_medic.damage.explosion_damage_mul = 0.5
-	self.tank_mini.damage.explosion_damage_mul = 0.5
-	--cop health
-	self.cop.HEALTH_INIT = 15
-	self.cop_female.HEALTH_INIT = 15
+	self.heavy_swat.damage.explosion_damage_mul = 0.7
+	self.fbi_heavy_swat.damage.explosion_damage_mul = 0.7
+	self.tank.damage.explosion_damage_mul = 1
+	self.tank_medic.damage.explosion_damage_mul = 1
+	self.tank_mini.damage.explosion_damage_mul = 0.7
 	--heavy swat health clamping for guaranteed two-shot-to-kill ratios
 	self.heavy_swat.DAMAGE_CLAMP_BULLET = 799
 	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 300
