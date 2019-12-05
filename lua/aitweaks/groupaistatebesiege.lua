@@ -108,7 +108,7 @@ function GroupAIStateBesiege:update(t, dt)
 				self._activeassaultbreak = true
 				self._stopassaultbreak_t = self._t + math.random(5, 10)
 				self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
-				--log("assaultbreakon")
+				log("assaultbreakon")
 			end
 			
 			if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
@@ -517,7 +517,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local assaultactive = task_data.phase == "build" or task_data.phase == "sustain"
 	local revealchk = not self._next_allowed_drama_reveal_t or self._next_allowed_drama_reveal_t < t
 	
-	if low_carnage and assaultactive and not self._feddensityhigh and revealchk and not self._activeassaultbreak or self._drama_data.amount <= tweak_data.drama.low and assaultactive and not self._feddensityhigh and not self._activeassaultbreak then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
+	if low_carnage and not self._feddensityhigh and revealchk and not self._activeassaultbreak or self._drama_data.amount <= self._drama_data.low_p and not self._feddensityhigh and not self._activeassaultbreak then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
 		if not assaultactive then
 			--log("AAAAAAAA FUCK YOU")
 		end
@@ -1106,6 +1106,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	local low_carnage = self:_count_criminals_engaged_force(4) <= 4
 	local task_data = self._task_data.assault
 	local assaultactive = nil
+	local can_update_hunter = not self._next_allowed_hunter_upd_t or self._next_allowed_hunter_upd_t < self._t
 	
 	if phase == "build" or phase == "sustain" then
 		assaultactive = true
@@ -1177,7 +1178,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 						return
 					end
 				end
-			elseif tactic_name == "hunter" and not phase_is_anticipation and (self._next_allowed_hunter_upd_t and self._next_allowed_hunter_upd_t < self._t or not self._next_allowed_hunter_upd_t) then
+			elseif tactic_name == "hunter" and not phase_is_anticipation and can_update_hunter then
 					if current_objective.tactic == tactic_name then
 						for u_key, u_data in pairs(self._char_criminals) do
 							if u_data.unit then
@@ -1231,9 +1232,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					self._next_allowed_hunter_upd_t = self._t + 1.5
 			elseif tactic_name == "charge" and not current_objective.moving_out and not self._activeassaultbreak and next(current_objective.area.criminal.units) and group.is_chasing and not current_objective.charge and not self._feddensityhigh and not tactics_map.obstacle then
 				charge = true
-				if not assaultactive then
-					--log("AAAAAAAA FUCK YOU")
-				end
 			end
 		end
 	end
@@ -1251,37 +1249,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	else
 		local obstructed_path_index = self:_chk_coarse_path_obstructed(group)
 
-		if obstructed_path_index then
+		if obstructed_path_index and phase_is_anticipation then
 			print("obstructed_path_index", obstructed_path_index)
 
 			objective_area = self:get_area_from_nav_seg_id(group.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
-			pull_back = true
-		elseif not current_objective.moving_out then
-			local has_criminals_close = nil
-			local is_ranged_fire_group = tactics_map and tactics_map.ranged_fire or tactics_map.elite_ranged_fire
-
-			if not current_objective.moving_out then
-				for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
-					if next(neighbour_area.criminal.units) then
-						has_criminals_close = true
-
-						break
-					end
-				end
+			if phase_is_anticipation then
+				pull_back = true
 			end
+		elseif not current_objective.moving_out then
 			
 			if phase_is_anticipation and current_objective.open_fire or self._feddensityhigh or self._activeassaultbreak then
 				pull_back = true
+			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
+				open_fire = true
+				self:_voice_open_fire_start(group)
 			elseif charge and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not self._feddensityhigh and not self._activeassaultbreak then
 				push = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak or phase_is_anticipation then
 				approach = true
-			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
-				open_fire = true
-				self:_voice_open_fire_start(group)
-			elseif not self._feddensityhigh and not tactics_map.ranged_fire and not tactics_map.elite_ranged_fire and not tactics_map.obstacle and not self._activeassaultbreak then
-				push = true
-			elseif is_ranged_fire_group and low_carnage then
+			elseif not self._feddensityhigh and not self._activeassaultbreak and not phase_is_anticipation and self._drama_data.amount <= self._drama_data.low_p then
 				push = true
 			end
 		end
@@ -1422,24 +1408,22 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				self:_voice_move_in_start(group)
 			end
 
-			if not push or used_grenade then
-				local grp_objective = {
-					type = "assault_area",
-					stance = "hos",
-					area = assault_area,
-					coarse_path = assault_path,
-					pose = push and math.random() < 0.5 and "crouch" or "stand",
-					attitude = push and "engage" or "avoid",
-					moving_in = push and true or nil,
-					open_fire = push or nil,
-					pushed = push or nil,
-					charge = charge,
-					interrupt_dis = charge and 0 or nil
-				}
-				group.is_chasing = group.is_chasing or push
+			local grp_objective = {
+				type = "assault_area",
+				stance = "hos",
+				area = assault_area,
+				coarse_path = assault_path,
+				pose = push and math.random() < 0.5 and "crouch" or "stand",
+				attitude = push and "engage" or "avoid",
+				moving_in = push and true or nil,
+				open_fire = push or nil,
+				pushed = push or nil,
+				charge = charge,
+				interrupt_dis = charge and 0 or nil
+			}
+			group.is_chasing = group.is_chasing or push
 
-				self:_set_objective_to_enemy_group(group, grp_objective)
-			end
+			self:_set_objective_to_enemy_group(group, grp_objective)
 		end
 	elseif pull_back then
 		local retreat_area, do_not_retreat = nil

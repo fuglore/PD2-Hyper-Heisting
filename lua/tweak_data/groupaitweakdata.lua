@@ -6125,7 +6125,6 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				1
 			}
 		},
-		build_duration = 35,
 		sustain_duration_min = {
 			240,
 			240,
@@ -6144,7 +6143,17 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		},
 		fade_duration = 30
 	}
-
+	
+	if difficulty_index == 7 or difficulty_index == 8 then
+		self.besiege.assault.build_duration = 60
+		self.besiege.assault.sustain_duration_balance_mul = {
+			1.25,
+			1.25,
+			1.25,
+			1.25
+		}
+	end
+	
 	if difficulty_index <= 2 then
 		self.besiege.assault.delay = {
 			45,
