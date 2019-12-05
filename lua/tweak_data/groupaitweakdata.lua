@@ -6141,6 +6141,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			1,
 			1
 		},
+		build_duration = 35,
 		fade_duration = 30
 	}
 	
