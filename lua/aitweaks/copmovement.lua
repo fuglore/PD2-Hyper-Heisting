@@ -210,7 +210,7 @@ function CopMovement:on_suppressed(state)
 							}
 						}
 						
-						self._unit:sound():say("lk3b", true) 
+						--self._unit:sound():say("lk3b", true) 
 						self:action_request(action_desc)
 					else
 						local action_desc = {
@@ -224,7 +224,7 @@ function CopMovement:on_suppressed(state)
 							}
 						}
 						
-						self._unit:sound():say("hr01")
+						--self._unit:sound():say("hr01")
 						self:action_request(action_desc)					
 					end
 				else
@@ -300,7 +300,7 @@ function CopMovement:on_suppressed(state)
 						}
 
 						self:action_request(action_desc)
-						self._unit:sound():say("hr01")
+						--self._unit:sound():say("hr01")
 					end
 				end
 			elseif self._ext_anim.idle and (not self._active_actions[2] or self._active_actions[2]:type() == "idle") and not self:chk_action_forbidden("act") then
@@ -315,17 +315,6 @@ function CopMovement:on_suppressed(state)
 						}
 					}
 					
-					if self._tweak_data.chatter.suppress then
-						local roll = math.random(1, 100)
-						local chance_heeeeelpp = 50
-						
-						if roll <= chance_heeeeelpp then
-							self._unit:sound():say("hlp", true)
-						else --implemented here to be a bit cleaner and result in less enemies saying hlp or lk3b randomly
-							self._unit:sound():say("lk3b", true) 
-						end		
-					end
-					
 					self:action_request(action_desc)
 				else
 					local action_desc = {
@@ -337,17 +326,6 @@ function CopMovement:on_suppressed(state)
 							walk = -1
 						}
 					}
-					
-					if self._tweak_data.chatter.suppress then
-						local roll = math.random(1, 100)
-						local chance_heeeeelpp = 50
-						
-						if roll <= chance_heeeeelpp then
-							self._unit:sound():say("hlp", true)
-						else --implemented here to be a bit cleaner and result in less enemies saying hlp or lk3b randomly
-							self._unit:sound():say("lk3b", true) 
-						end		
-					end
 					
 					self:action_request(action_desc)
 				end

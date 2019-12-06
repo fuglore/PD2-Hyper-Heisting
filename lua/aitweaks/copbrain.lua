@@ -53,12 +53,12 @@ function CopBrain:on_suppressed(state)
 
         if self._logic_data.char_tweak.chatter.suppress then
 		    local roll = math.random(1, 100)
-			local chance_heeeeelpp = 50
+			local chance_heeeeelpp = 75
 			
-			if roll <= chance_heeeeelpp then
-                --self._unit:sound():say("hlp", true)
+			if roll < chance_heeeeelpp then
+                self._unit:sound():say("hlp", true)
 			else --hopefully some variety here now
-                --self._unit:sound():say("lk3b", true) 
+                self._unit:sound():say("lk3b", true) 
 			end		
         end
     end

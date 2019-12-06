@@ -1033,10 +1033,10 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 	
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
-	if action_taken or my_data.stay_out_time and my_data.stay_out_time > t then
-		-- Nothing		
-	elseif my_data.walking_to_cover_shoot_pos then
-		--nothing
+	if my_data.walking_to_cover_shoot_pos then
+		-- nothing
+	elseif action_taken or my_data.stay_out_time and my_data.stay_out_time > t then
+		-- Nothing	
 	elseif managers.groupai:state():chk_active_assault_break() and not my_data.has_retreated then
 		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, true)
 		my_data.has_retreated = true
