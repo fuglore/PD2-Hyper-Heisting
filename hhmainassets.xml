@@ -401,7 +401,18 @@
 
 	<!--halloween dudes-->	
 	
-	<!--Zombie MP5 Punkerton-->	
+	<!--vampire jerome-->	
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" load="true"/>
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4_husk" load="true"/>
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4"/>	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4_contour"/>		
+	<object path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" />
+	<model path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4"/>
+	<texture path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/head_zomb_df" />
+	<texture path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/zomb_df" />
+	
+	<!--Zombie MP5 SWAT-->	
 	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_5/ene_cop_hvh_5" load="true"/>
 	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_5/ene_cop_hvh_5_husk" load="true"/>
 	<material_config path="units/pd2_dlc_hvh/characters/ene_cop_hvh_5/ene_cop_hvh_5"/>	

@@ -270,8 +270,13 @@ function CopLogicAttack._upd_aim(data, my_data)
 							end
 						else
 							local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
+							local suppressingfire_t = 3
+							
+							if data.tactics and data.tactics.harass then
+								suppressingfire_t = 6
+							end
 
-							if my_data.firing and time_since_verification and time_since_verification < 3 then
+							if my_data.firing and time_since_verification and time_since_verification < suppressingfire_t then
 								shoot = true
 								if dense_mook and managers.groupai:state():chk_high_fed_density() then
 									--log("not hunting due to FEDS")
@@ -811,7 +816,7 @@ function CopLogicAttack._peek_for_pos_sideways(data, my_data, from_racker, peek_
 	local ray_softness = 150
 	local stand_ray = World:raycast("ray", ray_params.trace[1] + math.UP * height, enemy_pos, "slot_mask", data.visibility_slotmask, "ray_type", "ai_vision")
 
-	if mvector3.distance(stand_ray.position, enemy_pos) < ray_softness and data.attention_obj and data.attention_obj.verified then
+	if not stand_ray or stand_ray and mvector3.distance(stand_ray.position, enemy_pos) < ray_softness and data.attention_obj and data.attention_obj.verified then
 		shoot_from_pos = ray_params.trace[1]
 		found_shoot_from_pos = true
 	end
@@ -822,7 +827,7 @@ function CopLogicAttack._peek_for_pos_sideways(data, my_data, from_racker, peek_
 		local ray_res = managers.navigation:raycast(ray_params)
 		local stand_ray = World:raycast("ray", ray_params.trace[1] + math.UP * height, enemy_pos, "slot_mask", data.visibility_slotmask, "ray_type", "ai_vision")
 
-		if not stand_ray or mvector3.distance(stand_ray.position, enemy_pos) < ray_softness then
+		if not stand_ray or stand_ray and mvector3.distance(stand_ray.position, enemy_pos) < ray_softness and data.attention_obj and data.attention_obj.verified then
 			shoot_from_pos = ray_params.trace[1]
 			found_shoot_from_pos = true
 		end
@@ -836,6 +841,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local t = data.t
 	local unit = data.unit
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local action_taken = data.logic.action_taken(data, my_data)
 	local focus_enemy = data.attention_obj
 	local in_cover = my_data.in_cover
 	local best_cover = my_data.best_cover
@@ -844,7 +850,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	
 	if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(1, 2)
+			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(0.3, 1.05)
 		else
 			enemy_visible_soft = focus_enemy and focus_enemy.verified
 		end
@@ -897,7 +903,6 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 	
 	local alert_soft = data.is_suppressed
-	local action_taken = data.logic.action_taken(data, my_data)
 	
 	--hitnrun: approach enemies, back away once the enemy is visible, creating a variating degree of aggressiveness
 	--eliterangedfire: open fire at enemies from longer distances, back away if the enemy gets too close for comfort
@@ -921,6 +926,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
 	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
 	
+	
 	local want_to_take_cover = my_data.want_to_take_cover
 	local move_to_cover, want_flank_cover = nil
 	local cover_test_step_chk = action_taken or want_to_take_cover or not in_cover --optimizations, yay
@@ -938,36 +944,36 @@ function CopLogicAttack._upd_combat_movement(data)
 	
 	local stay_out_time_chk = not my_data.at_cover_shoot_pos or action_taken
 	
-	local ranged_fire_sot_bonus = 2.5
+	local ranged_fire_sot_bonus = 1
 	
 	if my_data.stay_out_time and stay_out_time_chk then
 		my_data.stay_out_time = nil
 	elseif my_data.attitude == "engage" and not my_data.stay_out_time and not antipassivecheck and not enemy_visible_soft and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
 		if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
 			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				my_data.stay_out_time = t + 2
+				my_data.stay_out_time = t + 0.7
 			else
-				my_data.stay_out_time = t + 0.35
+				my_data.stay_out_time = t + 0.01
 			end
 			--log("interesting")
 		else
 			if diff_index <= 5 then
 				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 5 + ranged_fire_sot_bonus
+					my_data.stay_out_time = t + 2 + ranged_fire_sot_bonus
 				else
-					my_data.stay_out_time = t + 5
+					my_data.stay_out_time = t + 2
 				end
-			elseif diff_index == 6 or diff_index == 7 then
+			elseif diff_index == 6 then
 				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 2.5 + ranged_fire_sot_bonus
+					my_data.stay_out_time = t + 1 + ranged_fire_sot_bonus
 				else
-					my_data.stay_out_time = t + 2.5
+					my_data.stay_out_time = t + 1
 				end
 			else
 				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 1.5 + ranged_fire_sot_bonus
+					my_data.stay_out_time = t + 0.5 + ranged_fire_sot_bonus
 				else
-					my_data.stay_out_time = t + 1.5
+					my_data.stay_out_time = t + 0.5
 				end
 			end
 		end
@@ -1041,11 +1047,6 @@ function CopLogicAttack._upd_combat_movement(data)
 			end
 			move_to_cover = true
 		end
-	elseif want_to_take_cover then
-		if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
-			want_flank_cover = true
-		end
-		move_to_cover = true
 	elseif not enemy_visible_soft and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() or antipassivecheck and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
 		if not data.objective or data.objective and not data.objective.type == "follow" then
 			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or data.tactics and data.tactics.flank and my_data.flank_cover and in_cover and focus_enemy and focus_enemy.dis <= 4000 and my_data.taken_flank_cover and flank_cover_charge_qualify and (not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t) and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 2) then
@@ -1084,7 +1085,7 @@ function CopLogicAttack._upd_combat_movement(data)
 					end
 
 					local my_tracker = unit:movement():nav_tracker()
-					local shoot_from_pos = CopLogicAttack._peek_for_pos_sideways(data, my_data, my_tracker, focus_enemy.m_head_pos, height)
+					local shoot_from_pos = CopLogicAttack._peek_for_pos_sideways(data, my_data, my_tracker, focus_enemy.m_pos, height)
 
 					if shoot_from_pos then
 						local path = {
@@ -1128,6 +1129,11 @@ function CopLogicAttack._upd_combat_movement(data)
 				move_to_cover = true
 			end
 		end
+	elseif want_to_take_cover then
+		if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
+			want_flank_cover = true
+		end
+		move_to_cover = true
 	end
 	
 	if want_flank_cover then

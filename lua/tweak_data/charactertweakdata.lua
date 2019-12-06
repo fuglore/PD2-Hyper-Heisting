@@ -9818,6 +9818,7 @@ function CharacterTweakData:character_map()
 			"ene_fbi_hvh_1",
 			"ene_fbi_hvh_2",
 			"ene_fbi_hvh_3",
+			"ene_fbigod_hvh_m4",
 			"ene_spook_hvh_1",
 			"ene_swat_heavy_hvh_1",
 			"ene_swat_heavy_hvh_r870",
