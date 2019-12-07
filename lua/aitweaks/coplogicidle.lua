@@ -369,12 +369,12 @@ function CopLogicIdle._upd_scan(data, my_data)
 		end
 	end
 	
-	local reaction_time = nil
+	local reaction_time = 1.4
 	
-	if diff_index <= 7 and not Global.game_settings.use_intense_AI then
-		reaction_time = 1.4
-	else
-		reaction_time = 0.7
+	if data.unit:base():has_tag("twitchy") then
+		reaction_time = 0.01
+	elseif data.unit:base():has_tag("panicked") then
+		reaction_time = 0.5
 	end
 	
 	if managers.groupai:state():whisper_mode() then
@@ -383,6 +383,76 @@ function CopLogicIdle._upd_scan(data, my_data)
 		my_data.next_scan_t = data.t + reaction_time * math.random(1, 3)
 	end
 
+end
+
+function CopLogicIdle._turn_by_spin(data, my_data, spin)
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local mook_units = {
+		"security",
+		"security_undominatable",
+		"cop",
+		"cop_scared",
+		"cop_female",
+		"gensec",
+		"fbi",
+		"swat",
+		"heavy_swat",
+		"fbi_swat",
+		"fbi_heavy_swat",
+		"city_swat",
+		"gangster",
+		"biker",
+		"mobster",
+		"bolivian",
+		"bolivian_indoors",
+		"medic",
+		"taser",
+		"shield",
+		"spooc",
+		"spooc_heavy",
+		"shadow_spooc"
+	}
+	local is_mook = nil
+	for _, name in ipairs(mook_units) do
+		if data.unit:base()._tweak_table == name then
+			is_mook = true
+		end
+	end
+	
+	local speed = nil
+	
+	if data.is_converted or data.unit:in_slot(16) or data.unit:base()._tweak_table == "sniper" then
+		speed = 2.5
+	elseif diff_index == 8 and is_mook then
+		speed = 1.75
+	elseif diff_index == 6 and is_mook or diff_index == 7 and is_mook then
+		speed = 1.5
+	elseif diff_index <= 5 and is_mook then
+		speed = 1.25
+	else
+		speed = 1
+	end
+	
+	local gamemode_chk = game_state_machine:gamemode() 
+	if gamemode_chk == "crime_spree" then
+		if managers.crime_spree then
+			local copturnspdadd = managers.crime_spree:get_turn_spd_add()
+			speed = speed + copturnspdadd
+		end
+	end
+	
+	local new_action_data = {
+		body_part = 2,
+		type = "turn",
+		angle = spin,
+		speed = speed or 1
+	}
+	
+	my_data.turning = data.unit:brain():action_request(new_action_data)
+
+	if my_data.turning then
+		return true
+	end
 end
 
 function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_func)

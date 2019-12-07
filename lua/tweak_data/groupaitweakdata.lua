@@ -75,6 +75,22 @@ function GroupAITweakData:_init_chatter_data()
 		group_min = 0,
 		queue = "g90"
 	}
+	self.enemy_chatter.assaultpanicsuppressed1 = {
+		radius = 2000,
+		max_nr = 40,
+		duration = {3, 4},
+		interval = {3, 6},
+		group_min = 0,
+		queue = "hlp"
+	}
+	self.enemy_chatter.assaultpanicsuppressed2 = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {3, 4},
+		interval = {3, 6},
+	    group_min = 0,
+	    queue = "lk3b"
+	}
 	self.enemy_chatter.open_fire = {
 		radius = 2000,
 		max_nr = 40,
@@ -128,7 +144,7 @@ function GroupAITweakData:_init_chatter_data()
 	    max_nr = 1,
 	    duration = {60, 60},
 	    interval = {2, 2.5},
-	    group_min = 3,
+	    group_min = 1,
 	    queue = "g90"
 	}
 	self.enemy_chatter.clear = {
@@ -136,7 +152,7 @@ function GroupAITweakData:_init_chatter_data()
 	    max_nr = 1,
 	    duration = {60, 60},
 	    interval = {4, 5},
-	    group_min = 2,
+	    group_min = 1,
 	    queue = "clr"
 	}
 	self.enemy_chatter.csalpha = {
@@ -546,9 +562,9 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.punk_group = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
-					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
-					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),

@@ -25,6 +25,8 @@ local bezier_curve = {
 function CopActionShoot:update(t)
 	local vis_state = self._ext_base:lod_stage()
 	vis_state = vis_state or 4
+	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local speed = 1
 
 	if vis_state == 1 then
 		-- Nothing
@@ -50,7 +52,19 @@ function CopActionShoot:update(t)
 
 		local fwd = self._common_data.fwd
 		local fwd_dot = mvec3_dot(fwd, tar_vec_flat)
-
+		
+		if not self._unit:base():has_tag("tank") then
+			if difficulty_index == 8 then
+				speed = 1.75
+			elseif difficulty_index == 6 or difficulty_index == 7 then
+				speed = 1.5
+			elseif difficulty_index <= 5 then
+				speed = 1.25
+			else
+				speed = 1.25
+			end
+		end
+		
 		if self._turn_allowed then
 			local active_actions = self._common_data.active_actions
 			local queued_actions = self._common_data.queued_actions
@@ -61,9 +75,10 @@ function CopActionShoot:update(t)
 				if fwd_dot_flat < 0.96 then
 					local spin = tar_vec_flat:to_polar_with_reference(fwd, math.UP).spin
 					local new_action_data = {
-						body_part = 2,
 						type = "turn",
-						angle = spin
+						body_part = 2,
+						speed = speed or 1,
+						angle = error_spin
 					}
 
 					self._ext_movement:action_request(new_action_data)

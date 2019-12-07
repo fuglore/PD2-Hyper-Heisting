@@ -70,7 +70,7 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 	local lerp_dis = math.min(1, target_vec:length() / self._falloff[#self._falloff].r)
 	local shoot_delay = math.lerp(aim_delay[1], aim_delay[2], lerp_dis)
 	if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
-		self._mod_enable_t = t + 0.4
+		self._mod_enable_t = t + 0.35
 	else
 		self._mod_enable_t = t + 0.2
 	end
@@ -83,7 +83,7 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 		if not attention_unit:base().is_husk_player then
 		
 			if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then --keep it consistent, tase is executed first, if it fails, then open fire, on MH and up, the tase check is executed much faster.
-				self._shoot_t = TimerManager:game():time() + 0.45
+				self._shoot_t = TimerManager:game():time() + 0.4
 			else
 				self._shoot_t = TimerManager:game():time() + 0.25
 			end
@@ -95,7 +95,7 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 	elseif attention_unit:base().is_local_player then
 		
 		if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then --keep it consistent, tase is executed first, if it fails, then open fire, on MH and up, the tase check is executed much faster.
-				self._shoot_t = TimerManager:game():time() + 0.45
+				self._shoot_t = TimerManager:game():time() + 0.4
 			else
 				self._shoot_t = TimerManager:game():time() + 0.25
 		end
@@ -110,6 +110,7 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 end
 
 function CopActionTase:update(t)
+	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	if self._expired then
 		return
 	end
@@ -134,10 +135,9 @@ function CopActionTase:update(t)
 			self._modifier_on = true
 
 			self._machine:force_modifier(self._modifier_name)
-			local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 			
 			if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
-				self._mod_enable_t = t + 0.4 --execute tase check first, but slower than MH and up
+				self._mod_enable_t = t + 0.35 --execute tase check first, but slower than MH and up
 			else
 				self._mod_enable_t = t + 0.2 --execute tase check first
 			end
@@ -155,11 +155,23 @@ function CopActionTase:update(t)
 		if self._turn_allowed and not self._ext_anim.walk and not self._ext_anim.turn and not self._ext_movement:chk_action_forbidden("walk") then
 			local spin = target_vec:to_polar_with_reference(self._common_data.fwd, math.UP).spin
 			local abs_spin = math.abs(spin)
-
+			
+			if difficulty_index == 8 then
+				speed = 1.75
+			elseif difficulty_index == 6 or difficulty_index == 7 then
+				speed = 1.5
+			elseif difficulty_index <= 5 then
+				speed = 1.25
+			else
+				speed = 1.25
+			end
+	
+			
 			if abs_spin > 27 then
 				local new_action_data = {
 					type = "turn",
 					body_part = 2,
+					speed = speed or 1,
 					angle = spin
 				}
 

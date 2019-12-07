@@ -873,7 +873,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local enemy_visible_mild_soft = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 2
 	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4
 	local antipassivecheck = nil
-	local flank_cover_charge_qualify = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t > 2 or focus_enemy.verified
+	local flank_cover_charge_qualify = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t > 2 or focus_enemy and focus_enemy.verified
 	
 	if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
@@ -1032,9 +1032,28 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 	
+	local charge_failed_t_chk = not my_data.charge_path_failed_t or my_data.charge_path_failed_t and data.t - my_data.charge_path_failed_t > 6
+	local flank_charge_t_chk = not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t
+	local ranged_fire_group = data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire
+	
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
 	if my_data.walking_to_cover_shoot_pos then
 		-- nothing
+	elseif my_data.at_cover_shoot_pos then
+		--ranged fire cops also signal the END of their movement and positioning
+		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+			if not data.unit:in_slot(16) and data.char_tweak.chatter.ready then
+				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "inpos")
+			end
+		end
+		
+		--i went ahead and included these to make sure flankers are always getting flanking positions instead of regular ones, it helps them stay predictable in regards to their choices of movement, you can tell a flank team by 1. smoke grenades being present 2. their chatter and 3. how they prefer to move around the map.
+		if my_data.stay_out_time and my_data.stay_out_time < t then
+			if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
+				want_flank_cover = true
+			end
+			move_to_cover = true
+		end
 	elseif action_taken or my_data.stay_out_time and my_data.stay_out_time > t then
 		-- Nothing	
 	elseif managers.groupai:state():chk_active_assault_break() and not my_data.has_retreated then
@@ -1048,8 +1067,8 @@ function CopLogicAttack._upd_combat_movement(data)
 			move_to_cover = true
 		end
 	elseif not enemy_visible_soft and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() or antipassivecheck and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
-		if not data.objective or data.objective and not data.objective.type == "follow" then
-			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6) or data.tactics and data.tactics.flank and my_data.flank_cover and in_cover and focus_enemy and focus_enemy.dis <= 4000 and my_data.taken_flank_cover and flank_cover_charge_qualify and (not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t) and (not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 2) then
+		if data.objective and not data.objective.type == "follow" then
+			if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and charge_failed_t_chk or data.tactics and data.tactics.flank and my_data.flank_cover and my_data.taken_flank_cover and flank_cover_charge_qualify and flank_charge_t_chk and charge_failed_t_chk or not charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
 				if my_data.charge_path then
 					if data.objective and not data.objective.type == "follow" then
 						local path = my_data.charge_path
@@ -1325,6 +1344,60 @@ function CopLogicAttack.queue_update(data, my_data)
 	local is_close = focus_enemy and focus_enemy.dis <= 3000 and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction
 	local too_far = focus_enemy and focus_enemy.dis > 5000 and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction
 	local delay = nil
+	
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
+	
+    if not data.unit:base():has_tag("special") then
+    	if data.char_tweak.chatter.clear and not cant_say_clear then
+			if data.unit:movement():cool() then
+				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
+			else
+				local clearchk = math.random(1, 100)
+				local say_clear = 70
+				if clearchk <= say_clear then
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
+				else
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "controlpanic" )
+				end
+			end
+		end
+    end
+	
+	if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
+    	if not cant_say_clear then
+			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
+		end
+    end
+	
+	
+	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
+	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
+	
+	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic then
+		if managers.groupai:state():chk_assault_active_atm() then
+			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
+				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed then
+					local roll = math.random(1, 100)
+					local chance_suppanic = 30
+					
+					if roll <= chance_suppanic then
+						local nroll = math.random(1, 100)
+						local chance_help = 50
+						if roll <= chance_suppanic then
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed1" )
+						else
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed2" )
+						end
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+					end
+				else
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+				end
+			end
+		end
+	end
+	
 	if in_close then
 		delay = 0
 	elseif too_far then

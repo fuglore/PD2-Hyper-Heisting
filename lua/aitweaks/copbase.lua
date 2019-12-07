@@ -1,3 +1,41 @@
+function CopBase:init(unit)
+	if unit:name() == Idstring("units/pd2_dlc_bph/characters/civ_male_locke_escort/civ_male_locke_escort_husk") then
+		local spawn_position = unit:position()
+
+		managers.enemy:add_delayed_clbk("LockePrisonPositionHack", function ()
+			unit:movement():set_position(spawn_position)
+		end, TimerManager:game():time() + 1)
+	end
+
+	local unit_name = unit:name()
+
+	UnitBase.init(self, unit, false)
+
+	self._char_tweak = tweak_data.character[self._tweak_table]
+	
+	if unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar") or unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar_husk") then
+		local tags = self:char_tweak().tags
+		table.insert(tags, "twitchy")
+	end
+	
+	if unit_name ~= Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss") and unit_name ~= Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss_husk") then
+		if self._tweak_table == "cop" then
+			local tags = self:char_tweak().tags
+			table.insert(tags, "panicked")
+		end
+	end
+	
+	self._unit = unit
+	self._visibility_state = true
+	self._foot_obj_map = {
+		right = self._unit:get_object(Idstring("RightToeBase")),
+		left = self._unit:get_object(Idstring("LeftToeBase"))
+	}
+	self._is_in_original_material = true
+	self._buffs = {}
+end
+
+
 function CopBase:default_weapon_name()
 	local default_weapon_id = self._default_weapon_id
 	local weap_ids = tweak_data.character.weap_ids

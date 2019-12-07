@@ -28,7 +28,7 @@ function CopActionTurn:_upd_wait_full_blend(t)
 			end
 
 			if self._action_desc.speed then
-				local speed = self._action_desc.speed
+				local speed = self._action_desc.speed or 1
 
 				self._machine:set_speed(redir_res, speed)
 			end

@@ -176,6 +176,15 @@ function GroupAIStateBesiege:chk_high_fed_density()
 	return true
 end
 
+function GroupAIStateBesiege:chk_no_fighting_atm()
+
+	if self._drama_data.amount > tweak_data.drama.consistentcombat then
+		return
+	end
+	
+	return true
+end
+
 function GroupAIStateBesiege:chk_active_assault_break()
 
 	if not self._activeassaultbreak then
@@ -337,7 +346,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			
 			for group_id, group in pairs(self._groups) do
 				for u_key, u_data in pairs(group.units) do
-					u_data.unit:sound():say("g90", true)
+					u_data.unit:sound():say("att", true)
 				end
 			end
 

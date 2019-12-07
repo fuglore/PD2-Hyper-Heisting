@@ -224,21 +224,19 @@ function CopLogicTravel.queued_update(data)
     	delay = 0.35
     end
 	
-	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t < 5
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
 	
-    if my_data.coarse_path and not data.unit:base():has_tag("special") then
-    	if data.char_tweak.chatter.clear and data.unit:anim_data().idle and not cant_say_clear then
+    if not data.unit:base():has_tag("special") then
+    	if data.char_tweak.chatter.clear and not cant_say_clear then
 			if data.unit:movement():cool() then
 				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
 			else
 				local clearchk = math.random(1, 100)
-				local say_clear = 50
+				local say_clear = 70
 				if clearchk <= say_clear then
 					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
 				else
-					if not managers.groupai:state():chk_assault_active_atm() then
-						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "controlpanic" )
-					end
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "controlpanic" )
 				end
 			end
 		end
@@ -265,9 +263,9 @@ function CopLogicTravel.queued_update(data)
 						local nroll = math.random(1, 100)
 						local chance_help = 50
 						if roll <= chance_suppanic then
-							data.unit:sound():say("hlp", true)
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed1" )
 						else
-							data.unit:sound():say("lk3b	", true)
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed2" )
 						end
 					else
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )

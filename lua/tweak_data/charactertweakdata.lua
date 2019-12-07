@@ -9802,7 +9802,10 @@ function CharacterTweakData:character_map()
 		path = "units/pd2_mod_ftsu/characters/",
 		list = {
 			"ene_gensec_fbigod_c45",
-			"ene_gensec_fbigod_m4"
+			"ene_gensec_fbigod_m4",
+			"ene_gensec_punk_mp5",
+			"ene_gensec_punk_moss",
+			"ene_gensec_punk_bronco"
 		}
 	}
 	char_map.hvh = {

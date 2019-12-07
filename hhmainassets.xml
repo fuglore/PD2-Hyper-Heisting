@@ -514,10 +514,46 @@
 
 	<!--Gensec Ninja C45-->
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45" load="true"/>
-	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45_husk" load="true"/>	
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45_husk" load="true"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45_contour"/>	
 	<object path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45" />
 	<model path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45" />	
-	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"/>	
+	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"/>
+	
+	<!--Gensec Ninja Cap-->	
+	<unit path="units/pd2_mod_ftsu/characters/ene_acc_gensec_cap/ene_acc_gensec_cap" load="true"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_acc_gensec_cap/ene_acc_gensec_cap"/>	
+	<object path="units/pd2_mod_ftsu/characters/ene_acc_gensec_cap/ene_acc_gensec_cap" />
+	<model path="units/pd2_mod_ftsu/characters/ene_acc_gensec_cap/ene_acc_gensec_cap" />	
+	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_acc_gensec_cap/ene_acc_gensec_cap"/>
+		
+	<!--gensec bronco punky-->
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco" load="true"/>
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco_husk" load="true"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco_contour"/>	
+	<object path="units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco" />
+	<model path="units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco" />	
+	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco"/>
+	
+	<!--gensec double-barrel punkerton-->
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss" load="true"/>
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss_husk" load="true"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss_contour"/>	
+	<object path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss" />
+	<model path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss" />	
+	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"/>
+	
+	<!--gensec double-barrel punkerton-->
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5" load="true"/>
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5_husk" load="true"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5_contour"/>	
+	<object path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5" />
+	<model path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5" />	
+	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"/>
 	
 	<!--Textures-->	
 	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_head_df" />	
