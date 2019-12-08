@@ -7285,7 +7285,7 @@ function CharacterTweakData:_set_normal()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("simple")
@@ -7415,7 +7415,7 @@ function CharacterTweakData:_set_hard()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("simple")
@@ -7553,7 +7553,7 @@ function CharacterTweakData:_set_overkill()
 	
 	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -7704,7 +7704,7 @@ function CharacterTweakData:_set_overkill_145()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -7850,7 +7850,7 @@ function CharacterTweakData:_set_easy_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.presets.weapon.gang_member.is_pistol.FALLOFF = {
 		{
@@ -8450,7 +8450,7 @@ function CharacterTweakData:_set_overkill_290()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.presets.weapon.gang_member.is_pistol.FALLOFF = {
 		{
@@ -9066,7 +9066,7 @@ function CharacterTweakData:_set_sm_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 15
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.presets.weapon.gang_member.is_pistol.FALLOFF = {
 		{

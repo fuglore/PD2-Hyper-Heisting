@@ -88,6 +88,15 @@
 	<!--Vanilla Heavy ZEAL SWAT Replacement-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy" load="true" force="true"/>
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy_husk" load="true" force="true"/>
+	
+	<!--ZEAL MP5 PUNK-->	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5_contour"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5" />
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"/>
 
 	<!--Better But Still Bad Taser-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh" load="true"/>
@@ -205,7 +214,9 @@
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_shotgun_il" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_shotgun_il" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_il" />	
-	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_il" />	
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_il" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/armored_punk_df" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/glasses_df" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_head_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_il" />	

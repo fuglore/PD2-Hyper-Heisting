@@ -588,9 +588,9 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.punk_group = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
-					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
-					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
@@ -6162,12 +6162,15 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	}
 	
 	if difficulty_index == 7 or difficulty_index == 8 then
-		self.besiege.assault.build_duration = 60
-		self.besiege.assault.sustain_duration_balance_mul = {
-			1.25,
-			1.25,
-			1.25,
-			1.25
+		self.besiege.assault.sustain_duration_min = {
+			360,
+			360,
+			360
+		}
+		self.besiege.assault.sustain_duration_max = {
+			360,
+			360,
+			360
 		}
 	end
 	
@@ -6217,7 +6220,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" then
 		self.besiege.assault.force = {
 			1,
 			1,
@@ -6241,7 +6244,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" then
 		if difficulty_index <= 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
