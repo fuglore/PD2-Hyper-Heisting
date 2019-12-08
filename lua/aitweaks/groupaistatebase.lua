@@ -111,34 +111,33 @@ function GroupAIStateBase:chk_random_drama_comment()
 	local selfchance = math.random()
 	
 	if self._feddensityhigh and not self._rolled_dramatalk_chance then
-		if chance > 75 then
-			if randomcommentchance < 10 then
-				if selfchance < 0.5 then
-					managers.groupai:state():teammate_comment(nil, "g68", nil, false, nil, true)
-				else
-					managers.player:speak("g68", false, nil)
-				end
-			elseif randomcommentchance > 10 and randomcommentchance < 20 then
-				if selfchance < 0.5 then
-					managers.groupai:state():teammate_comment(nil, "g69", nil, false, nil, true)
-				else
-					managers.player:speak("g69", false, nil)
-				end
-			elseif randomcommentchance > 20 and randomcommentchance < 30 then
-				if selfchance < 0.5 then
-					managers.groupai:state():teammate_comment(nil, "g29", nil, false, nil, true)
-				else
-					managers.player:speak("g29", false, nil)
-				end
+		if randomcommentchance < 10 then
+			if selfchance < 0.5 then
+				managers.groupai:state():teammate_comment(nil, "g68", nil, false, nil, true)
 			else
-				if selfchance < 0.5 then
-					managers.groupai:state():teammate_comment(nil, "g16", nil, false, nil, true)
-				else
-					managers.player:speak("g16", false, nil)
-				end
+				managers.player:speak("g68", false, nil)
+			end
+		elseif randomcommentchance > 10 and randomcommentchance < 20 then
+			if selfchance < 0.5 then
+				managers.groupai:state():teammate_comment(nil, "g69", nil, false, nil, true)
+			else
+				managers.player:speak("g69", false, nil)
+			end
+		elseif randomcommentchance > 20 and randomcommentchance < 30 then
+			if selfchance < 0.5 then
+				managers.groupai:state():teammate_comment(nil, "g29", nil, false, nil, true)
+			else
+				managers.player:speak("g29", false, nil)
+			end
+		else
+			if selfchance < 0.5 then
+				managers.groupai:state():teammate_comment(nil, "g16", nil, false, nil, true)
+			else
+				managers.player:speak("g16", false, nil)
 			end
 		end
 	end
+	
 	self._rolled_dramatalk_chance = true
 end
 
@@ -403,7 +402,7 @@ end
 
 function GroupAIStateBase:_map_spawn_points_to_respective_areas(id, spawn_points)
 	local nav_manager = managers.navigation
-
+	local level = Global.level_data and Global.level_data.level_id
 	for _, new_spawn_point in ipairs(spawn_points) do
 		local pos = new_spawn_point:value("position")
 		local interval = new_spawn_point:value("interval")
@@ -445,6 +444,81 @@ function GroupAIStateBase:_map_spawn_points_to_respective_areas(id, spawn_points
 	end
 end
 
+function GroupAIStateBase:create_spawn_group(id, spawn_group, spawn_points)
+	local level = Global.level_data and Global.level_data.level_id
+	local pos = spawn_points[1]:value("position")
+	local nav_seg = managers.navigation:get_nav_seg_from_pos(spawn_points[1]:value("position"), true)
+	local area = self:get_area_from_nav_seg_id(nav_seg)
+	local interval = spawn_group:value("interval")
+	local amount = spawn_group:get_random_table_value(spawn_group:value("amount"))
+	
+	if amount <= 0 then
+		amount = nil
+	end
+	
+	local corrected_interval = nil
+		
+	if interval < 2.5 then
+		corrected_interval = 2.5
+	elseif level == "sah" or level == "mad" and interval > 5 then
+		corrected_interval = 5
+	else
+		corrected_interval = interval
+	end
+
+	local new_spawn_group_data = {
+		delay_t = -1,
+		id = id,
+		pos = Vector3(),
+		nav_seg = nav_seg,
+		area = area,
+		mission_element = spawn_group,
+		amount = amount,
+		interval = corrected_interval,
+		spawn_pts = {},
+		team_id = spawn_group:value("team")
+	}
+	local nr_elements = 0
+
+	for _, spawn_pt_element in ipairs(spawn_points) do
+		local interval = spawn_pt_element:value("interval")
+		local amount = spawn_pt_element:get_random_table_value(spawn_pt_element:value("amount"))
+		
+		local corrected_interval = nil
+		
+		if interval < 2.5 then
+			corrected_interval = 2.5
+		elseif level == "sah" or level == "mad" and interval > 5 then
+			corrected_interval = 5
+		else
+			corrected_interval = interval
+		end
+		
+		if amount <= 0 then
+			amount = nil
+		end
+
+		local accessibility = spawn_pt_element:accessibility()
+		local sp_data = {
+			delay_t = -1,
+			pos = spawn_pt_element:value("position"),
+			interval = corrected_interval,
+			amount = amount,
+			accessibility = accessibility,
+			mission_element = spawn_pt_element
+		}
+
+		table.insert(new_spawn_group_data.spawn_pts, sp_data)
+		mvector3.add(new_spawn_group_data.pos, spawn_pt_element:value("position"))
+
+		nr_elements = nr_elements + 1
+	end
+
+	mvector3.divide(new_spawn_group_data.pos, nr_elements)
+
+	return new_spawn_group_data, area
+end
+
 function GroupAIStateBase:criminal_hurt_drama_armor(unit, attacker)
 	local drama_data = self._drama_data
 
@@ -459,6 +533,16 @@ function GroupAIStateBase:criminal_hurt_drama_armor(unit, attacker)
 	if drama_amount and drama_amount >= 0.01 then 
 		self:_add_drama(drama_amount)
 	end
+end
+
+function GroupAIStateBase:is_area_safe_assault(area)
+	for u_key, u_data in pairs(self._criminals) do
+		if not u_data.is_deployable and area.nav_segs[u_data.tracker:nav_segment()] then
+			return
+		end
+	end
+
+	return true
 end
 
 function GroupAIStateBase:_get_anticipation_duration(anticipation_duration_table, is_first)

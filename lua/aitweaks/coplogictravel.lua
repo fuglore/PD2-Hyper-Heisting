@@ -57,6 +57,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	local my_data = {
 		unit = data.unit
 	}
+	data.internal_data = my_data
 	local is_cool = data.unit:movement():cool()
 	
 	if is_cool then
@@ -87,8 +88,14 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	if data.char_tweak.announce_incomming then
 		my_data.announce_t = data.t + 2
 	end
-
-	data.internal_data = my_data
+	
+	local prefix = data.unit:sound():chk_voice_prefix() or "empty"
+	local is_radio_cop = prefix == "l1d_" or prefix == "l2d_" or prefix == "l3d_" or prefix == "l4d_" or prefix == "l5d_"
+	
+	if prefix ~= "empty" and is_radio_cop then
+		my_data.radio_voice = true
+	end
+	
 	local key_str = tostring(data.key)
 	my_data.upd_task_key = "CopLogicTravel.queued_update" .. key_str
 
@@ -139,8 +146,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 			my_data.path_is_precise = true
 			my_data.path_ahead = true
 		elseif path_style == "coarse" then
-			my_data.path_safely = true
-			my_data.path_ahead = nil
+			my_data.path_ahead = true
 			local nav_manager = managers.navigation
 			local f_get_nav_seg = nav_manager.get_nav_seg_from_pos
 			local start_seg = data.unit:movement():nav_tracker():nav_segment()
@@ -224,6 +230,39 @@ function CopLogicTravel.queued_update(data)
     	delay = 0.35
     end
 	
+	local level = Global.level_data and Global.level_data.level_id
+	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
+	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter
+	
+	if hostage_count > 0 and not managers.groupai:state():chk_assault_active_atm() then --make sure the hostage count is actually above zero before replacing any of the lines
+		if hostage_count > 3 then  -- hostage count needs to be above 3
+			if math.random() < 0.2 then --20% chance
+				chosen_panic_chatter = "controlpanic"
+			else
+				chosen_panic_chatter = "hostagepanic2" --more panicky "GET THOSE HOSTAGES OUT RIGHT NOW!!!" line for when theres too many hostages on the map
+			end
+		else
+			if math.random() < 0.2 then
+				chosen_panic_chatter = "controlpanic"
+			else
+				chosen_panic_chatter = "hostagepanic1" --less panicky "Delay the assault until those hostages are out." line
+			end
+		end
+	end
+	
+	local chosen_sabotage_chatter = "sabotagegeneric" --set default sabotage chatter for variety's sake
+	local skirmish_map = level == "skm_mus" or level == "skm_red2" or level == "skm_run" or level == "skm_watchdogs_stage2" --these shouldnt play on holdout
+	
+	if my_data.radio_voice then --check if the cop actually has the voiceline needed to play this :( not all of them do
+		if level == "branchbank" then --bank heist
+			chosen_sabotage_chatter = "sabotagedrill"
+		elseif level == "nmh" or level == "man" or level == "framing_frame_3" or level == "rat" or level == "election_day_1" then --various heists where turning off the power is a frequent occurence
+			chosen_sabotage_chatter = "sabotagepower"
+		else
+			chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
+		end
+	end
+	
 	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
 	
     if not data.unit:base():has_tag("special") then
@@ -231,12 +270,18 @@ function CopLogicTravel.queued_update(data)
 			if data.unit:movement():cool() then
 				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
 			else
-				local clearchk = math.random(1, 100)
-				local say_clear = 70
-				if clearchk <= say_clear then
+				local clearchk = math.random(0, 90)
+				local say_clear = 30
+				if clearchk > 60 then
 					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
+				elseif clearchk > 40 then
+					if not skirmish_map and my_data.radio_voice then
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
+					end
 				else
-					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "controlpanic" )
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
 				end
 			end
 		end
@@ -255,7 +300,7 @@ function CopLogicTravel.queued_update(data)
 	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic then
 		if managers.groupai:state():chk_assault_active_atm() then
 			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
-				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed then
+				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
 					local roll = math.random(1, 100)
 					local chance_suppanic = 30
 					
@@ -271,7 +316,11 @@ function CopLogicTravel.queued_update(data)
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
 					end
 				else
-					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+					if math.random() < 0.1 then
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+					end
 				end
 			end
 		end
@@ -603,7 +652,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					if no_cover_search_dis_change or not is_mook then
 						cover_search_dis = 100
 					else
-						cover_search_dis = 50
+						cover_search_dis = 100
 					end
 					
 					--if cover_search_dis == 200 then
@@ -626,7 +675,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			if no_cover_search_dis_change or not is_mook then
 				cover_search_dis = 100
 			else
-				cover_search_dis = 75
+				cover_search_dis = 100
 			end
 			
 			if dis > cover_search_dis then
@@ -1059,7 +1108,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 
 	if not reservation and wants_reservation then
 		data.brain:add_pos_rsrv("path", {
-			radius = 60,
+			radius = 30,
 			position = mvector3.copy(to_pos)
 		})
 	end

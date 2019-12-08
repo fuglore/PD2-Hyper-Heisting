@@ -14,6 +14,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._tweak_data = tweak_data.group_ai[group_ai_state]
 	self._spawn_group_timers = {}
 	self._graph_distance_cache = {}
+	self._had_hostages = nil
 	self._feddensityhigh = nil	
 	self._feddensityhighfrequency = 1
 	self._downleniency = 1
@@ -202,6 +203,15 @@ function GroupAIStateBesiege:chk_assault_active_atm()
 	end
 	
 	return true
+end
+
+function GroupAIStateBesiege:get_hostage_count_for_chatter()
+	
+	if self._hostage_headcount > 0 then
+		return self._hostage_headcount
+	end
+	
+	return 0
 end
 	
 function GroupAIStateBesiege:_begin_assault_task(assault_areas)
@@ -1100,6 +1110,20 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 	end
 end
 
+function GroupAIStateBesiege:_verify_anticipation_spawn_point(sp_data)
+	local sp_nav_seg = sp_data.nav_seg
+	local area = self:get_area_from_nav_seg_id(sp_nav_seg)
+
+	for criminal_key, c_data in pairs(self._criminals) do
+		local not_safe_for_spawn = mvector3.distance(sp_data.pos, c_data.m_pos) < 2000 and math.abs(sp_data.pos.z - c_data.m_pos.z) < 300 or mvector3.distance(sp_data.pos, c_data.m_pos) < 1200
+		if not c_data.status and not c_data.is_deployable and not_safe_for_spawn then
+			return
+		end
+	end
+
+	return true
+end
+
 function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	if not group.has_spawned then
 		return
@@ -1239,7 +1263,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 						end
 					end
 					self._next_allowed_hunter_upd_t = self._t + 1.5
-			elseif tactic_name == "charge" and not current_objective.moving_out and not self._activeassaultbreak and next(current_objective.area.criminal.units) and group.is_chasing and not current_objective.charge and not self._feddensityhigh and not tactics_map.obstacle then
+			elseif tactic_name == "charge" and not current_objective.moving_out and not self._activeassaultbreak and not current_objective.charge and not self._feddensityhigh and not tactics_map.obstacle then
 				charge = true
 			end
 		end
@@ -1274,7 +1298,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				self:_voice_open_fire_start(group)
 			elseif charge and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not self._feddensityhigh and not self._activeassaultbreak then
 				push = true
-			elseif not self._feddensityhigh and not self._activeassaultbreak or phase_is_anticipation then
+			elseif not self._feddensityhigh and not self._activeassaultbreak and not phase_is_anticipation then
 				approach = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak and not phase_is_anticipation and self._drama_data.amount <= self._drama_data.low_p then
 				push = true
@@ -1522,6 +1546,68 @@ function GroupAIStateBesiege:_end_regroup_task()
 		end
 
 		self._task_data.recon.next_dispatch_t = self._t
+	end
+end
+
+function GroupAIStateBesiege:_upd_recon_tasks()
+	local task_data = self._task_data.recon.tasks[1]
+
+	self:_assign_enemy_groups_to_recon()
+
+	if not task_data then
+		return
+	end
+
+	local t = self._t
+
+	self:_assign_assault_groups_to_retire()
+
+	local target_pos = task_data.target_area.pos
+	local nr_wanted = self:_get_difficulty_dependent_value(self._tweak_data.recon.force) - self:_count_police_force("recon")
+
+	if nr_wanted <= 0 then
+		return
+	end
+
+	local used_event, used_spawn_points, reassigned = nil
+
+	if task_data.use_spawn_event then
+		task_data.use_spawn_event = false
+
+		if self:_try_use_task_spawn_event(t, task_data.target_area, "recon") then
+			used_event = true
+		end
+	end
+
+	if not used_event then
+		local used_group = nil
+
+		if next(self._spawning_groups) then
+			used_group = true
+		else
+			local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(task_data.target_area, self._tweak_data.recon.groups, nil, nil, callback(self, self, "_verify_anticipation_spawn_point"))
+
+			if spawn_group then
+				local grp_objective = {
+					attitude = "avoid",
+					scan = true,
+					stance = "hos",
+					type = "recon_area",
+					area = spawn_group.area,
+					target_area = task_data.target_area
+				}
+
+				self:_spawn_in_group(spawn_group, spawn_group_type, grp_objective)
+
+				used_group = true
+			end
+		end
+	end
+
+	if used_event or used_spawn_points or reassigned then
+		table.remove(self._task_data.recon.tasks, 1)
+
+		self._task_data.recon.next_dispatch_t = t + math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.recon.interval))
 	end
 end
 

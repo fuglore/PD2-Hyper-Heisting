@@ -14,6 +14,8 @@ local temp_vec3 = Vector3()
 function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	CopLogicBase.enter(data, new_logic_name, enter_params)
 	data.unit:brain():cancel_all_pathing_searches()
+	local prefix = data.unit:sound():chk_voice_prefix() or "empty"
+	local is_radio_cop = prefix == "l1d_" or prefix == "l2d_" or prefix == "l3d_" or prefix == "l4d_" or prefix == "l5d_"
 
 	local old_internal_data = data.internal_data
 	local my_data = {
@@ -29,6 +31,10 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 		my_data.attention_unit = old_internal_data.attention_unit
 
 		CopLogicAttack._set_best_cover(data, my_data, old_internal_data.best_cover)
+	end
+	
+	if prefix ~= "empty" and is_radio_cop then
+		my_data.radio_voice = true
 	end
 
 	my_data.cover_test_step = 1
@@ -872,30 +878,8 @@ function CopLogicAttack._upd_combat_movement(data)
 	
 	local enemy_visible_mild_soft = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 2
 	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4
-	local antipassivecheck = nil
+	local antipassivecheck = focus_enemy and focus_enemy.verified or my_data.shooting
 	local flank_cover_charge_qualify = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t > 2 or focus_enemy and focus_enemy.verified
-	
-	if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
-		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			antipassivecheck = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > math.random(1, 2)
-		else
-			antipassivecheck = focus_enemy and focus_enemy.verified or my_data.shooting --fuck you <3
-		end
-	else
-		if diff_index <= 5 then
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				antipassivecheck = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > math.random(3.1, 3.8)
-			else
-				antipassivecheck = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > math.random(1.05, 1.4)
-			end
-		else
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				antipassivecheck = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > math.random(2, 3)
-			else
-				antipassivecheck = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > math.random(0.35, 0.7)
-			end
-		end
-	end
 	
 	if not managers.groupai:state():chk_active_assault_break() then
 		my_data.has_retreated = nil
@@ -951,9 +935,9 @@ function CopLogicAttack._upd_combat_movement(data)
 	elseif my_data.attitude == "engage" and not my_data.stay_out_time and not antipassivecheck and not enemy_visible_soft and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
 		if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
 			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				my_data.stay_out_time = t + 0.7
+				my_data.stay_out_time = t + 1.05
 			else
-				my_data.stay_out_time = t + 0.01
+				my_data.stay_out_time = t + 0.35
 			end
 			--log("interesting")
 		else
@@ -1036,7 +1020,10 @@ function CopLogicAttack._upd_combat_movement(data)
 	local flank_charge_t_chk = not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t
 	local ranged_fire_group = data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire
 	
+	local move_t_chk = not my_data.move_t or my_data.move_t < data.t
+	
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
+		
 	if my_data.walking_to_cover_shoot_pos then
 		-- nothing
 	elseif my_data.at_cover_shoot_pos then
@@ -1048,26 +1035,26 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 		
 		--i went ahead and included these to make sure flankers are always getting flanking positions instead of regular ones, it helps them stay predictable in regards to their choices of movement, you can tell a flank team by 1. smoke grenades being present 2. their chatter and 3. how they prefer to move around the map.
-		if my_data.stay_out_time and my_data.stay_out_time < t then
-			if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
+		if my_data.stay_out_time and my_data.stay_out_time < t or not focus_enemy.verified then
+			if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
 				want_flank_cover = true
 			end
 			move_to_cover = true
 		end
-	elseif action_taken or my_data.stay_out_time and my_data.stay_out_time > t then
+	elseif action_taken or my_data.stay_out_time and my_data.stay_out_time > t and focus_enemy.verified then
 		-- Nothing	
 	elseif managers.groupai:state():chk_active_assault_break() and not my_data.has_retreated then
 		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, true)
 		my_data.has_retreated = true
 	elseif managers.groupai:state():chk_active_assault_break() and my_data.has_retreated then
 		if my_data.in_retreat_pos then
-			if data.tactics and data.tactics.flank then
+			if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
 				want_flank_cover = true
 			end
 			move_to_cover = true
 		end
-	elseif Global.game_settings.one_down or managers.skirmish.is_skirmish() or not enemy_visible_soft and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() or antipassivecheck and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
-		if data.tactics and data.tactics.charge and data.objective and data.objective.grp_objective and data.objective.grp_objective.charge and charge_failed_t_chk or data.tactics and data.tactics.flank and my_data.flank_cover and my_data.taken_flank_cover and flank_cover_charge_qualify and flank_charge_t_chk and charge_failed_t_chk or not charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
+	elseif Global.game_settings.one_down or managers.skirmish.is_skirmish() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
+		if data.tactics and data.tactics.charge and charge_failed_t_chk or data.tactics and data.tactics.flank and my_data.flank_cover and my_data.taken_flank_cover and flank_cover_charge_qualify and flank_charge_t_chk and charge_failed_t_chk or not charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
 			if my_data.charge_path then
 				if data.objective and not data.objective.type == "follow" then
 					local path = my_data.charge_path
@@ -1092,7 +1079,7 @@ function CopLogicAttack._upd_combat_movement(data)
 					end
 				end
 			end
-		elseif in_cover then
+		elseif in_cover and enemyvisiblesoft or in_cover and antipassivecheck then
 			if my_data.cover_test_step <= 2 then
 				local height = nil
 
@@ -1124,7 +1111,9 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 			elseif not enemy_visible_softer and math.random() < 0.05 then
 				move_to_cover = true
-				want_flank_cover = true
+				if not my_data.taken_flank_cover then
+					want_flank_cover = true
+				end
 			end
 		elseif my_data.at_cover_shoot_pos then
 			--ranged fire cops also signal the END of their movement and positioning
@@ -1134,20 +1123,33 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 			end
 			if my_data.stay_out_time and my_data.stay_out_time < t then
-				if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
+				if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
 					want_flank_cover = true 
 					--i went ahead and included these to make sure flankers are always getting flanking positions instead of regular ones, it helps them stay predictable in regards to their choices of movement, you can tell a flank team by 1. smoke grenades being present 2. their chatter and 3. how they prefer to move around the map.
 				end
 				move_to_cover = true
 			end				
 		else
-			if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
+			if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
 				want_flank_cover = true
 			end
 			move_to_cover = true
 		end
+		
+		if not Global.game_settings.one_down and not managers.skirmish.is_skirmish() and not Global.game_settings.aggroAI then
+			if diff_index <= 5 then
+				my_data.move_t = data.t + 1.05
+			elseif diff_index == 6 then
+				my_data.move_t = data.t + 0.7
+			else
+				my_data.move_t = data.t + 0.35
+			end
+		else
+			my_data.move_t = data.t + 0.01
+		end
+		
 	elseif want_to_take_cover then
-		if data.tactics and data.tactics.flank and managers.groupai:state():chk_assault_active_atm() then
+		if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
 			want_flank_cover = true
 		end
 		move_to_cover = true
@@ -1166,7 +1168,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			my_data.next_allowed_flank_charge_t = data.t + 2
 			want_flank_cover = nil
 			if not data.unit:in_slot(16) then --flankers signal their presence whenever they move around
-				if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.look_for_angle then
+				if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
 				end
 			end
@@ -1338,10 +1340,42 @@ function CopLogicAttack.action_complete_clbk(data, action)
 end
 
 function CopLogicAttack.queue_update(data, my_data)
+	local level = Global.level_data and Global.level_data.level_id
 	local focus_enemy = data.attention_obj
 	local is_close = focus_enemy and focus_enemy.dis <= 3000 and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction
 	local too_far = focus_enemy and focus_enemy.dis > 5000 and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction
 	local delay = nil
+	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
+	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter
+	
+	if hostage_count > 0 and not managers.groupai:state():chk_assault_active_atm() then --make sure the hostage count is actually above zero before replacing any of the lines
+		if hostage_count > 3 then  -- hostage count needs to be above 3
+			if math.random() < 0.2 then --20% chance
+				chosen_panic_chatter = "controlpanic"
+			else
+				chosen_panic_chatter = "hostagepanic2" --more panicky "GET THOSE HOSTAGES OUT RIGHT NOW!!!" line for when theres too many hostages on the map
+			end
+		else
+			if math.random() < 0.2 then
+				chosen_panic_chatter = "controlpanic"
+			else
+				chosen_panic_chatter = "hostagepanic1" --less panicky "Delay the assault until those hostages are out." line
+			end
+		end
+	end
+	
+	local chosen_sabotage_chatter = "sabotagegeneric" --set default sabotage chatter for variety's sake
+	local skirmish_map = level == "skm_mus" or level == "skm_red2" or level == "skm_run" or level == "skm_watchdogs_stage2" --these shouldnt play on holdout
+	
+	if my_data.radio_voice then --check if the cop actually has the voiceline needed to play this :( not all of them do
+		if level == "branchbank" then --bank heist
+			chosen_sabotage_chatter = "sabotagedrill"
+		elseif level == "nmh" or level == "man" or level == "framing_frame_3" or level == "rat" or level == "election_day_1" then --various heists where turning off the power is a frequent occurence
+			chosen_sabotage_chatter = "sabotagepower"
+		else
+			chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
+		end
+	end
 	
 	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
 	
@@ -1350,12 +1384,18 @@ function CopLogicAttack.queue_update(data, my_data)
 			if data.unit:movement():cool() then
 				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
 			else
-				local clearchk = math.random(1, 100)
-				local say_clear = 70
-				if clearchk <= say_clear then
+				local clearchk = math.random(0, 90)
+				local say_clear = 30
+				if clearchk > 60 then
 					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
+				elseif clearchk > 40 then
+					if not skirmish_map and my_data.radio_voice then
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
+					end
 				else
-					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "controlpanic" )
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
 				end
 			end
 		end
@@ -1374,7 +1414,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic then
 		if managers.groupai:state():chk_assault_active_atm() then
 			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
-				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed then
+				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
 					local roll = math.random(1, 100)
 					local chance_suppanic = 30
 					
@@ -1390,7 +1430,11 @@ function CopLogicAttack.queue_update(data, my_data)
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
 					end
 				else
-					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+					if math.random() < 0.1 then
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+					end
 				end
 			end
 		end
@@ -1670,7 +1714,7 @@ function CopLogicAttack._update_cover(data)
 
 		local in_cover = my_data.in_cover
 
-		if in_cover and enemyseeninlast2secs then
+		if in_cover then
 			local threat_pos = data.attention_obj.verified_pos
 			in_cover[3], in_cover[4] = CopLogicAttack._chk_covered(data, my_pos, threat_pos, data.visibility_slotmask)
 		end

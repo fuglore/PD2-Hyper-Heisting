@@ -31,7 +31,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 40,
 		duration = {3, 4},
-		interval = {1.5, 2},
+		interval = {4, 6},
 		group_min = 0,
 		queue = "g90"
 	}
@@ -141,11 +141,51 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.controlpanic = {
 		radius = 2000,
-	    max_nr = 1,
-	    duration = {60, 60},
-	    interval = {2, 2.5},
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {2, 4.5},
 	    group_min = 1,
 	    queue = "g90"
+	}
+	self.enemy_chatter.sabotagepower = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {10, 20},
+	    group_min = 1,
+	    queue = "e03"
+	}
+	self.enemy_chatter.sabotagedrill = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {10, 20},
+	    group_min = 1,
+	    queue = "e01"
+	}
+	self.enemy_chatter.sabotagegeneric = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {10, 20},
+	    group_min = 1,
+	    queue = "e04"
+	}
+	self.enemy_chatter.hostagepanic1 = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {2, 4.5},
+	    group_min = 1,
+	    queue = "p01"
+	}
+	self.enemy_chatter.hostagepanic2 = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {2, 4.5},
+	    group_min = 1,
+	    queue = "p01"
 	}
 	self.enemy_chatter.clear = {
 		radius = 2000,
@@ -7054,7 +7094,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		10,
 		10
 	}
-	self.besiege.recon.interval_variation = 20
+	self.besiege.recon.interval_variation = 10
 
 	if difficulty_index < 6 then
 		self.besiege.recon.force = {
