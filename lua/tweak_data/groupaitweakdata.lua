@@ -149,7 +149,7 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.sabotagepower = {
 		radius = 2000,
-	    max_nr = 40,
+	    max_nr = 10,
 	    duration = {1, 1},
 	    interval = {10, 20},
 	    group_min = 1,
@@ -157,7 +157,7 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.sabotagedrill = {
 		radius = 2000,
-	    max_nr = 40,
+	    max_nr = 10,
 	    duration = {1, 1},
 	    interval = {10, 20},
 	    group_min = 1,
@@ -165,11 +165,19 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.sabotagegeneric = {
 		radius = 2000,
-	    max_nr = 40,
+	    max_nr = 10,
 	    duration = {1, 1},
 	    interval = {10, 20},
 	    group_min = 1,
 	    queue = "e04"
+	}
+	self.enemy_chatter.sabotagebags = {
+		radius = 2000,
+	    max_nr = 10,
+	    duration = {1, 1},
+	    interval = {10, 20},
+	    group_min = 1,
+	    queue = "l01"
 	}
 	self.enemy_chatter.hostagepanic1 = {
 		radius = 2000,

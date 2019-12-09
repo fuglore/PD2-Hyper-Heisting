@@ -252,15 +252,17 @@ function CopLogicTravel.queued_update(data)
 	
 	local chosen_sabotage_chatter = "sabotagegeneric" --set default sabotage chatter for variety's sake
 	local skirmish_map = level == "skm_mus" or level == "skm_red2" or level == "skm_run" or level == "skm_watchdogs_stage2" --these shouldnt play on holdout
+	local ignore_radio_rules = nil
 	
-	if my_data.radio_voice then --check if the cop actually has the voiceline needed to play this :( not all of them do
-		if level == "branchbank" then --bank heist
-			chosen_sabotage_chatter = "sabotagedrill"
-		elseif level == "nmh" or level == "man" or level == "framing_frame_3" or level == "rat" or level == "election_day_1" then --various heists where turning off the power is a frequent occurence
-			chosen_sabotage_chatter = "sabotagepower"
-		else
-			chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
-		end
+	if level == "branchbank" then --bank heist
+		chosen_sabotage_chatter = "sabotagedrill"
+	elseif level == "nmh" or level == "man" or level == "framing_frame_3" or level == "rat" or level == "election_day_1" then --various heists where turning off the power is a frequent occurence
+		chosen_sabotage_chatter = "sabotagepower"
+	elseif level == "chill_combat" or level == "watchdogs_1" or level == "watchdogs_1_night" or level == "watchdogs_2" or level == "watchdogs_2_day" or level == "cane" then
+		chosen_sabotage_chatter = "sabotagebags"
+		ignore_radio_rules = true
+	else
+		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
 	end
 	
 	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
@@ -275,7 +277,7 @@ function CopLogicTravel.queued_update(data)
 				if clearchk > 60 then
 					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
 				elseif clearchk > 40 then
-					if not skirmish_map and my_data.radio_voice then
+					if not skirmish_map and my_data.radio_voice or not skirmish_map and ignore_radio_rules then
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
 					else
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
