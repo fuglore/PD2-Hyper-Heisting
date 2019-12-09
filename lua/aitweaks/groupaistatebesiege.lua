@@ -656,6 +656,84 @@ function GroupAIStateBesiege:_upd_assault_task()
 	self:_assign_enemy_groups_to_assault(task_data.phase)
 end
 
+function GroupAIStateBesiege._create_objective_from_group_objective(grp_objective, receiving_unit)
+	local objective = {
+		grp_objective = grp_objective
+	}
+
+	if grp_objective.element then
+		objective = grp_objective.element:get_random_SO(receiving_unit)
+
+		if not objective then
+			return
+		end
+
+		objective.grp_objective = grp_objective
+
+		return
+	elseif grp_objective.type == "defend_area" or grp_objective.type == "recon_area" or grp_objective.type == "reenforce_area" then
+		objective.type = "defend_area"
+		objective.stance = "hos"
+		objective.pose = "stand"
+		objective.scan = true
+		objective.interrupt_dis = 200
+		objective.interrupt_suppression = nil
+	elseif grp_objective.type == "retire" then
+		objective.type = "defend_area"
+		objective.stance = "hos"
+		objective.pose = "stand"
+		objective.scan = true
+		objective.interrupt_dis = 200
+	elseif grp_objective.type == "assault_area" then
+		objective.type = "defend_area"
+
+		if grp_objective.follow_unit then
+			objective.follow_unit = grp_objective.follow_unit
+			objective.distance = grp_objective.distance
+		end
+
+		objective.stance = "hos"
+		objective.pose = "stand"
+		objective.scan = true
+		objective.interrupt_dis = 200
+		objective.interrupt_suppression = true
+	elseif grp_objective.type == "create_phalanx" then
+		objective.type = "phalanx"
+		objective.stance = "hos"
+		objective.interrupt_dis = nil
+		objective.interrupt_health = nil
+		objective.interrupt_suppression = nil
+		objective.attitude = "avoid"
+		objective.path_ahead = true
+	elseif grp_objective.type == "hunt" then
+		objective.type = "hunt"
+		objective.stance = "hos"
+		objective.scan = true
+		objective.interrupt_dis = 200
+	end
+
+	objective.stance = grp_objective.stance or objective.stance
+	objective.pose = grp_objective.pose or objective.pose
+	objective.area = grp_objective.area
+	objective.nav_seg = grp_objective.nav_seg or objective.area.pos_nav_seg
+	objective.attitude = grp_objective.attitude or objective.attitude
+	objective.interrupt_dis = grp_objective.interrupt_dis or objective.interrupt_dis
+	objective.interrupt_health = grp_objective.interrupt_health or objective.interrupt_health
+	objective.interrupt_suppression = nil
+	objective.pos = grp_objective.pos
+
+	if grp_objective.scan ~= nil then
+		objective.scan = grp_objective.scan
+	end
+
+	if grp_objective.coarse_path then
+		objective.path_style = "coarse_complete"
+		objective.path_data = grp_objective.coarse_path
+	end
+
+	return objective
+end
+
 function GroupAIStateBesiege:_voice_groupentry(group)
 	local group_leader_u_key, group_leader_u_data = self._determine_group_leader(group.units)
 	if group_leader_u_data and group_leader_u_data.tactics and group_leader_u_data.char_tweak.chatter.entry then
@@ -1164,7 +1242,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							local crim_nav_seg = u_data.tracker:nav_segment()
 
 							if current_objective.area.nav_segs[crim_nav_seg] then
-								return
+								--return
 							end
 						end
 					end
@@ -1219,7 +1297,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 								local crim_nav_seg = u_data.tracker:nav_segment()
 								if players_nearby and players_nearby <= 0 then
 									if current_objective.area.nav_segs[crim_nav_seg] then
-										return
+										--return
 									end
 								end
 							end
@@ -1329,6 +1407,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		self:_voice_open_fire_start(group)
 	elseif approach or push then
 		local assault_area, alternate_assault_area, alternate_assault_area_from, assault_path, alternate_assault_path = nil
+		local from_seg, to_seg, access_pos, verify_clbk = nil
 		local to_search_areas = {
 			objective_area
 		}
@@ -1338,8 +1417,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 		repeat
 			local search_area = table.remove(to_search_areas, 1)
-
-			if next(search_area.criminal.units) then
+			-- or 
+			if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) or next(search_area.criminal.units) then
 				local assault_from_here = true
 
 				if tactics_map and tactics_map.flank then --for the love of frick just let flankers flank
