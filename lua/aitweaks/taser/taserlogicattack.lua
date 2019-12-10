@@ -192,9 +192,10 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 	local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
 	local tase_length = data.internal_data.tase_distance or 1500 --fix for better bots crash
 	local my_data = data.internal_data
+	local human_or_forbidden_chk = attention_data.is_human_player or not attention_data.unit:movement():chk_action_forbidden("hurt")
 	local is_valid_target = nil
 	
-	if attention_data.is_person and attention_data.unit:movement() and attention_data.unit:movement():is_taser_attack_allowed() and not attention_data.unit:movement():chk_action_forbidden("hurt") then
+	if attention_data.is_person and attention_data.unit:movement() and attention_data.unit:movement():is_taser_attack_allowed() and human_or_forbidden_chk then
 		is_valid_target = true
 		--log("helpme")
 	end
