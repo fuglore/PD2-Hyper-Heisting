@@ -33,7 +33,14 @@ function LevelsTweakData:init()
 	self.wwh.package = {"packages/hhmurkies", "packages/lvl_wwh"}
 	self.arm_for.package = {"packages/hhmurkies", "packages/narr_arm_for"}
 	self.mex.package = {"packages/hhmurkies", "packages/job_mex"}
-	self.mex_cooking.package = {"packages/hhmurkies", "packages/job_mex2"}	
+	self.mex_cooking.package = {"packages/hhmurkies", "packages/job_mex2"}
+	
+	--fix missing ganster vo, ty rino
+	self.short2_stage1.package = {"packages/job_short2_stage1", "levels/narratives/dentist/mia/stage2/world_sounds"}
+	self.nightclub.package = {"packages/vlad_nightclub", "levels/narratives/dentist/mia/stage2/world_sounds"}
+	self.spa.package = {"packages/job_spa", "levels/narratives/dentist/mia/stage2/world_sounds"}
+	self.friend.package = {"levels/narratives/h_alex_must_die/stage_1/world_sounds", "packages/lvl_friend"}
+	self.cane.package = {"packages/cane", "levels/narratives/e_welcome_to_the_jungle/stage_1/world_sounds"}
 	
 	local gamemode_chk = game_state_machine and game_state_machine:gamemode()
 	if not gamemode_chk or gamemode_chk and not gamemode_chk == "crime_spree" then

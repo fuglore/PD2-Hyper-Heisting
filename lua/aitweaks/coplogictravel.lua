@@ -300,7 +300,7 @@ function CopLogicTravel.queued_update(data)
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
 	
 	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic then
-		if managers.groupai:state():chk_assault_active_atm() then
+		if managers.groupai:state():chk_assault_active_atm() or not data.unit:base():has_tag("law") then
 			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
 				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
 					local roll = math.random(1, 100)
@@ -309,7 +309,7 @@ function CopLogicTravel.queued_update(data)
 					if roll <= chance_suppanic then
 						local nroll = math.random(1, 100)
 						local chance_help = 50
-						if roll <= chance_suppanic then
+						if roll <= chance_suppanic or not data.unit:base():has_tag("law") then
 							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed1" )
 						else
 							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed2" )
@@ -318,7 +318,7 @@ function CopLogicTravel.queued_update(data)
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
 					end
 				else
-					if math.random() < 0.1 then
+					if math.random() < 0.1 and data.unit:base():has_tag("law") then
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
 					else
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )

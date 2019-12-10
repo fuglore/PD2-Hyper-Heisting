@@ -7128,8 +7128,93 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_gangster", "hhpost_gangster", function(self, presets)
+	local job = Global.level_data and Global.level_data.level_id
 	self.gangster.HEALTH_INIT = 6
 	self.gangster.headshot_dmg_mul = 12
+	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
+		self.gangster.speech_prefix_p1 = "rt"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	elseif job == "alex_2" then
+		self.gangster.speech_prefix_p1 = "ict"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	elseif job == "welcome_to_the_jungle_1" then
+		self.gangster.speech_prefix_p1 = "bik"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	else
+		self.gangster.speech_prefix_p1 = "lt"
+		self.gangster.speech_prefix_p2 = nil
+		self.gangster.speech_prefix_count = 2
+	end
+	self.gangster.chatter = {
+		aggressive = true,
+		retreat = true,
+		contact = true,
+		go_go = true,
+		suppress = true,
+		enemyidlepanic = true
+	}
+end)
+
+Hooks:PostHook(CharacterTweakData, "_init_biker", "hhpost_biker", function(self, presets)
+	self.biker.HEALTH_INIT = 6
+	self.biker.headshot_dmg_mul = 12
+	self.biker.speech_prefix_p1 = "bik"
+	self.biker.speech_prefix_p2 = nil
+	self.biker.speech_prefix_count = 2	
+	self.biker.chatter = {
+		aggressive = true,
+		retreat = true,
+		contact = true,
+		go_go = true,
+		suppress = true,
+		enemyidlepanic = true
+	}
+	local job = Global.level_data and Global.level_data.level_id
+	if job == "mex" or job == "mex_cooking" then
+		self.biker.access = "security"
+	else
+		self.biker.access = "gangster"
+	end
+end)
+
+Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", function(self, presets)
+	self.bolivian.HEALTH_INIT = 6
+	self.bolivian.headshot_dmg_mul = 12
+	self.bolivian.speech_prefix_p1 = "lt"
+	self.bolivian.speech_prefix_p2 = nil
+	self.bolivian.speech_prefix_count = 2
+	self.bolivian.chatter = {
+		aggressive = true,
+		retreat = true,
+		contact = true,
+		go_go = true,
+		suppress = true,
+		enemyidlepanic = true
+	}
+	self.bolivian_indoors.HEALTH_INIT = 6
+	self.bolivian_indoors.headshot_dmg_mul = 12
+	self.bolivian_indoors.speech_prefix_p1 = "lt"
+	self.bolivian_indoors.speech_prefix_p2 = nil
+	self.bolivian_indoors.speech_prefix_count = 2
+	self.bolivian_indoors.chatter = {
+		aggressive = true,
+		retreat = true,
+		contact = true,
+		go_go = true,
+		suppress = true,
+		enemyidlepanic = true
+	}
+	self.bolivian_indoors_mex = deep_clone(self.bolivian_indoors)
+	self.bolivian_indoors_mex.has_alarm_pager = true
+	local job = Global.level_data and Global.level_data.level_id
+	if job == "mex" or job == "mex_cooking" then
+		self.bolivian_indoors_mex.access = "security"
+	else
+		self.bolivian_indoors_mex.access = "gangster"
+	end
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", function(self, presets)
@@ -9604,6 +9689,9 @@ function CharacterTweakData:_set_sm_wish()
 			self.fbi.speech_prefix_p2 = "n"
 			self.fbi_swat.speech_prefix_p2 = "n"
 			self.city_swat.speech_prefix_p2 = "n"
+		end
+		if faction == "russia" then
+			
 		end
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
