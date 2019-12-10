@@ -160,15 +160,15 @@ function CopDamage:_on_damage_received(damage_info)
 				if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
 					if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
 						self._unit:sound():say("burnhurt", nil, nil, nil, nil)
-						self._next_allowed_burnhurt_t = t + 8
-						self._next_allowed_hurt_t = t + math.random(2, 4)
+						self._next_allowed_burnhurt_t = t + 6
+						self._next_allowed_hurt_t = t + math.random(3, 6)
 					end
 				end
 			else
 				if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
 					if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
 						self._unit:sound():say("burnhurt", nil, nil, nil, nil)
-						self._next_allowed_burnhurt_t = t + 8
+						self._next_allowed_burnhurt_t = t + 4
 						self._next_allowed_hurt_t = t + math.random(1, 4)
 					end
 				else

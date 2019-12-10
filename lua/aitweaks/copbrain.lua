@@ -47,19 +47,22 @@ end
 
 function CopBrain:on_suppressed(state)
     self._logic_data.is_suppressed = state or nil
-
+	
+	local supp_complain_t_chk = not self._next_supyell_t or self._next_supyell_t < TimerManager:game():time()
+	
     if self._current_logic.on_suppressed_state then
         self._current_logic.on_suppressed_state(self._logic_data)
 
-        if self._logic_data.char_tweak.chatter.suppress then
+        if self._logic_data.char_tweak.chatter.suppress and supp_complain_t_chk then
 		    local roll = math.random(1, 100)
-			local chance_heeeeelpp = 75
+			local chance_heeeeelpp = 60
 			
 			if roll < chance_heeeeelpp then
                 self._unit:sound():say("hlp", true)
 			else --hopefully some variety here now
                 self._unit:sound():say("lk3b", true) 
-			end		
+			end
+			self._next_supyell_t = TimerManager:game():time() + 4
         end
     end
 end
