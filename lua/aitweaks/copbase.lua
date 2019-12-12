@@ -75,7 +75,9 @@ function CopBase:default_weapon_name()
 	local commando_553 = Idstring("units/payday2/weapons/wpn_npc_s552/wpn_npc_s552")
 
 	local unit_name = self._unit:name()
-
+	
+	local hoxout_m4s = unit_name == Idstring("units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2") or unit_name == Idstring("units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2_husk") or unit_name == Idstring("units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2") or unit_name == Idstring("units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2_husk")
+	
 	--groups of units to modify
 	local mosconi_punks = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870_husk")
 	
@@ -89,6 +91,8 @@ function CopBase:default_weapon_name()
 
 	if zombie_taser then
 		return yellow_car4
+	elseif hoxout_m4s then
+		return car4
 	elseif mosconi_punks then
 		return sawn_off_mosconi
 	elseif bronco_punks then

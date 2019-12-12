@@ -6113,13 +6113,145 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
+					0.05,
+					0.05
+				},
+				mode = {
+					0,
+					3,
+					3,
+					1
+				}
+			},
+			{
+				dmg_mul = 6,
+				r = 500,
+				acc = {
 					0.1,
-					0.25
+					0.85
+				},
+				recoil = {
+					0.05,
+					0.05
+				},
+				mode = {
+					0,
+					3,
+					3,
+					1
+				}
+			},
+			{
+				dmg_mul = 6, --falloff does not begin, save it for 20m
+				r = 1000,
+				acc = {
+					0,
+					0.7 --higher accuracy
+				},
+				recoil = {
+					0.05,
+					0.05
+				},
+				mode = {
+					0,
+					3,
+					3,
+					1
+				}
+			},
+			{
+				dmg_mul = 4, --no harsh drop
+				r = 2000,
+				acc = {
+					0,
+					0.5
+				},
+				recoil = {
+					0.05,
+					0.05
+				},
+				mode = {
+					0,
+					3,
+					3,
+					1
+				}
+			},
+			{
+				dmg_mul = 4, --still dangerous, acc drops hard, but not recoil or firing pattern
+				r = 3000,
+				acc = {
+					0,
+					0.35
+				},
+				recoil = {
+					0.05,
+					0.05
+				},
+				mode = {
+					0,
+					3,
+					3,
+					1
+				}
+			},
+			{
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
+				r = 4000,
+				acc = {
+					0,
+					0
+				},
+				recoil = {
+					0.05,
+					0.05
+				},
+				mode = {
+					0,
+					3,
+					3,
+					1
+				}
+			}
+		}
+	}
+	presets.weapon.fbigod.akimbo_pistol = { --oh boy why didnt i do this earlier
+		aim_delay = { --no aim delay
+			0,
+			0
+		},
+		focus_delay = 2, --focus delay.
+		focus_dis = 500,
+		spread = 25,
+		miss_dis = 10,
+		RELOAD_SPEED = 2.1, --Fast reloads.
+		melee_speed = 1,
+		melee_dmg = 5,
+		melee_retry_delay = {
+			1,
+			1
+		},
+		range = {
+			optimal = 4000, --cant walk and shoot past this range
+			far = 6000, --40m cut off range.
+			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 6, --increased massively from anarchy, meant to solidify their threat as a veteran unit.
+				r = 100,
+				acc = {
+					0.1, --focus delay build up, unchanged from civil
+					0.9
+				},
+				recoil = {
+					0.1,
+					0.1
 				},
 				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					1,
-					1,
+					0,
+					0,
+					0,
 					1
 				}
 			},
@@ -6132,12 +6264,12 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				recoil = {
 					0.1,
-					0.25
+					0.1
 				},
 				mode = {
-					1,
-					1,
-					1,
+					0,
+					0,
+					0,
 					1
 				}
 			},
@@ -6149,13 +6281,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.7 --higher accuracy
 				},
 				recoil = {
-					0.15,
-					0.25
+					0.1,
+					0.1
 				},
 				mode = {
-					1,
-					1,
-					1,
+					0,
+					0,
+					0,
 					1
 				}
 			},
@@ -6167,13 +6299,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.5
 				},
 				recoil = { 
-					0.2,
-					0.3
+					0.1,
+					0.1
 				},
 				mode = {
-					1,
-					1,
-					1,
+					0,
+					0,
+					0,
 					1
 				}
 			},
@@ -6185,26 +6317,26 @@ function CharacterTweakData:_presets(tweak_data)
 					0.35
 				},
 				recoil = {
-					0.2,
-					0.3
+					0.1,
+					0.1
 				},
 				mode = {
-					1,
-					1,
-					1,
+					0,
+					0,
+					0,
 					1
 				}
 			},
 			{
-				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
 				r = 4000,
 				acc = {
 					0,
-					0.01
+					0
 				},
 				recoil = {
-					0.4,
-					1
+					0.1,
+					0.1
 				},
 				mode = {
 					1,
@@ -6967,7 +7099,14 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.no_arrest = true
 	self.fbi.chatter = presets.enemy_chatter.swat
 	self.fbi.steal_loot = true
-
+	self.fbi_xc45 = deep_clone(self.fbi)
+	self.fbi_xc45.damage.hurt_severity = presets.hurt_severities.no_hurts
+	self.fbi_xc45.allowed_stances = {
+		cbt = true
+	}
+	self.fbi_xc45.use_animation_on_fire_damage = false
+	self.fbi_xc45.melee_weapon = nil
+	
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(self, presets) --TODO: Nothing right now.
@@ -7377,6 +7516,27 @@ function CharacterTweakData:_set_normal()
 
 	self.flashbang_multiplier = 1
 	self.concussion_multiplier = 1
+	
+	if self.tweak_data and self.tweak_data.levels then
+		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "russia" then
+			self.swat.speech_prefix_p1 = "r"
+			self.swat.speech_prefix_count = 4	
+			self.heavy_swat.speech_prefix_p1 = "r"
+			self.heavy_swat.speech_prefix_count = 4	
+			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_swat.speech_prefix_p1 = "r"
+			self.city_swat.speech_prefix_p1 = "r"
+		end
+		if faction == "zombie" then
+			self.swat.spawn_scream = "g90"
+			self.heavy_swat.spawn_scream = "g90"
+			self.fbi_swat.spawn_scream = "g90"
+			self.fbi_heavy_swat.spawn_scream = "g90"
+			self.city_swat.spawn_scream = "g90"
+		end
+	end
+	
 	--Sniper tweak
 	self.sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
@@ -7508,6 +7668,27 @@ function CharacterTweakData:_set_hard()
 	
 	self.flashbang_multiplier = 1
 	self.concussion_multiplier = 1
+	
+	if self.tweak_data and self.tweak_data.levels then
+		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "russia" then
+			self.swat.speech_prefix_p1 = "r"
+			self.swat.speech_prefix_count = 4	
+			self.heavy_swat.speech_prefix_p1 = "r"
+			self.heavy_swat.speech_prefix_count = 4	
+			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_swat.speech_prefix_p1 = "r"
+			self.city_swat.speech_prefix_p1 = "r"
+		end
+		if faction == "zombie" then
+			self.swat.spawn_scream = "g90"
+			self.heavy_swat.spawn_scream = "g90"
+			self.fbi_swat.spawn_scream = "g90"
+			self.fbi_heavy_swat.spawn_scream = "g90"
+			self.city_swat.spawn_scream = "g90"
+		end
+	end
+	
 	--Sniper tweak
 	self.sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
@@ -7651,10 +7832,34 @@ function CharacterTweakData:_set_overkill()
 		0.35,
 		0.35
 	}
+	
+	if self.tweak_data and self.tweak_data.levels then
+		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "russia" then
+			self.swat.speech_prefix_p1 = "r"
+			self.swat.speech_prefix_count = 4	
+			self.heavy_swat.speech_prefix_p1 = "r"
+			self.heavy_swat.speech_prefix_count = 4	
+			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_swat.speech_prefix_p1 = "r"
+			self.city_swat.speech_prefix_p1 = "r"
+		end
+		if faction == "zombie" then
+			self.swat.spawn_scream = "g90"
+			self.heavy_swat.spawn_scream = "g90"
+			self.fbi_swat.spawn_scream = "g90"
+			self.fbi_heavy_swat.spawn_scream = "g90"
+			self.city_swat.spawn_scream = "g90"
+		end
+	end
+	
 	--fbi setup.
 	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.dodge = self.presets.dodge.heavy_complex
 	self.fbi.move_speed = self.presets.move_speed.complex_consistency
+	self.fbi_xc45.weapon = self.presets.weapon.complex
+	self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
+	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
 	--sniper setup.
 	self.sniper.weapon.is_rifle.focus_delay = 2
 	--Shield speed setup
@@ -7803,11 +8008,35 @@ function CharacterTweakData:_set_overkill_145()
 		0.35
 	}
 	
+	if self.tweak_data and self.tweak_data.levels then
+		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "russia" then
+			self.swat.speech_prefix_p1 = "r"
+			self.swat.speech_prefix_count = 4	
+			self.heavy_swat.speech_prefix_p1 = "r"
+			self.heavy_swat.speech_prefix_count = 4	
+			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_swat.speech_prefix_p1 = "r"
+			self.city_swat.speech_prefix_p1 = "r"
+		end
+		if faction == "zombie" then
+			self.swat.spawn_scream = "g90"
+			self.heavy_swat.spawn_scream = "g90"
+			self.fbi_swat.spawn_scream = "g90"
+			self.fbi_heavy_swat.spawn_scream = "g90"
+			self.city_swat.spawn_scream = "g90"
+		end
+	end
+	
 	if Global.game_settings and Global.game_settings.use_intense_AI then
 		--fbi setup
+		
 		self.fbi.dodge = self.presets.dodge.ninja_complex
 		self.fbi.weapon = self.presets.weapon.fbigod
 		self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+		self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
+		self.fbi_xc45.weapon = self.presets.weapon.fbigod
+		self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 		--sniper setup
 		self.sniper.weapon.is_rifle.focus_delay = 1.5
 		self.sniper.weapon.is_rifle.aim_delay = {0, 0}
@@ -7894,6 +8123,9 @@ function CharacterTweakData:_set_overkill_145()
 		self.fbi.weapon = self.presets.weapon.complex
 		self.fbi.dodge = self.presets.dodge.heavy_complex
 		self.fbi.move_speed = self.presets.move_speed.complex_consistency
+		self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
+		self.fbi_xc45.weapon = self.presets.weapon.complex
+		self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
 		--sniper setup.
 		self.sniper.weapon.is_rifle.focus_delay = 2
 		--Shield speed setup
@@ -8395,12 +8627,35 @@ function CharacterTweakData:_set_easy_wish()
 	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_xc45.weapon = self.presets.weapon.anarchy
+	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
+	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--sniper setup
 	self.sniper.weapon.is_rifle.focus_delay = 2
 	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
-	--Helmet static for MFRs on MH and up.
-	self.fbi_heavy_swat.speech_prefix_p2 = "d"
-	self.fbi_heavy_swat.speech_prefix_count = 5	
+	if self.tweak_data and self.tweak_data.levels then
+		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "america" then
+			self.fbi_heavy_swat.speech_prefix_p2 = "d"
+			self.fbi_heavy_swat.speech_prefix_count = 5
+		end
+		if faction == "russia" then
+			self.swat.speech_prefix_p1 = "r"
+			self.swat.speech_prefix_count = 4	
+			self.heavy_swat.speech_prefix_p1 = "r"
+			self.heavy_swat.speech_prefix_count = 4	
+			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_swat.speech_prefix_p1 = "r"
+			self.city_swat.speech_prefix_p1 = "r"
+		end
+		if faction == "zombie" then
+			self.swat.spawn_scream = "g90"
+			self.heavy_swat.spawn_scream = "g90"
+			self.fbi_swat.spawn_scream = "g90"
+			self.fbi_heavy_swat.spawn_scream = "g90"
+			self.city_swat.spawn_scream = "g90"
+		end
+	end
 	--Movespeed setups.
 	self.swat.move_speed = self.presets.move_speed.complex_consistency
 	self.city_swat.move_speed = self.presets.move_speed.complex_consistency
@@ -9000,12 +9255,24 @@ function CharacterTweakData:_set_overkill_290()
 	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_xc45.weapon = self.presets.weapon.anarchy
+	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
+	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--MFR has radio static in this difficulty.
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
 		if faction == "america" then
 			self.fbi_heavy_swat.speech_prefix_p2 = "d"
 			self.fbi_heavy_swat.speech_prefix_count = 5
+		end
+		if faction == "russia" then
+			self.swat.speech_prefix_p1 = "r"
+			self.swat.speech_prefix_count = 4	
+			self.heavy_swat.speech_prefix_p1 = "r"
+			self.heavy_swat.speech_prefix_count = 4	
+			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_swat.speech_prefix_p1 = "r"
+			self.city_swat.speech_prefix_p1 = "r"
 		end
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
@@ -9613,6 +9880,9 @@ function CharacterTweakData:_set_sm_wish()
 	self.fbi.dodge = self.presets.dodge.ninja_complex
 	self.fbi.weapon = self.presets.weapon.fbigod
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_xc45.weapon = self.presets.weapon.fbigod
+	self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
+	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--sniper setup
 	self.sniper.weapon.is_rifle.focus_delay = 1.5
 	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
@@ -9691,7 +9961,13 @@ function CharacterTweakData:_set_sm_wish()
 			self.city_swat.speech_prefix_p2 = "n"
 		end
 		if faction == "russia" then
-			
+			self.swat.speech_prefix_p1 = "r"
+			self.swat.speech_prefix_count = 4	
+			self.heavy_swat.speech_prefix_p1 = "r"
+			self.heavy_swat.speech_prefix_count = 4	
+			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_swat.speech_prefix_p1 = "r"
+			self.city_swat.speech_prefix_p1 = "r"
 		end
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
@@ -9865,7 +10141,8 @@ function CharacterTweakData:character_map()
 			"ene_zeal_swat_shield_hh",
 			"ene_zeal_tazer",
 			"ene_zeal_tazer_hh",
-			"ene_fbigod_m4" --COOL JEROME
+			"ene_zeal_fbigod_m4", --COOL JEROME
+			"ene_zeal_fbigod_c45"
 		}
 	}
 	char_map.psc = {

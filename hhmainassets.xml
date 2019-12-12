@@ -126,14 +126,36 @@
 	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"/>
 
 	<!--COOL JEROME-->	
-	<unit path="units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4" load="true"/>
-	<unit path="units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4_husk" load="true"/>	
-	<material_config path="units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4"/>
-	<material_config path="units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4_contour"/>	
-	<object path="units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4" />
-	<model path="units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4" />
-	<texture path="units/pd2_dlc_gitgud/characters/ene_fbigod_m4/pants_df" />	
-	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4_contour"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/pants_df" />	
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4"/>
+	
+	<!--AKIMBO ZEALOT-->	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45_contour"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45" />
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45"/>
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_df" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_df" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_nm" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_nm" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/body_il" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/mask_il" />
+
+	<!--AKIMBO ZEALOT MASK-->
+	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_mask/ene_acc_zeal_mask" load="true"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_mask/ene_acc_zeal_mask"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_mask/ene_acc_zeal_mask" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_mask/ene_acc_zeal_mask" />	
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_mask/ene_acc_zeal_mask"/>
 
 	<!--ZEAL Heavy SWAT AR-->	
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/ene_zeal_swat_heavy_hh" load="true"/>

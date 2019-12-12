@@ -1082,7 +1082,7 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 			end
 		elseif in_cover and enemyvisiblesoft or in_cover and antipassivecheck then
-			if my_data.cover_test_step <= 2 then
+			if my_data.cover_test_step <= 3 then
 				local height = nil
 
 				if in_cover[4] then

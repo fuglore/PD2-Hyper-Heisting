@@ -219,7 +219,7 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 		return reaction
 	end
 
-	if attention_data.is_human_player and not attention_data.unit:movement():is_taser_attack_allowed() then
+	if not is_valid_target then
 		return AIAttentionObject.REACT_COMBAT
 	end
 	

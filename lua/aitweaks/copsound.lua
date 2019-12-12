@@ -9,6 +9,28 @@ function CopSound:init(unit)
 	self._speak_expire_t = 0
 	local char_tweak = tweak_data.character[unit:base()._tweak_table]
 	
+	self._speech_prefix2 = char_tweak.speech_prefix_p2
+	
+	local low_diff_units = {
+		Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
+		Idstring("units/payday2/characters/ene_swat_1/ene_swat_1_husk"),
+		Idstring("units/payday2/characters/ene_swat_2/ene_swat_2"),
+		Idstring("units/payday2/characters/ene_swat_2/ene_swat_2_husk"),
+		Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1"),
+		Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1_husk"),
+		Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870"),
+		Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870_husk"),
+		Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"),
+		Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1_husk"),
+		Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870"),
+		Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870_husk")
+	}
+	for _, unit in ipairs(low_diff_units) do
+		if self._unit:name() == unit then
+			self._speech_prefix2 = "n"
+		end
+	end
+	
 	local tasers = {
 		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"),
 		Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1"),
@@ -96,7 +118,9 @@ function CopSound:init(unit)
 	self:set_voice_prefix(nil)
 
 	local nr_variations = char_tweak.speech_prefix_count
-	self._prefix = (char_tweak.speech_prefix_p1 or "") .. (nr_variations and tostring(math.random(nr_variations)) or "") .. (char_tweak.speech_prefix_p2 or "") .. "_"
+	
+	
+	self._prefix = (char_tweak.speech_prefix_p1 or "") .. (nr_variations and tostring(math.random(nr_variations)) or "") .. (self._speech_prefix2 or "") .. "_"
 	
 	if self._unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar") or self._unit:name() == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3") or is_l1d then
 		self._prefix = ("l1d") .. "_"
@@ -262,7 +286,7 @@ function CopSound:set_voice_prefix(index)
 	end
 	
 	local nr_variations = char_tweak.speech_prefix_count
-	self._prefix = (char_tweak.speech_prefix_p1 or "") .. (nr_variations and tostring(math.random(nr_variations)) or "") .. (char_tweak.speech_prefix_p2 or "") .. "_"
+	self._prefix = (char_tweak.speech_prefix_p1 or "") .. (nr_variations and tostring(math.random(nr_variations)) or "") .. (self._speech_prefix2 or "") .. "_"
 	
 	if self._unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar") or self._unit:name() == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3") or is_l1d then
 		self._prefix = ("l1d") .. "_"
