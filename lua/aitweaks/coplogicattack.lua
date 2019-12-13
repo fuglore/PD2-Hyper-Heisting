@@ -1138,8 +1138,8 @@ function CopLogicAttack._upd_combat_movement(data)
 			move_to_cover = true
 		end
 		
-		if not Global.game_settings.one_down and not managers.skirmish.is_skirmish() and not Global.game_settings.aggroAI then
-			if diff_index <= 5 then
+		if not Global.game_settings.one_down and not managers.skirmish.is_skirmish() then
+			if diff_index <= 5 and not Global.game_settings.aggroAI then
 				my_data.move_t = data.t + 1.05
 			elseif diff_index == 6 then
 				my_data.move_t = data.t + 0.7
