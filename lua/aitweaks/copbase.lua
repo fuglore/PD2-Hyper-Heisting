@@ -11,20 +11,6 @@ function CopBase:init(unit)
 	local unit_name = unit:name()
 
 	UnitBase.init(self, unit, false)
-
-	self._char_tweak = tweak_data.character[self._tweak_table]
-	
-	if unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar") or unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar_husk") then
-		local tags = self:char_tweak().tags
-		table.insert(tags, "twitchy")
-	end
-	
-	if unit_name ~= Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss") and unit_name ~= Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss_husk") then
-		if self._tweak_table == "cop" then
-			local tags = self:char_tweak().tags
-			table.insert(tags, "panicked")
-		end
-	end
 	
 	local DS_c45_units = {
 		Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
@@ -38,6 +24,20 @@ function CopBase:init(unit)
 			if unit_name == pistoleer then
 				self._tweak_table = "fbi_xc45"
 			end
+		end
+	end
+
+	self._char_tweak = tweak_data.character[self._tweak_table]
+	
+	if unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar") or unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar_husk") then
+		local tags = self:char_tweak().tags
+		table.insert(tags, "twitchy")
+	end
+	
+	if unit_name ~= Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss") and unit_name ~= Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss_husk") then
+		if self._tweak_table == "cop" then
+			local tags = self:char_tweak().tags
+			table.insert(tags, "panicked")
 		end
 	end
 	
