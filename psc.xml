@@ -87,11 +87,7 @@
 	<material_config path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_contour"/>	
 	<object path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"/>
 	<model path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"/>	
-	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"/>	
-	
-	<!--Murky Pistol Akimbo Ninja for DS-->
-	<unit path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45_DS/ene_murky_fbigod_c45_DS" load="true"/>
-	<unit path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45_DS/ene_murky_fbigod_c45_DS_husk" load="true"/>
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"/>
 	
 	<unit path="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret" load="true"/>
 	<material_config path="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret"/>	

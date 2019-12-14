@@ -1238,18 +1238,18 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45_DS/ene_akan_hyper_fbininja_c45_DS")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4")
 				},
 				murkywater = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45_DS/ene_murky_fbigod_c45_DS"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45_DS/ene_murky_fbigod_c45_DS"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4")
 				}
 			},

@@ -601,8 +601,7 @@
 	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"/>
 	
 	<!--Textures-->	
-	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_head_df" />	
-	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_head_nm" />	
+    <df_nm path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_head" />    	
 	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_df" />		
 </table>
 	
