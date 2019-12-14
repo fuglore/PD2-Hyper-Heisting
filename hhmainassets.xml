@@ -51,7 +51,10 @@
 	<!--functional weapon sounds-->	
 	<unit path="units/payday2/weapons/wpn_npc_ump/wpn_npc_ump" load="true" force="true"/>
 	<unit path="units/pd2_dlc_mad/weapons/wpn_npc_rpk/wpn_npc_rpk" load="true" force="true"/>	
-	<unit path="units/pd2_dlc_mad/weapons/wpn_npc_sr2/wpn_npc_sr2" load="true" force="true"/>	
+	<unit path="units/pd2_dlc_mad/weapons/wpn_npc_sr2/wpn_npc_sr2" load="true" force="true"/>
+
+	<!--force load akimbo pistols for npcs-->
+	<unit path="units/payday2/weapons/wpn_npc_c45/wpn_npc_x_c45" force="true"/>
 	
 	<!--Light SWAT Rifle-->	
 	<unit path="units/payday2/characters/ene_swat_1/ene_swat_1" load="true" force="true"/>
@@ -445,6 +448,15 @@
 	<texture path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/head_zomb_df" />
 	<texture path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/zomb_df" />
 	
+	<!--vampire vinny-->
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" load="true"/>
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45_husk" load="true"/>
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"/>	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45_contour"/>		
+	<object path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" />
+	<model path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"/>
+	
 	<!--Zombie MP5 SWAT-->	
 	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_5/ene_cop_hvh_5" load="true"/>
 	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_5/ene_cop_hvh_5_husk" load="true"/>
@@ -473,7 +485,7 @@
 	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1" force="true"/>	
 	
 	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870" load="true" force="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870" load="true" force="true"/>
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870_husk" load="true" force="true"/>
 	
 	<!--Light SWAT Zombie Rifle-->
 	<unit path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1" load="true" force="true"/>
@@ -498,7 +510,7 @@
 	<texture path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/swat_heavy_il" />		
 	<texture path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/swat_heavy_df" />	
 
-	<!-- BRAIINNNSS end	 -->	
+	<!-- BRAIINNNSS end	-->	
 
 	<!--SHADOW CLOACKERS-->	
 	

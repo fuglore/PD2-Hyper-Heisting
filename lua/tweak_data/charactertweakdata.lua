@@ -6245,13 +6245,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.1,
-					0.1
+					0.05,
+					0.05
 				},
-				mode = { --tap fire like crazy, unchanged from civil
+				mode = {
 					0,
-					0,
-					0,
+					3,
+					3,
 					1
 				}
 			},
@@ -6263,13 +6263,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.85
 				},
 				recoil = {
-					0.1,
-					0.1
+					0.05,
+					0.05
 				},
 				mode = {
 					0,
-					0,
-					0,
+					3,
+					3,
 					1
 				}
 			},
@@ -6281,13 +6281,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.7 --higher accuracy
 				},
 				recoil = {
-					0.1,
-					0.1
+					0.05,
+					0.05
 				},
 				mode = {
 					0,
-					0,
-					0,
+					3,
+					3,
 					1
 				}
 			},
@@ -6298,14 +6298,14 @@ function CharacterTweakData:_presets(tweak_data)
 					0,
 					0.5
 				},
-				recoil = { 
-					0.1,
-					0.1
+				recoil = {
+					0.05,
+					0.05
 				},
 				mode = {
 					0,
-					0,
-					0,
+					3,
+					3,
 					1
 				}
 			},
@@ -6317,13 +6317,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.35
 				},
 				recoil = {
-					0.1,
-					0.1
+					0.05,
+					0.05
 				},
 				mode = {
 					0,
-					0,
-					0,
+					3,
+					3,
 					1
 				}
 			},
@@ -6335,14 +6335,14 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				recoil = {
-					0.1,
-					0.1
+					0.05,
+					0.05
 				},
 				mode = {
-					1,
 					0,
-					0,
-					0
+					3,
+					3,
+					1
 				}
 			}
 		}
@@ -6581,24 +6581,42 @@ end
 function CharacterTweakData:_set_characters_weapon_preset(preset)
 	local all_units = {
 		"security",
+		"security_undominatable",
+		"mute_security_undominatable",
 		"cop",
+		"cop_scared",
+		"cop_female",
+		"gensec",
 		"swat",
-		"fbi_swat",
-		"city_swat",
-		"fbi_heavy_swat",
 		"heavy_swat",
-		"medic",
+		"heavy_swat_sniper",
+		"fbi_swat",
+		"fbi_heavy_swat",
+		"city_swat",
+		"gangster",
+		"biker",
+		"biker_escape",
+		"mobster",
+		"bolivian",
+		"bolivian_indoors",
+		"bolivian_indoors_mex",
+		"tank",
+		"tank_hw",
+		"tank_medic",
+		"tank_mini",
 		"spooc",
 		"spooc_heavy",
+		"shadow_spooc",
+		"medic",
 		"taser",
-		"tank",
-		"tank_mini",
-		"tank_medic",
 		"shield",
-		"gangster",
-		"bolivian",
-		"mobster",
-		"biker"
+		"mobster_boss",
+		"biker_boss",
+		"chavez_boss",
+		"hector_boss",
+		"hector_boss_no_armor",
+		"drug_lord_boss",
+		"drug_lord_boss_stealth"
 	}
 
 	for _, name in ipairs(all_units) do
@@ -6609,7 +6627,7 @@ end
 function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, heavy_swat_chance, common_chance)
 	local heavy_units ={
 		"fbi_heavy_swat",
-		"heavy_swat",
+		"heavy_swat"
 	}
 	
 	local light_units = {
@@ -6620,12 +6638,18 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 	
 	local common_units = {
 		"security",
+		"security_undominatable",
+		"mute_security_undominatable",
 		"cop",
 		"cop_female",
+		"cop_scared",
 		"gangster",
 		"bolivian",
 		"mobster",
-		"biker"
+		"biker",
+		"mobster",
+		"bolivian_indoors",
+		"bolivian_indoors_mex"
 	}
 
 	for _, cname in ipairs(common_units) do
@@ -10157,6 +10181,7 @@ function CharacterTweakData:character_map()
 			"ene_murky_light_ump",
 			"ene_murky_fbigod_m4",
 			"ene_murky_fbigod_c45",
+			"ene_murky_fbigod_c45_DS",
 			"ene_murky_DS_shield",
 			"ene_murky_punk_bronco",
 			"ene_murky_punk_mp5",
@@ -10187,6 +10212,7 @@ function CharacterTweakData:character_map()
 			"ene_fbi_hvh_2",
 			"ene_fbi_hvh_3",
 			"ene_fbigod_hvh_m4",
+			"ene_fbigod_hvh_c45",
 			"ene_spook_hvh_1",
 			"ene_swat_heavy_hvh_1",
 			"ene_swat_heavy_hvh_r870",
@@ -10237,6 +10263,7 @@ function CharacterTweakData:character_map()
 			"ene_akan_hyper_swat_akmsu_smg",
 			"ene_akan_hyper_fbininja_ak47_ass",
 			"ene_akan_hyper_fbininja_c45",
+			"ene_akan_hyper_fbininja_c45_DS",
 			"ene_akan_hyper_DS_shield"
 		}
 	}	
