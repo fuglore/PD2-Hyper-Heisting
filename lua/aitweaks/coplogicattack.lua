@@ -1043,7 +1043,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			end
 			move_to_cover = true
 		end
-	elseif action_taken or my_data.stay_out_time and my_data.stay_out_time > t and focus_enemy.verified then
+	elseif action_taken or my_data.move_t and my_data.move_t > t or my_data.stay_out_time and my_data.stay_out_time > t and focus_enemy.verified then
 		-- Nothing	
 	elseif managers.groupai:state():chk_active_assault_break() and not my_data.has_retreated then
 		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, true)
@@ -1445,7 +1445,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	end
 	
 	if in_close then
-		delay = 0
+		delay = 0.35
 	elseif too_far then
 		delay = 0.7
 	else
@@ -1495,7 +1495,6 @@ function CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 		end
 	end
 end
-
 
 local temp_vec4 = Vector3()
 local temp_vec5 = Vector3()

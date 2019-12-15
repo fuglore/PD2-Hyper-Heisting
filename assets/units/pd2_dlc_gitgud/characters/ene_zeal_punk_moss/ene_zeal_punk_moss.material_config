@@ -1,0 +1,11 @@
+<materials version="3" group="npc_mr_pink">
+    <material unique="true" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" name="mtr_head" version="2">
+        <bump_normal_texture    file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/moss_punk_head_nm"/>
+        <diffuse_texture        file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/moss_punk_head_df"/>
+    </material>
+    <material unique="true" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" name="mtr_body" version="2">
+        <bump_normal_texture file="units/pd2_dlc_rvd/characters/npc_mr_pink/npc_mr_pink_nm"/>
+        <diffuse_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/moss_punk_df"/>
+    </material>
+    <material render_template="shadow_caster_only:SKINNED_1WEIGHT" name="shadow_caster" version="2"/>
+</materials>

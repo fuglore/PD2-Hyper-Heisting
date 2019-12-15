@@ -270,6 +270,11 @@ function WeaponTweakData:_set_normal()
 	self.ak47_npc.CLIP_AMMO_MAX = 16
 	self.lazer_npc.CLIP_AMMO_MAX = 16
 	
+	--shotgun tweaks, fires 3 times before reload on SWAT-tier
+	self.r870_npc.CLIP_AMMO_MAX = 3
+	self.benelli_npc.CLIP_AMMO_MAX = 3
+	self.blazter_npc.CLIP_AMMO_MAX = 3
+	
 	self:_set_characters_weapon_preset(40, 20, 20, 100)
 	
 	--Turret Tweaks.
@@ -316,6 +321,11 @@ function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
 	self.ak47_npc.CLIP_AMMO_MAX = 16
 	self.lazer_npc.CLIP_AMMO_MAX = 16
 	
+	--shotgun tweaks, fires 3 times before reload on SWAT-tier
+	self.r870_npc.CLIP_AMMO_MAX = 3
+	self.benelli_npc.CLIP_AMMO_MAX = 3
+	self.blazter_npc.CLIP_AMMO_MAX = 3
+	
 	self:_set_characters_weapon_preset(40, 20, 20, 100) --setting enemy weapon spread
 	
 	--Turret Tweaks.
@@ -357,6 +367,11 @@ function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried abo
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 25
 	self.ak47_npc.CLIP_AMMO_MAX = 25
 	self.lazer_npc.CLIP_AMMO_MAX = 25
+	
+	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
+	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.benelli_npc.CLIP_AMMO_MAX = 4
+	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
 	self:_set_characters_weapon_preset(30, 15, 40, 80) --setting enemy weapon spread
 	
@@ -407,6 +422,11 @@ function WeaponTweakData:_set_overkill_145()
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 25
 	self.ak47_npc.CLIP_AMMO_MAX = 25
 	self.lazer_npc.CLIP_AMMO_MAX = 25
+	
+	--shotgun tweaks, fires 4 times before reload on FBI-tier
+	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.benelli_npc.CLIP_AMMO_MAX = 4
+	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
 	self:_set_characters_weapon_preset(30, 15, 40, 80) --setting enemy weapon spread
 	
@@ -461,6 +481,11 @@ function WeaponTweakData:_set_easy_wish()
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 30
 	self.ak47_npc.CLIP_AMMO_MAX = 30
 	self.lazer_npc.CLIP_AMMO_MAX = 30
+	
+	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
+	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.benelli_npc.CLIP_AMMO_MAX = 4
+	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
 	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
 	
@@ -529,6 +554,11 @@ function WeaponTweakData:_set_overkill_290()
 	self.ak47_npc.CLIP_AMMO_MAX = 30
 	self.lazer_npc.CLIP_AMMO_MAX = 30
 	
+	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
+	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.benelli_npc.CLIP_AMMO_MAX = 4
+	self.blazter_npc.CLIP_AMMO_MAX = 4
+	
 	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
 	
 	--sniper tweak
@@ -595,6 +625,11 @@ function WeaponTweakData:_set_sm_wish()
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 45
 	self.ak47_npc.CLIP_AMMO_MAX = 45
 	self.lazer_npc.CLIP_AMMO_MAX = 45
+	
+	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
+	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.benelli_npc.CLIP_AMMO_MAX = 4
+	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
 	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
 	

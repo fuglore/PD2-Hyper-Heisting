@@ -100,6 +100,17 @@
 	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5" />
 	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5" />
 	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"/>
+	
+	<!--ZEAL MOSS PUNK-->	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss_contour"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss" />
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"/>
+	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/moss_punk_head" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/moss_punk_df" />
 
 	<!--Better But Still Bad Taser-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh" load="true"/>
@@ -239,7 +250,7 @@
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_shotgun_il" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_shotgun_il" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_il" />	
-	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_il" />
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_il" load="true" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/armored_punk_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/glasses_df" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_df" />	
