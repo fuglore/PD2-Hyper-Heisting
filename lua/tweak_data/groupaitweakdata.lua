@@ -2434,18 +2434,11 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle_civil
 				},
 				{
-					freq = 0.3,
-					amount_max = 1,
-					rank = 2,
-					unit = "CS_tazer",
-					tactics = self._tactics.tazer_charge
-				},
-				{
 					freq = 0.5,
 					amount_max = 1,
 					rank = 2,
-					unit = "CS_swat_R870",
-					tactics = self._tactics.swat_shotgun_rush_civil
+					unit = "punk_group",
+					tactics = self._tactics.swat_rifle_civil
 				},
 			}
 		}
@@ -2553,18 +2546,11 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle_flank_civil
 				},
 				{
-					freq = 0.3,
-					amount_max = 1,
-					rank = 2,
-					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking
-				},
-				{
 					freq = 0.5,
 					amount_max = 1,
 					rank = 2,
-					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_rush_civil
+					unit = "FBI_swat_M4",
+					tactics = self._tactics.swat_rifle_flank_civil
 				},
 			}
 		}
@@ -2648,14 +2634,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 3,
 					rank = 2,
 					unit = "punk_group",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank_complex
 				},
 				{
 					freq = 1,
 					amount_max = 2,
 					rank = 2,
 					unit = "CS_swat_SMG",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank_complex
 				}
 			}
 		}
@@ -2670,21 +2656,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "CS_swat_SMG",
-					tactics = self._tactics.swat_rifle_flank_civil
-				},
-				{
-					freq = 0.3,
-					amount_max = 1,
-					rank = 2,
-					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking
+					tactics = self._tactics.swat_rifle_flank_complex
 				},
 				{
 					freq = 0.5,
 					amount_max = 1,
 					rank = 2,
-					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_rush_civil
+					unit = "FBI_swat_M4",
+					tactics = self._tactics.swat_rifle_flank_complex
 				},
 			}
 		}
@@ -2699,7 +2678,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank_complex
 				},
 				{
 					freq = 1,
@@ -2721,7 +2700,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "punk_group",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank_complex
 				},
 			}
 		}
@@ -2736,7 +2715,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank_complex
 				},
 				{
 					freq = 1.25,
@@ -2744,14 +2723,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 3,
 					rank = 2,
 					unit = "CS_swat_SMG",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank_complex
 				},
 				{
 					freq = 1.5,
 					amount_max = 2,
 					rank = 2,
 					unit = "punk_group",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank_complex
 				},
 			}
 		}
@@ -2768,14 +2747,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 3,
 					rank = 2,
 					unit = "punk_group",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank
 				},
 				{
 					freq = 1,
 					amount_max = 2,
 					rank = 2,
 					unit = "CS_swat_SMG",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank
 				}
 			}
 		}
@@ -2790,21 +2769,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "CS_swat_SMG",
-					tactics = self._tactics.swat_rifle_flank_civil
-				},
-				{
-					freq = 0.3,
-					amount_max = 1,
-					rank = 2,
-					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking
+					tactics = self._tactics.swat_rifle_flank
 				},
 				{
 					freq = 0.5,
 					amount_max = 1,
 					rank = 2,
-					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_rush_civil
+					unit = "FBI_LHmix",
+					tactics = self._tactics.swat_rifle_flank
 				},
 			}
 		}
@@ -2819,7 +2791,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank
 				},
 				{
 					freq = 1,
@@ -2841,7 +2813,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "punk_group",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank
 				},
 			}
 		}
@@ -2852,11 +2824,18 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			},
 			spawn = {
 				{
+					freq = 1,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_heavy_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
 					freq = 1.25,
 					amount_max = 1,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank
 				},
 				{
 					freq = 1.25,
@@ -2864,14 +2843,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 3,
 					rank = 2,
 					unit = "CS_swat_SMG",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank
 				},
 				{
 					freq = 1.5,
 					amount_max = 2,
 					rank = 2,
 					unit = "punk_group",
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank
 				},
 			}
 		}
@@ -7103,8 +7082,22 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		10
 	}
 	self.besiege.recon.interval_variation = 10
-
-	if difficulty_index < 6 then
+	
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" then
+		if difficulty_index <= 7 then
+			self.besiege.recon.force = {
+				0.5,
+				0.5,
+				0.5
+			}
+		else
+			self.besiege.recon.force = {
+				0.5,
+				0.5,
+				0.5
+			}
+		end
+	elseif difficulty_index < 6 then
 		self.besiege.recon.force = {
 			4,
 			4,
@@ -7189,25 +7182,15 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	elseif difficulty_index == 5 then
 		self.besiege.recon.groups = {
-			FBI_spoocs = {
-				12.5,
-				12.5,
-				12.5
-			},
-			tac_tazer_flanking = {
-				12.5,
-				12.5,
-				12.5
-			},
 			recon_squad_B = {
-				12.5,
-				12.5,
-				12.5
+				25,
+				25,
+				25
 			},
 			recon_squad_C = {
-				12.5,
-				12.5,
-				12.5
+				25,
+				25,
+				25
 			},
 			recon_squad_D = {
 				25,
@@ -7222,40 +7205,25 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	else
 		self.besiege.recon.groups = {
-			tac_tazer_flanking = {
-				15,
-				15,
-				15
-			},
 			recon_squad_B = {
-				15,
-				15,
-				15
+				25,
+				25,
+				25
 			},
 			recon_squad_C = {
-				15,
-				15,
-				15
+				25,
+				25,
+				25
 			},
 			recon_squad_D = {
-				19,
-				19,
-				19
-			},
-			tac_tazer_charge = {
-				15,
-				15,
-				15
-			},
-			FBI_spoocs = {
-				15,
-				15,
-				15
+				25,
+				25,
+				25
 			},
 			recon_squad_A = {
-				19,
-				19,
-				19
+				25,
+				25,
+				25
 			}
 		}
 	end

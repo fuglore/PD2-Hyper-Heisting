@@ -552,7 +552,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 				if group.objective.charge then
 					for u_key, u_data in pairs(group.units) do
 						u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
-						if not u_data.unit:sound():speaking(time) then
+						if not u_data.unit:sound():speaking(time) and assaultactive then
 							local chance = math.random(1, 100)
 							local do_pus = 33
 							local not_mov = 65
@@ -592,7 +592,8 @@ function GroupAIStateBesiege:_upd_assault_task()
 			task_data.target_areas[1] = nearest_area
 		end
 	end
-
+	
+	local enemy_count = self:_count_police_force("assault")
 	local nr_wanted = task_data.force - self:_count_police_force("assault")
 	local anticipation_count = task_data.force * 0.25
 
@@ -607,7 +608,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 		nr_wanted = task_data.force - self:_count_police_force("assault")
 	end
 
-	if nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh then
+	if task_data.phase == "anticipation" and enemy_count < 16 or nr_wanted > 0 and task_data.phase ~= "anticipation" and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil
 
 		if task_data.use_spawn_event and task_data.phase ~= "anticipation" then
@@ -1361,7 +1362,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		local obstructed_path_index = self:_chk_coarse_path_obstructed(group)
 
 		if obstructed_path_index and phase_is_anticipation then
-			print("obstructed_path_index", obstructed_path_index)
+			--print("obstructed_path_index", obstructed_path_index)
 
 			objective_area = self:get_area_from_nav_seg_id(group.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
 			if phase_is_anticipation then
@@ -1417,7 +1418,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 		repeat
 			local search_area = table.remove(to_search_areas, 1)
-			-- or 
+			-- they never used this function for some reason, now i use it, so thats nice
 			if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) or next(search_area.criminal.units) then
 				local assault_from_here = true
 

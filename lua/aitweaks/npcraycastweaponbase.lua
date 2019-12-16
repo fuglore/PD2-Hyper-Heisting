@@ -66,6 +66,7 @@ end
 local mvec_true_spread = Vector3()
 local mvec_to = Vector3()
 local mvec_spread = Vector3()
+
 function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
 	local result = {}
 	local hit_unit = nil
@@ -96,7 +97,9 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 	local player_hit, player_ray_data = nil
 	local shouldnt_suppress_on_hit = nil
 	
-	if (not col_ray or col_ray.unit ~= target_unit) and target_unit and target_unit:character_damage() and target_unit:character_damage().build_suppression then
+	local nc_or_nothit_chk = not col_ray or col_ray.unit ~= target_unit
+	
+	if target_unit and nc_or_nothit_chk and target_unit:character_damage() and target_unit:character_damage().build_suppression then
 		local weaponname = tweak_data.weapon[self._name_id]
 		if weaponname.suppression and weaponname.suppression >= 5 then
 			target_unit:character_damage():build_suppression(tweak_data.weapon[self._name_id].suppression)
