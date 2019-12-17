@@ -126,7 +126,13 @@
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet"/>	
 	<object path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet" />
 	<model path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet" />	
-	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet"/>	
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet"/>
+	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_r870_helmet/ene_acc_zeal_medic_r870_helmet" load="true"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_r870_helmet/ene_acc_zeal_medic_r870_helmet"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_r870_helmet/ene_acc_zeal_medic_r870_helmet" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_r870_helmet/ene_acc_zeal_medic_r870_helmet" />	
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_r870_helmet/ene_acc_zeal_medic_r870_helmet"/>	
 
 	<!--ZEAL MEDICS-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic" load="true"/>
