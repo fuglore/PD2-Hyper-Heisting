@@ -119,8 +119,41 @@
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh_contour"/>	
 	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh" />
 	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh" />	
-	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh"/>	
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh"/>
 
+	<!--ZEAL MEDIC ACC-->	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet" load="true"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet" />	
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_medic_helmet/ene_acc_zeal_medic_helmet"/>	
+
+	<!--ZEAL MEDICS-->
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic_contour"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic"/>
+	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic" />	
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic"/>
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/material_body_nm" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/material_body_df" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/material_head_nm" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/material_head_df" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_medic/material_head_il" />
+	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870_contour"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870" />	
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870"/>
+	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/material_body_df" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/material_head_df" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/material_head_il" />
+	
 	<!--ZEAL SWAT Shield-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/ene_zeal_swat_shield_hh" load="true"/>
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/ene_zeal_swat_shield_hh_husk" load="true"/>	
@@ -243,31 +276,31 @@
 
 	<!--Zeal Folk Textures-->	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_df" />	
-	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_riflesmg_il" />	
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_riflesmg_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_df" />	
-	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_riflesmg_il" />	
-	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_shotgun_il" />	
-	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_shotgun_il" />	
-	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_il" />	
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_riflesmg_il" load="true" />	
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_shotgun_il" load="true" />	
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_shotgun_il" load="true" />	
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_il" load="true" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/armored_punk_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/glasses_df" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_head_df" />	
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_il" />	
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/helmets_atlas_il" />	
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/swat_heavy_il" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_il" load="true" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/helmets_atlas_il" load="true" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/swat_heavy_il" load="true" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_df" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_nm" />
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_il" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/danial_il" />		
 	<texture path="units/pd2_dlc_gitgud/characters/ene_acc_shield_new_swat_hh/shield_il" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_acc_shield_new_swat_hh/shield_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_df" />	
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_il" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_df" />	
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_il" />	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_il" load="true"/>	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_nm" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_nm" />	
 	

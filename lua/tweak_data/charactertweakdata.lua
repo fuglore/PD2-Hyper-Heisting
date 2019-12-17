@@ -10158,6 +10158,8 @@ function CharacterTweakData:character_map()
 			"ene_zeal_city_1",
 			"ene_zeal_city_2",
 			"ene_zeal_city_3",
+			"ene_zeal_medic",
+			"ene_zeal_medic_r870",
 			"ene_zeal_swat_heavy",
 			"ene_zeal_swat_heavy_hh",
 			"ene_zeal_swat_heavy_r870",			
@@ -10165,6 +10167,8 @@ function CharacterTweakData:character_map()
 			"ene_zeal_swat_shield_hh",
 			"ene_zeal_tazer",
 			"ene_zeal_tazer_hh",
+			"ene_zeal_punk_mp5",
+			"ene_zeal_punk_moss",
 			"ene_zeal_fbigod_m4", --COOL JEROME
 			"ene_zeal_fbigod_c45"
 		}

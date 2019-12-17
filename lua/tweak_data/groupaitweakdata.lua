@@ -2111,51 +2111,99 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			access = access_type_walk_only
 		}
 	end
-
-	self.unit_categories.medic_M4 = {
-		special_type = "medic",
-		unit_types = {
-			america = {
-				Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4")
+	
+	if difficulty_index <= 7 then
+		self.unit_categories.medic_M4 = {
+			special_type = "medic",
+			unit_types = {
+				america = {
+					Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_ak47_ass")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_m4/ene_medic_hvh_m4")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"),
+					Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4")
+				}
 			},
-			russia = {
-				Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_ak47_ass")
+			access = access_type_all
+		}
+		self.unit_categories.medic_R870 = {
+			special_type = "medic",
+			unit_types = {
+				america = {
+					Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_r870/ene_akan_medic_r870")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_r870/ene_medic_hvh_r870")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"),
+					Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870")
+				}
 			},
-			zombie = {
-				Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_m4/ene_medic_hvh_m4")
+			access = access_type_all
+		}
+	else
+		self.unit_categories.medic_M4 = {
+			special_type = "medic",
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_ak47_ass")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_m4/ene_medic_hvh_m4")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic")
+				}
 			},
-			murkywater = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic")
+			access = access_type_all
+		}
+		self.unit_categories.medic_R870 = {
+			special_type = "medic",
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_r870/ene_akan_medic_r870")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_r870/ene_medic_hvh_r870")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870")
+				}
 			},
-			shared = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"),
-				Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4")
-			}
-		},
-		access = access_type_all
-	}
-	self.unit_categories.medic_R870 = {
-		special_type = "medic",
-		unit_types = {
-			america = {
-				Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870")
-			},
-			russia = {
-				Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_r870/ene_akan_medic_r870")
-			},
-			zombie = {
-				Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_r870/ene_medic_hvh_r870")
-			},
-			murkywater = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")
-			},
-			shared = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"),
-				Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870")
-			}
-		},
-		access = access_type_all
-	}
+			access = access_type_all
+		}
+	end
+		
 	self.unit_categories.Phalanx_minion = {
 		special_type = "shield",
 		unit_types = {
