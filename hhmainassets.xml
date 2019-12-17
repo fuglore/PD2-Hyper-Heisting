@@ -81,6 +81,21 @@
 	<cooked_physics path="units/payday2/characters/ene_cop_5/ene_cop_5"/>	
 
 	<texture path="units/payday2/characters/shared_textures/police_df" force="true"/>	
+
+
+	<!--gensec shield-->
+	<unit path="units/payday2/characters/ene_city_shield/ene_city_shield" force="true"/>
+	<unit path="units/payday2/characters/ene_city_shield/ene_city_shield_husk" force="true"/>
+
+	<!--gensec shield accessory-->	
+	<unit path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city" load="true"/>
+	<material_config path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city"/>
+	<object path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city" />
+	<model path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city" />
+	<cooked_physics path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city"/>
+	<texture path="units/payday2/characters/ene_acc_shield_city/cityshield_df" />	
+	<texture path="units/payday2/characters/ene_acc_shield_city/cityshield_nm" />	
+	
 	<!--Base Game Asset Replacements END-->	
 	
 	
