@@ -597,18 +597,9 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local nr_wanted = task_data.force - self:_count_police_force("assault")
 	local anticipation_count = task_data.force * 0.25
 
-	if task_data.phase == "anticipation" and task_data.phase_end_t < t then
-		if anticipation_count < 16 then
-			local min_count = 16
-			nr_wanted = min_count - self:_count_police_force("assault")
-		else
-			nr_wanted = anticipation_count - self:_count_police_force("assault")
-		end
-	else
-		nr_wanted = task_data.force - self:_count_police_force("assault")
-	end
+	nr_wanted = task_data.force - self:_count_police_force("assault")
 
-	if task_data.phase == "anticipation" and enemy_count < 16 or nr_wanted > 0 and task_data.phase ~= "anticipation" and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh then
+	if nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil
 
 		if task_data.use_spawn_event and task_data.phase ~= "anticipation" then
