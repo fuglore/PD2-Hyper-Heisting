@@ -21,7 +21,7 @@
             </billboard>
             <billboard texture="effects/pd2_mod_hh/particles/textures/effects_atlas" intensity="inside of borg queen" billboard_type="normal_locked" rotation_channel="world_rotation" blend_mode="add" render_template="effect_op_glow" origo="0.5 0.5" per_particle_age="false" size_input="channel" color_input="keys" opacity_input="constant" opacity="255" rotation_input="constant" rotation="0" rotation_axis="0 0 1" uv_size="0.0625 0.0625" uv_offset_input="channel">
                 <color_keys loop="false">
-                    <key t="0" v="255 140 20"/>
+                    <key t="0" v="255 80 20"/>
                     <key t="0.79864639043808" v="0 0 0"/>
                 </color_keys>
             </billboard>
@@ -53,11 +53,11 @@
             <billboard texture="effects/textures/add_atlas_df" intensity="megatron" billboard_type="normal_locked" rotation_channel="world_rotation" blend_mode="normal" render_template="heat_shimmer" origo="0.5 1" per_particle_age="false" size_input="scaled_channel" color_input="constant" color="255 255 255" opacity_input="keys" rotation_input="constant" rotation="0" rotation_axis="0 0 1" uv_size="0.25 0.125" uv_offset_input="constant" uv_offset="0.5 0.17">
                 <size_scale_keys loop="false">
                     <key t="0" v="0.5 0.5"/>
-                    <key t="0.1521" v="0.5 0.5"/>
+                    <key t="0.15221" v="0.5 0.5"/>
                 </size_scale_keys>
                 <opacity_keys loop="false">
-                    <key t="0" v="150"/>
-                    <key t="0.1211847686768" v="0"/>
+                    <key t="0" v="180"/>
+                    <key t="0.2811847686768" v="0"/>
                 </opacity_keys>
             </billboard>
         </visualizerstack>
