@@ -51,12 +51,14 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.silserbu_npc.sounds.prefix = "serbu_npc"
 	self.silserbu_npc.has_suppressor = "suppressed_a"
 	self.smoke_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
-	self.lazer_npc = deep_clone(self.g36_npc)
+	self.lazer_npc = deep_clone(self.m4_npc)
 	self.lazer_npc.sounds.prefix = "tecci_npc"
+	self.lazer_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_empty"
 	self.lazer_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"
 	self.lazer_npc.b_trail = true
 	self.blazter_npc = deep_clone(self.benelli_npc)
 	self.blazter_npc.sounds.prefix = "boot_npc"
+	self.blazter_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_empty"
 	self.blazter_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"
 	self.blazter_npc.r_trail = true
 	

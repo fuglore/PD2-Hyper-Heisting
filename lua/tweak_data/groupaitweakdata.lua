@@ -6251,32 +6251,32 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	
 	if difficulty_index <= 2 then
 		self.besiege.assault.delay = {
-			45,
-			35,
-			30
+			40,
+			40,
+			40
 		}
 	elseif difficulty_index == 3 then
 		self.besiege.assault.delay = {
-			45,
-			35,
-			30
+			40,
+			40,
+			40
 		}
 	elseif difficulty_index == 4 then
 		self.besiege.assault.delay = {
-			45,
-			35,
-			30
+			40,
+			40,
+			40
 		}
-	elseif difficulty_index == 5 then
+	elseif difficulty_index == 5 or difficulty_index == 6 then
 		self.besiege.assault.delay = {
-			45,
-			35,
-			30
+			40,
+			40,
+			40
 		}
 	else
 		self.besiege.assault.delay = {
-			45,
-			35,
+			30,
+			30,
 			30
 		}
 	end
