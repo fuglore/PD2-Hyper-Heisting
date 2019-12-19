@@ -24,7 +24,7 @@ function NewFlamethrowerBase:_fire_raycast(user_unit, from_pos, direction, dmg_m
 	mvector3.add(mvec_to, mvector3.copy(from_pos))
 
 	--use a smaller sphere ray to limit the range of the actual damaging sphere ray
-	local col_sphere_ray = World:raycast("ray", mvector3.copy(from_pos), mvec_to, "sphere_cast_radius", 20, "disable_inner_ray", "slot_mask", col_slotmask, "ignore_unit", self._setup.ignore_units)
+	local col_sphere_ray = World:raycast("ray", mvector3.copy(from_pos), mvec_to, "sphere_cast_radius", 20, "disable_inner_ray", "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units)
 
 	if col_sphere_ray then --limit the range of the damage sphere if something was hit by the initial sphere ray
 		damage_range = math.min(damage_range, col_sphere_ray.distance)
