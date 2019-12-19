@@ -31,9 +31,9 @@
                     <key t="0.80000001192093" v="2 2"/>
                 </size_scale_keys>
                 <opacity_keys loop="false">
-                    <key t="0.030981067568064" v="255"/>
-                    <key t="0.15834768116474" v="100"/>
-                    <key t="0.2" v="0"/>
+                    <key t="0.01" v="200"/>
+                    <key t="0.02" v="100"/>
+                    <key t="0.03" v="0"/>
                 </opacity_keys>
                 <rotation_scale_keys loop="false">
                     <key t="0" v="0.0049999998882413"/>
@@ -56,8 +56,8 @@
         <simulatorstack>
             <scaledvelocityintegrator channel="world" per_particle_age="true">
                 <scale_keys loop="false">
-                    <key t="0" v="3"/>
-                    <key t="0.062602967023849" v="2"/>
+                    <key t="0" v="2"/>
+                    <key t="0.062602967023849" v="1"/>
                     <key t="0.18121911585331" v="1"/>
                 </scale_keys>
             </scaledvelocityintegrator>
@@ -82,8 +82,8 @@
                     <key t="2" v="0 247 255"/>
                 </color_keys>
                 <opacity_keys loop="false">
-                    <key t="0" v="255"/>
-                    <key t="1.8829604387283" v="0"/>
+                    <key t="0" v="200"/>
+                    <key t="0.02" v="0"/>
                 </opacity_keys>
             </billboard>
         </visualizerstack>

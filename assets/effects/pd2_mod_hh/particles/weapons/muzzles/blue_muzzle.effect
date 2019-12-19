@@ -2,7 +2,7 @@
 	
 	<atom name="glow" min_size="0" max_size="1" lifetime="0.04" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="kill" cull_policy="kill" cull_gracetime="0" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
-            <localboxrandomposition min="0 40 0" max="0 100 0"/>
+            <localboxrandomposition min="0 40 0" max="0 40 0"/>
         </initializerstack>
         <simulatorstack>
             <worldtransform transform_rotations="false"/>
@@ -19,7 +19,7 @@
 	
     <atom name="ball_flash" min_size="1" max_size="1" lifetime="0.02" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="kill" cull_policy="kill" cull_gracetime="0" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
-            <localboxrandomposition min="0 8 0" max="0 20 0"/>
+            <localboxrandomposition min="0 8 0" max="0 8 0"/>
             <boxrandomvelocity relative="effect" min="0 0 0" max="0 0 0"/>
             <boxrandomangle min="0" max="360"/>
             <boxrandomrotation relative="effect" min="0 0 0" max="0 0 0" min_rot="0" max_rot="0"/>
@@ -133,7 +133,7 @@
     </atom>
 	<atom name="smoke_flash" min_size="0" max_size="1" lifetime="0.05" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="kill" cull_policy="kill" cull_gracetime="0" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
-            <localboxrandomposition min="0 40 0" max="0 60 0"/>
+            <localboxrandomposition min="0 8 0" max="0 8 0"/>
             <boxrandomvelocity relative="effect" min="-10 0 0" max="-5 0 0"/>
             <boxrandomangle min="0" max="360"/>
             <boxrandomrotation relative="effect" min="0 0 0" max="0 0 0" min_rot="0" max_rot="0"/>
