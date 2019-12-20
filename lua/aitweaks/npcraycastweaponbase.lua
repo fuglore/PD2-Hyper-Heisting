@@ -42,10 +42,12 @@ local setup_func = NPCRaycastWeaponBase.setup
 function NPCRaycastWeaponBase:setup(setup_data, ...)
 	setup_func(self, setup_data, ...)
 	self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(22) --removes a certain specific slotmask type related to bullet-impacts for enemies
+	self._enemy_slotmask = managers.slot:get_mask("criminals")
 	local user_unit = setup_data.user_unit
 	if user_unit then
 		if user_unit:in_slot(16) then
 			self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(16, 22) --removes criminals and certain kinds of bullet-impact related slotmasks
+			self._enemy_slotmask = managers.slot:get_mask("enemies")
 		end
 	end		
 end
