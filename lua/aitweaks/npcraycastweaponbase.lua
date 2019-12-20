@@ -111,7 +111,7 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 		player_hit, player_ray_data = self:damage_player(col_ray, from_pos, direction, result)
 
 		if player_hit then
-			if target_unit and target_unit:character_damage() and target_unit:character_damage().build_suppression and not should_suppress_on_hit then
+			if target_unit and target_unit:character_damage() and target_unit:character_damage().build_suppression and not shouldnt_suppress_on_hit then
 				target_unit:character_damage():build_suppression(tweak_data.weapon[self._name_id].suppression)
 			end
 			InstantBulletBase:on_hit_player(col_ray or player_ray_data, self._unit, user_unit, damage)
