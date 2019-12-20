@@ -1,68 +1,110 @@
-local mvec_to = Vector3()
-local mvec_direction = Vector3()
-local mvec_spread_direction = Vector3()
+function NewFlamethrowerBase:setup_default()
+	self._rays = tweak_data.weapon[self._name_id].rays or 6
+	self._range = tweak_data.weapon[self._name_id].flame_max_range or 1000
+	self._flame_max_range = tweak_data.weapon[self._name_id].flame_max_range
+	self._single_flame_effect_duration = tweak_data.weapon[self._name_id].single_flame_effect_duration
+	self._bullet_class = FlameBulletBase
+	self._bullet_slotmask = self._bullet_class:bullet_slotmask()
+	self._bullet_slotmask = managers.mutators:modify_value("ProjectileBase:create_sweep_data:slot_mask", self._bullet_slotmask)
+	self._blank_slotmask = self._bullet_class:blank_slotmask()
+end
 
 function NewFlamethrowerBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, shoot_through_data)
-	if self._rays == 1 then
-		local result = NewFlamethrowerBase.super._fire_raycast(self, user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, shoot_through_data)
-
-		return result
-	end
-
 	local result = {}
-	local hit_enemies = 0
+	local hit_enemies = {}
+	local hit_objects = {}
+
+	local draw_debug_spheres = false
 	local damage = self:_get_current_damage(dmg_mul)
-	local autoaim, dodge_enemies = self:check_autoaim(from_pos, direction, self._range)
 	local damage_range = self._flame_max_range
-	local spread_x, spread_y = self:_get_spread(user_unit)
 
-	mvector3.set(mvec_to, direction)
+	local mvec_to = Vector3()
+	mvector3.set(mvec_to, mvector3.copy(direction))
 	mvector3.multiply(mvec_to, damage_range)
-	mvector3.add(mvec_to, from_pos)
+	mvector3.add(mvec_to, mvector3.copy(from_pos))
 
-	local col_ray = World:raycast("ray", from_pos, mvec_to, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "ignore_unit", self._setup.ignore_units)
+	--use a smaller sphere ray to limit the range of the actual damaging sphere ray
+	local col_sphere_ray = World:raycast("ray", mvector3.copy(from_pos), mvec_to, "sphere_cast_radius", 20, "disable_inner_ray", "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units)
 
-	if col_ray then
-		damage_range = math.min(damage_range, col_ray.distance)
+	if col_sphere_ray then --limit the range of the damage sphere if something was hit by the initial sphere ray
+		damage_range = math.min(damage_range, col_sphere_ray.distance)
 	end
 
-	local cone_spread = math.rad(spread_x) * damage_range
+	local mvec_to2 = Vector3()
+	mvector3.set(mvec_to2, mvector3.copy(direction))
+	mvector3.multiply(mvec_to2, damage_range)
+	mvector3.add(mvec_to2, mvector3.copy(from_pos))
 
-	mvector3.set(mvec_to, direction)
-	mvector3.multiply(mvec_to, damage_range)
-	mvector3.add(mvec_to, from_pos)
+	local sphere_hits = World:raycast_all("ray", mvector3.copy(from_pos), mvec_to2, "sphere_cast_radius", 35, "disable_inner_ray", "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units)
+	local units_hit = {}
+	local unique_hits = {}
 
-	local hit_bodies = World:find_bodies(user_unit, "intersect", "cone", from_pos, mvec_to, cone_spread, self._bullet_slotmask)
-
-	for idx, body in ipairs(hit_bodies) do
-		local unit = body:unit()
-		local fake_ray = {
-			body = body,
-			unit = body:unit(),
-			ray = direction,
-			normal = direction,
-			position = from_pos
-		}
-
-		self._bullet_class:on_collision(fake_ray, self._unit, user_unit, damage)
-
-		if unit:character_damage() and unit:character_damage().is_head then
-			hit_enemies = hit_enemies + 1
+	for i, hit in ipairs(sphere_hits) do
+		if not units_hit[hit.unit:key()] then
+			units_hit[hit.unit:key()] = true
+			unique_hits[#unique_hits + 1] = hit
+			hit.hit_position = hit.position
 		end
 	end
 
-	if dodge_enemies and self._suppression then
-		for enemy_data, dis_error in pairs(dodge_enemies) do
-			enemy_data.unit:character_damage():build_suppression(suppr_mul * dis_error * self._suppression, self._panic_suppression_chance)
+	for _, hit in ipairs(unique_hits) do
+		if hit and hit.unit then
+			if hit.unit:character_damage() then
+				if not hit_enemies[hit.unit:key()] then --not already hit
+					hit_enemies[hit.unit:key()] = hit
+				else
+					if hit.unit:character_damage().is_head then --has is_head function
+						if hit.unit:character_damage():is_head(hit.body) then --prioritize the head (you never know if it's going to be useful, it changes nothing for now so it does no harm)
+							hit_enemies[hit.unit:key()] = hit
+						elseif hit.body:name() == Idstring("body_helmet_plate") or hit.body:name() == Idstring("body_helmet_glass") then --prioritize dozer faceplates and visors over other body parts
+							hit_enemies[hit.unit:key()] = hit
+						end
+					else
+						local turret_shield = hit.unit:character_damage()._shield_body_name_ids
+						local turret_weak_spot = hit.unit:character_damage()._bag_body_name_ids
+
+						if turret_shield and (hit.body:name() == turret_shield) or turret_weak_spot and (hit.body:name() == turret_weak_spot) then --prioritize the shield or weak spot of a turret over other parts of its body
+							hit_enemies[hit.unit:key()] = hit
+						end
+					end
+				end
+			else
+				if not hit_objects[hit.unit:key()] then --not already hit
+					hit_objects[hit.unit:key()] = hit
+					self._bullet_class:on_collision(hit, self._unit, user_unit, damage)
+
+					if draw_debug_spheres then
+						local draw_duration = 1
+						local new_brush = Draw:brush(Color.white:with_alpha(0.5), draw_duration)
+						new_brush:sphere(hit.position, 5)
+					end
+				end
+			end
 		end
 	end
 
-	result.hit_enemy = hit_enemies > 0 and true or false
+	for _, col_ray in pairs(hit_enemies) do --clean way to deal damage to each enemy once per fired shot
+		self._bullet_class:on_collision(col_ray, self._unit, user_unit, damage)
+
+		if draw_debug_spheres then
+			local draw_duration = 1
+			local new_brush = Draw:brush(Color.red:with_alpha(0.5), draw_duration)
+			new_brush:sphere(col_ray.position, 5)
+		end
+	end
+
+	if self._suppression then --proper suppression, using a wider cylinder here due to the flamethrower's short range and wider area of effect
+		local max_suppression_range = self._flame_max_range * 1.5
+
+		self:_suppress_units(mvector3.copy(from_pos), mvector3.copy(direction), max_suppression_range, managers.slot:get_mask("enemies"), user_unit, suppr_mul)
+	end
+
+	result.hit_enemy = #hit_enemies > 0 and true or false
 
 	if self._alert_events then
 		result.rays = {
 			{
-				position = from_pos
+				position = mvector3.copy(from_pos) --flamethrowers normally cause alerts only from where they're fired, keeping it that way since it makes sense
 			}
 		}
 	end
@@ -72,7 +114,7 @@ function NewFlamethrowerBase:_fire_raycast(user_unit, from_pos, direction, dmg_m
 		weapon_unit = self._unit
 	})
 
-	for i = 1, hit_enemies, 1 do
+	for i = 1, #hit_enemies, 1 do
 		managers.statistics:shot_fired({
 			skip_bullet_count = true,
 			hit = true,

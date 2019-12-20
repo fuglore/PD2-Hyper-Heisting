@@ -13,8 +13,60 @@ local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_rot1 = Rotation()
 
-local MIN_KNOCK_BACK = 200
-local KNOCK_BACK_CHANCE = 0.8
+function RaycastWeaponBase:setup(setup_data, damage_multiplier)
+	self._autoaim = setup_data.autoaim
+	local stats = tweak_data.weapon[self._name_id].stats
+	self._alert_events = setup_data.alert_AI and {} or nil
+	self._alert_fires = {}
+	local weapon_stats = tweak_data.weapon.stats
+
+	if stats then
+		self._zoom = self._zoom or weapon_stats.zoom[stats.zoom]
+		self._alert_size = self._alert_size or weapon_stats.alert_size[stats.alert_size]
+		self._suppression = self._suppression or weapon_stats.suppression[stats.suppression]
+		self._spread = self._spread or weapon_stats.spread[stats.spread]
+		self._recoil = self._recoil or weapon_stats.recoil[stats.recoil]
+		self._spread_moving = self._spread_moving or weapon_stats.spread_moving[stats.spread_moving]
+		self._concealment = self._concealment or weapon_stats.concealment[stats.concealment]
+		self._value = self._value or weapon_stats.value[stats.value]
+		self._reload = self._reload or weapon_stats.reload[stats.reload]
+
+		for i, _ in pairs(weapon_stats) do
+			local stat = self["_" .. tostring(i)]
+
+			if not stat then
+				self["_" .. tostring(i)] = weapon_stats[i][5]
+
+				debug_pause("[RaycastWeaponBase] Weapon \"" .. tostring(self._name_id) .. "\" is missing stat \"" .. tostring(i) .. "\"!")
+			end
+		end
+	else
+		debug_pause("[RaycastWeaponBase] Weapon \"" .. tostring(self._name_id) .. "\" is missing stats block!")
+
+		self._zoom = 60
+		self._alert_size = 5000
+		self._suppression = 1
+		self._spread = 1
+		self._recoil = 1
+		self._spread_moving = 1
+		self._reload = 1
+	end
+
+	self._bullet_slotmask = setup_data.hit_slotmask or self._bullet_slotmask
+	self._bullet_slotmask = managers.mutators:modify_value("ProjectileBase:create_sweep_data:slot_mask", self._bullet_slotmask)
+	self._panic_suppression_chance = setup_data.panic_suppression_skill and self:weapon_tweak_data().panic_suppression_chance
+
+	if self._panic_suppression_chance == 0 then
+		self._panic_suppression_chance = false
+	end
+
+	self._setup = setup_data
+	self._fire_mode = self._fire_mode or tweak_data.weapon[self._name_id].FIRE_MODE or "single"
+
+	if self._setup.timer then
+		self:set_timer(self._setup.timer)
+	end
+end
 
 function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_assist, autohit_override_data)
 	local autohit = use_aim_assist and self._aim_assist_data or self._autohit_data
@@ -25,79 +77,263 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 	local closest_error, closest_ray = nil
 	local tar_vec = tmp_vec1
 	local ignore_units = self._setup.ignore_units
-	local slotmask = self._bullet_slotmask
-	local enemies = managers.enemy:all_enemies()
-	local suppression_near_angle = 75
-	local suppression_far_angle = 10
-	local suppression_enemies = nil
+	local obstruction_slotmask = self._bullet_slotmask
 
-	for u_key, enemy_data in pairs(enemies) do
-		local enemy = enemy_data.unit
+	if self._can_shoot_through_shield then
+		obstruction_slotmask = obstruction_slotmask - 8
+	end
 
-		if not enemy:in_slot(16) then
-			local com = enemy:movement():m_com()
+	local cone_distance = max_dist or self:weapon_range() or 20000
+	local tmp_vec_to = Vector3()
+	mvector3.set(tmp_vec_to, mvector3.copy(direction))
+	mvector3.multiply(tmp_vec_to, cone_distance)
+	mvector3.add(tmp_vec_to, mvector3.copy(from_pos))
 
-			mvec3_set(tar_vec, com)
-			mvec3_sub(tar_vec, from_pos)
+	local cone_radius = mvector3.length(tmp_vec_to) / 4
+	local enemies_in_cone = World:find_units("cone", from_pos, tmp_vec_to, cone_radius, managers.slot:get_mask("player_autoaim"))
 
-			local tar_aim_dot = mvec3_dot(direction, tar_vec)
+	for _, enemy in pairs(enemies_in_cone) do
+		local com = enemy:movement():m_com()
 
-			if tar_aim_dot > 0 and (not max_dist or tar_aim_dot < max_dist) then
-				local tar_vec_len = math_clamp(mvec3_norm(tar_vec), 1, far_dis)
-				local error_dot = mvec3_dot(direction, tar_vec)
-				local error_angle = math.acos(error_dot)
-				local dis_lerp = math.pow(tar_aim_dot / far_dis, 0.25)
-				local dis_lerp_sup = math.pow(tar_aim_dot / 6000, 0.25)
-				local suppression_min_angle = math_lerp(suppression_near_angle, suppression_far_angle, dis_lerp_sup)
+		mvector3.set(tar_vec, com)
+		mvector3.subtract(tar_vec, from_pos)
 
-				if error_angle < suppression_min_angle then
-					suppression_enemies = suppression_enemies or {}
-					local percent_error = error_angle / suppression_min_angle
-					suppression_enemies[enemy_data] = percent_error
-				end
+		local tar_aim_dot = mvec3_dot(direction, tar_vec)
 
-				local autohit_min_angle = math_lerp(autohit_near_angle, autohit_far_angle, dis_lerp)
+		if tar_aim_dot > 0 and (not max_dist or tar_aim_dot < max_dist) then
+			local tar_vec_len = math_clamp(mvec3_norm(tar_vec), 1, far_dis)
+			local error_dot = mvec3_dot(direction, tar_vec)
+			local error_angle = math.acos(error_dot)
+			local dis_lerp = math.pow(tar_aim_dot / far_dis, 0.25)
+			local autohit_min_angle = math_lerp(autohit_near_angle, autohit_far_angle, dis_lerp)
 
-				if error_angle < autohit_min_angle then
-					local percent_error = error_angle / autohit_min_angle
+			if error_angle < autohit_min_angle then
+				local percent_error = error_angle / autohit_min_angle
 
-					if not closest_error or percent_error < closest_error then
-						tar_vec_len = tar_vec_len + 100
+				if not closest_error or percent_error < closest_error then
+					tar_vec_len = tar_vec_len + 100
 
-						mvec3_mul(tar_vec, tar_vec_len)
-						mvec3_add(tar_vec, from_pos)
+					mvector3.multiply(tar_vec, tar_vec_len)
+					mvector3.add(tar_vec, from_pos)
 
-						local vis_ray = World:raycast("ray", from_pos, tar_vec, "slot_mask", slotmask, "ignore_unit", ignore_units)
+					local vis_ray = World:raycast("ray", from_pos, tar_vec, "slot_mask", obstruction_slotmask, "ignore_unit", ignore_units)
 
-						if vis_ray and vis_ray.unit:key() == u_key and (not closest_error or error_angle < closest_error) then
-							closest_error = error_angle
-							closest_ray = vis_ray
+					if vis_ray and vis_ray.unit:key() == enemy:key() and (not closest_error or error_angle < closest_error) then
+						closest_error = error_angle
+						closest_ray = vis_ray
 
-							mvec3_set(tmp_vec1, com)
-							mvec3_sub(tmp_vec1, from_pos)
+						mvector3.set(tmp_vec1, com)
+						mvector3.subtract(tmp_vec1, from_pos)
 
-							local d = mvec3_dot(direction, tmp_vec1)
+						local d = mvec3_dot(direction, tmp_vec1)
 
-							mvec3_set(tmp_vec1, direction)
-							mvec3_mul(tmp_vec1, d)
-							mvec3_add(tmp_vec1, from_pos)
-							mvec3_sub(tmp_vec1, com)
+						mvector3.set(tmp_vec1, direction)
+						mvector3.multiply(tmp_vec1, d)
+						mvector3.add(tmp_vec1, from_pos)
+						mvector3.subtract(tmp_vec1, com)
 
-							closest_ray.distance_to_aim_line = mvec3_len(tmp_vec1)
-						end
+						closest_ray.distance_to_aim_line = mvec3_len(tmp_vec1)
 					end
 				end
 			end
 		end
 	end
 
-	return closest_ray, suppression_enemies
+	return closest_ray
 end
 
+local mvec_to = Vector3()
+local mvec_spread_direction = Vector3()
+local mvec1 = Vector3()
+
+function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
+	if self:gadget_overrides_weapon_functions() then
+		return self:gadget_function_override("_fire_raycast", self, user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
+	end
+
+	local result = {}
+	local spread_x, spread_y = self:_get_spread(user_unit)
+	local ray_distance = self:weapon_range()
+	local right = direction:cross(Vector3(0, 0, 1)):normalized()
+	local up = direction:cross(right):normalized()
+	local theta = math.random() * 360
+	local ax = math.sin(theta) * math.random() * spread_x * (spread_mul or 1)
+	local ay = math.cos(theta) * math.random() * spread_y * (spread_mul or 1)
+
+	mvector3.set(mvec_spread_direction, direction)
+	mvector3.add(mvec_spread_direction, right * math.rad(ax))
+	mvector3.add(mvec_spread_direction, up * math.rad(ay))
+	mvector3.set(mvec_to, mvec_spread_direction)
+	mvector3.multiply(mvec_to, ray_distance)
+	mvector3.add(mvec_to, from_pos)
+
+	local damage = self:_get_current_damage(dmg_mul)
+	local ray_hits, hit_enemy = self:_collect_hits(from_pos, mvec_to, ray_distance, ray_distance)
+	local hit_anyone = false
+
+	if self._autoaim then
+		local weight = 0.1
+		local auto_hit_candidate = not hit_enemy and self:check_autoaim(from_pos, direction)
+
+		if auto_hit_candidate then
+			local autohit_chance = 1 - math.clamp((self._autohit_current - self._autohit_data.MIN_RATIO) / (self._autohit_data.MAX_RATIO - self._autohit_data.MIN_RATIO), 0, 1)
+
+			if autohit_mul then
+				autohit_chance = autohit_chance * autohit_mul
+			end
+
+			if math.random() < autohit_chance then
+				self._autohit_current = (self._autohit_current + weight) / (1 + weight)
+
+				mvector3.set(mvec_to, from_pos)
+				mvector3.add_scaled(mvec_to, auto_hit_candidate.ray, ray_distance)
+
+				ray_hits, hit_enemy = self:_collect_hits(from_pos, mvec_to, nil, nil, true)
+				result.was_auto_hit = true
+			end
+		end
+
+		if hit_enemy then
+			self._autohit_current = (self._autohit_current + weight) / (1 + weight)
+		elseif auto_hit_candidate then
+			self._autohit_current = self._autohit_current / (1 + weight)
+		end
+	end
+
+	local hit_count = 0
+	local cop_kill_count = 0
+	local hit_through_wall = false
+	local hit_through_shield = false
+	local hit_result = nil
+
+	for _, hit in ipairs(ray_hits) do
+		damage = self:get_damage_falloff(damage, hit, user_unit)
+		hit_result = self._bullet_class:on_collision(hit, self._unit, user_unit, damage)
+
+		if hit_result and hit_result.type == "death" then
+			local unit_type = hit.unit:base() and hit.unit:base()._tweak_table
+			local is_civilian = unit_type and CopDamage.is_civilian(unit_type)
+
+			if not is_civilian then
+				cop_kill_count = cop_kill_count + 1
+			end
+
+			if self:is_category(tweak_data.achievement.easy_as_breathing.weapon_type) and not is_civilian then
+				self._kills_without_releasing_trigger = (self._kills_without_releasing_trigger or 0) + 1
+
+				if tweak_data.achievement.easy_as_breathing.count <= self._kills_without_releasing_trigger then
+					managers.achievment:award(tweak_data.achievement.easy_as_breathing.award)
+				end
+			end
+		end
+
+		if hit_result then
+			hit.damage_result = hit_result
+			hit_anyone = true
+			hit_count = hit_count + 1
+		end
+
+		if hit.unit:in_slot(managers.slot:get_mask("world_geometry")) then
+			hit_through_wall = true
+		elseif hit.unit:in_slot(managers.slot:get_mask("enemy_shield_check")) then
+			hit_through_shield = hit_through_shield or alive(hit.unit:parent())
+		end
+
+		if hit_result and hit_result.type == "death" and cop_kill_count > 0 then
+			local unit_type = hit.unit:base() and hit.unit:base()._tweak_table
+			local multi_kill, enemy_pass, obstacle_pass, weapon_pass, weapons_pass, weapon_type_pass = nil
+
+			for achievement, achievement_data in pairs(tweak_data.achievement.sniper_kill_achievements) do
+				multi_kill = not achievement_data.multi_kill or cop_kill_count == achievement_data.multi_kill
+				enemy_pass = not achievement_data.enemy or unit_type == achievement_data.enemy
+				obstacle_pass = not achievement_data.obstacle or achievement_data.obstacle == "wall" and hit_through_wall or achievement_data.obstacle == "shield" and hit_through_shield
+				weapon_pass = not achievement_data.weapon or self._name_id == achievement_data.weapon
+				weapons_pass = not achievement_data.weapons or table.contains(achievement_data.weapons, self._name_id)
+				weapon_type_pass = not achievement_data.weapon_type or self:is_category(achievement_data.weapon_type)
+
+				if multi_kill and enemy_pass and obstacle_pass and weapon_pass and weapons_pass and weapon_type_pass then
+					if achievement_data.stat then
+						managers.achievment:award_progress(achievement_data.stat)
+					elseif achievement_data.award then
+						managers.achievment:award(achievement_data.award)
+					elseif achievement_data.challenge_stat then
+						managers.challenge:award_progress(achievement_data.challenge_stat)
+					elseif achievement_data.trophy_stat then
+						managers.custom_safehouse:award(achievement_data.trophy_stat)
+					elseif achievement_data.challenge_award then
+						managers.challenge:award(achievement_data.challenge_award)
+					end
+				end
+			end
+		end
+	end
+
+	if not tweak_data.achievement.tango_4.difficulty or table.contains(tweak_data.achievement.tango_4.difficulty, Global.game_settings.difficulty) then
+		if self._gadgets and table.contains(self._gadgets, "wpn_fps_upg_o_45rds") and cop_kill_count > 0 and managers.player:player_unit():movement():current_state():in_steelsight() then
+			if self._tango_4_data then
+				if self._gadget_on == self._tango_4_data.last_gadget_state then
+					self._tango_4_data = nil
+				else
+					self._tango_4_data.last_gadget_state = self._gadget_on
+					self._tango_4_data.count = self._tango_4_data.count + 1
+				end
+
+				if self._tango_4_data and tweak_data.achievement.tango_4.count <= self._tango_4_data.count then
+					managers.achievment:_award_achievement(tweak_data.achievement.tango_4, "tango_4")
+				end
+			else
+				self._tango_4_data = {
+					count = 1,
+					last_gadget_state = self._gadget_on
+				}
+			end
+		elseif self._tango_4_data then
+			self._tango_4_data = nil
+		end
+	end
+
+	result.hit_enemy = hit_anyone
+
+	if self._autoaim then
+		self._shot_fired_stats_table.hit = hit_anyone
+		self._shot_fired_stats_table.hit_count = hit_count
+
+		if (not self._ammo_data or not self._ammo_data.ignore_statistic) and not self._rays then
+			managers.statistics:shot_fired(self._shot_fired_stats_table)
+		end
+	end
+
+	local furthest_hit = ray_hits[#ray_hits]
+
+	if (furthest_hit and furthest_hit.distance > 600 or not furthest_hit) and alive(self._obj_fire) then
+		local trail_direction = furthest_hit and furthest_hit.ray or mvec_spread_direction
+
+		self._obj_fire:m_position(self._trail_effect_table.position)
+		mvector3.set(self._trail_effect_table.normal, trail_direction)
+
+		local trail = World:effect_manager():spawn(self._trail_effect_table)
+
+		if furthest_hit then
+			World:effect_manager():set_remaining_lifetime(trail, math.clamp((furthest_hit.distance - 600) / 10000, 0, furthest_hit.distance))
+		else
+			World:effect_manager():set_remaining_lifetime(trail, math.clamp((ray_distance - 600) / 10000, 0, ray_distance))
+		end
+	end
+
+	if self._alert_events then
+		result.rays = ray_hits
+	end
+
+	if self._suppression then
+		self:_suppress_units(mvector3.copy(from_pos), mvector3.copy(direction), ray_distance, managers.slot:get_mask("enemies"), user_unit, suppr_mul)
+	end
+
+	return result
+end
 
 --Fix for duplicated bullets below, thank you Hoxi <3
 function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, blank, no_sound)
-	if not blank and Network:is_client() and user_unit and alive(user_unit) and user_unit ~= managers.player:player_unit() then
+	if Network:is_client() and not blank and user_unit ~= managers.player:player_unit() then
 		blank = true
 	end
 
@@ -105,28 +341,35 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 	local shield_knock = false
 	local is_shield = hit_unit:in_slot(managers.slot:get_mask("enemy_shield_check")) and alive(hit_unit:parent())
 
-	if weapon_unit and is_shield and not hit_unit:parent():base().is_phalanx and tweak_data.character[hit_unit:parent():base()._tweak_table].damage.shield_knocked and not hit_unit:parent():character_damage():is_immune_to_shield_knockback() then
-		shield_knock = weapon_unit:base()._shield_knock
-		local dmg_ratio = math.min(damage, MIN_KNOCK_BACK)
-		dmg_ratio = dmg_ratio / MIN_KNOCK_BACK + 1
-		local rand = math.random() * dmg_ratio
+	if alive(weapon_unit) and is_shield and weapon_unit:base()._shield_knock then
+		local enemy_unit = hit_unit:parent()
 
-		if KNOCK_BACK_CHANCE < rand then
-			local enemy_unit = hit_unit:parent()
+		--it never hurts to add these checks 
+		if enemy_unit:character_damage() and enemy_unit:character_damage().dead and not enemy_unit:character_damage():dead() then
+			if enemy_unit:base():char_tweak() then
+				if not enemy_unit:base():char_tweak().immune_to_ranged_knock_back and enemy_unit:base():char_tweak().damage.shield_knocked and not enemy_unit:character_damage():is_immune_to_shield_knockback() then
+					local MIN_KNOCK_BACK = 200
+					local KNOCK_BACK_CHANCE = 0.8
+					local dmg_ratio = math.min(damage, MIN_KNOCK_BACK)
+					dmg_ratio = dmg_ratio / MIN_KNOCK_BACK + 1
 
-			if shield_knock and enemy_unit:character_damage() then
-				local damage_info = {
-					damage = 0,
-					type = "shield_knock",
-					variant = "melee",
-					col_ray = col_ray,
-					result = {
-						variant = "melee",
-						type = "shield_knock"
-					}
-				}
+					local rand = math.random() * dmg_ratio
 
-				enemy_unit:character_damage():_call_listeners(damage_info)
+					if KNOCK_BACK_CHANCE < rand then
+						local damage_info = {
+							damage = 0,
+							type = "shield_knock",
+							variant = "melee",
+							col_ray = col_ray,
+							result = {
+								variant = "melee",
+								type = "shield_knock"
+							}
+						}
+
+						enemy_unit:character_damage():_call_listeners(damage_info)
+					end
+				end
 			end
 		end
 	end
@@ -134,26 +377,42 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 	local play_impact_flesh = not hit_unit:character_damage() or not hit_unit:character_damage()._no_blood
 
 	if hit_unit:damage() and managers.network:session() and col_ray.body:extension() and col_ray.body:extension().damage then
-		local sync_damage = not blank and hit_unit:id() ~= -1
-		local network_damage = math.ceil(damage * 163.84)
-		damage = network_damage / 163.84
+		local damage_body_extension = true
+		local character_unit = nil
 
-		if sync_damage then
-			local normal_vec_yaw, normal_vec_pitch = self._get_vector_sync_yaw_pitch(col_ray.normal, 128, 64)
-			local dir_vec_yaw, dir_vec_pitch = self._get_vector_sync_yaw_pitch(col_ray.ray, 128, 64)
-
-			managers.network:session():send_to_peers_synched("sync_body_damage_bullet", col_ray.unit:id() ~= -1 and col_ray.body or nil, user_unit:id() ~= -1 and user_unit or nil, normal_vec_yaw, normal_vec_pitch, col_ray.position, dir_vec_yaw, dir_vec_pitch, math.min(16384, network_damage))
+		if hit_unit:character_damage() then
+			character_unit = hit_unit
+		elseif is_shield and hit_unit:parent():character_damage() then
+			character_unit = hit_unit:parent()
 		end
 
-		local local_damage = not blank or hit_unit:id() == -1
+		if character_unit and character_unit:character_damage().is_friendly_fire and character_unit:character_damage():is_friendly_fire(user_unit) then
+			damage_body_extension = false
+		end
 
-		if local_damage then
-			col_ray.body:extension().damage:damage_bullet(user_unit, col_ray.normal, col_ray.position, col_ray.ray, 1)
-			col_ray.body:extension().damage:damage_damage(user_unit, col_ray.normal, col_ray.position, col_ray.ray, damage)
+		--do a friendly fire check if the unit hit is a character or a character's shield before damaging the body extension that was hit
+		if damage_body_extension then
+			local sync_damage = not blank and hit_unit:id() ~= -1
+			local network_damage = math.ceil(damage * 163.84)
+			damage = network_damage / 163.84
 
-			if alive(weapon_unit) and weapon_unit:base().categories and weapon_unit:base():categories() then
-				for _, category in ipairs(weapon_unit:base():categories()) do
-					col_ray.body:extension().damage:damage_bullet_type(category, user_unit, col_ray.normal, col_ray.position, col_ray.ray, 1)
+			if sync_damage then
+				local normal_vec_yaw, normal_vec_pitch = self._get_vector_sync_yaw_pitch(col_ray.normal, 128, 64)
+				local dir_vec_yaw, dir_vec_pitch = self._get_vector_sync_yaw_pitch(col_ray.ray, 128, 64)
+
+				managers.network:session():send_to_peers_synched("sync_body_damage_bullet", col_ray.unit:id() ~= -1 and col_ray.body or nil, user_unit:id() ~= -1 and user_unit or nil, normal_vec_yaw, normal_vec_pitch, col_ray.position, dir_vec_yaw, dir_vec_pitch, math.min(16384, network_damage))
+			end
+
+			local local_damage = not blank or hit_unit:id() == -1
+
+			if local_damage then
+				col_ray.body:extension().damage:damage_bullet(user_unit, col_ray.normal, col_ray.position, col_ray.ray, 1)
+				col_ray.body:extension().damage:damage_damage(user_unit, col_ray.normal, col_ray.position, col_ray.ray, damage)
+
+				if alive(weapon_unit) and weapon_unit:base().categories and weapon_unit:base():categories() then
+					for _, category in ipairs(weapon_unit:base():categories()) do
+						col_ray.body:extension().damage:damage_bullet_type(category, user_unit, col_ray.normal, col_ray.position, col_ray.ray, 1)
+					end
 				end
 			end
 		end
@@ -161,26 +420,33 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 
 	local result = nil
 
-	if not blank then
-		if alive(weapon_unit) and hit_unit:character_damage() and hit_unit:character_damage().damage_bullet then
-			local is_alive = not hit_unit:character_damage():dead()
+	if alive(weapon_unit) and hit_unit:character_damage() and hit_unit:character_damage().damage_bullet then
+		local is_alive = not hit_unit:character_damage():dead()
+
+		if not blank then
 			local knock_down = weapon_unit:base()._knock_down and weapon_unit:base()._knock_down > 0 and math.random() < weapon_unit:base()._knock_down
+
 			result = self:give_impact_damage(col_ray, weapon_unit, user_unit, damage, weapon_unit:base()._use_armor_piercing, false, knock_down, weapon_unit:base()._stagger, weapon_unit:base()._variant)
+		end
 
-			if result ~= "friendly_fire" then
-				local is_dead = hit_unit:character_damage():dead()
-				local push_multiplier = self:_get_character_push_multiplier(weapon_unit, is_alive and is_dead)
+		local is_dead = hit_unit:character_damage():dead()
 
-				managers.game_play_central:physics_push(col_ray, push_multiplier)
-			else
+		if not is_dead then
+			if not result or result == "friendly_fire" then
 				play_impact_flesh = false
 			end
-		else
-			managers.game_play_central:physics_push(col_ray)
 		end
-		
+
+		local push_multiplier = self:_get_character_push_multiplier(weapon_unit, is_alive and is_dead)
+
+		managers.game_play_central:physics_push(col_ray, push_multiplier)
+	else
+		managers.game_play_central:physics_push(col_ray)
+	end
+
+	if play_impact_flesh then
 		local fullautonpc = alive(weapon_unit) and weapon_unit:base().weapon_tweak_data and weapon_unit:base():weapon_tweak_data() and weapon_unit:base():weapon_tweak_data().fullautonpc ~= nil
-		
+
 		if fullautonpc then --no more destroying my framerate you figgin' fuggin' goose
 			if math.random() < 0.25 then
 				managers.game_play_central:play_impact_flesh({
@@ -189,7 +455,7 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 				})
 				self:play_impact_sound_and_effects(weapon_unit, col_ray, no_sound)
 			end
-		elseif play_impact_flesh then
+		else
 			managers.game_play_central:play_impact_flesh({
 				col_ray = col_ray,
 				no_sound = no_sound
@@ -199,6 +465,79 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 	end
 
 	return result
+end
+
+function RaycastWeaponBase:_suppress_units(from_pos, direction, distance, slotmask, user_unit, suppr_mul)
+	local tmp_to = Vector3()
+
+	mvector3.set(tmp_to, mvector3.copy(direction))
+	mvector3.multiply(tmp_to, distance)
+	mvector3.add(tmp_to, mvector3.copy(from_pos))
+
+	local cone_radius = distance / 4
+	local enemies_in_cone = World:find_units(user_unit, "cone", from_pos, tmp_to, cone_radius, slotmask)
+	local enemies_to_suppress = {}
+
+	--draw the cone to see where it goes
+	local draw_suppression_cone = false
+	--mark valid enemies (specials can count even if they end up denying suppression anyway)
+	local mark_suppressed_enemies = false
+
+	if draw_suppression_cone and user_unit == managers.player:player_unit() then
+		local draw_duration = 0.1
+		local new_brush = Draw:brush(Color.white:with_alpha(0.5), draw_duration)
+		new_brush:cone(from_pos, tmp_to, cone_radius)
+	end
+
+	if #enemies_in_cone > 0 then
+		for _, enemy in ipairs(enemies_in_cone) do
+			if Network:is_server() or user_unit == managers.player:player_unit() or enemy == managers.player:player_unit() then --clients only allow the local player to suppress or be suppressed (so that NPC husks don't suppress each other)
+				if not table.contains(enemies_to_suppress, enemy) and enemy.character_damage and enemy:character_damage() and enemy:character_damage().build_suppression then --valid enemy + has suppression function
+					if not enemy:movement().cool or enemy:movement().cool and not enemy:movement():cool() then --is alerted or can't be alerted at all (player)
+						if enemy:character_damage().is_friendly_fire and not enemy:character_damage():is_friendly_fire(user_unit) then --not in the same team as the shooter
+							local obstructed = World:raycast("ray", from_pos, enemy:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision", "report") --imitating AI checking for visibility for things like shouting
+
+							if not obstructed then
+								table.insert(enemies_to_suppress, enemy)
+							end
+						end
+					end
+				end
+			end
+		end
+
+		if #enemies_to_suppress > 0 then
+			for _, enemy in ipairs(enemies_to_suppress) do
+				local enemy_distance = mvector3.distance(from_pos, enemy:movement():m_head_pos())
+				local dis_lerp_value = math.clamp(enemy_distance, 0, distance) / distance
+				local total_suppression = self._suppression
+
+				if suppr_mul then
+					total_suppression = total_suppression * suppr_mul
+				end
+
+				total_suppression = math.lerp(total_suppression, 0, dis_lerp_value)
+
+				local total_panic_chance = false
+
+				if self._panic_suppression_chance then
+					total_panic_chance = self._panic_suppression_chance
+
+					local suppr_lerp_value = math.clamp(total_suppression, 0, 4.5) / 4.5
+
+					total_panic_chance = math.lerp(0, total_panic_chance, suppr_lerp_value)
+				end
+
+				if total_suppression > 0 then
+					if mark_suppressed_enemies and enemy:contour() then
+						enemy:contour():add("medic_heal")
+					end
+
+					enemy:character_damage():build_suppression(total_suppression, total_panic_chance)
+				end
+			end
+		end
+	end
 end
 
 function InstantBulletBase:on_collision_effects(col_ray, weapon_unit, user_unit, damage, blank, no_sound)
