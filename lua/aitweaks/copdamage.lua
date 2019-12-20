@@ -1875,12 +1875,6 @@ function CopDamage:damage_explosion(attack_data)
 		return
 	end
 
-	local valid_attacker = attack_data.attacker_unit and alive(attack_data.attacker_unit)
-
-	if valid_attacker and self:is_friendly_fire(attack_data.attacker_unit) then
-		return "friendly_fire"
-	end
-
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 
 	local result = nil

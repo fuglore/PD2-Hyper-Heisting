@@ -6285,7 +6285,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		self.besiege.assault.hostage_hesitation_delay = {
 			20,
 			20,
-			20
+			20	
 		}
 	else
 		self.besiege.assault.hostage_hesitation_delay = {

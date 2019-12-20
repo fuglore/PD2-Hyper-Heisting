@@ -8,7 +8,8 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 		"smoke_npc",
 		"scar_npc",
 		"lazer_npc",
-		"s552_npc"
+		"s552_npc",
+		"quagmire_npc"
 	}
 	
 	local all_smgs = {
@@ -42,11 +43,18 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 	self.benelli_npc.spread = 1
 	self.silserbu_npc.spread = 1
 	self.mossberg_npc.spread = 1
+	self.bayou_npc.spread = 1
 end
 
 Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	
 	--begin new weapon setup
+	self.bayou_npc = deep_clone(self.r870_npc)
+	self.bayou_npc.sounds.prefix = "spas_npc"
+	self.quagmire_npc = deep_clone(self.m4_npc)
+	self.quagmire_npc.sounds.prefix = "contraband_npc"
+	self.quagmire_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
+	self.quagmire_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
 	self.silserbu_npc = deep_clone(self.r870_npc)
 	self.silserbu_npc.sounds.prefix = "serbu_npc"
 	self.silserbu_npc.has_suppressor = "suppressed_a"
@@ -71,8 +79,9 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.g36_npc.DAMAGE = 1
 	self.ak47_npc.DAMAGE = 1
 	self.smoke_npc.DAMAGE = 1
+	self.quagmire_npc.DAMAGE = 1
+	self.scar_npc.DAMAGE = 1
 	self.saiga_npc.DAMAGE = 5
-	self.scar_npc.DAMAGE = 1.5
 	
 	--New adjustment for consistent firing times, I found that the amount of time an enemy could go on without reloading was causing gaps of breathing room in the chaos, these should always be a LITTLE bit.
 	self.m4_npc.auto.fire_rate = 0.08
@@ -81,14 +90,19 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.smoke_npc.auto.fire_rate = 0.08
 	self.ak47_ass_npc.auto.fire_rate = 0.08
 	self.ak47_npc.auto.fire_rate = 0.08
+	self.quagmire_npc.fire_rate = 0.08
+	self.scar_npc.fire_rate = 0.08
 	
 	--This...is important, suppression needs to be changed between enemies due to the way suppression works being partially modified on the player's side, as such, minimum suppression for a few things that I want to really lay suppression on the player on have been greatly increased.
 	self.m4_npc.suppression = 1
 	self.m4_yellow_npc.suppression = 1
 	self.ak47_npc.suppression = 1
 	self.ak47_ass_npc.suppression = 1
+	self.scar_npc.suppression = 1
 	self.g36_npc.suppression = 1
 	self.smoke_npc.suppression = 1
+	self.quagmire_npc.suppression = 1
+	self.lazer_npc.suppression = 1
 	self.mp5_npc.suppression = 5
 	self.ump_npc.suppression = 5
 	self.mp9_npc.suppression = 5
@@ -146,7 +160,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.rpk_lmg_npc.usage = "is_lmg"
 	self.rpk_lmg_npc.auto.fire_rate = 0.08
 	self.mossberg_npc.usage = "is_shotgun_mag"
-	self.mossberg_npc.DAMAGE = 1.5
+	self.mossberg_npc.DAMAGE = 2
 	self.mossberg_npc.CLIP_AMMO_MAX = 2
 	
 	self.mini_npc.CLIP_AMMO_MAX = 100000 --new minigun dozer buff setup
@@ -165,6 +179,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.rpk_lmg_npc.hivis = true
 	self.silserbu_npc.hi_vis = true
 	self.mossberg_npc.hi_vis = true
+	self.bayou_npc.hi_vis = true
 	self.m14_sniper_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.svd_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.svdsil_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
@@ -177,6 +192,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.m249_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.rpk_lmg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.mossberg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
+	self.bayou_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	
 	self.swat_van_turret_module.DAMAGE_MUL_RANGE = {
 		{
@@ -257,8 +273,11 @@ function WeaponTweakData:_set_normal()
 	self.m4_yellow_npc.DAMAGE = 0.5
 	self.g36_npc.DAMAGE = 0.5
 	self.ak47_npc.DAMAGE = 0.5
+	self.scar_npc.DAMAGE = 0.5
 	self.smoke_npc.DAMAGE = 0.5
+	self.quagmire_npc.DAMAGE = 0.5
 	self.r870_npc.DAMAGE = 2.5
+	self.bayou_npc.DAMAGE = 2.5
 	self.benelli_npc.DAMAGE = 2.5
 	self.blazter_npc.DAMAGE = 2.5
 	self.m14_sniper_npc.damage = 1
@@ -271,9 +290,11 @@ function WeaponTweakData:_set_normal()
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 16
 	self.ak47_npc.CLIP_AMMO_MAX = 16
 	self.lazer_npc.CLIP_AMMO_MAX = 16
+	self.quagmire_npc.CLIP_AMMO_MAX = 16
 	
 	--shotgun tweaks, fires 3 times before reload on SWAT-tier
 	self.r870_npc.CLIP_AMMO_MAX = 3
+	self.bayou_npc.CLIP_AMMO_MAX = 3
 	self.benelli_npc.CLIP_AMMO_MAX = 3
 	self.blazter_npc.CLIP_AMMO_MAX = 3
 	
@@ -308,8 +329,11 @@ function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
 	self.m4_yellow_npc.DAMAGE = 0.5
 	self.g36_npc.DAMAGE = 0.5
 	self.ak47_npc.DAMAGE = 0.5
+	self.scar_npc.DAMAGE = 0.5
 	self.smoke_npc.DAMAGE = 0.5
+	self.quagmire_npc.DAMAGE = 0.5
 	self.r870_npc.DAMAGE = 2.5
+	self.bayou_npc.DAMAGE = 2.5
 	self.benelli_npc.DAMAGE = 2.5
 	self.blazter_npc.DAMAGE = 2.5
 	self.m14_sniper_npc.damage = 1
@@ -322,9 +346,11 @@ function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 16
 	self.ak47_npc.CLIP_AMMO_MAX = 16
 	self.lazer_npc.CLIP_AMMO_MAX = 16
+	self.quagmire_npc.CLIP_AMMO_MAX = 16
 	
 	--shotgun tweaks, fires 3 times before reload on SWAT-tier
 	self.r870_npc.CLIP_AMMO_MAX = 3
+	self.bayou_npc.CLIP_AMMO_MAX = 3
 	self.benelli_npc.CLIP_AMMO_MAX = 3
 	self.blazter_npc.CLIP_AMMO_MAX = 3
 	
@@ -360,6 +386,7 @@ function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried abo
 	self.g36_npc.DAMAGE = 1
 	self.ak47_npc.DAMAGE = 1
 	self.smoke_npc.DAMAGE = 1
+	self.quagmire_npc.DAMAGE = 1
 	
 	--rifle tweaks, 2 seconds of firing
 	self.m4_npc.CLIP_AMMO_MAX = 25
@@ -369,9 +396,11 @@ function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried abo
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 25
 	self.ak47_npc.CLIP_AMMO_MAX = 25
 	self.lazer_npc.CLIP_AMMO_MAX = 25
+	self.quagmire_npc.CLIP_AMMO_MAX = 25
 	
 	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
 	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.bayou_npc.CLIP_AMMO_MAX = 4
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
@@ -424,9 +453,11 @@ function WeaponTweakData:_set_overkill_145()
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 25
 	self.ak47_npc.CLIP_AMMO_MAX = 25
 	self.lazer_npc.CLIP_AMMO_MAX = 25
+	self.quagmire_npc.CLIP_AMMO_MAX = 25
 	
 	--shotgun tweaks, fires 4 times before reload on FBI-tier
 	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.bayou_npc.CLIP_AMMO_MAX = 4
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
@@ -483,9 +514,11 @@ function WeaponTweakData:_set_easy_wish()
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 30
 	self.ak47_npc.CLIP_AMMO_MAX = 30
 	self.lazer_npc.CLIP_AMMO_MAX = 30
+	self.quagmire_npc.CLIP_AMMO_MAX = 30
 	
 	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
 	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.bayou_npc.CLIP_AMMO_MAX = 4
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
@@ -555,9 +588,11 @@ function WeaponTweakData:_set_overkill_290()
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 30
 	self.ak47_npc.CLIP_AMMO_MAX = 30
 	self.lazer_npc.CLIP_AMMO_MAX = 30
+	self.quagmire_npc.CLIP_AMMO_MAX = 30
 	
 	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
 	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.bayou_npc.CLIP_AMMO_MAX = 4
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
@@ -627,9 +662,11 @@ function WeaponTweakData:_set_sm_wish()
 	self.ak47_ass_npc.CLIP_AMMO_MAX = 45
 	self.ak47_npc.CLIP_AMMO_MAX = 45
 	self.lazer_npc.CLIP_AMMO_MAX = 45
+	self.quagmire_npc.CLIP_AMMO_MAX = 45
 	
 	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
 	self.r870_npc.CLIP_AMMO_MAX = 4
+	self.bayou_npc.CLIP_AMMO_MAX = 4
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
@@ -656,6 +693,7 @@ function WeaponTweakData:_set_sm_wish()
 	self.ak47_npc.DAMAGE = 1
 	self.smoke_npc.DAMAGE = 1
 	self.lazer_npc.DAMAGE = 1
+	self.quagmire_npc.DAMAGE = 30
 	
 	--Turret tweaks.
 	self.swat_van_turret_module.HEALTH_INIT = 25000

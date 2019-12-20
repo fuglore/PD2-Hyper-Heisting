@@ -355,7 +355,25 @@
 	
 	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_df" />	
 	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_nm" />	
-	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_il" />	
+	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_il" />
+		
+	<unit path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" load="true"/>
+	<material_config path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>	
+	<object path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" />
+	<model path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" />	
+	<cooked_physics path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>	
+	<sequence_manager path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>
+
+	<texture path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou_df" />
+
+	<unit path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire" load="true"/>
+	<material_config path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"/>	
+	<object path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire" />
+	<model path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire" />	
+	<cooked_physics path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"/>	
+	<sequence_manager path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"/>
+
+	<df_nm path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire" />
 
 	<!--CRIME SPREE MOTHAFUCKERS-->	
 	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic" force="true"/>

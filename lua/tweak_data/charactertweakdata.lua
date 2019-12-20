@@ -10080,7 +10080,9 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"smoke",
 		"s553_zeal",
 		"lazer",
-		"blazter"
+		"blazter",
+		"bayou_spas",
+		"quagmire"
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -10116,7 +10118,9 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_uno/weapons/wpn_npc_smoke/wpn_npc_smoke"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_s553/wpn_npc_s553"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_lazer"),
-		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_blazter/wpn_npc_blazter")
+		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_blazter/wpn_npc_blazter"),
+		Idstring("units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"),
+		Idstring("units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire")
 	}
 end
 

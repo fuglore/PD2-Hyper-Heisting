@@ -151,7 +151,7 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 					InstantBulletBase:on_hit_player(hit or player_ray_data, self._unit, user_unit, damage)
 
 					if not self._use_armor_piercing then
-						hit.position = mvector3.copy(managers.player:player_unit():movement():m_head_pos()))
+						hit.position = mvector3.copy(managers.player:player_unit():movement():m_head_pos())
 						hit.distance = mvector3.direction(hit.ray, mvector3.copy(from_pos), mvector3.copy(managers.player:player_unit():movement():m_head_pos()))
 						furthest_hit = hit
 
