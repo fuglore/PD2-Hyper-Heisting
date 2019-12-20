@@ -127,14 +127,10 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 			local weak_body = hit.body:has_ray_type(ai_vision_ids)
 			weak_body = weak_body or hit.body:has_ray_type(bulletproof_ids)
 
-			if not self._use_armor_piercing and hit_enemy then
-				break
-			elseif hit.unit:in_slot(wall_mask) then
-				if not self._use_armor_piercing and weak_body then
+			if not self._use_armor_piercing then
+				if hit_enemy or hit.unit:in_slot(wall_mask) and weak_body or hit.unit:in_slot(shield_mask) then
 					break
 				end
-			elseif not self._use_armor_piercing and hit.unit:in_slot(shield_mask) then
-				break
 			end
 		end
 	end
