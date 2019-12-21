@@ -3,8 +3,8 @@
 		<bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_nm"/>
 		<diffuse_texture 		file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_df"/>
 		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/mask_il"/>
-        <variable type="scalar" name="il_bloom" value="5"/>
-        <variable type="scalar" name="il_multiplier" value="reddot"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
 	</material>
 
 		<material name="mtr_helmet" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" version="2">
@@ -19,8 +19,8 @@
 		<bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_nm"/>
 		<diffuse_texture 		file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_df"/>
 		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/body_il"/>
-        <variable type="scalar" name="il_bloom" value="5"/>
-        <variable type="scalar" name="il_multiplier" value="reddot"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
 	</material>
 	
     <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>

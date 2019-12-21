@@ -4,15 +4,15 @@
 		<diffuse_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_df"/>
 		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_il"/>
         <variable type="scalar" name="il_bloom" value="10"/>
-        <variable type="scalar" name="il_multiplier" value="neonsign"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
 	</material>
 
-	<material name="mtr_head" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SKINNED_3WEIGHTS" version="2">
+	<material name="mtr_head" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM:SKINNED_3WEIGHTS" version="2">
 		<bump_normal_texture 	file="units/payday2/characters/shared_textures/danial_nm"/>
 		<diffuse_texture 	file="units/payday2/characters/shared_textures/danial_df"/>
 		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/danial_il"/>
-        <variable type="scalar" name="il_bloom" value="5"/>
-        <variable type="scalar" name="il_multiplier" value="neonsign"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
 	</material>
 
 	<material name="mtr_ene_acc_swat_helmet" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP" version="2">
