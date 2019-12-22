@@ -1682,9 +1682,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = { --tap fire like crazy
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -1700,9 +1700,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -1718,9 +1718,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -1736,9 +1736,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -1754,9 +1754,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -1814,9 +1814,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -1832,9 +1832,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -1850,9 +1850,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -1868,9 +1868,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -1887,8 +1887,8 @@ function CharacterTweakData:_presets(tweak_data)
 				mode = {
 					1,
 					0,
-					0,
-					1
+					1,
+					0
 				}
 			}
 		}
@@ -2822,9 +2822,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = { --tap fire like crazy
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -2840,9 +2840,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -2858,9 +2858,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -2876,9 +2876,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -2894,9 +2894,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -2954,9 +2954,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -2972,9 +2972,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -2990,9 +2990,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -3008,9 +3008,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -3027,8 +3027,8 @@ function CharacterTweakData:_presets(tweak_data)
 				mode = {
 					1,
 					0,
-					0,
-					1
+					1,
+					0
 				}
 			}
 		}
@@ -3909,9 +3909,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = { --tap fire like crazy, unchanged from civil
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -3927,9 +3927,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -3945,9 +3945,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -3963,9 +3963,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -3981,9 +3981,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -4041,9 +4041,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -4059,9 +4059,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -4077,9 +4077,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -4095,9 +4095,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -4114,8 +4114,8 @@ function CharacterTweakData:_presets(tweak_data)
 				mode = {
 					1,
 					0,
-					0,
-					1
+					1,
+					0
 				}
 			}
 		}
@@ -5015,9 +5015,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = { --tap fire like crazy, unchanged from civil
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -5033,9 +5033,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -5051,9 +5051,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -5069,9 +5069,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -5087,9 +5087,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
-					1,
-					1,
-					1
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -5147,9 +5147,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -5165,9 +5165,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -5183,9 +5183,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -5201,9 +5201,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					1,
+					0,
 					1,
-					1,
-					1
+					0
 				}
 			},
 			{
@@ -5220,8 +5220,8 @@ function CharacterTweakData:_presets(tweak_data)
 				mode = {
 					1,
 					0,
-					0,
-					1
+					1,
+					0
 				}
 			}
 		}
@@ -6117,10 +6117,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6135,10 +6135,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6153,10 +6153,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6171,10 +6171,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6189,10 +6189,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6207,10 +6207,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			}
 		}
@@ -6249,10 +6249,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6267,10 +6267,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6285,10 +6285,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6303,10 +6303,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6321,10 +6321,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			},
 			{
@@ -6339,10 +6339,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					1,
+					0
 				}
 			}
 		}
