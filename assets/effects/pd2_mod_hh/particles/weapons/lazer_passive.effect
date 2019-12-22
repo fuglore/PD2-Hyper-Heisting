@@ -10,7 +10,7 @@
             <boxrandomuvoffset uv_size="0.25 0.25" frame_start="0 0.5" primary_step_direction="+x" secondary_step_direction="+y" num_frames="4"/>
         </initializerstack>
         <simulatorstack>
-            <teleporter name="" trigger_teleport="time" lifetime_input="constant" particle_lifetime="0.033" teleport_cap="8" current_position="true" channel="world" normal_variation="0.12999999523163" teleport_event="true" positioner="box">
+            <teleporter name="" trigger_teleport="time" lifetime_input="constant" particle_lifetime="0.016" teleport_cap="8" current_position="true" channel="world" normal_variation="0.12999999523163" teleport_event="true" positioner="box">
                 <box min="-2 -2 -2" max="-2 -2 -2" min_normal="--2 -2 -2" max_normal="--2 -2 -2"/>
                 <normal min_velocity="5" max_velocity="10"/>
             </teleporter>
@@ -64,9 +64,9 @@
             <constantacceleration relative="world" acceleration="0 0 0"/>
             <ager/>
             <anglevelocityintegrator/>
-            <teleporter name="" trigger_teleport="time" lifetime_input="constant" particle_lifetime="0.033" teleport_cap="8" current_position="true" channel="world" normal_variation="0.37999999523163" teleport_event="false" positioner="box">
+            <teleporter name="" trigger_teleport="time" lifetime_input="constant" particle_lifetime="0.016" teleport_cap="8" current_position="true" channel="world" normal_variation="0.37999999523163" teleport_event="false" positioner="box">
                 <box min="-2 -2 -2" max="-2 -2 -2" min_normal="-2 -2 -2" max_normal="-2 -2 -2"/>
-                <normal min_velocity="0" max_velocity="0"/>
+                <normal min_velocity="1" max_velocity="1"/>
             </teleporter>
         </simulatorstack>
         <visualizerstack>

@@ -10173,6 +10173,7 @@ function CharacterTweakData:character_map()
 			"ene_zeal_tazer_hh",
 			"ene_zeal_punk_mp5",
 			"ene_zeal_punk_moss",
+			"ene_zeal_punk_bronco",
 			"ene_zeal_fbigod_m4", --COOL JEROME
 			"ene_zeal_fbigod_c45"
 		}

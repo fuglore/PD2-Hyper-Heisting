@@ -126,7 +126,14 @@
 	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"/>
 	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/moss_punk_head" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/moss_punk_df" />
-
+	
+	<!--ZEAL BRONCO PUNK-->	
+	<unit_mat path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco" load="true"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco_contour"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco_husk" load="true"/>		
+	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/punk_head" />
+	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/secret_service" />
+	
 	<!--Better But Still Bad Taser-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh" load="true"/>
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh_husk" load="true"/>	
@@ -510,10 +517,15 @@
 	<texture path="effects/pd2_mod_hh/particles/textures/effects_atlas" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/add_atlas_df" load="true" />
 	<effect path="effects/pd2_mod_hh/particles/weapons/lazer_passive"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/shells/shellsmoke_civil"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/shells/shellsmoke_complexup"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/shells/cooldown_smoke_r"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_civil"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"/>
 
