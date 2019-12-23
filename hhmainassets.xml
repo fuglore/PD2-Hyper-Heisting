@@ -525,7 +525,8 @@
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"/>
-
+	
+	<texture path="guis/textures/pd2/mission_briefing/assets/assets_risklevel_6_hh" force="false"/>
 	<texture path="guis/dlcs/cee/textures/pd2/crime_spree/modifiers_atlas" force="true"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifiers_atlas_2" force="true"/>
 
@@ -697,6 +698,6 @@
 	
 	<!--Textures-->	
     <df_nm path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_head" />    	
-	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_df" />		
+	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_df" />
 </table>
 	
