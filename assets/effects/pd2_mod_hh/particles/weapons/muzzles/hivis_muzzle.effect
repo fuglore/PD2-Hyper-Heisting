@@ -1,27 +1,38 @@
 <effect force_synch="false">
-	<atom name="shimmer" min_size="1" max_size="1" lifetime="0.4" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="0" fade_in_start="-1" fade_in_length="0" fade_out_start="20" spawn_cull_policy="initialize" cull_policy="freeze" cull_gracetime="0" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
+	<atom name="heat" min_size="0" max_size="8" lifetime="0.25" random_start_time="false" start_time="0" preroll="3" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="kill" cull_policy="kill" cull_gracetime="0" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
-            <localboxrandomposition min="0 0 0" max="0 0 0"/>
-            <boxrandomaspectsize size="2 2" min="2" max="2"/>
-            <boxrandomangle min="75" max="-90"/>
+            <boxrandomposition relative="effect" min="-0 8 0" max="0 8 0"/>
+            <boxrandomvelocity relative="effect" min="0 8 0" max="0 8 0"/>
+            <boxrandomangle min="0" max="360"/>
+            <boxrandomanglevelocity min="-0.2" max="0.2"/>
+            <boxrandomaspectsize size="60 60" min="1.2" max="1.6"/>
         </initializerstack>
         <simulatorstack>
-            <worldtransform transform_rotations="false"/>
+            <teleporter name="" trigger_teleport="time" lifetime_input="constant" particle_lifetime="0.4" teleport_cap="1" current_position="true" channel="world" normal_variation="0.18999999761581" teleport_event="false" positioner="box">
+                <box min="0 0 0" max="0 0 0" min_normal="0 1 1" max_normal="0 1 1"/>
+                <normal min_velocity="0" max_velocity="0"/>
+            </teleporter>
+            <scaledvelocityintegrator channel="world" per_particle_age="true">
+                <scale_keys loop="false">
+                    <key t="0.0032948928419501" v="0"/>
+                    <key t="0.35864296555519" v="1"/>
+                </scale_keys>
+            </scaledvelocityintegrator>
+            <ager/>
+            <constantacceleration relative="world" acceleration="0 0 -10"/>
+            <anglevelocityintegrator/>
         </simulatorstack>
         <visualizerstack>
-            <billboard texture="effects/textures/bullet_hit/e_dist_heat" intensity="megatron" billboard_type="camera_facing" rotation_channel="rotation" blend_mode="normal" render_template="heat_shimmer" origo="0.5 0.5" per_particle_age="false" size_input="scaled_channel" color_input="constant" color="255 255 255" opacity_input="keys" rotation_input="scaled_channel" rotation_axis="0 0 1" uv_size="1 1" uv_offset_input="constant" uv_offset="0 0">
+            <billboard texture="effects/textures/bullet_hit/e_dist_heat" intensity="" billboard_type="camera_facing" rotation_channel="world_rotation" blend_mode="normal" render_template="heat_shimmer" origo="0.5 0.5" per_particle_age="true" size_input="scaled_channel" color_input="constant" color="255 255 255" opacity_input="keys" rotation_input="channel" rotation_axis="0 0 1" uv_size="1 1" uv_offset_input="constant" uv_offset="0 0">
                 <size_scale_keys loop="false">
-                    <key t="0" v="0.30000001192093 0.30000001192093"/>
-                    <key t="0.057530000805855" v="2.5 2.5"/>
+                    <key t="0" v="0.60000002384186 0.60000002384186"/>
+                    <key t="0.4534687995911" v="1.5 1.5"/>
                 </size_scale_keys>
                 <opacity_keys loop="false">
-                    <key t="0.033840946853161" v="255"/>
-                    <key t="0.098138749599457" v="0"/>
+                    <key t="0" v="0"/>
+                    <key t="0.019" v="160"/>
+                    <key t="0.20" v="0"/>
                 </opacity_keys>
-                <rotation_scale_keys loop="false">
-                    <key t="0" v="0.10000000149012"/>
-                    <key t="1.8999999761581" v="0"/>
-                </rotation_scale_keys>
             </billboard>
         </visualizerstack>
     </atom>
@@ -121,7 +132,7 @@
             <velocityintegrator channel="world"/>
         </simulatorstack>
         <visualizerstack>
-            <billboard texture="effects/textures/effects_atlas" intensity="identity" billboard_type="normal_locked" rotation_channel="world_rotation" blend_mode="add" render_template="effect_op_glow" origo="0.5 1" per_particle_age="false" size_input="channel" color_input="keys" opacity_input="constant" opacity="150" rotation_input="channel" rotation_axis="0 0 0" uv_size="0.125 0.25" uv_offset_input="channel">
+            <billboard texture="effects/textures/effects_atlas" intensity="inside of borg queen" billboard_type="normal_locked" rotation_channel="world_rotation" blend_mode="add" render_template="effect_op_glow" origo="0.5 1" per_particle_age="false" size_input="channel" color_input="keys" opacity_input="constant" opacity="150" rotation_input="channel" rotation_axis="0 0 0" uv_size="0.125 0.25" uv_offset_input="channel">
                 <color_keys loop="false">
                     <key t="0.010327022522688" v="255 255 255"/>
                     <key t="0.058519791811705" v="0 0 0"/>
@@ -167,7 +178,7 @@
             <velocityintegrator channel="world"/>
         </simulatorstack>
         <visualizerstack>
-            <billboard texture="effects/textures/effects_atlas" intensity="streetlight" billboard_type="camera_facing" rotation_channel="world_rotation" blend_mode="add" render_template="effect_op_glow" origo="0.5 0.5" per_particle_age="false" size_input="channel" color_input="keys" opacity_input="constant" opacity="100" rotation_input="channel" rotation_axis="0 0 0" uv_size="0.125 0.125" uv_offset_input="channel">
+            <billboard texture="effects/textures/effects_atlas" intensity="megatron" billboard_type="camera_facing" rotation_channel="world_rotation" blend_mode="add" render_template="effect_op_glow" origo="0.5 0.5" per_particle_age="false" size_input="channel" color_input="keys" opacity_input="constant" opacity="100" rotation_input="channel" rotation_axis="0 0 0" uv_size="0.125 0.125" uv_offset_input="channel">
                 <color_keys loop="false">
                     <key t="0.010327022522688" v="255 255 255"/>
                     <key t="0.038519791811705" v="0 0 0"/>

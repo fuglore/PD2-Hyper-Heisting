@@ -46,14 +46,14 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 					managers.groupai:state():on_enemy_engaging(data.unit, new_att_obj.u_key)
 				end
 
-				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 7
+				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 10
 			end
 		else
 			if new_crim_rec then
 				managers.groupai:state():on_enemy_engaging(data.unit, new_att_obj.u_key)
 			end
 
-			contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 7
+			contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 10
 			
 		end
 
@@ -69,7 +69,7 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 		local not_acting = data.unit:anim_data().idle or data.unit:anim_data().move
 		
 		if AIAttentionObject.REACT_SHOOT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and not_acting and new_att_obj.is_person and data.char_tweak.chatter.contact then --the fact i have to do this is just hghghghg
-			if not data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") then
+			if not data.unit:raycast("ray", data.unit:movement():m_head_pos(), new_att_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", new_att_obj.unit, "report") then
 				if data.unit:base()._tweak_table == "gensec" then
 					data.unit:sound():say("a01", true)			
 				elseif data.unit:base()._tweak_table == "security" then
@@ -125,10 +125,6 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 		delay = 0.7
 	else
 		delay = 0.35
-	end
-	
-	if data.unit:base()._tweak_table == "spooc" then
-		
 	end
 	
 	--if CopLogicTravel.chk_slide_conditions(data) then 
@@ -317,7 +313,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 			end
 		else
 			if attention_info.dis > 2000 then --optimizations, yay
-				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and 1 or 2)
+				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and 1 or 1)
 			else
 				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and attention_info.settings.verification_interval or attention_info.settings.notice_interval or attention_info.settings.verification_interval)
 			end
@@ -345,21 +341,32 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						local min_delay = my_data.detection.delay[1]
 						
 						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-							min_delay = math.max(my_data.detection.delay[1], 0.7)
+							if managers.groupai:state():whisper_mode() then
+								min_delay = math.max(my_data.detection.delay[1], 0.35)
+							else
+								min_delay = math.max(my_data.detection.delay[1], 0.7)
+							end
 						else
-							min_delay = math.min(my_data.detection.delay[1], 0.35)
+							min_delay = math.max(my_data.detection.delay[1], 0.35)
 						end
 						
 						local max_delay = my_data.detection.delay[2]
 						
 						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-							max_delay = math.max(my_data.detection.delay[2], 1)
+							if managers.groupai:state():whisper_mode() then
+								max_delay = math.max(my_data.detection.delay[2], 1.05)
+							else
+								max_delay = math.max(my_data.detection.delay[2], 1.05)
+							end
 						else
-							max_delay = math.min(my_data.detection.delay[2], 0.5)
+							max_delay = math.max(my_data.detection.delay[2], 0.7)
 						end
 						
-						local angle_mul_mod = 0.25 * math.min(angle / my_data.detection.angle_max, 1)
-						local dis_mul_mod = 0.75 * dis_multiplier
+						local angle_mul_mod = 0.5 * math.min(angle / my_data.detection.angle_max, 1)
+						local dis_mul_mod = 2 * dis_multiplier
+						if diff_index < 7 then
+							dis_mul_mod = 4 * dis_multiplier
+						end
 						local notice_delay_mul = attention_info.settings.notice_delay_mul or 1
 
 						if attention_info.settings.detection and attention_info.settings.detection.delay_mul then

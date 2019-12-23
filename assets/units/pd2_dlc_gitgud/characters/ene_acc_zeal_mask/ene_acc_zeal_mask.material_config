@@ -1,0 +1,18 @@
+<materials version="3">
+	<material name="mtr_ene_acc_zeal_swat_helmet" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" version="2">
+		<bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_nm"/>
+		<diffuse_texture 		file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_df"/>
+		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/mask_il"/>
+        <variable type="scalar" name="il_bloom" value="5"/>
+        <variable type="scalar" name="il_multiplier" value="reddot"/>
+	</material>
+
+	<material name="mtr_ene_acc_zeal_swat_helmet_lod1" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" version="2">
+		<bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_nm"/>
+		<diffuse_texture 		file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_df"/>
+		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/mask_il"/>
+        <variable type="scalar" name="il_bloom" value="5"/>
+        <variable type="scalar" name="il_multiplier" value="reddot"/>
+	</material>
+	
+</materials>

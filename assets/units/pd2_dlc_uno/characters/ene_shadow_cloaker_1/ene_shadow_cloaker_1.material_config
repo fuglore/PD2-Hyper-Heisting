@@ -3,31 +3,31 @@
         <bump_normal_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_body_nm"/>
         <diffuse_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_blue_df"/>
         <self_illumination_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_blue_il"/>
-        <variable type="scalar" name="il_multiplier" value="reddot"/>
+        <variable type="scalar" name="il_multiplier" value="inside of borg queen"/>
     </material>
     <material render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SKINNED_3WEIGHTS" name="mtr_body_lod" version="2">
         <bump_normal_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_body_nm" mip="1"/>
         <diffuse_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_blue_df" mip="1"/>
         <self_illumination_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_blue_il"/>
-        <variable type="scalar" name="il_multiplier" value="reddot"/>
+        <variable type="scalar" name="il_multiplier" value="inside of borg queen"/>
     </material>
     <material render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SKINNED_3WEIGHTS" name="mtr_head" version="2">
         <bump_normal_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_nm"/>
         <diffuse_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_df"/>
         <self_illumination_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_il"/>
-        <variable type="scalar" name="il_multiplier" value="reddot"/>
+        <variable type="scalar" name="il_multiplier" value="inside of borg queen"/>
     </material>
     <material render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SKINNED_3WEIGHTS" name="mtr_head_lod" version="2">
         <bump_normal_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_nm" mip="1"/>
         <diffuse_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_df" mip="1"/>
         <self_illumination_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_il"/>
-        <variable type="scalar" name="il_multiplier" value="reddot"/>
+        <variable type="scalar" name="il_multiplier" value="inside of borg queen"/>
     </material>
     <material render_template="generic:ALPHA_MASKED:DIFFUSE_TEXTURE:OPACITY_TEXTURE:RL_COPS:SELF_ILLUMINATION" name="mtr_il" version="2">
         <diffuse_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/eyes_blue_il"/>
         <self_illumination_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/eyes_blue_il"/>
         <opacity_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/eyes_blue_il"/>
-        <variable type="scalar" name="il_multiplier" value="reddot"/>
+        <variable type="scalar" name="il_multiplier" value="inside of borg queen"/>
     </material>
     <material render_template="shadow_caster_only:SKINNED_1WEIGHT" name="shadow_caster" version="2"/>
 </materials>

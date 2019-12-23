@@ -40,6 +40,7 @@ function CopBrain:post_init()
 	CopBrain._logic_variants.spooc_heavy = clone(security_variant)
 	CopBrain._logic_variants.spooc_heavy.idle = SpoocLogicIdle
 	CopBrain._logic_variants.spooc_heavy.attack = SpoocLogicAttack
+	CopBrain._logic_variants.fbi_xc45 = clone(security_variant)
 
 	old_init(self)
 end
@@ -47,19 +48,22 @@ end
 
 function CopBrain:on_suppressed(state)
     self._logic_data.is_suppressed = state or nil
-
+	
+	local supp_complain_t_chk = not self._next_supyell_t or self._next_supyell_t < TimerManager:game():time()
+	
     if self._current_logic.on_suppressed_state then
         self._current_logic.on_suppressed_state(self._logic_data)
 
-        if self._logic_data.char_tweak.chatter.suppress then
+        if self._logic_data.char_tweak.chatter.suppress and supp_complain_t_chk then
 		    local roll = math.random(1, 100)
-			local chance_heeeeelpp = 50
+			local chance_heeeeelpp = 60
 			
-			if roll <= chance_heeeeelpp then
-                --self._unit:sound():say("hlp", true)
+			if roll < chance_heeeeelpp then
+                self._unit:sound():say("hlp", true)
 			else --hopefully some variety here now
-                --self._unit:sound():say("lk3b", true) 
-			end		
+                self._unit:sound():say("lk3b", true) 
+			end
+			self._next_supyell_t = TimerManager:game():time() + 4
         end
     end
 end

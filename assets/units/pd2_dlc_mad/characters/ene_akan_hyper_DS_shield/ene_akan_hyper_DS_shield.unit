@@ -13,7 +13,7 @@
 		<extension name="base" class="CopBase" >
 			<var name="can_be_marked" value="true" />
 			<var name="_tweak_table" value="shield" />
-			<var name="_default_weapon_id" value="mp9" />
+			<var name="_default_weapon_id" value="sr2_smg" />
 		</extension>
 		<extension name="inventory" class="CopInventory" >
 			<var name="_shield_unit_name" value="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield/ene_acc_shield_akan"/>

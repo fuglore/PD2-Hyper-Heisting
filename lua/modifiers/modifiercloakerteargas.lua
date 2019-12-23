@@ -6,9 +6,14 @@ ModifierCloakerTearGas.desc_id = "menu_cs_modifier_cloaker_tear_gas"
 function ModifierCloakerTearGas:init(data)
 	ModifierCloakerTearGas.super.init(self, data)
 	
-	if not Global.mutators.telespooc then
-		Global.mutators.telespooc = true
-	end	
+	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
+	if gamemode_chk == "crime_spree" or managers.skirmish and managers.skirmish:is_skirmish() then
+		if not Global.mutators.telespooc then
+			Global.mutators.telespooc = true
+		end
+	else
+		Global.mutators.telespooc = nil
+	end
 end
 
 function ModifierCloakerTearGas:OnEnemyDied(unit, damage_info)
@@ -16,9 +21,14 @@ function ModifierCloakerTearGas:OnEnemyDied(unit, damage_info)
 		return
 	end
 	
-	if not Global.mutators.telespooc then
-		Global.mutators.telespooc = true
-	end
+	local gamemode_chk = game_state_machine:gamemode() 
+	if gamemode_chk == "crime_spree" or managers.skirmish and managers.skirmish:is_skirmish() then
+		if not Global.mutators.telespooc then
+			Global.mutators.telespooc = true
+		end
+	else
+		Global.mutators.telespooc = nil
+	end	
 
 	if dont and unit:base()._tweak_table == "spooc" then
 		local grenade = World:spawn_unit(Idstring("units/pd2_dlc_drm/weapons/smoke_grenade_tear_gas/smoke_grenade_tear_gas"), unit:position(), unit:rotation())

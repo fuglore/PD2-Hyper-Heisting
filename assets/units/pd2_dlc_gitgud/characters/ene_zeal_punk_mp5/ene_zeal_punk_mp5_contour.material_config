@@ -1,0 +1,39 @@
+<materials version="3" group="ene_murkywater_secret_service">
+    <material name="mtr_head" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+        <bump_normal_texture file="units/pd2_dlc_vit/characters/ene_murkywater_secret_service/ene_murkywater_secret_service_head_nm"/>
+        <diffuse_texture file="units/pd2_dlc_vit/characters/ene_murkywater_secret_service/ene_murkywater_secret_service_head_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0" type="scalar" name="contour_opacity"/>
+    </material>
+
+    <material name="mtr_glass" render_template="opacity:CUBE_ENVIRONMENT_MAPPING:CUBE_FRESNEL:DIFFUSE_TEXTURE:SKINNED_3WEIGHTS" unique="true" version="2" >
+        <variable value="0 1 0.66999995708466" type="vector3" name="fresnel_settings"/>
+        <opacity_texture file="units/glass/vehicle_glass_op"/>
+        <diffuse_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/glasses_df"/>
+        <reflection_texture type="cube" global_texture="current_global_texture"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0" type="scalar" name="contour_opacity"/>
+    </material>
+
+    <material name="mtr_body" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+        <bump_normal_texture file="units/pd2_dlc_vit/characters/ene_murkywater_secret_service/ene_murkywater_secret_service_body_nm"/>
+        <diffuse_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/armored_punk_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0" type="scalar" name="contour_opacity"/>
+    </material>   
+
+   <material name="mtr_head_lod" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+        <bump_normal_texture file="units/pd2_dlc_vit/characters/ene_murkywater_secret_service/ene_murkywater_secret_service_head_nm" mip="3"/>
+        <diffuse_texture file="units/pd2_dlc_vit/characters/ene_murkywater_secret_service/ene_murkywater_secret_service_head_df" mip="3"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0" type="scalar" name="contour_opacity"/>
+    </material>
+    
+    <material name="mtr_body_lod" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+        <bump_normal_texture file="units/pd2_dlc_vit/characters/ene_murkywater_secret_service/ene_murkywater_secret_service_body_nm" mip="3"/>
+        <diffuse_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/armored_punk_df" mip="3"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0" type="scalar" name="contour_opacity"/>
+    </material>
+    <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
+</materials>

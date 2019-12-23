@@ -148,13 +148,33 @@ function CopDamage:_on_damage_received(damage_info)
 		managers.player:on_damage_dealt(self._unit, damage_info)
 	end
 
-	local dmg_chk = not self._dead and not self._unit:base():has_tag("special") and self._health > 0
+	local dmg_chk = not self._dead and self._health > 0
 	
 	local t = TimerManager:game():time()
-
-	if damage_info.damage and damage_info.damage > 0.01 and dmg_chk then
+	
+	local speech_allowed = not self._next_allowed_hurt_t or self._next_allowed_hurt_t and self._next_allowed_hurt_t < t	
+	
+	if damage_info.damage and damage_info.damage > 0.01 and self._health > damage_info.damage and dmg_chk and speech_allowed then
 		if not damage_info.result_type or damage_info.result_type ~= "healed" and damage_info.result_type ~= "death" then
-			self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+			if self._unit:base():has_tag("special") then
+				if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
+					if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
+						self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+						self._next_allowed_burnhurt_t = t + 6
+						self._next_allowed_hurt_t = t + math.random(3, 6)
+					end
+				end
+			else
+				if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
+					if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
+						self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+						self._next_allowed_burnhurt_t = t + 4
+						self._next_allowed_hurt_t = t + math.random(1, 4)
+					end
+				else
+					self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+				end
+			end
 		end
 	end
 	
@@ -1853,12 +1873,6 @@ end
 function CopDamage:damage_explosion(attack_data)
 	if self._dead or self._invulnerable then
 		return
-	end
-
-	local valid_attacker = attack_data.attacker_unit and alive(attack_data.attacker_unit)
-
-	if valid_attacker and self:is_friendly_fire(attack_data.attacker_unit) then
-		return "friendly_fire"
 	end
 
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)

@@ -1,8 +1,10 @@
-<unit type="wpn" slot="13" >
-    <object file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_lazer" />
+<?xml version="1.0"?>
+<unit type="wpn" slot="13">
+	<object file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_lazer" />
 	<dependencies>
 		<depends_on effect="effects/particles/weapons/rifle/muzzleflash_3dp" />
 		<depends_on effect="effects/particles/weapons/sniper_trail" />
+		<depends_on effect="effects/pd2_mod_hh/particles/weapons/lazer_passive" />
 		<depends_on bnk="soundbanks/weapon_tecci"/>
 	</dependencies>
 	<extensions>
@@ -15,7 +17,7 @@
 	</extensions>
 	
 	<sounds>
-		<soundsource name="root" source="rp_wpn_npc_g36" />
-		<default_soundsource source="rp_wpn_npc_g36" />
+		<soundsource name="root" source="rp_m4" />
+		<default_soundsource source="rp_m4" />
 	</sounds>
 </unit>

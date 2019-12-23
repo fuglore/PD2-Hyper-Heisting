@@ -37,8 +37,13 @@ function CopMovement:init(unit)
 	CopMovement._action_variants.tank_ftsu = clone(security_variant)
 	CopMovement._action_variants.tank_ftsu.walk = TankCopActionWalk
 	CopMovement._action_variants.spooc_heavy = security_variant
+	CopMovement._action_variants.fbi_xc45 = security_variant
 	
 	old_init(self, unit)
+end
+
+function CopMovement:is_taser_attack_allowed() --lol
+	return
 end
 
 function CopMovement:_change_stance(stance_code, instant)
@@ -145,7 +150,7 @@ function CopMovement:_change_stance(stance_code, instant)
 			start_values = start_values,
 			duration = delay,
 			start_t = t,
-			next_upd_t = t + 0.033
+			next_upd_t = t + 0.066
 		}
 		stance.transition = transition
 	end
@@ -169,7 +174,7 @@ function CopMovement:on_suppressed(state)
 			start_val = suppression.value,
 			duration = duration,
 			start_t = t,
-			next_upd_t = t + 0.033
+			next_upd_t = t + 0.066
 		}
 	else
 		suppression.transition = nil
@@ -179,9 +184,11 @@ function CopMovement:on_suppressed(state)
 	end
 
 	self._action_common_data.is_suppressed = state and true or nil
-
+	
+	local pose_chk = self._tweak_data.allowed_poses and self._tweak_data.allowed_poses.crouch or self._tweak_data.allowed_poses and self._tweak_data.allowed_poses.stand
+	
 	if Network:is_server() and state then
-		if self._tweak_data.allowed_poses and (self._tweak_data.allowed_poses.crouch or self._tweak_data.allowed_poses.stand) or self:chk_action_forbidden("walk") or not self._unit:base():has_tag("law") then
+		if pose_chk or self:chk_action_forbidden("walk") or not self._unit:base():has_tag("law") then
 			--nothing
 		else
 			local crumble_chance = self._tweak_data and self._tweak_data.crumble_chance or 0.25
@@ -206,7 +213,7 @@ function CopMovement:on_suppressed(state)
 							}
 						}
 						
-						self._unit:sound():say("lk3b", true) 
+						--self._unit:sound():say("lk3b", true) 
 						self:action_request(action_desc)
 					else
 						local action_desc = {
@@ -220,7 +227,7 @@ function CopMovement:on_suppressed(state)
 							}
 						}
 						
-						self._unit:sound():say("hr01")
+						--self._unit:sound():say("hr01")
 						self:action_request(action_desc)					
 					end
 				else
@@ -296,7 +303,7 @@ function CopMovement:on_suppressed(state)
 						}
 
 						self:action_request(action_desc)
-						self._unit:sound():say("hr01")
+						--self._unit:sound():say("hr01")
 					end
 				end
 			elseif self._ext_anim.idle and (not self._active_actions[2] or self._active_actions[2]:type() == "idle") and not self:chk_action_forbidden("act") then
@@ -311,17 +318,6 @@ function CopMovement:on_suppressed(state)
 						}
 					}
 					
-					if self._tweak_data.chatter.suppress then
-						local roll = math.random(1, 100)
-						local chance_heeeeelpp = 50
-						
-						if roll <= chance_heeeeelpp then
-							self._unit:sound():say("hlp", true)
-						else --implemented here to be a bit cleaner and result in less enemies saying hlp or lk3b randomly
-							self._unit:sound():say("lk3b", true) 
-						end		
-					end
-					
 					self:action_request(action_desc)
 				else
 					local action_desc = {
@@ -333,17 +329,6 @@ function CopMovement:on_suppressed(state)
 							walk = -1
 						}
 					}
-					
-					if self._tweak_data.chatter.suppress then
-						local roll = math.random(1, 100)
-						local chance_heeeeelpp = 50
-						
-						if roll <= chance_heeeeelpp then
-							self._unit:sound():say("hlp", true)
-						else --implemented here to be a bit cleaner and result in less enemies saying hlp or lk3b randomly
-							self._unit:sound():say("lk3b", true) 
-						end		
-					end
 					
 					self:action_request(action_desc)
 				end
@@ -412,7 +397,7 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 
 			for body_part, action in ipairs(self._active_actions) do
 				if action then
-					print(body_part, action:type(), inspect(action._blocks))
+					--print(body_part, action:type(), inspect(action._blocks))
 				end
 			end
 		end
@@ -506,8 +491,10 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 	end
 
 	local client_interrupt = nil
+	
+	local horribly_long_hurt_chk = hurt_type == "light_hurt" or hurt_type == "hurt" and damage_info.variant ~= "tase" or hurt_type == "heavy_hurt" or hurt_type == "expl_hurt" or hurt_type == "shield_knock" or hurt_type == "counter_tased" or hurt_type == "taser_tased" or hurt_type == "counter_spooc" or hurt_type == "death" or hurt_type == "hurt_sick" or hurt_type == "fire_hurt" or hurt_type == "poison_hurt" or hurt_type == "concussion"
 
-	if Network:is_client() and (hurt_type == "light_hurt" or hurt_type == "hurt" and damage_info.variant ~= "tase" or hurt_type == "heavy_hurt" or hurt_type == "expl_hurt" or hurt_type == "shield_knock" or hurt_type == "counter_tased" or hurt_type == "taser_tased" or hurt_type == "counter_spooc" or hurt_type == "death" or hurt_type == "hurt_sick" or hurt_type == "fire_hurt" or hurt_type == "poison_hurt" or hurt_type == "concussion") then
+	if Network:is_client() and horribly_long_hurt_chk then
 		client_interrupt = true
 	end
 
@@ -525,6 +512,7 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			client_interrupt = client_interrupt
 		}
 	else
+		local death_severity_chk = tweak.damage.death_severity and tweak.damage.death_severity < damage_info.damage / tweak.HEALTH_INIT and "heavy" or "normal"
 		action_data = {
 			type = "hurt",
 			block_type = block_type,
@@ -536,7 +524,7 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			blocks = blocks,
 			client_interrupt = client_interrupt,
 			attacker_unit = damage_info.attacker_unit,
-			death_type = tweak.damage.death_severity and (tweak.damage.death_severity < damage_info.damage / tweak.HEALTH_INIT and "heavy" or "normal") or "normal",
+			death_type = death_severity_chk or "normal",
 			ignite_character = damage_info.ignite_character,
 			start_dot_damage_roll = damage_info.start_dot_damage_roll,
 			is_fire_dot_damage = damage_info.is_fire_dot_damage,

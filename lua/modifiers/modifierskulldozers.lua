@@ -10,8 +10,22 @@ ModifierSkulldozers.unit_swaps = { --replace jerome with cool jerome when everyt
 function ModifierSkulldozers:init(data)
 	ModifierSkulldozers.super.init(self, data)
 	
-	if not Global.game_settings.use_intense_AI then
-		Global.game_settings.use_intense_AI = true
+	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
+	if gamemode_chk == "crime_spree" or managers.skirmish and managers.skirmish:is_skirmish() then
+		local current_wave = managers.skirmish:current_wave_number()
+		if gamemode_chk == "crime_spree" or current_wave and current_wave ~= nil and current_wave >= 3 then
+			Global.game_settings.use_intense_AI = true
+			--log("itson")
+		end
+	else
+		Global.game_settings.use_intense_AI = nil
+	end
+	
+	if managers.skirmish then
+		local current_wave = managers.skirmish:current_wave_number()
+		if current_wave and current_wave ~= nil and current_wave < 3 then
+			Global.game_settings.use_intense_AI = nil
+		end
 	end
 	
 	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.america, Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"))

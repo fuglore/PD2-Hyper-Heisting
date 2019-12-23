@@ -15,5 +15,7 @@ function PlayerManager:_chk_fellow_crimin_proximity(unit)
 end
 
 function PlayerManager:speak(message, arg1, arg2)
-	self:player_unit():sound():say(message, arg1, arg2)
+	if self:player_unit() and self:player_unit():sound() then
+		self:player_unit():sound():say(message, arg1, arg2)
+	end
 end

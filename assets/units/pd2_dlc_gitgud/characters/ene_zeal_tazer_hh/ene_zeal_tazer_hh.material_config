@@ -8,7 +8,7 @@
 		<diffuse_texture 		file="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_df"/>
 		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_il"/>
 		<variable type="scalar" name="il_bloom" value="10"/>
-        <variable type="scalar" name="il_multiplier" value="reddot"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
 	</material>
 	<material name="mtr_ene_acc_swat_helmet" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" version="2">
 		<bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_nm"/>
