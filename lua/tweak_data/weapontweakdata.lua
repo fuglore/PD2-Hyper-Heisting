@@ -708,7 +708,7 @@ function WeaponTweakData:_set_sm_wish()
 	self.ak47_npc.DAMAGE = 1
 	self.smoke_npc.DAMAGE = 1
 	self.lazer_npc.DAMAGE = 1
-	self.quagmire_npc.DAMAGE = 30
+	self.quagmire_npc.DAMAGE = 1
 	
 	--Turret tweaks.
 	self.swat_van_turret_module.HEALTH_INIT = 25000

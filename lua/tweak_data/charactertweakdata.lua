@@ -6113,13 +6113,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6131,13 +6131,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.85
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6149,13 +6149,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.7 --higher accuracy
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6167,13 +6167,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.5
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6185,13 +6185,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.35
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6209,7 +6209,7 @@ function CharacterTweakData:_presets(tweak_data)
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			}
@@ -6245,13 +6245,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6263,13 +6263,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.85
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6281,13 +6281,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.7 --higher accuracy
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6299,13 +6299,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.5
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -6317,8 +6317,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.35
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
@@ -6335,13 +6335,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.1,
+					0.15
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			}

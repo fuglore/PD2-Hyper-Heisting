@@ -27,7 +27,9 @@ function CopActionShoot:update(t)
 	vis_state = vis_state or 4
 	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local speed = 1
-
+	local feddensitypenalty = managers.groupai:state():chk_high_fed_density() and 1 or 0
+	local suppressedpenalty = self._common_data.is_suppressed and 1.5 or 1
+	
 	if vis_state == 1 then
 		-- Nothing
 	elseif self._skipped_frames < vis_state * 3 then
@@ -158,9 +160,9 @@ function CopActionShoot:update(t)
 						self._ext_movement:play_redirect("up_idle")
 
 						if not Global.game_settings.one_down then
-							self._shoot_t = t + (self._common_data.is_suppressed and 1.5 or 1) + (managers.groupai:state():chk_high_fed_density() and 1 or 0) * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
+							self._shoot_t = t + suppressedpenalty + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
 						elseif Global.game_settings.one_down then
-							self._shoot_t = t + 1 + (managers.groupai:state():chk_high_fed_density() and 1 or 0) * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom()) --suppression does not affect recoil on shin mode
+							self._shoot_t = t + 1 + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom()) --suppression does not affect recoil on shin mode
 						else
 							self._shoot_t = t + falloff.recoil[2]
 						end
@@ -304,14 +306,14 @@ function CopActionShoot:update(t)
 								self._ext_movement:play_redirect("recoil_single")
 							end
 
-							self._shoot_t = t + (self._common_data.is_suppressed and 1.5 or 1) + (managers.groupai:state():chk_high_fed_density() and 1 or 0) * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
+							self._shoot_t = t + suppressedpenalty + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
 							
 						elseif Global.game_settings.one_down then
 							if vis_state == 1 and not ext_anim.base_no_recoil and not ext_anim.move then
 								self._ext_movement:play_redirect("recoil_single")
 							end
 
-							self._shoot_t = t + 1 + (managers.groupai:state():chk_high_fed_density() and 1 or 0) * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom()) --suppression does not affect recoil on shin mode
+							self._shoot_t = t + 1 + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom()) --suppression does not affect recoil on shin mode
 							
 						else
 							self._shoot_t = t + falloff.recoil[2]
