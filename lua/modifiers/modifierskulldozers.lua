@@ -3,7 +3,8 @@ ModifierSkulldozers._type = "ModifierSkulldozers"
 ModifierSkulldozers.name_id = "none"
 ModifierSkulldozers.desc_id = "menu_cs_modifier_dozer_lmg"
 ModifierSkulldozers.unit_swaps = { --replace jerome with cool jerome when everything is horrible
-	["units/payday2/characters/ene_fbi_2/ene_fbi_2"] = "units/pd2_dlc_gitgud/characters/ene_fbigod_m4/ene_fbigod_m4",	
+	["units/payday2/characters/ene_fbi_2/ene_fbi_2"] = "units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4",
+	["units/payday2/characters/ene_fbi_1/ene_fbi_1"] = "units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45",
 }
 
 

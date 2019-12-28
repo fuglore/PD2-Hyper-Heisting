@@ -546,7 +546,7 @@ function InstantBulletBase:on_collision_effects(col_ray, weapon_unit, user_unit,
 	local fullautonpc = alive(weapon_unit) and weapon_unit:base().weapon_tweak_data and weapon_unit:base():weapon_tweak_data() and weapon_unit:base():weapon_tweak_data().fullautonpc ~= nil
 	
 	if fullautonpc then
-		if math.random() < 0.25 then
+		if math.random() < 0.1 then
 			managers.game_play_central:play_impact_flesh({
 				col_ray = col_ray,
 				no_sound = no_sound
