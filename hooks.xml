@@ -25,7 +25,7 @@
 	<post :script_path="localizationmanager.lua" :hook_id="managers/localizationmanager"/>
 	
 	<!--<post :script_path="HHmenu.lua" :hook_id="managers/menumanager"/> nelson more like Belson lmao-->
-	<!--<post :script_path="hudassaultcorner.lua" :hook_id="managers/hud/hudassaultcorner"/>-->
+	<post :script_path="hudassaultcorner.lua" :hook_id="managers/hud/hudassaultcorner"/>
 	
 	<post :script_path="dialogmanager.lua" :hook_id="managers/dialogmanager"/>
 	
