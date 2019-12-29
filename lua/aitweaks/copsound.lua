@@ -200,7 +200,28 @@ function CopSound:set_voice_prefix(index)
 	if index and (index < 1 or nr_variations < index) then
 		debug_pause_unit(self._unit, "[CopSound:set_voice_prefix] Invalid prefix index:", index, ". nr_variations:", nr_variations)
 	end
-
+	
+	local low_diff_units = {
+		Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
+		Idstring("units/payday2/characters/ene_swat_1/ene_swat_1_husk"),
+		Idstring("units/payday2/characters/ene_swat_2/ene_swat_2"),
+		Idstring("units/payday2/characters/ene_swat_2/ene_swat_2_husk"),
+		Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1"),
+		Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1_husk"),
+		Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870"),
+		Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870_husk"),
+		Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"),
+		Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1_husk"),
+		Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870"),
+		Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870_husk")
+	}
+	for _, unit in ipairs(low_diff_units) do
+		if self._unit:name() == unit then
+			self._speech_prefix2 = "n"
+		end
+	end
+	
+	
 	local tasers = {
 		Idstring("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"),
 		Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1"),
