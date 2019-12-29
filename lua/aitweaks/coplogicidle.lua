@@ -192,7 +192,7 @@ function CopLogicIdle._update_haste(data, my_data)
 	local pose = nil
 	local end_pose = nil
 	
-	if my_data.cover_path or my_data.charge_path or my_data.chase_path or my_data.advance_path then	
+	if my_data.cover_path or my_data.charge_path or my_data.chase_path then	
 		if is_mook and not data.is_converted and not data.unit:in_slot(16) then
 			if data.unit:movement():cool() then
 				haste = "walk"
@@ -268,7 +268,7 @@ function CopLogicIdle._update_haste(data, my_data)
 	end	
 	 
 	if data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and haste then
-		local path = my_data.chase_path or my_data.charge_path or my_data.advance_path or my_data.cover_path
+		local path = my_data.chase_path or my_data.charge_path or my_data.cover_path
 		if not my_data.has_reset_walk_cycle then
 			local new_action = {
 				body_part = 2,

@@ -10307,6 +10307,7 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.bolivian_indoors.HEALTH_INIT = self.bolivian_indoors.HEALTH_INIT * hp_mul
 	self.drug_lord_boss.HEALTH_INIT = self.drug_lord_boss.HEALTH_INIT * hp_mul
 	self.drug_lord_boss_stealth.HEALTH_INIT = self.drug_lord_boss_stealth.HEALTH_INIT * hp_mul
+	self.fbi_xc45.HEALTH_INIT = self.fbi_xc45.HEALTH_INIT * hp_mul
 
 	if self.security.headshot_dmg_mul then
 		self.security.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
@@ -10419,4 +10420,9 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	if self.tank_ftsu.headshot_dmg_mul then
 		self.tank_ftsu.headshot_dmg_mul = self.tank_ftsu.headshot_dmg_mul * hs_mul
 	end
+	
+	if self.fbi_xc45.headshot_dmg_mul then
+		self.fbi_xc45.headshot_dmg_mul = self.fbi_xc45.headshot_dmg_mul * hs_mul
+	end
+	
 end
