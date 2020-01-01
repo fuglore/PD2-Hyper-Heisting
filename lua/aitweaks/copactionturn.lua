@@ -2,7 +2,7 @@ local tmp_rot = Rotation()
 local mrot_set_ypr = mrotation.set_yaw_pitch_roll
 
 function CopActionTurn:_upd_wait_full_blend(t)
-	if self._ext_anim.idle_full_blend then
+	if self._ext_anim.idle_full_blend and self._action_desc.angle then
 		local angle = self._action_desc.angle
 		local dir_str = angle and angle > 0 and "l" or "r"
 		local redir_name = "turn_" .. dir_str
