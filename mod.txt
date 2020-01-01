@@ -4,7 +4,7 @@
    "color" : "0.75 0.65 1",
    "author" : "Fuglore",
    "contact" : "Just look up Fuglore on steam",
-   "version" : "SHINV2.52",
+   "version" : "SHINV2.53",
    "priority" : 47,
    "blt_version" : 2,
    "image" : "hhshin.png"
