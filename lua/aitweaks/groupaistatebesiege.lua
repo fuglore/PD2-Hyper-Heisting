@@ -177,6 +177,14 @@ function GroupAIStateBesiege:chk_high_fed_density()
 	return true
 end
 
+function GroupAIStateBesiege:chk_assault_number()
+	if not self._assault_number then
+		return 1
+	end
+	
+	return self._assault_number
+end
+
 function GroupAIStateBesiege:chk_no_fighting_atm()
 
 	if self._drama_data.amount > tweak_data.drama.consistentcombat then

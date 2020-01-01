@@ -10129,7 +10129,8 @@ function CharacterTweakData:character_map()
 	char_map.additions = {
 		path = "units/payday2/characters/",
 		list = {
-			"ene_cop_5"
+			"ene_fbi_swat_3",
+			"ene_swat_3"
 		}
 	}
 	char_map.drm = {

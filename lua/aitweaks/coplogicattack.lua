@@ -495,22 +495,16 @@ function CopLogicAttack._upd_aim(data, my_data)
 		
 		local reaction_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 0.2
 		
-		local loud_react_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 0.2
-		
 		if managers.groupai:state():whisper_mode() then
 			if not reaction_comply then
 				shoot = nil
 			end
 		else
-			if not loud_react_comply and not data.unit:base()._tweak_table == "spooc" and not data.unit:base()._tweak_table == "taser" and not data.unit:base()._tweak_table == "spooc_heavy" and not data.unit:base()._tweak_table == "shadow_spooc" then
+			if managers.groupai:state():chk_high_fed_density() and dense_mook then
 				shoot = nil
+				--log("not firing due to FEDS")
 			end
-		end
-		
-		if managers.groupai:state():chk_high_fed_density() and dense_mook then
-			shoot = nil
-			--log("not firing due to FEDS")
-		end
+		end	
 	end
 	
 	if not my_data.weapon_range and focus_enemy and focus_enemy.dis > 6000 or my_data.weapon_range and focus_enemy and focus_enemy.dis > my_data.weapon_range.far then

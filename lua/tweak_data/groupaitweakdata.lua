@@ -876,7 +876,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				america = {
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
-					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5")
+					Idstring("units/payday2/characters/ene_swat_3/ene_swat_3")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_ak47_ass/ene_akan_cs_swat_ak47_ass"),
@@ -1167,7 +1167,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				america = {
 					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
 					Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2"),
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3")
+					Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg"),
@@ -1279,7 +1279,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.CS_swat_SMG = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5")
+					Idstring("units/payday2/characters/ene_swat_3/ene_swat_3")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
@@ -1291,7 +1291,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
 				shared = {
-					Idstring("units/payday2/characters/ene_cop_5/ene_cop_5"),
+					Idstring("units/payday2/characters/ene_swat_3/ene_swat_3"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				}
 			},
@@ -1301,7 +1301,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.CS_swat_SMG = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3")
+					Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
@@ -1371,7 +1371,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				america = {
 					Idstring("units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"),
 					Idstring("units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"),
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3")
+					Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),

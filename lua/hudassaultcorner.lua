@@ -1,6 +1,6 @@
 Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(self)
 	local cover_line_to_use = "hud_assault_cover"
-	local FG_chance = math.random(1, 214)
+	local FG_chance = math.random(1, 184)
 	
 	local versusline = "hud_assault_faction_swat"
 	
@@ -28,7 +28,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end			
 	end
 	
-	if FG_chance <= 14 then
+	if FG_chance <= 24 then
 		cover_line_to_use = "hud_assault_FG_cover" .. FG_chance
 	else
 		cover_line_to_use = "hud_assault_cover"

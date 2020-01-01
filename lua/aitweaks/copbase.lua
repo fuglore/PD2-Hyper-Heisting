@@ -108,7 +108,7 @@ function CopBase:default_weapon_name()
 	
 	local DS_c45_units = unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45") or unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45_husk")
 	
-	if diff_index == 8 and DS_c45_units then
+	if dont and DS_c45_units then
 		return crosskill_chimano_akimbo
 	elseif zombie_taser then
 		return yellow_car4
