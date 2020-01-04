@@ -42,8 +42,7 @@ function LevelsTweakData:init()
 	self.friend.package = {"levels/narratives/h_alex_must_die/stage_1/world_sounds", "packages/lvl_friend"}
 	self.cane.package = {"packages/cane", "levels/narratives/e_welcome_to_the_jungle/stage_1/world_sounds"}
 	
-	local gamemode_chk = game_state_machine and game_state_machine:gamemode()
-	if not gamemode_chk or gamemode_chk and not gamemode_chk == "crime_spree" then
+	if Global.game_settings and not Global.game_settings.incsmission then
 		self.haunted.package = {
 			"packages/narr_haunted", 
 			"packages/narr_hvh", 
@@ -63,4 +62,21 @@ function LevelsTweakData:init()
 		self.nail.ai_group_type = zombie
 		self.help.ai_group_type = zombie
 	end
+end
+
+function LevelsTweakData:get_ai_group_type()
+	local level_data = Global.level_data and Global.level_data.level_id and self[Global.level_data.level_id]
+
+	if level_data then
+		local ai_group_type = level_data.ai_group_type
+		if ai_group_type and ai_group_type == "zombie" and Global.game_settings and Global.game_settings.incsmission then
+			return "america"
+		elseif ai_group_type then
+			return ai_group_type
+		end
+	end
+
+	--print("[LevelsTweakData:get_ai_group_type] group is not defined for this level, fallback on default")
+
+	return self.ai_groups.default
 end
