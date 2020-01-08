@@ -544,36 +544,38 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local assaultactive = task_data.phase == "build" or task_data.phase == "sustain"
 	local revealchk = not self._next_allowed_drama_reveal_t or self._next_allowed_drama_reveal_t < t
 	
-	if low_carnage and not self._feddensityhigh and revealchk and not self._activeassaultbreak or self._drama_data.amount <= self._drama_data.low_p and not self._feddensityhigh and not self._activeassaultbreak then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
-		if not assaultactive then
-			--log("AAAAAAAA FUCK YOU")
-		end
-		--if low_carnage then
-			--log("YOU...WILL...FIIIIIIIIIIIIIIGHT!!!!!!")
-		--end
-		self._next_allowed_drama_reveal_t = t + 10
-		for criminal_key, criminal_data in pairs(self._player_criminals) do
-			self:criminal_spotted(criminal_data.unit)
-			--this is some insane over-weight code for some chatter randomness but hot damn am i happy with it
-			local time = self._t
-			for group_id, group in pairs(self._groups) do
-				if group.objective.charge then
-					for u_key, u_data in pairs(group.units) do
-						u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
-						if not u_data.unit:sound():speaking(time) and assaultactive then
-							local chance = math.random(1, 100)
-							local do_pus = 33
-							local not_mov = 65
-							if chance <= do_pus then
-								u_data.unit:sound():say("pus", true) --GOGOGO/PUSH!
-							elseif chance > not_mov then
-								--nothing, keeps things less spammy
-							else
-								u_data.unit:sound():say("mov", true) --Move out/Move!
+	if assaultactive then
+		if low_carnage and not self._feddensityhigh and revealchk and not self._activeassaultbreak or self._drama_data.amount <= self._drama_data.low_p and not self._feddensityhigh and not self._activeassaultbreak then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
+			if not assaultactive then
+				--log("AAAAAAAA FUCK YOU")
+			end
+			--if low_carnage then
+				--log("YOU...WILL...FIIIIIIIIIIIIIIGHT!!!!!!")
+			--end
+			self._next_allowed_drama_reveal_t = t + 10
+			for criminal_key, criminal_data in pairs(self._player_criminals) do
+				self:criminal_spotted(criminal_data.unit)
+				--this is some insane over-weight code for some chatter randomness but hot damn am i happy with it
+				local time = self._t
+				for group_id, group in pairs(self._groups) do
+					if group.objective.charge then
+						for u_key, u_data in pairs(group.units) do
+							u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
+							if not u_data.unit:sound():speaking(time) and assaultactive then
+								local chance = math.random(1, 100)
+								local do_pus = 33
+								local not_mov = 65
+								if chance <= do_pus then
+									u_data.unit:sound():say("pus", true) --GOGOGO/PUSH!
+								elseif chance > not_mov then
+									--nothing, keeps things less spammy
+								else
+									u_data.unit:sound():say("mov", true) --Move out/Move!
+								end
 							end
 						end
-					end
-				end				
+					end				
+				end
 			end
 		end
 	end
@@ -1368,16 +1370,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				pull_back = true
 			end
 		elseif not current_objective.moving_out then
+			local has_criminals_close = nil
+			
+			for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
+				if next(neighbour_area.criminal.units) then
+					has_criminals_close = true
+
+					break
+				end
+			end
 			
 			if phase_is_anticipation and current_objective.open_fire or self._feddensityhigh or self._activeassaultbreak then
 				pull_back = true
+			elseif not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
+				approach = true
 			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				open_fire = true
 				self:_voice_open_fire_start(group)
-			elseif charge and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not self._feddensityhigh and not self._activeassaultbreak then
+			elseif charge and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak then
 				push = true
-			elseif not self._feddensityhigh and not self._activeassaultbreak and not phase_is_anticipation then
-				approach = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak and not phase_is_anticipation and self._drama_data.amount <= self._drama_data.low_p then
 				push = true
 			end
@@ -1407,6 +1418,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		self:_voice_open_fire_start(group)
 	elseif approach or push then
 		local assault_area, alternate_assault_area, alternate_assault_area_from, assault_path, alternate_assault_path = nil
+		local assault_area_uno, assault_area_dos, assault_area_tres, assault_area_quatro = nil
+		local assault_path_uno, assault_path_dos, assault_path_tres, assault_path_quatro = nil
 		local from_seg, to_seg, access_pos, verify_clbk = nil
 		local to_search_areas = {
 			objective_area
@@ -1420,43 +1433,40 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			-- they never used this function for some reason, now i use it, so thats nice
 			if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) or next(search_area.criminal.units) then
 				local assault_from_here = true
+				
+				if search_area then
+						--local cop_units = assault_from_area.police.units
 
-				if tactics_map and tactics_map.flank then --for the love of frick just let flankers flank
-					local assault_from_area = found_areas[search_area]
-
-					if assault_from_area ~= "init" then
-						local cop_units = assault_from_area.police.units
-
-						for u_key, u_data in pairs(cop_units) do
+						for u_key, u_data in pairs(group.units) do
 							if u_data.group and u_data.group.objective.type == "assault_area" then
-								assault_from_here = nil
 
-								if not alternate_assault_area then
-									local search_params = {
-										id = "GroupAI_assault",
-										from_seg = current_objective.area.pos_nav_seg,
-										to_seg = search_area.pos_nav_seg,
-										access_pos = self._get_group_acces_mask(group),
-										verify_clbk = callback(self, self, "is_nav_seg_safe")
-									}
-									alternate_assault_path = managers.navigation:search_coarse(search_params)
+							if not alternate_assault_area then
+								local search_params = {
+									id = "GroupAI_assault",
+									from_seg = current_objective.area.pos_nav_seg,
+									to_seg = search_area.pos_nav_seg,
+									access_pos = self._get_group_acces_mask(group),
+									verify_clbk = callback(self, self, "is_nav_seg_safe")
+								}
+								alternate_assault_path = managers.navigation:search_coarse(search_params)
 
-									if alternate_assault_path then
-										self:_merge_coarse_path_by_area(alternate_assault_path)
-
-										alternate_assault_area = search_area
-										alternate_assault_area_from = assault_from_area
-									end
+								if alternate_assault_path then
+									local clean_path = self:_merge_coarse_path_by_area(alternate_assault_path)
+									
+									alternate_assault_path = clean_path
+									
+									alternate_assault_area = search_area
+									alternate_assault_area_from = current_objective.area
 								end
-
-								found_areas[search_area] = nil
-
-								break
 							end
+
+							found_areas[search_area] = nil
+
+							break
 						end
 					end
 				end
-
+				
 				if assault_from_here then
 					local search_params = {
 						id = "GroupAI_assault",
@@ -1468,9 +1478,30 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					assault_path = managers.navigation:search_coarse(search_params)
 
 					if assault_path then
-						self:_merge_coarse_path_by_area(assault_path)
-
+						local clean_path = self:_merge_coarse_path_by_area(assault_path)
+						
+						assault_path = clean_path
 						assault_area = search_area
+						
+						if not assault_area_uno then
+							assault_area_uno = assault_area
+						elseif not assault_area_dos then
+							assault_area_dos = assault_area
+						elseif not assault_area_tres then
+							assault_area_tres = assault_area
+						elseif not assault_area_quatro then
+							assault_area_quatro = assault_area
+						end
+						
+						if not assault_path_uno then
+							assault_path_uno = assault_path
+						elseif not assault_path_dos then
+							assault_path_dos = assault_path
+						elseif not assault_path_tres then
+							assault_path_tres = assault_path
+						elseif not assault_path_quatro then
+							assault_path_quatro = assault_path
+						end
 
 						break
 					end
@@ -1486,14 +1517,30 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			end
 		until #to_search_areas == 0
 
-		if not assault_area and alternate_assault_area or tactics_map and tactics_map.flank and alternate_assault_area then
+		if not assault_path_uno or not assault_area_uno then
+			--log("dicks")
 			assault_area = alternate_assault_area
 			found_areas[assault_area] = alternate_assault_area_from
 			assault_path = alternate_assault_path
+		else
+			local path_and_area_to_choose = math.random(1, 4)
+			if not tactics_map.flank then 
+				assault_area = assault_area_uno
+				assault_path = assault_path_uno
+			elseif path_and_area_to_choose == 2 then
+				assault_area = assault_area_dos
+				assault_path = assault_path_dos
+			elseif path_and_area_to_choose == 3 then
+				assault_area = assault_area_tres
+				assault_path = assault_path_tres
+			elseif path_and_area_to_choose == 4 then
+				assault_area = assault_area_quatro
+				assault_path = assault_path_quatro
+			end
 		end
 	
 		if assault_area and assault_path then
-			local assault_area = push and assault_area or found_areas[assault_area] == "init" and objective_area or found_areas[assault_area]
+			local assault_area = push and assault_area or found_areas[assault_area] == current_objective.area and objective_area or current_objective.area
 
 			if #assault_path > 4 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
 				table.remove(assault_path)
@@ -1725,8 +1772,9 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 		for _, sp_data in ipairs(spawn_points) do
 			local category = group_ai_tweak.unit_categories[u_type_name]
-
-			if (sp_data.accessibility == "any" or category.access[sp_data.accessibility]) and (not sp_data.amount or sp_data.amount > 0) and sp_data.mission_element:enabled() then
+			local stop_please = sp_data.accessibility == "any" or category.access[sp_data.accessibility]
+			local please_stop = not sp_data.amount or sp_data.amount > 0
+			if stop_please and please_stop and sp_data.mission_element:enabled() then
 				hopeless = false
 
 				if sp_data.delay_t < self._t then
@@ -1799,7 +1847,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 		end
 
 		if hopeless then
-			debug_pause("[GroupAIStateBesiege:_upd_group_spawning] spawn group", spawn_task.spawn_group.id, "failed to spawn unit", u_type_name)
+			--debug_pause("[GroupAIStateBesiege:_upd_group_spawning] spawn group", spawn_task.spawn_group.id, "failed to spawn unit", u_type_name)
 
 			return true
 		end

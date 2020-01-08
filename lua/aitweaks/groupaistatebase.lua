@@ -617,3 +617,21 @@ function GroupAIStateBase:_get_anticipation_duration(anticipation_duration_table
 	end
 	
 end
+
+function GroupAIStateBase:_merge_coarse_path_by_area(coarse_path)
+	local i_nav_seg = #coarse_path
+	local last_area = nil
+
+	while i_nav_seg > 0 do
+		local nav_seg = coarse_path[i_nav_seg][1]
+		local area = self:get_area_from_nav_seg_id(nav_seg)
+
+		if last_area and last_area == area and #coarse_path > 2 then
+			table.remove(coarse_path, i_nav_seg)
+		end
+
+		i_nav_seg = i_nav_seg - 1
+	end
+	
+	return coarse_path
+end

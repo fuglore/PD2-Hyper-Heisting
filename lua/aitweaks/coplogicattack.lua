@@ -207,7 +207,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 			--this is important for harass.
 			local pantsdownchk = nil
 					
-			if not data.unit:in_slot(16) and focus_enemy and focus_enemy.is_person and focus_enemy.verified and focus_enemy.dis <= 2000 then
+			if not data.unit:in_slot(16) and not data.is_converted and focus_enemy and focus_enemy.is_person and focus_enemy.verified and focus_enemy.dis <= 2000 then
 				if focus_enemy.is_local_player then
 					local e_movement_state = focus_enemy.unit:movement():current_state()
 					if e_movement_state:_is_reloading() or e_movement_state:_interacting() or e_movement_state:is_equipping() then
@@ -406,7 +406,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	end
 		
 	--cops call out player reloads if they've seen the player in the last 2 seconds if they have the harass tactic
-	if focus_enemy and focus_enemy.is_person and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT and not data.unit:in_slot(16) and data.tactics and data.tactics.harass then
+	if focus_enemy and focus_enemy.is_person and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT and not data.unit:in_slot(16) and not data.is_converted and data.tactics and data.tactics.harass then
 		if focus_enemy.is_local_player then
 			local time_since_verify = data.attention_obj.verified_t and data.t - data.attention_obj.verified_t
 			local e_movement_state = focus_enemy.unit:movement():current_state()
@@ -852,18 +852,6 @@ function CopLogicAttack._upd_combat_movement(data)
 	local spoocavoidancemovementqualify = data.tactics and data.tactics.spoocavoidance and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 2000 and focus_enemy.aimed_at
 	local eliterangedfiremovementqualify = data.tactics and data.tactics.elite_ranged_fire and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1500
 	
-	--dangerawarenessGL: if i am aimed while the enemy is holding a grenade launcher within 30 meters, find nearby position to retreat to and disperse
-	local antiexpmovementqualify = nil
-	
-	if data.tactics and data.tactics.dangerawarenessGL and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 3000 and focus_enemy.aimed_at and data.attention_obj.unit and data.attention_obj.is_person then
-		local weapon_unit = data.attention_obj.unit:inventory():equipped_unit()
-		if alive(weapon_unit) and weapon_unit:base().is_category and weapon_unit:base():is_category("grenade_launcher") then
-			if data.attention_obj.aimed_at then
-				antiexpmovementqualify = true
-			end
-		end
-	end
-	
 	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
 	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
 	
@@ -919,11 +907,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			end
 		end
 	end
-	
-	if not action_taken and antiexpmovementqualify then
-		action_taken = CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
-	end
-	
+
 	--removed the need for being important, moved it up in priority
 	if not action_taken and not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and CopLogicAttack._can_move(data) and data.attention_obj.verified and not spoocavoidancemovementqualify then
 		if data.is_suppressed and data.t - data.unit:character_damage():last_suppression_t() < 0.7 then
@@ -986,7 +970,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	elseif my_data.at_cover_shoot_pos then
 		--ranged fire cops also signal the END of their movement and positioning
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			if not data.unit:in_slot(16) and data.char_tweak.chatter.ready then
+			if not data.unit:in_slot(16) and not data.is_converted and data.char_tweak.chatter.ready then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "inpos")
 			end
 		end
@@ -998,7 +982,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			end
 			move_to_cover = true
 		end
-	elseif action_taken or my_data.move_t and my_data.move_t > t or my_data.stay_out_time and my_data.stay_out_time > t and focus_enemy.verified then
+	elseif action_taken or my_data.move_t and my_data.move_t > t or my_data.stay_out_time and my_data.stay_out_time > t then
 		-- Nothing	
 	elseif managers.groupai:state():chk_active_assault_break() and not my_data.has_retreated then
 		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, true)
@@ -1011,7 +995,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			move_to_cover = true
 		end
 	elseif Global.game_settings.one_down or managers.skirmish.is_skirmish() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
-		if data.tactics and data.tactics.charge and charge_failed_t_chk or data.tactics and data.tactics.flank and my_data.flank_cover and my_data.taken_flank_cover and flank_cover_charge_qualify and flank_charge_t_chk and charge_failed_t_chk or not charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
+		if data.tactics and data.tactics.charge and charge_failed_t_chk or my_data.taken_flank_cover and charge_failed_t_chk or not charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
 			if my_data.charge_path then
 				if data.objective and not data.objective.type == "follow" then
 					local path = my_data.charge_path
@@ -1036,7 +1020,7 @@ function CopLogicAttack._upd_combat_movement(data)
 					end
 				end
 			end
-		elseif in_cover and enemyvisiblesoft or in_cover and antipassivecheck then
+		elseif in_cover then
 			if my_data.cover_test_step <= 2 then
 				local height = nil
 
@@ -1056,7 +1040,7 @@ function CopLogicAttack._upd_combat_movement(data)
 					}
 					--ranged fire cops signal the start of their movement and positioning
 					if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-						if not data.unit:in_slot(16) then
+						if not data.unit:in_slot(16) and not data.is_converted then
 							if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.ready then
 								managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "ready")
 							end
@@ -1066,7 +1050,7 @@ function CopLogicAttack._upd_combat_movement(data)
 				else
 					my_data.cover_test_step = my_data.cover_test_step + 1
 				end
-			elseif not enemy_visible_softer and math.random() < 0.05 then
+			elseif math.random() < 0.05 then
 				move_to_cover = true
 				if not my_data.taken_flank_cover then
 					want_flank_cover = true
@@ -1075,7 +1059,7 @@ function CopLogicAttack._upd_combat_movement(data)
 		elseif my_data.at_cover_shoot_pos then
 			--ranged fire cops also signal the END of their movement and positioning
 			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				if not data.unit:in_slot(16) and data.char_tweak.chatter.ready then
+				if not data.unit:in_slot(16) and not data.is_converted and data.char_tweak.chatter.ready then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "inpos")
 				end
 			end
@@ -1124,8 +1108,8 @@ function CopLogicAttack._upd_combat_movement(data)
 			my_data.taken_flank_cover = true --this helps them qualify for charging behavior after acquiring a flank, which is not vanilla behavior btw
 			my_data.next_allowed_flank_charge_t = data.t + 2
 			want_flank_cover = nil
-			if not data.unit:in_slot(16) then --flankers signal their presence whenever they move around
-				if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
+			if not data.unit:in_slot(16) and not data.is_converted then --flankers signal their presence whenever they move around
+				if data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
 				end
 			end
@@ -1311,13 +1295,13 @@ function CopLogicAttack.queue_update(data, my_data)
 	
 	if hostage_count > 0 and not managers.groupai:state():chk_assault_active_atm() then --make sure the hostage count is actually above zero before replacing any of the lines
 		if hostage_count > 3 then  -- hostage count needs to be above 3
-			if math.random() < 0.2 then --20% chance
+			if math.random() < 0.4 then --40% chance for regular panic if hostages are present
 				chosen_panic_chatter = "controlpanic"
 			else
 				chosen_panic_chatter = "hostagepanic2" --more panicky "GET THOSE HOSTAGES OUT RIGHT NOW!!!" line for when theres too many hostages on the map
 			end
 		else
-			if math.random() < 0.2 then
+			if math.random() < 0.4 then
 				chosen_panic_chatter = "controlpanic"
 			else
 				chosen_panic_chatter = "hostagepanic1" --less panicky "Delay the assault until those hostages are out." line
@@ -1340,7 +1324,7 @@ function CopLogicAttack.queue_update(data, my_data)
 		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
 	end
 	
-	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5 and not data.is_converted
 	
     if not data.unit:base():has_tag("special") then
     	if data.char_tweak.chatter.clear and not cant_say_clear then
@@ -1374,7 +1358,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
 	
-	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic then
+	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted then
 		if managers.groupai:state():chk_assault_active_atm() or not data.unit:base():has_tag("law") then
 			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
 				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
@@ -1403,56 +1387,18 @@ function CopLogicAttack.queue_update(data, my_data)
 		end
 	end
 	
-	if in_close then
+	if is_close then
 		delay = 0.35
 	elseif too_far then
 		delay = 0.7
 	else
-		delay = 0.35
+		delay = 0.5
 	end
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay)
 end
 
 function CopLogicAttack.chk_should_turn(data, my_data)
 	return not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos
-end
-
-function CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
-	local my_tracker = data.unit:movement():nav_tracker()
-	local reservation = {
-		radius = 30,
-		position = data.m_pos,
-		filter = data.pos_rsrv_id
-	}
-	local to_pos = nil
-	local to_pos_range = nil
-	
-	if not managers.navigation:is_pos_free(reservation) then
-		if data.attention_obj and data.attention_obj.unit and data.attention_obj.verified and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.is_person then
-			local weapon_unit = data.attention_obj.unit:inventory():equipped_unit()
-
-			if alive(weapon_unit) and weapon_unit:base().is_category and weapon_unit:base():is_category("grenade_launcher") and data.tactics and data.tactics.dangerawarenessGL then
-				if data.attention_obj.aimed_at then
-					to_pos_range = 1500
-				end
-			end
-		end
-		
-		if to_pos_range then
-			to_pos = CopLogicTravel._get_pos_on_wall(data.m_pos, to_pos_range)
-		else
-			to_pos = CopLogicTravel._get_pos_on_wall(data.m_pos, 500)
-		end
-		
-		if to_pos then
-			local path = {
-				my_tracker:position(),
-				to_pos
-			}
-
-			CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
-		end
-	end
 end
 
 local temp_vec4 = Vector3()
@@ -1474,14 +1420,23 @@ function CopLogicAttack._update_cover(data)
 			local threat_pos = enemy_tracker:field_position()
 			local heister_pos = data.attention_obj.m_pos --the threat
 			
-			if data.objective and data.objective.type == "follow" then
-				local near_pos = data.objective.follow_unit:movement():m_pos()
-
-				if (not best_cover or not CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 200, 1000)) and not my_data.processing_cover_path and not my_data.charge_path_search_id then
+			if data.objective and data.objective.type == "follow" and data.tactics and data.tactics.shield_cover and not data.unit:base()._tweak_table == "shield" then
+				local shield_pos = data.objective.follow_unit:movement():m_pos() --the pillar
+				local shield_direction = mvector3.direction(temp_vec4, my_pos, shield_pos)
+				local heister_direction = mvector3.direction(temp_vec5, my_pos, heister_pos)
+				local following_direction = mvector3.direction(temp_vec6, shield_direction, heister_direction)
+				local following_dis = following_direction * 120
+				local near_pos = data.objective.follow_unit:movement():m_pos() + following_dis
+				
+				local notbestcovernotfollowcoverchk = not best_cover or not CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 60, 120)
+				
+				--unit would take the heister's angle to both the pillar, and the unit, the unit would attempt to line up the pillar and the heister together, since they're following the pillar, they should frequently position themselves behind the pillar, which would keep them in cover, its hacky, but it would work
+				
+				if notbestcovernotfollowcoverchk and not my_data.processing_cover_path and not my_data.charge_path_search_id then
 					local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
 
-					if found_cover then
+					if found_cover and data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") then
 						if not follow_unit_area.nav_segs[found_cover[3]:nav_segment()] then
 							debug_pause_unit(data.unit, "cover in wrong area")
 						end
@@ -1501,25 +1456,16 @@ function CopLogicAttack._update_cover(data)
 						end
 					end
 				end
-			elseif data.objective and data.objective.type == "follow" and data.tactics and data.tactics.shield_cover and not data.unit:base()._tweak_table == "shield" then
-				local shield_pos = data.objective.follow_unit:movement():m_pos() --the pillar
-				local shield_direction = mvector3.direction(temp_vec4, my_pos, shield_pos)
-				local heister_direction = mvector3.direction(temp_vec5, my_pos, heister_pos)
-				local following_direction = mvector3.direction(temp_vec6, shield_direction, heister_direction)
-				local following_dis = following_direction * 120
-				local near_pos = data.objective.follow_unit:movement():m_pos() + following_dis
-				
-				local notbestcovernotfollowcoverchk = not best_cover or not CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 60, 120)
-				
-				--unit would take the heister's angle to both the pillar, and the unit, the unit would attempt to line up the pillar and the heister together, since they're following the pillar, they should frequently position themselves behind the pillar, which would keep them in cover, its hacky, but it would work
-				
-				if notbestcovernotfollowcoverchk and not my_data.processing_cover_path and not my_data.charge_path_search_id then
+			elseif data.objective and data.objective.type == "follow" then
+				local near_pos = data.objective.follow_unit:movement():m_pos()
+				local notbc_ornotvc_chk = not best_cover or not CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 200, 1000)
+				if notbc_ornotvc_chk and not my_data.processing_cover_path and not my_data.charge_path_search_id then
 					local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
 
-					if found_cover and data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") then
+					if found_cover then
 						if not follow_unit_area.nav_segs[found_cover[3]:nav_segment()] then
-							debug_pause_unit(data.unit, "cover in wrong area")
+							--debug_pause_unit(data.unit, "cover in wrong area")
 						end
 
 						satisfied = true

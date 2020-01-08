@@ -236,13 +236,13 @@ function CopLogicTravel.queued_update(data)
 	
 	if hostage_count > 0 and not managers.groupai:state():chk_assault_active_atm() then --make sure the hostage count is actually above zero before replacing any of the lines
 		if hostage_count > 3 then  -- hostage count needs to be above 3
-			if math.random() < 0.2 then --20% chance
+			if math.random() < 0.4 then --40% chance
 				chosen_panic_chatter = "controlpanic"
 			else
 				chosen_panic_chatter = "hostagepanic2" --more panicky "GET THOSE HOSTAGES OUT RIGHT NOW!!!" line for when theres too many hostages on the map
 			end
 		else
-			if math.random() < 0.2 then
+			if math.random() < 0.4 then
 				chosen_panic_chatter = "controlpanic"
 			else
 				chosen_panic_chatter = "hostagepanic1" --less panicky "Delay the assault until those hostages are out." line
@@ -265,7 +265,7 @@ function CopLogicTravel.queued_update(data)
 		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
 	end
 	
-	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5 and not data.is_converted
 	
     if not data.unit:base():has_tag("special") then
     	if data.char_tweak.chatter.clear and not cant_say_clear then
@@ -276,7 +276,7 @@ function CopLogicTravel.queued_update(data)
 				local say_clear = 30
 				if clearchk > 60 then
 					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
-				elseif clearchk > 40 then
+				elseif clearchk > 30 then
 					if not skirmish_map and my_data.radio_voice or not skirmish_map and ignore_radio_rules then
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
 					else
@@ -299,7 +299,7 @@ function CopLogicTravel.queued_update(data)
 	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
 	
-	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic then
+	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted then
 		if managers.groupai:state():chk_assault_active_atm() or not data.unit:base():has_tag("law") then
 			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
 				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
