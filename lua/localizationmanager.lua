@@ -71,7 +71,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_assaultcornertext", function(loc)
 		["loading_hh_6"] = "Special enemies get more dangerous as difficulties increase! Keep a close eye on them!",
 		["loading_hh_7"] = "The cops are generally more intelligent, get faster, deal slightly more damage, and are more accurate every 2 difficulties, while their group tactics get better every difficulty!",
 		["loading_hh_8"] = "Listen out for what the cops are saying from around the corner if you can, it'll help you predict what kind of tactics some of the groups might have! You can even hear them throw out smoke grenades and flashbangs!",
-		["loading_hh_9"] = "Shotgunners have massive smoke puffs that come out of their gun, these can help you locate them, and also help you figure out when they can fire again!",	
+		["loading_hh_9"] = "Shotgunners have massive smoke puffs that come out of their gun when they fire, these can help you locate them, and also help you figure out when they can fire again!",	
 		["loading_hh_10"] = "If you see extra-bright powerful tracers that distort the area around them, that's probably coming from some important enemy! Like a Shotgunner, or a Bulldozer!",
 		["loading_hh_11"] = "Join the Hyper Heisting Discord! You can find a link to it in the ModWorkshop page!",
 	})

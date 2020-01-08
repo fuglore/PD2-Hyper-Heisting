@@ -652,6 +652,21 @@ function CopLogicBase.on_suppressed_state(data)
 	end
 end
 
+function CopLogicBase.on_attention_obj_identified(data, attention_u_key, attention_info)
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	if data.group then
+		for u_key, u_data in pairs(data.group.units) do
+			if u_key ~= data.key then
+				if alive(u_data.unit) and diff_index >= 6 or alive(u_data.unit) and Global.game_settings.use_intense_AI then
+					u_data.unit:brain():clbk_group_member_attention_identified(data.unit, attention_u_key)
+				else
+					Application:error("[CopLogicBase.on_attention_obj_identified] destroyed group member", data.unit, inspect(data.group), inspect(u_data), u_key)
+				end
+			end
+		end
+	end
+end
+
 function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	--bots should no longer get interrupted by objectives on a whim, now cops are simply given the option of receiving new objectives rather than being FORCED into another objective which should make them feel less dumb
 	local my_data = data.internal_data

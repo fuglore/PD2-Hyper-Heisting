@@ -1431,7 +1431,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		repeat
 			local search_area = table.remove(to_search_areas, 1)
 			-- they never used this function for some reason, now i use it, so thats nice
-			if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) or next(search_area.criminal.units) then
+			if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) then
 				local assault_from_here = true
 				
 				if search_area then
@@ -1524,7 +1524,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			assault_path = alternate_assault_path
 		else
 			local path_and_area_to_choose = math.random(1, 4)
-			if not tactics_map.flank then 
+			if not tactics_map or tactics_map and not tactics_map.flank then 
 				assault_area = assault_area_uno
 				assault_path = assault_path_uno
 			elseif path_and_area_to_choose == 2 then

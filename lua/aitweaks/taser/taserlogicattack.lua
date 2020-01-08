@@ -205,11 +205,13 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 	if is_valid_target and attention_data.verified and attention_data.verified_dis <= tase_length then
 		--log("yeah.")
 		if (my_data.last_charge_snd_play_t and data.t - my_data.last_charge_snd_play_t < 0.5) then
+			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
 			return AIAttentionObject.REACT_SPECIAL_ATTACK --christ this was surprisingly way simpler than i thought it was
 		else
 			if not vis_check_fail then
 				my_data.last_charge_snd_play_t = data.t --force tasers to play buzzing before beginning tase
 				data.unit:sound():play("taser_charge", nil, true)
+				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
 				return AIAttentionObject.REACT_SPECIAL_ATTACK
 			end
 		end
