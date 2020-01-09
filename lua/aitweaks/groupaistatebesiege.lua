@@ -32,7 +32,7 @@ function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		self._police_upd_task_queued = true
 
-		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + (next(self._spawning_groups) and 0.4 or 0.8)) --please dont let your own algorithms implode like that, ovk, thanks
+		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + (next(self._spawning_groups) and 0.4 or 1.5)) --please dont let your own algorithms implode like that, ovk, thanks
 	end
 end
 
@@ -546,37 +546,35 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local revealchk = not self._next_allowed_drama_reveal_t or self._next_allowed_drama_reveal_t < t
 	
 	if assaultactive then
-		if low_carnage and not self._feddensityhigh and revealchk and not self._activeassaultbreak or self._drama_data.amount <= self._drama_data.low_p and not self._feddensityhigh and not self._activeassaultbreak then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
+		if low_carnage and not self._feddensityhigh and revealchk and not self._activeassaultbreak or self._drama_data.amount <= self._drama_data.low_p and not self._feddensityhigh and not self._activeassaultbreak and revealchk then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
 			if not assaultactive then
 				--log("AAAAAAAA FUCK YOU")
 			end
 			--if low_carnage then
 				--log("YOU...WILL...FIIIIIIIIIIIIIIGHT!!!!!!")
 			--end
-			self._next_allowed_drama_reveal_t = t + 10
+			self._next_allowed_drama_reveal_t = t + math.random(5, 10)
 			for criminal_key, criminal_data in pairs(self._player_criminals) do
 				self:criminal_spotted(criminal_data.unit)
 				--this is some insane over-weight code for some chatter randomness but hot damn am i happy with it
 				local time = self._t
 				for group_id, group in pairs(self._groups) do
-					if group.objective.charge then
-						for u_key, u_data in pairs(group.units) do
-							u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
-							if not u_data.unit:sound():speaking(time) and assaultactive then
-								local chance = math.random(1, 100)
-								local do_pus = 33
-								local not_mov = 65
-								if chance <= do_pus then
-									u_data.unit:sound():say("pus", true) --GOGOGO/PUSH!
-								elseif chance > not_mov then
-									--nothing, keeps things less spammy
-								else
-									u_data.unit:sound():say("mov", true) --Move out/Move!
-								end
+					for u_key, u_data in pairs(group.units) do
+						u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
+						if not u_data.unit:sound():speaking(time) then
+							local chance = math.random(1, 100)
+							local do_pus = 33
+							local not_mov = 65
+							if chance <= do_pus then
+								u_data.unit:sound():say("pus", true) --GOGOGO/PUSH!
+							elseif chance > not_mov then
+								--nothing, keeps things less spammy
+							else
+							u_data.unit:sound():say("mov", true) --Move out/Move!
 							end
 						end
-					end				
-				end
+					end
+				end				
 			end
 		end
 	end
@@ -586,21 +584,22 @@ function GroupAIStateBesiege:_upd_assault_task()
 	if self:is_area_safe_assault(primary_target_area) then
 		local target_pos = primary_target_area.pos
 		local nearest_area, nearest_dis = nil
+		
 
 		for criminal_key, criminal_data in pairs(self._player_criminals) do
 			if not criminal_data.status then
 				local dis = mvector3.distance_sq(target_pos, criminal_data.m_pos)
 
-				if not nearest_dis or dis < nearest_dis then
-					nearest_dis = dis
-					nearest_area = self:get_area_from_nav_seg_id(criminal_data.tracker:nav_segment())
+				if not self._current_assault_nearest_dis or dis < self._current_assault_nearest_dis then
+					self._current_assault_nearest_dis = dis
+					self._current_assault_nearest_area = self:get_area_from_nav_seg_id(criminal_data.tracker:nav_segment())
 				end
 			end
 		end
 
-		if nearest_area then
-			primary_target_area = nearest_area
-			task_data.target_areas[1] = nearest_area
+		if self._current_assault_nearest_area then
+			primary_target_area = self._current_assault_nearest_area
+			task_data.target_areas[1] = self._current_assault_nearest_area
 		end
 	end
 	
@@ -657,6 +656,117 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 
 	self:_assign_enemy_groups_to_assault(task_data.phase)
+end
+
+function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
+	if not group.has_spawned then
+		return
+	end
+
+	local current_objective = group.objective
+
+	if current_objective.target_area then
+		if current_objective.moving_out and not current_objective.moving_in then
+			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
+
+			if forwardmost_i_nav_point then
+				for i = forwardmost_i_nav_point + 1, #current_objective.coarse_path, 1 do
+					local nav_point = current_objective.coarse_path[forwardmost_i_nav_point]
+
+					if not self:is_nav_seg_safe(nav_point[1]) then
+						for i = 0, #current_objective.coarse_path - forwardmost_i_nav_point, 1 do
+							table.remove(current_objective.coarse_path)
+						end
+
+						local grp_objective = {
+							attitude = "avoid",
+							scan = true,
+							pose = "stand",
+							type = "reenforce_area",
+							stance = "hos",
+							area = self:get_area_from_nav_seg_id(current_objective.coarse_path[#current_objective.coarse_path][1]),
+							target_area = current_objective.target_area
+						}
+
+						self:_set_objective_to_enemy_group(group, grp_objective)
+
+						return
+					end
+				end
+			end
+		end
+
+		if not current_objective.moving_out and not current_objective.area.neighbours[current_objective.target_area.id] then
+			local search_params = {
+				id = "GroupAI_reenforce",
+				from_seg = current_objective.area.pos_nav_seg,
+				to_seg = current_objective.target_area.pos_nav_seg,
+				access_pos = self._get_group_acces_mask(group),
+				verify_clbk = callback(self, self, "is_nav_seg_safe")
+			}
+			local coarse_path = managers.navigation:search_coarse(search_params)
+
+			if coarse_path then
+				self:_merge_coarse_path_by_area(coarse_path)
+
+				local grp_objective = {
+					scan = true,
+					pose = "crouch",
+					type = "reenforce_area",
+					stance = "hos",
+					attitude = "avoid",
+					area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
+					target_area = current_objective.target_area,
+					coarse_path = coarse_path
+				}
+
+				self:_set_objective_to_enemy_group(group, grp_objective)
+				table.remove(coarse_path)
+			end
+		end
+
+		if not current_objective.moving_out and current_objective.area.neighbours[current_objective.target_area.id] then
+			local grp_objective = {
+				stance = "hos",
+				scan = true,
+				pose = "stand",
+				type = "reenforce_area",
+				attitude = "engage",
+				area = current_objective.target_area
+			}
+
+			self:_set_objective_to_enemy_group(group, grp_objective)
+
+			group.objective.moving_in = true
+		end
+	end
+end
+
+function GroupAIStateBesiege:_upd_groups()
+	for group_id, group in pairs(self._groups) do
+		self:_verify_group_objective(group)
+
+		for u_key, u_data in pairs(group.units) do
+			local brain = u_data.unit:brain()
+			local current_objective = brain:objective()
+			local noobjordefaultorgrpobjchkandnoretry = not current_objective or current_objective.is_default or current_objective.grp_objective and current_objective.grp_objective ~= group.objective and not current_objective.grp_objective.no_retry
+			local notfollowingorfollowingaliveunit = not group.objective.follow_unit or alive(group.objective.follow_unit)
+
+			if noobjordefaultorgrpobjchkandnoretry and notfollowingorfollowingaliveunit then
+				local objective = self._create_objective_from_group_objective(group.objective, u_data.unit)
+
+				if objective and brain:is_available_for_assignment(objective) then
+					self:set_enemy_assigned(objective.area or group.objective.area, u_key)
+
+					if objective.element then
+						objective.element:clbk_objective_administered(u_data.unit)
+					end
+
+					u_data.unit:brain():set_objective(objective)
+				end
+			end
+		end
+	end
 end
 
 function GroupAIStateBesiege._create_objective_from_group_objective(grp_objective, receiving_unit)
