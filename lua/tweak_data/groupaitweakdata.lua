@@ -1831,6 +1831,9 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			special_type = "shield",
 			unit_types = {
 				america = {
+					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1"),
+					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1"),
+					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1"),
 					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1")
 				},
 				russia = {
@@ -1840,6 +1843,9 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_shield_hvh_1/ene_shield_hvh_1")
 				},
 				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"),
 					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
 				},
 				shared = {

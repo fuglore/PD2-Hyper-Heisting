@@ -26,6 +26,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._special_unit_types['tank_medic'] = true
 	self._special_unit_types['tank_ftsu'] = true
 	self._special_unit_types['spooc_heavy'] = true
+	self._special_unit_types['akuma'] = true
 	self._special_unit_types['phalanx_minion'] = true
 	self._rolled_dramatalk_chance = nil
 end
@@ -57,6 +58,7 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._special_unit_types['tank_medic'] = true
 	self._special_unit_types['tank_ftsu'] = true
 	self._special_unit_types['spooc_heavy'] = true
+	self._special_unit_types['akuma'] = true
 	self._special_unit_types['phalanx_minion'] = true
 	self._rolled_dramatalk_chance = nil
 end

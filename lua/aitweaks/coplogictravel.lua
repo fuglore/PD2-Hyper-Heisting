@@ -265,10 +265,10 @@ function CopLogicTravel.queued_update(data)
 		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
 	end
 	
-	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5 and not data.is_converted
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
 	
     if not data.unit:base():has_tag("special") then
-    	if data.char_tweak.chatter.clear and not cant_say_clear then
+    	if data.char_tweak.chatter.clear and not cant_say_clear and not data.is_converted then
 			if data.unit:movement():cool() then
 				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
 			else

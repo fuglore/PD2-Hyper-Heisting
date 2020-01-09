@@ -18,6 +18,10 @@ function NPCRaycastWeaponBase:init(...)
 	if weapon_tweak and weapon_tweak.b_trail then
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b")
 	end
+	
+	if weapon_Tweak and weapon_tweak.no_vis then
+		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak")
+	end
 		
 	self._trail_effect_table = {
 		effect = trail,
@@ -50,17 +54,6 @@ function NPCRaycastWeaponBase:setup(setup_data, ...)
 			self._enemy_slotmask = managers.slot:get_mask("enemies")
 		end
 	end		
-end
-
-function NPCRaycastWeaponBase:_spawn_trail_effect(direction, col_ray)
-	self._obj_fire:m_position(self._trail_effect_table.position)
-	mvector3.set(self._trail_effect_table.normal, direction)
-
-	local trail = World:effect_manager():spawn(self._trail_effect_table)
-
-	if col_ray then
-		World:effect_manager():set_remaining_lifetime(trail, math.clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
-	end
 end
 
 function NPCRaycastWeaponBase:_get_spread(user_unit)
@@ -201,8 +194,8 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 	end
 
 	result.hit_enemy = char_hit
-
-	if (furthest_hit and furthest_hit.distance > 600 or not furthest_hit or result.guaranteed_miss) and alive(self._obj_fire) then
+	local fhover600ornohitormiss = furthest_hit and furthest_hit.distance > 600 or not furthest_hit or result.guaranteed_miss
+	if fhover600ornohitormiss and alive(self._obj_fire) then
 		local num_rays = (tweak_data.weapon[self._name_id] or {}).rays or 1
 		local trail_direction = furthest_hit and furthest_hit.ray or direction
 

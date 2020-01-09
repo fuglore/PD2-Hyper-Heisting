@@ -524,12 +524,28 @@
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/snozer_cap_df"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/snozer_cap_nm"/>
-	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/snozer_df"/>	
+	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/snozer_df"/>
+	
+	<unit path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" load="true"/>
+	<unit path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master_contour"/>	
+	<object path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" />
+	<model path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" />	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master"/>
+	
+	<unit path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor" load="true"/>
+	<material_config path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>	
+	<object path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor" />
+	<model path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor" />	
+	<cooked_physics path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>	
+	<sequence_manager path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>
 	
 	<texture path="effects/pd2_mod_hh/particles/textures/effects_atlas" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/add_atlas_df" load="true" />
 	<effect path="effects/pd2_mod_hh/particles/weapons/lazer_passive"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"/>

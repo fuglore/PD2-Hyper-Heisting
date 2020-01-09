@@ -258,6 +258,17 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 		}
 	}
 	self.crate_turret_module.dontsuppressonmiss = true
+	
+	self.emp_npc = deep_clone(self.mp9_npc)
+	self.emp_npc.CLIP_AMMO_MAX = 100000
+	self.emp_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_empty"
+	self.emp_npc.muzzleflash = "effects/payday2/particles/weapons/shells/shell_empty"
+	self.emp_npc.no_vis = true
+	self.emp_npc.damage = 0
+	self.emp_npc.suppression = 99
+	self.emp_npc.apply_emp = true
+	
+	
 end)
 
 --TODO: it is done

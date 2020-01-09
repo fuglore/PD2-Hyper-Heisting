@@ -1638,6 +1638,7 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.civil = deep_clone(presets.weapon.normal)
 	presets.weapon.complex = deep_clone(presets.weapon.normal)
 	presets.weapon.anarchy = deep_clone(presets.weapon.normal)
+	presets.weapon.akuma = deep_clone(presets.weapon.anarchy)
 	presets.weapon.fbigod = deep_clone(presets.weapon.anarchy)
 	
 	--commonly used presets for enemies replaced by existing presets
@@ -6490,6 +6491,126 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	
+	presets.weapon.akuma.is_smg = { --oh? on god?
+		aim_delay = {
+			0,
+			0
+		},
+		focus_delay = 2,
+		focus_dis = 500, 
+		spread = 15,
+		miss_dis = 20,
+		RELOAD_SPEED = 0.1, 
+		melee_speed = 1,
+		melee_dmg = 5,
+		melee_retry_delay = {
+			1,
+			1
+		},
+		range = {
+			optimal = 3500,
+			far = 4000,
+			close = 1000 
+		},
+		autofire_rounds = {
+			32,
+			60
+		},
+		
+		FALLOFF = {
+			{
+				dmg_mul = 0,
+				r = 100,
+				acc = { 
+					0,
+					0.15
+				},
+				recoil = {
+					0.1,
+					0.1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 500,
+				acc = {
+					0,
+					0.15
+				},
+				recoil = { 
+					0.1,
+					0.1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 1000,
+				acc = { 
+					0,
+					0.1
+				},
+				recoil = {
+					0.5,
+					0.9
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0, 
+				r = 2000,
+				acc = {
+					0,
+					0.04
+				},
+				recoil = {
+					0.6,
+					1.2
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 3000,
+				acc = {
+					0,
+					0
+				},
+				recoil = {
+					1.5,
+					3
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			}
+		}
+	}
+	
 	presets.enemy_chatter = {
 		no_chatter = {},
 		cop = {
@@ -6925,7 +7046,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 		"dense"
 	}
 	self.shield.experience = {}
-	self.shield.weapon = deep_clone(presets.weapon.simple)
+	self.shield.weapon = presets.weapon.simple
 	self.shield.detection = presets.detection.enemymook
 	self.shield.HEALTH_INIT = 16
 	self.shield.headshot_dmg_mul = 12
@@ -6964,6 +7085,15 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.use_animation_on_fire_damage = false
 
 	table.insert(self._enemy_list, "shield")
+	
+	self.akuma = deep_clone(self.shield)
+	self.akuma.weapon = presets.weapon.akuma
+	self.akuma.move_speed = presets.move_speed.lightning_constant
+	self.akuma.chatter = presets.enemy_chatter.no_chatter
+	self.akuma.do_not_drop_ammo = true
+	self.akuma.surrender = nil
+	table.insert(self._enemy_list, "akuma")
+	
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self, presets) --TODO: Nothing right now.
@@ -10082,7 +10212,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"lazer",
 		"blazter",
 		"bayou_spas",
-		"quagmire"
+		"quagmire",
+		"em_disruptor"
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -10120,7 +10251,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_lazer"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_blazter/wpn_npc_blazter"),
 		Idstring("units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"),
-		Idstring("units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire")
+		Idstring("units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"),
+		Idstring("units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"),
 	}
 end
 
@@ -10149,7 +10281,8 @@ function CharacterTweakData:character_map()
 			"ene_medic_heavy_m4",
 			"ene_medic_heavy_r870",
 			"ene_city_swat_saiga",
-			"ene_swat_bronco"
+			"ene_swat_bronco",
+			"ene_true_lotus_master"
 		}
 	}
 	char_map.gitgud = {

@@ -1,3 +1,24 @@
+require("lib/units/enemies/cop/actions/lower_body/CopActionIdle")
+require("lib/units/enemies/cop/actions/lower_body/CopActionWalk")
+require("lib/units/enemies/cop/actions/full_body/CopActionAct")
+require("lib/units/enemies/cop/actions/lower_body/CopActionTurn")
+require("lib/units/enemies/cop/actions/full_body/CopActionHurt")
+require("lib/units/enemies/cop/actions/lower_body/CopActionStand")
+require("lib/units/enemies/cop/actions/lower_body/CopActionCrouch")
+require("lib/units/enemies/cop/actions/upper_body/CopActionShoot")
+require("lib/units/enemies/cop/actions/upper_body/CopActionReload")
+require("lib/units/enemies/cop/actions/upper_body/CopActionTase")
+require("lib/units/enemies/cop/actions/full_body/CopActionDodge")
+require("lib/units/enemies/cop/actions/full_body/CopActionWarp")
+require("lib/units/enemies/spooc/actions/lower_body/ActionSpooc")
+require("lib/units/civilians/actions/lower_body/CivilianActionWalk")
+require("lib/units/civilians/actions/lower_body/EscortWithSuitcaseActionWalk")
+require("lib/units/enemies/tank/actions/lower_body/TankCopActionWalk")
+require("lib/units/enemies/shield/actions/lower_body/ShieldCopActionWalk")
+require("lib/units/player_team/actions/lower_body/CriminalActionWalk")
+require("lib/units/enemies/cop/actions/upper_body/CopActionHealed")
+require("lib/units/enemies/medic/actions/upper_body/MedicActionHeal")
+
 local mvec3_set = mvector3.set
 local mvec3_set_z = mvector3.set_z
 local mvec3_lerp = mvector3.lerp
@@ -38,6 +59,9 @@ function CopMovement:init(unit)
 	CopMovement._action_variants.tank_ftsu.walk = TankCopActionWalk
 	CopMovement._action_variants.spooc_heavy = security_variant
 	CopMovement._action_variants.fbi_xc45 = security_variant
+	CopMovement._action_variants.akuma = clone(security_variant)
+	CopMovement._action_variants.akuma.hurt = ShieldActionHurt
+	CopMovement._action_variants.akuma.walk = ShieldCopActionWalk
 	
 	old_init(self, unit)
 end

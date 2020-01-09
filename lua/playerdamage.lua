@@ -228,10 +228,23 @@ function PlayerDamage:_chk_dmg_too_soon(damage, ...)
 end
 
 Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self, attack_data)
+	local armor_damage = self:_max_armor() > 0 and self:get_real_armor() < self:_max_armor()
+	if attack_data then
+		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
+			if tostring(attack_data.attacker_unit:base()._tweak_table) == "akuma" then
+				if alive(player_unit) then
+					self:build_suppression(99)
+					return
+				end
+			end
+		end
+	end
+	
 	local armor_subtracted = self:_calc_armor_damage(attack_data)
 	if not self._bleed_out and armor_subtracted > 0 then
 		managers.groupai:state():criminal_hurt_drama_armor(self._unit, attacker)
 	end
+
 end)
 
 local _calc_armor_damage_original = PlayerDamage._calc_armor_damage
@@ -265,6 +278,14 @@ function PlayerDamage:build_suppression(amount)
 
 	local data = self._supperssion_data
 	amount = amount * managers.player:upgrade_value("player", "suppressed_multiplier", 1)
+	local armor_damage = self:_max_armor() > 0 and self:get_real_armor() < self:_max_armor()
+	
+	if amount >= 99 then
+		self._akuma_effect = true
+		self._akuma_dampen = 50
+		SoundDevice:set_rtpc("downed_state_progression", self._akuma_dampen)
+	end
+		
 	local morale_boost_bonus = self._unit:movement():morale_boost()
 
 	if morale_boost_bonus then
@@ -275,5 +296,24 @@ function PlayerDamage:build_suppression(amount)
 	data.value = math.min(tweak_data.player.suppression.max_value, (data.value or 0) + amount * tweak_data.player.suppression.receive_mul)
 	self._last_received_sup = amount
 	self._next_allowed_sup_t = managers.player:player_timer():time() + self._dmg_interval
-	data.decay_start_t = managers.player:player_timer():time() + tweak_data.player.suppression.decay_start_delay
+	if self._akuma_effect then
+		data.decay_start_t = managers.player:player_timer():time() + tweak_data.player.suppression.decay_start_delay * 4
+	else
+		data.decay_start_t = managers.player:player_timer():time() + tweak_data.player.suppression.decay_start_delay
+	end
 end
+
+function PlayerDamage:_begin_akuma_snddedampen()
+	if self._akuma_dampen and self._akuma_dampen > 0 then
+		self._akuma_dampen = 0
+		SoundDevice:set_rtpc("downed_state_progression", self._akuma_dampen)		
+	end
+end
+
+Hooks:PostHook(PlayerDamage, "_regenerate_armor", "hh_regenarmor", function(self, no_sound)
+	self._akuma_effect = nil
+	if self._akuma_dampen then
+		--self._is_damping = true
+		self:_begin_akuma_snddedampen()
+	end
+end)

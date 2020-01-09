@@ -61,7 +61,7 @@ function RaycastWeaponBase:setup(setup_data, damage_multiplier)
 	end
 
 	self._setup = setup_data
-	self._fire_mode = self._fire_mode or tweak_data.weapon[self._name_id].FIRE_MODE or "single"
+	self._fire_mode = self._fire_mode or tweak_data.weapon[self._name_id].FIRE_MODE or "auto"
 
 	if self._setup.timer then
 		self:set_timer(self._setup.timer)

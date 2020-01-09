@@ -1,0 +1,14 @@
+<materials version="3" group="wpn_npc_smg_mp9">
+    <material name="mtr_mp9" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_smg_mp9_pts/wpn_third_smg_mp9_body_mp9_df"/>
+        <bump_normal_texture file="units/payday2/weapons/wpn_third_smg_mp9_pts/wpn_third_smg_mp9_body_mp9_nm"/>
+    </material>	
+    <material name="extended" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_smg_mp9_pts/wpn_third_smg_mp9_m_extended_df"/>
+        <bump_normal_texture file="units/payday2/weapons/wpn_third_smg_mp9_pts/wpn_third_smg_mp9_m_extended_nm"/>
+    </material>	
+    <material name="fold" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_smg_mp9_pts/wpn_third_smg_mp9_s_fold_df"/>
+        <bump_normal_texture file="units/payday2/weapons/wpn_third_smg_mp9_pts/wpn_third_smg_mp9_s_fold_nm"/>
+    </material>	
+</materials>

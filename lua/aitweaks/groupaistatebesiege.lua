@@ -139,7 +139,7 @@ end
 local fixed = false
 local origfunc2 = GroupAIStateBesiege._get_special_unit_type_count
 function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
-	if special_type == 'tank_mini' and special_type == 'tank_medic' and special_type == 'tank_ftsu' and special_type == 'spooc_heavy' and special_type == 'phalanx_minion' and special_type == 'tank_hw' then
+	if special_type == 'tank_mini' and special_type == 'tank_medic' and special_type == 'tank_ftsu' and special_type == 'spooc_heavy' and special_type == 'phalanx_minion' and special_type == 'tank_hw' and special_type == 'akuma' then
 		fixed = true
 	end
 	
@@ -161,6 +161,7 @@ function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 	if not fixed and special_type == 'shield' then 
 		local res3 = origfunc2(self, 'shield', ...) or 0
 		res3 = res3 + (origfunc2(self, 'phalanx_minion', ...) or 0)
+		res3 = res3 + (origfunc2(self, 'akuma', ...) or 0)
 		return res3
 	end
 	
