@@ -707,8 +707,12 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 			local coarse_path = managers.navigation:search_coarse(search_params)
 
 			if coarse_path then
-				self:_merge_coarse_path_by_area(coarse_path)
-
+				local clean_path = self:_merge_coarse_path_by_area(coarse_path)
+				
+				if clean_path then
+					coarse_path = clean_path
+				end
+				
 				local grp_objective = {
 					scan = true,
 					pose = "crouch",
