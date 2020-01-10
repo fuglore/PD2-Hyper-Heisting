@@ -995,7 +995,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			move_to_cover = true
 		end
 	elseif Global.game_settings.one_down or managers.skirmish.is_skirmish() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
-		if data.tactics and data.tactics.charge and charge_failed_t_chk or my_data.taken_flank_cover and charge_failed_t_chk or not charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
+		if data.tactics and data.tactics.charge and charge_failed_t_chk or my_data.taken_flank_cover and charge_failed_t_chk or charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
 			if my_data.charge_path then
 				if data.objective and not data.objective.type == "follow" then
 					local path = my_data.charge_path

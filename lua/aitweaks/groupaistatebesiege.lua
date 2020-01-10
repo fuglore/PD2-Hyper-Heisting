@@ -30,9 +30,13 @@ end
 
 function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
+		local next_upd_t = 1.5
+		if next(self._spawning_groups) then
+			next_upd_t = 0.4
+		end
 		self._police_upd_task_queued = true
 
-		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + (next(self._spawning_groups) and 0.4 or 1.5)) --please dont let your own algorithms implode like that, ovk, thanks
+		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + next_upd_t) --please dont let your own algorithms implode like that, ovk, thanks
 	end
 end
 
@@ -1502,7 +1506,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				open_fire = true
 				self:_voice_open_fire_start(group)
-			elseif charge and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak then
+			elseif charge and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak then
 				push = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak and not phase_is_anticipation and self._drama_data.amount <= self._drama_data.low_p then
 				push = true
@@ -1580,53 +1584,53 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							break
 						end
 					end
-				end
 				
-				if assault_from_here then
-					local search_params = {
-						id = "GroupAI_assault",
-						from_seg = current_objective.area.pos_nav_seg,
-						to_seg = search_area.pos_nav_seg,
-						access_pos = self._get_group_acces_mask(group),
-						verify_clbk = callback(self, self, "is_nav_seg_safe")
-					}
-					assault_path = managers.navigation:search_coarse(search_params)
+					if assault_from_here then
+						local search_params = {
+							id = "GroupAI_assault",
+							from_seg = current_objective.area.pos_nav_seg,
+							to_seg = search_area.pos_nav_seg,
+							access_pos = self._get_group_acces_mask(group),
+							verify_clbk = callback(self, self, "is_nav_seg_safe")
+						}
+						assault_path = managers.navigation:search_coarse(search_params)
 
-					if assault_path then
-						local clean_path = self:_merge_coarse_path_by_area(assault_path)
-						
-						assault_path = clean_path
-						assault_area = search_area
-						
-						if not assault_area_uno then
-							assault_area_uno = assault_area
-						elseif not assault_area_dos then
-							assault_area_dos = assault_area
-						elseif not assault_area_tres then
-							assault_area_tres = assault_area
-						elseif not assault_area_quatro then
-							assault_area_quatro = assault_area
-						end
-						
-						if not assault_path_uno then
-							assault_path_uno = assault_path
-						elseif not assault_path_dos then
-							assault_path_dos = assault_path
-						elseif not assault_path_tres then
-							assault_path_tres = assault_path
-						elseif not assault_path_quatro then
-							assault_path_quatro = assault_path
-						end
+						if assault_path then
+							local clean_path = self:_merge_coarse_path_by_area(assault_path)
+							
+							assault_path = clean_path
+							assault_area = search_area
+							
+							if not assault_area_uno then
+								assault_area_uno = assault_area
+							elseif not assault_area_dos then
+								assault_area_dos = assault_area
+							elseif not assault_area_tres then
+								assault_area_tres = assault_area
+							elseif not assault_area_quatro then
+								assault_area_quatro = assault_area
+							end
+							
+							if not assault_path_uno then
+								assault_path_uno = assault_path
+							elseif not assault_path_dos then
+								assault_path_dos = assault_path
+							elseif not assault_path_tres then
+								assault_path_tres = assault_path
+							elseif not assault_path_quatro then
+								assault_path_quatro = assault_path
+							end
 
-						break
+							break
+						end
 					end
-				end
-			else
-				for other_area_id, other_area in pairs(search_area.neighbours) do
-					if not found_areas[other_area] then
-						table.insert(to_search_areas, other_area)
+				else
+					for other_area_id, other_area in pairs(search_area.neighbours) do
+						if not found_areas[other_area] then
+							table.insert(to_search_areas, other_area)
 
-						found_areas[other_area] = search_area
+							found_areas[other_area] = search_area
+						end
 					end
 				end
 			end

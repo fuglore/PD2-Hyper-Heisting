@@ -605,10 +605,10 @@ function GroupAIStateBase:_radio_chatter_clbk()
 
 	self._radio_clbk = callback(self, self, "_radio_chatter_clbk")
 	if managers.groupai:state():whisper_mode() then
-		managers.enemy:add_delayed_clbk("_radio_chatter_clbk", self._radio_clbk, Application:time() + 10 + math.random(0, 20))
+		managers.enemy:add_delayed_clbk("_radio_chatter_clbk", self._radio_clbk, Application:time() + math.random(0, 20))
 	else
 		local commonradiotime = math.random(10, 15)
-		managers.enemy:add_delayed_clbk("_radio_chatter_clbk", self._radio_clbk, Application:time() + math.lerp(commonradiotime, 2.5, self._drama_data.amount))
+		managers.enemy:add_delayed_clbk("_radio_chatter_clbk", self._radio_clbk, Application:time() + math.lerp(commonradiotime, 1, self._drama_data.amount))
 	end
 end
 
