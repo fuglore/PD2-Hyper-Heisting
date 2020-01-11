@@ -1310,7 +1310,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	end
 	
 	local chosen_sabotage_chatter = "sabotagegeneric" --set default sabotage chatter for variety's sake
-	local skirmish_map = level == "skm_mus" or level == "skm_red2" or level == "skm_run" or level == "skm_watchdogs_stage2" --these shouldnt play on holdout
+	local skirmish_map = managers.skirmish:is_skirmish()--these shouldnt play on holdout
 	local ignore_radio_rules = nil
 	
 	if level == "branchbank" then --bank heist

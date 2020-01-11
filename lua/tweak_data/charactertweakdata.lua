@@ -6941,6 +6941,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.damage.no_suppression_crouch = true
 	self.spooc.suppression = presets.suppression.stalwart_nil
 	self.spooc.no_fumbling = true
+	self.spooc.no_suppression_reaction = true
 	self.spooc.surrender = presets.surrender.special
 	self.spooc.priority_shout = "f33"
 	self.spooc.priority_shout_max_dis = 700
@@ -6992,13 +6993,14 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	self.shadow_spooc.move_speed = presets.move_speed.lightning_constant
 	self.shadow_spooc.no_retreat = true
 	self.shadow_spooc.no_arrest = true
+	self.shadow_spooc.no_fumbling = true
+	self.shadow_spooc.no_suppression_reaction = true
 	self.shadow_spooc.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.shadow_spooc.surrender_break_time = {
 		4,
 		6
 	}
 	self.shadow_spooc.suppression = nil
-	self.shadow_spooc.no_fumbling = true
 	self.shadow_spooc.surrender = nil
 	self.shadow_spooc.silent_priority_shout = "f37"
 	self.shadow_spooc.priority_shout_max_dis = 700
@@ -7062,6 +7064,8 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.no_run_stop = true
 	self.shield.no_retreat = nil
 	self.shield.no_arrest = true
+	self.shield.no_fumbling = true
+	self.shield.no_suppression_reaction = true
 	self.shield.surrender = nil
 	self.shield.priority_shout = "f31"
 	self.shield.rescue_hostages = false
@@ -7090,6 +7094,8 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.akuma.weapon = presets.weapon.akuma
 	self.akuma.move_speed = presets.move_speed.lightning_constant
 	self.akuma.chatter = presets.enemy_chatter.no_chatter
+	self.akuma.no_fumbling = true
+	self.akuma.no_suppression_reaction = true
 	self.akuma.do_not_drop_ammo = true
 	self.akuma.surrender = nil
 	table.insert(self._enemy_list, "akuma")
@@ -7111,6 +7117,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.damage.no_suppression_crouch = true
 	self.medic.suppression = presets.suppression.stalwart_nil
 	self.medic.no_fumbling = true
+	self.medic.no_suppression_reaction = true
 	self.medic.no_retreat = nil
 	self.medic.surrender = presets.surrender.special
 	self.medic.move_speed = presets.move_speed.civil_consistency
@@ -7155,6 +7162,7 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.move_speed = presets.move_speed.civil_consistency
 	self.taser.suppression = presets.suppression.stalwart_nil
 	self.taser.no_fumbling = true
+	self.taser.no_suppression_reaction = true
 	self.taser.no_retreat = nil
 	self.taser.no_arrest = true
 	self.taser.surrender = presets.surrender.special
@@ -7225,6 +7233,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.weapon = presets.weapon.complex
 	self.fbi.detection = presets.detection.enemymook
 	self.fbi.no_fumbling = true
+	self.fbi.no_suppression_reaction = true
 	self.fbi.no_retreat = nil
 	self.fbi.HEALTH_INIT = 16
 	self.fbi.headshot_dmg_mul = 6

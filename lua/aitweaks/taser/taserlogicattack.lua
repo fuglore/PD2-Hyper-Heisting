@@ -8,7 +8,7 @@ function TaserLogicAttack.queued_update(data)
 
 		return
 	elseif not data.attention_obj then
-		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t)
+		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0.3)
 		CopLogicBase._report_detections(data.detected_attention_objects)
 
 		return
@@ -16,7 +16,7 @@ function TaserLogicAttack.queued_update(data)
 
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
-		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t)
+		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0.016)
 
 		return
 	end
@@ -50,7 +50,7 @@ function TaserLogicAttack.queued_update(data)
 		CopLogicAttack._upd_combat_movement(data)
 	end
 
-	CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0.01) --update asap
+	CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0.016) --update asap
 	CopLogicBase._report_detections(data.detected_attention_objects)
 end
 
@@ -83,15 +83,16 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 		elseif focus_enemy.verified_t and data.t - focus_enemy.verified_t < 10 then
 			aim = true
 
-			if my_data.shooting and data.t - focus_enemy.verified_t < 1 then
+			if my_data.shooting and data.t - focus_enemy.verified_t < 3 then
 				shoot = true
 			end
 		elseif focus_enemy.verified_dis <= 1500 and my_data.walking_to_cover_shoot_pos then
 			aim = true
 		end
 	end
-
-	if tase and (my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover or data.unit:anim_data().run or data.unit:anim_data().move) and not data.unit:movement():chk_action_forbidden("walk") then
+	
+	local is_moving = my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover or data.unit:anim_data().run or data.unit:anim_data().move
+	if tase and is_moving and not data.unit:movement():chk_action_forbidden("walk") then
 		local new_action = {
 			body_part = 2,
 			type = "idle"
@@ -118,10 +119,11 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 
 			my_data.attention_unit = mvector3.copy(focus_enemy.verified_pos)
 		end
-
+		
+		local nottasingortargetwrong = not my_data.tasing or my_data.tasing.target_u_data ~= focus_enemy
 		if not data.unit:anim_data().reload and not data.unit:movement():chk_action_forbidden("action") then
 			if tase then
-				if (not my_data.tasing or my_data.tasing.target_u_data ~= focus_enemy) and not data.unit:movement():chk_action_forbidden("walk") and not focus_enemy.unit:movement():zipline_unit() then
+				if nottasingortargetwrong and not data.unit:movement():chk_action_forbidden("walk") and not focus_enemy.unit:movement():zipline_unit() then
 					if my_data.attention_unit ~= focus_enemy.u_key then
 						CopLogicBase._set_attention(data, focus_enemy)
 
@@ -190,41 +192,51 @@ end
 
 function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data, stationary)
 	local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
-	local tase_length = data.internal_data.tase_distance or 1500 --fix for better bots crash
 	local my_data = data.internal_data
-	local human_chk = attention_data.is_human_player
-	local is_valid_target = nil
-	
-	if attention_data.is_person and attention_data.criminal_record and attention_data.unit:movement() and attention_data.unit:movement():is_taser_attack_allowed() then
-		is_valid_target = true
-		--log("helpme")
-	end
+	local tase_length = my_data.tase_distance or 1500 --fix for better bots crash (more like the sanity check vanilla lacks because :julesyes: )
 
-	local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry"), "ignore_unit", attention_data.unit, "report") 
-	
-	if is_valid_target and attention_data.verified and attention_data.verified_dis <= tase_length then
-		--log("yeah.")
-		if (my_data.last_charge_snd_play_t and data.t - my_data.last_charge_snd_play_t < 0.5) then
-			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
-			return AIAttentionObject.REACT_SPECIAL_ATTACK --christ this was surprisingly way simpler than i thought it was
-		else
-			if not vis_check_fail then
-				my_data.last_charge_snd_play_t = data.t --force tasers to play buzzing before beginning tase
-				data.unit:sound():play("taser_charge", nil, true)
-				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
-				return AIAttentionObject.REACT_SPECIAL_ATTACK
-			end
-		end
-	end
-
+	--if not supposd to shoot (or tase, for that matter), end the function here
 	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
 		return reaction
 	end
 
-	if not is_valid_target then
-		return AIAttentionObject.REACT_COMBAT
+	if attention_data.unit:movement() then
+		--check if the unit's movement extension has a is_taser_attack_allowed function first (should be fine since you're checking for criminal_record and is_person first, but you never know)
+		if attention_data.unit:movement().is_taser_attack_allowed and attention_data.unit:movement():is_taser_attack_allowed() then
+			--log("helpme")
+
+			if attention_data.verified then
+				if attention_data.verified_dis <= tase_length then
+					--log("yeah.")
+
+					--honestly I have no idea what difference does it make to use the unit itself to do the ray, if it's better for performance, go for it
+					--there's also no need to use ignore_unit if the slotmask won't include them (since only geometry, vehicles and shields are checked in this case)
+					--sphere ray used to avoid tasers trying to tase if already obstructed by geometry (can add character slotmasks to prevent this with them as well)
+					local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "sphere_cast_radius", 25, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "report")
+
+					if not vis_check_fail then
+						if my_data.last_charge_snd_play_t and data.t - my_data.last_charge_snd_play_t < 1 or my_data.tasing and my_data.tasing.target_u_data.unit:movement():tased() then --tase
+							return AIAttentionObject.REACT_SPECIAL_ATTACK
+						else --charge taser
+							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive") --don't know what delays are being used in copactiontase, so it might be better to use this above (at tase)
+							my_data.last_charge_snd_play_t = data.t
+							data.unit:sound():play("taser_charge", nil, true)
+							return AIAttentionObject.REACT_AIM
+						end
+					else
+						return AIAttentionObject.REACT_COMBAT
+					end
+				else
+					return AIAttentionObject.REACT_COMBAT
+				end
+			end
+		else
+			if attention_data.verified then
+				return AIAttentionObject.REACT_COMBAT
+			end
+		end
 	end
-	
+
 	return reaction
 end
 
@@ -243,7 +255,7 @@ function TaserLogicAttack._upd_enemy_detection(data)
 	
 	for key, enemy_data in pairs(data.detected_attention_objects) do
 		if enemy_data.dmg_t and alert_chk_t < enemy_data.dmg_t then
-			under_multiple_fire = (under_multiple_fire or 0) + 0
+			under_multiple_fire = 0
 
 			if under_multiple_fire > 11 then
 					under_multiple_fire = true
@@ -289,10 +301,10 @@ function TaserLogicAttack._upd_enemy_detection(data)
 				end
 
 				CopLogicAttack._set_best_cover(data, my_data, nil)
-				TaserLogicAttack._chk_play_charge_weapon_sound(data, my_data, new_attention)
+				--TaserLogicAttack._chk_play_charge_weapon_sound(data, my_data, new_attention)
 			end
 		else
-			TaserLogicAttack._chk_play_charge_weapon_sound(data, my_data, new_attention)
+			--TaserLogicAttack._chk_play_charge_weapon_sound(data, my_data, new_attention)
 		end
 	elseif old_att_obj then
 		CopLogicAttack._cancel_charge(data, my_data)

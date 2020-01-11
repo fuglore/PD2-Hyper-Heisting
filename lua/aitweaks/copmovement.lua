@@ -330,7 +330,7 @@ function CopMovement:on_suppressed(state)
 						--self._unit:sound():say("hr01")
 					end
 				end
-			elseif self._ext_anim.idle and (not self._active_actions[2] or self._active_actions[2]:type() == "idle") and not self:chk_action_forbidden("act") then
+			elseif self._ext_anim.idle and (not self._active_actions[2] or self._active_actions[2]:type() == "idle") and not self:chk_action_forbidden("act") and not self._tweak_data.no_suppression_reaction then
 				if Global.game_settings.one_down and not self._ext_anim.crouch and not self:chk_action_forbidden("act") then
 					local action_desc = {
 						clamp_to_graph = true,
