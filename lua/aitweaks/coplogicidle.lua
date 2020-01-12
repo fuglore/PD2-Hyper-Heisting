@@ -633,7 +633,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					local justmurder = data.tactics and data.tactics.murder
 					local justharass = data.tactics and data.tactics.harass
 					
-					if data.tactics and data.tactics.spooctargeting and distance < 1500 then
+					if data.tactics and data.tactics.spooctargeting and distance <= 1500 then
 						target_priority_slot = 1
 					elseif distance < 250 and not murderorspooctargeting then
 						target_priority_slot = 1
@@ -702,6 +702,63 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 	return best_target, best_target_priority_slot, best_target_reaction
 end
 
+function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
+	local record = attention_data.criminal_record
+	local can_arrest = CopLogicBase._can_arrest(data)
+
+	if not record or not attention_data.is_person then
+		if attention_data.settings.reaction == AIAttentionObject.REACT_ARREST and not can_arrest then
+			return AIAttentionObject.REACT_AIM
+		else
+			return attention_data.settings.reaction
+		end
+	end
+
+	local att_unit = attention_data.unit
+
+	if attention_data.is_deployable or data.t < record.arrest_timeout then
+		return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_COMBAT)
+	end
+
+	local visible = attention_data.verified
+
+	if record.status == "dead" then
+		return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_AIM)
+	elseif record.status == "disabled" then
+		if record.assault_t and record.assault_t - record.disabled_t > 0.6 then
+			return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_COMBAT)
+		else
+			return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_AIM)
+		end
+	elseif record.being_arrested then
+		return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_AIM)
+	elseif can_arrest and (not record.assault_t or att_unit:base():arrest_settings().aggression_timeout < data.t - record.assault_t) and record.arrest_timeout < data.t and not record.status then
+		local under_threat = nil
+
+		if attention_data.dis < 2000 then
+			for u_key, other_crim_rec in pairs(managers.groupai:state():all_criminals()) do
+				local other_crim_attention_info = data.detected_attention_objects[u_key]
+
+				if other_crim_attention_info and (other_crim_attention_info.is_deployable or other_crim_attention_info.verified and other_crim_rec.assault_t and data.t - other_crim_rec.assault_t < other_crim_rec.unit:base():arrest_settings().aggression_timeout) then
+					under_threat = true
+
+					break
+				end
+			end
+		end
+
+		if under_threat then
+			return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_COMBAT)
+		elseif attention_data.dis < 2000 and visible then
+			return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_ARREST)
+		else
+			return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_AIM)
+		end
+	end
+
+	return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_COMBAT)
+end
+
 function CopLogicIdle.on_alert(data, alert_data)
 	local alert_type = alert_data[1]
 	local alert_unit = alert_data[5]
@@ -715,7 +772,9 @@ function CopLogicIdle.on_alert(data, alert_data)
 	if CopLogicBase.is_alert_aggressive(alert_type) then
 		data.unit:movement():set_cool(false, managers.groupai:state().analyse_giveaway(data.unit:base()._tweak_table, alert_data[5], alert_data))
 	end
-
+	
+	local was_cool_alert_chk = alert_type == "footstep" or alert_type == "bullet" or alert_type == "aggression" or alert_type == "explosion" or alert_type == "vo_cbt" or alert_type == "vo_intimidate" or alert_type == "vo_distress"
+	
 	if alert_unit and alive(alert_unit) and alert_unit:in_slot(data.enemy_slotmask) then
 		local att_obj_data, is_new = CopLogicBase.identify_attention_obj_instant(data, alert_unit:key())
 
@@ -739,9 +798,9 @@ function CopLogicIdle.on_alert(data, alert_data)
 		--	data.unit:brain():action_request(action_data)
 		--end
 
-		if not action_data and alert_type == "bullet" and data.logic.should_duck_on_alert(data, alert_data) then
-			action_data = CopLogicAttack._chk_request_action_crouch(data)
-		end
+		--if not action_data and alert_type == "bullet" and data.logic.should_duck_on_alert(data, alert_data) then
+			--action_data = CopLogicAttack._chk_request_action_crouch(data)
+		--end
 
 		if att_obj_data.criminal_record then
 			managers.groupai:state():criminal_spotted(alert_unit)
@@ -750,7 +809,7 @@ function CopLogicIdle.on_alert(data, alert_data)
 				managers.groupai:state():report_aggression(alert_unit)
 			end
 		end
-	elseif was_cool and (alert_type == "footstep" or alert_type == "bullet" or alert_type == "aggression" or alert_type == "explosion" or alert_type == "vo_cbt" or alert_type == "vo_intimidate" or alert_type == "vo_distress") then
+	elseif was_cool and was_cool_alert_chk then
 		local attention_obj = alert_unit and alert_unit:brain() and alert_unit:brain()._logic_data.attention_obj
 
 		if attention_obj then
@@ -774,7 +833,7 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 			--nothing
 		elseif data.unit:base():has_tag("taser") and data.attention_obj and data.attention_obj.verified and data.attention_obj.dis and data.attention_obj.dis <= 1500 then
 			CopLogicBase._exit(data.unit, "attack")
-		elseif data.unit:base():has_tag("spooc") and focus_enemy and focus_enemy.dis and focus_enemy.is_person and focus_enemy.criminal_record and not focus_enemy.criminal_record.status and not my_data.spooc_attack and AIAttentionObject.REACT_SHOOT <= focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") and not SpoocLogicAttack._is_last_standing_criminal(focus_enemy) and not focus_enemy.unit:movement():zipline_unit() and focus_enemy.unit:movement():is_SPOOC_attack_allowed() and focus_enemy.dis <= 1500 and focus_enemy.verified then
+		elseif data.unit:base():has_tag("spooc") and focus_enemy and focus_enemy.dis and focus_enemy.is_person and focus_enemy.criminal_record and not focus_enemy.criminal_record.status and not my_data.spooc_attack and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") and not SpoocLogicAttack._is_last_standing_criminal(focus_enemy) and not focus_enemy.unit:movement():zipline_unit() and focus_enemy.unit:movement():is_SPOOC_attack_allowed() and focus_enemy.dis <= 1500 and focus_enemy.verified then
 			CopLogicBase._exit(data.unit, "attack")
 		elseif CopLogicIdle._chk_objective_needs_travel(data, new_objective) then
 			CopLogicBase._exit(data.unit, "travel")
