@@ -158,7 +158,9 @@ function ActionSpooc:init(action_desc, common_data)
 		end
 	end
 	
-	self._unit:damage():run_sequence_simple("turn_on_spook_lights")
+	if not Global.mutators.telespooc then
+		self._unit:damage():run_sequence_simple("turn_on_spook_lights")
+	end
 
 	local r = LevelsTweakData.LevelType.Russia
 	local ai_type = tweak_data.levels:get_ai_group_type()
