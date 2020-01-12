@@ -387,12 +387,13 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 		if managers.crime_spree then
 			local copaccmultcs = managers.crime_spree:get_acc_mult() or 1
 			
-			hit_chance = hitchance * getcopaccmultcs
+			hit_chance = hit_chance * copaccmultcs
 		end
 	end
 
-	hit_chance = hit_chance * self._unit:character_damage():accuracy_multiplier()
 
+	hit_chance = hit_chance * self._unit:character_damage():accuracy_multiplier()
+	
 	if self:_pseudorandom() < hit_chance then
 		mvec3_set(shoot_hist.m_last_pos, pos)
 	else

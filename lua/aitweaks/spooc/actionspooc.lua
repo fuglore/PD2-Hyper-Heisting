@@ -233,7 +233,8 @@ function ActionSpooc:_upd_strike_first_frame(t)
 	end
 
 	local redir_result = self._ext_movement:play_redirect("spooc_strike")
-
+	self._unit:damage():run_sequence_simple("kill_spooc_lights")
+	
 	if redir_result then
 		self._ext_movement:spawn_wanted_items()
 	elseif self._is_local then
@@ -282,7 +283,9 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 	else
 		target_pos = self._nav_path[#self._nav_path]
 	end
-
+	
+	self._unit:damage():run_sequence_simple("kill_spooc_lights")
+	
 	local my_pos = self._unit:movement():m_pos()
 	local target_vec = self._tmp_vec1
 

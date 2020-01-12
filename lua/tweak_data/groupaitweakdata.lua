@@ -142,8 +142,8 @@ function GroupAITweakData:_init_chatter_data()
 	self.enemy_chatter.controlpanic = {
 		radius = 2000,
 	    max_nr = 40,
-	    duration = {1, 1},
-	    interval = {2, 4.5},
+	    duration = {3, 6},
+	    interval = {6, 8},
 	    group_min = 1,
 	    queue = "g90"
 	}
