@@ -178,7 +178,9 @@ function ActionSpooc:init(action_desc, common_data)
 end
 
 function ActionSpooc:complete()
-	return (self._beating_end_t and self._beating_end_t < TimerManager:game():time()) or (self._beating_end_t and self._last_vel_z >= 0) --https://www.youtube.com/watch?v=XvGRaxtPb3Y
+	local complete = self._beating_end_t and self._beating_end_t < TimerManager:game():time() or self._beating_end_t and self._last_vel_z >= 0
+	
+	return complete --https://www.youtube.com/watch?v=XvGRaxtPb3Y
 end
 
 function ActionSpooc:_upd_strike_first_frame(t)

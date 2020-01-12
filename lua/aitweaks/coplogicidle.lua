@@ -18,8 +18,11 @@ function CopLogicIdle.queued_update(data)
 
 		return
 	end
-
-	if data.is_converted and (not data.objective or data.objective.type == "free") and (not data.path_fail_t or data.t - data.path_fail_t > 3) then
+	
+	local objective_chk = not data.objective or data.objective.type and data.objective.type == "free"
+	local path_fail_chk = not data.path_fail_t or data.t - data.path_fail_t > 3
+	
+	if data.is_converted and objective_chk and path_fail_chk then
 		managers.groupai:state():on_criminal_jobless(data.unit)
 
 		if my_data ~= data.internal_data then
@@ -102,9 +105,9 @@ function CopLogicIdle._upd_stance_and_pose(data, my_data, objective)
 		end
 	end
 	
-	local objective_pose_shit = not data.char_tweak.allowed_stances or data.char_tweak.allowed_stances[objective.stance]
-	
 	if objective and not agg_pose then
+		local objective_pose_shit = not data.char_tweak.allowed_stances or objective and objective.stance and data.char_tweak.allowed_stances[objective.stance]
+		
 		if objective.stance and objective_pose_shit then
 			obj_has_stance = true
 			local upper_body_action = data.unit:movement()._active_actions[3]
@@ -438,7 +441,7 @@ function CopLogicIdle._turn_by_spin(data, my_data, spin)
 	end
 	
 	local gamemode_chk = game_state_machine:gamemode() 
-	if gamemode_chk == "crime_spree" then
+	if Global.game_settings.incsmission then
 		if managers.crime_spree then
 			local copturnspdadd = managers.crime_spree:get_turn_spd_add()
 			speed = speed + copturnspdadd

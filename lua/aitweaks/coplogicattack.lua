@@ -65,16 +65,20 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	if data.cool then
 		data.unit:movement():set_cool(false)
 	end
-
-	if (not data.objective or not data.objective.stance) and data.unit:movement():stance_code() == 1 then
+	
+	local stance_chk = not data.objective or not data.objective.stance
+	
+	if stance_chk and data.unit:movement():stance_code() == 1 then
 		data.unit:movement():set_stance("hos")
 	end
 
 	if my_data ~= data.internal_data then
 		return
 	end
-
-	if data.objective and (data.objective.action_duration or data.objective.action_timeout_t and data.t < data.objective.action_timeout_t) then
+	
+	local objective_duration_chk = data.objective and data.objective.action_duration or data.objective and data.objective.action_timeout_t and data.t < data.objective.action_timeout_t
+	
+	if data.objective and objective_duration_chk then
 		my_data.action_timeout_clbk_id = "CopLogicIdle_action_timeout" .. tostring(data.key)
 		local action_timeout_t = data.objective.action_timeout_t or data.t + data.objective.action_duration
 		data.objective.action_timeout_t = action_timeout_t
@@ -215,7 +219,8 @@ function CopLogicAttack._upd_aim(data, my_data)
 					end
 				else
 					local e_anim_data = focus_enemy.unit:anim_data()
-					if not (e_anim_data.move or e_anim_data.idle) or e_anim_data.reload then
+					local movingoridle = e_anim_data.move or e_anim_data.idle
+					if not movingoridle or e_anim_data.reload then
 						pantsdownchk = true
 					end
 				end
@@ -406,7 +411,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	end
 		
 	--cops call out player reloads if they've seen the player in the last 2 seconds if they have the harass tactic
-	if focus_enemy and focus_enemy.is_person and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT and not data.unit:in_slot(16) and not data.is_converted and data.tactics and data.tactics.harass then
+	if focus_enemy and focus_enemy.is_person and focus_enemy.reaction <= AIAttentionObject.REACT_COMBAT and not data.unit:in_slot(16) and not data.is_converted and data.tactics and data.tactics.harass then
 		if focus_enemy.is_local_player then
 			local time_since_verify = data.attention_obj.verified_t and data.t - data.attention_obj.verified_t
 			local e_movement_state = focus_enemy.unit:movement():current_state()
@@ -932,8 +937,9 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 			else
 				local e_anim_data = focus_enemy.unit:anim_data()
+				local movingoridle = e_anim_data.move or e_anim_data.idle
 
-				if (e_anim_data.move or e_anim_data.idle) and not e_anim_data.reload then
+				if movingoridle and not e_anim_data.reload then
 					dodge = true
 				end
 			end
@@ -1683,7 +1689,7 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 	end
 	
 	local gamemode_chk = game_state_machine:gamemode() 
-	if gamemode_chk == "crime_spree" then
+	if Global.game_settings.incsmission then
 		if managers.crime_spree then
 			local copturnspdadd = managers.crime_spree:get_turn_spd_add()
 			speed = speed + copturnspdadd

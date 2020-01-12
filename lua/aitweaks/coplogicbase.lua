@@ -339,41 +339,16 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						delta_prog = 1
 					else
 						local min_delay = my_data.detection.delay[1]
-						
-						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-							if managers.groupai:state():whisper_mode() then
-								min_delay = math.max(my_data.detection.delay[1], 0.35)
-							else
-								min_delay = math.max(my_data.detection.delay[1], 0.7)
-							end
-						else
-							min_delay = math.max(my_data.detection.delay[1], 0.35)
-						end
-						
 						local max_delay = my_data.detection.delay[2]
 						
-						if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-							if managers.groupai:state():whisper_mode() then
-								max_delay = math.max(my_data.detection.delay[2], 1.05)
-							else
-								max_delay = math.max(my_data.detection.delay[2], 1.05)
-							end
-						else
-							max_delay = math.max(my_data.detection.delay[2], 0.7)
-						end
-						
 						local angle_mul_mod = 0.5 * math.min(angle / my_data.detection.angle_max, 1)
-						local dis_mul_mod = 2 * dis_multiplier
-						if diff_index < 7 then
-							dis_mul_mod = 4 * dis_multiplier
-						end
 						local notice_delay_mul = attention_info.settings.notice_delay_mul or 1
 
 						if attention_info.settings.detection and attention_info.settings.detection.delay_mul then
 							notice_delay_mul = notice_delay_mul * attention_info.settings.detection.delay_mul
 						end
 
-						local notice_delay_modified = math.lerp(min_delay * notice_delay_mul, max_delay, dis_mul_mod + angle_mul_mod)
+						local notice_delay_modified = math.lerp(min_delay * notice_delay_mul, max_delay, dis_multiplier + angle_mul_mod)
 						delta_prog = notice_delay_modified > 0 and dt / notice_delay_modified or 1
 					end
 				else

@@ -383,7 +383,7 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 	
 	local gamemode_chk = game_state_machine:gamemode() 
 	
-	if gamemode_chk == "crime_spree" then
+	if Global.game_settings.incsmission then
 		if managers.crime_spree then
 			local copaccmultcs = managers.crime_spree:get_acc_mult() or 1
 			

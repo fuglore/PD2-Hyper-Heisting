@@ -3,8 +3,7 @@ function PlayerTweakData:_set_normal()
 	self.damage.automatic_respawn_time = 120
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.suspicion.range_mul = 0.8
-	self.suspicion.max_value = 10
-	self.suspicion.buildup_mul = 0.8
+	self.suspicion.buildup_mul = 0.5
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.8
 	}
@@ -26,8 +25,7 @@ function PlayerTweakData:_set_hard()
 	self.damage.DOWNED_TIME_MIN = 5
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.suspicion.range_mul = 0.8
-	self.suspicion.max_value = 10
-	self.suspicion.buildup_mul = 0.8
+	self.suspicion.buildup_mul = 0.5
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.8
 	}
@@ -47,8 +45,6 @@ function PlayerTweakData:_set_overkill()
 	self.damage.DOWNED_TIME_DEC = 10
 	self.damage.DOWNED_TIME_MIN = 5
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
-	self.suspicion.range_mul = 0.8
-	self.suspicion.max_value = 10
 	self.suspicion.buildup_mul = 0.8
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.6
@@ -70,6 +66,7 @@ function PlayerTweakData:_set_overkill_145()
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.suspicion.max_value = 10
+	self.suspicion.buildup_mul = 0.8
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.6
 	}
@@ -90,7 +87,6 @@ function PlayerTweakData:_set_easy_wish()
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.BLEED_OT_TIME = 10
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
-	self.suspicion.max_value = 10
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.5
 	}
@@ -118,7 +114,6 @@ function PlayerTweakData:_set_overkill_290()
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.BLEED_OT_TIME = 10
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
-	self.suspicion.max_value = 10
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.5
 	}
@@ -144,10 +139,8 @@ end
 function PlayerTweakData:_set_sm_wish()
 	self.damage.DOWNED_TIME_DEC = 20
 	self.damage.DOWNED_TIME_MIN = 1
-	self.suspicion.max_value = 10
-	self.suspicion.range_mul = 1.25
-	self.suspicion.buildup_mul = 1.25
 	self.damage.BLEED_OT_TIME = 10
+	self.suspicion.buildup_mul = 1.5
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.5

@@ -381,7 +381,7 @@ function CopLogicTravel.upd_advance(data)
 				my_data.cover_leave_t = nil
 			end
 		end
-	elseif objective and (objective.nav_seg or objective.type == "follow") then
+	elseif objective and objective.nav_seg or objective and objective.type == "follow" then
 		if my_data.coarse_path then
 			if my_data.coarse_path_index == #my_data.coarse_path then
 				CopLogicTravel._on_destination_reached(data)

@@ -66,6 +66,120 @@ function CopMovement:init(unit)
 	old_init(self, unit)
 end
 
+function CopMovement:post_init()
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local unit = self._unit
+	self._ext_brain = unit:brain()
+	self._ext_network = unit:network()
+	self._ext_anim = unit:anim_data()
+	self._ext_base = unit:base()
+	self._ext_damage = unit:character_damage()
+	self._ext_inventory = unit:inventory()
+	self._tweak_data = tweak_data.character[self._ext_base._tweak_table]
+
+	tweak_data:add_reload_callback(self, self.tweak_data_clbk_reload)
+	self._machine:set_callback_object(self)
+
+	self._stance = {
+		name = "ntl",
+		code = 1,
+		values = {
+			1,
+			0,
+			0,
+			0
+		}
+	}
+
+	if managers.navigation:is_data_ready() then
+		self._nav_tracker = managers.navigation:create_nav_tracker(self._m_pos)
+		self._pos_rsrv_id = managers.navigation:get_pos_reservation_id()
+	else
+		Application:error("[CopMovement:post_init] Spawned AI unit with incomplete navigation data.")
+		self._unit:set_extension_update(ids_movement, false)
+	end
+
+	self._unit:kill_mover()
+	self._unit:set_driving("script")
+	
+	if diff_index == 8 then
+		self._unit:unit_data().has_alarm_pager = self._tweak_data.has_alarm_pager
+	end
+	
+	local event_list = {
+		"bleedout",
+		"light_hurt",
+		"heavy_hurt",
+		"expl_hurt",
+		"hurt",
+		"hurt_sick",
+		"shield_knock",
+		"knock_down",
+		"stagger",
+		"counter_tased",
+		"taser_tased",
+		"death",
+		"fatal",
+		"fire_hurt",
+		"poison_hurt",
+		"concussion"
+	}
+
+	table.insert(event_list, "healed")
+	self._unit:character_damage():add_listener("movement", event_list, callback(self, self, "damage_clbk"))
+	self._unit:inventory():add_listener("movement", {
+		"equip",
+		"unequip"
+	}, callback(self, self, "clbk_inventory"))
+	self:add_weapons()
+
+	if self._unit:inventory():is_selection_available(2) then
+		if managers.groupai:state():whisper_mode() or not self._unit:inventory():is_selection_available(1) then
+			self._unit:inventory():equip_selection(2, true)
+		else
+			self._unit:inventory():equip_selection(1, true)
+		end
+	elseif self._unit:inventory():is_selection_available(1) then
+		self._unit:inventory():equip_selection(1, true)
+	end
+
+	if self._ext_inventory:equipped_selection() == 2 and managers.groupai:state():whisper_mode() then
+		self._ext_inventory:set_weapon_enabled(false)
+	end
+
+	local weap_name = self._ext_base:default_weapon_name(managers.groupai:state():enemy_weapons_hot() and "primary" or "secondary")
+	local fwd = self._m_rot:y()
+	self._action_common_data = {
+		stance = self._stance,
+		pos = self._m_pos,
+		rot = self._m_rot,
+		fwd = fwd,
+		right = self._m_rot:x(),
+		unit = unit,
+		machine = self._machine,
+		ext_movement = self,
+		ext_brain = self._ext_brain,
+		ext_anim = self._ext_anim,
+		ext_inventory = self._ext_inventory,
+		ext_base = self._ext_base,
+		ext_network = self._ext_network,
+		ext_damage = self._ext_damage,
+		char_tweak = self._tweak_data,
+		nav_tracker = self._nav_tracker,
+		active_actions = self._active_actions,
+		queued_actions = self._queued_actions,
+		look_vec = mvector3.copy(fwd)
+	}
+
+	self:upd_ground_ray()
+
+	if self._gnd_ray then
+		self:set_position(self._gnd_ray.position)
+	end
+
+	self:_post_init()
+end
+
 function CopMovement:is_taser_attack_allowed() --lol
 	return
 end
