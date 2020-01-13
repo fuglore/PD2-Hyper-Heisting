@@ -7338,7 +7338,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 		"protected_reverse",
 		"dense"
 	}
-	self.armored_swat.HEALTH_INIT = 800
+	self.armored_swat.HEALTH_INIT = 200
 	self.armored_swat.headshot_dmg_mul = 12
 	self.armored_swat.move_speed = presets.move_speed.civil_consistency
 	self.armored_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
