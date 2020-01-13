@@ -59,6 +59,7 @@ function CopMovement:init(unit)
 	CopMovement._action_variants.tank_ftsu.walk = TankCopActionWalk
 	CopMovement._action_variants.spooc_heavy = security_variant
 	CopMovement._action_variants.fbi_xc45 = security_variant
+	CopMovement._action_variants.armored_swat = security_variant
 	CopMovement._action_variants.akuma = clone(security_variant)
 	CopMovement._action_variants.akuma.hurt = ShieldActionHurt
 	CopMovement._action_variants.akuma.walk = ShieldCopActionWalk

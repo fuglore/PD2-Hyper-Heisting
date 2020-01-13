@@ -768,6 +768,19 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 			head = false
 		end
 	end
+	
+	if head and self._unit:base():has_tag("protected_reverse") and not attack_data.weapon_unit:base().thrower_unit then
+		mvector3.set(mvec_1, attack_data.col_ray.body:position())
+		mvector3.subtract(mvec_1, attack_data.attacker_unit:position())
+		mvector3.normalize(mvec_1)
+		mvector3.set(mvec_2, self._unit:rotation():y())
+
+		local not_from_the_front = mvector3.dot(mvec_1, mvec_2) >= 0
+
+		if not not_from_the_front then
+			head = false
+		end
+	end
 
 	local damage = attack_data.damage
 	local headshot = false
@@ -806,8 +819,8 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		if self:is_friendly_fire(attack_data.attacker_unit) then
 			return "friendly_fire"
 		end
-	elseif self:is_friendly_fire(attack_data.attacker_unit) and not is_civilian then
-		if attack_data.attacker_unit:base()._tweak_table == "tank_mini" or attack_data.attacker_unit:base()._tweak_table == "tank" or attack_data.attacker_unit:base()._tweak_table == "tank_medic" and not attack_data.attacker_unit:base()._tweak_table == "tank_ftsu" then
+	elseif self:is_friendly_fire(attack_data.attacker_unit) and not is_civilian and not self._unit:base():has_tag("special") then
+		if attack_data.attacker_unit:base()._tweak_table == "tank_mini" or attack_data.attacker_unit:base()._tweak_table == "tank" or attack_data.attacker_unit:base()._tweak_table == "tank_medic" and not attack_data.attacker_unit:base()._tweak_table == "tank_ftsu" and not self._unit:base():has_tag("protected_reverse") then
 			damage = damage * 9
 		else
 			damage = damage * 0.25
@@ -904,7 +917,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 			type = result_type,
 			variant = attack_data.variant
 		}
-
+		
 		self:_apply_damage_to_health(damage)
 	end
 

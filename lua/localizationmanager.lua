@@ -51,6 +51,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_assaultcornertext", function(loc)
 		["menu_cs_modifier_shield_phalanx"] = "Shotgunners have a chance to be replaced by a Gensec Saiga SWAT.",
 		["menu_cs_modifier_dozer_medic"] = "ERROR: menu_cs_modifier_suppressive_winters",
 		["menu_cs_modifier_no_hurt"] = "SHIN SHOOTOUT is now enabled.",
+		["menu_cs_modifier_medic_adrenaline"] = "Adds a chance for a fully armored ZEAL Light to spawn, killable only by shots in the back of the head.",
 		["menu_cs_modifier_cloaker_tear_gas"] = "Cloakers are now silent while charging and move 25% faster.",
 		["menu_cs_modifier_enemy_health_damage"] = "Enemies deal an additional 15% more damage, are 10% more accurate, have 15% more health, turn 5% faster and detect you slightly faster in Stealth.",
 		["loading_heister_13"] = "Go shoot a cop in real life RIGHT NOW!!! It'll end well! Trust me!",

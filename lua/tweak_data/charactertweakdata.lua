@@ -7329,6 +7329,22 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.chatter = presets.enemy_chatter.swat
 	self.fbi_swat.melee_weapon = "knife_1"
 	self.fbi_swat.steal_loot = true
+	
+	table.insert(self._enemy_list, "fbi_swat")
+	
+	self.armored_swat = deep_clone(self.fbi_swat)
+	self.armored_swat.tags = {
+		"law",
+		"protected_reverse",
+		"dense"
+	}
+	self.armored_swat.HEALTH_INIT = 800
+	self.armored_swat.headshot_dmg_mul = 12
+	self.armored_swat.move_speed = presets.move_speed.civil_consistency
+	self.armored_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
+	self.armored_swat.surrender = presets.surrender.hard
+	table.insert(self._enemy_list, "armored_swat")
+	
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", function(self, presets) --TODO: Nothing right now.

@@ -45,6 +45,17 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
+				id = "dozer_rage",
+				icon = "crime_spree_dozer_rage",
+				class = "ModifierDozerRage",
+				data = {
+					damage = {
+						100,
+						"add"
+					}
+				}
+			},
+			{
 				id = "medic_heal_1",
 				icon = "crime_spree_medic_speed",
 				class = "ModifierHealSpeed",
@@ -54,12 +65,6 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 						"add"
 					}
 				}
-			},
-			{
-				id = "no_hurt",
-				icon = "crime_spree_no_hurt",
-				class = "ModifierNoHurtAnims",
-				data = {}
 			},
 			{
 				id = "taser_overcharge",
@@ -90,23 +95,18 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
+				id = "no_hurt",
+				icon = "crime_spree_no_hurt",
+				class = "ModifierNoHurtAnims",
+				data = {}
+			},
+			{
 				id = "heavy_sniper",
 				icon = "crime_spree_heavy_sniper",
 				class = "ModifierHeavySniper",
 				data = {
 					spawn_chance = {
 						5,
-						"add"
-					}
-				}
-			},
-			{
-				id = "dozer_rage",
-				icon = "crime_spree_dozer_rage",
-				class = "ModifierDozerRage",
-				data = {
-					damage = {
-						100,
 						"add"
 					}
 				}

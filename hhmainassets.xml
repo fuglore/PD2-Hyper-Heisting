@@ -512,6 +512,15 @@
 	<texture path="units/pd2_dlc_drm/characters/ene_shield_heavy/shield_body_df"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_shield_heavy/classic2_nm"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_shield_heavy/mask_df"/>	
+	
+	<!-- that zeal light has armor!!!-->
+	<unit path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light" load="true"/>
+	<unit path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light_contour"/>	
+	<object path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light" />
+	<model path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light" />	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light"/>
 
 	<!--sniperdozer-->
 	<unit path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" load="true"/>
