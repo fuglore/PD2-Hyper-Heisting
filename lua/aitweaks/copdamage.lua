@@ -2060,10 +2060,14 @@ function CopDamage:damage_explosion(attack_data)
 	else
 		if result.type == "expl_hurt" then
 			i_attack_variant = 3
-		elseif result.type == "heavy_hurt" then
+		elseif result.type == "light_hurt" then
 			i_attack_variant = 4
-		elseif result.type == "dmg_rcv" then --important, need to sync if there's no reaction
+		elseif result.type == "hurt" then
 			i_attack_variant = 5
+		elseif result.type == "heavy_hurt" then
+			i_attack_variant = 6
+		elseif result.type == "dmg_rcv" then --important, need to sync if there's no reaction
+			i_attack_variant = 7
 		else
 			i_attack_variant = 0
 		end
@@ -2124,8 +2128,12 @@ function CopDamage:sync_damage_explosion(attacker_unit, damage_percent, i_attack
 			if i_attack_variant == 3 then
 				result_type = "expl_hurt"
 			elseif i_attack_variant == 4 then
-				result_type = "heavy_hurt"
+				result_type = "light_hurt"
 			elseif i_attack_variant == 5 then
+				result_type = "hurt"
+			elseif i_attack_variant == 6 then
+				result_type = "heavy_hurt"
+			elseif i_attack_variant == 7 then --note to fug: 8 is still available for use if some weird shit reaction needs to happen
 				result_type = "dmg_rcv"
 			else
 				result_type = self:get_damage_type(damage_percent, "explosion")

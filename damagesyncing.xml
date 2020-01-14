@@ -48,4 +48,28 @@
             <attr name="max" value="4"/>
         </target>
     </tweak>
+	<!--damage_explosion_stun-->
+	<tweak name="settings/network" extension="network_settings">
+        <search>
+            <network/>
+            <rpc/>
+            <message name="damage_explosion_stun"/>
+            <param type="int" min="1" max="8" />
+        </search>
+        <target mode="attributes">
+            <attr name="min" value="0"/>
+        </target>
+    </tweak>
+	<!--damage_explosion_fire-->
+	<tweak name="settings/network" extension="network_settings">
+        <search>
+            <network/>
+            <rpc/>
+            <message name="damage_explosion_fire"/>
+            <param type="int" min="1" max="8" />
+        </search>
+        <target mode="attributes">
+            <attr name="min" value="0"/>
+        </target>
+    </tweak>
 </tweaks>

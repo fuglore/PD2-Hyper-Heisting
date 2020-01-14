@@ -4,7 +4,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 	self.max_modifiers_displayed = 3
 	self.modifier_levels = {
 		loud = 10,
-		forced = 50,
+		forced = 25,
 		stealth = math.huge
 	}
 	self.modifiers = {
