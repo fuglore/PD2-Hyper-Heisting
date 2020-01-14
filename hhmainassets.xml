@@ -535,6 +535,9 @@
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/snozer_cap_nm"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/snozer_df"/>
 	
+	<texture path="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotusbody" load="true"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotuseye" load="true"/>
+	
 	<unit path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" load="true"/>
 	<unit path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master_husk" load="true"/>	
 	<material_config path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master"/>
