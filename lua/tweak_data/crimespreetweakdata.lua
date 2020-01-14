@@ -46,7 +46,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "dozer_rage",
-				icon = "crime_spree_dozer_rage",
+				icon = "cs_modifier_bronconinja",
 				class = "ModifierDozerRage",
 				data = {
 					damage = {
@@ -96,13 +96,13 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "no_hurt",
-				icon = "crime_spree_no_hurt",
+				icon = "cs_modifier_shoryu",
 				class = "ModifierNoHurtAnims",
 				data = {}
 			},
 			{
 				id = "heavy_sniper",
-				icon = "crime_spree_heavy_sniper",
+				icon = "cs_modifier_ftsudozer",
 				class = "ModifierHeavySniper",
 				data = {
 					spawn_chance = {
@@ -113,7 +113,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "cloaker_tear_gas",
-				icon = "crime_spree_cloaker_tear_gas",
+				icon = "cs_modifier_telespooc",
 				class = "ModifierCloakerTearGas",
 				data = {
 					diameter = {
@@ -154,7 +154,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "dozer_lmg",
-				icon = "crime_spree_dozer_lmg",
+				icon = "cs_modifier_difficultyspike",
 				class = "ModifierSkulldozers",
 				data = {}
 			},
@@ -171,7 +171,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "shield_phalanx",
-				icon = "crime_spree_shield_phalanx",
+				icon = "cs_modifier_saigasec",
 				class = "ModifierShieldPhalanx",
 				data = {}
 			},
@@ -211,13 +211,13 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "dozer_immunity",
-				icon = "crime_spree_dozer_explosion",
+				icon = "cs_modifier_aggro",
 				class = "ModifierExplosionImmunity",
 				data = {}
 			},
 			{
 				id = "dozer_medic",
-				icon = "crime_spree_dozer_medic",
+				icon = "cs_modifier_truelotusmaster",
 				class = "ModifierDozerMedic",
 				data = {}
 			},
@@ -260,7 +260,13 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 						"add"
 					}
 				}
-			}
+			},
+			{
+				id = "unison",
+				icon = "crime_spree_heavies",
+				class = "ModifierUnison",
+				data = {}
+			},
 		},
 		stealth = {
 			{

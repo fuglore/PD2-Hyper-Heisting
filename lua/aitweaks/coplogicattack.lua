@@ -23,7 +23,12 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	}
 	data.internal_data = my_data
 	my_data.detection = data.char_tweak.detection.combat
-
+	
+	--if Global.game_settings.thethreekings then
+	--	log("oh worm")
+	--end
+	--New times are coming, ngl.
+	
 	if old_internal_data then
 		my_data.turning = old_internal_data.turning
 		my_data.firing = old_internal_data.firing
@@ -865,7 +870,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local move_to_cover, want_flank_cover = nil
 	local cover_test_step_chk = action_taken or want_to_take_cover or not in_cover --optimizations, yay
 	
-	if data.tactics and (data.tactics.hitnrun or data.tactics.murder) or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
+	if data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
 		if my_data.cover_test_step ~= 1 and cover_test_step_chk then
 			my_data.cover_test_step = 1
 			--not many tactics need to be this aggressive, but hitnrun and murder are specifically for bulldozer and units which will want to get up to enemies' faces, and as such, require these.
@@ -882,7 +887,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	
 	if my_data.stay_out_time and stay_out_time_chk then
 		my_data.stay_out_time = nil
-	elseif my_data.attitude == "engage" and not my_data.stay_out_time and not antipassivecheck and not enemy_visible_soft and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
+	elseif my_data.attitude == "engage" and not my_data.stay_out_time and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
 		if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
 			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
 				my_data.stay_out_time = t + 1.05
@@ -1001,6 +1006,19 @@ function CopLogicAttack._upd_combat_movement(data)
 			move_to_cover = true
 		end
 	elseif Global.game_settings.one_down or managers.skirmish.is_skirmish() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
+	
+		if not Global.game_settings.one_down and not managers.skirmish.is_skirmish() then
+			if diff_index <= 5 and not Global.game_settings.aggroAI then
+				my_data.move_t = data.t + 1.05
+			elseif diff_index == 6 then
+				my_data.move_t = data.t + 0.7
+			else
+				my_data.move_t = data.t + 0.35
+			end
+		else
+			my_data.move_t = data.t + 0.01
+		end
+		
 		if data.tactics and data.tactics.charge and charge_failed_t_chk or my_data.taken_flank_cover and charge_failed_t_chk or charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
 			if my_data.charge_path then
 				if data.objective and not data.objective.type == "follow" then
@@ -1082,19 +1100,6 @@ function CopLogicAttack._upd_combat_movement(data)
 			end
 			move_to_cover = true
 		end
-		
-		if not Global.game_settings.one_down and not managers.skirmish.is_skirmish() then
-			if diff_index <= 5 and not Global.game_settings.aggroAI then
-				my_data.move_t = data.t + 1.05
-			elseif diff_index == 6 then
-				my_data.move_t = data.t + 0.7
-			else
-				my_data.move_t = data.t + 0.35
-			end
-		else
-			my_data.move_t = data.t + 0.01
-		end
-		
 	elseif want_to_take_cover then
 		if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
 			want_flank_cover = true

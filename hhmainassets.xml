@@ -570,8 +570,16 @@
 	<texture path="guis/textures/loading/hints/hh_shotgunners" force="false"/>
 	<texture path="guis/textures/loading/hints/enemy_zeal" force="true"/>
 	<texture path="guis/textures/pd2/mission_briefing/assets/assets_risklevel_6_hh" force="false"/>
-	<texture path="guis/dlcs/cee/textures/pd2/crime_spree/modifiers_atlas" force="true"/>
-	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifiers_atlas_2" force="true"/>
+	<!--<texture path="guis/dlcs/cee/textures/pd2/crime_spree/modifiers_atlas" force="true"/>
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifiers_atlas_2" force="true"/>-->
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_aggro" force="false"/>
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_telespooc" force="false"/>
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_shoryu" force="false"/>
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_saigasec" force="false"/>
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_lotus" force="false"/>
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_difficultyspike" force="false"/>
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_ftsudozer" force="false"/>
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_bronconinja" force="false"/>
 
 
 	<!--halloween dudes-->	
