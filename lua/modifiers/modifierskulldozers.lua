@@ -12,9 +12,9 @@ function ModifierSkulldozers:init(data)
 	ModifierSkulldozers.super.init(self, data)
 	
 	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
-	if gamemode_chk == "crime_spree" or managers.skirmish and managers.skirmish:is_skirmish() then
+	if Global.game_settings.incsmission or managers.skirmish and managers.skirmish:is_skirmish() then
 		local current_wave = managers.skirmish:current_wave_number()
-		if gamemode_chk == "crime_spree" or current_wave and current_wave ~= nil and current_wave >= 3 then
+		if Global.game_settings.incsmission or current_wave and current_wave ~= nil and current_wave >= 3 then
 			Global.game_settings.use_intense_AI = true
 			--log("itson")
 		end
