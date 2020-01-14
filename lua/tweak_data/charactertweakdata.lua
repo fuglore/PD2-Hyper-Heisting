@@ -10297,6 +10297,7 @@ function CharacterTweakData:character_map()
 			"ene_bulldozer_minigun",
 			"ene_bulldozer_minigun_classic",
 			"ene_zeal_swat_heavy_sniper",
+			"ene_zeal_armored_light",
 			"ene_murky_heavy_ump",
 			"ene_fbi_heavy_ump",
 			"ene_bulldozer_sniper",

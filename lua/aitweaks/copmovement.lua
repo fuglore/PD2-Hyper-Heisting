@@ -289,7 +289,7 @@ function CopMovement:_change_stance(stance_code, instant)
 			start_values = start_values,
 			duration = delay,
 			start_t = t,
-			next_upd_t = t + 0.066
+			next_upd_t = t + 0.2
 		}
 		stance.transition = transition
 	end
@@ -313,7 +313,7 @@ function CopMovement:on_suppressed(state)
 			start_val = suppression.value,
 			duration = duration,
 			start_t = t,
-			next_upd_t = t + 0.066
+			next_upd_t = t + 0.2
 		}
 	else
 		suppression.transition = nil

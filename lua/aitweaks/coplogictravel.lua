@@ -793,7 +793,7 @@ function CopLogicTravel._update_cover(ignore_this, data)
 	end
 
 	if nearest_cover or best_cover then
-		CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.032)
+		CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
 	end
 end
 
@@ -823,7 +823,7 @@ function CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, s
 			
 			local notdelayclbksornotdlclbks_chk = not my_data.delayed_clbks or not my_data.delayed_clbks[my_data.cover_update_task_key]
 			if my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
-				CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.032)
+				CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
 			end
 		end
 	end
