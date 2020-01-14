@@ -70,8 +70,11 @@ function CopActionShoot:update(t)
 		if self._turn_allowed then
 			local active_actions = self._common_data.active_actions
 			local queued_actions = self._common_data.queued_actions
-
-			if (not active_actions[2] or active_actions[2]:type() == "idle") and (not queued_actions or not queued_actions[1] and not queued_actions[2]) and not self._ext_movement:chk_action_forbidden("walk") then
+			
+			local actions_chk = not active_actions[2] or active_actions[2]:type() == "idle"
+			local queued_actions_chk = not queued_actions or not queued_actions[1] and not queued_actions[2]
+			
+			if actions_chk and queued_actions_chk and not self._ext_movement:chk_action_forbidden("walk") then
 				local fwd_dot_flat = mvec3_dot(tar_vec_flat, fwd)
 
 				if fwd_dot_flat < 0.96 then
@@ -159,12 +162,10 @@ function CopActionShoot:update(t)
 						self._weapon_base:stop_autofire()
 						self._ext_movement:play_redirect("up_idle")
 
-						if not Global.game_settings.one_down then
-							self._shoot_t = t + suppressedpenalty + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
-						elseif Global.game_settings.one_down then
+						if Global.game_settings.one_down then
 							self._shoot_t = t + 1 + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom()) --suppression does not affect recoil on shin mode
 						else
-							self._shoot_t = t + falloff.recoil[2]
+							self._shoot_t = t + suppressedpenalty + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
 						end
 					else
 						self._autoshots_fired = self._autoshots_fired + 1
@@ -224,20 +225,23 @@ function CopActionShoot:update(t)
 
 			if self._common_data.char_tweak.no_move_and_shoot and self._common_data.ext_anim and self._common_data.ext_anim.move then
 				shoot = false
-				self._shoot_t = t + (self._common_data.char_tweak.move_and_shoot_cooldown or 1)
+				local move_and_shoot_chk = self._common_data.char_tweak.move_and_shoot_cooldown or 1
+				self._shoot_t = t + move_and_shoot_chk
 			end
 
 			if shoot then
 				local melee = nil
+				local counter_chk = not self._common_data.melee_countered_t or t - self._common_data.melee_countered_t > 15
 
-				if autotarget and (not self._common_data.melee_countered_t or t - self._common_data.melee_countered_t > 15) and target_dis < 130 and self._w_usage_tweak.melee_speed and self._melee_timeout_t < t then
+				if autotarget and counter_chk and target_dis < 130 and self._w_usage_tweak.melee_speed and self._melee_timeout_t < t then
 					melee = self:_chk_start_melee(target_vec, target_dis, autotarget, target_pos)
 				end
 
 				if not melee then
 					local falloff, i_range = self:_get_shoot_falloff(target_dis, self._falloff)
 					local dmg_buff = self._unit:base():get_total_buff("base_damage")
-					local dmg_mul = (1 + dmg_buff) * falloff.dmg_mul
+					local regular_damage = 1 + dmg_buff
+					local dmg_mul = regular_damage * falloff.dmg_mul
 					local firemode = nil
 
 					if self._automatic_weap then
@@ -301,14 +305,7 @@ function CopActionShoot:update(t)
 							self._unit:unit_data().mission_element:event("killshot", self._unit)
 						end
 
-						if not Global.game_settings.one_down then
-							if vis_state == 1 and not ext_anim.base_no_recoil and not ext_anim.move then
-								self._ext_movement:play_redirect("recoil_single")
-							end
-
-							self._shoot_t = t + suppressedpenalty + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
-							
-						elseif Global.game_settings.one_down then
+						if Global.game_settings.one_down then
 							if vis_state == 1 and not ext_anim.base_no_recoil and not ext_anim.move then
 								self._ext_movement:play_redirect("recoil_single")
 							end
@@ -316,7 +313,11 @@ function CopActionShoot:update(t)
 							self._shoot_t = t + 1 + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom()) --suppression does not affect recoil on shin mode
 							
 						else
-							self._shoot_t = t + falloff.recoil[2]
+							if vis_state == 1 and not ext_anim.base_no_recoil and not ext_anim.move then
+								self._ext_movement:play_redirect("recoil_single")
+							end
+
+							self._shoot_t = t + suppressedpenalty + feddensitypenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
 						end
 					end
 				end
@@ -334,8 +335,9 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 	local focus_delay, focus_prog = nil
 
 	if shoot_hist.focus_delay then
-		focus_delay = (shooting_local_player and self._attention.unit:character_damage():focus_delay_mul() or 1) * shoot_hist.focus_delay
-		focus_prog = focus_delay > 0 and (t - shoot_hist.focus_start_t) / focus_delay
+		focus_delay = 1 * shoot_hist.focus_delay
+		local focus_t = t - shoot_hist.focus_start_t
+		focus_prog = focus_delay > 0 and focus_t / focus_delay
 
 		if not focus_prog or focus_prog >= 1 then
 			shoot_hist.focus_delay = nil
@@ -354,7 +356,9 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 		hit_chance = math.lerp(hit_chances[1], hit_chances[2], focus_prog)
 	else
 		local prev_falloff = w_tweak.FALLOFF[i_range - 1]
-		dis_lerp = math.min(1, (dis - prev_falloff.r) / (falloff.r - prev_falloff.r))
+		local falloff_range_dis1 = dis - prev_falloff.r
+		local falloff_range_dis2 = falloff.r - prev_falloff.r
+		dis_lerp = math.min(1, falloff_range_dis1 / falloff_range_dis2)
 		local prev_range_hit_chance = math.lerp(prev_falloff.acc[1], prev_falloff.acc[2], focus_prog)
 		hit_chance = math.lerp(prev_range_hit_chance, math.lerp(hit_chances[1], hit_chances[2], focus_prog), dis_lerp)
 	end

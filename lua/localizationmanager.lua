@@ -42,7 +42,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_assaultcornertext", function(loc)
 		["menu_risk_easy_wish"] = "GENSEC is out to get you! Getting hot in here!",
 		["menu_risk_elite"] = "New units rolling in! More heat around the corner!",
 		["menu_risk_sm_wish"] = "VERSUS! ZEAL LEGION! FIGHT!!!",
-		["menu_cs_modifier_heavies"] = "All enemies except Bulldozers and Ninjas now have body armor.",
+		["menu_cs_modifier_heavies"] = "All special enemies except Bulldozers now have body armor, adds a chance for an armored SMG heavy to spawn.",
 		["menu_cs_modifier_heavy_sniper"] = "Adds a chance for Sniperdozers to spawn.",
 		["menu_cs_modifier_dozer_lmg"] = "EVERYTHING IS HORRIBLE!!!",
 		["menu_cs_modifier_unison"] = "WIP NEW MODIFIER, DOES NOTHING CURRENTLY",
