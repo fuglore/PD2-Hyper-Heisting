@@ -495,11 +495,9 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 end
 
 function CopActionShoot:on_exit()
-	if self._unit:character_damage():dead() then
-		if self._storm_effect then
-			World:effect_manager():fade_kill(self._storm_effect)
-			self._storm_effect = nil
-		end
+	if self._storm_effect then
+		World:effect_manager():fade_kill(self._storm_effect)
+		self._storm_effect = nil
 	end
 	
 	if Network:is_server() then
