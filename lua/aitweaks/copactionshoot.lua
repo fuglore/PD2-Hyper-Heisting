@@ -83,7 +83,7 @@ function CopActionShoot:update(t)
 						type = "turn",
 						body_part = 2,
 						speed = speed or 1,
-						angle = error_spin
+						angle = spin
 					}
 
 					self._ext_movement:action_request(new_action_data)
