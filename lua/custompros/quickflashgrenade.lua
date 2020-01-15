@@ -168,7 +168,7 @@ function BouncerNade:_state_bounced()
 
 	local light = World:create_light("omni|specular")
 
-	light:set_far_range(tweak_data.group_ai.flash_grenade.light_range)
+	light:set_far_range(600)
 	light:set_color(tweak_data.group_ai.flash_grenade.light_color)
 	light:set_position(self._unit:position())
 	light:set_specular_multiplier(tweak_data.group_ai.flash_grenade.light_specular)
@@ -225,13 +225,11 @@ function BouncerNade:make_flash(detonate_pos, range, ignore_units)
 end
 
 function BouncerNade:make_flash_client(detonate_pos, range, ignore_units)
-	local pos = self._unit:position()
 	local normal = math.UP
 	local range = 500
 	local slot_mask = managers.slot:get_mask("explosion_targets")
 
 	local pos = self._unit:position()
-	local range = self._range
 
 	managers.explosion:give_local_player_dmg(pos, range, 5)
 	managers.explosion:explode_on_client(pos, math.UP, nil, 5, range, 3, self._custom_params)
