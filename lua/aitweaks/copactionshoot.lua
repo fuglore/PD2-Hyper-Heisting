@@ -359,18 +359,26 @@ function CopActionShoot:execute_magnet_storm(t)
 	
 	if m_storm_targets then
 		for _, player in ipairs(m_storm_targets) do
-			if player then
+			if player and player == managers.player:local_player() then
 			
-				local player_movement_chk = player:movement():current_state_name() == "standard" or player:movement():current_state_name() == "carry" or player:movement():current_state_name() == "bipod"
+				local player_movement_chk = player:movement() and player:movement():current_state_name() == "standard" or player:movement():current_state_name() == "carry" or player:movement():current_state_name() == "bipod"
 				
 				if alive(player) and player_movement_chk and not player:movement():tased() then
-					if player:movement():current_state_name() == "bipod" then
-						player:movement()._current_state:exit(nil, "tased")
+					if player == managers.player:local_player() then
+						if player:movement():current_state_name() == "bipod" then
+							player:movement()._current_state:exit(nil, "tased")
+						end
+						
+						if player:movement().on_non_lethal_electrocution then
+							player:movement():on_non_lethal_electrocution()
+						end
+						
+						managers.player:set_player_state("tased")
+					else
+						--if player:movement().on_non_lethal_electrocution then
+						--	player:movement():on_non_lethal_electrocution()
+						--end
 					end
-					
-					player:movement():on_non_lethal_electrocution()
-					
-					managers.player:set_player_state("tased")
 				end
 			end
 		end
