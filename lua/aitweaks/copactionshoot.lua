@@ -95,8 +95,13 @@ function CopActionShoot:update(t)
 	end
 	
 	local testing = true
-	if self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") and testing then
-		self:execute_magnet_storm(t)
+	
+	if self._unit:brain().is_converted_chk and self._unit:brain():is_converted_chk() then
+		--nothing
+	else
+		if self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") and testing then
+			self:execute_magnet_storm(t)
+		end
 	end
 
 	if not ext_anim.reload and not ext_anim.equip and not ext_anim.melee then
@@ -112,12 +117,15 @@ function CopActionShoot:update(t)
 			end
 
 			local res = CopActionReload._play_reload(self)
-			
-			if res and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or testing and res and self._unit:base():has_tag("law") then
-				self._execute_storm_t = t + 0.5
-				local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
-				if tase_effect_table then
-					self._storm_effect = World:effect_manager():spawn(tase_effect_table)
+			if self._unit:brain().is_converted_chk and self._unit:brain():is_converted_chk() then
+				--nothing
+			else
+				if res and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or testing and res and self._unit:base():has_tag("law") then
+					self._execute_storm_t = t + 0.5
+					local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
+					if tase_effect_table then
+						self._storm_effect = World:effect_manager():spawn(tase_effect_table)
+					end
 				end
 			end
 			

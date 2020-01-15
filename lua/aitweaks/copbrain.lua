@@ -72,6 +72,12 @@ function CopBrain:on_suppressed(state)
     end
 end
 
+function CopBrain:is_converted_chk()
+	if self._logic_data.is_converted then
+		return true
+	end
+end
+
 function CopBrain:on_alarm_pager_interaction(status, player)
 	if not managers.groupai:state():whisper_mode() then
 		return
