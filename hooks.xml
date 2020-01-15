@@ -34,6 +34,7 @@
 	<post :script_path="firemanager.lua" :hook_id="managers/firemanager"/>
 	<post :script_path="crimespreemanager.lua" :hook_id="managers/crimespreemanager"/>
 	
+	<post :script_path="enemymanager.lua" :hook_id="managers/enemymanager"/>
 	<post :script_path="playermanager.lua" :hook_id="managers/playermanager"/>
 	
 	<!-- Tweaks for enemy AI and other weirdness starts here. -->	

@@ -93,6 +93,11 @@ function CopActionShoot:update(t)
 
 		target_vec = self:_upd_ik(target_vec, fwd_dot, t)
 	end
+	
+	local testing = true
+	if self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") and testing then
+		self:execute_magnet_storm(t)
+	end
 
 	if not ext_anim.reload and not ext_anim.equip and not ext_anim.melee then
 		if ext_anim.equip then
@@ -107,6 +112,15 @@ function CopActionShoot:update(t)
 			end
 
 			local res = CopActionReload._play_reload(self)
+			
+			if res and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or testing and res and self._unit:base():has_tag("law") then
+				self._execute_storm_t = t + 0.5
+				local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
+				if tase_effect_table then
+					self._storm_effect = World:effect_manager():spawn(tase_effect_table)
+				end
+			end
+			
 
 			if res and not self._ext_anim.base_no_reload then
 				self._machine:set_speed(res, self._reload_speed)
@@ -330,6 +344,41 @@ function CopActionShoot:update(t)
 	end
 end
 
+function CopActionShoot:execute_magnet_storm(t)
+	local m_storm_targets = managers.enemy:get_magnet_storm_targets(self._unit)
+	
+	--log("cuuunt")
+	
+	if m_storm_targets then
+		for _, player in ipairs(m_storm_targets) do
+			if player then
+			
+				local player_movement_chk = player:movement():current_state_name() == "standard" or player:movement():current_state_name() == "carry" or player:movement():current_state_name() == "bipod"
+				
+				if alive(player) and player_movement_chk and not player:movement():tased() then
+					if player:movement():current_state_name() == "bipod" then
+						player:movement()._current_state:exit(nil, "tased")
+					end
+					
+					player:movement():on_non_lethal_electrocution()
+					
+					managers.player:set_player_state("tased")
+				end
+			end
+		end
+	end
+	
+	self._executed_storm = true
+	
+	self._execute_storm_t = nil
+	
+	if self._storm_effect then
+		World:effect_manager():fade_kill(self._storm_effect)
+		self._storm_effect = nil
+	end
+	
+end
+
 function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_range, shooting_local_player)
 	local shoot_hist = self._shoot_history
 	local focus_delay, focus_prog = nil
@@ -426,5 +475,35 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 		mvec3_set(shoot_hist.m_last_pos, error_vec)
 
 		return error_vec
+	end
+end
+
+function CopActionShoot:on_exit()
+	if self._unit:character_damage():dead() then
+		if self._storm_effect then
+			World:effect_manager():fade_kill(self._storm_effect)
+			self._storm_effect = nil
+		end
+	end
+	
+	if Network:is_server() then
+		self._ext_movement:set_stance("hos")
+	end
+
+	if self._modifier_on then
+		self[self._ik_preset.stop](self)
+	end
+
+	if self._autofiring then
+		self._weapon_base:stop_autofire()
+		self._ext_movement:play_redirect("up_idle")
+	end
+
+	if Network:is_server() then
+		self._common_data.unit:network():send("action_aim_state", false)
+	end
+
+	if self._shooting_player and alive(self._attention.unit) then
+		self._attention.unit:movement():on_targetted_for_attack(false, self._common_data.unit)
 	end
 end

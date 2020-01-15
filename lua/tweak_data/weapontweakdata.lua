@@ -138,6 +138,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.ak47_ass_npc.muzzleflash = "effects/payday2/particles/weapons/762_auto"
 	self.mp5_tactical_npc = deep_clone(self.mp5_npc)
 	self.mp5_tactical_npc.has_suppressor = "suppressed_a"
+	self.mp5_tactical_npc.no_vis = true
 	self.ump_npc = deep_clone(self.mp5_npc)
 	self.ump_npc.sounds.prefix = "schakal_npc"
 	self.akmsu_smg_npc = deep_clone(self.mp5_npc)
@@ -148,6 +149,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.asval_smg_npc.sounds.prefix = "val_npc"
 	self.asval_smg_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
 	self.asval_smg_npc.has_suppressor = "suppressed_a"
+	self.asval_smg_npc.no_vis = true
 	self.mac11_npc.sounds.prefix = "mac10_npc"
 	self.benelli_npc.sounds.prefix = "benelli_m4_npc"
 	

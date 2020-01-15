@@ -43,6 +43,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_assaultcornertext", function(loc)
 		["menu_risk_elite"] = "New units rolling in! More heat around the corner!",
 		["menu_risk_sm_wish"] = "VERSUS! ZEAL LEGION! FIGHT!!!",
 		["menu_cs_modifier_heavies"] = "All special enemies except Bulldozers now have body armor, adds a chance for an armored SMG heavy to spawn.",
+		["menu_cs_modifier_magnetstorm"] = "When enemies reload, they emit an electric burst after a short moment that tases players.",
 		["menu_cs_modifier_heavy_sniper"] = "Adds a chance for Sniperdozers to spawn.",
 		["menu_cs_modifier_dozer_lmg"] = "EVERYTHING IS HORRIBLE!!!",
 		["menu_cs_modifier_unison"] = "WIP NEW MODIFIER, DOES NOTHING CURRENTLY",

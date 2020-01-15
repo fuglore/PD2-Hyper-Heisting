@@ -160,7 +160,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "medic_adrenaline",
-				icon = "crime_spree_medic_adrenaline",
+				icon = "cs_modifier_zealot",
 				class = "ModifierMedicAdrenaline",
 				data = {
 					damage = {
@@ -260,6 +260,12 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 						"add"
 					}
 				}
+			},
+			{
+				id = "magnetstorm",
+				icon = "cs_modifier_truelotusmaster",
+				class = "ModifierMagnetstorm",
+				data = {}
 			},
 			{
 				id = "unison",
