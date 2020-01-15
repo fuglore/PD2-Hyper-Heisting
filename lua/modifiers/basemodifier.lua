@@ -24,7 +24,7 @@ function ModifierBouncers:OnEnemyDied(unit, damage_info)
 		return
 	end
 
-	if unit:base():has_tag("law") then
+	if unit:base():has_tag("law") and math.random() < 0.75 then
 		local grenade = World:spawn_unit(Idstring("units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer"), unit:position(), unit:rotation())
 
 		--grenade:base():set_properties({
