@@ -1896,7 +1896,7 @@ function CopDamage:is_friendly_fire(unit)
 end
 
 function CopDamage:damage_explosion(attack_data)
-	if self._dead or self._invulnerable or attack_data.attacker_unit:base().is_cop_grenade then
+	if self._dead or self._invulnerable or attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:base().is_cop_grenade then
 		return
 	end
 	
