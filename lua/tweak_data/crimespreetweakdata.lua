@@ -245,6 +245,12 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
+				id = "bouncer_nades",
+				icon = "cs_modifier_truelotusmaster",
+				class = "ModifierBouncers",
+				data = {}
+			},
+			{
 				id = "cloaker_arrest",
 				icon = "crime_spree_cloaker_arrest",
 				class = "ModifierCloakerArrest",

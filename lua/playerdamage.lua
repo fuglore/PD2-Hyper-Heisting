@@ -271,6 +271,21 @@ function PlayerDamage:_calc_health_damage(attack_data, ...)
 	return _calc_health_damage_original(self, attack_data, ...)
 end
 
+function PlayerDamage:is_friendly_fire(unit)
+	if not unit or not unit:movement() or unit:base().is_grenade then
+		return false
+	end
+
+	if unit:movement() and unit:movement():team() and unit:movement():team() ~= self._unit:movement():team() and unit:movement():friendly_fire() then
+		return false
+	end
+
+	local friendly_fire = not unit:movement():team().foes[self._unit:movement():team().id]
+	friendly_fire = managers.mutators:modify_value("PlayerDamage:FriendlyFire", friendly_fire)
+
+	return friendly_fire
+end
+
 function PlayerDamage:build_suppression(amount)
 	--if self:_chk_suppression_too_soon(amount) then
 		--return

@@ -553,6 +553,15 @@
 	<cooked_physics path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>	
 	<sequence_manager path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>
 	
+	<unit path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer" load="true"/>
+	<material_config path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer"/>	
+	<object path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer" />
+	<model path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer" />	
+	<cooked_physics path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer"/>	
+	<sequence_manager path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer"/>
+	<texture path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/flashbang_df" force="false"/>
+	<texture path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/flashbang_nm" force="false"/>
+	
 	<texture path="effects/pd2_mod_hh/particles/textures/effects_atlas" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/add_atlas_df" load="true" />
 	<effect path="effects/pd2_mod_hh/particles/weapons/lazer_passive"/>

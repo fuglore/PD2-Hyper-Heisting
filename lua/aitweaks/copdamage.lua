@@ -1883,10 +1883,23 @@ function CopDamage:sync_damage_fire(attacker_unit, damage_percent, start_dot_dan
 	self:_on_damage_received(attack_data)
 end
 
+function CopDamage:is_friendly_fire(unit)
+	if not unit or unit:base().is_grenade and not unit:base().is_cop_grenade then
+		return false
+	end
+
+	if unit:movement() and unit:movement():team() and unit:movement():team() ~= self._unit:movement():team() and unit:movement():friendly_fire() then
+		return false
+	end
+
+	return not unit:movement():team().foes[self._unit:movement():team().id]
+end
+
 function CopDamage:damage_explosion(attack_data)
-	if self._dead or self._invulnerable then
+	if self._dead or self._invulnerable or attack_data.attacker_unit:base().is_cop_grenade then
 		return
 	end
+	
 
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 

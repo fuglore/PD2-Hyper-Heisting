@@ -100,4 +100,10 @@
 		
 	</group>
 	
+	<group :script_path="custompros/" :hook_id="units/weapons/">
+		
+		<post :script_path="quickflashgrenade.lua" :hook_id="grenades/quickflashgrenade"/>
+		
+	</group>
+	
 </hooks>
