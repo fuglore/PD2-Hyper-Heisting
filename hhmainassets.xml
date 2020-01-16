@@ -564,6 +564,8 @@
 	
 	<texture path="effects/pd2_mod_hh/particles/textures/effects_atlas" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/add_atlas_df" load="true" />
+	<effect path="effects/pd2_mod_hh/particles/weapons/explosion/electric_explosion"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/explosion/bouncer_explosion"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/lazer_passive"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak"/>

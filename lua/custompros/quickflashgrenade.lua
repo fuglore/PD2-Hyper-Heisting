@@ -27,12 +27,12 @@ function BouncerNade:init(unit)
 	self._state = 0
 	self._armed = false
 	self._player_damage = 5
-	self._effect_name = "effects/payday2/particles/explosions/grenade_explosion"
+	self._effect_name = "effects/pd2_mod_hh/particles/weapons/explosion/bouncer_explosion"
 	self._custom_params = {
 		camera_shake_max_mul = 4,
 		sound_muffle_effect = true,
 		effect = self._effect_name,
-		sound_event = sound_event,
+		sound_event = "grenade_explode",
 		feedback_range = 500 * 2
 	}
 	

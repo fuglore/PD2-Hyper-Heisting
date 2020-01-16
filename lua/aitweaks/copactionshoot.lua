@@ -94,12 +94,12 @@ function CopActionShoot:update(t)
 		target_vec = self:_upd_ik(target_vec, fwd_dot, t)
 	end
 	
-	local testing = nil
+	--local testing = true
 	
 	if self._unit:brain().is_converted_chk and self._unit:brain():is_converted_chk() then
 		--nothing
 	else
-		if self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") and testing then
+		if Global.game_settings.magnetstorm and self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") or testing and self._execute_storm_t and self._execute_storm_t < t and self._unit:base():has_tag("law") then
 			self:execute_magnet_storm(t)
 		end
 	end
@@ -117,12 +117,14 @@ function CopActionShoot:update(t)
 			end
 
 			local res = CopActionReload._play_reload(self)
+			
 			if self._unit:brain().is_converted_chk and self._unit:brain():is_converted_chk() then
 				--nothing
 			else
-				if res and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or testing and res and self._unit:base():has_tag("law") then
-					self._execute_storm_t = t + 0.5
+				if res and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or testing and res and self._unit:base():has_tag("law") and not self._execute_storm_t then
+					self._execute_storm_t = t + 0.75
 					local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
+					
 					if tase_effect_table then
 						self._storm_effect = World:effect_manager():spawn(tase_effect_table)
 					end
@@ -356,6 +358,12 @@ function CopActionShoot:execute_magnet_storm(t)
 	local m_storm_targets = managers.enemy:get_magnet_storm_targets(self._unit)
 	
 	--log("cuuunt")
+	self._execute_storm_t = nil
+	
+	World:effect_manager():spawn({
+		effect = Idstring("effects/pd2_mod_hh/particles/weapons/explosion/electric_explosion"),
+		position = self._unit:movement():m_pos()
+	})
 	
 	if m_storm_targets then
 		for _, player in ipairs(m_storm_targets) do
