@@ -32,7 +32,7 @@ function BouncerNade:init(unit)
 		camera_shake_max_mul = 4,
 		sound_muffle_effect = true,
 		effect = self._effect_name,
-		sound_event = "grenade_explode",
+		sound_event = "swat_explosion",
 		feedback_range = 500 * 2
 	}
 	

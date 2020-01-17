@@ -343,8 +343,8 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 	end
 	
 	if dead and managers.groupai:state():whisper_mode() then
-		self._guard_detection_mul = self._guard_detection_mul + 0.5
-		self._guard_delay_deduction = self._guard_delay_deduction - 0.1
+		self._guard_detection_mul = self._guard_detection_mul + 1
+		self._guard_delay_deduction = self._guard_delay_deduction + 0.2
 	end
 	
 	if dead and self._task_data and self._task_data.assault and self._task_data.assault.phase == "sustain" and self._task_data.assault.active then

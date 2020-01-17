@@ -226,7 +226,7 @@ function CopActionShoot:update(t)
 						self._shoot_t = t + aim_delay
 					end
 				else
-					if t - self._line_of_sight_t > 0.35 and not self._last_vis_check_status then
+					if t - self._line_of_sight_t > 1 and not self._last_vis_check_status then
 						local shoot_hist = self._shoot_history
 						local displacement = mvector3.distance(target_pos, shoot_hist.m_last_pos)
 						local mult = displacement / self._w_usage_tweak.focus_dis
@@ -364,6 +364,8 @@ function CopActionShoot:execute_magnet_storm(t)
 		effect = Idstring("effects/pd2_mod_hh/particles/weapons/explosion/electric_explosion"),
 		position = self._unit:movement():m_pos()
 	})
+	
+	self._unit:sound():play("c4_explode_metal")
 	
 	if m_storm_targets then
 		for _, player in ipairs(m_storm_targets) do

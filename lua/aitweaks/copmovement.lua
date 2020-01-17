@@ -105,6 +105,8 @@ function CopMovement:post_init()
 	
 	if diff_index == 8 then
 		self._unit:unit_data().has_alarm_pager = self._tweak_data.has_alarm_pager
+	else
+		self._unit:unit_data().has_alarm_pager = nil
 	end
 	
 	local event_list = {
