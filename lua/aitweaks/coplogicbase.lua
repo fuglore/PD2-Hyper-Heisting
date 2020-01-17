@@ -107,6 +107,7 @@ function CopLogicBase._chk_nearly_visible_chk_needed(data, attention_info, u_key
 end
 
 function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_reaction)
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local t = data.t
 	local detected_obj = data.detected_attention_objects
 	local my_data = data.internal_data
@@ -118,18 +119,11 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	local my_tracker = data.unit:movement():nav_tracker()
 	local chk_vis_func = my_tracker.check_visibility
 	local is_detection_persistent = managers.groupai:state():is_detection_persistent()
-	local delay = nil
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local delay = 0.7
 	
-	if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-		delay = 0.7
-	else
+	if diff_index == 8 then
 		delay = 0.35
 	end
-	
-	--if CopLogicTravel.chk_slide_conditions(data) then 
-		--data.unit:movement():play_redirect("e_nl_button_slide_under")
-	--end
 	
 	local player_importance_wgt = data.unit:in_slot(managers.slot:get_mask("enemies")) and {}
 
@@ -273,8 +267,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	end
 
 	for u_key, attention_info in pairs(all_attention_objects) do
-		local notattinfonavtrackorchkvisfunc = not attention_info.nav_tracker or chk_vis_func(my_tracker, attention_info.nav_tracker)
-		if u_key ~= my_key and not detected_obj[u_key] and notattinfonavtrackorchkvisfunc then
+		if u_key ~= my_key and not detected_obj[u_key] and (not attention_info.nav_tracker or chk_vis_func(my_tracker, attention_info.nav_tracker)) then
 			local settings = attention_info.handler:get_attention(my_access, min_reaction, max_reaction, data.team)
 
 			if settings then
@@ -300,23 +293,11 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	for u_key, attention_info in pairs(detected_obj) do
 		if t < attention_info.next_verify_t then
 			if AIAttentionObject.REACT_SUSPICIOUS <= attention_info.reaction then
-				local next_verify = attention_info.next_verify_t - t
-				local next_verify_x2 = next_verify * 2
-				local delay_multid = delay * 2
-				local close_delay = math.min(next_verify, delay)
-				local far_delay = math.min(next_verify_x2, delay_multid)
-				if attention_info.dis <= 2000 then 
-					delay = close_delay
-				else
-					delay = far_delay
-				end
+				delay = math.min(attention_info.next_verify_t - t, delay)
 			end
 		else
-			if attention_info.dis > 2000 then --optimizations, yay
-				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and 1 or 1)
-			else
-				attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and attention_info.settings.verification_interval or attention_info.settings.notice_interval or attention_info.settings.verification_interval)
-			end
+			attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and attention_info.settings.verification_interval or attention_info.settings.notice_interval or attention_info.settings.verification_interval)
+			delay = math.min(delay, attention_info.settings.verification_interval)
 
 			if not attention_info.identified then
 				local noticable = nil
@@ -340,15 +321,15 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 					else
 						local min_delay = my_data.detection.delay[1]
 						local max_delay = my_data.detection.delay[2]
-						
-						local angle_mul_mod = 0.5 * math.min(angle / my_data.detection.angle_max, 1)
+						local angle_mul_mod = 0.25 * math.min(angle / my_data.detection.angle_max, 1)
+						local dis_mul_mod = 0.75 * dis_multiplier
 						local notice_delay_mul = attention_info.settings.notice_delay_mul or 1
 
 						if attention_info.settings.detection and attention_info.settings.detection.delay_mul then
 							notice_delay_mul = notice_delay_mul * attention_info.settings.detection.delay_mul
 						end
 
-						local notice_delay_modified = math.lerp(min_delay * notice_delay_mul, max_delay, dis_multiplier + angle_mul_mod)
+						local notice_delay_modified = math.lerp(min_delay * notice_delay_mul, max_delay, dis_mul_mod + angle_mul_mod)
 						delta_prog = notice_delay_modified > 0 and dt / notice_delay_modified or 1
 					end
 				else
@@ -385,6 +366,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 			end
 
 			if attention_info.identified then
+				delay = math.min(delay, attention_info.settings.verification_interval)
 				attention_info.nearly_visible = nil
 				local verified, vis_ray = nil
 				local attention_pos = attention_info.handler:get_detection_m_pos()
@@ -438,10 +420,13 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						if not is_detection_persistent and mvector3.distance(attention_pos, attention_info.criminal_record.pos) > 700 then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else
-							if diff_index >= 6 or Global.game_settings.use_intense_AI then --this is actually a vanilla thing which lets cops use fellow teammates' recorded positions, i personally think that with hyper heisting's faster updates, this should be limited to higher difficulties
-								attention_info.verified_pos = mvector3.copy( attention_info.criminal_record.pos )
+							delay = math.min(0.2, delay)
+							
+							if diff_index > 6 or Global.game_settings.use_intense_AI then
+								attention_info.verified_pos = mvector3.copy(attention_info.criminal_record.pos)
 								attention_info.verified_dis = dis
 							end
+
 							if vis_ray and data.logic._chk_nearly_visible_chk_needed(data, attention_info, u_key) then
 								_nearly_visible_chk(attention_info, attention_pos)
 							end

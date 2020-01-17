@@ -1678,8 +1678,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.1,
-					0.25
+					0.4,
+					0.45
 				},
 				mode = { --tap fire like crazy
 					1,
@@ -1696,8 +1696,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.85
 				},
 				recoil = {
-					0.1,
-					0.35
+					0.45,
+					0.45
 				},
 				mode = {
 					1,
@@ -1714,8 +1714,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.55
 				},
 				recoil = {
-					0.15,
-					0.4
+					0.5,
+					0.6
 				},
 				mode = {
 					1,
@@ -1732,8 +1732,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.45
 				},
 				recoil = { --reduced from simple, keeps them still moderately effective at this range
-					0.3,
-					0.5
+					0.55,
+					0.6
 				},
 				mode = {
 					1,
@@ -1750,7 +1750,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.2
 				},
 				recoil = {
-					0.4,
+					0.9,
 					1
 				},
 				mode = {
@@ -1768,8 +1768,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.01
 				},
 				recoil = {
-					0.4,
-					1
+					0.9,
+					1.2
 				},
 				mode = {
 					1,
@@ -2818,8 +2818,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.1,
-					0.25
+					0.25,
+					0.35
 				},
 				mode = { --tap fire like crazy
 					1,
@@ -2836,7 +2836,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.85
 				},
 				recoil = {
-					0.1,
+					0.35,
 					0.35
 				},
 				mode = {
@@ -2854,8 +2854,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.55
 				},
 				recoil = {
-					0.15,
-					0.4
+					0.4,
+					0.5
 				},
 				mode = {
 					1,
@@ -2872,8 +2872,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.45
 				},
 				recoil = { --reduced from simple, keeps them still moderately effective at this range
-					0.3,
-					0.5
+					0.5,
+					0.6
 				},
 				mode = {
 					1,
@@ -2890,7 +2890,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.2
 				},
 				recoil = {
-					0.4,
+					0.6,
 					1
 				},
 				mode = {
@@ -2908,8 +2908,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.01
 				},
 				recoil = {
-					0.4,
-					1
+					0.6,
+					1.2
 				},
 				mode = {
 					1,
@@ -3905,7 +3905,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.1,
+					0.25,
 					0.25
 				},
 				mode = { --tap fire like crazy, unchanged from civil
@@ -3923,7 +3923,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.85
 				},
 				recoil = {
-					0.1,
+					0.3,
 					0.35
 				},
 				mode = {
@@ -3941,7 +3941,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.6 --increased slightly from .55 to .6
 				},
 				recoil = {
-					0.15,
+					0.3,
 					0.4
 				},
 				mode = {
@@ -3959,7 +3959,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.45
 				},
 				recoil = { 
-					0.3,
+					0.35,
 					0.4 --reduced from civil by .1, shouldnt matter too much but keeps a certain feeling of noteworthyness
 				},
 				mode = {
@@ -5011,7 +5011,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.1,
+					0.2,
 					0.25
 				},
 				mode = { --tap fire like crazy, unchanged from civil
@@ -5029,7 +5029,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.85
 				},
 				recoil = {
-					0.1,
+					0.25,
 					0.35
 				},
 				mode = {
@@ -5047,7 +5047,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.6
 				},
 				recoil = {
-					0.15,
+					0.3,
 					0.4
 				},
 				mode = {
@@ -5066,7 +5066,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				recoil = { 
 					0.3,
-					0.4
+					0.45
 				},
 				mode = {
 					1,
