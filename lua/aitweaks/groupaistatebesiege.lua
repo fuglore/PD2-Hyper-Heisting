@@ -19,6 +19,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._feddensityhighfrequency = 1
 	self._downleniency = 1
 	self._enemies_killed_sustain = 0
+	self._enemies_killed_sustain_guaranteed_break = 50
 	self._downcountleniency = 0
 	self._feddensity_active_t = nil
 	self._next_allowed_hunter_upd_t = nil
@@ -109,10 +110,13 @@ function GroupAIStateBesiege:update(t, dt)
 				end
 			end
 			
-			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t then
+			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t or self._enemies_killed_sustain_guaranteed_break < self._enemies_killed_sustain and not self._stopassaultbreak_t then
 				self._activeassaultbreak = true
 				self._stopassaultbreak_t = self._t + math.random(5, 10)
 				self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
+				if self._enemies_killed_sustain_guaranteed_break < self._enemies_killed_sustain then
+					self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain_guaranteed_break + 50
+				end
 				--log("assaultbreakon")
 			end
 			
@@ -766,6 +770,12 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	end
 	
+	if task_data.use_smoke_timer < t then
+		task_data.use_smoke = true
+	end
+
+	self:detonate_queued_smoke_grenades()
+	
 	local enemy_count = self:_count_police_force("assault")
 	local nr_wanted = task_data.force - self:_count_police_force("assault")
 	local anticipation_count = task_data.force * 0.25
@@ -808,14 +818,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 				end
 			end
 		end
-	end
-
-	if task_data.phase ~= "anticipation" then
-		if task_data.use_smoke_timer < t then
-			task_data.use_smoke = true
-		end
-
-		self:detonate_queued_smoke_grenades()
 	end
 
 	self:_assign_enemy_groups_to_assault(task_data.phase)
@@ -1190,13 +1192,15 @@ function GroupAIStateBesiege:_voice_dont_delay_assault(group)
 end
 
 function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, detonate_pos)
-	if task_data.use_smoke and not self:is_smoke_grenade_active() and not self._activeassaultbreak then
+	if task_data.use_smoke then
 		local shooter_pos, shooter_u_data = nil
 		local duration = tweak_data.group_ai.smoke_grenade_lifetime
 
 		for u_key, u_data in pairs(group.units) do
-			if u_data.tactics_map and u_data.tactics_map.flash_grenade then
-				if not detonate_pos then
+			shooter_pos = mvector3.copy(u_data.m_pos)
+			shooter_u_data = u_data
+			if u_data.tactics_map and u_data.tactics_map.smoke_grenade then
+				if not detonate_pos or math.random() < 0.5 then
 					local smoke_pos_chance = math.random()
 					local nav_seg_id = u_data.tracker:nav_segment()
 					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
@@ -1213,9 +1217,6 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 									detonate_pos = random_door_id:script_data().element:nav_link_end_pos()
 								end
 
-								shooter_pos = mvector3.copy(u_data.m_pos)
-								shooter_u_data = u_data
-
 								break
 							end
 						end
@@ -1225,7 +1226,7 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 				if detonate_pos and shooter_u_data then
 					self:detonate_smoke_grenade(detonate_pos, shooter_pos, duration, false)
 
-					task_data.use_smoke_timer = self._t + math.lerp(tweak_data.group_ai.smoke_and_flash_grenade_timeout[1], tweak_data.group_ai.smoke_and_flash_grenade_timeout[2], math.rand(0, 1)^0.5)
+					task_data.use_smoke_timer = self._t + math.lerp(tweak_data.group_ai.smoke_and_flash_grenade_timeout[1], tweak_data.group_ai.smoke_and_flash_grenade_timeout[2], math.random())
 					task_data.use_smoke = false
 
 					if shooter_u_data.char_tweak.chatter.smoke and not shooter_u_data.unit:sound():speaking(self._t) then
@@ -1237,14 +1238,18 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 			end
 		end
 	end
+	
+	return nil
 end
 
 function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, detonate_pos)
-	if task_data.use_smoke and not self:is_smoke_grenade_active() and not self._activeassaultbreak then
+	if task_data.use_smoke and not self._activeassaultbreak then
 		local shooter_pos, shooter_u_data = nil
 		local duration = tweak_data.group_ai.flash_grenade_lifetime
 
 		for u_key, u_data in pairs(group.units) do
+			shooter_pos = mvector3.copy(u_data.m_pos)
+			shooter_u_data = u_data
 			if u_data.tactics_map and u_data.tactics_map.flash_grenade then
 				if not detonate_pos then
 					local flash_pos_chance = math.random()
@@ -1263,9 +1268,6 @@ function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, deto
 									detonate_pos = random_door_id:script_data().element:nav_link_end_pos()
 								end
 
-								shooter_pos = mvector3.copy(u_data.m_pos)
-								shooter_u_data = u_data
-
 								break
 							end
 						end
@@ -1276,7 +1278,7 @@ function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, deto
 				if detonate_pos and shooter_u_data then
 					self:detonate_smoke_grenade(detonate_pos, shooter_pos, duration, true)
 
-					task_data.use_smoke_timer = self._t + math.lerp(tweak_data.group_ai.smoke_and_flash_grenade_timeout[1], tweak_data.group_ai.smoke_and_flash_grenade_timeout[2], math.random()^0.5)
+					task_data.use_smoke_timer = self._t + math.lerp(tweak_data.group_ai.smoke_and_flash_grenade_timeout[1], tweak_data.group_ai.smoke_and_flash_grenade_timeout[2], math.random())
 					task_data.use_smoke = false
 
 					if shooter_u_data.char_tweak.chatter.flash_grenade and not shooter_u_data.unit:sound():speaking(self._t) then
@@ -1833,18 +1835,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if push then
 				local detonate_pos = nil
 
-				if charge then
-					for c_key, c_data in pairs(assault_area.criminal.units) do
-						detonate_pos = c_data.unit:movement():m_pos()
+				for c_key, c_data in pairs(assault_area.criminal.units) do
+					detonate_pos = c_data.unit:movement():m_pos()
 
-						break
-					end
+					break
 				end
 
-				local first_chk = math.random() < 0.5 and self._chk_group_use_flash_grenade or self._chk_group_use_smoke_grenade
-				local second_chk = first_chk == self._chk_group_use_flash_grenade and self._chk_group_use_smoke_grenade or self._chk_group_use_flash_grenade
-				used_grenade = first_chk(self, group, self._task_data.assault, detonate_pos)
-				used_grenade = used_grenade or second_chk(self, group, self._task_data.assault, detonate_pos)
+				if not used_grenade or used_grenade == nil then
+					used_grenade = self:_chk_group_use_smoke_grenade(group, self._task_data.assault, detonate_pos)
+				end
+				
+				if not used_grenade or used_grenade == nil then
+					used_grenade = self:_chk_group_use_flash_grenade(group, self._task_data.assault, detonate_pos)
+				end
+				
+				if not used_grenade then
+					log("group doesnt have tactic for this")
+				elseif used_grenade then
+					log("cool")
+				end
 
 				self:_voice_move_in_start(group)
 			end

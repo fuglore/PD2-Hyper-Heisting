@@ -6698,7 +6698,6 @@ function CharacterTweakData:_presets(tweak_data)
 	return presets
 end
 
-
 function CharacterTweakData:_set_characters_weapon_preset(preset)
 	local all_units = {
 		"security",
