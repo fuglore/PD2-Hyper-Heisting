@@ -6068,17 +6068,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		0.5
 	}
 
-	if difficulty_index < 6 then
-		self.smoke_and_flash_grenade_timeout = {
-			20,
-			15
-		}
-	else
-		self.smoke_and_flash_grenade_timeout = {
-			15,
-			10
-		}
-	end
+	self.smoke_and_flash_grenade_timeout = {
+		20,
+		13
+	}
 
 	if difficulty_index < 6 then
 		self.smoke_grenade_lifetime = 7.5

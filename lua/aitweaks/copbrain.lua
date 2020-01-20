@@ -42,6 +42,8 @@ function CopBrain:post_init()
 	CopBrain._logic_variants.spooc_heavy.attack = SpoocLogicAttack
 	CopBrain._logic_variants.fbi_xc45 = clone(security_variant)
 	CopBrain._logic_variants.armored_swat = clone(security_variant)
+	CopBrain._logic_variants.shield = clone(security_variant)
+	CopBrain._logic_variants.shield.attack = CopLogicAttack
 	CopBrain._logic_variants.akuma = clone(security_variant)
 	CopBrain._logic_variants.akuma.attack = ShieldLogicAttack
 	

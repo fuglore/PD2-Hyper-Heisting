@@ -1531,12 +1531,12 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 
 				local closest_crim_u_data, closest_crim_dis_sq = nil
-
+				local crim_dis_sq_chk = not closest_crim_dis_sq or closest_u_dis_sq < closest_crim_dis_sq
 				for u_key, u_data in pairs(self._char_criminals) do
 					if u_data.status then
 						local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(u_data.m_pos, group.units)
 
-						if closest_u_dis_sq and (not closest_crim_dis_sq or closest_u_dis_sq < closest_crim_dis_sq) then
+						if closest_u_dis_sq and crim_dis_sq_chk then
 							closest_crim_u_data = u_data
 							closest_crim_dis_sq = closest_u_dis_sq
 						end
@@ -1586,12 +1586,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 						end
 					end
 					local closest_crim_u_data, closest_crim_dis_sq = nil
+					local crim_dis_sq_chk = not closest_crim_dis_sq or closest_crim_dis_sq > closest_u_dis_sq
 					for u_key, u_data in pairs(self._char_criminals) do
 						if u_data.unit then
 							local players_nearby = managers.player:_chk_fellow_crimin_proximity(u_data.unit)
 							local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(u_data.m_pos, group.units)
 							if players_nearby and players_nearby <= 0 then
-								if closest_u_dis_sq and (not closest_crim_dis_sq or closest_crim_dis_sq > closest_u_dis_sq) then
+								if closest_u_dis_sq and crim_dis_sq_chk then
 									closest_crim_u_data = u_data
 									closest_crim_dis_sq = closest_u_dis_sq
 								end
@@ -1834,11 +1835,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 			if push then
 				local detonate_pos = nil
+				
+				if math.random() < 0.25 then
+					for c_key, c_data in pairs(assault_area.criminal.units) do
+						detonate_pos = c_data.unit:movement():m_pos()
 
-				for c_key, c_data in pairs(assault_area.criminal.units) do
-					detonate_pos = c_data.unit:movement():m_pos()
-
-					break
+						break
+					end
 				end
 
 				if not used_grenade or used_grenade == nil then
@@ -1850,9 +1853,9 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 				
 				if not used_grenade then
-					log("group doesnt have tactic for this")
+					--log("group doesnt have tactic for this")
 				elseif used_grenade then
-					log("cool")
+					--log("cool")
 				end
 
 				self:_voice_move_in_start(group)
