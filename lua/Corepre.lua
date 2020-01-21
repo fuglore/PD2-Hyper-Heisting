@@ -16,7 +16,7 @@ function PD2THHSHIN:ChangeSetting(setting_name,value,apply_immediately)
 end
 
 function PD2THHSHIN:IsOverhaulEnabled()
-	return self:GetSetting("toggle_overhaul_player")
+	return self:GetSessionSetting("toggle_overhaul_player")
 end
 
 function PD2THHSHIN:GetSessionSetting(setting_name,fallback_value)
