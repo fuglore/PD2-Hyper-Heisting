@@ -1,0 +1,16 @@
+{
+	"menu_id" : "shin_options",
+	"parent_menu_id" : "blt_options",
+	"title" : "shin_options_title",
+	"back_callback" : "callback_shin_close",
+	"items" : [
+		{
+			"type" : "toggle",
+			"id" : "shin_toggle_overhaul_player",
+			"title" : "shin_toggle_overhaul_player_title",
+			"description" : "shin_toggle_overhaul_player_desc",
+			"callback" : "callback_shin_toggle_overhaul_player",
+			"value" : "toggle_overhaul_player"
+		}
+	]
+}

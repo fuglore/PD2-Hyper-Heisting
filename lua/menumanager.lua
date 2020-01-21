@@ -33,3 +33,37 @@ function MenuCallbackHandler:accept_skirmish_weekly_contract(item, node)
 		MenuCallbackHandler:start_job(job_data)
 	end
 end
+
+Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
+
+	MenuCallbackHandler.callback_shin_toggle_overhaul_player = function(self,item) --toggle
+		PD2THHSHIN:ChangeSetting("toggle_overhaul_player",item:value() == "on")
+	end
+	
+	--you can disable the "requires restart" popup if you want, just change show_popup to false
+	local show_popup = true
+	
+	MenuCallbackHandler.callback_shin_close = function(self,item) --toggle
+		if show_popup then 
+			local has_change = false
+			local settings_list = "\n"
+			for setting_name,value in pairs(PD2THHSHIN.session_settings) do 
+				local new_value = PD2THHSHIN.settings[setting_name]
+				if (new_value ~= nil) and (new_value ~= value) then 
+					has_change = true
+					settings_list = settings_list .. managers.localization:text("shin_" .. tostring(setting_name) .. "_title") .. ": " .. tostring(value) .. "-->" .. tostring(new_value) .. "\n"
+				end
+			end
+			if has_change then 
+				QuickMenu:new(managers.localization:text("shin_requires_restart_title"),string.gsub(managers.localization:text("shin_requires_restart_desc"),"$SETTINGSLIST",settings_list),{
+					{
+						text = managers.localization:text("dialog_ok"),
+						is_cancel_button = true
+					}
+				},true)
+			end
+		end
+	end
+	
+	MenuHelper:LoadFromJsonFile(PD2THHSHIN._options_path, PD2THHSHIN, PD2THHSHIN.settings)
+end)
