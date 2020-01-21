@@ -501,7 +501,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 		end
 	end
 	
-	if focus_enemy and focus_enemy.reaction >= AIAttentionObject.REACT_COMBAT then
+	if focus_enemy and focus_enemy.reaction <= AIAttentionObject.REACT_COMBAT then
 		
 		local reaction_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 0.2
 		
@@ -1335,7 +1335,7 @@ function CopLogicAttack.queue_update(data, my_data)
 		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
 	end
 	
-	local cant_say_clear = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5 and not data.is_converted
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5 and not data.is_converted
 	
     if not data.unit:base():has_tag("special") then
     	if data.char_tweak.chatter.clear and not cant_say_clear then
@@ -1370,7 +1370,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	
 	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted then
 		if managers.groupai:state():chk_assault_active_atm() or not data.unit:base():has_tag("law") then
-			if data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
+			if data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
 				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
 					local roll = math.random(1, 100)
 					local chance_suppanic = 30

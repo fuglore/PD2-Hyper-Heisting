@@ -90,7 +90,7 @@ function CopLogicIdle._upd_stance_and_pose(data, my_data, objective)
 					agg_pose = true
 				end
 			end
-		elseif data.attention_obj and data.attention_obj.is_person and data.attention_obj.verified and data.attention_obj.aimed_at and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT then
+		elseif data.attention_obj and data.attention_obj.is_person and data.attention_obj.verified and data.attention_obj.aimed_at and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT then
 			if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 				--nothing
 			else

@@ -782,7 +782,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	local my_data = data.internal_data
 	attention = attention or data.attention_obj
 	local t = data.t
-	local mid_fight = data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified
+	local mid_fight = data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified
 
 	if not objective or objective.is_default or (objective.in_place or not objective.nav_seg) and not objective.action then
 		return true, false
