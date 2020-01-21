@@ -1441,7 +1441,7 @@ function CopLogicAttack._update_cover(data)
 				local following_dis = following_direction * 120
 				local near_pos = data.objective.follow_unit:movement():m_pos() + following_dis
 				
-				local notbestcovernotfollowcoverchk = not best_cover or not CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 60, 120)
+				local notbestcovernotfollowcoverchk = not best_cover or CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 60, 120)
 				
 				--unit would take the heister's angle to both the pillar, and the unit, the unit would attempt to line up the pillar and the heister together, since they're following the pillar, they should frequently position themselves behind the pillar, which would keep them in cover, its hacky, but it would work
 				
@@ -1471,7 +1471,7 @@ function CopLogicAttack._update_cover(data)
 				end
 			elseif data.objective and data.objective.type == "follow" then
 				local near_pos = data.objective.follow_unit:movement():m_pos()
-				local notbc_ornotvc_chk = not best_cover or not CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 200, 1000)
+				local notbc_ornotvc_chk = not best_cover or CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 200, 1000)
 				if notbc_ornotvc_chk and not my_data.processing_cover_path and not my_data.charge_path_search_id then
 					local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
@@ -1611,7 +1611,7 @@ function CopLogicAttack._update_cover(data)
 					local notbcorvc_chk = nil
 					
 					if found_cover then
-						notbcorvc_chk = not best_cover or CopLogicAttack._verify_cover(data, found_cover, threat_pos, min_dis, max_dis)
+						notbcorvc_chk = not best_cover or not CopLogicAttack._verify_cover(data, found_cover, threat_pos, min_dis, max_dis)
 					end
 					
 					if found_cover and notbcorvc_chk then
