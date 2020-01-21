@@ -1,4 +1,4 @@
-Hooks:Add("LocalizationManagerPostInit", "shin_assaultcornertext", function(loc)
+Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 	LocalizationManager:add_localized_strings({
 		["hud_assault_FG_cover1"] = "KILL EACHOTHER, BUT IT'S GOOD INVERSES",
 		["hud_assault_FG_cover2"] = "RARE FOOTAGE OF DRAGAN ACTUALLY ANGRY",
@@ -81,10 +81,22 @@ Hooks:Add("LocalizationManagerPostInit", "shin_assaultcornertext", function(loc)
 		["loading_hh_10"] = "If you see extra-bright powerful tracers that distort the area around them, that's probably coming from some important enemy! Like a Shotgunner, or a Bulldozer!",
 		["loading_hh_11"] = "Join the Hyper Heisting Discord! You can find a link to it in the ModWorkshop page!",
 		["loading_hh_12"] = "Ninja enemies are particularly hard to dominate, but are very strong when converted into Jokers!",
-		["shin_options_title"] = "Hyper Heisting Menu",
-		["shin_toggle_overhaul_player_title"] = "Player-side Rebalance",
-		["shin_toggle_overhaul_player_desc"] = "Changes weapon stuff, skills, and some things. Fug, change this string!",
+		["shin_options_title"] = "Hyper Heisting Options!",
+		["shin_toggle_overhaul_player_title"] = "HH Player-Side Rebalance!",
+		["shin_toggle_overhaul_player_desc"] = "Enables a not-yet-modified version of Gambyt's VIWR mod!",
 		["shin_requires_restart_title"] = "Restart required!",
 		["shin_requires_restart_desc"] = "You have made changes to the following settings:\n$SETTINGSLIST\nChanges will take effect on game/heist restart.\nHave a nice day!"
 	})
+end)
+
+Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
+	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
+		LocalizationManager:add_localized_strings({
+			["menu_perseverance_beta_desc"] = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##3## seconds with a ##60%## movement penalty before going down. \n\nACE: ##$pro##\nIncreases the duration of Swan Song to ##6## seconds.",
+			["menu_overkill_beta_desc"] = "BASIC: ##$basic##\nKilling an enemy at medium range has a ##75%## chance to spread panic among your enemies. \n\nACE: ##$pro##\nWhen you kill an enemy with a shotgun, shotguns recieve a ##25%## damage increase that lasts for ##8## seconds.",
+			["menu_gun_fighter_beta_desc"] = "BASIC: ##$basic##\nPistols gain ##5## more damage points. \n\nACE: ##$pro##\nPistols gain an additional ##5## damage points.",
+			["menu_dance_instructor_desc"] = "BASIC: ##$basic##\nYour pistol magazine sizes are increased by ##5## bullets. \n\nACE: ##$pro##\nYou gain a ##25%## increased rate of fire with pistols.",
+			["menu_expert_handling_desc"] = "BASIC: ##$basic##\nEach successful pistol hit gives you a ##10%## increased accuracy bonus for ##10## seconds and can stack ##4## times.  \n\nACE: ##$pro##\nYou reload all pistols ##25%## faster."
+		})
+	end
 end)
