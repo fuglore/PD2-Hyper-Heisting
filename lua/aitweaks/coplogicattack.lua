@@ -1365,7 +1365,6 @@ function CopLogicAttack.queue_update(data, my_data)
 		end
     end
 	
-	
 	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
 	
@@ -1398,6 +1397,9 @@ function CopLogicAttack.queue_update(data, my_data)
 		end
 	end
 	
+	data.logic._update_haste(data, data.internal_data)
+	CopLogicAttack._update_cover(data)
+	
 	if is_close then
 		delay = 0.35
 	elseif too_far then
@@ -1422,7 +1424,7 @@ function CopLogicAttack._update_cover(data)
 	local satisfied = true
 	local my_pos = data.m_pos --my position
 	
-	if data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction then
+	if data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 		local find_new = not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos and not my_data.surprised
 		local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 2
 		
@@ -1447,7 +1449,7 @@ function CopLogicAttack._update_cover(data)
 					local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
 
-					if found_cover and data.unit:raycast("ray", data.unit:movement():m_head_pos(), data.attention_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", data.attention_obj.unit, "report") then
+					if found_cover then
 						if not follow_unit_area.nav_segs[found_cover[3]:nav_segment()] then
 							debug_pause_unit(data.unit, "cover in wrong area")
 						end

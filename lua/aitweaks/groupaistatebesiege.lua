@@ -1836,7 +1836,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if push then
 				local detonate_pos = nil
 				
-				if math.random() < 0.25 then
+				if math.random() < 0.05 or self._drama_data.amount <= self._drama_data.low_p and math.random() < 0.5 then
 					for c_key, c_data in pairs(assault_area.criminal.units) do
 						detonate_pos = c_data.unit:movement():m_pos()
 

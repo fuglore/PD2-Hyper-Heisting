@@ -295,6 +295,7 @@ function CopLogicTravel.queued_update(data)
 		end
     end
 	
+	data.logic._update_haste(data, data.internal_data)
 	
 	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
@@ -337,7 +338,7 @@ function CopLogicTravel.upd_advance(data)
 	local objective = data.objective
 	local t = TimerManager:game():time()
 	data.t = t
-
+	
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
 	elseif my_data.warp_pos then
@@ -460,13 +461,30 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	return true
 end
 
+local temp_vec4 = Vector3()
+local temp_vec5 = Vector3()
+local temp_vec6 = Vector3()
 function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local cover = nil
 	local search_area = nil
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
-	if data.objective and data.objective.type == "follow" then
-		 search_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
+	if data.objective and data.objective.type == "follow" and data.tactics and data.tactics.shield_cover and not data.unit:base()._tweak_table == "shield" and data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
+		 local enemy_tracker = data.attention_obj.nav_tracker
+		 local threat_pos = enemy_tracker:field_position()
+		 local heister_pos = data.attention_obj.m_pos --the threat
+		 local shield_pos = data.objective.follow_unit:movement():m_pos() --the pillar
+		 local shield_direction = mvector3.direction(temp_vec4, my_pos, shield_pos)
+		 local heister_direction = mvector3.direction(temp_vec5, my_pos, heister_pos)
+		 local following_direction = mvector3.direction(temp_vec6, shield_direction, heister_direction)
+		 local following_dis = following_direction * 120
+		 local near_pos = data.objective.follow_unit:movement():m_pos() + following_dis
+		 local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
+		 
+		 local cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
+		 
+	elseif data.objective and data.objective.type == "follow" then
+		search_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 	else
 		search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
 	end
@@ -475,6 +493,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		cover = managers.navigation:find_cover_in_nav_seg_1(search_area.nav_segs)
 	else
 		local optimal_threat_dis, threat_pos = nil
+		
 		if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "taser" then --make sure these two boys are getting appropriate ranges
 			if diff_index <= 5 and data.unit:base()._tweak_table == "spooc" and not Global.game_settings.use_intense_AI then
 				optimal_threat_dis = 900
@@ -490,31 +509,38 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 				optimal_threat_dis = data.internal_data.weapon_range.close
 			end
 		else
-			optimal_threat_dis = data.internal_data.weapon_range.far
+			optimal_threat_dis = data.internal_data.weapon_range.optimal
 		end
 
 		near_pos = near_pos or search_area.pos
-		local all_criminals = managers.groupai:state():all_char_criminals()
-		local closest_crim_u_data, closest_crim_dis = nil
+		
+		if data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT then
+			threat_pos = data.attention_obj.m_pos
+		else
+			local all_criminals = managers.groupai:state():all_char_criminals()
+			local closest_crim_u_data, closest_crim_dis = nil
 
-		for u_key, u_data in pairs(all_criminals) do
-			local crim_area = managers.groupai:state():get_area_from_nav_seg_id(u_data.tracker:nav_segment()) --this checks for the area any criminal units are standing in, this includes players and bots, keep in mind, this is nav-segment to nav-segment, so its map-dependant
+			for u_key, u_data in pairs(all_criminals) do
+				local crim_area = managers.groupai:state():get_area_from_nav_seg_id(u_data.tracker:nav_segment()) --this checks for the area any criminal units are standing in, this includes players and bots, keep in mind, this is nav-segment to nav-segment, so its map-dependant
 
-			if crim_area == search_area then
-				threat_pos = u_data.m_pos
-
-				break
-			else
-				local crim_dis = mvector3.distance_sq(near_pos, u_data.m_pos)
-
-				if not closest_crim_dis or crim_dis < closest_crim_dis then
+				if crim_area == search_area then
 					threat_pos = u_data.m_pos
-					closest_crim_dis = crim_dis
+
+					break
+				else
+					local crim_dis = mvector3.distance_sq(near_pos, u_data.m_pos)
+
+					if not closest_crim_dis or crim_dis < closest_crim_dis then
+						threat_pos = u_data.m_pos
+						closest_crim_dis = crim_dis
+					end
 				end
 			end
 		end
-
-		cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
+		
+		if not cover then
+			cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
+		end
 	end
 
 	return cover
