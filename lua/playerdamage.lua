@@ -1,3 +1,18 @@
+local mvec3_set = mvector3.set
+local mvec3_add = mvector3.add
+local mvec3_dot = mvector3.dot
+local mvec3_sub = mvector3.subtract
+local mvec3_mul = mvector3.multiply
+local mvec3_norm = mvector3.normalize
+local mvec3_dir = mvector3.direction
+local mvec3_set_l = mvector3.set_length
+local mvec3_len = mvector3.length
+local math_clamp = math.clamp
+local math_lerp = math.lerp
+local tmp_vec1 = Vector3()
+local tmp_vec2 = Vector3()
+local tmp_rot1 = Rotation()
+
 Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	self._lives_init = tweak_data.player.damage.LIVES_INIT
 
@@ -178,17 +193,23 @@ Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	self:clear_delayed_damage()
 end)
 
-
 Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, attack_data)
 	local player_unit = managers.player:player_unit()
 	local cur_state = self._unit:movement():current_state_name()
 	if attack_data then
+		
+		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
+			if alive(player_unit) and self._unit:movement():current_state().on_melee_stun then
+				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), 0.8)
+			end
+		end
+		
 		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and Global.game_settings.one_down then
 			if tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_xc45" then
 				if alive(player_unit) then
 					managers.player:set_player_state("arrested") --fbis can cuff players on shin mode
 				end
-			end		
+			end	
 		end
 	end
 end)
@@ -229,6 +250,7 @@ end
 
 Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self, attack_data)
 	local armor_damage = self:_max_armor() > 0 and self:get_real_armor() < self:_max_armor()
+	
 	if attack_data then
 		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
 			if tostring(attack_data.attacker_unit:base()._tweak_table) == "akuma" then
@@ -238,6 +260,25 @@ Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self,
 				end
 			end
 		end
+	end
+	
+	--local testing = true
+	if Global.game_settings.bulletknock or testing then
+		if attack_data and alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self:incapacitated() then
+			local push_vec = Vector3()
+			local distance = mvector3.distance(self._unit:position(), attack_data.attacker_unit:position())
+			local dis_lerp_value = math.clamp(distance, 0, 1000) / 1000
+			
+			local push_amount = math.lerp(1000, 0, dis_lerp_value)
+			
+			mvector3.direction(push_vec, attack_data.attacker_unit:position(), self._unit:position() + math.UP * 200)
+			
+			self._unit:movement():push(push_vec * push_amount)
+		end
+	end
+	
+	if not self:_chk_can_take_dmg() then
+		return
 	end
 	
 	local armor_subtracted = self:_calc_armor_damage(attack_data)

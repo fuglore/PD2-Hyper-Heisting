@@ -36,6 +36,22 @@ function ModifierBouncers:OnEnemyDied(unit, damage_info)
 	end
 end
 
+ModifierBulletknock = ModifierBulletknock or class(BaseModifier)
+ModifierBulletknock._type = "ModifierBulletknock"
+ModifierBulletknock.name_id = "none"
+ModifierBulletknock.desc_id = "menu_cs_modifier_bulletknock"
+
+function ModifierBulletknock:init(data)
+	ModifierBulletknock.super.init(self, data)
+	
+	if Global.game_settings.incsmission or managers.skirmish and managers.skirmish:is_skirmish() then
+		Global.game_settings.bulletknock = true
+	else
+		Global.game_settings.bulletknock = nil
+	end
+	
+end
+
 ModifierUnison = ModifierUnison or class(BaseModifier)
 ModifierUnison._type = "ModifierUnison"
 ModifierUnison.name_id = "none"
@@ -45,9 +61,9 @@ function ModifierUnison:init(data)
 	ModifierUnison.super.init(self, data)
 	
 	if Global.game_settings.incsmission or managers.skirmish and managers.skirmish:is_skirmish() then
-		Global.game_settings.thethreekings = true
+		Global.game_settings.thethreerulers = true
 	else
-		Global.game_settings.thethreekings = nil
+		Global.game_settings.thethreerulers = nil
 	end
 	
 end

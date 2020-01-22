@@ -81,4 +81,13 @@ Hooks:PostHook(HudIconsTweakData, "init", "hh_icons", function(self)
 			image_sizes
 		}
 	}
+	self.cs_modifier_bouncer = {
+		texture = "guis/dlcs/drm/textures/pd2/crime_spree/modifier_bouncer",
+		texture_rect = {
+			image_sizes * 0,
+			image_sizes * 0,
+			image_sizes,
+			image_sizes
+		}
+	}
 end)

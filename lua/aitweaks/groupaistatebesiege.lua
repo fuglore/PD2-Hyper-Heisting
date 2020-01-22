@@ -31,7 +31,7 @@ end
 
 function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
-		local next_upd_t = 1.5
+		local next_upd_t = 0.8
 		if next(self._spawning_groups) then
 			next_upd_t = 0.4
 		end

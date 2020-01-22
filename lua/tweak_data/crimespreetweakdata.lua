@@ -246,7 +246,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "bouncer_nades",
-				icon = "cs_modifier_truelotusmaster",
+				icon = "cs_modifier_bouncer",
 				class = "ModifierBouncers",
 				data = {}
 			},
