@@ -763,5 +763,8 @@
 	<!--Textures-->	
     <df_nm path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_head" />    	
 	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_df" />
+	
+	<!--Truth Runes Pattern-->
+	<texture path="patterns/真_fv"/>
 </table>
 	
