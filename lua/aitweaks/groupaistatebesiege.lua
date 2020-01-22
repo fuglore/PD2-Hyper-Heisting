@@ -112,7 +112,11 @@ function GroupAIStateBesiege:update(t, dt)
 			
 			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t or self._enemies_killed_sustain_guaranteed_break < self._enemies_killed_sustain and not self._stopassaultbreak_t then
 				self._activeassaultbreak = true
-				self._stopassaultbreak_t = self._t + math.random(5, 10)
+				if managers.skirmish:is_skirmish() then
+					self._stopassaultbreak_t = self._t + 5
+				else
+					self._stopassaultbreak_t = self._t + math.random(5, 10)
+				end
 				self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
 				if self._enemies_killed_sustain_guaranteed_break < self._enemies_killed_sustain then
 					self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain_guaranteed_break + 50
@@ -401,6 +405,7 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.force_anticipation = 16
 	assault_task.is_first = nil
 	self._enemies_killed_sustain = 0
+	self._enemies_killed_sustain_guaranteed_break = 50
 	assault_task.phase_end_t = self._t + anticipation_duration
 	
 	if not self._downleniency or self._downleniency < 1 then
