@@ -1,9 +1,9 @@
-<table name="skm_mus_hh">
+<table name="skm_red_hh">
 	<Localization default="english.txt" directory="loc"/>
-	<level ai_group_type="america" briefing_dialog="Play_loc_skm_brf" cube="cube_apply_heist_bank" group_ai_state="skirmish" id="skm_mus_hh" intro_event="Play_loc_skm_intro" music_ext="heist" narrator="locke" wave_count="9">
-		<add file="levels/skm_mus_hh/add.xml"/>
+	<level ai_group_type="america" briefing_dialog="Play_loc_skm_brf" cube="cube_apply_heist_bank" group_ai_state="skirmish" id="skm_red_hh" intro_event="Play_loc_skm_intro" music="heist" narrator="locke" wave_count="9">
+		<add file="levels/skm_red_hh/add.xml"/>
 		<assets/>
-		<include directory="levels/skm_mus_hh">
+		<include directory="levels/skm_red_hh">
 			<file file="world.world" type="binary"/>
 			<file file="continents.continents" type="binary"/>
 			<file file="mission.mission" type="binary"/>
@@ -12,18 +12,18 @@
 			<file file="world_cameras.world_cameras" type="binary"/>
 			<file file="collision/collision.continent" type="binary"/>
 			<file file="collision/collision.mission" type="binary"/>
-			<file file="editor_only/editor_only.continent" type="binary"/>
-			<file file="editor_only/editor_only.mission" type="binary"/>
-			<file file="new_props/new_props.continent" type="binary"/>
-			<file file="new_props/new_props.mission" type="binary"/>
-			<file file="lighting/lighting.continent" type="binary"/>
-			<file file="lighting/lighting.mission" type="binary"/>
+			<file file="lights_rob/lights_rob.continent" type="binary"/>
+			<file file="lights_rob/lights_rob.mission" type="binary"/>
+			<file file="env/env.continent" type="binary"/>
+			<file file="env/env.mission" type="binary"/>
+			<file file="shadow_caster/shadow_caster.continent" type="binary"/>
+			<file file="shadow_caster/shadow_caster.mission" type="binary"/>
 			<file file="world/world.continent" type="binary"/>
 			<file file="world/world.mission" type="binary"/>
-			<file file="art/art.continent" type="binary"/>
-			<file file="art/art.mission" type="binary"/>
+			<file file="editor_only/editor_only.continent" type="binary"/>
+			<file file="editor_only/editor_only.mission" type="binary"/>
 			<file file="cover_data.cover_data" type="binary"/>
-			<file file="environments/pd2_indiana_big_room_hh.environment" type="custom_xml"/>
+			<file file="environments/skm_red_hh.environment" type="custom_xml"/>
 		</include>
 		<outro_event>
 			<value_node value="Play_loc_skm_end_win"/>
@@ -31,14 +31,14 @@
 		</outro_event>
 		<packages>
 			<value_node value="packages/dlcs/skm/job_skm"/>
-			<value_node value="levels/narratives/skm/skm_mus/world"/>
-			<value_node value="levels/narratives/skm/skm_mus/world_sounds"/>
-			<value_node value="levels/narratives/skm/skm_mus/collision/collision"/>
-			<value_node value="levels/narratives/skm/skm_mus/world/world"/>
-			<value_node value="levels/narratives/skm/skm_mus/new_props/new_props"/>
-			<value_node value="levels/narratives/skm/skm_mus/lighting/lighting"/>
-			<value_node value="levels/narratives/skm/skm_mus/art/art"/>
-			<value_node value="levels/narratives/skm/skm_mus/editor_only/editor_only"/>
+			<value_node value="levels/narratives/skm/skm_red2/world"/>
+			<value_node value="levels/narratives/skm/skm_red2/world_sounds"/>
+			<value_node value="levels/narratives/skm/skm_red2/collision/collision"/>
+			<value_node value="levels/narratives/skm/skm_red2/world/world"/>
+			<value_node value="levels/narratives/skm/skm_red2/editor_only/editor_only"/>
+			<value_node value="levels/narratives/skm/skm_red2/shadow_caster/shadow_caster"/>
+			<value_node value="levels/narratives/skm/skm_red2/env/env"/>
+			<value_node value="levels/narratives/skm/skm_red2/lights_rob/lights_rob"/>
 		</packages>
 		<script_data_mods directory="scriptdata">
 			<mod replacement="objectives.objective" replacement_type="custom_xml" target_ext="objective" target_path="gamedata/objectives">
@@ -46,9 +46,9 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative briefing_event="dentist_hd1_cbf_01" contact="skirmish" icon="guis/textures/pd2/skirmish/menu_landing_mus" id="skm_mus" jc="50" max_mission_xp="135900" min_mission_xp="8000" region="street">
+	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" icon="guis/textures/pd2/skirmish/menu_landing_red2" debrief_event="pln_fwb_34" id="skm_red2" jc="60" max_mission_xp="135900" min_mission_xp="8000" region="street">
 		<chain>
-			<table level_id="skm_mus_hh" type="d" type_id="heist_type_assault"/>
+			<table level_id="skm_red_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
 		<contract_cost>
 			<value_node value="16000"/>
@@ -70,10 +70,6 @@
 			<value_node value="4"/>
 			<value_node value="23"/>
 		</date_added>
-		<debrief_event>
-			<value_node value="dentist_hd1_debrief_01"/>
-			<value_node value="dentist_hd1_debrief_02"/>
-		</debrief_event>
 		<experience_mul>
 			<value_node value="1"/>
 			<value_node value="1"/>
