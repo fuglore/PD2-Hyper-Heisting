@@ -46,7 +46,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" icon="guis/textures/pd2/skirmish/menu_landing_red2" debrief_event="pln_fwb_34" id="skm_red2" jc="60" max_mission_xp="135900" min_mission_xp="8000" region="street">
+	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" debrief_event="pln_fwb_34" icon="guis/textures/pd2/skirmish/menu_landing_red2" id="skm_red2" jc="60" max_mission_xp="135900" min_mission_xp="8000" region="street">
 		<chain>
 			<table level_id="skm_red_hh" type="d" type_id="heist_type_assault"/>
 		</chain>

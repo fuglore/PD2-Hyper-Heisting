@@ -1,1 +1,46 @@
-<table directory="assets"/>
+<table directory="assets">
+	<add path="core/environments/skies/sky_1313_cloudy/sky_1313_cloudy" type="scene">
+		<scene force="true" load="true" path="core/environments/skies/sky_1313_cloudy/sky_1313_cloudy" unload="true"/>
+		<material_config force="true" path="core/environments/skies/sky_1313_cloudy/sky_1313_cloudy" unload="true"/>
+		<texture force="true" path="core/environments/skies/sky_1313_cloudy/sky_1313_cloudy" unload="true"/>
+	</add>
+	<texture path="levels/mods/skm_red_hh/cubemaps/479"/>
+	<texture path="levels/mods/skm_red_hh/cubemaps/483"/>
+	<texture path="levels/mods/skm_red_hh/cubemaps/480"/>
+	<texture path="levels/mods/skm_red_hh/cubemaps/482"/>
+	<texture path="levels/mods/skm_red_hh/cubemaps/481"/>
+	<texture path="levels/mods/skm_red_hh/cubemaps/484"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104810"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104809"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/106744"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/106743"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104815"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/101266"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/106735"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104812"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104819"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/101279"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/101283"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/101205"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104818"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104813"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104785"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/106745"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/101726"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/101695"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104804"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/101723"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104811"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104779"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104790"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104783"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104782"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104801"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/102700"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104777"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104788"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104806"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104802"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104789"/>
+	<texture path="levels/mods/skm_red_hh/cube_lights/104787"/>
+</table>

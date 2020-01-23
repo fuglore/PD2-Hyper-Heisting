@@ -775,8 +775,10 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	end
 	
-	if task_data.use_smoke_timer < t then
-		task_data.use_smoke = true
+	if task_data.phase ~= "fade" and task_data.phase ~= "anticipation"  and not self._activeassaultbreak and not self._feddensityhigh then
+		if task_data.use_smoke_timer < t then
+			task_data.use_smoke = true
+		end
 	end
 
 	self:detonate_queued_smoke_grenades()
@@ -802,7 +804,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			if next(self._spawning_groups) then
 				-- Nothing
 			else
-				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, nil, nil, nil)
+				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, nil, nil)
 
 				if spawn_group then
 					local grp_objective = {
@@ -826,6 +828,14 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 
 	self:_assign_enemy_groups_to_assault(task_data.phase)
+end
+
+function GroupAIStateBesiege:is_smoke_grenade_active()
+	if not self._task_data.assault.use_smoke then
+		return
+	end
+	
+	return self._task_data.assault.use_smoke
 end
 
 function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)

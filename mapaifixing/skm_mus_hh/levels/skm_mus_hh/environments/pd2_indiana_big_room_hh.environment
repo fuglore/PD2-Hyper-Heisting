@@ -6,13 +6,13 @@
 			<param key="rotation" value="0" />
 		</sky_orientation>
 		<others>
-			<param key="sky_texture" value=""/>
+			<param key="sky_texture" value="core/environments/skies/sky_2003_dusk_blue/sky_2003_dusk_blue"/>
 			<param key="global_world_overlay_mask_texture" value=""/>
 			<param key="underlay" value="core/environments/skies/sky_2003_dusk_blue/sky_2003_dusk_blue"/>
 			<param key="sun_ray_color_scale" value="0.92035353183746"/>
 			<param key="global_world_overlay_texture" value=""/>
 			<param key="sun_ray_color" value="0.75686275959015 0.76470589637756 1"/>
-			<param key="global_texture" value="environments/cubemaps/cubemap_bank_01"/>
+			<param key="global_texture" value="levels/mods/skm_mus_hh/cubemaps/1"/>
 		</others>
 		<post_effect>
 			<deferred>
@@ -62,8 +62,8 @@
 			<sky>
 				<param key="color0" value="0.72156864404678 0.80392158031464 0.8901960849762"/>
 				<param key="color2" value="0.6745098233223 0.74509805440903 1"/>
-				<param key="color2_scale" value="1.5141307115555"/>
-				<param key="color0_scale" value="0.72242778539658"/>
+				<param key="color2_scale" value="1.0169999599457"/>
+				<param key="color0_scale" value="0.60000002384186"/>
 			</sky>
 		</underlay_effect>
 		<environment_effects>
