@@ -1,8 +1,3 @@
-PD2THHSHIN_Maps = PD2THHSHIN_Maps or class(MapFramework)
-PD2THHSHIN_Maps._directory = ModPath .. "mapaifixing"
-PD2THHSHIN_Maps.type_name = "PD2THHSHIN"
-PD2THHSHIN_Maps:new()
-
 _G.PD2THHSHIN = PD2THHSHIN or {}
 
 PD2THHSHIN._mod_path = ModPath
@@ -68,6 +63,10 @@ end
 
 PD2THHSHIN:LoadSettings()
 
+PD2THHSHIN_Maps = PD2THHSHIN_Maps or class(MapFramework)
+PD2THHSHIN_Maps._directory = ModPath .. "mapaifixing"
+PD2THHSHIN_Maps.type_name = "PD2THHSHIN"
+PD2THHSHIN_Maps:new()
 
 --this file is the only time that settings should be loaded from the mod save file;
 --any changes will not take place until Lua is reloaded (eg. load into new mission or on restart),
