@@ -250,6 +250,7 @@ end
 
 Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self, attack_data)
 	local armor_damage = self:_max_armor() > 0 and self:get_real_armor() < self:_max_armor()
+	local cur_state = self._unit:movement():current_state_name()
 	
 	if attack_data then
 		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
@@ -263,16 +264,31 @@ Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self,
 	end
 	
 	--local testing = true
+	local state_chk = cur_state == "standard" or cur_state == "carry" or cur_state == "bipod"
 	if Global.game_settings.bulletknock or testing then
-		if attack_data and alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self:incapacitated() then
+		if alive(attack_data.attacker_unit) and state_chk then
+			local from_pos = nil
+
+			--probably unnecessary but you never know
+			if attack_data.attacker_unit:movement() then
+				if attack_data.attacker_unit:movement().m_head_pos then
+					from_pos = attack_data.attacker_unit:movement():m_head_pos()
+				elseif attack_data.attacker_unit:movement().m_pos then
+					from_pos = attack_data.attacker_unit:movement():m_pos()
+				else
+					from_pos = attack_data.attacker_unit:position()
+				end
+			else
+				from_pos = attack_data.attacker_unit:position()
+			end
+
 			local push_vec = Vector3()
-			local distance = mvector3.distance(self._unit:position(), attack_data.attacker_unit:position())
+			local distance = mvector3.direction(push_vec, from_pos, self._unit:movement():m_head_pos())
+			mvector3.normalize(push_vec)
+
 			local dis_lerp_value = math.clamp(distance, 0, 1000) / 1000
-			
 			local push_amount = math.lerp(1000, 0, dis_lerp_value)
-			
-			mvector3.direction(push_vec, attack_data.attacker_unit:position(), self._unit:position() + math.UP * 200)
-			
+
 			self._unit:movement():push(push_vec * push_amount)
 		end
 	end
