@@ -534,11 +534,11 @@ function RaycastWeaponBase:_suppress_units(from_pos, direction, distance, slotma
 
 				total_suppression = math.lerp(total_suppression, 0, dis_lerp_value)
 				
+				local total_panic_chance = nil
+
 				if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-					local total_panic_chance = nil
+					--nothing
 				else
-					local total_panic_chance = false
-					
 					if self._panic_suppression_chance then
 						total_panic_chance = self._panic_suppression_chance
 
