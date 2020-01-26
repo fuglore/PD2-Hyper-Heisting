@@ -713,7 +713,7 @@ function CopActionShoot:anim_clbk_melee_strike()
 	mvector3.add(target_pos, shoot_from_pos)
 
 	local hit_local_player = true
-	local melee_slot_mask = managers.slot:get_mask("bullet_impact_targets_no_police") --ignore teammates of the attacking unit
+	local melee_slot_mask = managers.slot:get_mask("bullet_impact_targets")
 	melee_slot_mask = melee_slot_mask + 3 --just consider player husks as obstructions for enemies, they won't take damage
 
 	if managers.groupai:state():is_unit_team_AI(self._unit) or managers.groupai:state():is_enemy_converted_to_criminal(self._unit) then --override for Jokers and team AI
