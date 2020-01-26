@@ -1,4 +1,5 @@
 function PlayerTased:_check_action_shock(t, input)
+		
 	if self._next_shock < t then
 		
 		if Global.game_settings.one_down or managers.skirmish:is_skirmish() then
@@ -9,7 +10,7 @@ function PlayerTased:_check_action_shock(t, input)
 			self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * math.random(20))
 		else
 			self._num_shocks = self._num_shocks + 1
-			self._next_shock = t + 0.25 + math.rand(1)
+			self._next_shock = t + math.random(0.25, 1)
 
 			self._unit:camera():play_shaker("player_taser_shock", 1, 10)
 			self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * math.random(10))
@@ -48,4 +49,29 @@ function PlayerTased:_check_action_shock(t, input)
 			self._camera_unit:base():stop_shooting()
 		end
 	end
+end
+
+function PlayerTased:on_tase_ended()
+	self._tase_ended = true
+
+	if self._fatal_delayed_clbk then
+		managers.enemy:remove_delayed_clbk(self._fatal_delayed_clbk)
+
+		self._fatal_delayed_clbk = nil
+	end
+
+	local current_state_name = managers.player:current_state()
+
+	if not self._recover_delayed_clbk and current_state_name == "tased" and managers.network:session() then
+		self._recover_delayed_clbk = "PlayerTased_recover_delayed_clbk"
+
+		managers.enemy:add_delayed_clbk(self._recover_delayed_clbk, callback(self, self, "clbk_exit_to_std"), TimerManager:game():time())
+	end
+
+	self._taser_unit = nil
+end
+
+function PlayerTased:update(t, dt)
+	
+	PlayerTased.super.update(self, t, dt)
 end

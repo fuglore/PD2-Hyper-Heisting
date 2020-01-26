@@ -529,7 +529,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 			end
 
 			local reaction_too_mild = nil
-
+			
 			if not reaction or best_target_reaction and reaction < best_target_reaction then
 				reaction_too_mild = true
 			elseif distance < 150 and reaction == AIAttentionObject.REACT_IDLE then
@@ -705,7 +705,7 @@ end
 function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
 	local record = attention_data.criminal_record
 	local can_arrest = CopLogicBase._can_arrest(data)
-
+	
 	if not record or not attention_data.is_person then
 		if attention_data.settings.reaction == AIAttentionObject.REACT_ARREST and not can_arrest then
 			return AIAttentionObject.REACT_AIM
@@ -831,7 +831,7 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 
 		if objective_type == "free" and my_data.exiting then
 			--nothing
-		elseif data.unit:base():has_tag("taser") and data.attention_obj and data.attention_obj.verified and data.attention_obj.dis and data.attention_obj.dis <= 1500 then
+		elseif data.unit:base():has_tag("taser") and data.attention_obj and data.attention_obj.verified and data.attention_obj.dis and data.attention_obj.dis <= 1500 and data.attention_obj.is_person and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and focus_enemy.unit:movement().is_taser_attack_allowed and focus_enemy.unit:movement():is_taser_attack_allowed() then
 			CopLogicBase._exit(data.unit, "attack")
 		elseif data.unit:base():has_tag("spooc") and focus_enemy and focus_enemy.dis and focus_enemy.is_person and focus_enemy.criminal_record and not focus_enemy.criminal_record.status and not my_data.spooc_attack and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") and not SpoocLogicAttack._is_last_standing_criminal(focus_enemy) and not focus_enemy.unit:movement():zipline_unit() and focus_enemy.unit:movement():is_SPOOC_attack_allowed() and focus_enemy.dis <= 1500 and focus_enemy.verified then
 			CopLogicBase._exit(data.unit, "attack")
