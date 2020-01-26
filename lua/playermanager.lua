@@ -78,7 +78,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 				local enemies = World:find_units_quick("sphere", pos, area, 12, 21)
 
 				for i, unit in ipairs(enemies) do
-					if unit:character_damage() then
+					if unit:character_damage() and unit:character_damage().build_suppression then
 						unit:character_damage():build_suppression(amount, chance, true)
 					end
 				end
