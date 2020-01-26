@@ -6845,6 +6845,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.priority_shout = "f30"
 	self.tank.rescue_hostages = false
 	self.tank.deathguard = true
+	self.tank.melee_weapon = "fists"
 	self.tank.melee_weapon_dmg_multiplier = 2.5
 	self.tank.critical_hits = {
 		damage_mul = self.tank.headshot_dmg_mul * 1
@@ -6860,7 +6861,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.can_be_tased = false
 	self.tank.immune_to_knock_down = true
 	self.tank.immune_to_concussion = true
-	
+
 	self.tank_hw = deep_clone(self.tank)
 	self.tank_hw.tags = {
 		"law",
@@ -6876,7 +6877,8 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_hw.use_animation_on_fire_damage = false
 	self.tank_hw.flammable = true
 	self.tank_hw.can_be_tased = false
-	
+	self.tank_hw.melee_weapon = "helloween"
+
 	self.tank_medic = deep_clone(self.tank)
 	self.tank_medic.move_speed = presets.move_speed.simple_consistency --tiny bit faster, their gun is lighter.
 	self.tank_medic.weapon = deep_clone(presets.weapon.civil)
@@ -6895,7 +6897,9 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_mini.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_mini.always_face_enemy = true
 	self.tank_mini.damage.fire_damage_mul = 1
-	
+	self.tank_mini.melee_weapon = nil
+	self.tank_mini.melee_weapon_dmg_multiplier = nil
+
 	self.tank_ftsu = deep_clone(self.tank) --and just like that, ive turned a meme into a real thing
 	self.tank_ftsu.tags = {
 		"law",
@@ -6906,7 +6910,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_ftsu.move_speed = presets.move_speed.mini_consistency
 	self.tank_ftsu.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_ftsu.always_face_enemy = nil
-	
+
 	table.insert(self._enemy_list, "tank")
 	table.insert(self._enemy_list, "tank_hw")
 	table.insert(self._enemy_list, "tank_medic")
