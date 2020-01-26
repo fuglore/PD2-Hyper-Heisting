@@ -337,8 +337,14 @@ function CopDamage:damage_melee(attack_data)
 		return
 	end
 
-	if PlayerDamage.is_friendly_fire(self, attack_data.attacker_unit) then
-		return "friendly_fire"
+	if is_civilian then
+		if self:is_friendly_fire(attack_data.attacker_unit) then
+			return "friendly_fire"
+		end
+	elseif self:is_friendly_fire(attack_data.attacker_unit) then
+		if attack_data.attacker_unit:base().has_tag and attack_data.attacker_unit:base():has_tag("tank") and not self._unit:base():has_tag("tank") and not self._unit:base():has_tag("protected_reverse") then
+			attack_data.damage = attack_data.damage * 9
+		end
 	end
 
 	local result = nil
