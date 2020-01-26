@@ -51,13 +51,13 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		if self:has_category_upgrade("player", "panic_suppression") then --let's make this fuckin' happen
 			local equipped_unit = self:get_current_state()._equipped_unit:base()
-			local suppression_amount = equipped_unit:get_suppression() 
-			local sup_chance = equipped_unit:get_panic_sup_chance() 
+			local suppression_amount = equipped_unit._suppression
+			local sup_chance = equipped_unit._panic_suppression_chance
 			local pos = killed_unit:position()
 			local enemies = World:find_units_quick("sphere", pos, 1200, 12, 21)
 				
 			for i, unit in ipairs(enemies) do
-				if unit:character_damage() then
+				if unit:character_damage() and unit:character_damage().build_suppression then
 					unit:character_damage():build_suppression(suppression_amount, sup_chance, nil)
 				end
 			end
@@ -78,7 +78,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 				local enemies = World:find_units_quick("sphere", pos, area, 12, 21)
 
 				for i, unit in ipairs(enemies) do
-					if unit:character_damage() and unit:sound() then
+					if unit:character_damage() then
 						unit:character_damage():build_suppression(amount, chance, true)
 					end
 				end
