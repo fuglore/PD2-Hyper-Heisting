@@ -107,6 +107,116 @@ function CopDamage:die(attack_data)
 	end
 end
 
+function CopDamage:build_suppression(amount, panic_chance, was_saw)
+	if self._dead or not self._char_tweak.suppression then
+		return
+	end
+
+	local t = TimerManager:game():time()
+	local sup_tweak = self._char_tweak.suppression
+	
+	--local panic_chance_chk = panic_chance == -1 or panic_chance > 0 and sup_tweak.panic_chance_mul > 0 and math.random() < panic_chance * sup_tweak.panic_chance_mul
+
+	if panic_chance then
+		local panic_chance_chk = panic_chance == -1 or panic_chance > 0 and sup_tweak.panic_chance_mul > 0 and math.random() < panic_chance * sup_tweak.panic_chance_mul
+		if panic_chance_chk then
+			amount = "panic"
+		end
+	end
+
+	local amount_val = nil
+
+	if amount == "max" or amount == "panic" then
+		amount_val = (sup_tweak.brown_point or sup_tweak.react_point)[2]
+	elseif Network:is_server() and self._suppression_hardness_t and t < self._suppression_hardness_t then
+		amount_val = amount * 0.5
+	else
+		amount_val = amount
+	end
+
+	if not Network:is_server() then
+		local sync_amount = nil
+
+		if amount == "panic" then
+			sync_amount = 16
+		elseif amount == "max" then
+			sync_amount = 15
+		else
+			local sync_amount_ratio = nil
+
+			if sup_tweak.brown_point then
+				if sup_tweak.brown_point[2] <= 0 then
+					sync_amount_ratio = 1
+				else
+					sync_amount_ratio = amount_val / sup_tweak.brown_point[2]
+				end
+			elseif sup_tweak.react_point[2] <= 0 then
+				sync_amount_ratio = 1
+			else
+				sync_amount_ratio = amount_val / sup_tweak.react_point[2]
+			end
+
+			sync_amount = math.clamp(math.ceil(sync_amount_ratio * 15), 1, 15)
+		end
+
+		managers.network:session():send_to_host("suppression", self._unit, sync_amount)
+
+		return
+	end
+
+	if self._suppression_data then
+		self._suppression_data.value = math.min(self._suppression_data.brown_point or self._suppression_data.react_point, self._suppression_data.value + amount_val)
+		self._suppression_data.last_build_t = t
+		self._suppression_data.decay_t = t + self._suppression_data.duration
+
+		managers.enemy:reschedule_delayed_clbk(self._suppression_data.decay_clbk_id, self._suppression_data.decay_t)
+	else
+		local duration = math.lerp(sup_tweak.duration[1], sup_tweak.duration[2], math.random())
+		local decay_t = t + duration
+		self._suppression_data = {
+			value = amount_val,
+			last_build_t = t,
+			decay_t = decay_t,
+			duration = duration,
+			react_point = sup_tweak.react_point and math.lerp(sup_tweak.react_point[1], sup_tweak.react_point[2], math.random()),
+			brown_point = sup_tweak.brown_point and math.lerp(sup_tweak.brown_point[1], sup_tweak.brown_point[2], math.random()),
+			decay_clbk_id = "CopDamage_suppression" .. tostring(self._unit:key())
+		}
+
+		managers.enemy:add_delayed_clbk(self._suppression_data.decay_clbk_id, callback(self, self, "clbk_suppression_decay"), decay_t)
+	end
+
+	if not self._suppression_data.brown_zone and self._suppression_data.brown_point and self._suppression_data.brown_point <= self._suppression_data.value then
+		self._suppression_data.brown_zone = true
+
+		self._unit:brain():on_suppressed(amount == "panic" and "panic" or true)
+	elseif amount == "panic" then
+		self._unit:brain():on_suppressed("panic")
+	end
+
+	if not self._suppression_data.react_zone and self._suppression_data.react_point and self._suppression_data.react_point <= self._suppression_data.value then
+		self._suppression_data.react_zone = true
+
+		self._unit:movement():on_suppressed(amount == "panic" and "panic" or true)
+		if amount == "panic" then
+			if was_saw then
+				self._unit:sound():say("ch4", true, nil, true, nil)
+			else
+				self._unit:sound():say("lk3b", true, nil, true, nil) 
+			end
+		else
+			self._unit:sound():say("hlp", true, nil, true, nil)
+		end
+	elseif amount == "panic" then
+		self._unit:movement():on_suppressed("panic")
+		if was_saw then
+			self._unit:sound():say("ch4", true, nil, true, nil)
+		else
+			self._unit:sound():say("lk3b", true, nil, true, nil) 
+		end
+	end
+end
+
 function CopDamage:_on_damage_received(damage_info)
 	self:_call_listeners(damage_info)
 	CopDamage._notify_listeners("on_damage", damage_info)
@@ -2783,9 +2893,9 @@ end
 
 Hooks:PostHook(CopDamage, "damage_bullet", "shin_damagebullet", function(self, attack_data)
 	
-	if attack_data.weapon_unit and attack_data.weapon_unit:base().is_category and attack_data.weapon_unit:base():is_category("saw") then
-		managers.groupai:state():_voice_saw() --THAT MADMAN HAS A FUCKIN' SAW
-	end
+	--if attack_data.weapon_unit and attack_data.weapon_unit:base().is_category and attack_data.weapon_unit:base():is_category("saw") then
+	--	managers.groupai:state():_voice_saw() --THAT MADMAN HAS A FUCKIN' SAW
+	--end
 		
 	if attack_data.attacker_unit:base().sentry_gun and not self:is_friendly_fire(attack_data.attacker_unit) then
 		managers.groupai:state():_voice_sentry() --FUCKING SCI-FI ROBOT GUNS

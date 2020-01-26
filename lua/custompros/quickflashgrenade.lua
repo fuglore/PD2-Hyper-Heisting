@@ -1,3 +1,41 @@
+function QuickFlashGrenade:make_flash(detonate_pos, range, ignore_units)
+	local range = range or 1000
+	local effect_params = {
+		sound_event = "flashbang_explosion",
+		effect = "effects/particles/explosions/explosion_flash_grenade",
+		camera_shake_max_mul = 4,
+		feedback_range = range * 2
+	}
+
+	managers.explosion:play_sound_and_effects(detonate_pos, math.UP, range, effect_params)
+
+	ignore_units = ignore_units or {}
+
+	table.insert(ignore_units, self._unit)
+
+	local affected, line_of_sight, travel_dis, linear_dis = self:_chk_dazzle_local_player(detonate_pos, range, ignore_units)
+
+	if affected then
+		managers.environment_controller:set_flashbang(detonate_pos, line_of_sight, travel_dis, linear_dis, tweak_data.character.flashbang_multiplier)
+
+		local sound_eff_mul = math.clamp(1 - (travel_dis or linear_dis) / range, 0.3, 1)
+
+		managers.player:player_unit():character_damage():on_flashbanged(sound_eff_mul)
+	end
+	
+	if affected then
+		local players = World:find_units_quick(self._unit, "sphere", self._unit:position(), range, managers.slot:get_mask("criminals_no_deployables"))
+		for _, player in ipairs(players) do
+			if player == managers.player:local_player() then
+				local vis_check_fail = World:raycast("ray", self._unit:position(), player:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "ignore_unit", self._unit, "report")
+				if not vis_check_fail then
+					managers.player:player_unit():sound():say("g41x_any", true)
+				end
+			end
+		end
+	end
+end
+
 BouncerNade = BouncerNade or class(QuickFlashGrenade)
 
 BouncerNade.States = {
@@ -39,7 +77,7 @@ function BouncerNade:init(unit)
 	
 	for i, state in ipairs(BouncerNade.States) do
 		if state[2] == nil then
-			BouncerNade.States[i][2] = tweak_data.group_ai.flash_grenade.timer
+			BouncerNade.States[i][2] = tweak_data.group_ai.bouncer_grenade.timer
 		end
 	end
 
@@ -110,7 +148,7 @@ function BouncerNade:_beep()
 	self._unit:sound_source():post_event("ecm_jammer_ready")
 
 	self._beep_t = self:_get_next_beep_time()
-	self._light_multiplier = tweak_data.group_ai.flash_grenade.beep_multi
+	self._light_multiplier = tweak_data.group_ai.bouncer_grenade.beep_multi
 end
 
 function BouncerNade:timer(new)
@@ -124,7 +162,7 @@ function BouncerNade:timer(new)
 end
 
 function BouncerNade:_get_next_beep_time()
-	local beep_speed = tweak_data.group_ai.flash_grenade.beep_speed
+	local beep_speed = tweak_data.group_ai.bouncer_grenade.beep_speed
 
 	return self:timer() / beep_speed[1] * beep_speed[2]
 end
@@ -169,9 +207,9 @@ function BouncerNade:_state_bounced()
 	local light = World:create_light("omni|specular")
 
 	light:set_far_range(600)
-	light:set_color(tweak_data.group_ai.flash_grenade.light_color)
+	light:set_color(tweak_data.group_ai.bouncer_grenade.light_color)
 	light:set_position(self._unit:position())
-	light:set_specular_multiplier(tweak_data.group_ai.flash_grenade.light_specular)
+	light:set_specular_multiplier(tweak_data.group_ai.bouncer_grenade.light_specular)
 	light:set_enable(true)
 	light:set_multiplier(0)
 	light:set_falloff_exponent(0.5)
@@ -183,7 +221,7 @@ end
 function BouncerNade:_state_detonated()
 	local detonate_pos = self._unit:position()
 	if Network:is_server() then
-		self:make_flash(detonate_pos, tweak_data.group_ai.flash_grenade.range, nil)
+		self:make_flash(detonate_pos, tweak_data.group_ai.bouncer_grenade.range, nil)
 		managers.groupai:state():propagate_alert({
 			"aggression",
 			detonate_pos,
@@ -192,7 +230,7 @@ function BouncerNade:_state_detonated()
 		})
 		self._unit:damage():run_sequence_simple("detonate")
 	else
-		self:make_flash_client(detonate_pos, tweak_data.group_ai.flash_grenade.range, nil)
+		self:make_flash_client(detonate_pos, tweak_data.group_ai.bouncer_grenade.range, nil)
 		self._unit:damage():run_sequence_simple("detonate")
 	end
 end
@@ -204,7 +242,6 @@ end
 function BouncerNade:make_flash(detonate_pos, range, ignore_units)
 	local pos = self._unit:position()
 	local normal = math.UP
-	local range = 500
 	local slot_mask = managers.slot:get_mask("explosion_targets")
 
 	managers.explosion:give_local_player_dmg(pos, range, self._player_damage)
@@ -226,7 +263,6 @@ end
 
 function BouncerNade:make_flash_client(detonate_pos, range, ignore_units)
 	local normal = math.UP
-	local range = 500
 	local slot_mask = managers.slot:get_mask("explosion_targets")
 
 	local pos = self._unit:position()

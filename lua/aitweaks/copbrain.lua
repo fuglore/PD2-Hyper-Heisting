@@ -60,18 +60,17 @@ function CopBrain:on_suppressed(state)
     if self._current_logic.on_suppressed_state and not self._logic_data.is_converted then
         self._current_logic.on_suppressed_state(self._logic_data)
 
-        if self._logic_data.char_tweak.chatter.suppress and supp_complain_t_chk then
-		    local roll = math.random(1, 100)
-			local chance_heeeeelpp = 60
+        --if self._logic_data.char_tweak.chatter.suppress and supp_complain_t_chk then
+		--    local roll = math.random(1, 100)
+		--	local chance_heeeeelpp = 60
 			
-			if roll < chance_heeeeelpp then
-                self._unit:sound():say("hlp", true)
-			else --hopefully some variety here now
-                self._unit:sound():say("lk3b", true) 
-			end
-			self._next_supyell_t = TimerManager:game():time() + 4
-        end
-    end
+		--	if roll < chance_heeeeelpp then
+        --        self._unit:sound():say("hlp", true)
+		--	else --hopefully some variety here now
+        --         self._unit:sound():say("lk3b", true) 
+		--	end
+		--	self._next_supyell_t = TimerManager:game():time() + 4  
+	end
 end
 
 function CopBrain:is_converted_chk()

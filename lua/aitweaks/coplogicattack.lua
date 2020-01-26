@@ -416,7 +416,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	end
 		
 	--cops call out player reloads if they've seen the player in the last 2 seconds if they have the harass tactic
-	if focus_enemy and focus_enemy.is_person and AIAttentionObject.REACT_AIM <= data.attention_obj.reaction and not data.unit:in_slot(16) and not data.is_converted and data.tactics and data.tactics.harass then
+	if focus_enemy and focus_enemy.is_person and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not data.unit:in_slot(16) and not data.is_converted and data.tactics and data.tactics.harass then
 		if focus_enemy.is_local_player then
 			local time_since_verify = data.attention_obj.verified_t and data.t - data.attention_obj.verified_t
 			local e_movement_state = focus_enemy.unit:movement():current_state()

@@ -6845,7 +6845,6 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.priority_shout = "f30"
 	self.tank.rescue_hostages = false
 	self.tank.deathguard = true
-	self.tank.melee_weapon = "fists"
 	self.tank.melee_weapon_dmg_multiplier = 2.5
 	self.tank.critical_hits = {
 		damage_mul = self.tank.headshot_dmg_mul * 1

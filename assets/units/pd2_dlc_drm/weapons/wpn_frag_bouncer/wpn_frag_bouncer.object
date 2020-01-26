@@ -11,6 +11,9 @@
 			<object name="c_hitbox" collision_type="box" padding="-2"/>
 		</body>
 	</bodies>
+	<effects>
+		<effect_spawner name="passive_bouncer" object="g_body" effect="effects/pd2_mod_hh/particles/weapons/bouncer_passive" enabled="true" assign_parent="true"/>
+	</effects>
 	<graphics>
 		<object name="g_body" enabled="true" />
 	</graphics>

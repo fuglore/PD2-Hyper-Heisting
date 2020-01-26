@@ -4,21 +4,14 @@ ModifierNoHurtAnims.name_id = "none"
 ModifierNoHurtAnims.desc_id = "menu_cs_modifier_no_hurt"
 ModifierNoHurtAnims.IgnoredHurtTypes = {
 	"expl_hurt",
-	"heavy_hurt"
+	"heavy_hurt",
+	"hurt"
 }
 
-function ModifierNoHurtAnims:init(data)
-	ModifierNoHurtAnims.super.init(self, data)
-	if not Global.game_settings.one_down then
-		Global.game_settings.one_down = true
-	end
-end
-
 function ModifierNoHurtAnims:modify_value(id, value)
-	--dont
-	if dont and id == "CopMovement:HurtType" and table.contains(ModifierNoHurtAnims.IgnoredHurtTypes, value) then
-		return value
+	if id == "CopMovement:HurtType" and table.contains(ModifierNoHurtAnims.IgnoredHurtTypes, value) and math.random() < 0.5 then
+		return nil, true
 	end
-	
+
 	return value
 end

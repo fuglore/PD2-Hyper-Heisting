@@ -52,6 +52,17 @@ function ModifierBulletknock:init(data)
 	
 end
 
+ModifierShin = ModifierShin or class(BaseModifier)
+ModifierShin._type = "ModifierShin"
+ModifierShin.name_id = "none"
+ModifierShin.desc_id = "menu_cs_modifier_shin"
+
+function ModifierShin:init(data)
+	ModifierShin.super.init(self, data)
+	
+	Global.game_settings.one_down = true
+end
+
 ModifierUnison = ModifierUnison or class(BaseModifier)
 ModifierUnison._type = "ModifierUnison"
 ModifierUnison.name_id = "none"

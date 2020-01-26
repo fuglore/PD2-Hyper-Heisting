@@ -199,7 +199,7 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 	if attack_data then
 		
 		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
-			if alive(player_unit) and self._unit:movement():current_state().on_melee_stun then
+			if alive(player_unit) and self._unit:movement():current_state().on_melee_stun and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi" or tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_xc45" then
 				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), 0.8)
 			end
 		end

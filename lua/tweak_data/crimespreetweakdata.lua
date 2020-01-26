@@ -78,6 +78,12 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
+				id = "shin",
+				icon = "cs_modifier_shoryu",
+				class = "ModifierShin",
+				data = {}
+			},
+			{
 				id = "heavies",
 				icon = "crime_spree_heavies",
 				class = "ModifierHeavies",
@@ -96,7 +102,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "no_hurt",
-				icon = "cs_modifier_shoryu",
+				icon = "crime_spree_no_hurt",
 				class = "ModifierNoHurtAnims",
 				data = {}
 			},

@@ -333,6 +333,11 @@ function CopMovement:on_suppressed(state)
 			--nothing
 		else
 			local crumble_chance = self._tweak_data and self._tweak_data.crumble_chance or 0.25
+			
+			if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
+				crumble_chance = 1000
+			end
+			
 			-- the fact i need to do this is why i hate everything about the panic effect
 			if state == "panic" and not self:chk_action_forbidden("act") and math.random() < crumble_chance and not self._tweak_data.no_fumbling then
 				if self._ext_anim.run and self._ext_anim.move_fwd then

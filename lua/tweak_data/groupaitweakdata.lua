@@ -6093,6 +6093,20 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			0.025
 		}
 	}
+	
+	self.bouncer_grenade = {
+		timer = 3,
+		light_range = 600,
+		range = 500,
+		light_specular = 2,
+		beep_fade_speed = 4,
+		beep_multi = 0.3,
+		light_color = Vector3(255, 255, 0),
+		beep_speed = {
+			1,
+			0.33
+		}
+	}
 
 	if difficulty_index <= 5 then
 		self.flash_grenade.timer = 3
