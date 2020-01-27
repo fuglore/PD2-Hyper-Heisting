@@ -157,3 +157,37 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		player_unit:movement():add_stamina(stamina_regen)
 	end
 end
+
+function PlayerManager:on_headshot_dealt()
+	local player_unit = self:player_unit()
+
+	if not player_unit then
+		return
+	end
+
+	self._message_system:notify(Message.OnHeadShot, nil, nil)
+
+	local t = Application:time()
+
+	local damage_ext = player_unit:character_damage()
+	local regen_armor_bonus = managers.player:upgrade_value("player", "headshot_regen_armor_bonus", 0)
+	local regen_armor_t_chk = not self._on_headshot_dealt_t or self._on_headshot_dealt_t and self._on_headshot_dealt_t < t
+
+	if damage_ext and regen_armor_bonus > 0 and regen_armor_t_chk then
+		damage_ext:restore_armor(regen_armor_bonus)
+		self._on_headshot_dealt_t = t + (tweak_data.upgrades.on_headshot_dealt_cooldown or 0)
+	end
+	
+	if damage_ext and self:has_category_upgrade("player", "jackpot_safety") and not damage_ext:has_jackpot_token() and player_unit:movement() then	
+		local cur_state = player_unit:movement():current_state_name()
+		local state_chk = cur_state == "standard" or cur_state == "carry" or cur_state == "bipod"
+		
+		if state_chk then
+			if not self._safety_headshot_t or self._safety_headshot_t and self._safety_headshot_t < t then
+				damage_ext:activate_jackpot_token()
+				self._safety_headshot_t = t + 5
+			end
+		end
+	end
+	
+end

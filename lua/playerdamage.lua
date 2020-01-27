@@ -231,7 +231,33 @@ function PlayerDamage:clbk_kill_taunt(attack_data) -- just a nice little detail
 	end
 end
 
---Reduced I-Frame Damage starts here.
+function PlayerDamage:has_jackpot_token()
+	return self._jackpot_token
+end
+
+function PlayerDamage:activate_jackpot_token()
+	self._jackpot_token = true
+	log("this party's gettin crazy")
+end
+
+function PlayerDamage:_regenerated(no_messiah)
+	self:set_health(self:_max_health())
+	self:_send_set_health()
+	self:_set_health_effect()
+	self._jackpot_token = nil
+
+	self._said_hurt = false
+	self._revives = Application:digest_value(self._lives_init + managers.player:upgrade_value("player", "additional_lives", 0), true)
+	self._revive_health_i = 1
+
+	managers.environment_controller:set_last_life(false)
+
+	self._down_time = tweak_data.player.damage.DOWNED_TIME
+
+	if not no_messiah then
+		self._messiah_charges = managers.player:upgrade_value("player", "pistol_revive_from_bleed_out", 0)
+	end
+end
 
 function PlayerDamage:_chk_dmg_too_soon(damage, ...)
 	local next_allowed_dmg_t = type(self._next_allowed_dmg_t) == "number" and self._next_allowed_dmg_t or Application:digest_value(self._next_allowed_dmg_t, false)
@@ -313,8 +339,8 @@ function PlayerDamage:_calc_armor_damage(attack_data, ...)
 	return _calc_armor_damage_original(self, attack_data, ...)
 end
 
-local _calc_health_damage_original = PlayerDamage._calc_health_damage
-function PlayerDamage:_calc_health_damage(attack_data, ...)
+function PlayerDamage:_calc_health_damage(attack_data)
+
 	attack_data.damage = attack_data.damage - (self._old_last_received_dmg or 0)
 	if self._unit then
 		local state = self._unit:movement():current_state_name()
@@ -325,7 +351,48 @@ function PlayerDamage:_calc_health_damage(attack_data, ...)
 	self._next_allowed_dmg_t = self._old_next_allowed_dmg_t and Application:digest_value(self._old_next_allowed_dmg_t, true) or self._next_allowed_dmg_t
 	self._old_last_received_dmg = nil
 	self._old_next_allowed_dmg_t = nil
-	return _calc_health_damage_original(self, attack_data, ...)
+	
+	local health_subtracted = 0
+	local death_prevented = nil
+	health_subtracted = self:get_real_health()
+	
+	if self._jackpot_token and self:get_real_health() - attack_data.damage <= 0 then
+		death_prevented = true
+	else
+		self:change_health(-attack_data.damage)
+	end
+
+	health_subtracted = health_subtracted - self:get_real_health()
+	local trigger_skills = table.contains({
+		"bullet",
+		"explosion",
+		"melee",
+		"delayed_tick"
+	}, attack_data.variant)
+
+	if self:get_real_health() == 0 and trigger_skills then
+		self:_chk_cheat_death()
+	end
+
+	self:_damage_screen()
+	self:_check_bleed_out(trigger_skills)
+	managers.hud:set_player_health({
+		current = self:get_real_health(),
+		total = self:_max_health(),
+		revives = Application:digest_value(self._revives, false)
+	})
+	self:_send_set_health()
+	self:_set_health_effect()
+	managers.statistics:health_subtracted(health_subtracted)
+	
+	if self._jackpot_token and death_prevented then
+		self._jackpot_token = nil
+		self._unit:sound():play("pickup_fak_skill")
+		--log("Jackpot just saved you!")
+		return 0
+	else
+		return health_subtracted
+	end
 end
 
 function PlayerDamage:is_friendly_fire(unit)
@@ -389,3 +456,4 @@ Hooks:PostHook(PlayerDamage, "_regenerate_armor", "hh_regenarmor", function(self
 		self:_begin_akuma_snddedampen()
 	end
 end)
+
