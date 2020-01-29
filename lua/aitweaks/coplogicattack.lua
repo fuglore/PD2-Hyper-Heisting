@@ -445,7 +445,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	local FE_or_EP_chk = focus_enemy or expected_pos
 	local verified_or_nearvis_chk = focus_enemy and focus_enemy.verified or focus_enemy and focus_enemy.nearly_visible
 
-	if data.logic.chk_should_turn(data, my_data) and FE_or_EP_chk then
+	if CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk then
 		local enemy_pos = verified_or_nearvis_chk and focus_enemy.m_pos or focus_enemy and focus_enemy.verified_pos or expected_pos
 
 		CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
@@ -1357,7 +1357,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	
 	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted then
 		if managers.groupai:state():chk_assault_active_atm() or not data.unit:base():has_tag("law") then
-			if data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
 				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
 					local roll = math.random(1, 100)
 					local chance_suppanic = 30
@@ -1721,47 +1721,6 @@ function CopLogicAttack._verify_cover(data, cover, threat_pos, min_dis, max_dis)
 	end
 
 	return true
-end
-
-function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
-	managers.groupai:state():on_unit_detection_updated(data.unit)
-
-	data.t = TimerManager:game():time()
-	local my_data = data.internal_data
-	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
-
-	if my_data ~= data.internal_data then
-		return
-	end
-	
-	if not my_data.firing then
-		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
-		local old_att_obj = data.attention_obj
-
-		if new_attention and old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
-			CopLogicAttack._cancel_charge(data, my_data)
-			CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
-			data.logic._chk_exit_attack_logic(data, new_reaction)
-			my_data.flank_cover = nil
-
-			if not data.unit:movement():chk_action_forbidden("walk") then
-				CopLogicAttack._cancel_walking_to_cover(data, my_data)
-			end
-
-			CopLogicAttack._set_best_cover(data, my_data, nil)
-		end
-
-		CopLogicBase._chk_call_the_police(data)
-	end
-
-
-	data.logic._upd_aim(data, my_data)
-
-	if not is_synchronous then
-		CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, delay and data.t + delay, data.important and true)
-	end
-
-	CopLogicBase._report_detections(data.detected_attention_objects)
 end
 
 function CopLogicAttack._verify_follow_cover(data, cover, near_pos, threat_pos, min_dis, max_dis)
