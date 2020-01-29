@@ -106,6 +106,65 @@ function CopLogicBase._chk_nearly_visible_chk_needed(data, attention_info, u_key
 	return not attention_info.criminal_record or attention_info.is_human_player
 end
 
+function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
+	if data.unit:movement():chk_action_forbidden("walk") then
+		return
+	end
+	
+	if my_data ~= data.internal_data then
+		log("how is this man")
+		return
+	end
+	
+	
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+
+	local obj_has_stance, obj_has_pose, agg_pose = nil
+	local should_crouch = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
+	local should_stand = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.stand
+	
+	if not data.is_converted then
+		if data.is_suppressed then
+			if diff_index <= 5 and not Global.game_settings.use_intense_AI then
+				if not data.unit:anim_data().crouch and should_crouch then
+					if not my_data.next_allowed_crouch_t or my_data.next_allowed_crouch_t < data.t then
+						CopLogicAttack._chk_request_action_crouch(data)
+						my_data.next_allowed_crouch_t = data.t + math.random(0.8, 3)
+					end
+				end
+			else
+				if not data.unit:anim_data().crouch and should_crouch then
+					if not my_data.next_allowed_crouch_t or my_data.next_allowed_crouch_t < data.t then
+						CopLogicAttack._chk_request_action_crouch(data)
+						my_data.next_allowed_crouch_t = data.t + math.random(0.8, 3)
+					end
+				elseif data.unit:anim_data().crouch and should_stand then
+					if not my_data.next_allowed_stand_t or my_data.next_allowed_stand_t < data.t then
+						CopLogicAttack._chk_request_action_stand(data)
+						my_data.next_allowed_stand_t = data.t + math.random(0.8, 3)
+					end
+				end
+			end
+		elseif data.attention_obj and data.attention_obj.is_person and data.attention_obj.verified and data.attention_obj.aimed_at and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
+			if diff_index <= 5 and not Global.game_settings.use_intense_AI then
+				--nothing
+			else
+				if not data.unit:anim_data().crouch and should_crouch then
+					if not my_data.next_allowed_crouch_t or my_data.next_allowed_crouch_t < data.t then
+						CopLogicAttack._chk_request_action_crouch(data)
+						my_data.next_allowed_crouch_t = data.t + math.random(0.8, 3)
+					end
+				elseif data.unit:anim_data().crouch and should_stand then
+					if not my_data.next_allowed_stand_t or my_data.next_allowed_stand_t < data.t then
+						CopLogicAttack._chk_request_action_stand(data)
+						my_data.next_allowed_stand_t = data.t + math.random(0.8, 3)
+					end
+				end
+			end
+		end
+	end
+end
+
 function CopLogicBase._update_haste(data, my_data)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local is_mook = data.unit:base():has_tag("law") and not data.unit:base():has_tag("special")
@@ -255,7 +314,6 @@ function CopLogicBase._update_haste(data, my_data)
 	end
 end 
 
-
 function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_reaction)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local t = data.t
@@ -377,7 +435,8 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 		end
 
 		local dot = mvector3.dot(e_fwd, tmp_vec1)
-		weight = weight * weight * (1 - dot)
+		local oneminusdot = 1 - dot
+		weight = weight * weight * oneminusdot
 
 		table.insert(player_importance_wgt, attention_info.u_key)
 		table.insert(player_importance_wgt, weight)
@@ -770,7 +829,7 @@ function CopLogicBase.on_attention_obj_identified(data, attention_u_key, attenti
 				if alive(u_data.unit) and diff_index >= 6 or alive(u_data.unit) and Global.game_settings.use_intense_AI then
 					u_data.unit:brain():clbk_group_member_attention_identified(data.unit, attention_u_key)
 				else
-					Application:error("[CopLogicBase.on_attention_obj_identified] destroyed group member", data.unit, inspect(data.group), inspect(u_data), u_key)
+					--Application:error("[CopLogicBase.on_attention_obj_identified] destroyed group member", data.unit, inspect(data.group), inspect(u_data), u_key)
 				end
 			end
 		end
@@ -783,8 +842,9 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	attention = attention or data.attention_obj
 	local t = data.t
 	local mid_fight = data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified
+	local objective_chk = objective and objective.in_place or objective and not objective.nav_seg
 
-	if not objective or objective.is_default or (objective.in_place or not objective.nav_seg) and not objective.action then
+	if not objective or objective.is_default or objective_chk and not objective.action then
 		return true, false
 	end
 		

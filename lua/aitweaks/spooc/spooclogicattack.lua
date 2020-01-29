@@ -8,7 +8,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data) --TODO: Optimize it *
 	end
 	
 	--Some changes included to make this a bit less weird, I don't know why it calls to the want_to_take_cover but it doesn't do anything good and delays the kick unescessarily.
-	if not my_data.spooc_attack and focus_enemy.is_person and focus_enemy.criminal_record and not focus_enemy.criminal_record.status and AIAttentionObject.REACT_COMBAT == focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") and not SpoocLogicAttack._is_last_standing_criminal(focus_enemy) and not focus_enemy.unit:movement():zipline_unit() and focus_enemy.unit:movement():is_SPOOC_attack_allowed() then
+	if not my_data.spooc_attack and AIAttentionObject.REACT_COMBAT == focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") and not SpoocLogicAttack._is_last_standing_criminal(focus_enemy) and not focus_enemy.unit:movement():zipline_unit() and focus_enemy.unit:movement():is_SPOOC_attack_allowed() then
 		local fuckingmoving = my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover or data.unit:anim_data().run or data.unit:anim_data().move
 			
 		local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)

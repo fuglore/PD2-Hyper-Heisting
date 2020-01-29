@@ -248,7 +248,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 						firing_range = running and data.internal_data.weapon_range.close or data.internal_data.weapon_range.far
 						maxrange = data.internal_data.weapon_range.far
 					else
-						debug_pause_unit(data.unit, "[CopLogicAttack]: Unit doesn't have data.internal_data.weapon_range")
+						--debug_pause_unit(data.unit, "[CopLogicAttack]: Unit doesn't have data.internal_data.weapon_range")
 					end
 					
 					if not managers.groupai:state():whisper_mode() then
@@ -499,22 +499,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 			my_data.attention_unit = nil
 		end
-	end
-	
-	if focus_enemy and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-		
-		local reaction_comply = focus_enemy and focus_enemy.verified and focus_enemy.verified_t > 0.2
-		
-		if managers.groupai:state():whisper_mode() then
-			if not reaction_comply then
-				shoot = nil
-			end
-		else
-			if managers.groupai:state():chk_high_fed_density() and dense_mook then
-				shoot = nil
-				--log("not firing due to FEDS")
-			end
-		end	
 	end
 	
 	if not my_data.weapon_range and focus_enemy and focus_enemy.dis > 6000 or my_data.weapon_range and focus_enemy and focus_enemy.dis > my_data.weapon_range.far then
@@ -1253,10 +1237,9 @@ function CopLogicAttack.action_complete_clbk(data, action)
 
 	if action_type == "walk" then
 		my_data.advancing = nil
-
+		my_data.flank_cover = nil
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
-		CopLogicIdle._update_haste(data, my_data)
 		if my_data.has_retreated and managers.groupai:state():chk_active_assault_break() then
 			my_data.in_retreat_pos = true
 		elseif my_data.surprised then
@@ -1282,6 +1265,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		--Removed the requirement for being important here.
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			data.logic._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
 		end
 	elseif action_type == "dodge" then
 		local timeout = action:timeout()
@@ -1401,6 +1385,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	end
 	
 	data.logic._update_haste(data, data.internal_data)
+	data.logic._upd_stance_and_pose(data, data.internal_data)
 	CopLogicAttack._update_cover(data)
 	
 	if is_close then
@@ -1450,7 +1435,7 @@ function CopLogicAttack._update_cover(data)
 				
 				if notbestcovernotfollowcoverchk and not my_data.processing_cover_path and not my_data.charge_path_search_id then
 					local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
-					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
+					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance or nil, near_pos, threat_pos)
 
 					if found_cover then
 						if not follow_unit_area.nav_segs[found_cover[3]:nav_segment()] then
@@ -1512,7 +1497,7 @@ function CopLogicAttack._update_cover(data)
 					end
 				end
 				
-				local notbc_or_fc_or_notvc_chk = not best_cover or flank_cover or CopLogicAttack._verify_cover(data, best_cover[1], threat_pos, min_dis, max_dis)
+				local notbc_or_fc_or_notvc_chk = not best_cover or flank_cover or not CopLogicAttack._verify_cover(data, best_cover[1], threat_pos, min_dis, max_dis)
 				
 				if not my_data.processing_cover_path and not my_data.charge_path_search_id and notbc_or_fc_or_notvc_chk then
 					satisfied = false
@@ -1736,6 +1721,47 @@ function CopLogicAttack._verify_cover(data, cover, threat_pos, min_dis, max_dis)
 	end
 
 	return true
+end
+
+function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
+	managers.groupai:state():on_unit_detection_updated(data.unit)
+
+	data.t = TimerManager:game():time()
+	local my_data = data.internal_data
+	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+
+	if my_data ~= data.internal_data then
+		return
+	end
+	
+	if not my_data.firing then
+		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
+		local old_att_obj = data.attention_obj
+
+		if new_attention and old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
+			CopLogicAttack._cancel_charge(data, my_data)
+			CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
+			data.logic._chk_exit_attack_logic(data, new_reaction)
+			my_data.flank_cover = nil
+
+			if not data.unit:movement():chk_action_forbidden("walk") then
+				CopLogicAttack._cancel_walking_to_cover(data, my_data)
+			end
+
+			CopLogicAttack._set_best_cover(data, my_data, nil)
+		end
+
+		CopLogicBase._chk_call_the_police(data)
+	end
+
+
+	data.logic._upd_aim(data, my_data)
+
+	if not is_synchronous then
+		CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, delay and data.t + delay, data.important and true)
+	end
+
+	CopLogicBase._report_detections(data.detected_attention_objects)
 end
 
 function CopLogicAttack._verify_follow_cover(data, cover, near_pos, threat_pos, min_dis, max_dis)

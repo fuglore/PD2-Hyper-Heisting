@@ -31,6 +31,12 @@ local mrot_set = mrotation.set_yaw_pitch_roll
 local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 local temp_vec3 = Vector3()
+local stance_ctl_pts = {
+	0,
+	0.34,
+	0.67,
+	1
+}
 
 local old_init = CopMovement.init
 local action_variants = {
@@ -291,7 +297,7 @@ function CopMovement:_change_stance(stance_code, instant)
 			start_values = start_values,
 			duration = delay,
 			start_t = t,
-			next_upd_t = t + 0.2
+			next_upd_t = t + 0.07
 		}
 		stance.transition = transition
 	end
@@ -301,6 +307,69 @@ function CopMovement:_change_stance(stance_code, instant)
 	end
 
 	self:enable_update()
+end
+
+function CopMovement:_upd_stance(t)
+	if self._stance.transition then
+		local stance = self._stance
+		local transition = stance.transition
+
+		if transition.next_upd_t < t then
+			local values = stance.values
+			local progtransition_t = t - transition.start_t
+			local prog = progtransition_t / transition.duration
+
+			if prog < 1 then
+				local prog_smooth = math.clamp(math.bezier(stance_ctl_pts, prog), 0, 1)
+				local v_start = transition.start_values
+				local v_end = transition.end_values
+				local mlerp = math.lerp
+
+				for i, v in ipairs(v_start) do
+					values[i] = mlerp(v, v_end[i], prog_smooth)
+				end
+
+				transition.next_upd_t = t + 0.033
+			else
+				for i, v in ipairs(transition.end_values) do
+					values[i] = v
+				end
+
+				stance.transition = nil
+			end
+
+			local names = CopMovement._stance.names
+
+			for i, v in ipairs(values) do
+				self._machine:set_global(names[i], v)
+			end
+		end
+	end
+
+	if self._suppression.transition then
+		local suppression = self._suppression
+		local transition = suppression.transition
+
+		if transition.next_upd_t < t then
+			local progtransition_t = t - transition.start_t
+			local prog = progtransition_t / transition.duration
+
+			if prog < 1 then
+				local prog_smooth = math.clamp(math.bezier(stance_ctl_pts, prog), 0, 1)
+				local val = math.lerp(transition.start_val, transition.end_val, prog_smooth)
+				suppression.value = val
+
+				self._machine:set_global("sup", val)
+
+				transition.next_upd_t = t + 0.033
+			else
+				self._machine:set_global("sup", transition.end_val)
+
+				suppression.value = transition.end_val
+				suppression.transition = nil
+			end
+		end
+	end
 end
 
 function CopMovement:on_suppressed(state)
@@ -315,7 +384,7 @@ function CopMovement:on_suppressed(state)
 			start_val = suppression.value,
 			duration = duration,
 			start_t = t,
-			next_upd_t = t + 0.2
+			next_upd_t = t + 0.07
 		}
 	else
 		suppression.transition = nil

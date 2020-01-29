@@ -237,7 +237,7 @@ end
 
 function PlayerDamage:activate_jackpot_token()
 	self._jackpot_token = true
-	log("this party's gettin crazy")
+	--log("this party's gettin crazy")
 end
 
 function PlayerDamage:_regenerated(no_messiah)

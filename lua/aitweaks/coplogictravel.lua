@@ -218,7 +218,6 @@ function CopLogicTravel.queued_update(data)
     end
     
     CopLogicTravel.upd_advance(data)
-	CopLogicIdle._update_haste(data, my_data)
     
     if data.internal_data ~= my_data then
     	return
@@ -296,6 +295,7 @@ function CopLogicTravel.queued_update(data)
     end
 	
 	data.logic._update_haste(data, data.internal_data)
+	data.logic._upd_stance_and_pose(data, data.internal_data)
 	
 	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper

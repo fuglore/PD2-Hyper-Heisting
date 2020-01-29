@@ -545,7 +545,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local nr_enemies = crim_record and crim_record.engaged_force
 				local old_enemy = false
 
-				if data.attention_obj and data.attention_obj.u_key == u_key and data.t - attention_data.acquire_t < 4 then
+				if attention_data.acquire_t and data.attention_obj and data.attention_obj.u_key == u_key then
 					old_enemy = true
 				end
 
@@ -656,7 +656,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					end
 					
 					if old_enemy then
-						target_priority_slot = target_priority_slot - 3
+						target_priority_slot = target_priority_slot - 1
 					end
 					
 					target_priority_slot = math.clamp(target_priority_slot, 1, 10)

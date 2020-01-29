@@ -6,7 +6,7 @@ function GroupAITweakData:init(tweak_data)
 
 	--print("[GroupAITweakData:init] difficulty", difficulty, "difficulty_index", difficulty_index)
 
-	self.ai_tick_rate =  0.016666666666666666
+	self.ai_tick_rate =  0.018
 
 	self:_read_mission_preset(tweak_data)
 	self:_create_table_structure()
@@ -6315,9 +6315,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			1
 		}
 		self.besiege.assault.force_pool = {
-			75,
-			75,
-			75
+			30,
+			30,
+			30
 		}
 	else
 		self.besiege.assault.force = {
@@ -6326,9 +6326,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			16
 		}
 		self.besiege.assault.force_pool = {
-			125,
-			125,
-			125
+			65,
+			65,
+			65
 		}
 	end
 
