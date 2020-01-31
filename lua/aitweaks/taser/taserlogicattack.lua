@@ -205,8 +205,10 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 		--check if the unit's movement extension has a is_taser_attack_allowed function first (should be fine since you're checking for criminal_record and is_person first, but you never know)
 		if attention_data.unit:movement().is_taser_attack_allowed and attention_data.unit:movement():is_taser_attack_allowed() then
 			--log("helpme")
-
-			if attention_data.verified and attention_data.dis <= 1500 then
+			
+			local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "sphere_cast_radius", 5, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "report")
+			
+			if attention_data.verified and attention_data.dis <= 1500 and not vis_check_fail then
 				return AIAttentionObject.REACT_SPECIAL_ATTACK
 			else
 				return AIAttentionObject.REACT_COMBAT
