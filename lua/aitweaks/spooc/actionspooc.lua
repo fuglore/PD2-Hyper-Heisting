@@ -329,3 +329,26 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 
 	self:_set_updator("_upd_flying_strike")
 end
+
+function ActionSpooc:get_sound_event(sound)
+	local sound_events = self._unit:base():char_tweak().spooc_sound_events
+	local event = sound_events and sound_events[sound]
+	
+	if not sound_events then
+		local sound_events = {
+			detect_stop = "cloaker_detect_stop",
+			detect = "cloaker_detect_mono"
+		}
+		event = sound_events[sound] or event
+	end
+
+	if self:_use_christmas_sounds() then
+		local christmas_events = {
+			detect_stop = "cloaker_detect_christmas_stop",
+			detect = "cloaker_detect_christmas_mono"
+		}
+		event = christmas_events[sound] or event
+	end
+
+	return event
+end

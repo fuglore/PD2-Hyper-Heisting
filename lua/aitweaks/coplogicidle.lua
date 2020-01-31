@@ -828,12 +828,13 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 
 	if new_objective then
 		local objective_type = new_objective.type
+		local reactions_chk = focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction or focus_enemy and AIAttentionObject.REACT_SPECIAL_ATTACK <= focus_enemy.reaction
 
 		if objective_type == "free" and my_data.exiting then
 			--nothing
-		elseif data.unit:base():has_tag("taser") and data.attention_obj and data.attention_obj.verified and data.attention_obj.dis and data.attention_obj.dis <= 1500 and data.attention_obj.is_person and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and focus_enemy.unit:movement().is_taser_attack_allowed and focus_enemy.unit:movement():is_taser_attack_allowed() then
+		elseif data.unit:base():has_tag("taser") and data.attention_obj and data.attention_obj.verified and data.attention_obj.dis and data.attention_obj.dis <= 1500 and data.attention_obj.is_person and reactions_chk and focus_enemy.unit:movement().is_taser_attack_allowed and focus_enemy.unit:movement():is_taser_attack_allowed() then
 			CopLogicBase._exit(data.unit, "attack")
-		elseif data.unit:base():has_tag("spooc") and focus_enemy and focus_enemy.dis and focus_enemy.is_person and focus_enemy.criminal_record and not focus_enemy.criminal_record.status and not my_data.spooc_attack and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") and not SpoocLogicAttack._is_last_standing_criminal(focus_enemy) and not focus_enemy.unit:movement():zipline_unit() and focus_enemy.unit:movement():is_SPOOC_attack_allowed() and focus_enemy.dis <= 1500 and focus_enemy.verified then
+		elseif data.unit:base():has_tag("spooc") and focus_enemy and focus_enemy.dis and focus_enemy.is_person and focus_enemy.criminal_record and not focus_enemy.criminal_record.status and not my_data.spooc_attack and reactions_chk and not data.unit:movement():chk_action_forbidden("walk") and not SpoocLogicAttack._is_last_standing_criminal(focus_enemy) and not focus_enemy.unit:movement():zipline_unit() and focus_enemy.unit:movement():is_SPOOC_attack_allowed() and focus_enemy.dis <= 1500 and focus_enemy.verified then
 			CopLogicBase._exit(data.unit, "attack")
 		elseif CopLogicIdle._chk_objective_needs_travel(data, new_objective) then
 			CopLogicBase._exit(data.unit, "travel")
@@ -867,4 +868,32 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 	if old_objective and old_objective.fail_clbk then
 		old_objective.fail_clbk(data.unit)
 	end
+end
+
+function CopLogicIdle._chk_objective_needs_travel(data, new_objective)
+	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+	
+	if not new_objective.nav_seg and new_objective.type ~= "follow" then
+		return
+	end
+	
+	if data.attention_obj and data.attention_obj.dis <= 1500 and data.attention_obj.verified and reactions_chk then
+		return
+	end
+
+	if new_objective.in_place then
+		return
+	end
+
+	if new_objective.pos then
+		return true
+	end
+
+	if new_objective.area and new_objective.area.nav_segs[data.unit:movement():nav_tracker():nav_segment()] then
+		new_objective.in_place = true
+
+		return
+	end
+
+	return true
 end	

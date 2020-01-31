@@ -2,7 +2,7 @@ CopActionTase = CopActionTase or class()
 local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 
-function CopActionTase:on_attention(attention) --TODO: Nothing currently.
+function CopActionTase:on_attention(attention)
 	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	if self._expired then
 		self._attention = attention
@@ -66,14 +66,7 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 
 	self._modifier:set_target_y(target_vec)
 
-	local aim_delay = weapon_usage_tweak.aim_delay
-	local lerp_dis = math.min(1, target_vec:length() / self._falloff[#self._falloff].r)
-	local shoot_delay = math.lerp(aim_delay[1], aim_delay[2], lerp_dis)
-	if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
-		self._mod_enable_t = t + 0.35
-	else
-		self._mod_enable_t = t + 0.2
-	end
+	self._mod_enable_t = t + 0.1
 	self._tasing_local_unit = nil
 	self._tasing_player = nil
 
@@ -81,26 +74,27 @@ function CopActionTase:on_attention(attention) --TODO: Nothing currently.
 		self._common_data.ext_network:send("action_tase_event", 1)
 
 		if not attention_unit:base().is_husk_player then
-		
-			if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then --keep it consistent, tase is executed first, if it fails, then open fire, on MH and up, the tase check is executed much faster.
-				self._shoot_t = TimerManager:game():time() + 0.4
+			
+			if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
+				self._shoot_t = TimerManager:game():time() + 0.8
 			else
-				self._shoot_t = TimerManager:game():time() + 0.25
+				self._shoot_t = TimerManager:game():time() + 0.55
 			end
 			
 			self._tasing_local_unit = attention_unit
-			self._line_of_fire_slotmask = managers.slot:get_mask("bullet_impact_targets_no_criminals")
+			self._line_of_fire_slotmask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
 			self._tasing_player = attention_unit:base().is_local_player
 		end
 	elseif attention_unit:base().is_local_player then
-		
-		if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then --keep it consistent, tase is executed first, if it fails, then open fire, on MH and up, the tase check is executed much faster.
-				self._shoot_t = TimerManager:game():time() + 0.4
-			else
-				self._shoot_t = TimerManager:game():time() + 0.25
+	
+		if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
+			self._shoot_t = TimerManager:game():time() + 1
+		else
+			self._shoot_t = TimerManager:game():time() + 0.55
 		end
+		
 		self._tasing_local_unit = attention_unit
-		self._line_of_fire_slotmask = managers.slot:get_mask("bullet_impact_targets")
+		self._line_of_fire_slotmask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
 		self._tasing_player = true
 	end
 
@@ -124,6 +118,9 @@ function CopActionTase:update(t)
 	self._attention.unit:character_damage():shoot_pos_mid(target_pos)
 
 	target_dis = mvector3.direction(target_vec, shoot_from_pos, target_pos)
+	
+	--log("current target dis is:" .. target_dis .. "just work please")
+	
 	local target_vec_flat = target_vec:with_z(0)
 
 	mvector3.normalize(target_vec_flat)
@@ -136,12 +133,7 @@ function CopActionTase:update(t)
 
 			self._machine:force_modifier(self._modifier_name)
 			
-			if difficulty_index <= 5 and not Global.game_settings.use_intense_AI then
-				self._mod_enable_t = t + 0.35 --execute tase check first, but slower than MH and up
-			else
-				self._mod_enable_t = t + 0.2 --execute tase check first
-			end
-			
+			self._mod_enable_t = t + 0.1		
 		end
 
 		self._modifier:set_target_y(target_vec)
@@ -186,7 +178,7 @@ function CopActionTase:update(t)
 		if self._ext_anim.equip then
 			-- Nothing
 		elseif self._discharging then
-			local vis_ray = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", self._w_usage_tweak.tase_sphere_cast_radius, "ignore_unit", self._tasing_local_unit, "report")
+			local vis_ray = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", 5, "report")
 
 			if not self._tasing_local_unit:movement():tased() or vis_ray then
 				if Network:is_server() then
@@ -201,61 +193,74 @@ function CopActionTase:update(t)
 					self.update = self._upd_empty
 				end
 			end
-		elseif self._shoot_t and target_vec and self._common_data.allow_fire and self._mod_enable_t < t then
+		elseif self._mod_enable_t < t then
 			if self._tase_effect then
 				World:effect_manager():fade_kill(self._tase_effect)
 			end
-	
+
 			self._tase_effect = World:effect_manager():spawn({
 				force_synch = true,
 				effect = Idstring("effects/payday2/particles/character/taser_thread"),
 				parent = self._ext_inventory:equipped_unit():get_object(Idstring("fire"))
 			})
 
-			if self._tasing_local_unit and mvector3.distance(shoot_from_pos, target_pos) <= tase_dist then --less or equal
-				local record = managers.groupai:state():criminal_record(self._tasing_local_unit:key())
-
-				if not record or record.status or self._tasing_local_unit:movement():chk_action_forbidden("hurt") or self._tasing_local_unit:movement():zipline_unit() then
-					if Network:is_server() then
-						self._expired = true
-					end
-				else
-					local vis_ray = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", self._w_usage_tweak.tase_sphere_cast_radius, "ignore_unit", self._tasing_local_unit, "report")
-
-					if not vis_ray then
-						self._common_data.ext_network:send("action_tase_event", 3)
-
-						local attack_data = {
-							attacker_unit = self._unit
-						}
-
-						self._attention.unit:character_damage():damage_tase(attack_data)
-						CopDamage._notify_listeners("on_criminal_tased", self._unit, self._attention.unit)
-
-						self._discharging = true
-
-						if not self._tasing_local_unit:base().is_local_player then
-							self._tasered_sound = self._unit:sound():play("tasered_3rd", nil)
-						end
-
-						local redir_res = self._ext_movement:play_redirect("recoil")
-
-						if redir_res then
-							self._machine:set_parameter(redir_res, "hvy", 0)
-						end
-
-						self._shoot_t = nil
-					end
+			if Network:is_server() then
+				if not self._last_charge_snd_play_t or self._last_charge_snd_play_t + 3 < t then
+					self._last_charge_snd_play_t = t
+					self._unit:sound():play("taser_charge", nil, true)
+					managers.groupai:state():chk_say_enemy_chatter(self._unit, shoot_from_pos, "aggressive")
 				end
-			elseif not self._tasing_local_unit then
-				self._tasered_sound = self._unit:sound():play("tasered_3rd", nil)
-				local redir_res = self._ext_movement:play_redirect("recoil")
+			end
 
-				if redir_res then
-					self._machine:set_parameter(redir_res, "hvy", 0)
+			if self._shoot_t and self._shoot_t < t and target_vec and self._common_data.allow_fire then
+				local tase_distance = self._w_usage_tweak.tase_distance or 1500
+
+				if self._tasing_local_unit and mvector3.distance(shoot_from_pos, target_pos) <= tase_distance then
+					local record = managers.groupai:state():criminal_record(self._tasing_local_unit:key())
+
+					if not record or record.status or self._tasing_local_unit:movement():chk_action_forbidden("hurt") or self._tasing_local_unit:movement():zipline_unit() then
+						if Network:is_server() then
+							self._expired = true
+						end
+					else
+						local vis_ray = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", 5, "report")
+
+						if not vis_ray then
+							
+							self._common_data.ext_network:send("action_tase_event", 3)
+
+							local attack_data = {
+								attacker_unit = self._unit
+							}
+
+							self._attention.unit:character_damage():damage_tase(attack_data)
+							CopDamage._notify_listeners("on_criminal_tased", self._unit, self._attention.unit)
+
+							self._discharging = true
+
+							if not self._tasing_local_unit:base().is_local_player then
+								self._tasered_sound = self._unit:sound():play("tasered_3rd", nil)
+							end
+
+							local redir_res = self._ext_movement:play_redirect("recoil")
+
+							if redir_res then
+								self._machine:set_parameter(redir_res, "hvy", 0)
+							end
+
+							self._shoot_t = nil
+						end
+					end
+				elseif not self._tasing_local_unit then
+					self._tasered_sound = self._unit:sound():play("tasered_3rd", nil)
+					local redir_res = self._ext_movement:play_redirect("recoil")
+
+					if redir_res then
+						self._machine:set_parameter(redir_res, "hvy", 0)
+					end
+
+					self._shoot_t = nil
 				end
-
-				self._shoot_t = nil
 			end
 		end
 	end

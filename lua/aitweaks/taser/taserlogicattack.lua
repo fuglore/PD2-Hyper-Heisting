@@ -8,7 +8,7 @@ function TaserLogicAttack.queued_update(data)
 
 		return
 	elseif not data.attention_obj then
-		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0.3)
+		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0)
 		CopLogicBase._report_detections(data.detected_attention_objects)
 
 		return
@@ -16,7 +16,7 @@ function TaserLogicAttack.queued_update(data)
 
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
-		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0.016)
+		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0)
 
 		return
 	end
@@ -37,7 +37,7 @@ function TaserLogicAttack.queued_update(data)
 	if my_data.tasing then
 		action_taken = action_taken or CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
 
-		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0.3) --be chill if mid-tase
+		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0)
 		CopLogicBase._report_detections(data.detected_attention_objects)
 
 		return
@@ -50,7 +50,7 @@ function TaserLogicAttack.queued_update(data)
 		CopLogicAttack._upd_combat_movement(data)
 	end
 
-	CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0.016) --update asap
+	CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0) --update asap
 	CopLogicBase._report_detections(data.detected_attention_objects)
 end
 
@@ -121,6 +121,7 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 		end
 		
 		local nottasingortargetwrong = not my_data.tasing or my_data.tasing.target_u_data ~= focus_enemy
+		
 		if not data.unit:anim_data().reload and not data.unit:movement():chk_action_forbidden("action") then
 			if tase then
 				if nottasingortargetwrong and not data.unit:movement():chk_action_forbidden("walk") and not focus_enemy.unit:movement():zipline_unit() then
@@ -193,10 +194,10 @@ end
 function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data, stationary)
 	local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
 	local my_data = data.internal_data
-	local tase_length = my_data.tase_distance or 1500 --fix for better bots crash (more like the sanity check vanilla lacks because :julesyes: )
+	--local tase_length = my_data.tase_distance or 1500 --fix for better bots crash (more like the sanity check vanilla lacks because :julesyes: )
 
-	--if not supposd to shoot (or tase, for that matter), end the function here
-	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
+	--if not supposed to shoot (or tase, for that matter), end the function here
+	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or attention_data.criminal_record.status or not attention_data.is_person then
 		return reaction
 	end
 
@@ -205,30 +206,10 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 		if attention_data.unit:movement().is_taser_attack_allowed and attention_data.unit:movement():is_taser_attack_allowed() then
 			--log("helpme")
 
-			if attention_data.verified then
-				if attention_data.verified_dis <= tase_length then
-					--log("yeah.")
-
-					--honestly I have no idea what difference does it make to use the unit itself to do the ray, if it's better for performance, go for it
-					--there's also no need to use ignore_unit if the slotmask won't include them (since only geometry, vehicles and shields are checked in this case)
-					--sphere ray used to avoid tasers trying to tase if already obstructed by geometry (can add character slotmasks to prevent this with them as well)
-					local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "sphere_cast_radius", 25, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "report")
-
-					if not vis_check_fail then
-						if my_data.last_charge_snd_play_t and data.t - my_data.last_charge_snd_play_t < 1 or my_data.tasing and my_data.tasing.target_u_data.unit:movement():tased() then --tase
-							return AIAttentionObject.REACT_SPECIAL_ATTACK
-						else --charge taser
-							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive") --don't know what delays are being used in copactiontase, so it might be better to use this above (at tase)
-							my_data.last_charge_snd_play_t = data.t
-							data.unit:sound():play("taser_charge", nil, true)
-							return AIAttentionObject.REACT_AIM
-						end
-					else
-						return AIAttentionObject.REACT_COMBAT
-					end
-				else
-					return AIAttentionObject.REACT_COMBAT
-				end
+			if attention_data.verified and attention_data.dis <= 1500 then
+				return AIAttentionObject.REACT_SPECIAL_ATTACK
+			else
+				return AIAttentionObject.REACT_COMBAT
 			end
 		else
 			if attention_data.verified then
@@ -250,29 +231,14 @@ function TaserLogicAttack._upd_enemy_detection(data)
 	
 	CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
 
-	local under_multiple_fire = nil
-	local alert_chk_t = data.t - 1.2
-	
-	for key, enemy_data in pairs(data.detected_attention_objects) do
-		if enemy_data.dmg_t and alert_chk_t < enemy_data.dmg_t then
-			under_multiple_fire = 0
-
-			if under_multiple_fire > 11 then
-					under_multiple_fire = true
-				break
-			end
-		end
-	end
-
 	local find_new_focus_enemy = nil
 	local tasing = my_data.tasing
 	local tased_u_key = tasing and tasing.target_u_key
 	local tase_in_effect = tasing and tasing.target_u_data.unit:movement():tased()
 
-	if tase_in_effect or tasing and data.t - tasing.start_t < math.max(1, data.char_tweak.weapon.is_rifle.aim_delay_tase[2] or 0 * 1.5) then --added some fallback code to make sure this mod works with tdlq's excellent mods
-		if under_multiple_fire then
-			find_new_focus_enemy = true
-		end
+	if tase_in_effect or tasing then --added some fallback code to make sure this mod works with tdlq's excellent mods
+		find_new_focus_enemy = nil
+		return
 	else
 		find_new_focus_enemy = true
 	end

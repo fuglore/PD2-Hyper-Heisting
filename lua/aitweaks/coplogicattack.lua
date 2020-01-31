@@ -1398,10 +1398,6 @@ function CopLogicAttack.queue_update(data, my_data)
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay)
 end
 
-function CopLogicAttack.chk_should_turn(data, my_data)
-	return not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos
-end
-
 local temp_vec4 = Vector3()
 local temp_vec5 = Vector3()
 local temp_vec6 = Vector3()
@@ -1497,7 +1493,7 @@ function CopLogicAttack._update_cover(data)
 					end
 				end
 				
-				local notbc_or_fc_or_notvc_chk = not best_cover or flank_cover or not CopLogicAttack._verify_cover(data, best_cover[1], threat_pos, min_dis, max_dis)
+				local notbc_or_fc_or_notvc_chk = not best_cover or flank_cover or CopLogicAttack._verify_cover(data, best_cover[1], threat_pos, min_dis, max_dis)
 				
 				if not my_data.processing_cover_path and not my_data.charge_path_search_id and notbc_or_fc_or_notvc_chk then
 					satisfied = false
@@ -1599,7 +1595,7 @@ function CopLogicAttack._update_cover(data)
 					local notbcorvc_chk = nil
 					
 					if found_cover then
-						notbcorvc_chk = not best_cover or not CopLogicAttack._verify_cover(data, found_cover, threat_pos, min_dis, max_dis)
+						notbcorvc_chk = not best_cover or flank_cover or CopLogicAttack._verify_cover(data, found_cover, threat_pos, min_dis, max_dis)
 					end
 					
 					if found_cover and notbcorvc_chk then
@@ -1771,4 +1767,32 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	end
 
 	return true
+end
+
+function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
+	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+	
+	if not data.is_converted and not data.unit:in_slot(16) and data.unit:base():has_tag("law") then
+		if data.attention_obj and data.attention_obj.dis <= 1500 and data.attention_obj.verified and reactions_chk or data.internal_data and data.internal_data.tasing then
+			return
+		end
+	end
+
+	if not data.unit:movement():chk_action_forbidden("walk") then
+		local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
+
+		if wanted_state ~= data.name then
+			local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, nil)
+
+			if allow_trans then
+				if obj_failed then
+					data.objective_failed_clbk(data.unit, data.objective)
+				elseif wanted_state ~= "idle" or not managers.groupai:state():on_cop_jobless(data.unit) then
+					CopLogicBase._exit(data.unit, wanted_state)
+				end
+
+				CopLogicBase._report_detections(data.detected_attention_objects)
+			end
+		end
+	end
 end

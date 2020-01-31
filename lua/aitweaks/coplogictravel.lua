@@ -502,14 +502,14 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			end
 		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" then --charge is an aggressive tactic, so i want it actually being aggressive as possible
 			optimal_threat_dis = data.internal_data.weapon_range.close * 0.5
-		elseif data.objective.attitude == "engage" and data.tactics and data.tactics.charge then --everything else is not required to find it.
+		elseif data.objective.attitude == "engage" and data.tactics and not data.tactics.charge then --everything else is not required to find it.
 			if diff_index <= 5 and not Global.game_settings.use_intense_AI then
 				optimal_threat_dis = data.internal_data.weapon_range.optimal
 			else
 				optimal_threat_dis = data.internal_data.weapon_range.close
 			end
 		else
-			optimal_threat_dis = data.internal_data.weapon_range.optimal
+			optimal_threat_dis = data.internal_data.weapon_range.far
 		end
 
 		near_pos = near_pos or search_area.pos
@@ -680,7 +680,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					if no_cover_search_dis_change or not is_mook then
 						cover_search_dis = 100
 					else
-						cover_search_dis = 100
+						cover_search_dis = 250
 					end
 					
 					--if cover_search_dis == 200 then
@@ -703,7 +703,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			if no_cover_search_dis_change or not is_mook then
 				cover_search_dis = 100
 			else
-				cover_search_dis = 100
+				cover_search_dis = 250
 			end
 			
 			if dis > cover_search_dis then
