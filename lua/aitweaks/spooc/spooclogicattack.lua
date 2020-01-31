@@ -277,7 +277,7 @@ function SpoocLogicAttack._chk_reaction_to_attention_object(data, attention_data
             return AIAttentionObject.REACT_COMBAT
         end
 
-        if not SpoocLogicAttack._is_last_standing_criminal(attention_data) then
+        if SpoocLogicAttack._is_last_standing_criminal(attention_data) then
             return AIAttentionObject.REACT_COMBAT
         end
 
