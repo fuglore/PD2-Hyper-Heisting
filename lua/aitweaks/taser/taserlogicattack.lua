@@ -208,7 +208,7 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 			
 			local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "sphere_cast_radius", 5, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "report")
 			
-			if attention_data.verified and attention_data.dis <= 1500 and not vis_check_fail then
+			if attention_data.verified and attention_data.verified_dis <= 1500 and not vis_check_fail then
 				return AIAttentionObject.REACT_SPECIAL_ATTACK
 			else
 				return AIAttentionObject.REACT_COMBAT
