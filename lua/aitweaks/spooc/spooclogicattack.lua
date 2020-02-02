@@ -207,7 +207,7 @@ function SpoocLogicAttack.queue_update(data, my_data)
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, SpoocLogicAttack.queued_update, data, data.t + 0)
 end
 
-function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
+function SpoocLogicAttack._upd_enemy_detection(data, is_synchronous)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
 	data.t = TimerManager:game():time()
