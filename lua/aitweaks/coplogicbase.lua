@@ -165,6 +165,32 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 	end
 end
 
+function CopLogicBase.chk_am_i_aimed_at(data, attention_obj, max_dot)
+	if not attention_obj.is_person then
+		return
+	end
+
+	if attention_obj.dis < 700 and max_dot > 0.3 then
+		max_dot = math.lerp(0.3, max_dot, (attention_obj.dis - 50) / 650)
+	end
+
+	local enemy_look_dir = nil
+
+	if attention_obj.is_husk_player then
+		enemy_look_dir = attention_obj.unit:movement():detect_look_dir()
+	else
+		enemy_look_dir = tmp_vec1
+
+		mrotation.y(attention_obj.unit:movement():m_head_rot(), enemy_look_dir)
+	end
+
+	local enemy_vec = tmp_vec2
+
+	mvec3_dir(enemy_vec, attention_obj.m_head_pos, data.unit:movement():m_com())
+
+	return max_dot < mvec3_dot(enemy_vec, enemy_look_dir)
+end
+
 function CopLogicBase._update_haste(data, my_data)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local is_mook = data.unit:base():has_tag("law") and not data.unit:base():has_tag("special")
@@ -211,6 +237,12 @@ function CopLogicBase._update_haste(data, my_data)
 	local should_crouch = nil
 	local pose = nil
 	local end_pose = nil
+	
+	-- I'm gonna leave a note to myself here so that I never commit the same mistake ever again.
+	-- AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction
+	-- THIS IS HOW YOU CHECK FOR COMBAT REACTIONS, YOU DEHYDRATED RAISIN OF A PERSON, FUGLORE
+	-- I SWEAR TO FUCKING GOD I WILL SLAUGHTER YOU IF YOU MAKE THE SAME MISTAKE AGAIN
+	-- - Past Fuglore, thembo extraordinaire and apparently, no longer an idiot.
 	
 	if my_data.cover_path or my_data.charge_path or my_data.chase_path then	
 		if is_mook and not data.is_converted and not data.unit:in_slot(16) then
