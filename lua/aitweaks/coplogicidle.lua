@@ -544,8 +544,8 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local status = crim_record and crim_record.status
 				local nr_enemies = crim_record and crim_record.engaged_force
 				local old_enemy = false
-
-				if attention_data.acquire_t and data.attention_obj and data.attention_obj.u_key == u_key then
+				
+				if attention_data.acquire_t and attention_data.verified and data.attention_obj and data.attention_obj.verified and data.attention_obj.is_person and reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.u_key == u_key then
 					old_enemy = true
 				end
 

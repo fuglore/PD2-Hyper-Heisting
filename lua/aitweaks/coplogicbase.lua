@@ -626,7 +626,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 					attention_info.verified_dis = dis
 				elseif data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask) then
 					if attention_info.criminal_record and AIAttentionObject.REACT_COMBAT <= attention_info.settings.reaction then
-						if not is_detection_persistent and mvector3.distance(attention_pos, attention_info.criminal_record.pos) > 700 then
+						if not is_detection_persistent and mvector3.distance(attention_pos, attention_info.criminal_record.pos) > 250 then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else
 							delay = math.min(0.2, delay)

@@ -192,35 +192,38 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 end
 
 function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data, stationary)
-	local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
-	local my_data = data.internal_data
-	--local tase_length = my_data.tase_distance or 1500 --fix for better bots crash (more like the sanity check vanilla lacks because :julesyes: )
+    local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
+    local tase_length = data.internal_data.tase_distance or 1500
 
-	--if not supposed to shoot (or tase, for that matter), end the function here
-	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or attention_data.criminal_record.status or not attention_data.is_person then
-		return reaction
-	end
+    if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
+        return reaction
+    end
 
-	if attention_data.unit:movement() then
-		--check if the unit's movement extension has a is_taser_attack_allowed function first (should be fine since you're checking for criminal_record and is_person first, but you never know)
-		if attention_data.unit:movement().is_taser_attack_allowed and attention_data.unit:movement():is_taser_attack_allowed() then
-			--log("helpme")
-			
-			local vis_check_fail = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "sphere_cast_radius", 5, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "report")
-			
-			if attention_data.verified and attention_data.verified_dis <= 1500 and not vis_check_fail then
-				return AIAttentionObject.REACT_SPECIAL_ATTACK
-			else
-				return AIAttentionObject.REACT_COMBAT
-			end
-		else
-			if attention_data.verified then
-				return AIAttentionObject.REACT_COMBAT
-			end
-		end
-	end
+    if attention_data.verified and attention_data.verified_dis <= tase_length then
+        if not data.internal_data.tasing or data.internal_data.tasing.target_u_key ~= attention_data.u_key then
+            if attention_data.unit:movement() and attention_data.unit:movement().tased and attention_data.unit:movement():tased() then
+                return AIAttentionObject.REACT_COMBAT
+            end
+        end
 
-	return reaction
+        if attention_data.is_human_player then
+            if not attention_data.unit:movement():is_taser_attack_allowed() then
+                return AIAttentionObject.REACT_COMBAT
+            end
+        elseif attention_data.unit:movement():chk_action_forbidden("hurt") then
+            return AIAttentionObject.REACT_COMBAT
+        end
+
+        local obstructed = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 5, "report")
+
+        if obstructed then
+            return AIAttentionObject.REACT_COMBAT
+        else
+            return AIAttentionObject.REACT_SPECIAL_ATTACK
+        end
+    end
+
+    return reaction
 end
 
 function TaserLogicAttack._upd_enemy_detection(data)

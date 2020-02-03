@@ -14,6 +14,7 @@ local mrot_axis_angle = mrotation.set_axis_angle
 local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 local temp_vec3 = Vector3()
+local temp_vec4 = Vector3()
 local temp_rot1 = Rotation()
 local bezier_curve = {
 	0,
@@ -22,24 +23,163 @@ local bezier_curve = {
 	1
 }
 
+function CopActionShoot:_upd_ik_spine(target_vec, fwd_dot, t)
+	if fwd_dot > 0.5 then
+		if not self._modifier_on then
+			self._modifier_on = true
+
+			self._machine:force_modifier(self._modifier_name)
+
+			self._mod_enable_t = t + 0.3
+		end
+
+		self._modifier:set_target_y(target_vec)
+		mvec3_set(self._common_data.look_vec, target_vec)
+
+		return target_vec
+	else
+		if self._modifier_on then
+			self._modifier_on = nil
+
+			self._machine:allow_modifier(self._modifier_name)
+		end
+
+		return nil
+	end
+end
+
+function CopActionShoot:_upd_ik_r_arm(target_vec, fwd_dot, t)
+	if fwd_dot > 0.5 then
+		if not self._modifier_on then
+			self._modifier_on = true
+
+			self._machine:force_modifier(self._head_modifier_name)
+			self._machine:force_modifier(self._r_arm_modifier_name)
+
+			self._mod_enable_t = t + 0.3
+		end
+
+		self._head_modifier:set_target_z(target_vec)
+		self._r_arm_modifier:set_target_y(target_vec)
+		mvec3_set(self._common_data.look_vec, target_vec)
+
+		return target_vec
+	else
+		if self._modifier_on then
+			self._modifier_on = nil
+
+			self._machine:allow_modifier(self._head_modifier_name)
+			self._machine:allow_modifier(self._r_arm_modifier_name)
+		end
+
+		return nil
+	end
+end
+
+function CopActionShoot:on_attention(attention, old_attention)
+	if self._shooting_player and old_attention and alive(old_attention.unit) then
+		old_attention.unit:movement():on_targetted_for_attack(false, self._common_data.unit)
+	end
+
+	self._shooting_player = nil
+	self._shooting_husk_player = nil
+	self._next_vis_ray_t = nil
+
+	if attention then
+		local target_pos = attention.handler and attention.handler:get_attention_m_pos() or attention.unit and attention.unit:movement():m_head_pos()
+		if not target_pos then
+			if shoot_hist and shoot_hist.m_last_pos then
+				target_pos = shoot_hist.m_last_pos
+			else
+				target_pos = self._shoot_from_pos
+			end
+		end
+		local target_dis = mvector3.distance(target_pos, self._shoot_from_pos)
+		self[self._ik_preset.start](self)
+
+		if target_dis and target_dis <= 1200 then
+			local t = TimerManager:game():time()
+			self._aim_transition = {
+				duration = 0.333,
+				start_t = t,
+				start_vec = mvector3.copy(self._common_data.look_vec)
+			}
+			self._get_target_pos = self._get_transition_target_pos
+		else
+			self._aim_transition = nil
+			self._get_target_pos = nil
+		end
+
+		self._mod_enable_t = TimerManager:game():time() + 0.3
+
+		if attention.unit then
+			self._shooting_player = attention.unit:base() and attention.unit:base().is_local_player
+
+			if Network:is_client() then
+				self._shooting_husk_player = attention.unit:base() and attention.unit:base().is_husk_player
+
+				if self._shooting_husk_player then
+					self._next_vis_ray_t = TimerManager:game():time()
+				end
+			end
+
+			if self._shooting_player or self._shooting_husk_player then
+				self._verif_slotmask = managers.slot:get_mask("AI_visibility")
+				self._line_of_sight_t = -100
+
+				if self._shooting_player then
+					attention.unit:movement():on_targetted_for_attack(true, self._common_data.unit)
+				end
+			else
+				self._verif_slotmask = nil
+			end
+
+			local usage_tweak = self._w_usage_tweak
+			local shoot_hist = self._shoot_history
+
+			if shoot_hist then
+				local displacement = mvector3.distance(target_pos, shoot_hist.m_last_pos)
+				local focus_delay = usage_tweak.focus_delay * math.min(1, displacement / usage_tweak.focus_dis)
+				shoot_hist.focus_start_t = TimerManager:game():time()
+				shoot_hist.focus_delay = focus_delay
+				shoot_hist.m_last_pos = mvector3.copy(target_pos)
+			else
+				shoot_hist = {
+					focus_start_t = TimerManager:game():time(),
+					focus_delay = usage_tweak.focus_delay,
+					m_last_pos = mvector3.copy(target_pos)
+				}
+				self._shoot_history = shoot_hist
+			end
+		end
+	else
+		self[self._ik_preset.stop](self)
+
+		if self._aim_transition then
+			self._aim_transition = nil
+			self._get_target_pos = nil
+		end
+	end
+
+	self._attention = attention
+end
+
 function CopActionShoot:update(t)
-	local vis_state = self._ext_base:lod_stage()
-	vis_state = vis_state or 4
 	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local speed = 1
 	local feddensitypenalty = managers.groupai:state():chk_high_fed_density() and 1 or 0
 	local suppressedpenalty = self._common_data.is_suppressed and 1.5 or 1
 	
-	if vis_state == 1 then
+	--if vis_state == 1 then
 		-- Nothing
-	elseif self._skipped_frames < vis_state * 3 then
-		self._skipped_frames = self._skipped_frames + 1
+	--elseif self._skipped_frames < vis_state * 3 then
+	--	self._skipped_frames = self._skipped_frames + 1
 
-		return
-	else
-		self._skipped_frames = 1
-	end
-
+	--	return
+	--else
+	--	self._skipped_frames = 1
+	--end
+	
 	local shoot_from_pos = self._shoot_from_pos
 	local ext_anim = self._ext_anim
 	local target_vec, target_dis, autotarget, target_pos = nil
@@ -66,6 +206,21 @@ function CopActionShoot:update(t)
 				speed = 1.25
 			end
 		end
+		
+		if target_dis then
+			if target_dis > 1200 then
+				self._skipped_frames = 1
+			elseif target_dis > 2000 then
+				self._skipped_frames = 2
+			elseif target_dis > 3000 then
+				self._skipped_frames = 3
+			elseif target_dis > 4000 then
+				self._skipped_frames = 4
+			else
+				self._skipped_frames = 0
+			end
+		end
+
 		
 		if self._turn_allowed then
 			local active_actions = self._common_data.active_actions
@@ -174,7 +329,7 @@ function CopActionShoot:update(t)
 						self._unit:unit_data().mission_element:event("killshot", self._unit)
 					end
 
-					if not ext_anim.recoil and vis_state == 1 and not ext_anim.base_no_recoil and not ext_anim.move then
+					if not ext_anim.recoil and self._skipped_frames <= 1 and not ext_anim.base_no_recoil and not ext_anim.move then
 						self._ext_movement:play_redirect("recoil_auto")
 					end
 
@@ -246,7 +401,11 @@ function CopActionShoot:update(t)
 			if self._common_data.char_tweak.no_move_and_shoot and self._common_data.ext_anim and self._common_data.ext_anim.move then
 				local move_and_shoot_chk = self._common_data.char_tweak.move_and_shoot_cooldown or 1
 				shoot = false
-				self._shoot_t = t + move_and_shoot_chk
+				if self._shoot_t then
+					self._shoot_t = self._shoot_t + move_and_shoot_chk
+				else
+					self._shoot_t = t + 1
+				end
 			end
 
 			if shoot then
@@ -305,7 +464,7 @@ function CopActionShoot:update(t)
 
 						self._autoshots_fired = 0
 
-						if vis_state == 1 and not ext_anim.base_no_recoil and not ext_anim.move then
+						if self._skipped_frames <= 1 and not ext_anim.base_no_recoil and not ext_anim.move then
 							self._ext_movement:play_redirect("recoil_auto")
 						end
 					else
@@ -333,13 +492,13 @@ function CopActionShoot:update(t)
 						end
 
 						if Global.game_settings.one_down then
-							if vis_state == 1 and not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move then
+							if self._skipped_frames <= 1 and not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move then
 								self._ext_movement:play_redirect("recoil_single")
 							end
 
 							self._shoot_t = t + 1 * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
 						else
-							if vis_state == 1 and not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move then
+							if self._skipped_frames <= 1 and not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move then
 								self._ext_movement:play_redirect("recoil_single")
 							end
 							
