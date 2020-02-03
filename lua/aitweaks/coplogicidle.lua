@@ -536,7 +536,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 
 			local reaction_too_mild = nil
 			
-			if not reaction or best_target_reaction and reaction < best_target_reaction then
+			if not reaction or best_target_reaction and reaction < best_target_reaction or AIAttentionObject.REACT_SCARED > reaction and not managers.groupai:state():whisper_mode() then
 				reaction_too_mild = true
 			elseif distance < 150 and reaction == AIAttentionObject.REACT_IDLE then
 				reaction_too_mild = true
@@ -675,11 +675,11 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					--log("*heavy breathing*")
 				end
 				
-				if assault_reaction and data.unit:base()._tweak_table == "taser" and distance < 1500 then
+				if assault_reaction and distance < 1500 then
 					target_priority_slot = 1
 				end
 
-				if reaction < AIAttentionObject.REACT_COMBAT or data.tactics and data.tactics.murder and not old_enemy then
+				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.murder and not old_enemy then
 					target_priority_slot = 20 + target_priority_slot + math.max(0, AIAttentionObject.REACT_COMBAT - reaction)
 				end
 
