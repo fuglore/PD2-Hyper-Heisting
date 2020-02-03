@@ -286,7 +286,7 @@ function CopActionShoot:update(t)
 				end
 			end
 
-			if res and not self._ext_anim.base_no_reload then
+			if res then
 				self._machine:set_speed(res, self._reload_speed)
 			end
 

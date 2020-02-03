@@ -2797,7 +2797,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 0.8, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
+		RELOAD_SPEED = 0.9, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
 		melee_speed = 1.5,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -2929,7 +2929,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 20,
 		miss_dis = 50,
-		RELOAD_SPEED = 0.5, --slightly reduced from simple
+		RELOAD_SPEED = 0.6, --slightly reduced from simple
 		melee_speed = 1.5,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -3043,7 +3043,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay starts after 5m
 		spread = 30, --lowered slightly from simple
 		miss_dis = 1,
-		RELOAD_SPEED = 1, --lowered slightly from simple
+		RELOAD_SPEED = 1.25, --lowered slightly from simple
 		melee_speed = 1.5,
 		melee_dmg = 10, --100 damage on melee, no joke
 		melee_retry_delay = {
@@ -3751,7 +3751,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 200,
 		spread = 40,
 		miss_dis = 1,
-		RELOAD_SPEED = 0.6, --2 second pause after a full burst, theres 200 ammo in the fucking thing, it'll take time to empty, believe me.
+		RELOAD_SPEED = 0.6,
 		melee_speed = 1.5,
 		melee_dmg = 15,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
@@ -4016,7 +4016,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500,
 		spread = 20,
 		miss_dis = 50,
-		RELOAD_SPEED = 2, --slightly reduced from civil
+		RELOAD_SPEED = 0.9,
 		melee_speed = 1.5,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -4130,7 +4130,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, --focus delay starts after 5m
 		spread = 20, --lowered slightly from civil
 		miss_dis = 5,
-		RELOAD_SPEED = 1.25,
+		RELOAD_SPEED = 1.1,
 		melee_speed = 1.5,
 		melee_dmg = 10, --100 damage on melee, no joke
 		melee_retry_delay = {
@@ -5963,7 +5963,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 200,
 		spread = 20,
 		miss_dis = 10,
-		RELOAD_SPEED = 1.4, --theres 200 ammo in the fucking thing, it'll take time to empty
+		RELOAD_SPEED = 1.15, --theres 200 ammo in the fucking thing, it'll take time to empty
 		melee_speed = 1.5,
 		melee_dmg = 15,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
@@ -6500,7 +6500,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 500, 
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 0.1, 
+		RELOAD_SPEED = 100, 
 		melee_speed = 1.5,
 		melee_dmg = 5,
 		melee_retry_delay = {
