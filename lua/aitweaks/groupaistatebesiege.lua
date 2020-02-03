@@ -716,41 +716,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	local assaultactive = task_data.phase == "build" or task_data.phase == "sustain"
 	local revealchk = not self._next_allowed_drama_reveal_t or self._next_allowed_drama_reveal_t < t
-	
-	if assaultactive then
-		if low_carnage and not self._feddensityhigh and revealchk and not self._activeassaultbreak or self._drama_data.amount <= self._drama_data.low_p and not self._feddensityhigh and not self._activeassaultbreak and revealchk then --drama is too low, or all players arent actively being attacked by at least one spawngroup during assault right now, reveal their location
-			if not assaultactive then
-				--log("AAAAAAAA FUCK YOU")
-			end
-			--if low_carnage then
-				--log("YOU...WILL...FIIIIIIIIIIIIIIGHT!!!!!!")
-			--end
-			self._next_allowed_drama_reveal_t = t + math.random(5, 10)
-			for criminal_key, criminal_data in pairs(self._player_criminals) do
-				self:criminal_spotted(criminal_data.unit)
-				--this is some insane over-weight code for some chatter randomness but hot damn am i happy with it
-				local time = self._t
-				for group_id, group in pairs(self._groups) do
-					for u_key, u_data in pairs(group.units) do
-						u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
-						if not u_data.unit:sound():speaking(time) then
-							local chance = math.random(1, 100)
-							local do_pus = 33
-							local not_mov = 65
-							if chance <= do_pus then
-								u_data.unit:sound():say("pus", true) --GOGOGO/PUSH!
-							elseif chance > not_mov then
-								--nothing, keeps things less spammy
-							else
-							u_data.unit:sound():say("mov", true) --Move out/Move!
-							end
-						end
-					end
-				end				
-			end
-		end
-	end
-
 	local primary_target_area = task_data.target_areas[1]
 
 	if self:is_area_safe_assault(primary_target_area) then

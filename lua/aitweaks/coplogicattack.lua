@@ -551,22 +551,22 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 		local pose_chk = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
 		local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
 		local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
-		local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
+		local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
 		local height_difference_penalty = math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0
 		
 		if data.unit:movement():cool() then
 			haste = "walk"
 		elseif data.attention_obj and data.attention_obj.dis > 10000 or data.unit:in_slot(16) or data.is_converted then
 			haste = "run"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun then
 			haste = "walk"
 		else
 			haste = "run"
 		end
 		
-		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
+		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
 			local randomwalkchance = math.random(0.01, 1)
 			if randomwalkchance > 0.1 then
 				haste = "walk"
@@ -584,11 +584,11 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 			stand_chance = 1
 			pose = "stand"
 			end_pose = "stand"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 2000 then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 2000 then
 			stand_chance = 0.75
 		elseif enemy_has_height_difference and pose_chk and is_mook then
 			stand_chance = 0.25
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and enemy_visible15m_or_10m_chk and CopLogicTravel._chk_close_to_criminal(data, my_data) and data.tactics and data.tactics.flank and haste == "walk" and is_mook then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and enemy_visible15m_or_10m_chk and CopLogicTravel._chk_close_to_criminal(data, my_data) and data.tactics and data.tactics.flank and haste == "walk" and is_mook then
 			stand_chance = 0.25
 		elseif my_data.moving_to_cover and pose_chk then
 			stand_chance = 0.5
@@ -610,7 +610,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 			end
 		end
 		
-		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
+		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
 			local randomwalkchance = math.random(0.01, 1)
 			if randomwalkchance > 0.10 then
 				haste = "walk"
@@ -694,22 +694,22 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 		local pose_chk = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
 		local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
 		local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
-		local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
+		local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
 		local height_difference_penalty = math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0
 		
 		if data.unit:movement():cool() then
 			haste = "walk"
 		elseif data.is_converted or data.unit:in_slot(16) or data.attention_obj and data.attention_obj.dis > 10000 then 
 			haste = "run"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun then
 			haste = "walk"
 		else
 			haste = "run"
 		end
 		
-		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
+		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
 			local randomwalkchance = math.random(0.01, 1)
 			if randomwalkchance > 0.1 then
 				haste = "walk"
@@ -728,11 +728,11 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 			stand_chance = 1
 			pose = "stand"
 			end_pose = "stand"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis > 2000 and is_mook then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 2000 and is_mook then
 			stand_chance = 0.75
 		elseif enemy_has_height_difference and pose_chk and is_mook then
 			stand_chance = 0.25
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and enemy_visible15m_or_10m_chk and CopLogicTravel._chk_close_to_criminal(data, my_data) and data.tactics and data.tactics.flank and haste == "walk" and is_mook then
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and enemy_visible15m_or_10m_chk and CopLogicTravel._chk_close_to_criminal(data, my_data) and data.tactics and data.tactics.flank and haste == "walk" and is_mook then
 			stand_chance = 0.25
 		elseif my_data.moving_to_cover and pose_chk then
 			stand_chance = 0.5
@@ -754,7 +754,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 			end
 		end
 		
-		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT >= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
+		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
 			local randomwalkchance = math.random(0.01, 1)
 			if randomwalkchance > 0.10 then
 				haste = "walk"
