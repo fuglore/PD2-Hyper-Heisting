@@ -294,8 +294,10 @@ function CopLogicTravel.queued_update(data)
 		end
     end
 	
+	local objective = data.objective or nil
+	
 	data.logic._update_haste(data, data.internal_data)
-	data.logic._upd_stance_and_pose(data, data.internal_data)
+	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
 	
 	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper

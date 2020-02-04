@@ -320,7 +320,6 @@ CopActionWalk._anim_block_presets = {
 	}
 }
 
--- Lines 198-250
 function CopActionWalk:init(action_desc, common_data)
 	self._common_data = common_data
 	self._action_desc = action_desc

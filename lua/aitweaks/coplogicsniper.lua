@@ -38,12 +38,6 @@ function CopLogicSniper._upd_enemy_detection(data)
 	
 	local focus_enemy = data.attention_obj
 	
-	if Global.game_settings.one_down or managers.skirmish:is_skirmish() then
-		delay = 0
-	else
-		delay = 0.35
-	end
-
 	CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicSniper._upd_enemy_detection, data, data.t + delay)
 	CopLogicBase._report_detections(data.detected_attention_objects)
 end

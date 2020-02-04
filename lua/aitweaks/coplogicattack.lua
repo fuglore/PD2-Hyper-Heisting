@@ -1287,7 +1287,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	local focus_enemy = data.attention_obj
 	local is_close = focus_enemy and focus_enemy.dis <= 3000 and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction
 	local too_far = focus_enemy and focus_enemy.dis > 5000 and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction
-	local delay = nil
+	local delay = 0.5
 	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
 	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter
 	
@@ -1384,8 +1384,10 @@ function CopLogicAttack.queue_update(data, my_data)
 		end
 	end
 	
+	local objective = data.objective or nil
+	
 	data.logic._update_haste(data, data.internal_data)
-	data.logic._upd_stance_and_pose(data, data.internal_data)
+	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
 	CopLogicAttack._update_cover(data)
 	
 	if is_close then

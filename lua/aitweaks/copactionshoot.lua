@@ -329,7 +329,7 @@ function CopActionShoot:update(t)
 						self._unit:unit_data().mission_element:event("killshot", self._unit)
 					end
 
-					if not ext_anim.recoil and self._skipped_frames <= 1 and not ext_anim.base_no_recoil and not ext_anim.move then
+					if not ext_anim.recoil and self._autofiring and self._skipped_frames <= 1 and not ext_anim.base_no_recoil and not ext_anim.move then
 						self._ext_movement:play_redirect("recoil_auto")
 					end
 
@@ -464,7 +464,7 @@ function CopActionShoot:update(t)
 
 						self._autoshots_fired = 0
 
-						if self._skipped_frames <= 1 and not ext_anim.base_no_recoil and not ext_anim.move then
+						if not ext_anim.recoil and self._autofiring and self._skipped_frames <= 1 and not ext_anim.base_no_recoil and not ext_anim.move then
 							self._ext_movement:play_redirect("recoil_auto")
 						end
 					else
@@ -492,13 +492,13 @@ function CopActionShoot:update(t)
 						end
 
 						if Global.game_settings.one_down then
-							if self._skipped_frames <= 1 and not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move then
+							if self._skipped_frames <= 1 and not self._autofiring and not ext_anim.base_no_recoil and not ext_anim.move then
 								self._ext_movement:play_redirect("recoil_single")
 							end
 
 							self._shoot_t = t + 1 * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
 						else
-							if self._skipped_frames <= 1 and not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move then
+							if self._skipped_frames <= 1 and not self._autofiring and not ext_anim.base_no_recoil and not ext_anim.move then
 								self._ext_movement:play_redirect("recoil_single")
 							end
 							

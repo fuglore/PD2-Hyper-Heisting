@@ -4,6 +4,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	origfunc3(self, ...)
 	self._assault_was_hell = nil
 	self._next_allowed_enemykill_drama_t = nil
+	self._in_mexico = nil
 	self._downleniency = 1
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
@@ -36,6 +37,7 @@ function GroupAIStateBase:on_simulation_started(...)
 	origfunc2(self, ...)
 	self._assault_was_hell = nil
 	self._next_allowed_enemykill_drama_t = nil
+	self._in_mexico = nil
 	self._downleniency = 1
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1

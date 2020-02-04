@@ -129,19 +129,19 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 				if not data.unit:anim_data().crouch and should_crouch then
 					if not my_data.next_allowed_crouch_t or my_data.next_allowed_crouch_t < data.t then
 						CopLogicAttack._chk_request_action_crouch(data)
-						my_data.next_allowed_crouch_t = data.t + math.random(0.8, 3)
+						my_data.next_allowed_crouch_t = data.t + math.random(1.5, 4)
 					end
 				end
 			else
 				if not data.unit:anim_data().crouch and should_crouch then
 					if not my_data.next_allowed_crouch_t or my_data.next_allowed_crouch_t < data.t then
 						CopLogicAttack._chk_request_action_crouch(data)
-						my_data.next_allowed_crouch_t = data.t + math.random(0.8, 3)
+						my_data.next_allowed_crouch_t = data.t + math.random(1.5, 4)
 					end
 				elseif data.unit:anim_data().crouch and should_stand then
 					if not my_data.next_allowed_stand_t or my_data.next_allowed_stand_t < data.t then
 						CopLogicAttack._chk_request_action_stand(data)
-						my_data.next_allowed_stand_t = data.t + math.random(0.8, 3)
+						my_data.next_allowed_stand_t = data.t + math.random(1.5, 4)
 					end
 				end
 			end
@@ -152,17 +152,71 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 				if not data.unit:anim_data().crouch and should_crouch then
 					if not my_data.next_allowed_crouch_t or my_data.next_allowed_crouch_t < data.t then
 						CopLogicAttack._chk_request_action_crouch(data)
-						my_data.next_allowed_crouch_t = data.t + math.random(0.8, 3)
+						my_data.next_allowed_crouch_t = data.t + math.random(1.5, 4)
 					end
 				elseif data.unit:anim_data().crouch and should_stand then
 					if not my_data.next_allowed_stand_t or my_data.next_allowed_stand_t < data.t then
 						CopLogicAttack._chk_request_action_stand(data)
-						my_data.next_allowed_stand_t = data.t + math.random(0.8, 3)
+						my_data.next_allowed_stand_t = data.t + math.random(1.5, 4)
 					end
 				end
 			end
 		end
 	end
+	
+	if objective and not agg_pose then
+		local objective_pose_shit = not data.char_tweak.allowed_stances or objective and objective.stance and data.char_tweak.allowed_stances[objective.stance]
+		
+		if objective.stance and objective_pose_shit then
+			obj_has_stance = true
+			local upper_body_action = data.unit:movement()._active_actions[3]
+
+			if not upper_body_action or upper_body_action:type() ~= "shoot" then
+				data.unit:movement():set_stance(objective.stance)
+			end
+		end
+
+		if objective.pose and not agg_pose and objective_pose_shit then
+			obj_has_pose = true
+
+			if objective.pose == "crouch" then
+				CopLogicAttack._chk_request_action_crouch(data)
+			elseif objective.pose == "stand" then
+				CopLogicAttack._chk_request_action_stand(data)
+			end
+		end
+	end
+
+	if not obj_has_stance and data.char_tweak.allowed_stances and not data.char_tweak.allowed_stances[data.unit:anim_data().stance] and not agg_pose then
+		for stance_name, state in pairs(data.char_tweak.allowed_stances) do
+			if state then
+				data.unit:movement():set_stance(stance_name)
+
+				break
+			end
+		end
+	end
+	
+	if not obj_has_pose and not agg_pose then
+		if data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses[data.unit:anim_data().pose] then
+			for pose_name, state in pairs(data.char_tweak.allowed_poses) do
+				if state then
+					if pose_name == "crouch" then
+						CopLogicAttack._chk_request_action_crouch(data)
+
+						break
+					end
+
+					if pose_name == "stand" then
+						CopLogicAttack._chk_request_action_stand(data)
+					end
+
+					break
+				end
+			end
+		end
+	end
+	
 end
 
 function CopLogicBase.chk_am_i_aimed_at(data, attention_obj, max_dot)
@@ -369,7 +423,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	local my_head_fwd = nil
 	local my_tracker = data.unit:movement():nav_tracker()
 	local chk_vis_func = my_tracker.check_visibility
-	local is_detection_persistent = managers.groupai:state():is_detection_persistent()
+	local is_detection_persistent = managers.groupai:state():chk_assault_active_atm() --LMAO
 	local delay = 0.7
 	
 	if diff_index == 8 then
@@ -661,7 +715,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 				if is_ignored then
 					CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
-				elseif verified then
+				elseif attention_info.verified then
 					attention_info.release_t = nil
 					attention_info.verified_t = t
 
@@ -671,10 +725,10 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 					attention_info.verified_dis = dis
 				elseif data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask) then
 					if attention_info.criminal_record and AIAttentionObject.REACT_COMBAT <= attention_info.settings.reaction then
-						if not is_detection_persistent and mvector3.distance(attention_pos, attention_info.criminal_record.pos) > 250 then
+						local seeninlast1second = attention_info.verified_t and attention_info.verified_t - t <= 1
+						if not is_detection_persistent and mvector3.distance(attention_pos, attention_info.criminal_record.pos) > 250 or not is_detection_persistent and not seeninlast1second then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else
-						
 							if diff_index > 6 or Global.game_settings.use_intense_AI then
 								attention_info.verified_pos = mvector3.copy(attention_info.criminal_record.pos)
 								attention_info.verified_dis = dis

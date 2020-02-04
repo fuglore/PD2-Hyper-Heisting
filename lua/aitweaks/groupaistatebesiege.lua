@@ -226,6 +226,16 @@ function GroupAIStateBesiege:chk_assault_active_atm()
 	return true
 end
 
+function GroupAIStateBesiege:is_detection_persistent()
+
+	if not self._task_data.assault.phase == "build" or not self._task_data.assault.phase == "sustain" then
+		return
+		--log("not assault active")
+	end
+	
+	return true
+end
+
 function GroupAIStateBesiege:get_hostage_count_for_chatter()
 	
 	if self._hostage_headcount > 0 then

@@ -24,6 +24,7 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 	for _, rname in ipairs(all_rifles) do
 		self[rname].spread = rifle_spread
 		self[rname].fanpcwep = true
+		self[rname].hold = "rifle"
 	end
 	
 	for _, sname in ipairs(all_smgs) do
@@ -161,7 +162,10 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.rpk_lmg_npc.sounds.prefix = "rpk_npc"
 	self.rpk_lmg_npc.usage = "is_lmg"
 	self.rpk_lmg_npc.auto.fire_rate = 0.08
+	
+	--punk mossberg
 	self.mossberg_npc.usage = "is_shotgun_mag"
+	self.mossberg_npc.hold = "rifle"
 	self.mossberg_npc.DAMAGE = 2
 	self.mossberg_npc.CLIP_AMMO_MAX = 2
 	
