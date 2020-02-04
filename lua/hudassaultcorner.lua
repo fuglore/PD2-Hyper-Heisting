@@ -6,15 +6,22 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	
 	local faction = tweak_data.levels:get_ai_group_type()
 	
+	local assaultline = "hud_assault_assault"
+	
 	if faction then
 		if faction == "russia" then
 			versusline = "hud_assault_faction_mad"
 		elseif faction == "murkywater" then
 			versusline = "hud_assault_faction_psc"
+		elseif faction == "zombie" then
+			versusline = "hud_assault_faction_hvh"
+			assaultline = "hud_assault_assaulthvh"
 		elseif faction == "america" then
 			local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-				
-			if diff_index == 4 or diff_index == 5 then
+			
+			if managers.skirmish and managers.skirmish:is_skirmish() or Global.game_settings.incsmission then	
+				versusline = "hud_assault_faction_generic"
+			elseif diff_index == 4 or diff_index == 5 then
 				versusline = "hud_assault_faction_fbi"
 			elseif diff_index == 6 then
 				versusline = "hud_assault_faction_fbitsu"
@@ -31,7 +38,11 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	if FG_chance <= 24 then
 		cover_line_to_use = "hud_assault_FG_cover" .. FG_chance
 	else
-		cover_line_to_use = "hud_assault_cover"
+		if faction == "zombie" then
+			cover_line_to_use = "hud_assault_coverhvh"
+		else
+			cover_line_to_use = "hud_assault_cover"
+		end
 	end
 	
 	if self._assault_mode == "normal" then
@@ -39,7 +50,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 			local ids_risk = Idstring("risk")
 
 			return {
-				"hud_assault_assault",
+				assaultline,
 				"hud_assault_end_line",
 				cover_line_to_use,
 				"hud_assault_end_line",
@@ -47,7 +58,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 				"hud_assault_end_line",
 				ids_risk,
 				"hud_assault_end_line",
-				"hud_assault_assault",
+				assaultline,
 				"hud_assault_end_line",
 				cover_line_to_use,
 				"hud_assault_end_line",
@@ -58,13 +69,13 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 			}
 		else
 			return {
-				"hud_assault_assault",
+				assaultline,
 				"hud_assault_end_line",
 				cover_line_to_use,
 				"hud_assault_end_line",
 				versusline,
 				"hud_assault_end_line",
-				"hud_assault_assault",
+				assaultline,
 				"hud_assault_end_line",
 				cover_line_to_use,
 				"hud_assault_end_line",

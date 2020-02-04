@@ -6065,7 +6065,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	local level = Global.level_data and Global.level_data.level_id
 	self.max_nr_simultaneous_boss_types = 0
 	self.difficulty_curve_points = {
-		0.5
+		0.1
 	}
 	
 	self.smoke_and_flash_grenade_timeout = {

@@ -650,7 +650,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			local enemies_defeated = enemies_left < min_enemies_left
 			local taking_too_long = t > task_data.phase_end_t + enemies_defeated_time_limit
 			local fade_time_over = t > task_data.phase_end_t 
-			self:_assign_assault_groups_to_retire()
+			--self:_assign_assault_groups_to_retire()
 			if enemies_defeated and fade_time_over or taking_too_long then
 				if not task_data.said_retreat then
 					self._task_data.assault.said_retreat = true

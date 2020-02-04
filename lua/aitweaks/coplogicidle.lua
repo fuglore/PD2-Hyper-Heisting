@@ -206,10 +206,10 @@ function CopLogicIdle._update_haste(data, my_data)
 				haste = "walk"
 			elseif data.attention_obj and data.attention_obj.dis > 10000 then
 				haste = "run"
-			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() and data.unit:anim_data().move and not data.unit:anim_data().run and is_mook then
+			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not managers.groupai:state():whisper_mode() and data.unit:anim_data().move and not data.unit:anim_data().run then
 				haste = "run"
 				my_data.has_reset_walk_cycle = nil
-			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun and data.unit:anim_data().run then
+			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and data.tactics and not data.tactics.hitnrun and data.unit:anim_data().run then
 				haste = "walk"
 				my_data.has_reset_walk_cycle = nil
 			 else
@@ -482,7 +482,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 
 		if forced_attention_object then
 			for u_key, attention_info in pairs(forced_attention_object) do
-				if forced_attention_data.ignore_vis_blockers then
+				if not forced_attention_data.ignore_vis_blockers then
 					local vis_ray = World:raycast("ray", data.unit:movement():m_head_pos(), attention_info.handler:get_detection_m_pos(), "slot_mask", data.visibility_slotmask, "ray_type", "ai_vision")
 
 					if not vis_ray or vis_ray.unit:key() == u_key or not vis_ray.unit:visible() then
@@ -639,13 +639,11 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					local justmurder = data.tactics and data.tactics.murder
 					local justharass = data.tactics and data.tactics.harass
 					
-					if data.tactics and data.tactics.spooctargeting and distance <= 1500 then
+					if distance < 250 and not murderorspooctargeting then
 						target_priority_slot = 1
-					elseif distance < 250 and not murderorspooctargeting then
-						target_priority_slot = 1
-					elseif distance < 500 and not murderorspooctargeting then
+					elseif too_near and not murderorspooctargeting then
 						target_priority_slot = 2
-					elseif distance < 1500 and not murderorspooctargeting then
+					elseif near and not murderorspooctargeting then
 						target_priority_slot = 4
 					elseif not justmurder then
 						target_priority_slot = 6
