@@ -296,23 +296,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 							if my_data.firing and time_since_verification and time_since_verification < suppressingfire_t then
 								shoot = true
-								if dense_mook and managers.groupai:state():chk_high_fed_density() then
-									--log("not hunting due to FEDS")
-								else
-									--they'll start pathing ahead of time to hunt
-									if data.tactics and data.tactics.charge and focus_enemy.is_person then
-										data.brain:search_for_path_to_unit("hunt" .. tostring(my_data.key), focus_enemy.unit)
-									end
-								end
-							else
-								if dense_mook and managers.groupai:state():chk_high_fed_density() then
-									--log("not hunting due to FEDS")
-								else
-									--they'll start pathing ahead of time to hunt
-									if focus_enemy.is_person then
-										data.brain:search_for_path_to_unit("hunt" .. tostring(my_data.key), focus_enemy.unit)
-									end
-								end
 							end
 						end
 					end
@@ -1015,7 +998,11 @@ function CopLogicAttack._upd_combat_movement(data)
 					end
 				elseif not my_data.charge_path_search_id and data.attention_obj.nav_tracker then
 					if data.objective and not data.objective.type == "follow" then
-						my_data.charge_pos = CopLogicTravel._get_pos_on_wall(data.attention_obj.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil)
+						if data.tactics.charge then
+							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil)
+						else
+							CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker)
+						end
 
 						if my_data.charge_pos then
 							my_data.charge_path_search_id = "charge" .. tostring(data.key)
@@ -1726,6 +1713,73 @@ function CopLogicAttack._verify_follow_cover(data, cover, near_pos, threat_pos, 
 		return true
 	end
 end
+
+function CopLogicAttack._process_pathing_results(data, my_data)
+	if not data.pathing_results then
+		return
+	end
+
+	local pathing_results = data.pathing_results
+	local path = pathing_results[my_data.cover_path_search_id]
+
+	if path then
+		if path ~= "failed" then
+			my_data.cover_path = path
+		else
+			print(data.unit, "[CopLogicAttack._process_pathing_results] cover path failed", data.unit)
+			CopLogicAttack._set_best_cover(data, my_data, nil)
+
+			my_data.cover_path_failed_t = TimerManager:game():time()
+		end
+
+		my_data.processing_cover_path = nil
+		my_data.cover_path_search_id = nil
+	end
+
+	path = pathing_results[my_data.charge_path_search_id]
+
+	if path then
+		if path ~= "failed" then
+			log("charge/flank found")
+			my_data.charge_path = path
+		else
+			print("[CopLogicAttack._process_pathing_results] charge path failed", data.unit)
+		end
+
+		my_data.charge_path_search_id = nil
+		my_data.charge_path_failed_t = TimerManager:game():time()
+	end
+
+	path = pathing_results[my_data.expected_pos_path_search_id]
+
+	if path then
+		if path ~= "failed" then
+			my_data.expected_pos_path = path
+		end
+
+		my_data.expected_pos_path_search_id = nil
+	end
+	
+	data.pathing_results = nil
+end
+
+function CopLogicAttack._get_all_paths(data)
+	return {
+		cover_path = data.internal_data.cover_path,
+		flank_path = data.internal_data.flank_path,
+		expected_pos_path = data.internal_data.expected_pos_path,
+		charge_path = data.internal_data.charge_path
+		
+	}
+end
+
+function CopLogicAttack._set_verified_paths(data, verified_paths)
+	data.internal_data.cover_path = verified_paths.cover_path
+	data.internal_data.flank_path = verified_paths.flank_path
+	data.internal_data.expected_pos_path = verified_paths.expected_pos_path
+	data.internal_data.charge_path = verified_paths.charge_path
+end
+
 
 function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	local my_data = data.internal_data

@@ -79,6 +79,25 @@ function CopBrain:is_converted_chk()
 	end
 end
 
+function CopBrain:search_for_path_to_unit(search_id, other_unit, access_neg)
+	local enemy_tracker = other_unit:movement():nav_tracker()
+	local pos_to = enemy_tracker:field_position()
+	local params = {
+		tracker_from = self._unit:movement():nav_tracker(),
+		pos_to = pos_to,
+		tracker_to = enemy_tracker,
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		access_pos = self._SO_access,
+		access_neg = access_neg
+	}
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
 function CopBrain:on_alarm_pager_interaction(status, player)
 	if not managers.groupai:state():whisper_mode() then
 		return

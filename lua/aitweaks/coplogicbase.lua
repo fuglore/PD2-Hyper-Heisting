@@ -291,6 +291,7 @@ function CopLogicBase._update_haste(data, my_data)
 	local should_crouch = nil
 	local pose = nil
 	local end_pose = nil
+	local path = my_data.chase_path or my_data.charge_path or my_data.advance_path or my_data.cover_path or my_data.expected_pos_path or my_data.hunt_path or my_data.flank_path
 	
 	-- I'm gonna leave a note to myself here so that I never commit the same mistake ever again.
 	-- AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction
@@ -298,7 +299,7 @@ function CopLogicBase._update_haste(data, my_data)
 	-- I SWEAR TO FUCKING GOD I WILL SLAUGHTER YOU IF YOU MAKE THE SAME MISTAKE AGAIN
 	-- - Past Fuglore, thembo extraordinaire and apparently, no longer an idiot.
 	
-	if my_data.cover_path or my_data.charge_path or my_data.chase_path then	
+	if path then	
 		if is_mook and not data.is_converted and not data.unit:in_slot(16) then
 			if data.unit:movement():cool() then
 				haste = "walk"
@@ -379,8 +380,6 @@ function CopLogicBase._update_haste(data, my_data)
 	end	
 	 
 	if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and haste and can_perform_walking_action then
-		local path = my_data.chase_path or my_data.charge_path or my_data.advance_path or my_data.cover_path
-		
 		if not my_data.has_reset_walk_cycle then
 			local new_action = {
 				body_part = 2,
@@ -1039,16 +1038,16 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 		}
 	end
 	
-	if data.unit:base():has_tag("special") or data.unit:base():has_tag("takedown") or data.internal_data.shooting or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 3000 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1500 or data.is_converted or data.unit:in_slot(16) then
+	if data.unit:base():has_tag("special") or data.unit:base():has_tag("takedown") or data.internal_data.shooting or data.attention_obj and data.t and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 3000 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1500 or data.is_converted or data.unit:in_slot(16) then
 		asap = true
-		if data.attention_obj <= 1500 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 then
+		if data.attention_obj and data.attention_obj.dis <= 1500 and data.t and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 then
 			exec_t = data.t + 0.15
 		else
 			exec_t = data.t + 0.3
 		end
-	else
+	elseif data.t and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 		asap = nil
-		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 4000 then
+		if data.attention_obj.dis <= 4000 then
 			exec_t = data.t + 0.5
 		else
 			exec_t = data.t + 1

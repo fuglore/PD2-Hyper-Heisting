@@ -731,9 +731,26 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 	elseif action_type == "turn" then
 		data.internal_data.turning = nil
+	elseif action_type == "hurt" then
+		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+		end	
 	elseif action_type == "shoot" then
 		data.internal_data.shooting = nil
 	elseif action_type == "dodge" then
+		local timeout = action:timeout()
+
+		if timeout then
+			data.dodge_timeout_t = TimerManager:game():time() + math.lerp(timeout[1], timeout[2], math.random())
+		end
+
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+		end
+		
 		local objective = data.objective
 		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, nil)
 
