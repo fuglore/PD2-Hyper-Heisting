@@ -379,7 +379,8 @@ function CopLogicBase._update_haste(data, my_data)
 	end	
 	 
 	if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and haste and can_perform_walking_action then
-		local path = my_data.chase_path or my_data.charge_path or my_data.cover_path
+		local path = my_data.chase_path or my_data.charge_path or my_data.advance_path or my_data.cover_path
+		
 		if not my_data.has_reset_walk_cycle then
 			local new_action = {
 				body_part = 2,
@@ -1013,3 +1014,47 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	return false, false
 end
 
+function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
+	if internal_data.unit and internal_data ~= internal_data.unit:brain()._logic_data.internal_data then
+		log("how is this man")
+		--debug_pause("[CopLogicBase.queue_task] Task queued from the wrong logic", internal_data.unit, id, func, data, exec_t, asap)
+	end
+	
+	if asap then
+		asap = nil
+	end
+
+	local qd_tasks = internal_data.queued_tasks
+
+	if qd_tasks then
+		if qd_tasks[id] then
+			log("queued something twice!!!")
+			--debug_pause("[CopLogicBase.queue_task] Task queued twice", internal_data.unit, id, func, data, exec_t, asap)
+		end
+
+		qd_tasks[id] = true
+	else
+		internal_data.queued_tasks = {
+			[id] = true
+		}
+	end
+	
+	if data.unit:base():has_tag("special") or data.unit:base():has_tag("takedown") or data.internal_data.shooting or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 3000 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1500 or data.is_converted or data.unit:in_slot(16) then
+		asap = true
+		if data.attention_obj <= 1500 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 then
+			exec_t = data.t + 0.15
+		else
+			exec_t = data.t + 0.3
+		end
+	else
+		asap = nil
+		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 4000 then
+			exec_t = data.t + 0.5
+		else
+			exec_t = data.t + 1
+		end
+	end
+	
+	
+	managers.enemy:queue_task(id, func, data, exec_t, callback(CopLogicBase, CopLogicBase, "on_queued_task", internal_data), asap)
+end

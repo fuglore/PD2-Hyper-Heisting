@@ -431,7 +431,7 @@ function CopActionHurt:init(action_desc, common_data)
 		end
 	elseif action_type == "light_hurt" then
 		--prevent light_hurt from showing when doing animations like climbing, etc
-		if (self._unit:anim_data() and self._unit:anim_data().act) then
+		if self._unit:anim_data() and self._unit:anim_data().act then
 			return
 		end
 

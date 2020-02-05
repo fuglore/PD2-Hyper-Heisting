@@ -33,7 +33,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["hud_assault_faction_mad"] = "VS. REAPERS",
 		["hud_assault_faction_hvh"] = "YOU HAVE STARTLED THE HORDE",
 		["hud_assault_faction_generic"] = "VS. US SWAT",
-		["hud_assault_faction_mexcross"] = "VS. BATALLÓN MURKY",
+		["hud_assault_faction_mexcross"] = "VS. BATALLÓN MURKY", --hoxi said this doesnt look good so i should look into figuring out how to make it cooler later
 		["hud_assault_cover"] = "STAY IN COVER",
 		["hud_assault_coverhvh"] = "DON'T STOP MOVING",
 		["hud_assault_cover_mexcross"] = "MANTENTE A CUBIERTO",

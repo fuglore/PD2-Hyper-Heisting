@@ -169,16 +169,20 @@ function CopActionShoot:update(t)
 	local speed = 1
 	local feddensitypenalty = managers.groupai:state():chk_high_fed_density() and 1 or 0
 	local suppressedpenalty = self._common_data.is_suppressed and 1.5 or 1
+	local vis_state = self._ext_base:lod_stage()
+	vis_state = vis_state or 4
 	
-	--if vis_state == 1 then
-		-- Nothing
-	--elseif self._skipped_frames < vis_state * 3 then
-	--	self._skipped_frames = self._skipped_frames + 1
-
-	--	return
-	--else
-	--	self._skipped_frames = 1
-	--end
+	if vis_state == 1 then
+		self._skipped_frames = 0
+	elseif vis_state == 2 then
+		self._skipped_frames = 1
+	elseif vis_state == 3 then
+		self._skipped_frames = 2
+	elseif vis_state == 4 then
+		self._skipped_frames = 3
+	else
+		self._skipped_frames = 1
+	end
 	
 	local shoot_from_pos = self._shoot_from_pos
 	local ext_anim = self._ext_anim
@@ -207,19 +211,19 @@ function CopActionShoot:update(t)
 			end
 		end
 		
-		if target_dis then
-			if target_dis > 1200 then
-				self._skipped_frames = 1
-			elseif target_dis > 2000 then
-				self._skipped_frames = 2
-			elseif target_dis > 3000 then
-				self._skipped_frames = 3
-			elseif target_dis > 4000 then
-				self._skipped_frames = 4
-			else
-				self._skipped_frames = 0
-			end
-		end
+		--if target_dis then
+		--	if target_dis > 1200 then
+		--		self._skipped_frames = 1
+		--	elseif target_dis > 2000 then
+		--		self._skipped_frames = 2
+		--	elseif target_dis > 3000 then
+		--		self._skipped_frames = 3
+		--	elseif target_dis > 4000 then
+		--		self._skipped_frames = 4
+		--	else
+		--		self._skipped_frames = 0
+		--	end
+		--end
 
 		
 		if self._turn_allowed then

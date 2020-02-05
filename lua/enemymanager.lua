@@ -1,3 +1,14 @@
+local mvec3_set = mvector3.set
+local mvec3_sub = mvector3.subtract
+local mvec3_dir = mvector3.direction
+local mvec3_dot = mvector3.dot
+local mvec3_dis = mvector3.distance
+local t_rem = table.remove
+local t_ins = table.insert
+local m_min = math.min
+local tmp_vec1 = Vector3()
+
+
 function EnemyManager:get_magnet_storm_targets(unit)
 	if self:is_civilian(unit) then
 		return nil
@@ -19,23 +30,60 @@ function EnemyManager:get_magnet_storm_targets(unit)
 	return targets_to_tase
 end
 
-function EnemyManager:_update_gfx_lod()
-	if self._gfx_lod_data.enabled and managers.navigation:is_data_ready() and dont then --note: this code is literally worthless and ruins performance more than it helps it, not to mention indirectly affecting ai behavior, id love to one day figure out a fix for this but until then im decommisioning it, besides, LOD models arent really enough to do any performance changes, nothing of value was lost
-		local camera_rot = managers.viewport:get_current_camera_rotation()
+function EnemyManager:_update_queued_tasks(t, dt)
+	local i_asap_task, asp_task_t = nil
+	self._queue_buffer = self._queue_buffer + dt
+	local tick_rate = tweak_data.group_ai.ai_tick_rate
 
-		if camera_rot then
-			local pl_tracker, cam_pos = nil
-			local pl_fwd = camera_rot:y()
-			local player = managers.player:player_unit()
+	if tick_rate <= self._queue_buffer then
+		for i_task, task_data in ipairs(self._queued_tasks) do
+			if task_data.asap and not asp_task_t or task_data.asap and asp_task_t and task_data.t < asp_task_t then
+				i_asap_task = i_task
+				asp_task_t = task_data.t
+			elseif not task_data.t or task_data.t < t then
+				self:_execute_queued_task(i_task)
 
-			if player then
-				pl_tracker = player:movement():nav_tracker()
-				cam_pos = player:movement():m_head_pos()
-			else
-				pl_tracker = false
-				cam_pos = managers.viewport:get_current_camera_position()
+				self._queue_buffer = self._queue_buffer - tick_rate
+
+				if self._queue_buffer <= 0 then
+					break
+				end
 			end
+		end
+	end
 
+	if #self._queued_tasks == 0 then
+		self._queue_buffer = 0
+	end
+
+	if i_asap_task and not self._queued_task_executed then
+		self:_execute_queued_task(i_asap_task)
+	end
+
+	local all_clbks = self._delayed_clbks
+
+	if all_clbks[1] and all_clbks[1][2] < t then
+		local clbk = table.remove(all_clbks, 1)[3]
+
+		clbk()
+	end
+end
+
+function EnemyManager:_update_gfx_lod()
+	if self._gfx_lod_data.enabled and managers.navigation:is_data_ready() then
+		local player = managers.player:player_unit()
+		local pl_tracker, cam_pos, cam_fwd = nil
+
+		if player then
+			pl_tracker = player:movement():nav_tracker()
+			cam_pos = player:movement():m_head_pos()
+			cam_fwd = player:camera():forward()
+		elseif managers.viewport:get_current_camera() then
+			cam_pos = managers.viewport:get_current_camera_position()
+			cam_fwd = managers.viewport:get_current_camera_rotation():y()
+		end
+
+		if cam_fwd then
 			local entries = self._gfx_lod_data.entries
 			local units = entries.units
 			local states = entries.states
@@ -48,10 +96,22 @@ function EnemyManager:_update_gfx_lod()
 			local world_in_view_with_options = World.in_view_with_options
 
 			for i, state in ipairs(states) do
-				if not state and alive(units[i]) and (occ_skip_units[units[i]:key()] or (not pl_tracker or chk_vis_func(pl_tracker, trackers[i])) and not unit_occluded(units[i])) and world_in_view_with_options(World, com[i], 0, 110, 18000) then
-					states[i] = 1
+				if not state and alive(units[i]) then
+					local proceed = nil
 
-					units[i]:base():set_visibility_state(1)
+					if occ_skip_units[units[i]:key()] then
+						proceed = true
+					elseif not unit_occluded(units[i]) then
+						if not pl_tracker or chk_vis_func(pl_tracker, trackers[i]) then
+							proceed = true
+						end
+					end
+
+					if proceed and world_in_view_with_options(World, com[i], 0, 110, 18000) then
+						states[i] = 1
+
+						units[i]:base():set_visibility_state(1)
+					end
 				end
 			end
 
@@ -73,7 +133,15 @@ function EnemyManager:_update_gfx_lod()
 
 				repeat
 					if states[i] and alive(units[i]) then
-						if not occ_skip_units[units[i]:key()] and (pl_tracker and not chk_vis_func(pl_tracker, trackers[i]) or unit_occluded(units[i])) then
+						local occluded_or_not_visible = nil
+
+						if not occ_skip_units[units[i]:key()] then
+							if unit_occluded(units[i]) or pl_tracker and not chk_vis_func(pl_tracker, trackers[i]) then
+								occluded_or_not_visible = true
+							end
+						end
+
+						if occluded_or_not_visible then
 							states[i] = false
 
 							units[i]:base():set_visibility_state(false)
@@ -93,7 +161,7 @@ function EnemyManager:_update_gfx_lod()
 							break
 						else
 							local my_wgt = mvec3_dir(tmp_vec1, cam_pos, com[i])
-							local dot = mvec3_dot(tmp_vec1, pl_fwd)
+							local dot = mvec3_dot(tmp_vec1, cam_fwd)
 							local previous_prio = nil
 
 							for prio, i_entry in ipairs(imp_i_list) do
@@ -178,5 +246,271 @@ function EnemyManager:_update_gfx_lod()
 				until i == start_i
 			end
 		end
+	end
+end
+
+function EnemyManager:chk_any_unit_in_slotmask_visible(slotmask, cam_pos, cam_nav_tracker)
+	if self._gfx_lod_data.enabled and managers.navigation:is_data_ready() then
+		local entries = self._gfx_lod_data.entries
+		local units = entries.units
+		local states = entries.states
+		local trackers = entries.trackers
+		local move_exts = entries.move_ext
+		local com = entries.com
+		local chk_vis_func = cam_nav_tracker and cam_nav_tracker.check_visibility
+		local unit_occluded = Unit.occluded
+		local occ_skip_units = managers.occlusion._skip_occlusion
+		local vis_slotmask = managers.slot:get_mask("AI_visibility")
+
+		for i, state in ipairs(states) do
+			if alive(units[i]) then
+				local unit = units[i]
+
+				if unit:in_slot(slotmask) then
+					local proceed = nil
+
+					if occ_skip_units[unit:key()] then
+						proceed = true
+					elseif not unit_occluded(unit) then
+						if not cam_nav_tracker or chk_vis_func(cam_nav_tracker, trackers[i]) then
+							proceed = true
+						end
+					end
+
+					if proceed then
+						local distance = mvec3_dis(cam_pos, com[i])
+
+						if distance < 300 then
+							return true
+						elseif distance < 2000 then
+							local u_m_head_pos = move_exts[i]:m_head_pos()
+							local ray = World:raycast("ray", cam_pos, u_m_head_pos, "slot_mask", vis_slotmask, "report")
+
+							if not ray then
+								return true
+							else
+								ray = World:raycast("ray", cam_pos, com[i], "slot_mask", vis_slotmask, "report")
+
+								if not ray then
+									return true
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end
+
+function EnemyManager:_update_queued_tasks(t, dt)
+	local i_asap_task, asp_task_t = nil
+	self._queue_buffer = self._queue_buffer + dt
+	local tick_rate = tweak_data.group_ai.ai_tick_rate
+
+	if tick_rate <= self._queue_buffer then
+		for i_task, task_data in ipairs(self._queued_tasks) do
+			if not task_data.t or task_data.t < t then
+				self:_execute_queued_task(i_task)
+
+				self._queue_buffer = self._queue_buffer - tick_rate
+
+				if self._queue_buffer <= 0 then
+					break
+				end
+			elseif task_data.asap then
+				if not asp_task_t or task_data.t < asp_task_t then
+					i_asap_task = i_task
+					asp_task_t = task_data.t
+				end
+			end
+		end
+	end
+
+	if #self._queued_tasks == 0 then
+		self._queue_buffer = 0
+	end
+
+	if i_asap_task and not self._queued_task_executed then
+		self:_execute_queued_task(i_asap_task)
+	end
+
+	local all_clbks = self._delayed_clbks
+
+	if all_clbks[1] and all_clbks[1][2] < t then
+		local clbk = table.remove(all_clbks, 1)[3]
+
+		clbk()
+	end
+end
+
+function EnemyManager:_upd_corpse_disposal()
+	local t = TimerManager:game():time()
+	local enemy_data = self._enemy_data
+	local nr_corpses = enemy_data.nr_corpses
+	local disposals_needed = nr_corpses - self:corpse_limit()
+	local corpses = enemy_data.corpses
+	local player = managers.player:player_unit()
+	local pl_tracker, cam_pos, cam_fwd = nil
+
+	if player then
+		pl_tracker = player:movement():nav_tracker()
+		cam_pos = player:movement():m_head_pos()
+		cam_fwd = player:camera():forward()
+	elseif managers.viewport:get_current_camera() then
+		cam_pos = managers.viewport:get_current_camera_position()
+		cam_fwd = managers.viewport:get_current_camera_rotation():y()
+	end
+
+	local to_dispose = {}
+	local nr_found = 0
+
+	if pl_tracker then
+		for u_key, u_data in pairs(corpses) do
+			local u_tracker = u_data.tracker
+
+			if u_tracker and not pl_tracker:check_visibility(u_tracker) then
+				to_dispose[u_key] = true
+				nr_found = nr_found + 1
+			end
+		end
+	end
+
+	if disposals_needed > #to_dispose then
+		if cam_pos then
+			for u_key, u_data in pairs(corpses) do
+				local u_pos = u_data.m_pos
+
+				if not to_dispose[u_key] and mvec3_dis(cam_pos, u_pos) > 300 and mvector3.dot(cam_fwd, u_pos - cam_pos) < 0 then
+					to_dispose[u_key] = true
+					nr_found = nr_found + 1
+
+					if nr_found == disposals_needed then
+						break
+					end
+				end
+			end
+		end
+
+		if nr_found < disposals_needed then
+			local oldest_u_key, oldest_t = nil
+
+			for u_key, u_data in pairs(corpses) do
+				if not oldest_t or u_data.death_t < oldest_t then
+					if not to_dispose[u_key] then
+						oldest_u_key = u_key
+						oldest_t = u_data.death_t
+					end
+				end
+			end
+
+			if oldest_u_key then
+				to_dispose[oldest_u_key] = true
+				nr_found = nr_found + 1
+			end
+		end
+	end
+
+	for u_key, _ in pairs(to_dispose) do
+		local u_data = corpses[u_key]
+
+		if alive(u_data.unit) then
+			u_data.unit:base():set_slot(u_data.unit, 0)
+		end
+
+		corpses[u_key] = nil
+	end
+
+	enemy_data.nr_corpses = nr_corpses - nr_found
+
+	if nr_corpses > 0 then
+		local delay = self:corpse_limit() < enemy_data.nr_corpses and 0 or self._corpse_disposal_upd_interval
+
+		self:queue_task("EnemyManager._upd_corpse_disposal", EnemyManager._upd_corpse_disposal, self, t + delay)
+	end
+end
+
+function EnemyManager:_upd_shield_disposal()
+	local t = TimerManager:game():time()
+	local enemy_data = self._enemy_data
+	local nr_shields = enemy_data.nr_shields
+	local disposals_needed = nr_shields - self:shield_limit()
+	local shields = enemy_data.shields
+	local player = managers.player:player_unit()
+	local cam_pos, cam_fwd = nil
+
+	if player then
+		cam_pos = player:movement():m_head_pos()
+		cam_fwd = player:camera():forward()
+	elseif managers.viewport:get_current_camera() then
+		cam_pos = managers.viewport:get_current_camera_position()
+		cam_fwd = managers.viewport:get_current_camera_rotation():y()
+	end
+
+	local to_dispose = {}
+	local nr_found = 0
+
+	if disposals_needed > #to_dispose then
+		if cam_pos then
+			for u_key, u_data in pairs(shields) do
+				local dispose = false
+
+				if alive(u_data.unit) then
+					local u_pos = u_data.unit:position()
+
+					if not to_dispose[u_key] and mvec3_dis(cam_pos, u_pos) > 300 and mvector3.dot(cam_fwd, u_pos - cam_pos) < 0 and t > u_data.death_t + self._shield_disposal_lifetime then
+						dispose = true
+					end
+				else
+					dispose = true
+				end
+
+				if dispose then
+					to_dispose[u_key] = true
+					nr_found = nr_found + 1
+
+					if nr_found == disposals_needed then
+						break
+					end
+				end
+			end
+		end
+
+		if nr_found < disposals_needed then
+			local oldest_u_key, oldest_t = nil
+
+			for u_key, u_data in pairs(shields) do
+				if not oldest_t or u_data.death_t < oldest_t then
+					if not to_dispose[u_key] then
+						oldest_u_key = u_key
+						oldest_t = u_data.death_t
+					end
+				end
+			end
+
+			if oldest_u_key then
+				to_dispose[oldest_u_key] = true
+				nr_found = nr_found + 1
+			end
+		end
+	end
+
+	for u_key, _ in pairs(to_dispose) do
+		local u_data = shields[u_key]
+
+		if alive(u_data.unit) then
+			self:unregister_shield(u_data.unit)
+			u_data.unit:set_slot(0)
+		end
+
+		shields[u_key] = nil
+	end
+
+	enemy_data.nr_shields = nr_shields - nr_found
+
+	if enemy_data.nr_shields > 0 then
+		local delay = self:corpse_limit() < enemy_data.nr_shields and 0 or self._shield_disposal_upd_interval
+
+		self:queue_task("EnemyManager._upd_shield_disposal", EnemyManager._upd_shield_disposal, self, t + delay)
 	end
 end

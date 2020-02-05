@@ -1381,9 +1381,7 @@ function CharacterTweakData:_presets(tweak_data)
 					health_limit = 0.6
 				},
 				{
-					light = 0.1,
-					moderate = 0.4,
-					heavy = 0.5
+					moderate = 9
 				}
 			}
 		},
@@ -1430,7 +1428,6 @@ function CharacterTweakData:_presets(tweak_data)
 					health_limit = 0.4
 				},
 				{
-					light = 0,
 					moderate = 0.5,
 					heavy = 0.5
 				}
@@ -1440,7 +1437,8 @@ function CharacterTweakData:_presets(tweak_data)
 			health_reference = "current",
 			zones = {
 				{
-					fire = 0.05
+					fire = 0.05,
+					light = 0.95
 				}
 			}
 		},
@@ -1449,6 +1447,7 @@ function CharacterTweakData:_presets(tweak_data)
 			zones = {
 				{
 					poison = 0.25,
+					light = 0.75,
 					none = 0
 				}
 			}
@@ -1478,9 +1477,7 @@ function CharacterTweakData:_presets(tweak_data)
 					health_limit = 0.5
 				},
 				{
-					light = 0, --it never gets to explode reactions,
-					moderate = 0.5,
-					heavy = 0.5
+					moderate = 1
 				}
 			}
 		},
@@ -1532,7 +1529,8 @@ function CharacterTweakData:_presets(tweak_data)
 			health_reference = "current",
 			zones = {
 				{
-					fire = 0.025
+					fire = 0.025,
+					light = 0.975,
 				}
 			}
 		},
@@ -1541,7 +1539,7 @@ function CharacterTweakData:_presets(tweak_data)
 			zones = {
 				{
 					poison = 0.05,
-					none = 0
+					light = 0.95
 				}
 			}
 		}

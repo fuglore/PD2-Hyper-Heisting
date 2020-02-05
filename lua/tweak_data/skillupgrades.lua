@@ -86,9 +86,18 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				1,
 				1
 			}
-		end	
-	
-	
+		end
+		
+		self.values.player.body_armor.skill_max_health_store = {
+			11,
+			11,
+			10,
+			9,
+			8,
+			6,
+			5
+		}
+		
 		self.values.temporary.overkill_damage_multiplier = {{1.25, 8}}
 		self.values.pistol.damage_addend = {0.5, 1}
 		self.values.pistol.fire_rate_multiplier = {1.25}

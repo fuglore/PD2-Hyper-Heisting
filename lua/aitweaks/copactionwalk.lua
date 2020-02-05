@@ -354,6 +354,16 @@ function CopActionWalk:init(action_desc, common_data)
 	self._sync = Network:is_server()
 	self._skipped_frames = 1
 	
+	if not action_desc then
+		log("huh?")
+		return
+	end
+	
+	if not action_desc.nav_path then
+		log("what?")
+		return
+	end
+	
 	if self._ext_anim.needs_idle then
 		self._waiting_full_blend = true
 

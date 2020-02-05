@@ -152,7 +152,7 @@ function GroupAIStateBase:set_importance_weight(u_key, wgt_report)
 
 	local t_rem = table.remove
 	local t_ins = table.insert
-	local max_nr_imp = 6969 --no reason to have this anymore, i think i adjusted reaction times enough to justify removing importance altogether
+	local max_nr_imp = 32 --oh hey mod runs ok again
 	local imp_adj = 0
 	local criminals = self._player_criminals
 	local cops = self._police
@@ -234,7 +234,7 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 			self:_set_rescue_state(false)
 			for group_id, group in pairs(self._groups) do
 				for u_key, u_data in pairs(group.units) do
-					u_data.unit:sound():say("g90", true)
+					u_data.unit:sound():say("att", true)
 				end
 			end
 

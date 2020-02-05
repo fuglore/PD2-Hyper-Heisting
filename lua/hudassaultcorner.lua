@@ -1,4 +1,5 @@
 Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(self)
+	local level = Global.level_data and Global.level_data.level_id
 	local cover_line_to_use = "hud_assault_cover"
 	local FG_chance = math.random(1, 124)
 	
@@ -12,7 +13,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		if faction == "russia" then
 			versusline = "hud_assault_faction_mad"
 		elseif faction == "murkywater" then
-			if managers.groupai and managers.groupai:state()._in_mexico then
+			if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" then
 				versusline = "hud_assault_faction_mexcross"
 				assaultline = "hud_assault_assault_mexcross"
 			else
