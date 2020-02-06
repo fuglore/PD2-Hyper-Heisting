@@ -1438,7 +1438,7 @@ function CharacterTweakData:_presets(tweak_data)
 			zones = {
 				{
 					fire = 0.05,
-					light = 0.95
+					none = 0.95
 				}
 			}
 		},
@@ -1447,8 +1447,8 @@ function CharacterTweakData:_presets(tweak_data)
 			zones = {
 				{
 					poison = 0.25,
-					light = 0.75,
-					none = 0
+					none = 0.75,
+					--none = 0
 				}
 			}
 		}
@@ -1530,7 +1530,7 @@ function CharacterTweakData:_presets(tweak_data)
 			zones = {
 				{
 					fire = 0.025,
-					light = 0.975,
+					none = 0.975,
 				}
 			}
 		},
@@ -1539,7 +1539,7 @@ function CharacterTweakData:_presets(tweak_data)
 			zones = {
 				{
 					poison = 0.05,
-					light = 0.95
+					none = 0.95
 				}
 			}
 		}

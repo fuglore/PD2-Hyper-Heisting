@@ -49,12 +49,12 @@ function CopActionTase:init(action_desc, common_data)
 	local attention = common_data.attention
 
 	if not attention or not attention.unit then
-        if Network:is_server() then
-            log("how is this man")
+		if Network:is_server() then
+			--debug_pause("[CopActionTase:init] no attention", inspect(action_desc))
 
-            return
-        end
-    end
+			return
+		end
+	end
 
 	local weapon_unit = self._ext_inventory:equipped_unit()
 
@@ -122,7 +122,9 @@ function CopActionTase:on_attention(attention)
 			end
 
 			if self._discharging then
-				self._tasing_local_unit:movement():on_tase_ended()
+				if self._tasing_local_unit then
+					self._tasing_local_unit:movement():on_tase_ended()
+				end
 
 				self._discharging = nil
 			end
@@ -147,16 +149,14 @@ function CopActionTase:on_attention(attention)
 			self._client_attention_set = true
 		end
 	end
-	self._attention = attention
 
 	local t = TimerManager:game():time()
-	local _, __, target_dis = self:_get_target_pos(self._shoot_from_pos, self._attention, t)
 
 	self[self._ik_preset.start](self)
 
 	local vis_state = self._ext_base:lod_stage()
 
-	if target_dis and target_dis <= 1200 and self[self._ik_preset.get_blend](self) > 0 then
+	if vis_state and vis_state < 3 and self[self._ik_preset.get_blend](self) > 0 then
 		self._aim_transition = {
 			duration = 0.333,
 			start_t = t,
@@ -168,19 +168,15 @@ function CopActionTase:on_attention(attention)
 		self._get_target_pos = nil
 	end
 
-	self._mod_enable_t = TimerManager:game():time() + 0.25
+	self._mod_enable_t = TimerManager:game():time() + 0.5
 
 	self.update = nil
-	
-	local lerp_dis = math.min(1, target_dis / self._falloff[#self._falloff].r)
-	
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local shoot_delay = 0.45
+	self._attention = attention
 
-	if diff_index > 5 then
-		shoot_delay = 0.25
-	end
-	
+	local _, __, target_dis = self:_get_target_pos(self._shoot_from_pos, self._attention, t)
+	local lerp_dis = math.min(1, target_dis / self._falloff[#self._falloff].r)
+	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local shoot_delay = difficulty_index > 5 and 0.5 or 1
 	self._tasing_local_unit = nil
 	self._tasing_player = nil
 
@@ -214,7 +210,7 @@ function CopActionTase:on_exit()
 		World:effect_manager():fade_kill(self._tase_effect)
 	end
 
-	if self._discharging then
+	if self._discharging and self._tasing_local_unit then
 		self._tasing_local_unit:movement():on_tase_ended()
 	end
 
@@ -250,21 +246,23 @@ function CopActionTase:update(t)
 	if self._expired then
 		return
 	end
-	
-	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 
-	--local vis_state = self._ext_base:lod_stage()
-	--vis_state = vis_state or 4
+	if Network:is_client() and self._ext_anim.act then --temporary fix for husks shooting local clients while doing animations like climbing
+		return
+	end
 
-	--if vis_state == 1 then
+	local vis_state = self._ext_base:lod_stage()
+	vis_state = vis_state or 4
+
+	if vis_state == 1 then
 		-- Nothing
-	--elseif self._skipped_frames < vis_state * 3 then
-	--	self._skipped_frames = self._skipped_frames + 1
+	elseif self._skipped_frames < vis_state * 3 then
+		self._skipped_frames = self._skipped_frames + 1
 
-	--	return
-	--else
-	--	self._skipped_frames = 1
-	--end
+		return
+	else
+		self._skipped_frames = 1
+	end
 
 	local target_pos, target_vec, target_dis = nil
 
@@ -278,53 +276,42 @@ function CopActionTase:update(t)
 
 		local fwd = self._common_data.fwd
 		local fwd_dot = mvec3_dot(fwd, tar_vec_flat)
-		
-		if not self._unit:base():has_tag("tank") then
-			if difficulty_index == 8 then
-				speed = 1.75
-			elseif difficulty_index == 6 or difficulty_index == 7 then
-				speed = 1.5
-			elseif difficulty_index <= 5 then
-				speed = 1.25
-			else
-				speed = 1.25
-			end
-		end
-		
-		if target_dis then
-			if target_dis > 1200 then
-				self._skipped_frames = 1
-			elseif target_dis > 2000 then
-				self._skipped_frames = 2
-			elseif target_dis > 3000 then
-				self._skipped_frames = 3
-			elseif target_dis > 4000 then
-				self._skipped_frames = 4
-			else
-				self._skipped_frames = 0
-			end
-		end
 
 		if self._turn_allowed then
 			local active_actions = self._common_data.active_actions
 			local queued_actions = self._common_data.queued_actions
+
+			if not active_actions[2] or active_actions[2]:type() == "idle" then
+				if not queued_actions or not queued_actions[1] and not queued_actions[2] then
+					if not self._ext_movement:chk_action_forbidden("turn") then
+						local fwd_dot_flat = mvec3_dot(tar_vec_flat, fwd)
+
+						if fwd_dot_flat < 0.96 then
+							local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 			
-			local actions_chk = not active_actions[2] or active_actions[2]:type() == "idle"
-			local queued_actions_chk = not queued_actions or not queued_actions[1] and not queued_actions[2]
+							if not self._unit:base():has_tag("tank") then
+								if difficulty_index == 8 then
+									speed = 1.75
+								elseif difficulty_index == 6 or difficulty_index == 7 then
+									speed = 1.5
+								elseif difficulty_index <= 5 then
+									speed = 1.25
+								else
+									speed = 1.25
+								end
+							end
+							
+							local spin = tar_vec_flat:to_polar_with_reference(fwd, math.UP).spin
+							local new_action_data = {
+								body_part = 2,
+								type = "turn",
+								speed = speed or 1,
+								angle = spin
+							}
 
-			if actions_chk and queued_actions_chk and not self._ext_movement:chk_action_forbidden("walk") then
-				local fwd_dot_flat = mvec3_dot(tar_vec_flat, fwd)
-
-				if fwd_dot_flat < 0.96 then
-					local spin = tar_vec_flat:to_polar_with_reference(fwd, math.UP).spin
-					local new_action_data = {
-						type = "turn",
-						body_part = 2,
-						speed = speed or 1,
-						angle = spin
-					}
-
-					self._ext_movement:action_request(new_action_data)
+							self._ext_movement:action_request(new_action_data)
+						end
+					end
 				end
 			end
 		end
@@ -334,42 +321,36 @@ function CopActionTase:update(t)
 
 	if not self._ext_anim.reload and not self._ext_anim.equip and not self._ext_anim.melee then
 		if self._discharging then
-			local cancel_tase = not self._tasing_local_unit:movement():tased() or self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", 5, "report")
+			if self._tasing_local_unit then
+				local cancel_tase = not self._tasing_local_unit:movement():tased() or self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", 5, "report")
 
-			if cancel_tase then
+				if cancel_tase then
+					if Network:is_server() then
+						self._expired = true
+					else
+						self._tasing_local_unit:movement():on_tase_ended()
+						self._tasing_local_unit:movement():on_targetted_for_attack(false, self._unit)
+						self._tasing_player = nil
+						self._tasing_local_unit = nil
+
+						self._discharging = nil
+						self.update = self._upd_empty
+					end
+				end
+			elseif not self._attention.unit:movement():tased() then
 				if Network:is_server() then
 					self._expired = true
 				else
-					self._tasing_local_unit:movement():on_tase_ended()
-					self._tasing_local_unit:movement():on_targetted_for_attack(false, self._unit)
-
-					self._discharging = nil
-					self._tasing_player = nil
-					self._tasing_local_unit = nil
 					self.update = self._upd_empty
 				end
 
-				self._started_tasing_husk = nil
-			else
-				if Network:is_server() then
-					local attention_can_joker_counter = nil --placeholder for skill check
-
-					if attention_can_joker_counter then
-						self:check_joker_counter()
-					end
-				end
-
-				if not self._tasing_local_unit and not self._started_tasing_husk then
-					self._started_tasing_husk = true
-					self._tasered_sound = self._unit:sound():play("tasered_3rd", nil)
-					local redir_res = self._ext_movement:play_redirect("recoil")
-
-					if redir_res then
-						self._machine:set_parameter(redir_res, "hvy", 0)
-					end
-				end
+				self._discharging = nil
 			end
-		elseif self._shoot_t and self._mod_enable_t < t then
+		elseif not self._tasing_local_unit and self._attention and self._attention.unit:movement():tased() then
+			self._discharging = true
+			self._tasered_sound = self._unit:sound():play("tasered_3rd", nil)
+			self._ext_movement:play_redirect("recoil")
+		elseif target_vec and self._mod_enable_t < t then
 			if self._tase_effect then
 				World:effect_manager():fade_kill(self._tase_effect)
 			end
@@ -381,14 +362,14 @@ function CopActionTase:update(t)
 			})
 
 			if not self._played_sound_this_once then
-				if not self._ext_brain._last_charge_snd_play_t or self._ext_brain._last_charge_snd_play_t + 3 < t then
+				if not self._ext_brain._last_charge_snd_play_t or self._ext_brain._last_charge_snd_play_t + 0.7 < t then
 					self._played_sound_this_once = true
 					self._ext_brain._last_charge_snd_play_t = t
 					self._unit:sound():play("taser_charge", nil)
 				end
 			end
 
-			if target_vec and self._common_data.allow_fire and self._shoot_t < t then
+			if self._common_data.allow_fire and self._shoot_t and self._shoot_t < t then
 				if self._tasing_local_unit and target_dis < self._tase_distance then
 					local record = managers.groupai:state():criminal_record(self._tasing_local_unit:key())
 
@@ -397,7 +378,7 @@ function CopActionTase:update(t)
 							self._expired = true
 						end
 					else
-						local is_obstructed = self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", 5, "report")
+						local is_obstructed = self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", self._sphere_radius, "report")
 
 						if not is_obstructed then
 							self._common_data.ext_network:send("action_tase_event", 3)
@@ -415,11 +396,7 @@ function CopActionTase:update(t)
 								self._tasered_sound = self._unit:sound():play("tasered_3rd", nil)
 							end
 
-							local redir_res = self._ext_movement:play_redirect("recoil")
-
-							if redir_res then
-								self._machine:set_parameter(redir_res, "hvy", 0)
-							end
+							self._ext_movement:play_redirect("recoil")
 
 							self._shoot_t = nil
 						end

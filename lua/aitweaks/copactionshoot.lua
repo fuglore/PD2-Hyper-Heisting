@@ -14,7 +14,6 @@ local mrot_axis_angle = mrotation.set_axis_angle
 local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 local temp_vec3 = Vector3()
-local temp_vec4 = Vector3()
 local temp_rot1 = Rotation()
 local bezier_curve = {
 	0,
@@ -23,57 +22,60 @@ local bezier_curve = {
 	1
 }
 
-function CopActionShoot:_upd_ik_spine(target_vec, fwd_dot, t)
-	if fwd_dot > 0.5 then
-		if not self._modifier_on then
-			self._modifier_on = true
+function CopActionShoot:init(action_desc, common_data)
+	self._common_data = common_data
+	self._ext_movement = common_data.ext_movement
+	self._ext_anim = common_data.ext_anim
+	self._ext_brain = common_data.ext_brain
+	self._ext_inventory = common_data.ext_inventory
+	self._ext_base = common_data.ext_base
+	self._body_part = action_desc.body_part
+	self._machine = common_data.machine
+	self._unit = common_data.unit
+	local preset_name = self._ext_anim.base_aim_ik or "spine"
+	local preset_data = self._ik_presets[preset_name]
+	self._ik_preset = preset_data
 
-			self._machine:force_modifier(self._modifier_name)
+	self[preset_data.start](self)
 
-			self._mod_enable_t = t + 0.3
-		end
+	local weapon_unit = self._ext_inventory:equipped_unit()
 
-		self._modifier:set_target_y(target_vec)
-		mvec3_set(self._common_data.look_vec, target_vec)
-
-		return target_vec
-	else
-		if self._modifier_on then
-			self._modifier_on = nil
-
-			self._machine:allow_modifier(self._modifier_name)
-		end
-
-		return nil
+	if not weapon_unit then
+		return false
 	end
-end
 
-function CopActionShoot:_upd_ik_r_arm(target_vec, fwd_dot, t)
-	if fwd_dot > 0.5 then
-		if not self._modifier_on then
-			self._modifier_on = true
+	local weap_tweak = weapon_unit:base():weapon_tweak_data()
+	local weapon_usage_tweak = common_data.char_tweak.weapon[weap_tweak.usage]
+	self._weapon_unit = weapon_unit
+	self._weapon_base = weapon_unit:base()
+	self._weap_tweak = weap_tweak
+	self._w_usage_tweak = weapon_usage_tweak
+	self._reload_speed = weapon_usage_tweak.RELOAD_SPEED
+	self._spread = weapon_usage_tweak.spread
+	self._falloff = weapon_usage_tweak.FALLOFF
+	self._variant = action_desc.variant
+	self._body_part = action_desc.body_part
+	self._turn_allowed = Network:is_client()
+	self._automatic_weap = weap_tweak.auto and weapon_usage_tweak.autofire_rounds and true
+	self._shoot_t = 0
+	local t = TimerManager:game():time()
+	self._melee_timeout_t = t + 1
+	local shoot_from_pos = self._ext_movement:m_head_pos()
+	self._shoot_from_pos = shoot_from_pos
+	self._shield = alive(self._ext_inventory and self._ext_inventory._shield_unit) and self._ext_inventory._shield_unit
 
-			self._machine:force_modifier(self._head_modifier_name)
-			self._machine:force_modifier(self._r_arm_modifier_name)
+	self:on_attention(common_data.attention)
 
-			self._mod_enable_t = t + 0.3
-		end
-
-		self._head_modifier:set_target_z(target_vec)
-		self._r_arm_modifier:set_target_y(target_vec)
-		mvec3_set(self._common_data.look_vec, target_vec)
-
-		return target_vec
-	else
-		if self._modifier_on then
-			self._modifier_on = nil
-
-			self._machine:allow_modifier(self._head_modifier_name)
-			self._machine:allow_modifier(self._r_arm_modifier_name)
-		end
-
-		return nil
+	if Network:is_server() then
+		self._ext_movement:set_stance_by_code(3)
+		common_data.ext_network:send("action_aim_state", true)
 	end
+
+	CopActionAct._create_blocks_table(self, action_desc.blocks)
+
+	self._skipped_frames = 1
+
+	return true
 end
 
 function CopActionShoot:on_attention(attention, old_attention)
@@ -86,19 +88,13 @@ function CopActionShoot:on_attention(attention, old_attention)
 	self._next_vis_ray_t = nil
 
 	if attention then
-		local target_pos = attention.handler and attention.handler:get_attention_m_pos() or attention.unit and attention.unit:movement():m_head_pos()
-		if not target_pos then
-			if shoot_hist and shoot_hist.m_last_pos then
-				target_pos = shoot_hist.m_last_pos
-			else
-				target_pos = self._shoot_from_pos
-			end
-		end
-		local target_dis = mvector3.distance(target_pos, self._shoot_from_pos)
+		local t = TimerManager:game():time()
+
 		self[self._ik_preset.start](self)
 
-		if target_dis and target_dis <= 1200 then
-			local t = TimerManager:game():time()
+		local vis_state = self._ext_base:lod_stage()
+
+		if vis_state and vis_state < 3 and self[self._ik_preset.get_blend](self) > 0 then
 			self._aim_transition = {
 				duration = 0.333,
 				start_t = t,
@@ -110,7 +106,7 @@ function CopActionShoot:on_attention(attention, old_attention)
 			self._get_target_pos = nil
 		end
 
-		self._mod_enable_t = TimerManager:game():time() + 0.3
+		self._mod_enable_t = t + 0.5
 
 		if attention.unit then
 			self._shooting_player = attention.unit:base() and attention.unit:base().is_local_player
@@ -119,33 +115,52 @@ function CopActionShoot:on_attention(attention, old_attention)
 				self._shooting_husk_player = attention.unit:base() and attention.unit:base().is_husk_player
 
 				if self._shooting_husk_player then
-					self._next_vis_ray_t = TimerManager:game():time()
+					self._next_vis_ray_t = t
 				end
 			end
 
 			if self._shooting_player or self._shooting_husk_player then
-				self._verif_slotmask = managers.slot:get_mask("AI_visibility")
-				self._line_of_sight_t = -100
+				self._line_of_sight_t = t - 2
 
 				if self._shooting_player then
 					attention.unit:movement():on_targetted_for_attack(true, self._common_data.unit)
 				end
-			else
-				self._verif_slotmask = nil
 			end
 
+			local target_pos, _, target_dis = self:_get_target_pos(self._shoot_from_pos, attention, t)
 			local usage_tweak = self._w_usage_tweak
 			local shoot_hist = self._shoot_history
 
 			if shoot_hist then
 				local displacement = mvector3.distance(target_pos, shoot_hist.m_last_pos)
-				local focus_delay = usage_tweak.focus_delay * math.min(1, displacement / usage_tweak.focus_dis)
-				shoot_hist.focus_start_t = TimerManager:game():time()
-				shoot_hist.focus_delay = focus_delay
+
+				shoot_hist.focus_start_t = t
 				shoot_hist.m_last_pos = mvector3.copy(target_pos)
+
+				if displacement > usage_tweak.focus_dis then
+					local aim_delay_minmax = usage_tweak.aim_delay
+					local lerp_dis = math.min(1, usage_tweak.focus_dis / displacement)
+					local aim_delay = math.lerp(aim_delay_minmax[2], aim_delay_minmax[1], lerp_dis)
+
+					if self._common_data.is_suppressed then
+						aim_delay = aim_delay * 1.5
+					end
+
+					self._shoot_t = t + aim_delay
+				end
 			else
+				local aim_delay_minmax = usage_tweak.aim_delay
+				local lerp_dis = math.min(1, target_dis / self._falloff[#self._falloff].r)
+				local aim_delay = math.lerp(aim_delay_minmax[1], aim_delay_minmax[2], lerp_dis)
+
+				if self._common_data.is_suppressed then
+					aim_delay = aim_delay * 1.5
+				end
+
+				self._shoot_t = t + aim_delay
+
 				shoot_hist = {
-					focus_start_t = TimerManager:game():time(),
+					focus_start_t = t,
 					focus_delay = usage_tweak.focus_delay,
 					m_last_pos = mvector3.copy(target_pos)
 				}
@@ -165,28 +180,26 @@ function CopActionShoot:on_attention(attention, old_attention)
 end
 
 function CopActionShoot:update(t)
-	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local speed = 1
-	local feddensitypenalty = managers.groupai:state():chk_high_fed_density() and 1 or 0
-	local suppressedpenalty = self._common_data.is_suppressed and 1.5 or 1
+	if Network:is_client() and self._ext_anim.act then --temporary fix for husks shooting local clients while doing animations like climbing
+		return
+	end
+
 	local vis_state = self._ext_base:lod_stage()
 	vis_state = vis_state or 4
-	
-	if vis_state == 1 then
-		self._skipped_frames = 0
-	elseif vis_state == 2 then
-		self._skipped_frames = 1
-	elseif vis_state == 3 then
-		self._skipped_frames = 2
-	elseif vis_state == 4 then
-		self._skipped_frames = 3
-	else
-		self._skipped_frames = 1
+
+	if not self._autofiring and vis_state ~= 1 then
+		if self._skipped_frames < vis_state * 3 then
+			self._skipped_frames = self._skipped_frames + 1
+
+			return
+		else
+			self._skipped_frames = 1
+		end
 	end
-	
+
 	local shoot_from_pos = self._shoot_from_pos
 	local ext_anim = self._ext_anim
-	local target_vec, target_dis, autotarget, target_pos = nil
+	local target_pos, target_vec, target_dis, autotarget = nil
 
 	if self._attention then
 		target_pos, target_vec, target_dis, autotarget = self:_get_target_pos(shoot_from_pos, self._attention, t)
@@ -198,74 +211,75 @@ function CopActionShoot:update(t)
 
 		local fwd = self._common_data.fwd
 		local fwd_dot = mvec3_dot(fwd, tar_vec_flat)
-		
-		if not self._unit:base():has_tag("tank") then
-			if difficulty_index == 8 then
-				speed = 1.75
-			elseif difficulty_index == 6 or difficulty_index == 7 then
-				speed = 1.5
-			elseif difficulty_index <= 5 then
-				speed = 1.25
-			else
-				speed = 1.25
-			end
-		end
-		
-		--if target_dis then
-		--	if target_dis > 1200 then
-		--		self._skipped_frames = 1
-		--	elseif target_dis > 2000 then
-		--		self._skipped_frames = 2
-		--	elseif target_dis > 3000 then
-		--		self._skipped_frames = 3
-		--	elseif target_dis > 4000 then
-		--		self._skipped_frames = 4
-		--	else
-		--		self._skipped_frames = 0
-		--	end
-		--end
 
-		
 		if self._turn_allowed then
 			local active_actions = self._common_data.active_actions
 			local queued_actions = self._common_data.queued_actions
-			
-			local actions_chk = not active_actions[2] or active_actions[2]:type() == "idle"
-			local queued_actions_chk = not queued_actions or not queued_actions[1] and not queued_actions[2]
-			
-			if actions_chk and queued_actions_chk and not self._ext_movement:chk_action_forbidden("walk") then
-				local fwd_dot_flat = mvec3_dot(tar_vec_flat, fwd)
 
-				if fwd_dot_flat < 0.96 then
-					local spin = tar_vec_flat:to_polar_with_reference(fwd, math.UP).spin
-					local new_action_data = {
-						type = "turn",
-						body_part = 2,
-						speed = speed or 1,
-						angle = spin
-					}
+			if not active_actions[2] or active_actions[2]:type() == "idle" then
+				if not queued_actions or not queued_actions[1] and not queued_actions[2] then
+					if not self._ext_movement:chk_action_forbidden("turn") then
+						local fwd_dot_flat = mvec3_dot(tar_vec_flat, fwd)
 
-					self._ext_movement:action_request(new_action_data)
+						if fwd_dot_flat < 0.96 then
+							local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+			
+							if not self._unit:base():has_tag("tank") then
+								if difficulty_index == 8 then
+									speed = 1.75
+								elseif difficulty_index == 6 or difficulty_index == 7 then
+									speed = 1.5
+								elseif difficulty_index <= 5 then
+									speed = 1.25
+								else
+									speed = 1.25
+								end
+							end
+							
+							local spin = tar_vec_flat:to_polar_with_reference(fwd, math.UP).spin
+							local new_action_data = {
+								body_part = 2,
+								type = "turn",
+								speed = speed or 1,
+								angle = spin
+							}
+
+							self._ext_movement:action_request(new_action_data)
+						end
+					end
 				end
 			end
 		end
 
 		target_vec = self:_upd_ik(target_vec, fwd_dot, t)
 	end
-	
-	--local testing = true
-	
-	if self._unit:brain().is_converted_chk and self._unit:brain():is_converted_chk() then
-		--nothing
-	else
-		if Global.game_settings.magnetstorm and self._execute_storm_t and self._execute_storm_t < t and ext_anim.reload and self._unit:base():has_tag("law") or testing and self._execute_storm_t and self._execute_storm_t < t and ext_anim.reload and self._unit:base():has_tag("law") then
-			self:execute_magnet_storm(t)
-		end
-	end
 
 	if not ext_anim.reload and not ext_anim.equip and not ext_anim.melee then
-		if ext_anim.equip then
-			-- Nothing
+		local can_melee = not self._shield and target_vec and self._common_data.allow_fire and true
+
+		if can_melee then
+			if Network:is_server() or autotarget then
+				local melee_range = autotarget and 130 or 180
+
+				if target_dis > melee_range then
+					can_melee = false
+				end
+			else
+				can_melee = false
+			end
+		end
+
+		local do_melee = can_melee and self:check_melee_start(t, self._attention, target_dis, autotarget, shoot_from_pos, target_pos) and self:_chk_start_melee(target_vec, target_dis, autotarget, target_pos)
+
+		if do_melee then
+			if self._autofiring then
+				self._weapon_base:stop_autofire()
+
+				self._autofiring = nil
+				self._autoshots_fired = nil
+			end
+
+			self._shoot_t = t + 1
 		elseif self._weapon_base:clip_empty() then
 			if self._autofiring then
 				self._weapon_base:stop_autofire()
@@ -275,24 +289,12 @@ function CopActionShoot:update(t)
 				self._autoshots_fired = nil
 			end
 
-			local res = CopActionReload._play_reload(self)
-			
-			if self._unit:brain().is_converted_chk and self._unit:brain():is_converted_chk() then
-				--nothing
-			else
-				if res and self._unit:base():has_tag("law") and Global.game_settings.magnetstorm or testing and res and self._unit:base():has_tag("law") and not self._execute_storm_t then
-					self._execute_storm_t = t + 0.75
-					local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
+			local reload_action = {
+				body_part = 3,
+				type = "reload"
+			}
 
-					if tase_effect_table then
-						self._storm_effect = World:effect_manager():spawn(tase_effect_table)
-					end
-				end
-			end
-
-			if res then
-				self._machine:set_speed(res, self._reload_speed)
-			end
+			self._ext_movement:action_request(reload_action)
 
 			if Network:is_server() then
 				managers.network:session():send_to_peers("reload_weapon_cop", self._unit)
@@ -324,75 +326,78 @@ function CopActionShoot:update(t)
 				mvec3_rand_orth(spread_pos, target_vec)
 				mvec3_set_l(spread_pos, spread)
 				mvec3_add(spread_pos, target_pos)
+				mvec3_dir(target_vec, shoot_from_pos, spread_pos)
 
-				target_dis = mvec3_dir(target_vec, shoot_from_pos, spread_pos)
-				local fired = self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, self._shooting_player, nil, nil, nil, self._attention.unit)
+				local fired = self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, autotarget, nil, nil, nil, self._attention.unit)
 
 				if fired then
-					if fired.hit_enemy and fired.hit_enemy.type == "death" and self._unit:unit_data().mission_element then
-						self._unit:unit_data().mission_element:event("killshot", self._unit)
+					if vis_state == 1 and not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move then
+						if self._ext_movement._anim_global == "tank" then
+							self._ext_movement:play_redirect("recoil_single")
+						else
+							self._ext_movement:play_redirect("recoil_auto")
+						end
 					end
 
-					if not ext_anim.recoil and self._autofiring and self._skipped_frames <= 1 and not ext_anim.base_no_recoil and not ext_anim.move then
-						self._ext_movement:play_redirect("recoil_auto")
-					end
-
-					if not self._autofiring or self._autoshots_fired >= self._autofiring - 1 then
+					if not self._autofiring or self._autofiring - 1 <= self._autoshots_fired then
 						self._autofiring = nil
 						self._autoshots_fired = nil
 
 						self._weapon_base:stop_autofire()
-						
-						if not ext_anim.recoil then
-							self._ext_movement:play_redirect("up_idle")
+						self._ext_movement:play_redirect("up_idle")
+
+						local lerp_dis = math.min(1, target_dis / self._falloff[#self._falloff].r)
+						local shoot_delay = math.lerp(falloff.recoil[1], falloff.recoil[2], lerp_dis)
+
+						if self._common_data.is_suppressed and not Global.game_settings.one_down then
+							shoot_delay = shoot_delay * 1.5
 						end
 
-						if Global.game_settings.one_down then
-							self._shoot_t = t + 1 * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
-						else
-							self._shoot_t = t + suppressedpenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
-						end
+						self._shoot_t = t + shoot_delay
 					else
 						self._autoshots_fired = self._autoshots_fired + 1
 					end
 				end
 			end
-		elseif target_vec and self._common_data.allow_fire and self._shoot_t < t and self._mod_enable_t < t then
+		elseif self._common_data.allow_fire and target_vec and self._mod_enable_t < t then
 			local shoot = nil
 
-			if autotarget or self._shooting_husk_player and self._next_vis_ray_t < t then
+			if self._common_data.char_tweak.no_move_and_shoot and self._common_data.active_actions[2] and self._common_data.active_actions[2]:type() == "walk" then
+				local moving_cooldown = self._common_data.char_tweak.move_and_shoot_cooldown or 1
+
+				self._shoot_t = t + moving_cooldown
+			elseif autotarget or self._shooting_husk_player and self._next_vis_ray_t < t then
 				if self._shooting_husk_player then
 					self._next_vis_ray_t = t + 2
 				end
 
-				local fire_line = World:raycast("ray", shoot_from_pos, target_pos, "slot_mask", self._verif_slotmask, "ray_type", "ai_vision")
+				local fire_line_is_obstructed = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")
 
-				if fire_line then
-					if t - self._line_of_sight_t > 3 then
-						local aim_delay_minmax = self._w_usage_tweak.aim_delay
-						local lerp_dis = math.min(1, target_vec:length() / self._falloff[#self._falloff].r)
-						local aim_delay = math.lerp(aim_delay_minmax[1], aim_delay_minmax[2], lerp_dis)
-						aim_delay = aim_delay
-
-						if not Global.game_settings.one_down then
-							if self._common_data.is_suppressed then --aim delay is not affected by suppression on shin mode
-								aim_delay = aim_delay * 1.5
-							end
-						end
-						self._shoot_t = t + aim_delay
+				if fire_line_is_obstructed then
+					if fire_line_is_obstructed.distance > 300 then
+						shoot = true
 					end
 				else
-					if t - self._line_of_sight_t > 1 and not self._last_vis_check_status then
-						local shoot_hist = self._shoot_history
-						local displacement = mvector3.distance(target_pos, shoot_hist.m_last_pos)
-						local focus_delay = self._w_usage_tweak.focus_delay * math.min(1, displacement / self._w_usage_tweak.focus_dis)
-						shoot_hist.focus_start_t = t
-						shoot_hist.focus_delay = focus_delay
-						shoot_hist.m_last_pos = mvector3.copy(target_pos)
+					local shield_in_the_way = nil
+					local has_ap_rounds = self._weapon_base._use_armor_piercing
+
+					if not has_ap_rounds then
+						if self._shield then
+							shield_in_the_way = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("enemy_shield_check"), "ignore_unit", self._shield, "report")
+						else
+							shield_in_the_way = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("enemy_shield_check"), "report")
+						end
 					end
 
-					self._line_of_sight_t = t
-					shoot = true
+					if not shield_in_the_way then
+						if not self._last_vis_check_status and t - self._line_of_sight_t > 1 then
+							self._shoot_history.focus_start_t = t
+							self._shoot_history.m_last_pos = mvector3.copy(target_pos)
+						end
+
+						self._line_of_sight_t = t
+						shoot = true
+					end
 				end
 
 				self._last_vis_check_status = shoot
@@ -401,113 +406,88 @@ function CopActionShoot:update(t)
 			else
 				shoot = true
 			end
-			
-			if self._common_data.char_tweak.no_move_and_shoot and self._common_data.ext_anim and self._common_data.ext_anim.move then
-				local move_and_shoot_chk = self._common_data.char_tweak.move_and_shoot_cooldown or 1
-				shoot = false
-				if self._shoot_t then
-					self._shoot_t = self._shoot_t + move_and_shoot_chk
-				else
-					self._shoot_t = t + 1
-				end
-			end
 
-			if shoot then
-				local can_melee = true
+			if shoot and self._shoot_t < t then
+				local falloff, i_range = self:_get_shoot_falloff(target_dis, self._falloff)
+				local dmg_buff = self._unit:base():get_total_buff("base_damage")
+				local dmg_mul = (1 + dmg_buff) * falloff.dmg_mul
+				local firemode = nil
 
-				if not Network:is_server() and not autotarget then --no need to even try anything if the unit is a husk and it's not targeting the player (the animation syncing for the host will in turn make them hit something correctly)
-					can_melee = false
-				end
+				if self._automatic_weap then
+					firemode = falloff.mode and falloff.mode[1] or 1
+					local random_mode = self:_pseudorandom()
 
-				if alive(self._ext_inventory and self._ext_inventory._shield_unit) then --prevent units with shields from using melee
-					can_melee = false
-				end
+					for i_mode, mode_chance in ipairs(falloff.mode) do
+						if random_mode <= mode_chance then
+							firemode = i_mode
 
-				local melee = can_melee and self:check_melee_start(t, self._attention, target_dis, autotarget, shoot_from_pos, target_pos) and self:_chk_start_melee(target_vec, target_dis, autotarget, target_pos)
-
-				if melee then
-					self._shoot_t = self._shoot_t + 1 --prevent unit from firing immediately after doing a melee attack
-				else
-					local falloff, i_range = self:_get_shoot_falloff(target_dis, self._falloff)
-					local dmg_buff = self._unit:base():get_total_buff("base_damage")
-					local regular_damage = 1 + dmg_buff
-					local dmg_mul = regular_damage * falloff.dmg_mul
-					local firemode = nil
-
-					if self._automatic_weap then
-						firemode = falloff.mode and falloff.mode[1] or 1
-						local random_mode = self:_pseudorandom()
-
-						for i_mode, mode_chance in ipairs(falloff.mode) do
-							if random_mode <= mode_chance then
-								firemode = i_mode
-
-								break
-							end
+							break
 						end
-					else
-						firemode = 1
+					end
+				else
+					firemode = 1
+				end
+
+				if firemode > 1 then
+					self._weapon_base:start_autofire(firemode < 4 and firemode)
+
+					if self._w_usage_tweak.autofire_rounds then
+						if firemode < 4 then
+							self._autofiring = firemode
+						elseif falloff.autofire_rounds then
+							local diff = falloff.autofire_rounds[2] - falloff.autofire_rounds[1]
+							self._autofiring = math.round(falloff.autofire_rounds[1] + self:_pseudorandom() * diff)
+						else
+							local diff = self._w_usage_tweak.autofire_rounds[2] - self._w_usage_tweak.autofire_rounds[1]
+							self._autofiring = math.round(self._w_usage_tweak.autofire_rounds[1] + self:_pseudorandom() * diff)
+						end
+					--[[else
+						Application:stack_dump_error("autofire_rounds is missing from weapon usage tweak data!", self._weap_tweak.usage)]]
 					end
 
-					if firemode > 1 then
-						self._weapon_base:start_autofire(firemode < 4 and firemode)
+					self._autoshots_fired = 0
 
-						if self._w_usage_tweak.autofire_rounds then
-							if firemode < 4 then
-								self._autofiring = firemode
-							elseif falloff.autofire_rounds then
-								local diff = falloff.autofire_rounds[2] - falloff.autofire_rounds[1]
-								self._autofiring = math.round(falloff.autofire_rounds[1] + self:_pseudorandom() * diff)
-							else
-								local diff = self._w_usage_tweak.autofire_rounds[2] - self._w_usage_tweak.autofire_rounds[1]
-								self._autofiring = math.round(self._w_usage_tweak.autofire_rounds[1] + self:_pseudorandom() * diff)
-							end
+					if vis_state == 1 and not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move then
+						if self._ext_movement._anim_global == "tank" then
+							self._ext_movement:play_redirect("recoil_single")
 						else
-							Application:stack_dump_error("autofire_rounds is missing from weapon usage tweak data!", self._weap_tweak.usage)
-						end
-
-						self._autoshots_fired = 0
-
-						if not ext_anim.recoil and self._autofiring and self._skipped_frames <= 1 and not ext_anim.base_no_recoil and not ext_anim.move then
 							self._ext_movement:play_redirect("recoil_auto")
 						end
+					end
+				else
+					local spread = self._spread
+					local new_target_pos = self._shoot_history and self:_get_unit_shoot_pos(t, target_pos, target_dis, self._w_usage_tweak, falloff, i_range, autotarget)
+
+					if new_target_pos then
+						target_pos = new_target_pos
 					else
-						local spread = self._spread
+						spread = math.min(20, spread)
+					end
 
-						local new_target_pos = self._shoot_history and self:_get_unit_shoot_pos(t, target_pos, target_dis, self._w_usage_tweak, falloff, i_range, autotarget)
+					local spread_pos = temp_vec2
 
-						if new_target_pos then
-							target_pos = new_target_pos
-						else
-							spread = math.min(20, spread)
+					mvec3_rand_orth(spread_pos, target_vec)
+					mvec3_set_l(spread_pos, spread)
+					mvec3_add(spread_pos, target_pos)
+					mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+
+					local fired = self._weapon_base:singleshot(shoot_from_pos, target_vec, dmg_mul, autotarget, nil, nil, nil, self._attention.unit)
+
+					if fired then
+						if vis_state == 1 and not ext_anim.base_no_recoil and not ext_anim.move then
+							self._ext_movement:play_redirect("recoil_single")
 						end
 
-						local spread_pos = temp_vec2
+						local recoil_1 = self._weap_tweak.custom_single_fire_rate or falloff.recoil[1]
+						local recoil_2 = self._weap_tweak.custom_single_fire_rate and self._weap_tweak.custom_single_fire_rate * #self._falloff or falloff.recoil[2]
+						local lerp_dis = math.min(1, target_dis / self._falloff[#self._falloff].r)
+						local shoot_delay = math.lerp(recoil_1, recoil_2, lerp_dis)
 
-						mvec3_rand_orth(spread_pos, target_vec)
-						mvec3_set_l(spread_pos, spread)
-						mvec3_add(spread_pos, target_pos)
-
-						target_dis = mvec3_dir(target_vec, shoot_from_pos, spread_pos)
-						local fired = self._weapon_base:singleshot(shoot_from_pos, target_vec, dmg_mul, self._shooting_player, nil, nil, nil, self._attention.unit)
-
-						if fired and fired.hit_enemy and fired.hit_enemy.type == "death" and self._unit:unit_data().mission_element then
-							self._unit:unit_data().mission_element:event("killshot", self._unit)
+						if self._common_data.is_suppressed and not Global.game_settings.one_down then
+							shoot_delay = shoot_delay * 1.5
 						end
 
-						if Global.game_settings.one_down then
-							if self._skipped_frames <= 1 and not self._autofiring and not ext_anim.base_no_recoil and not ext_anim.move then
-								self._ext_movement:play_redirect("recoil_single")
-							end
-
-							self._shoot_t = t + 1 * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
-						else
-							if self._skipped_frames <= 1 and not self._autofiring and not ext_anim.base_no_recoil and not ext_anim.move then
-								self._ext_movement:play_redirect("recoil_single")
-							end
-							
-							self._shoot_t = t + suppressedpenalty * math.lerp(falloff.recoil[1], falloff.recoil[2], self:_pseudorandom())
-						end
+						self._shoot_t = t + shoot_delay
 					end
 				end
 			end
@@ -519,49 +499,145 @@ function CopActionShoot:update(t)
 	end
 end
 
-function CopActionShoot:execute_magnet_storm(t)
-	local m_storm_targets = managers.enemy:get_magnet_storm_targets(self._unit)
-	
-	--log("cuuunt")
-	self._execute_storm_t = nil
-	
-	World:effect_manager():spawn({
-		effect = Idstring("effects/pd2_mod_hh/particles/weapons/explosion/electric_explosion"),
-		position = self._unit:movement():m_pos()
-	})
-	
-	self._unit:sound():play("c4_explode_metal")
-	
-	if m_storm_targets then
-		for _, player in ipairs(m_storm_targets) do
-			if player and player == managers.player:local_player() and player:movement() and player:movement().is_taser_attack_allowed and player:movement():is_taser_attack_allowed() then
-			
-				local player_movement_chk = player:movement():current_state_name() == "standard" or player:movement():current_state_name() == "carry" or player:movement():current_state_name() == "bipod"
-				
-				if alive(player) and player_movement_chk and not player:movement():tased() then
-					if player:movement():current_state_name() == "bipod" then
-						player:movement()._current_state:exit(nil, "tased")
+function CopActionShoot:check_melee_start(t, attention, target_dis, autotarget, shoot_from_pos)
+	if (not self._common_data.melee_countered_t or t - self._common_data.melee_countered_t > 15) and self._melee_timeout_t < t then
+		--das' a lot of sanity checks
+		if not attention then
+			return false
+		end
+
+		if not attention.unit then
+			return false
+		end
+
+		if not alive(attention.unit) then
+			return false
+		end
+
+		if not attention.unit.base then
+			return false
+		end
+
+		if not attention.unit:base() then
+			return false
+		end
+
+		if attention.unit:base().is_husk_player then --does not affect clients locally
+			return false
+		end
+
+		if not attention.unit.character_damage then
+			return false
+		end
+
+		if not attention.unit:character_damage() then
+			return false
+		end
+
+		if not attention.unit:base().sentry_gun and not attention.unit:character_damage().damage_melee then --sentries take bullet damage, but check for damage_melee for anything else
+			return false
+		end
+
+		if not autotarget and attention.unit:character_damage().dead and attention.unit:character_damage():dead() then --target is dead
+			return false
+		end
+
+		local melee_weapon = self._unit:base():melee_weapon()
+		local is_weapon = melee_weapon == "weapon"
+		--[[local melee_weapon_data = nil
+
+		if tweak_data.weapon.npc_melee[melee_weapon] then
+			melee_weapon_data = tweak_data.weapon.npc_melee[melee_weapon]
+		end]]
+
+		local melee_range = nil
+		--[[melee_range = melee_weapon_data and melee_weapon_data.stats and melee_weapon_data.stats.range
+
+		if melee_range then
+			melee_range = melee_range - 20
+		else]]
+			melee_range = autotarget and 130 or 180 --higher for NPC vs NPC so that they can hit each other more often and easily
+		--end
+
+		if target_dis <= melee_range then
+			local my_fwd = mvector3.copy(self._ext_movement:m_head_rot():z())
+			local target_pos = Vector3()
+
+			mvector3.set(target_pos, my_fwd)
+			mvector3.multiply(target_pos, melee_range)
+			mvector3.add(target_pos, shoot_from_pos)
+
+			local obstructed_by_geometry = self._unit:raycast("ray", shoot_from_pos, target_pos, "sphere_cast_radius", 20, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "ray_type", "body melee", "report")
+
+			if not obstructed_by_geometry then
+				local electrical_melee = not is_weapon and tweak_data.weapon.npc_melee[melee_weapon] and tweak_data.weapon.npc_melee[melee_weapon].electrical
+				local target_has_shield = alive(attention.unit:inventory() and attention.unit:inventory()._shield_unit)
+				local target_is_covered_by_shield = self._unit:raycast("ray", shoot_from_pos, target_pos, "sphere_cast_radius", 20, "slot_mask", managers.slot:get_mask("enemy_shield_check"), "ray_type", "body melee", "report")
+
+				if autotarget then
+					if not target_is_covered_by_shield then
+						return true
 					end
-						
-					if player:movement().on_non_lethal_electrocution then
-						player:movement():on_non_lethal_electrocution()
+				elseif attention.unit:base().sentry_gun then
+					if not electrical_melee then --since it'll probably be worse most of the time rather than just shooting at it
+						if not target_is_covered_by_shield then
+							return true
+						end
 					end
-						
-					managers.player:set_player_state("tased")
+				else
+					if target_has_shield then
+						if target_is_covered_by_shield then
+							local can_be_knocked = attention.unit:base():char_tweak().damage.shield_knocked and not attention.unit:base().is_phalanx and not attention.unit:character_damage():is_immune_to_shield_knockback()
+
+							if can_be_knocked then
+								return true
+							end
+						else
+							if electrical_melee then
+								local can_be_tased = attention.unit:base():char_tweak().can_be_tased == nil or attention.unit:base():char_tweak().can_be_tased
+
+								if can_be_tased then
+									local anim_data = attention.unit:anim_data()
+
+									if anim_data then
+										if anim_data.act or anim_data.tase or anim_data.hurt or anim_data.bleedout then
+											return false
+										end
+									end
+
+									return true
+								end
+							else
+								return true
+							end
+						end
+					else
+						if not target_is_covered_by_shield then
+							if electrical_melee then
+								local can_be_tased = attention.unit:base():char_tweak().can_be_tased == nil or attention.unit:base():char_tweak().can_be_tased
+
+								if can_be_tased then
+									local anim_data = attention.unit:anim_data()
+
+									if anim_data then
+										if anim_data.act or anim_data.tase or anim_data.hurt or anim_data.bleedout then
+											return false
+										end
+									end
+
+									return true
+								end
+							else
+								return true
+							end
+						end
+					end
 				end
 			end
 		end
 	end
-	
-	self._executed_storm = true
-	
-	self._execute_storm_t = nil
-	
-	if self._storm_effect then
-		World:effect_manager():fade_kill(self._storm_effect)
-		self._storm_effect = nil
-	end
-	
+
+	return false
 end
 
 function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_range, shooting_local_player)
@@ -663,154 +739,6 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 	end
 end
 
-function CopActionShoot:on_exit()
-	if self._storm_effect then
-		World:effect_manager():fade_kill(self._storm_effect)
-		self._storm_effect = nil
-	end
-	
-	if Network:is_server() then
-		self._ext_movement:set_stance("hos")
-	end
-
-	if self._modifier_on then
-		self[self._ik_preset.stop](self)
-	end
-
-	if self._autofiring then
-		self._weapon_base:stop_autofire()
-		self._ext_movement:play_redirect("up_idle")
-	end
-
-	if Network:is_server() then
-		self._common_data.unit:network():send("action_aim_state", false)
-	end
-
-	if self._shooting_player and alive(self._attention.unit) then
-		self._attention.unit:movement():on_targetted_for_attack(false, self._common_data.unit)
-	end
-end
-
-function CopActionShoot:check_melee_start(t, attention, target_dis, autotarget, shoot_from_pos, target_pos)
-	if (not self._common_data.melee_countered_t or t - self._common_data.melee_countered_t > 15) and self._melee_timeout_t < t then
-		if not attention then
-			return false
-		end
-
-		if not attention.unit then
-			return false
-		end
-
-		if not alive(attention.unit) then
-			return false
-		end
-
-		if not attention.unit.base then
-			return false
-		end
-
-		if not attention.unit:base() then
-			return false
-		end
-
-		if attention.unit:base().is_husk_player then --does not affect clients locally
-			return false
-		end
-
-		if not attention.unit.character_damage then
-			return false
-		end
-
-		if not attention.unit:character_damage() then
-			return false
-		end
-
-		if not attention.unit:base().sentry_gun and not attention.unit:character_damage().damage_melee then --sentries take bullet damage, but check for damage_melee for anything else
-			return false
-		end
-
-		if not autotarget and attention.unit:character_damage().dead and attention.unit:character_damage():dead() then --target is dead
-			return false
-		end
-
-		local melee_weapon = self._unit:base():melee_weapon()
-		local is_weapon = melee_weapon == "weapon"
-		local melee_range = autotarget and 130 or 180 --higher for NPC vs NPC so that they can hit each other more often and easily
-
-		if target_dis <= melee_range then
-			local obstructed_by_geometry = World:raycast("ray", shoot_from_pos, target_pos, "sphere_cast_radius", 20, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "ray_type", "body melee", "report")
-
-			if not obstructed_by_geometry then
-				local electrical_melee = not is_weapon and tweak_data.weapon.npc_melee[melee_weapon] and tweak_data.weapon.npc_melee[melee_weapon].electrical
-				local target_has_shield = alive(attention.unit:inventory() and attention.unit:inventory()._shield_unit)
-				local target_is_covered_by_shield = World:raycast("ray", shoot_from_pos, target_pos, "sphere_cast_radius", 20, "slot_mask", managers.slot:get_mask("enemy_shield_check"), "ray_type", "body melee", "report")
-
-				if autotarget then
-					if not target_is_covered_by_shield then
-						return true
-					end
-				elseif attention.unit:base().sentry_gun then
-					if not electrical_melee then --since it'll probably be worse most of the time rather than just shooting at it
-						if not target_is_covered_by_shield then
-							return true
-						end
-					end
-				else
-					if target_has_shield then
-						if target_is_covered_by_shield then
-							local can_be_knocked = attention.unit:base():char_tweak().damage.shield_knocked and not attention.unit:base().is_phalanx and not attention.unit:character_damage():is_immune_to_shield_knockback()
-
-							if can_be_knocked then
-								return true
-							end
-						else
-							if electrical_melee then
-								local can_be_tased = attention.unit:base():char_tweak().can_be_tased == nil or attention.unit:base():char_tweak().can_be_tased
-
-								if can_be_tased then
-									local anim_data = attention.unit:anim_data()
-
-									if anim_data then
-										if anim_data.act or anim_data.tase or anim_data.hurt or anim_data.bleedout then
-											return false
-										end
-									end
-
-									return true
-								end
-							else
-								return true
-							end
-						end
-					else
-						if not target_is_covered_by_shield then
-							if electrical_melee then
-								local can_be_tased = attention.unit:base():char_tweak().can_be_tased == nil or attention.unit:base():char_tweak().can_be_tased
-
-								if can_be_tased then
-									local anim_data = attention.unit:anim_data()
-
-									if anim_data then
-										if anim_data.act or anim_data.tase or anim_data.hurt or anim_data.bleedout then
-											return false
-										end
-									end
-
-									return true
-								end
-							else
-								return true
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-
-	return false
-end
-
 function CopActionShoot:_chk_start_melee(target_vec, target_dis, autotarget, target_pos)
 	local melee_weapon = self._unit:base():melee_weapon()
 	local is_weapon = melee_weapon == "weapon"
@@ -859,6 +787,9 @@ function CopActionShoot:_chk_start_melee(target_vec, target_dis, autotarget, tar
 		managers.network:session():send_to_peers_synched("play_distance_interact_redirect", self._unit, redir_name)
 
 		self._melee_timeout_t = TimerManager:game():time() + (self._w_usage_tweak.melee_retry_delay and math.lerp(self._w_usage_tweak.melee_retry_delay[1], self._w_usage_tweak.melee_retry_delay[2], self:_pseudorandom()) or 1)
+
+		--CopActionShoot.play_melee_sound(melee_weapon, "equip", self._unit)
+		--CopActionShoot.play_melee_sound(melee_weapon, "hit_air", self._unit)
 	else
 		debug_pause_unit(self._common_data.unit, "[CopActionShoot:_chk_start_melee] redirect failed in state", self._common_data.machine:segment_state(Idstring("base")), self._common_data.unit)
 	end
@@ -871,12 +802,25 @@ function CopActionShoot:anim_clbk_melee_strike()
 	local my_fwd = mvector3.copy(self._ext_movement:m_head_rot():z())
 	local target_pos = Vector3()
 
+	--[[if self._attention then
+		local att_char_dmg = self._attention.unit and self._attention.unit:character_damage()
+
+		if att_char_dmg and att_char_dmg.shoot_pos_mid then
+			local fwd_vec = Vector3()
+			local att_shoot_pos = Vector3()
+			att_char_dmg:shoot_pos_mid(att_shoot_pos)
+
+			mvector3.direction(fwd_vec, mvector3.copy(shoot_from_pos), att_shoot_pos)
+			my_fwd = fwd_vec
+		end
+	end]]
+
 	mvector3.set(target_pos, my_fwd)
 	mvector3.multiply(target_pos, 180)
 	mvector3.add(target_pos, shoot_from_pos)
 
 	local hit_local_player = true
-	local melee_slot_mask = managers.slot:get_mask("bullet_impact_targets")
+	local melee_slot_mask = managers.slot:get_mask("bullet_impact_targets_no_police") --ignore teammates of the attacking unit
 	melee_slot_mask = melee_slot_mask + 3 --just consider player husks as obstructions for enemies, they won't take damage
 
 	if managers.groupai:state():is_unit_team_AI(self._unit) or managers.groupai:state():is_enemy_converted_to_criminal(self._unit) then --override for Jokers and team AI
@@ -885,7 +829,7 @@ function CopActionShoot:anim_clbk_melee_strike()
 	end
 
 	--similar to player melee attacks, use a sphere ray instead of just a normal plain ray
-	local col_ray = World:raycast("ray", shoot_from_pos, target_pos, "sphere_cast_radius", 20, "slot_mask", melee_slot_mask, "ignore_unit", self._unit, "ray_type", "body melee")
+	local col_ray = self._unit:raycast("ray", shoot_from_pos, target_pos, "sphere_cast_radius", 20, "slot_mask", melee_slot_mask, "ray_type", "body melee")
 	local draw_debug_spheres = false
 
 	if draw_debug_spheres then
@@ -898,7 +842,7 @@ function CopActionShoot:anim_clbk_melee_strike()
 
 	local local_player = managers.player:player_unit()
 
-	--a more clena method of determining if the local player should get hit or not, without cancelling the attack if the player can't get hit, like it did before
+	--a more clean method of determining if the local player should get hit or not, without cancelling the attack if the player can't get hit, like it did before
 	--sadly, no raycasts I tried so far (even with target_unit/target_body) seem to be able to hit the local player
 	if hit_local_player and alive(local_player) and not self._unit:character_damage():is_friendly_fire(local_player) then
 		local range_against_player = 165
@@ -907,7 +851,7 @@ function CopActionShoot:anim_clbk_melee_strike()
 		local player_distance = mvector3.direction(player_vec, mvector3.copy(shoot_from_pos), mvector3.copy(player_head_pos))
 
 		if player_distance <= range_against_player then
-			if not col_ray or col_ray.distance > player_distance or not World:raycast("ray", shoot_from_pos, player_head_pos, "sphere_cast_radius", 5, "slot_mask", melee_slot_mask, "ignore_unit", self._unit, "ray_type", "body melee", "report") then
+			if not col_ray or col_ray.distance > player_distance or not self._unit:raycast("ray", shoot_from_pos, player_head_pos, "sphere_cast_radius", 5, "slot_mask", melee_slot_mask, "ray_type", "body melee", "report") then
 				local flat_vec = Vector3()
 
 				mvector3.set(flat_vec, player_vec)

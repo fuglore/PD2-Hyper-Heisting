@@ -882,6 +882,7 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	local objective = data.objective
 	local haste = nil
 	local pose = nil
+	local can_perform_walking_action = not data.unit:movement():chk_action_forbidden("walk") and not my_data.turning or data.unit:anim_data().act_idle
 	
 	local mook_units = {
 		"security",
@@ -914,83 +915,84 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	end
 	
 	--this is a mess, but it should keep enemy movement tacticool overall, by having them prefer slower apporoaches at close ranges
-	
-	local pose_chk = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
-	local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
-	local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
-	local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
-	local height_difference_penalty = data.attention_obj and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0
-	
-	if data.unit:movement():cool() then
-			haste = "walk"
-	elseif data.is_converted or data.unit:in_slot(16) or data.attention_obj and data.attention_obj.dis > 10000 then
-		haste = "run"
-	elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
-		haste = "run"
-	elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun then
-		haste = "walk"
-	else
-		haste = "run"
-	end
-
-	local should_crouch = nil
-
-	local end_rot = nil
-
-	if my_data.coarse_path_index >= #my_data.coarse_path - 1 then
-		end_rot = objective and objective.rot
-	end
-
-	local no_strafe, end_pose = nil
-	
-	local crouch_roll = math.random(0.01, 1)
-	local stand_chance = nil
-	local enemy_visible15m_or_10m_chk = data.attention_obj and data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj and data.attention_obj.dis <= 1000
-	
-	if data.attention_obj and data.attention_obj.dis > 10000 or data.unit:in_slot(16) or data.is_converted then
-		stand_chance = 1
-	elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 2000 and is_mook then
-		stand_chance = 0.75
-	elseif enemy_has_height_difference and enemy_visible15m_or_10m_chk and is_mook then
-		stand_chance = 0.25
-	elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and enemy_visible15m_or_10m_chk and CopLogicTravel._chk_close_to_criminal(data, my_data) and data.tactics and data.tactics.flank and haste == "walk" and is_mook then
-		stand_chance = 0.25
-	elseif my_data.moving_to_cover and pose_chk then
-		stand_chance = 0.5
-	else
-		stand_chance = 0.5
-	end
-	
-	--randomize enemy crouching to make enemies feel less easy to aim at, the fact they're always crouching all over the place always bugged me, plus, they shouldn't need to crouch so often when you're at long distances from them
-	
-	if not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
-		if stand_chance ~= 1 and crouch_roll > stand_chance and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) or data.char_tweak.allowed_poses and data.char_tweak.allowed_poses.crouch then
-			end_pose = "crouch"
-			pose = "crouch"
-		else
-			end_pose = "stand"
-			pose = "stand"
-		end
-	end
-	
-	if not pose then
-		pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or "stand"
-	end
-	
-	if not data.unit:anim_data()[pose] then
-		CopLogicAttack["_chk_request_action_" .. pose](data)
-	end
-	
-	if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
-		local randomwalkchance = math.random(0.01, 1)
-		if randomwalkchance > 0.10 then
+	if can_perform_walking_action then
+		local pose_chk = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
+		local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
+		local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
+		local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
+		local height_difference_penalty = data.attention_obj and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0
+		
+		if data.unit:movement():cool() then
+				haste = "walk"
+		elseif data.is_converted or data.unit:in_slot(16) or data.attention_obj and data.attention_obj.dis > 10000 then
+			haste = "run"
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+			haste = "run"
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun then
 			haste = "walk"
 		else
-			haste = haste
+			haste = "run"
 		end
-	end
 
-	CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, haste, end_rot, no_strafe, pose, end_pose)
+		local should_crouch = nil
+
+		local end_rot = nil
+
+		if my_data.coarse_path_index >= #my_data.coarse_path - 1 then
+			end_rot = objective and objective.rot
+		end
+
+		local no_strafe, end_pose = nil
+		
+		local crouch_roll = math.random(0.01, 1)
+		local stand_chance = nil
+		local enemy_visible15m_or_10m_chk = data.attention_obj and data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj and data.attention_obj.dis <= 1000
+		
+		if data.attention_obj and data.attention_obj.dis > 10000 or data.unit:in_slot(16) or data.is_converted then
+			stand_chance = 1
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 2000 and is_mook then
+			stand_chance = 0.75
+		elseif enemy_has_height_difference and enemy_visible15m_or_10m_chk and is_mook then
+			stand_chance = 0.25
+		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and enemy_visible15m_or_10m_chk and CopLogicTravel._chk_close_to_criminal(data, my_data) and data.tactics and data.tactics.flank and haste == "walk" and is_mook then
+			stand_chance = 0.25
+		elseif my_data.moving_to_cover and pose_chk then
+			stand_chance = 0.5
+		else
+			stand_chance = 0.5
+		end
+		
+		--randomize enemy crouching to make enemies feel less easy to aim at, the fact they're always crouching all over the place always bugged me, plus, they shouldn't need to crouch so often when you're at long distances from them
+		
+		if not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+			if stand_chance ~= 1 and crouch_roll > stand_chance and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) or data.char_tweak.allowed_poses and data.char_tweak.allowed_poses.crouch then
+				end_pose = "crouch"
+				pose = "crouch"
+			else
+				end_pose = "stand"
+				pose = "stand"
+			end
+		end
+		
+		if not pose then
+			pose = not data.char_tweak.crouch_move and "stand" or data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.stand and "crouch" or "stand"
+		end
+		
+		if not data.unit:anim_data()[pose] then
+			CopLogicAttack["_chk_request_action_" .. pose](data)
+		end
+		
+		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
+			local randomwalkchance = math.random(0.01, 1)
+			if randomwalkchance > 0.10 then
+				haste = "walk"
+			else
+				haste = haste
+			end
+		end
+
+		CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, haste, end_rot, no_strafe, pose, end_pose)
+	end
 end
 
 function CopLogicTravel._get_exact_move_pos(data, nav_index)
@@ -1000,7 +1002,6 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 	local coarse_path = my_data.coarse_path
 	local total_nav_points = #coarse_path
 	local reservation, wants_reservation = nil
-	local should_wall_offset = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not data.attention_obj.verified and data.attention_obj.dis <= 3000
 
 	if total_nav_points <= nav_index then
 		local new_occupation = data.logic._determine_destination_occupation(data, objective)
@@ -1026,6 +1027,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 			elseif new_occupation.type == "defend" then
 				if new_occupation.cover then
 					to_pos = new_occupation.cover[1][1]
+					local should_wall_offset = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not data.attention_obj.verified and data.attention_obj.dis <= 3000
 
 					if should_wall_offset or data.char_tweak.wall_fwd_offset then
 						local wall_fwd_offset = data.char_tweak.wall_fwd_offset or 40

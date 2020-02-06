@@ -8,67 +8,6 @@ local t_ins = table.insert
 local m_min = math.min
 local tmp_vec1 = Vector3()
 
-
-function EnemyManager:get_magnet_storm_targets(unit)
-	if self:is_civilian(unit) then
-		return nil
-	end
-	
-	--log("sexecuting")
-	
-	local targets_to_tase = {}
-
-	local targets = World:find_units_quick(unit, "sphere", unit:position(), 400, managers.slot:get_mask("players"))
-
-	for _, target in ipairs(targets) do
-		local vis_check_fail = World:raycast("ray", unit:movement():m_head_pos(), target:movement():m_head_pos(), "sphere_cast_radius", 10, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "report")
-		if not vis_check_fail then
-			table.insert(targets_to_tase, target)
-		end
-	end
-	
-	return targets_to_tase
-end
-
-function EnemyManager:_update_queued_tasks(t, dt)
-	local i_asap_task, asp_task_t = nil
-	self._queue_buffer = self._queue_buffer + dt
-	local tick_rate = tweak_data.group_ai.ai_tick_rate
-
-	if tick_rate <= self._queue_buffer then
-		for i_task, task_data in ipairs(self._queued_tasks) do
-			if task_data.asap and not asp_task_t or task_data.asap and asp_task_t and task_data.t < asp_task_t then
-				i_asap_task = i_task
-				asp_task_t = task_data.t
-			elseif not task_data.t or task_data.t < t then
-				self:_execute_queued_task(i_task)
-
-				self._queue_buffer = self._queue_buffer - tick_rate
-
-				if self._queue_buffer <= 0 then
-					break
-				end
-			end
-		end
-	end
-
-	if #self._queued_tasks == 0 then
-		self._queue_buffer = 0
-	end
-
-	if i_asap_task and not self._queued_task_executed then
-		self:_execute_queued_task(i_asap_task)
-	end
-
-	local all_clbks = self._delayed_clbks
-
-	if all_clbks[1] and all_clbks[1][2] < t then
-		local clbk = table.remove(all_clbks, 1)[3]
-
-		clbk()
-	end
-end
-
 function EnemyManager:_update_gfx_lod()
 	if self._gfx_lod_data.enabled and managers.navigation:is_data_ready() then
 		local player = managers.player:player_unit()
@@ -513,4 +452,25 @@ function EnemyManager:_upd_shield_disposal()
 
 		self:queue_task("EnemyManager._upd_shield_disposal", EnemyManager._upd_shield_disposal, self, t + delay)
 	end
+end
+
+function EnemyManager:get_magnet_storm_targets(unit)
+	if self:is_civilian(unit) then
+		return nil
+	end
+	
+	--log("sexecuting")
+	
+	local targets_to_tase = {}
+
+	local targets = World:find_units_quick(unit, "sphere", unit:position(), 400, managers.slot:get_mask("players"))
+
+	for _, target in ipairs(targets) do
+		local vis_check_fail = World:raycast("ray", unit:movement():m_head_pos(), target:movement():m_head_pos(), "sphere_cast_radius", 10, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "report")
+		if not vis_check_fail then
+			table.insert(targets_to_tase, target)
+		end
+	end
+	
+	return targets_to_tase
 end

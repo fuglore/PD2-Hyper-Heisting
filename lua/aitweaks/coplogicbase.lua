@@ -246,8 +246,13 @@ function CopLogicBase.chk_am_i_aimed_at(data, attention_obj, max_dot)
 end
 
 function CopLogicBase._update_haste(data, my_data)
+	local path = my_data.chase_path or my_data.charge_path or my_data.advance_path or my_data.cover_path or my_data.expected_pos_path or my_data.hunt_path or my_data.flank_path
+	
+	if not path then
+		return
+	end
+	
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local is_mook = data.unit:base():has_tag("law") and not data.unit:base():has_tag("special")
 	local can_perform_walking_action = not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action
 	local pose = nil
 	local mook_units = {
@@ -279,28 +284,27 @@ function CopLogicBase._update_haste(data, my_data)
 		end
 	end
 	
-	local haste = nil
-	local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
-	local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
-	local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
-	local height_difference_penalty = enemy_has_height_difference and 400 or 0
-	local can_crouch = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
-	local can_stand = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.stand
-	
-	
-	local should_crouch = nil
-	local pose = nil
-	local end_pose = nil
-	local path = my_data.chase_path or my_data.charge_path or my_data.advance_path or my_data.cover_path or my_data.expected_pos_path or my_data.hunt_path or my_data.flank_path
-	
 	-- I'm gonna leave a note to myself here so that I never commit the same mistake ever again.
 	-- AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction
 	-- THIS IS HOW YOU CHECK FOR COMBAT REACTIONS, YOU DEHYDRATED RAISIN OF A PERSON, FUGLORE
 	-- I SWEAR TO FUCKING GOD I WILL SLAUGHTER YOU IF YOU MAKE THE SAME MISTAKE AGAIN
 	-- - Past Fuglore, thembo extraordinaire and apparently, no longer an idiot.
 	
-	if path then	
+	if path and can_perform_walking_action and data.attention_obj then
+		local haste = nil
+		
 		if is_mook and not data.is_converted and not data.unit:in_slot(16) then
+			local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
+			local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
+			local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
+			local height_difference_penalty = enemy_has_height_difference and 400 or 0
+			local can_crouch = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
+			local can_stand = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.stand
+			
+			
+			local should_crouch = nil
+			local pose = nil
+			local end_pose = nil
 			if data.unit:movement():cool() then
 				haste = "walk"
 			elseif data.attention_obj and data.attention_obj.dis > 10000 then
@@ -725,8 +729,8 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 					attention_info.verified_dis = dis
 				elseif data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask) then
 					if attention_info.criminal_record and AIAttentionObject.REACT_COMBAT <= attention_info.settings.reaction then
-						local seeninlast1second = attention_info.verified_t and attention_info.verified_t - t <= 1
-						if not is_detection_persistent and mvector3.distance(attention_pos, attention_info.criminal_record.pos) > 250 or not is_detection_persistent and not seeninlast1second then
+						local seeninlast5seconds = attention_info.verified_t and attention_info.verified_t - t <= 5
+						if not is_detection_persistent and not seeninlast5seconds then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else
 							if diff_index > 6 or Global.game_settings.use_intense_AI then

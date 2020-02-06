@@ -191,41 +191,6 @@ function TaserLogicAttack._upd_aim(data, my_data, reaction)
 	CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 end
 
-function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data, stationary)
-    local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
-    local tase_length = data.internal_data.tase_distance or 1500
-
-    if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
-        return reaction
-    end
-
-    if attention_data.verified and attention_data.verified_dis <= tase_length then
-        if not data.internal_data.tasing or data.internal_data.tasing.target_u_key ~= attention_data.u_key then
-            if attention_data.unit:movement() and attention_data.unit:movement().tased and attention_data.unit:movement():tased() then
-                return AIAttentionObject.REACT_COMBAT
-            end
-        end
-
-        if attention_data.is_human_player then
-            if not attention_data.unit:movement():is_taser_attack_allowed() then
-                return AIAttentionObject.REACT_COMBAT
-            end
-        elseif attention_data.unit:movement():chk_action_forbidden("hurt") then
-            return AIAttentionObject.REACT_COMBAT
-        end
-
-        local obstructed = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 5, "report")
-
-        if obstructed then
-            return AIAttentionObject.REACT_COMBAT
-        else
-            return AIAttentionObject.REACT_SPECIAL_ATTACK
-        end
-    end
-
-    return reaction
-end
-
 function TaserLogicAttack._upd_enemy_detection(data)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
@@ -241,7 +206,7 @@ function TaserLogicAttack._upd_enemy_detection(data)
 	local tased_u_key = tasing and tasing.target_u_key
 	local tase_in_effect = tasing and tasing.target_u_data.unit:movement():tased()
 
-	if tase_in_effect or tasing then --added some fallback code to make sure this mod works with tdlq's excellent mods
+	if tase_in_effect or tasing then
 		find_new_focus_enemy = nil
 		return
 	else
@@ -284,10 +249,45 @@ function TaserLogicAttack._upd_enemy_detection(data)
 	TaserLogicAttack._upd_aim(data, my_data, new_reaction)
 end
 
-function TaserLogicAttack._chk_play_charge_weapon_sound(data, my_data, focus_enemy)
-	--if not my_data.tasing and (not my_data.last_charge_snd_play_t or data.t - my_data.last_charge_snd_play_t > 30) and focus_enemy.verified_dis < 2000 and math.abs(data.m_pos.z - focus_enemy.m_pos.z) < 300 then
-		--my_data.last_charge_snd_play_t = data.t
+function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data, stationary)
+	local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
+	local tase_length = data.internal_data.tase_distance or 1500
 
-		--data.unit:sound():play("taser_charge", nil, true)
-	--end
+	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
+		return reaction
+	end
+
+	if attention_data.verified and attention_data.verified_dis <= tase_length then
+		if not data.internal_data.tasing or data.internal_data.tasing.target_u_key ~= attention_data.u_key then
+			if attention_data.unit:movement() and attention_data.unit:movement().tased and attention_data.unit:movement():tased() then
+				return AIAttentionObject.REACT_COMBAT
+			end
+		end
+
+		if attention_data.is_human_player then
+			if not attention_data.unit:movement():is_taser_attack_allowed() then
+				return AIAttentionObject.REACT_COMBAT
+			end
+		elseif attention_data.unit:movement():chk_action_forbidden("hurt") then
+			return AIAttentionObject.REACT_COMBAT
+		end
+
+		local obstructed = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 5, "report")
+
+		if obstructed then
+			return AIAttentionObject.REACT_COMBAT
+		else
+			return AIAttentionObject.REACT_SPECIAL_ATTACK
+		end
+	end
+
+	return reaction
+end
+
+function TaserLogicAttack._chk_play_charge_weapon_sound(data, my_data, focus_enemy)
+	--[[if not my_data.tasing and (not my_data.last_charge_snd_play_t or data.t - my_data.last_charge_snd_play_t > 30) and focus_enemy.verified_dis <= 1500 and math.abs(data.m_pos.z - focus_enemy.m_pos.z) < 300 then
+		my_data.last_charge_snd_play_t = data.t
+
+		data.unit:sound():play("taser_charge", nil, true)
+	end]]
 end
