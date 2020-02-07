@@ -6291,6 +6291,13 @@ crouching = {
 }
 }
 end
+			
+--Guerilla 308
+if self.sgs then 
+self.sgs.fire_mode_data.fire_rate = .2
+self.sgs.AMMO_MAX = 45
+self.sgs.AMMO_PICKUP = {1, 2.1}
+end
 
 --  ak556
 if self.ak556 then 
