@@ -951,6 +951,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.interrupt_suppression = nil
 	elseif grp_objective.type == "retire" then
 		objective.type = "defend_area"
+		objective.running = true
 		objective.stance = "hos"
 		objective.pose = "stand"
 		objective.scan = true
@@ -991,6 +992,10 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 	objective.interrupt_health = grp_objective.interrupt_health or objective.interrupt_health
 	objective.interrupt_suppression = nil
 	objective.pos = grp_objective.pos
+	
+	if not objective.running then
+		objective.running = grp_objective.running or nil
+	end
 
 	if grp_objective.scan ~= nil then
 		objective.scan = grp_objective.scan
@@ -1901,6 +1906,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				pose = math.random() < 0.5 and "crouch" or "stand",
 				type = "assault_area",
 				area = retreat_area,
+				running = true,
 				coarse_path = {
 					{
 						retreat_area.pos_nav_seg,

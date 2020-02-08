@@ -305,18 +305,18 @@ function CopLogicBase._update_haste(data, my_data)
 			local should_crouch = nil
 			local pose = nil
 			local end_pose = nil
-			if data.unit:movement():cool() then
+			if data.unit:movement():cool() and data.unit:movement()._active_actions[2] and data.unit:movement()._active_actions[2]:type() == "walk" and data.unit:movement()._active_actions[2]:haste() == "run" then
 				haste = "walk"
-			elseif data.attention_obj and data.attention_obj.dis > 10000 then
+			elseif data.attention_obj and data.attention_obj.dis > 10000 and data.unit:movement()._active_actions[2] and data.unit:movement()._active_actions[2]:type() == "walk" and data.unit:movement()._active_actions[2]:haste() ~= "run" then
 				haste = "run"
-			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() and data.unit:anim_data().move and not data.unit:anim_data().run and is_mook then
+			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() and data.unit:movement()._active_actions[2] and data.unit:movement()._active_actions[2]:type() == "walk" and data.unit:movement()._active_actions[2]:haste() ~= "run" and is_mook then
 				haste = "run"
 				my_data.has_reset_walk_cycle = nil
-			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun and data.unit:anim_data().run then
+			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1200 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun and data.unit:movement()._active_actions[2] and data.unit:movement()._active_actions[2]:type() == "walk" and data.unit:movement()._active_actions[2]:haste() == "run" then
 				haste = "walk"
 				my_data.has_reset_walk_cycle = nil
 			 else
-				if data.unit:anim_data().move and not data.unit:anim_data().run then
+				if data.unit:movement()._active_actions[2] and data.unit:movement()._active_actions[2]:type() == "walk" and data.unit:movement()._active_actions[2]:haste() ~= "run" then
 					my_data.has_reset_walk_cycle = nil
 					haste = "run"
 				else
@@ -516,7 +516,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 			if not near_vis_ray then
 				attention_info.nearly_visible = true
-				attention_info.verified_pos = mvector3.copy(near_pos)
+				attention_info.last_verified_pos = mvector3.copy(near_pos)
 			end
 		end
 	end
@@ -723,11 +723,11 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 					mvector3.set(attention_info.verified_pos, attention_pos)
 
-					attention_info.verified_pos = mvector3.copy(attention_pos)
+					attention_info.last_verified_pos = mvector3.copy(attention_pos)
 					attention_info.verified_dis = dis
 				elseif data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask) then
 					if attention_info.criminal_record and AIAttentionObject.REACT_COMBAT <= attention_info.settings.reaction then
-						local seeninlast5seconds = attention_info.verified_t and attention_info.verified_t - t <= 5
+						local seeninlast5seconds = attention_info.verified_t and attention_info.verified_t - t <= 3
 						if not is_detection_persistent and not seeninlast5seconds and mvector3.distance(attention_pos, attention_info.verified_pos) > 250 then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else

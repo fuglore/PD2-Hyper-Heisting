@@ -24,6 +24,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["hud_assault_FG_cover22"] = "BLAZING STILL MY HEART IS BLAZING",
 		["hud_assault_FG_cover23"] = "HEAVEN OR HELL, LET'S ROCK",
 		["hud_assault_FG_cover24"] = "FIGHT LIKE A TIGER, WALK IN THE PARK",
+		["hud_assault_FG_cover25"] = "EAT CAPTAIN TO END ASS",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_fbi"] = "VS. FBI SQUADRON",
 		["hud_assault_faction_fbitsu"] = "VS. FBI & GENSEC",
@@ -33,7 +34,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["hud_assault_faction_mad"] = "VS. REAPERS",
 		["hud_assault_faction_hvh"] = "YOU HAVE STARTLED THE HORDE",
 		["hud_assault_faction_generic"] = "VS. US SWAT",
-		["hud_assault_faction_mexcross"] = "VS. BATALLÓN MURKY", --hoxi said this doesnt look good so i should look into figuring out how to make it cooler later
+		["hud_assault_faction_mexcross"] = "VS. BATALLÓN MURKY",
 		["hud_assault_cover"] = "STAY IN COVER",
 		["hud_assault_coverhvh"] = "DON'T STOP MOVING",
 		["hud_assault_cover_mexcross"] = "MANTENTE A CUBIERTO",
@@ -93,7 +94,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["shin_toggle_overhaul_player_title"] = "HH Player-Side Rebalance!",
 		["shin_toggle_overhaul_player_desc"] = "Enables a modified version of Gambyt's VIWR mod! Featuring various reworks of existing skills to make the game feel fresh!",
 		["shin_requires_restart_title"] = "Restart required!",
-		["shin_requires_restart_desc"] = "You have made changes to the following settings:\n$SETTINGSLIST\nChanges will take effect on game/heist restart.\nHave a nice day!"
+		["shin_requires_restart_desc"] = "You have made changes to the following settings:\n$SETTINGSLIST\nChanges will take effect on game restart.\nHave a nice day!"
 	})
 end)
 

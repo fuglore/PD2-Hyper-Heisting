@@ -222,8 +222,8 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 			if aim == nil and AIAttentionObject.REACT_AIM <= focus_enemy.reaction then
 				if AIAttentionObject.REACT_SHOOT <= focus_enemy.reaction then
-					local running = data.unit:anim_data().run
-					local firing_range = 1800
+					local running = data.unit:movement()._active_actions[2] and data.unit:movement()._active_actions[2]:type() == "walk" and data.unit:movement()._active_actions[2]:haste() == "run"
+					local firing_range = 3000
 
 					if data.internal_data.weapon_range then
 						firing_range = running and data.internal_data.weapon_range.close or data.internal_data.weapon_range.far
@@ -269,7 +269,8 @@ function CopLogicAttack._upd_aim(data, my_data)
 					end
 
 					if not shoot and not managers.groupai:state():whisper_mode() and my_data.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() then
-						if focus_enemy.verified_dis < firing_range * (height_difference and 0.75 or 1) or focus_enemy.reaction == AIAttentionObject.REACT_SHOOT then
+						local z_check = height_difference and 0.75 or 1
+						if focus_enemy.verified_dis < firing_range * z_check or focus_enemy.reaction == AIAttentionObject.REACT_SHOOT then
 							if dense_mook and managers.groupai:state():chk_high_fed_density() and not my_data.firing then
 									--log("not firing due to FEDS")
 							else
@@ -277,10 +278,10 @@ function CopLogicAttack._upd_aim(data, my_data)
 							end
 						else
 							local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
-							local suppressingfire_t = 3
+							local suppressingfire_t = 0.75
 							
 							if data.tactics and data.tactics.harass then
-								suppressingfire_t = 6
+								suppressingfire_t = 2
 							end
 
 							if my_data.firing and time_since_verification and time_since_verification < suppressingfire_t then
