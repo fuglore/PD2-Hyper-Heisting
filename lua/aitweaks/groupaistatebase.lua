@@ -682,6 +682,9 @@ function GroupAIStateBase:chk_area_leads_to_enemy(start_nav_seg_id, test_nav_seg
 			end
 		end
 	until #to_search_nav_segs == 0
+	--log("fuckoff")
+	
+	return
 end
 
 function GroupAIStateBase:_get_anticipation_duration(anticipation_duration_table, is_first)

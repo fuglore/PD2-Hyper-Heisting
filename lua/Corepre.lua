@@ -60,7 +60,6 @@ function PD2THHSHIN:SaveSettings(apply_immediately)
 	end
 end
 
-
 PD2THHSHIN:LoadSettings()
 
 PD2THHSHIN_Maps = PD2THHSHIN_Maps or class(MapFramework)

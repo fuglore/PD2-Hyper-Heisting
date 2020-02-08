@@ -516,7 +516,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 			if not near_vis_ray then
 				attention_info.nearly_visible = true
-				attention_info.last_verified_pos = mvector3.copy(near_pos)
+				attention_info.verified_pos = mvector3.copy(near_pos)
 			end
 		end
 	end
@@ -702,11 +702,9 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 						vis_ray = World:raycast("ray", my_pos, detect_pos, "slot_mask", data.visibility_slotmask, "ray_type", "ai_vision")
 
 						if not vis_ray or vis_ray.unit:key() == u_key then
-							verified = true
+							attention_info.verified = true
 						end
 					end
-
-					attention_info.verified = verified
 				end
 
 				attention_info.dis = dis
@@ -725,12 +723,12 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 					mvector3.set(attention_info.verified_pos, attention_pos)
 
-					attention_info.last_verified_pos = mvector3.copy(attention_pos)
+					attention_info.verified_pos = mvector3.copy(attention_pos)
 					attention_info.verified_dis = dis
 				elseif data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask) then
 					if attention_info.criminal_record and AIAttentionObject.REACT_COMBAT <= attention_info.settings.reaction then
 						local seeninlast5seconds = attention_info.verified_t and attention_info.verified_t - t <= 5
-						if not is_detection_persistent and not seeninlast5seconds then
+						if not is_detection_persistent and not seeninlast5seconds and mvector3.distance(attention_pos, attention_info.verified_pos) > 250 then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else
 							if diff_index > 6 or Global.game_settings.use_intense_AI then
@@ -936,85 +934,6 @@ function CopLogicBase.on_attention_obj_identified(data, attention_u_key, attenti
 			end
 		end
 	end
-end
-
-function CopLogicBase.is_obstructed(data, objective, strictness, attention)
-	--bots should no longer get interrupted by objectives on a whim, now cops are simply given the option of receiving new objectives rather than being FORCED into another objective which should make them feel less dumb
-	local my_data = data.internal_data
-	attention = attention or data.attention_obj
-	local t = data.t
-	local mid_fight = data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified
-	local objective_chk = objective and objective.in_place or objective and not objective.nav_seg
-
-	if not objective or objective.is_default or objective_chk and not objective.action then
-		return true, false
-	end
-		
-	
-	if objective.interrupt_suppression and data.is_suppressed and not data.unit:in_slot(16) and not data.is_converted then
-		if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
-			my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
-					
-			return true, true
-		else	
-			return true, false
-		end
-	end
-
-	strictness = strictness or 0
-
-	if objective.interrupt_health and not data.unit:in_slot(16) and not data.is_converted then
-			local health_ratio = data.unit:character_damage():health_ratio()
-			local too_much_damage = health_ratio < 1 and health_ratio * (1 - strictness) < objective.interrupt_health
-			local is_dead = data.unit:character_damage():dead()
-
-		if too_much_damage or is_dead then
-			if not is_dead then 
-				if my_data and my_data.next_allowed_obs_t and my_data.next_allowed_obs_t < t or not my_data.next_allowed_obs_t then
-					my_data.next_allowed_obs_t = data.t + math.random(2.5, 5)
-					
-					return true, true
-				end
-			else
-				
-				return true, false
-			end
-		end
-	end
-
-	if objective.interrupt_dis and not data.unit:in_slot(16) and not data.is_converted then
-		if attention and (AIAttentionObject.REACT_COMBAT <= attention.reaction or data.cool and AIAttentionObject.REACT_SURPRISED <= attention.reaction) then
-			if objective.interrupt_dis == -1 then
-				return true, true
-			elseif math.abs(attention.m_pos.z - data.m_pos.z) < 250 then
-				local enemy_dis = attention.dis * 1
-
-				if not attention.verified then
-					enemy_dis = 2 * attention.dis * 1
-				end
-
-				if attention.is_very_dangerous then
-					enemy_dis = enemy_dis * 0.25
-				end
-
-				if enemy_dis < objective.interrupt_dis then
-					return true, true
-				end
-			end
-
-			if objective.pos and math.abs(attention.m_pos.z - objective.pos.z) < 250 then
-				local enemy_dis = mvector3.distance(objective.pos, attention.m_pos) * 1
-
-				if enemy_dis < objective.interrupt_dis then
-					return true, true
-				end
-			end
-		elseif objective.interrupt_dis == -1 and not data.unit:movement():cool() then
-			return true, true
-		end
-	end
-
-	return false, false
 end
 
 function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)

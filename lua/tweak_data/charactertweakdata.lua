@@ -4745,15 +4745,15 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.mini = { --big boye
+	presets.weapon.complex.mini = { --yes
 		aim_delay = {
-			0.1,
-			0.2
+			0.8,
+			0.8
 		},
-		focus_delay = 3,
+		focus_delay = 0.7,
 		focus_dis = 100,
-		spread = 80, --bigger spread from anarchy, overall 
-		miss_dis = 5,
+		spread = 80, --weapon is mechanically different from every single other npc weapon in the game, works separate from the acc system
+		miss_dis = 10,
 		RELOAD_SPEED = 0.5,
 		melee_speed = 1.5,
 		melee_dmg = 25,
@@ -4762,7 +4762,7 @@ function CharacterTweakData:_presets(tweak_data)
 			2
 		},
 		range = {
-			optimal = 1500, --HAS to stand still to fire
+			optimal = 1500, --overall short range, but continues shooting often
 			far = 3000,
 			close = 1000
 		},
@@ -4775,26 +4775,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 10, --200 damage start, get the fuck out of its way.
 				r = 100,
 				acc = {
-					0.75,
-					0.75
-				},
-				recoil = {
-					2.7,
-					2.7
-				},
-				mode = {
-					0,
-					0,
-					0,
+					1,
 					1
-				}
-			},
-			{
-				dmg_mul = 5, --100
-				r = 1000,
-				acc = {
-					0.75,
-					0.75
 				},
 				recoil = {
 					2.7,
@@ -4809,10 +4791,28 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 4, --80
+				r = 1000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					2.7,
+					2.7
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 4 , --80
 				r = 2000,
 				acc = {
-					0,
-					0.01
+					0.75,
+					0.75
 				},
 				recoil = {
 					2.7,
@@ -5853,9 +5853,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.mini = { --my wrath is finally............gone...........
-		aim_delay = { --reduced high aim delay
-			0.1,
-			0.1
+		aim_delay = {
+			0.5,
+			0.5
 		},
 		focus_delay = 0.7,
 		focus_dis = 100,
@@ -5918,8 +5918,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4 , --80
 				r = 2000,
 				acc = {
-					0,
-					0.01
+					1,
+					1
 				},
 				recoil = {
 					2,

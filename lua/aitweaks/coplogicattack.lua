@@ -222,7 +222,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 			if aim == nil and AIAttentionObject.REACT_AIM <= focus_enemy.reaction then
 				if AIAttentionObject.REACT_SHOOT <= focus_enemy.reaction then
-					local running = my_data.advancing and not my_data.advancing:stopping() and my_data.advancing:haste() == "run"
+					local running = data.unit:anim_data().run
 					local firing_range = 1800
 
 					if data.internal_data.weapon_range then
@@ -251,11 +251,19 @@ function CopLogicAttack._upd_aim(data, my_data)
 							else
 								shoot = true
 							end
+						elseif not dense_mook and focus_enemy.verified and focus_enemy.dis <= firing_range or dense_mook and focus_enemy.verified and focus_enemy.aimed_at and focus_enemy.dis <= firing_range then
+							shoot = true
 						end
 					end
 					
 					if managers.groupai:state():whisper_mode() then
 						if focus_enemy.verified and focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 4 then
+							shoot = true
+						end
+					end
+					
+					if diff_index > 5 and managers.groupai:state():whisper_mode() then
+						if focus_enemy.verified and not shoot then
 							shoot = true
 						end
 					end
@@ -282,12 +290,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 					end
 
 					aim = aim or shoot
-					
-					if diff_index > 5 and managers.groupai:state():whisper_mode() then
-						if focus_enemy.verified and not shoot then
-							shoot = true
-						end
-					end
 					
 				else
 					aim = true
@@ -368,7 +370,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 				
 				--cops will open fire on expected player positions if they hear player alerts and the player has been seen in the last 5 seconds, and they're harassers, for large bursts of suppressive fire.
 				
-				if focus_enemy and aim and focus_enemy.alert_t and data.t - focus_enemy.alert_t < 1 and focus_enemy.verified_t and data.t - focus_enemy.verified_t < 5 and data.tactics and data.tactics.harass then
+				if focus_enemy and aim and focus_enemy.alert_t and data.t - focus_enemy.alert_t < math.random(2, 4) and focus_enemy.verified_t and data.tactics and data.tactics.harass then
 					if dense_mook and managers.groupai:state():chk_high_fed_density() then
 						--log("not firing due to FEDS")
 					else
@@ -464,7 +466,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 		local verified_or_nearvis_chk = focus_enemy and focus_enemy.verified or focus_enemy and focus_enemy.nearly_visible
 		local FE_or_EP_chk = focus_enemy or expected_pos
 		
-		if focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and data.unit:anim_data().run and math.lerp(my_data.weapon_range.close, my_data.weapon_range.optimal, 0) < focus_enemy.dis then
+		if focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and data.unit:anim_data().run and my_data.weapon_range.close < focus_enemy.dis then
 			local walk_to_pos = data.unit:movement():get_walk_to_pos()
 
 			if walk_to_pos then
@@ -473,14 +475,14 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 				local dot = mvector3.dot(temp_vec1, temp_vec2)
 
-				if dot < 0.6 then
+				if dot < 0.4 then
 					shoot = false
 					aim = false
 				end
 			end
 		end
 
-		if shoot and CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk or aim and CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk then
+		if shoot and CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk or aim and CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk or CopLogicAttack.chk_should_turn(data, my_data) and focus_enemy and focus_enemy.alert_t and data.t - focus_enemy.alert_t < math.random(2, 4) then
 			local enemy_pos = verified_or_nearvis_chk and focus_enemy.m_pos or focus_enemy and focus_enemy.verified_pos or expected_pos
 
 			CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
@@ -787,7 +789,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local enemy_visible = focus_enemy and focus_enemy.verified
 	local enemy_visible_soft = nil
 	
-	if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
+	if Global.game_settings.one_down then
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
 			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(0.3, 1.05)
 		else
@@ -969,9 +971,7 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 				move_to_cover = true
 			end
-		elseif data.objective and data.objective.type == "follow" and not action_taken then
-			move_to_cover = true
-		elseif Global.game_settings.one_down or managers.skirmish.is_skirmish() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() then 
+		elseif Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() then 
 		
 			if not Global.game_settings.one_down and not managers.skirmish.is_skirmish() then
 				if diff_index <= 5 and not Global.game_settings.aggroAI then
@@ -987,31 +987,27 @@ function CopLogicAttack._upd_combat_movement(data)
 			
 			if data.tactics and data.tactics.charge and charge_failed_t_chk or my_data.taken_flank_cover and charge_failed_t_chk or charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
 				if my_data.charge_path then
-					if data.objective and not data.objective.type == "follow" then
-						local path = my_data.charge_path
-						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path)
-						my_data.charge_path = nil
-						my_data.taken_flank_cover = nil
-					end
+					local path = my_data.charge_path
+					action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path)
+					my_data.charge_path = nil
+					my_data.taken_flank_cover = nil
 				elseif not my_data.charge_path_search_id and data.attention_obj.nav_tracker then
-					if data.objective and not data.objective.type == "follow" then
-						if data.tactics.charge then
-							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil)
-						else
-							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker)
-						end
+					if data.tactics and data.tactics.charge then
+						my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil)
+					else
+						my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, 3000)
+					end
 
-						if my_data.charge_pos then
-							my_data.charge_path_search_id = "charge" .. tostring(data.key)
+					if my_data.charge_pos then
+						my_data.charge_path_search_id = "charge" .. tostring(data.key)
 
-							unit:brain():search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
+						unit:brain():search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
 								
-							--my_data.taken_flank_cover = nil
-						else
-							debug_pause_unit(data.unit, "failed to find charge_pos", data.unit)
+						--my_data.taken_flank_cover = nil
+					else
+						debug_pause_unit(data.unit, "failed to find charge_pos", data.unit)
 
-							my_data.charge_path_failed_t = TimerManager:game():time()
-						end
+						my_data.charge_path_failed_t = TimerManager:game():time()
 					end
 				end
 			elseif in_cover then
@@ -1726,10 +1722,10 @@ function CopLogicAttack._process_pathing_results(data, my_data)
 
 	if path then
 		if path ~= "failed" then
-			log("charge/flank found")
+			--log("charge/flank found")
 			my_data.charge_path = path
 		else
-			print("[CopLogicAttack._process_pathing_results] charge path failed", data.unit)
+			--print("[CopLogicAttack._process_pathing_results] charge path failed", data.unit)
 		end
 
 		my_data.charge_path_search_id = nil
@@ -1790,9 +1786,21 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	end
 
 	local att_obj = data.attention_obj
+	
+	if att_obj and AIAttentionObject.REACT_AIM > att_obj.reaction  then
+		return true
+	end
+	
+	if att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and not att_obj.verified_t then
+		return true
+	end
 
-	if my_data.attitude == "engage" and att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and att_obj.verified_t and data.t - att_obj.verified_t < 2 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 then
+	if my_data.attitude == "engage" and att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and att_obj.verified_t and data.t - att_obj.verified_t < 0.5 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 and CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_assault_active_atm() then
 		return
+	end
+
+	if att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and att_obj.verified_t and data.t - att_obj.verified_t > 5 then
+		return true
 	end
 
 	if not new_objective or new_objective.type == "free" then
@@ -1813,9 +1821,10 @@ end
 function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
 	if not data.is_converted and not data.unit:in_slot(16) and data.unit:base():has_tag("law") then
 		local att_obj = data.attention_obj
+		local my_data = data.internal_data
 		local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
 		
-		if data.internal_data.attitude and data.internal_data.attitude == "engage" and att_obj and reactions_chk and att_obj.verified_t and data.t - att_obj.verified_t < 2 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack then
+		if data.internal_data.attitude and data.internal_data.attitude == "engage" and att_obj and reactions_chk and att_obj.verified_t and data.t - att_obj.verified_t < 2 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 and managers.groupai:state():chk_assault_active_atm() or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack then
 			return
 		end
 	end

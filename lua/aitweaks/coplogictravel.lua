@@ -437,13 +437,28 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 		end
 	end
 	
-	--check that the people in my group who have a similar objective to mine have caught up with me
-	if not my_objective.grp_objective then
+	local my_dis = mvector3.distance(my_objective.area.pos, data.m_pos)
+
+	if my_dis > 1000 and not managers.groupai:state():chk_high_fed_density() and not CopLogicTravel._chk_close_to_criminal(data, my_data) then
 		return true
 	end
 	
+	
 	if data.tactics and data.tactics.obstacle and CopLogicTravel._chk_close_to_criminal(data, my_data) then
 		return 
+	end
+	
+	if my_data.attitude and my_data.attitude ~= "engage" and CopLogicTravel._chk_close_to_criminal(data, my_data) then
+		return
+	end
+	
+	if CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_anticipation()then
+		return
+	end
+	
+	--check that the people in my group who have a similar objective to mine have caught up with me
+	if not my_objective.grp_objective then
+		return true
 	end
 	
 	if CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_high_fed_density() and dense_mook then
@@ -452,12 +467,6 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	
 	if CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_active_assault_break() and dense_mook then
 		return
-	end
-	
-	local my_dis = mvector3.distance_sq(my_objective.area.pos, data.m_pos)
-
-	if my_dis > 2000 * 2000 and not managers.groupai:state():chk_high_fed_density() then
-		return true
 	end
 
 	return true

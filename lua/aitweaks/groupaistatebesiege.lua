@@ -181,13 +181,7 @@ function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 end
 
 function GroupAIStateBesiege:chk_high_fed_density()
-
-	if not self._feddensityhigh then
-		return
-		--log("not my fucking dick")
-	end
-	
-	return true
+	return self._feddensityhigh
 end
 
 function GroupAIStateBesiege:chk_assault_number()
@@ -208,32 +202,37 @@ function GroupAIStateBesiege:chk_no_fighting_atm()
 end
 
 function GroupAIStateBesiege:chk_active_assault_break()
+	return self._activeassaultbreak
+end
 
-	if not self._activeassaultbreak then
-		return
+function GroupAIStateBesiege:chk_anticipation()
+	local assault_task = self._task_data.assault
+	
+	if not assault_task.active or assault_task and assault_task.phase == "anticipation" and assault_task.phase_end_t and assault_task.phase_end_t < self._t then
+		return true
 	end
 	
-	return true
+	return
 end
 
 function GroupAIStateBesiege:chk_assault_active_atm()
-
-	if not self._task_data.assault.phase == "build" or not self._task_data.assault.phase == "sustain" then
-		return
-		--log("not assault active")
+	local assault_task = self._task_data.assault
+	
+	if assault_task and assault_task.phase == "build" or assault_task and assault_task.phase == "sustain" then
+		return true
 	end
 	
-	return true
+	return
 end
 
 function GroupAIStateBesiege:is_detection_persistent()
-
-	if not self._task_data.assault.phase == "build" or not self._task_data.assault.phase == "sustain" then
-		return
-		--log("not assault active")
+	local assault_task = self._task_data.assault
+	
+	if assault_task and assault_task.phase == "build" or assault_task and assault_task.phase == "sustain" then
+		return true
 	end
 	
-	return true
+	return
 end
 
 function GroupAIStateBesiege:get_hostage_count_for_chatter()
@@ -955,7 +954,6 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.stance = "hos"
 		objective.pose = "stand"
 		objective.scan = true
-		objective.interrupt_dis = 200
 	elseif grp_objective.type == "assault_area" then
 		objective.type = "defend_area"
 

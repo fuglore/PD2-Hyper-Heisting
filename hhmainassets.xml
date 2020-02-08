@@ -1,6 +1,15 @@
 <table directory="assets">	
 	<!--Base Game Asset Replacements-->
 	
+	<!--sniper helmet popping-->
+	<unit_mat path="units/payday2/characters/ene_acc_sniper_cap/ene_acc_sniper_cap" load="true"/>
+	
+	<unit path="units/payday2/characters/ene_sniper_1/ene_sniper_1" load="true" force="true"/>
+	<unit path="units/payday2/characters/ene_sniper_1/ene_sniper_1_husk" load="true" force="true"/>
+
+	<unit path="units/payday2/characters/ene_sniper_2/ene_sniper_2" load="true" force="true"/>
+	<unit path="units/payday2/characters/ene_sniper_2/ene_sniper_2_husk" load="true" force="true"/>	
+	
 	<!--enemy bullet impact fixes-->	
 	<object path="units/pd2_dlc_flat/characters/npc_chavez/npc_chavez" force="true" />
 	<object path="units/pd2_dlc_flat/characters/npc_jamaican/npc_jamaican" force="true" />		
