@@ -188,6 +188,27 @@ function EnemyManager:_update_gfx_lod()
 	end
 end
 
+function EnemyManager:set_gfx_lod_enabled(state)
+    if state then
+        self._gfx_lod_data.enabled = state
+    elseif self._gfx_lod_data.enabled then
+        self._gfx_lod_data.enabled = state
+        local entries = self._gfx_lod_data.entries
+        local units = entries.units
+        local states = entries.states
+
+        for i, lod_stage in ipairs(states) do
+            if not lod_stage or lod_stage ~= 1 then
+                if alive(units[i]) then
+                    states[i] = 1
+
+                    units[i]:base():set_visibility_state(1)
+                end
+            end
+        end
+    end
+end
+
 function EnemyManager:chk_any_unit_in_slotmask_visible(slotmask, cam_pos, cam_nav_tracker)
 	if self._gfx_lod_data.enabled and managers.navigation:is_data_ready() then
 		local entries = self._gfx_lod_data.entries

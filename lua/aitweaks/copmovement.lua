@@ -372,6 +372,23 @@ function CopMovement:_upd_stance(t)
 	end
 end
 
+function CopMovement:anim_clbk_enemy_spawn_melee_item()
+    if alive(self._melee_item_unit) then
+        return
+    end
+
+    local melee_weapon = self._unit:base().melee_weapon and self._unit:base():melee_weapon()
+    local unit_name = melee_weapon and melee_weapon ~= "weapon" and tweak_data.weapon.npc_melee[melee_weapon] and tweak_data.weapon.npc_melee[melee_weapon].unit_name or nil
+
+    if unit_name then
+        local align_obj_l_name = CopMovement._gadgets.aligns.hand_l
+        local align_obj_l = self._unit:get_object(align_obj_l_name)
+
+        self._melee_item_unit = World:spawn_unit(unit_name, align_obj_l:position(), align_obj_l:rotation())
+        self._unit:link(align_obj_l:name(), self._melee_item_unit, self._melee_item_unit:orientation_object():name())
+    end
+end
+
 function CopMovement:on_suppressed(state)
 	local suppression = self._suppression
 	local end_value = state and 1 or 0

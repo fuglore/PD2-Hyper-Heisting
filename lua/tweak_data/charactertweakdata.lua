@@ -3072,8 +3072,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.15
 				},
 				recoil = { --super low recoil at this range
-					0.05,
-					0.15
+					0.2,
+					0.2
 				},
 				mode = { --full auto
 					0,
@@ -3090,8 +3090,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.15
 				},
 				recoil = {
-					0.05,
-					0.15
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3108,8 +3108,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.08
 				},
 				recoil = {
-					0.1,
-					0.25
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3126,8 +3126,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.02
 				},
 				recoil = { --no top recoil increase, just lower half
-					0.25,
-					0.35
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3144,8 +3144,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.01
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3423,9 +3423,9 @@ function CharacterTweakData:_presets(tweak_data)
 					0,
 					0.1
 				},
-				recoil = { --recoil is high because of the reload and auto-fire
-					0.1,
-					0.15
+				recoil = {
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3441,9 +3441,9 @@ function CharacterTweakData:_presets(tweak_data)
 					0,
 					0.1
 				},
-				recoil = { --low recoil, meant to simulate rapid bursts
-					0.1,
-					0.15
+				recoil = {
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3460,8 +3460,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				recoil = {
-					0.5,
-					0.9
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3500,10 +3500,10 @@ function CharacterTweakData:_presets(tweak_data)
 					3
 				},
 				mode = {
-					3,
-					1,
-					1,
-					0
+					0,
+					0,
+					0,
+					1
 				}
 			}
 		}
@@ -4158,9 +4158,9 @@ function CharacterTweakData:_presets(tweak_data)
 					0,
 					0.15
 				},
-				recoil = { --base recoil increased slightly to match new autofire values, no variation at this range to reduce positive randomness
-					0.1,
-					0.1
+				recoil = { 
+					0.2,
+					0.2
 				},
 				mode = { --full auto
 					0,
@@ -4173,12 +4173,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 5,
 				r = 500,
 				acc = {
-					0, --increased from simple to create consistency at close ranges in regards to danger
+					0, 
 					0.15
 				},
 				recoil = {
-					0.1,
-					0.1
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -4195,8 +4195,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.1
 				},
 				recoil = {
-					0.1,
-					0.2 --reduced slightly from .25 to .2, not the main feature, just a tiny little boost
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -4529,13 +4529,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.1
 				},
 				recoil = {
-					0.1,
-					0.1
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
-					3,
-					3,
+					0,
+					0,
 					1
 				}
 			},
@@ -4546,14 +4546,14 @@ function CharacterTweakData:_presets(tweak_data)
 					0,
 					0.1
 				},
-				recoil = { --lowered higher end of recoil, less positive rng
-					0.1,
-					0.1
+				recoil = {
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
-					3,
-					3,
+					0,
+					0,
 					1
 				}
 			},
@@ -4565,8 +4565,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.05
 				},
 				recoil = {
-					0.5,
-					0.9
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -4605,10 +4605,10 @@ function CharacterTweakData:_presets(tweak_data)
 					3
 				},
 				mode = {
-					3,
-					1,
-					1,
-					0
+					0,
+					0,
+					0,
+					1
 				}
 			}
 		}
@@ -5301,7 +5301,7 @@ function CharacterTweakData:_presets(tweak_data)
 					0.15
 				},
 				recoil = {
-					0.1,
+					0.2,
 					0.2 
 				},
 				mode = {
@@ -5636,13 +5636,13 @@ function CharacterTweakData:_presets(tweak_data)
 					0.15
 				},
 				recoil = {
-					0.1,
-					0.1
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
-					3,
-					3,
+					0,
+					0,
 					1
 				}
 			},
@@ -5653,14 +5653,14 @@ function CharacterTweakData:_presets(tweak_data)
 					0,
 					0.15
 				},
-				recoil = { --lowered higher end of recoil, less positive rng
-					0.1,
-					0.1
+				recoil = { 
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
-					3,
-					3,
+					0,
+					0,
 					1
 				}
 			},
@@ -5672,8 +5672,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.1
 				},
 				recoil = {
-					0.5,
-					0.9
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -5690,8 +5690,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.04
 				},
 				recoil = {
-					0.6,
-					1.2
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -5708,14 +5708,14 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				recoil = {
-					1.5,
-					3
+					0.2,
+					0.2
 				},
 				mode = {
-					3,
-					1,
-					1,
-					0
+					0,
+					0,
+					0,
+					1
 				}
 			}
 		}
