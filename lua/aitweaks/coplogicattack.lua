@@ -1126,16 +1126,19 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 
 	local pantsdownchk = nil
 	
-	if focus_enemy.is_local_player then
-		local e_movement_state = focus_enemy.unit:movement():current_state()
-		if e_movement_state:_is_reloading() or e_movement_state:_interacting() or e_movement_state:is_equipping() then
-			pantsdownchk = true
-		end
-	else
-		local e_anim_data = focus_enemy.unit:anim_data()
-		local movingoridle = e_anim_data.move or e_anim_data.idle
-		if not movingoridle or e_anim_data.reload then
-			pantsdownchk = true
+	
+	if focus_enemy.is_person and focus_enemy.is_husk_player or focus_enemy.is_person and focus_enemy.is_local_player then
+		if focus_enemy.is_local_player then
+			local e_movement_state = focus_enemy.unit:movement():current_state()
+			if e_movement_state:_is_reloading() or e_movement_state:_interacting() or e_movement_state:is_equipping() then
+				pantsdownchk = true
+			end
+		else
+			local e_anim_data = focus_enemy.unit:anim_data()
+			local movingoridle = e_anim_data.move or e_anim_data.idle
+			if not movingoridle or e_anim_data.reload then
+				pantsdownchk = true
+			end
 		end
 	end
 	
@@ -1801,8 +1804,15 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	if att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and not att_obj.verified_t then
 		return true
 	end
+	
+	local criminal_in_my_area = nil
+	local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
 
-	if my_data.attitude == "engage" and att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and att_obj.verified_t and data.t - att_obj.verified_t < 0.5 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 and CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_assault_active_atm() then
+	if next(my_area.criminal.units) then
+		criminal_in_my_area = true
+	end
+	
+	if my_data.attitude == "engage" and att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and att_obj.verified_t and data.t - att_obj.verified_t < 0.5 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 and CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_assault_active_atm() and criminal_in_my_area then
 		return
 	end
 
@@ -1830,8 +1840,14 @@ function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
 		local att_obj = data.attention_obj
 		local my_data = data.internal_data
 		local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+		local criminal_in_my_area = nil
+		local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
+
+		if next(my_area.criminal.units) then
+			criminal_in_my_area = true
+		end
 		
-		if data.internal_data.attitude and data.internal_data.attitude == "engage" and att_obj and reactions_chk and att_obj.verified_t and data.t - att_obj.verified_t < 2 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 and managers.groupai:state():chk_assault_active_atm() or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack then
+		if data.internal_data.attitude and data.internal_data.attitude == "engage" and att_obj and reactions_chk and att_obj.verified_t and data.t - att_obj.verified_t < 2 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 and managers.groupai:state():chk_assault_active_atm() and criminal_in_my_area or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack then
 			return
 		end
 	end

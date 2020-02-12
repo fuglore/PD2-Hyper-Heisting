@@ -48,6 +48,8 @@ function CopActionShoot:init(action_desc, common_data)
 	local weapon_usage_tweak = common_data.char_tweak.weapon[weap_tweak.usage]
 	self._weapon_unit = weapon_unit
 	self._weapon_base = weapon_unit:base()
+	local suppressive = self._weapon_base.suppression and self._weapon_base.suppression >= 5
+	self.fireline_t = suppressive and 2 or 0.7
 	self._weap_tweak = weap_tweak
 	self._w_usage_tweak = weapon_usage_tweak
 	self._reload_speed = weapon_usage_tweak.RELOAD_SPEED
@@ -374,7 +376,7 @@ function CopActionShoot:update(t)
 				local fire_line_is_obstructed = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")
 
 				if fire_line_is_obstructed then
-					if fire_line_is_obstructed.distance > 300 then
+					if self._line_of_sight_t and fire_line_is_obstructed.distance > 300 and t - self._line_of_sight_t < self.fireline_t then
 						shoot = true
 					end
 				else
@@ -390,6 +392,7 @@ function CopActionShoot:update(t)
 					end
 
 					if not shield_in_the_way then
+					
 						if not self._last_vis_check_status and t - self._line_of_sight_t > 1 then
 							self._shoot_history.focus_start_t = t
 							self._shoot_history.m_last_pos = mvector3.copy(target_pos)
@@ -404,7 +407,35 @@ function CopActionShoot:update(t)
 			elseif self._shooting_husk_player then
 				shoot = self._last_vis_check_status
 			else
-				shoot = true
+				local fire_line_is_obstructed = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")
+
+				if fire_line_is_obstructed then
+					if self._line_of_sight_t and fire_line_is_obstructed.distance > 300 and t - self._line_of_sight_t < self.fireline_t then
+						shoot = true
+					end
+				else
+					local shield_in_the_way = nil
+					local has_ap_rounds = self._weapon_base._use_armor_piercing
+
+					if not has_ap_rounds then
+						if self._shield then
+							shield_in_the_way = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("enemy_shield_check"), "ignore_unit", self._shield, "report")
+						else
+							shield_in_the_way = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("enemy_shield_check"), "report")
+						end
+					end
+
+					if not shield_in_the_way then
+						
+						if self._line_of_sight_t and not self._last_vis_check_status and t - self._line_of_sight_t > 1 then
+							self._shoot_history.focus_start_t = t
+							self._shoot_history.m_last_pos = mvector3.copy(target_pos)
+						end
+						
+						self._line_of_sight_t = t
+						shoot = true
+					end
+				end
 			end
 
 			if shoot and self._shoot_t < t then

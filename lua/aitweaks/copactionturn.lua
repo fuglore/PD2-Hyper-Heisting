@@ -39,11 +39,11 @@ function CopActionTurn:_upd_wait_full_blend(t)
 					end
 				end
 
-				self._machine:set_speed_soft(redir_res, speed, 0.8)
+				self._machine:set_speed_soft(redir_res, speed, 0.9)
 			end
 
 			self._common_data.unit:set_driving("animation")
-			self._ext_movement:set_root_blend(false)
+			self._ext_movement:set_root_blend(true)
 			self._ext_base:chk_freeze_anims()
 
 			self.update = nil

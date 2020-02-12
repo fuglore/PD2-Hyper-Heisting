@@ -1482,7 +1482,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		return
 	end
 
-	local phase_is_anticipation = phase == "anticipation"
+	local phase_is_anticipation = self:chk_anticipation()
 	local phase_is_fade = phase == "fade"
 	local current_objective = group.objective
 	local approach, open_fire, push, pull_back, charge = nil
@@ -1626,7 +1626,9 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	local objective_area = nil
 
 	if obstructed_area then
-		if current_objective.moving_out then
+		if phase_is_anticipation then
+			pull_back = true
+		elseif current_objective.moving_out then
 			if not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				open_fire = true
 			end
@@ -1654,7 +1656,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 			
-			if phase_is_anticipation and current_objective.open_fire or self._feddensityhigh or self._activeassaultbreak then
+			if phase_is_anticipation and current_objective.open_fire and has_criminals_close or self._feddensityhigh or self._activeassaultbreak then
 				pull_back = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
 				approach = true

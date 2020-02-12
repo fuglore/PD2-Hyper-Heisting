@@ -445,10 +445,6 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 		return 
 	end
 	
-	if my_data.attitude and my_data.attitude ~= "engage" and CopLogicTravel._chk_close_to_criminal(data, my_data) and not data.objective.running then
-		return
-	end
-	
 	if CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_anticipation() then
 		return
 	end

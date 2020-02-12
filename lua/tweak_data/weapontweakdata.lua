@@ -421,7 +421,7 @@ function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried abo
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
-	self:_set_characters_weapon_preset(30, 15, 40, 80) --setting enemy weapon spread
+	self:_set_characters_weapon_preset(30, 15, 40, 60) --setting enemy weapon spread
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 8
@@ -478,7 +478,7 @@ function WeaponTweakData:_set_overkill_145()
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
-	self:_set_characters_weapon_preset(30, 15, 40, 80) --setting enemy weapon spread
+	self:_set_characters_weapon_preset(30, 15, 40, 60) --setting enemy weapon spread
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 8
@@ -544,7 +544,7 @@ function WeaponTweakData:_set_easy_wish()
 	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	self.bayou_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	
-	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
+	self:_set_characters_weapon_preset(20, 10, 20, 40) --setting enemy weapon spread
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 16
@@ -623,7 +623,7 @@ function WeaponTweakData:_set_overkill_290()
 	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	self.bayou_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	
-	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
+	self:_set_characters_weapon_preset(20, 10, 20, 40) --setting enemy weapon spread
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 16
@@ -702,7 +702,7 @@ function WeaponTweakData:_set_sm_wish()
 	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	self.bayou_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	
-	self:_set_characters_weapon_preset(20, 15, 20, 60) --setting enemy weapon spread
+	self:_set_characters_weapon_preset(20, 6, 20, 35) --setting enemy weapon spread
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 40 --They'll lock your armor regen down after breaking it for a little while, but can't pierce your armor anymore.

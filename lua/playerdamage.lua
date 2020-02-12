@@ -440,10 +440,44 @@ function PlayerDamage:build_suppression(amount)
 	data.value = math.min(tweak_data.player.suppression.max_value, (data.value or 0) + amount * tweak_data.player.suppression.receive_mul)
 	self._last_received_sup = amount
 	self._next_allowed_sup_t = managers.player:player_timer():time() + self._dmg_interval
-	if self._akuma_effect then
-		data.decay_start_t = managers.player:player_timer():time() + tweak_data.player.suppression.decay_start_delay * 4
+	if not data.decay_start_t then
+		if self._akuma_effect then
+			data.decay_start_t = managers.player:player_timer():time() + 4
+		else
+			data.decay_start_t = managers.player:player_timer():time() + 1
+		end
 	else
-		data.decay_start_t = managers.player:player_timer():time() + tweak_data.player.suppression.decay_start_delay
+		if self._akuma_effect then
+			data.decay_start_t = managers.player:player_timer():time() + 4
+		else
+			local raw_decay_start_t = data.decay_start_t - managers.player:player_timer():time()
+			if raw_decay_start_t <= 0.95 then
+				data.decay_start_t = data.decay_start_t + 0.05
+			end
+		end
+	end
+end
+
+function PlayerDamage:_upd_suppression(t, dt)
+	local data = self._supperssion_data
+
+	if data.value then
+		if data.decay_start_t < t then
+			data.value = data.value - data.value
+
+			if data.value <= 0 then
+				data.value = nil
+				data.decay_start_t = nil
+
+				managers.environment_controller:set_suppression_value(0, 0)
+			end
+		elseif data.value == tweak_data.player.suppression.max_value and self._regenerate_timer then
+			self._listener_holder:call("suppression_max")
+		end
+
+		if data.value then
+			managers.environment_controller:set_suppression_value(self:effective_suppression_ratio(), self:suppression_ratio())
+		end
 	end
 end
 
