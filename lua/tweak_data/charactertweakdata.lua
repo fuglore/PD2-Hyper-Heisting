@@ -6677,6 +6677,11 @@ function CharacterTweakData:_presets(tweak_data)
 			approachingspecial = true
 			
 		},
+		akuma = {
+			contact = true,
+			aggressive = true,
+			approachingspecial = true		
+		},
 		taser = {
 			contact = true,
 			aggressive = true,
@@ -7093,7 +7098,10 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.akuma = deep_clone(self.shield)
 	self.akuma.weapon = presets.weapon.akuma
 	self.akuma.move_speed = presets.move_speed.lightning_constant
-	self.akuma.chatter = presets.enemy_chatter.no_chatter
+	self.akuma.speech_prefix_p1 = nil
+	self.akuma.speech_prefix_p2 = nil
+	self.akuma.chatter = presets.enemy_chatter.akuma
+	self.akuma.custom_voicework = "akuma"
 	self.akuma.no_fumbling = true
 	self.akuma.no_suppression_reaction = true
 	self.akuma.do_not_drop_ammo = true

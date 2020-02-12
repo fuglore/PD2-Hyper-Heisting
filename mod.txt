@@ -8,4 +8,17 @@
    "priority" : 47,
    "blt_version" : 2,
    "image" : "hhshin.png"
+   "libraries" : [
+		{
+            "display_name" : "BeardLib",
+            "identifier" : "beardlib",
+            "optional" : "false"
+        }
+    ],
+   "hooks" : [
+		{ 	
+			"hook_id" : "lib/entry",
+			"script_path" : "voframework.lua"
+		}
+	]
 }

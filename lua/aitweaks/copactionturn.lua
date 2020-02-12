@@ -39,7 +39,7 @@ function CopActionTurn:_upd_wait_full_blend(t)
 					end
 				end
 
-				self._machine:set_speed(redir_res, speed)
+				self._machine:set_speed_soft(redir_res, speed, 0.8)
 			end
 
 			self._common_data.unit:set_driving("animation")

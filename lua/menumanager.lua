@@ -61,7 +61,7 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 						is_cancel_button = true
 					}
 				},true)
-			PD2THHSHIN:SaveSettings(true)
+				PD2THHSHIN:SaveSettings(true)
 			end
 		end
 	end

@@ -43,6 +43,14 @@ function GroupAITweakData:_init_chatter_data()
 		group_min = 0,
 		queue = "g90"
 	}
+	self.enemy_chatter.lotusapproach = {
+		radius = 4000,
+		max_nr = 40,
+		duration = {1, 1},
+		interval = {1, 4},
+		group_min = 0,
+		queue = "ch3"
+	}
 	self.enemy_chatter.aggressivecontrolsurprised1 = {
 		radius = 2000,
 	    max_nr = 4,

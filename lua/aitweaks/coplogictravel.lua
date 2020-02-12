@@ -294,17 +294,16 @@ function CopLogicTravel.queued_update(data)
 		end
     end
 	
-	local objective = data.objective or nil
-	
-	data.logic._update_haste(data, data.internal_data)
-	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
+	if data.unit:base()._tweak_table == "akuma" then
+		managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "lotusapproach" )
+	end
 	
 	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
 	
-	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted then
+	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted and not data.unit:base():has_tag("special") then
 		if managers.groupai:state():chk_assault_active_atm() or not data.unit:base():has_tag("law") then
-			if data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
 				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
 					local roll = math.random(1, 100)
 					local chance_suppanic = 30
@@ -330,6 +329,11 @@ function CopLogicTravel.queued_update(data)
 			end
 		end
 	end
+	
+	local objective = data.objective or nil
+	
+	data.logic._update_haste(data, data.internal_data)
+	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
       
     CopLogicTravel.queue_update(data, data.internal_data, delay)
 end

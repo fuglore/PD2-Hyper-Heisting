@@ -42,8 +42,6 @@ function PD2THHSHIN:LoadSettings()
 			self.settings[k] = v
 			self.session_settings[k] = v
 		end
-	else
-		self:SaveSettings(true)
 	end
 end
 

@@ -1,17 +1,7 @@
+local old_init = CopBase.init
+
 function CopBase:init(unit)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	if unit:name() == Idstring("units/pd2_dlc_bph/characters/civ_male_locke_escort/civ_male_locke_escort_husk") then
-		local spawn_position = unit:position()
-
-		managers.enemy:add_delayed_clbk("LockePrisonPositionHack", function ()
-			unit:movement():set_position(spawn_position)
-		end, TimerManager:game():time() + 1)
-	end
-
-	local unit_name = unit:name()
-
-	UnitBase.init(self, unit, false)
-	
 	local DS_c45_units = {
 		Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
 		Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk"),
@@ -41,14 +31,7 @@ function CopBase:init(unit)
 		end
 	end
 	
-	self._unit = unit
-	self._visibility_state = true
-	self._foot_obj_map = {
-		right = self._unit:get_object(Idstring("RightToeBase")),
-		left = self._unit:get_object(Idstring("LeftToeBase"))
-	}
-	self._is_in_original_material = true
-	self._buffs = {}
+	old_init(self, unit)
 end
 
 

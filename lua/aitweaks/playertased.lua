@@ -15,8 +15,6 @@ function PlayerTased:_check_action_shock(t, input)
 			self._unit:camera():play_shaker("player_taser_shock", 1, 10)
 			self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * math.random(10))
 		end
-		
-		self._taser_value = math.max(self._taser_value - 0.25, 0)
 
 		self._unit:sound():play("tasered_shock")
 		managers.rumble:play("electric_shock")

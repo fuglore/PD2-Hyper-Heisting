@@ -462,6 +462,8 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 			self._t
 		})
 	end
+	
+	self:_assign_recon_groups_to_retire()
 
 	self._task_data.recon.tasks = {}
 end
@@ -516,8 +518,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 
 	local t = self._t
-
-	self:_assign_recon_groups_to_retire()
 
 	local force_pool = nil 
 	

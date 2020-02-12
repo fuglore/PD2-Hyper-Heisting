@@ -1,3 +1,8 @@
+
+if restoration and restoration:all_enabled("HUD/MainHUD", "HUD/AssaultPanel") then
+	return
+end
+
 Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(self)
 	local level = Global.level_data and Global.level_data.level_id
 	local cover_line_to_use = "hud_assault_cover"

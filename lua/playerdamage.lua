@@ -278,10 +278,15 @@ Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self,
 	local armor_damage = self:_max_armor() > 0 and self:get_real_armor() < self:_max_armor()
 	local cur_state = self._unit:movement():current_state_name()
 	
+	if self._bleed_out and self._akuma_effect then
+		managers.groupai:state():chk_taunt()
+	end
+	
 	if attack_data then
-		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
+		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
 			if tostring(attack_data.attacker_unit:base()._tweak_table) == "akuma" then
 				if alive(player_unit) then
+					--self._akuma_effect = true
 					self:build_suppression(99)
 					return
 				end

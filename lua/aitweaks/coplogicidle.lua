@@ -337,8 +337,9 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local has_damaged = dmg_dt < 5
 				local reviving = nil
 				local focus_enemy = attention_data
+				local human_chk = attention_data.is_husk_player or attention_data.is_local_player
 				
-				if not data.unit:in_slot(16) and focus_enemy and (focus_enemy.is_local_player or focus_enemy.is_husk_player) then
+				if not data.unit:in_slot(16) and focus_enemy and focus_enemy.is_local_player or not data.unit:in_slot(16) and focus_enemy and focus_enemy.is_husk_player then
 					local anim_data = att_unit:anim_data()
 					if focus_enemy.is_local_player then
 						local e_movement_state = att_unit:movement():current_state()
@@ -405,8 +406,11 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				end
 				
 				if old_enemy and data.tactics and data.tactics.murder then
-					target_priority_slot = 1
-					--log("*heavy breathing*")
+					if human_chk then
+						target_priority_slot = 1
+					else
+						target_priority_slot = target_priority_slot - 1 
+					end
 				end
 				
 				if assault_reaction and distance < 1500 then

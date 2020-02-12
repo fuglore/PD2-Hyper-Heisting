@@ -213,9 +213,21 @@ function GroupAIStateBase:set_importance_weight(u_key, wgt_report)
 	end
 end
 
+function GroupAIStateBase:chk_taunt()
+	for group_id, group in pairs(self._groups) do
+		for u_key, u_data in pairs(group.units) do
+			if u_data.unit:base()._tweak_table == "akuma" then
+				--log("heheheh")
+				u_data.unit:sound():say("i03", true, nil, true, nil)
+			end
+		end
+	end
+end
+
 function GroupAIStateBase:on_criminal_neutralized(unit)
 	local criminal_key = unit:key()
 	local record = self._criminals[criminal_key]
+	local criminal = unit
 
 	if not record then
 		return
@@ -225,6 +237,11 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 	record.arrest_timeout = 0
 
 	if Network:is_server() then
+	
+		--if criminal and criminal:character_damage() and criminal:character_damage()._akuma_effect then
+			
+		--end
+		
 		if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.active and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
 			self._assault_number = self._assault_number + 1
 
@@ -257,7 +274,7 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 		end
 
 		for key, data in pairs(self._police) do
-			data.unit:brain():on_criminal_neutralized(criminal_key)
+			data.unit:brain():on_criminal_neutralized(criminal_key, unit)
 		end
 
 		self:_add_drama(self._drama_data.actions.criminal_dead)

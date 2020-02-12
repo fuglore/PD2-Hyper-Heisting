@@ -55,7 +55,7 @@ end
 function CopBrain:on_suppressed(state)
     self._logic_data.is_suppressed = state or nil
 	
-	local supp_complain_t_chk = not self._next_supyell_t or self._next_supyell_t < TimerManager:game():time()
+	--local supp_complain_t_chk = not self._next_supyell_t or self._next_supyell_t < TimerManager:game():time()
 	
     if self._current_logic.on_suppressed_state and not self._logic_data.is_converted then
         self._current_logic.on_suppressed_state(self._logic_data)
