@@ -1003,6 +1003,13 @@ function CopLogicAttack._upd_combat_movement(data)
 				if my_data.charge_path then
 					local path = my_data.charge_path
 					action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path)
+					
+					if my_data.taken_flank_cover then
+						if data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
+							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
+						end
+					end
+					
 					my_data.charge_path = nil
 					my_data.taken_flank_cover = nil
 				elseif not my_data.charge_path_search_id and data.attention_obj.nav_tracker then
@@ -1095,15 +1102,9 @@ function CopLogicAttack._upd_combat_movement(data)
 					step = step,
 					angle = step * sign,
 					sign = sign
-				}
-				my_data.taken_flank_cover = true --this helps them qualify for charging behavior after acquiring a flank, which is not vanilla behavior btw
+				} 
 				my_data.next_allowed_flank_charge_t = data.t + 2
 				want_flank_cover = nil
-				if not data.unit:in_slot(16) and not data.is_converted then --flankers signal their presence whenever they move around
-					if data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
-						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
-					end
-				end
 			end
 		else
 			my_data.flank_cover = nil
@@ -1231,6 +1232,9 @@ function CopLogicAttack.action_complete_clbk(data, action)
 
 	if action_type == "walk" then
 		my_data.advancing = nil
+		if my_data.flank_cover then
+			my_data.taking_flank_cover = true
+		end
 		my_data.flank_cover = nil
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
@@ -1240,6 +1244,10 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			my_data.surprised = false
 		elseif my_data.moving_to_cover then
 			if action:expired() then
+				if my_data.taking_flank_cover then
+					my_data.taken_flank_cover = true
+				end
+				my_data.taking_flank_cover = nil
 				my_data.in_cover = my_data.moving_to_cover
 				my_data.cover_enter_t = data.t
 			end
