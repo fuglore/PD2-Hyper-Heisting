@@ -996,7 +996,7 @@ function CopLogicAttack._upd_combat_movement(data)
 					my_data.move_t = data.t + 0.35
 				end
 			else
-				my_data.move_t = data.t + 0.01
+				my_data.move_t = data.t + 0.032
 			end
 			
 			if data.tactics and data.tactics.charge and charge_failed_t_chk or my_data.taken_flank_cover and charge_failed_t_chk or charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then

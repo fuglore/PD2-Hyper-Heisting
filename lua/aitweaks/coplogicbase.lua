@@ -788,16 +788,12 @@ function CopLogicBase.should_enter_attack(data)
 			end
 		end
 		
-		local attack_distance = 1200
-		
-		if criminal_in_neighbour then
-			attack_distance = 800
-		end
+		local attack_distance = 1500
 		
 		local criminal_near = criminal_in_my_area or criminal_in_neighbour
 		local visibility_chk = att_obj.verified or att_obj.verified_t and att_obj.verified_t - data.t <= 1
 		
-		if managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and reactions_chk and att_obj.dis <= 5000 or managers.groupai:state():chk_high_fed_density() or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or reactions_chk and not att_obj.verified and att_obj.dis <= 500 or data.internal_data.attitude and data.internal_data.attitude == "engage" and my_data.firing and visibility_chk and att_obj.dis <= 1200 or data.internal_data.attitude and data.internal_data.attitude == "engage" and reactions_chk and visibility_chk and att_obj.dis <= attack_distance and criminal_near then
+		if data.is_suppressed and reactions_chk and att_obj.dis <= attack_distance and visibility_chk or not my_data.move_t and data.internal_data.attitude and data.internal_data.attitude == "engage" and reactions_chk or my_data.move_t and my_data.move_t < data.t and data.internal_data.attitude and data.internal_data.attitude == "engage" and reactions_chk or my_data.want_to_take_cover or my_data.charge_path and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() and data.internal_data.attitude and data.internal_data.attitude == "engage" or managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and reactions_chk and att_obj.dis <= 5000 or managers.groupai:state():chk_high_fed_density() or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or reactions_chk and not att_obj.verified and att_obj.dis <= 800 or data.internal_data.attitude and data.internal_data.attitude == "engage" and my_data.firing and visibility_chk and att_obj.dis <= attack_distance or data.internal_data.attitude and data.internal_data.attitude == "engage" and reactions_chk and visibility_chk and att_obj.dis <= attack_distance and criminal_near then
 			return true
 		end
 		
