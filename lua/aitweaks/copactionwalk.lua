@@ -322,10 +322,10 @@ CopActionWalk._anim_block_presets = {
 
 function CopActionWalk:init(action_desc, common_data)
 	self._common_data = common_data
-	self._action_desc = action_desc
-	self._action_desc.path_simplified = true
 	local action_desc = action_desc
 	action_desc.path_simplified = true
+	self._action_desc = action_desc
+	self._action_desc.path_simplified = true
 	self._unit = common_data.unit
 	self._ext_movement = common_data.ext_movement
 	self._ext_anim = common_data.ext_anim

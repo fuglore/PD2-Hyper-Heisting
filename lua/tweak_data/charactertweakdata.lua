@@ -226,7 +226,7 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.dodge.athletic_complex = {
-		speed = 1.3,
+		speed = 1.5,
 		occasions = {
 			hit = {
 				chance = 1,
@@ -324,7 +324,7 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.dodge.ninja_complex = {
-			speed = 1.3,
+			speed = 2,
 			occasions = {
 				hit = {
 					chance = 1,

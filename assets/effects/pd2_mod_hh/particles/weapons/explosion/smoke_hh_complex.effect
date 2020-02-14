@@ -30,7 +30,7 @@
             </billboard>
         </visualizerstack>
     </atom>
-    <atom name="smoke_dark_wide" min_size="10" max_size="20" lifetime="-1" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="0" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="freeze" cull_gracetime="0" max_particle_radius="1000" soundbank="" cue="" ambient="true" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
+    <atom name="smoke_dark_wide" min_size="5" max_size="20" lifetime="-1" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="0" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="freeze" cull_gracetime="0" max_particle_radius="1000" soundbank="" cue="" ambient="true" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
             <boxevenposition relative="effect" min="-10 -10 -10" max="10 10 10"/>
             <constantage age="9"/>
@@ -61,7 +61,7 @@
             </billboard>
         </visualizerstack>
     </atom>
-    <atom name="central_explosion" min_size="3" max_size="5" lifetime="1.5" random_start_time="false" start_time="0.08" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="kill" cull_gracetime="1" max_particle_radius="300" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
+    <atom name="central_explosion" min_size="1" max_size="5" lifetime="1.5" random_start_time="false" start_time="0.08" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="kill" cull_gracetime="1" max_particle_radius="300" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
             <boxrandomposition relative="effect" min="-40 -40 -40" max="40 40 40"/>
             <boxrandomvelocity relative="world" min="-10 -10 10" max="10 10 30"/>
@@ -92,7 +92,7 @@
             </billboard>
         </visualizerstack>
     </atom>
-    <atom name="Sparks Sparkling" min_size="40" max_size="40" lifetime="3" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="kill" cull_policy="kill" cull_gracetime="1" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
+    <atom name="Sparks Sparkling" min_size="20" max_size="40" lifetime="3" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="kill" cull_policy="kill" cull_gracetime="1" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
             <boxrandomposition relative="effect" min="-1 -1 -1" max="1 1 1"/>
             <boxrandomvelocity relative="effect" min="-40 -40 0" max="40 40 45"/>
@@ -133,7 +133,7 @@
             </billboard>
         </visualizerstack>
     </atom>
-    <atom name="dist0" min_size="2" max_size="2" lifetime="2" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="freeze" cull_gracetime="0" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
+    <atom name="dist0" min_size="0" max_size="2" lifetime="2" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="freeze" cull_gracetime="0" max_particle_radius="-1" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
             <boxrandomposition relative="effect" min="-1 -1 -1" max="1 1 1"/>
             <boxrandomaspectsize size="1 1" min="5" max="10"/>
@@ -172,7 +172,7 @@
             </billboard>
         </visualizerstack>
     </atom>
-    <atom name="Glow" min_size="1" max_size="1" lifetime="1" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="kill" cull_gracetime="1" max_particle_radius="400" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
+    <atom name="Glow" min_size="0" max_size="1" lifetime="1" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="1" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="kill" cull_gracetime="1" max_particle_radius="400" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="200" grab_backfacing="false" timeline="">
         <initializerstack>
             <boxrandomvelocity relative="effect" min="0 0 0" max="0 0 0"/>
             <boxrandomposition relative="effect" min="0 0 0" max="0 0 0"/>
