@@ -5,16 +5,15 @@ function PlayerStandard:on_melee_stun(t, timer)
 	self:_interupt_action_charging_weapon(t)
 
 	self._melee_stunned_expire_t = t + timer
+	self._melee_stunned = true
 
 	self:_play_unequip_animation()
 end
 
 function PlayerStandard:end_melee_stun()
-	if self._melee_stunned_expire_t then
-		self._melee_stunned_expire_t = nil
+	self._melee_stunned_expire_t = nil
 
-		self:_play_equip_animation()
-	end
+	self:_play_equip_animation()
 end
 
 function PlayerStandard:_check_action_reload(t, input)
@@ -22,7 +21,7 @@ function PlayerStandard:_check_action_reload(t, input)
 	local action_wanted = input.btn_reload_press
 
 	if action_wanted then
-		local action_forbidden = self:_is_reloading() or self:_changing_weapon() or self:_is_meleeing() or self._use_item_expire_t or self:_interacting() or self:_is_throwing_projectile() or self._melee_stunned_expire_t
+		local action_forbidden = self:_is_reloading() or self:_changing_weapon() or self:_is_meleeing() or self._use_item_expire_t or self:_interacting() or self:_is_throwing_projectile() or self._melee_stunned
 
 		if not action_forbidden and self._equipped_unit and not self._equipped_unit:base():clip_full() then
 			self:_start_action_reload_enter(t)
@@ -39,7 +38,7 @@ function PlayerStandard:_check_use_item(t, input)
 	local action_wanted = input.btn_use_item_press
 
 	if action_wanted then
-		local action_forbidden = self._use_item_expire_t or self:_interacting() or self:_changing_weapon() or self:_is_throwing_projectile() or self:_is_meleeing() or self._melee_stunned_expire_t
+		local action_forbidden = self._use_item_expire_t or self:_interacting() or self:_changing_weapon() or self:_is_throwing_projectile() or self:_is_meleeing() or self._melee_stunned
 
 		if not action_forbidden and managers.player:can_use_selected_equipment(self._unit) then
 			self:_start_action_use_item(t)
@@ -62,7 +61,7 @@ function PlayerStandard:_check_change_weapon(t, input)
 	if action_wanted then
 		local action_forbidden = self:_changing_weapon()
 		action_forbidden = action_forbidden or self:_is_meleeing() or self._use_item_expire_t or self._change_item_expire_t
-		action_forbidden = action_forbidden or self._unit:inventory():num_selections() == 1 or self:_interacting() or self:_is_throwing_projectile() or self:_is_deploying_bipod() or self._melee_stunned_expire_t
+		action_forbidden = action_forbidden or self._unit:inventory():num_selections() == 1 or self:_interacting() or self:_is_throwing_projectile() or self:_is_deploying_bipod() or self._melee_stunned
 
 		if not action_forbidden then
 			local data = {
@@ -82,7 +81,7 @@ function PlayerStandard:_check_change_weapon(t, input)
 end
 
 function PlayerStandard:_check_action_melee(t, input)
-	if self._melee_stunned_expire_t then
+	if self._melee_stunned then
 		return
 	end
 	
@@ -116,7 +115,7 @@ function PlayerStandard:_check_action_melee(t, input)
 		return
 	end
 
-	local action_forbidden = not self:_melee_repeat_allowed() or self._use_item_expire_t or self:_changing_weapon() or self:_interacting() or self:_is_throwing_projectile() or self:_is_using_bipod() or self._melee_stunned_expire_t
+	local action_forbidden = not self:_melee_repeat_allowed() or self._use_item_expire_t or self:_changing_weapon() or self:_interacting() or self:_is_throwing_projectile() or self:_is_using_bipod() or self._melee_stunned
 
 	if action_forbidden then
 		return
@@ -137,7 +136,7 @@ function PlayerStandard:_play_distance_interact_redirect(t, variant)
 		return
 	end
 	
-	if self._melee_stunned_expire_t then
+	if self._melee_stunned then
 		return
 	end
 
@@ -163,7 +162,7 @@ function PlayerStandard:_play_interact_redirect(t)
 		return
 	end
 	
-	if self._melee_stunned_expire_t then
+	if self._melee_stunned then
 		return
 	end
 
@@ -188,7 +187,7 @@ function PlayerStandard:_check_action_deploy_bipod(t, input)
 		return
 	end
 
-	action_forbidden = self:in_steelsight() or self:_on_zipline() or self:_is_throwing_projectile() or self:_is_meleeing() or self:is_equipping() or self:_changing_weapon() or self._melee_stunned_expire_t
+	action_forbidden = self:in_steelsight() or self:_on_zipline() or self:_is_throwing_projectile() or self:_is_meleeing() or self:is_equipping() or self:_changing_weapon() or self._melee_stunned
 
 	if not action_forbidden then
 		local weapon = self._equipped_unit:base()
@@ -214,7 +213,7 @@ function PlayerStandard:_check_action_deploy_underbarrel(t, input)
 		return new_action
 	end
 
-	action_forbidden = self:in_steelsight() or self:_is_throwing_projectile() or self:_is_meleeing() or self:is_equipping() or self:_changing_weapon() or self:shooting() or self:_is_reloading() or self:is_switching_stances() or self:_interacting() or self:running() and not self._equipped_unit:base():run_and_shoot_allowed() or self._melee_stunned_expire_t
+	action_forbidden = self:in_steelsight() or self:_is_throwing_projectile() or self:_is_meleeing() or self:is_equipping() or self:_changing_weapon() or self:shooting() or self:_is_reloading() or self:is_switching_stances() or self:_interacting() or self:running() and not self._equipped_unit:base():run_and_shoot_allowed() or self._melee_stunned
 
 	if self._running and not self._equipped_unit:base():run_and_shoot_allowed() and not self._end_running_expire_t then
 		self:_interupt_action_running(t)
@@ -292,7 +291,7 @@ function PlayerStandard:_check_action_cash_inspect(t, input)
 		return
 	end
 
-	local action_forbidden = self:_interacting() or self:is_deploying() or self:_changing_weapon() or self:_is_throwing_projectile() or self:_is_meleeing() or self:_on_zipline() or self:running() or self:_is_reloading() or self:in_steelsight() or self:is_equipping() or self:shooting() or self:_is_cash_inspecting(t) or self._melee_stunned_expire_t
+	local action_forbidden = self:_interacting() or self:is_deploying() or self:_changing_weapon() or self:_is_throwing_projectile() or self:_is_meleeing() or self:_on_zipline() or self:running() or self:_is_reloading() or self:in_steelsight() or self:is_equipping() or self:shooting() or self:_is_cash_inspecting(t) or self._melee_stunned
 
 	if action_forbidden then
 		return
@@ -305,7 +304,7 @@ end
 function PlayerStandard:_check_action_steelsight(t, input)
 	local new_action = nil
 	
-	if self._melee_stunned_expire_t then
+	if self._melee_stunned then
 		return
 	end
 
@@ -364,7 +363,7 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 	local action_wanted = input.btn_primary_attack_state or input.btn_primary_attack_release
 
 	if action_wanted then
-		local action_forbidden = self:_is_reloading() or self:_changing_weapon() or self:_is_meleeing() or self._use_item_expire_t or self:_interacting() or self:_is_throwing_projectile() or self:_is_deploying_bipod() or self._menu_closed_fire_cooldown > 0 or self:is_switching_stances() or self._melee_stunned_expire_t
+		local action_forbidden = self:_is_reloading() or self:_changing_weapon() or self:_is_meleeing() or self._use_item_expire_t or self:_interacting() or self:_is_throwing_projectile() or self:_is_deploying_bipod() or self._menu_closed_fire_cooldown > 0 or self:is_switching_stances() or self._melee_stunned
 
 		if not action_forbidden then
 			self._queue_reload_interupt = nil
@@ -575,11 +574,16 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 	return new_action
 end
 
-
 function PlayerStandard:_update_check_actions(t, dt, paused)
 	local input = self:_get_input(t, dt, paused)
 
 	self:_determine_move_direction()
+	
+	if self._melee_stunned and not self._melee_stunned_expire_t or self._melee_stunned_expire_t and self._melee_stunned_expire_t < t then
+		self._melee_stunned = nil
+		self:end_melee_stun()
+	end
+	
 	self:_update_interaction_timers(t)
 	self:_update_throw_projectile_timers(t, input)
 	self:_update_reload_timers(t, dt, input)
@@ -589,10 +593,6 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	self:_update_equip_weapon_timers(t, input)
 	self:_update_running_timers(t)
 	self:_update_zipline_timers(t, dt)
-	
-	if self._melee_stunned_expire_t and self._melee_stunned_expire_t < t then
-		self:end_melee_stun()
-	end
 
 	if self._change_item_expire_t and self._change_item_expire_t <= t then
 		self._change_item_expire_t = nil
@@ -648,5 +648,6 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	self:_check_action_duck(t, input)
 	self:_check_action_steelsight(t, input)
 	self:_check_action_night_vision(t, input)
+	
 	self:_find_pickups(t)
 end

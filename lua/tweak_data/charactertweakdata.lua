@@ -10130,9 +10130,9 @@ function CharacterTweakData:_set_sm_wish()
 		}
 	}
 	--Anti-Fire DOT setup
-	self.taser.DAMAGE_CLAMP_FIREDOT = 50 --Tasers and Shields need significant resistance to fire.
-	self.tank.DAMAGE_CLAMP_FIREDOT = 100
-	self.shield.DAMAGE_CLAMP_FIREDOT = 50
+	self.taser.DAMAGE_CLAMP_FIREDOT = 5 --Tasers and Shields need significant resistance to fire.
+	self.tank.DAMAGE_CLAMP_FIREDOT = 10
+	self.shield.DAMAGE_CLAMP_FIREDOT = 5
 	--This is weird, but makes snipers technically be active sooner, which is good.
 	self.sniper.move_speed = self.presets.move_speed.lightning_constant
 	--SWAT Speech prefixes to get some voice variety from ZEALs 'n Gensecs.
@@ -10190,19 +10190,19 @@ function CharacterTweakData:_set_sm_wish()
 	self.tank_medic.damage.explosion_damage_mul = 1
 	self.tank_mini.damage.explosion_damage_mul = 0.7
 	--heavy swat health clamping for guaranteed two-shot-to-kill ratios
-	self.heavy_swat.DAMAGE_CLAMP_BULLET = 799
-	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 300
+	self.heavy_swat.DAMAGE_CLAMP_BULLET = 79
+	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 30
 	self.heavy_swat.DAMAGE_CLAMP_EXPLOSION = self.heavy_swat.DAMAGE_CLAMP_BULLET
-	self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET = 799
-	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 300
+	self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET = 79
+	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 30
 	self.fbi_heavy_swat.DAMAGE_CLAMP_EXPLOSION = self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET
 	
 	
 	self.phalanx_minion.HEALTH_INIT = 300
-	self.phalanx_minion.DAMAGE_CLAMP_BULLET = 400
+	self.phalanx_minion.DAMAGE_CLAMP_BULLET = 40
 	self.phalanx_minion.DAMAGE_CLAMP_EXPLOSION = self.phalanx_minion.DAMAGE_CLAMP_BULLET
-	self.phalanx_vip.HEALTH_INIT = 800
-	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 800
+	self.phalanx_vip.HEALTH_INIT = 80
+	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 80
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
 	self.flashbang_multiplier = 2.25
 	self.concussion_multiplier = 1

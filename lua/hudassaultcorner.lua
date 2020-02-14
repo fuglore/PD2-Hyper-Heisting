@@ -49,7 +49,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	if FG_chance <= 24 then
 		cover_line_to_use = "hud_assault_FG_cover" .. FG_chance
 	else
-		if managers.groupai and managers.groupai:state()._in_mexico then
+		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" then
 			cover_line_to_use = "hud_assault_cover_mexcross"
 		elseif faction == "zombie" then
 			cover_line_to_use = "hud_assault_coverhvh"
