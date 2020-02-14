@@ -415,6 +415,10 @@ function CopLogicBase._update_haste(data, my_data)
 	end
 end 
 
+function CopLogicBase.action_taken(data, my_data)
+	return my_data.turning or my_data.moving_to_cover or my_data.walking_to_cover_shoot_pos or my_data.surprised or my_data.has_old_action or data.unit:movement():chk_action_forbidden("walk")
+end
+
 function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_reaction)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local t = data.t
@@ -761,6 +765,46 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	end
 
 	return delay
+end
+
+function CopLogicBase.should_enter_attack(data)
+	if not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and data.attention_obj then
+		local att_obj = data.attention_obj
+		local my_data = data.internal_data
+		local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+		local criminal_in_my_area = nil
+		local criminal_in_neighbour = nil
+		local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
+
+		if next(my_area.criminal.units) then
+			criminal_in_my_area = true
+		else
+			for _, nbr in pairs(my_area.neighbours) do
+				if next(nbr.criminal.units) then
+					criminal_in_neighbour = true
+
+					break
+				end
+			end
+		end
+		
+		local attack_distance = 1200
+		
+		if criminal_in_neighbour then
+			attack_distance = 800
+		end
+		
+		local criminal_near = criminal_in_my_area or criminal_in_neighbour
+		local visibility_chk = att_obj.verified or att_obj.verified_t and att_obj.verified_t - data.t <= 1
+		
+		if managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and reactions_chk and att_obj.dis <= 5000 or managers.groupai:state():chk_high_fed_density() or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or reactions_chk and not att_obj.verified and att_obj.dis <= 500 or data.internal_data.attitude and data.internal_data.attitude == "engage" and my_data.firing and visibility_chk and att_obj.dis <= 1200 or data.internal_data.attitude and data.internal_data.attitude == "engage" and reactions_chk and visibility_chk and att_obj.dis <= attack_distance and criminal_near then
+			return true
+		end
+		
+		return
+	end
+	
+	return
 end
 
 function CopLogicBase.chk_start_action_dodge(data, reason)

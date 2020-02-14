@@ -193,6 +193,69 @@ function CopMovement:is_taser_attack_allowed() --lol
 	return
 end
 
+function CopMovement:_upd_actions(t)
+	local a_actions = self._active_actions
+	local has_no_action = true
+
+	for i_action, action in ipairs(a_actions) do
+		if action then
+			if action.update then
+				action:update(t)
+			end
+
+			if not self._need_upd and action.need_upd then
+				self._need_upd = action:need_upd()
+			end
+
+			if action.expired and action:expired() then
+				a_actions[i_action] = false
+
+				if action.on_exit then
+					action:on_exit()
+				end
+
+				self._ext_brain:action_complete_clbk(action)
+				self._ext_base:chk_freeze_anims()
+
+				for _, action in ipairs(a_actions) do
+					if action then
+						has_no_action = nil
+
+						break
+					end
+				end
+			else
+				has_no_action = nil
+			end
+		end
+	end
+
+	if has_no_action and (not self._queued_actions or not next(self._queued_actions)) then
+		self:action_request({
+			body_part = 1,
+			type = "idle"
+		})
+	end
+
+	if not a_actions[1] and not a_actions[2] and (not self._queued_actions or not next(self._queued_actions)) and not self:chk_action_forbidden("action") then
+		if a_actions[3] then
+			self:action_request({
+				body_part = 2,
+				type = "idle"
+			})
+		else
+			self:action_request({
+				body_part = 1,
+				type = "idle"
+			})
+		end
+	end
+
+	self:_upd_stance(t)
+
+	self._need_upd = true
+end
+
 function CopMovement:_change_stance(stance_code, instant)
 	if self._tweak_data.allowed_stances then
 		if stance_code == 1 and not self._tweak_data.allowed_stances.ntl then

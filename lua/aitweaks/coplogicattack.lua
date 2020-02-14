@@ -785,7 +785,18 @@ function CopLogicAttack._upd_combat_movement(data)
 	local t = data.t
 	local unit = data.unit
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local action_taken = data.logic.action_taken(data, my_data)
+	
+	if not data.attention_obj then
+		return
+	else
+		local definitely_not_reactions_chk = AIAttentionObject.REACT_COMBAT > data.attention_obj.reaction
+
+		if definitely_not_reactions_chk then
+			return
+		end
+	end
+	
+	local action_taken = CopLogicAttack.action_taken(data, my_data)
 	local focus_enemy = data.attention_obj
 	local in_cover = my_data.in_cover
 	local best_cover = my_data.best_cover
@@ -1240,16 +1251,61 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		end
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
+	elseif action_type == "tase" then
+		if action:expired() and my_data.tasing then
+			local record = managers.groupai:state():criminal_record(my_data.tasing.target_u_key)
+
+			if record and record.status then
+				data.tase_delay_t = TimerManager:game():time() + 45
+			end
+		end
+
+		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
+
+		my_data.tasing = nil
+	elseif action_type == "spooc" then
+		data.spooc_attack_timeout_t = TimerManager:game():time() + math.lerp(data.char_tweak.spooc_attack_timeout[1], data.char_tweak.spooc_attack_timeout[2], math.random())
+
+		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math.random() <= data.char_tweak.spooc_attack_use_smoke_chance and not managers.groupai:state():is_smoke_grenade_active() then
+			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)
+		end
+		
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+
+		my_data.spooc_attack = nil
+	elseif action_type == "reload" then
+		--Removed the requirement for being important here.
+		if action:expired() then
+			data.logic._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+		end
 	elseif action_type == "turn" then
 		my_data.turning = nil
+	elseif action_type == "act" then
+		--CopLogicAttack._cancel_cover_pathing(data, my_data)
+		--CopLogicAttack._cancel_charge(data, my_data)
+		
+		--Fixed panic never waking up cops.
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+		
 	elseif action_type == "hurt" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
 		
 		--Removed the requirement for being important here.
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			data.logic._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 		end
+		
 	elseif action_type == "dodge" then
 		local timeout = action:timeout()
 
@@ -1261,6 +1317,8 @@ function CopLogicAttack.action_complete_clbk(data, action)
 
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 end
@@ -1771,7 +1829,6 @@ function CopLogicAttack._set_verified_paths(data, verified_paths)
 	data.internal_data.charge_path = verified_paths.charge_path
 end
 
-
 function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	local my_data = data.internal_data
 
@@ -1795,29 +1852,8 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 		return
 	end
 
-	local att_obj = data.attention_obj
-	
-	if att_obj and AIAttentionObject.REACT_AIM > att_obj.reaction  then
-		return true
-	end
-	
-	if att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and not att_obj.verified_t then
-		return true
-	end
-	
-	local criminal_in_my_area = nil
-	local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
-
-	if next(my_area.criminal.units) then
-		criminal_in_my_area = true
-	end
-	
-	if my_data.attitude == "engage" and att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and att_obj.verified_t and data.t - att_obj.verified_t < 0.5 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 and CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_assault_active_atm() and criminal_in_my_area then
+	if CopLogicBase.should_enter_attack(data) then
 		return
-	end
-
-	if att_obj and AIAttentionObject.REACT_COMBAT <= att_obj.reaction and att_obj.verified_t and data.t - att_obj.verified_t > 5 then
-		return true
 	end
 
 	if not new_objective or new_objective.type == "free" then
@@ -1836,20 +1872,8 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 end
 
 function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
-	if not data.is_converted and not data.unit:in_slot(16) and data.unit:base():has_tag("law") then
-		local att_obj = data.attention_obj
-		local my_data = data.internal_data
-		local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
-		local criminal_in_my_area = nil
-		local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
-
-		if next(my_area.criminal.units) then
-			criminal_in_my_area = true
-		end
-		
-		if data.internal_data.attitude and data.internal_data.attitude == "engage" and att_obj and reactions_chk and att_obj.verified_t and data.t - att_obj.verified_t < 2 and att_obj.dis <= 1500 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 and managers.groupai:state():chk_assault_active_atm() and criminal_in_my_area or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack then
-			return
-		end
+	if CopLogicBase.should_enter_attack(data) then
+		return
 	end
 
 	if not data.unit:movement():chk_action_forbidden("walk") then

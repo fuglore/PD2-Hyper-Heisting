@@ -52,7 +52,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		if self:has_category_upgrade("player", "panic_suppression") then --let's make this fuckin' happen
 			local equipped_unit = self:get_current_state()._equipped_unit:base()
 			local suppression_amount = equipped_unit._suppression
-			local sup_chance = equipped_unit._panic_suppression_chance
+			local sup_chance = equipped_unit._panic_suppression_chance * 1.75
 			local pos = killed_unit:position()
 			local enemies = World:find_units_quick("sphere", pos, 1200, 12, 21)
 				

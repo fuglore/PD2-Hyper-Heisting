@@ -334,6 +334,11 @@ function CopLogicTravel.queued_update(data)
 	
 	data.logic._update_haste(data, data.internal_data)
 	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
+	
+	if CopLogicBase.should_enter_attack(data) then
+		CopLogicBase._exit(data.unit, "attack")
+		return
+	end
       
     CopLogicTravel.queue_update(data, data.internal_data, delay)
 end
@@ -401,7 +406,11 @@ function CopLogicTravel.upd_advance(data)
 			CopLogicTravel._begin_coarse_pathing(data, my_data)
 		end
 	else
-		CopLogicBase._exit(data.unit, "idle")
+		if CopLogicBase.should_enter_attack(data) then
+			CopLogicBase._exit(data.unit, "attack")
+		else
+			CopLogicBase._exit(data.unit, "idle")
+		end
 
 		return
 	end
@@ -726,15 +735,61 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 			data.unit:brain():abort_detailed_pathing(my_data.advance_path_search_id)
 		end
-	elseif action_type == "turn" then
-		data.internal_data.turning = nil
-	elseif action_type == "hurt" then
+	elseif action_type == "shoot" then
+		my_data.shooting = nil
+	elseif action_type == "tase" then
+		if action:expired() and my_data.tasing then
+			local record = managers.groupai:state():criminal_record(my_data.tasing.target_u_key)
+
+			if record and record.status then
+				data.tase_delay_t = TimerManager:game():time() + 45
+			end
+		end
+
+		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
+
+		my_data.tasing = nil
+	elseif action_type == "spooc" then
+		data.spooc_attack_timeout_t = TimerManager:game():time() + math.lerp(data.char_tweak.spooc_attack_timeout[1], data.char_tweak.spooc_attack_timeout[2], math.random())
+
+		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math.random() <= data.char_tweak.spooc_attack_use_smoke_chance and not managers.groupai:state():is_smoke_grenade_active() then
+			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)
+		end
+		
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			--CopLogicAttack._upd_combat_movement(data)
+		end
+
+		my_data.spooc_attack = nil
+	elseif action_type == "reload" then
+		--Removed the requirement for being important here.
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-		end	
-	elseif action_type == "shoot" then
-		data.internal_data.shooting = nil
+		end
+	elseif action_type == "turn" then
+		my_data.turning = nil
+	elseif action_type == "act" then
+		--CopLogicAttack._cancel_cover_pathing(data, my_data)
+		--CopLogicAttack._cancel_charge(data, my_data)
+		
+		--Fixed panic never waking up cops.
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			--CopLogicAttack._upd_combat_movement(data)
+		end
+	elseif action_type == "hurt" then
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+		
+		--Removed the requirement for being important here.
+		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+		end
 	elseif action_type == "dodge" then
 		local timeout = action:timeout()
 
@@ -746,26 +801,8 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
-		end
-		
-		local objective = data.objective
-		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, nil)
-
-		if allow_trans then
-			local wanted_state = data.logic._get_logic_state_from_reaction(data)
-
-			if wanted_state and wanted_state ~= data.name and obj_failed then
-				if data.unit:in_slot(managers.slot:get_mask("enemies")) or data.unit:in_slot(17) then
-					data.objective_failed_clbk(data.unit, data.objective)
-				elseif data.unit:in_slot(managers.slot:get_mask("criminals")) then
-					managers.groupai:state():on_criminal_objective_failed(data.unit, data.objective, false)
-				end
-
-				if my_data == data.internal_data then
-					debug_pause_unit(data.unit, "[CopLogicTravel.action_complete_clbk] exiting without discarding objective", data.unit, inspect(data.objective))
-					CopLogicBase._exit(data.unit, wanted_state)
-				end
-			end
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			--CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 end

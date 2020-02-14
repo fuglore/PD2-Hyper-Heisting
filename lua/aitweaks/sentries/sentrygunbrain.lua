@@ -236,10 +236,8 @@ function SentryGunBrain:_upd_detection(t)
 						if not seeninlast5seconds and mvector3.distance(attention_pos, attention_info.verified_pos) > 250 or max_detection_range < dis then
 							self:_destroy_detected_attention_object_data(attention_info)
 						else
-							if diff_index > 6 or Global.game_settings.use_intense_AI then
-								attention_info.verified_pos = mvector3.copy(attention_info.criminal_record.pos)
-								attention_info.verified_dis = dis
-							end
+							attention_info.verified_pos = mvector3.copy(attention_info.criminal_record.pos)
+							attention_info.verified_dis = dis
 
 							if vis_ray then
 								_nearly_visible_chk(attention_info, attention_pos)
