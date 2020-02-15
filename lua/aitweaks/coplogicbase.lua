@@ -10,7 +10,6 @@ local tmp_vec2 = Vector3()
 
 function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local shield_sound = diff_index == 8 and "hos_shield_identification" or "shield_identification"
 	local old_att_obj = data.attention_obj
 	data.attention_obj = new_att_obj
 
@@ -23,20 +22,11 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 		if old_att_obj then
 			if old_att_obj.u_key == new_att_obj.u_key then
 				is_same_obj = true
-				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 2
-				
-				local notnewobjpauseorrandompauset = not new_att_obj.settings.pause or data.t + math.lerp(new_att_obj.settings.pause[1], new_att_obj.settings.pause[2], math.random())
-				
-				if new_att_obj.stare_expire_t and new_att_obj.stare_expire_t < data.t and notnewobjpauseorrandompauset or new_att_obj.pause_expire_t and new_att_obj.pause_expire_t < data.t then
-					if not new_att_obj.settings.attract_chance or math.random() < new_att_obj.settings.attract_chance then
-						new_att_obj.pause_expire_t = nil
-						new_att_obj.stare_expire_t = data.t + math.lerp(new_att_obj.settings.duration[1], new_att_obj.settings.duration[2], math.random())
-					else
-						debug_pause_unit(data.unit, "skipping attraction")
+				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 8
 
-						new_att_obj.pause_expire_t = data.t + math.lerp(new_att_obj.settings.pause[1], new_att_obj.settings.pause[2], math.random())
-					end
-				end
+				new_att_obj.stare_expire_t = nil
+				new_att_obj.pause_expire_t = nil
+				new_att_obj.settings.pause = nil
 			else
 				if old_att_obj.criminal_record then
 					managers.groupai:state():on_enemy_disengaging(data.unit, old_att_obj.u_key)
@@ -46,39 +36,35 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 					managers.groupai:state():on_enemy_engaging(data.unit, new_att_obj.u_key)
 				end
 
-				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 10
+				contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 15
 			end
 		else
 			if new_crim_rec then
 				managers.groupai:state():on_enemy_engaging(data.unit, new_att_obj.u_key)
 			end
 
-			contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 10
-			
+			contact_chatter_time_ok = new_crim_rec and data.t - new_crim_rec.det_t > 15
 		end
 
 		if not is_same_obj then
-			if new_att_obj.settings.duration then
-				new_att_obj.stare_expire_t = data.t + math.lerp(new_att_obj.settings.duration[1], new_att_obj.settings.duration[2], math.random())
-				new_att_obj.pause_expire_t = nil
-			end
+			new_att_obj.stare_expire_t = nil
+			new_att_obj.pause_expire_t = nil
+			new_att_obj.settings.pause = nil
 
 			new_att_obj.acquire_t = data.t
 		end
 		
 		local not_acting = data.unit:anim_data().idle or data.unit:anim_data().move
 		
-		if AIAttentionObject.REACT_SHOOT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and not_acting and new_att_obj.is_person and data.char_tweak.chatter.contact then --the fact i have to do this is just hghghghg
-			if not data.unit:raycast("ray", data.unit:movement():m_head_pos(), new_att_obj.m_head_pos, "slot_mask", managers.slot:get_mask("bullet_impact_targets_no_criminals"), "ignore_unit", new_att_obj.unit, "report") then
-				if data.unit:base()._tweak_table == "gensec" then
-					data.unit:sound():say("a01", true)			
-				elseif data.unit:base()._tweak_table == "security" then
-					data.unit:sound():say("a01", true)
-				elseif data.unit:base()._tweak_table == "shield" then
-					data.unit:sound():say(shield_sound, true)
-				else
-					data.unit:sound():say("c01", true)
-				end
+		if AIAttentionObject.REACT_SHOOT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and not_acting and new_att_obj.is_person and data.char_tweak.chatter and data.char_tweak.chatter.contact then --the fact i have to do this is just hghghghg
+			if data.unit:base()._tweak_table == "gensec" then
+				data.unit:sound():say("a01", true)			
+			elseif data.unit:base()._tweak_table == "security" then
+				data.unit:sound():say("a01", true)
+			elseif data.unit:base()._tweak_table == "shield" then
+				data.unit:sound():say("shield_identification", true)
+			else
+				data.unit:sound():say("c01", true)
 			end
 		end
 	elseif old_att_obj and old_att_obj.criminal_record then
@@ -417,6 +403,10 @@ end
 
 function CopLogicBase.action_taken(data, my_data)
 	return my_data.turning or my_data.moving_to_cover or my_data.walking_to_cover_shoot_pos or my_data.surprised or my_data.has_old_action or data.unit:movement():chk_action_forbidden("walk")
+end
+	
+function CopLogicBase.chk_should_turn(data, my_data)
+	return not my_data.turning and not my_data.has_old_action and not data.unit:movement():chk_action_forbidden("walk") and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos and not my_data.surprised
 end
 
 function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_reaction)
@@ -769,6 +759,7 @@ end
 
 function CopLogicBase.should_enter_attack(data)
 	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+	
 	if not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and reactions_chk and data.internal_data.attitude and data.internal_data.attitude == "engage" then
 		local att_obj = data.attention_obj
 		local my_data = data.internal_data
@@ -804,7 +795,7 @@ function CopLogicBase.should_enter_attack(data)
 		
 		local visibility_chk = att_obj.verified or att_obj.verified_t and att_obj.verified_t - data.t <= 1
 		
-		if my_data.charge_path and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() or managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and att_obj.dis <= 5000 or managers.groupai:state():chk_high_fed_density() or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or att_obj.dis <= 900 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 or my_data.firing and visibility_chk and att_obj.dis <= attack_distance or visibility_chk and att_obj.dis <= attack_distance and criminal_near then
+		if my_data.charge_path or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and att_obj.dis <= 5000 or managers.groupai:state():chk_high_fed_density() or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or att_obj.dis <= 900 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 or my_data.firing and visibility_chk and att_obj.dis <= attack_distance or visibility_chk and att_obj.dis <= attack_distance and criminal_near then
 			return true
 		end
 		

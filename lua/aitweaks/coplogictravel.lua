@@ -593,9 +593,6 @@ end
 function CopLogicTravel.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()
-	local no_cover_wait = my_data.additional_unit_configs and my_data.additional_unit_configs.no_cover_wait
-	local no_height_cover_wait = my_data.additional_unit_configs and my_data.additional_unit_configs.no_tacticool_cover_check
-	local no_cover_search_dis_change = my_data.additional_unit_configs and my_data.additional_unit_configs.no_cover_dis_change
 	
 	local mook_units = {
 		"security",
