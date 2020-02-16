@@ -86,7 +86,6 @@ function GroupAIStateBase:update(t, dt)
 
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
-	self:_check_drama_low_p()
 	--self:_draw_current_logics()
 	
 	if self._draw_drama then
@@ -420,56 +419,6 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 	if dead and self._task_data and self._task_data.assault and self._task_data.assault.phase == "sustain" and self._task_data.assault.active then
 		self._enemies_killed_sustain = self._enemies_killed_sustain + 1
 	end
-	
-	if dead then
-		local spawn_point = unit:unit_data().mission_element
-		
-		if spawn_point and not level == "sah" and not level == "chew" and not level == "help" and not level == "peta" and not level == "hox_1" and not level == "mad" then
-
-			for area_id, area_data in pairs(self._area_data) do
-				local area_spawn_points = area_data.spawn_points
-
-				if area_spawn_points then
-					for _, sp_data in ipairs(area_spawn_points) do
-						if sp_data.spawn_point then
-							--found = true
-							local spawn_pos = sp_data.spawn_point:value("position")
-							local u_pos = e_data.m_pos
-							if mvector3.distance(spawn_pos, u_pos) < 3000 then
-								sp_data.delay_t = self._t + math.random(7.5, 10)
-								sp_data.interval = self._t + math.random(7.5, 10)
-							elseif mvector3.distance(spawn_pos, u_pos) > 3000 and mvector3.distance(spawn_pos, u_pos) < 4000 then
-								sp_data.delay_t = self._t + math.random(5, 10)
-								sp_data.interval = self._t + math.random(5, 10)
-							elseif mvector3.distance(spawn_pos, u_pos) > 4000 then
-								sp_data.delay_t = self._t + math.random(5, 7.5)
-								sp_data.interval = self._t + math.random(5, 7.5)
-							end
-						end
-					end
-				end
-
-				local area_spawn_groups = area_data.spawn_groups
-
-				if area_spawn_groups then
-					for _, sp_data in ipairs(area_spawn_groups) do
-						if sp_data.spawn_point then
-							--found = true
-							local spawn_pos = sp_data.spawn_point:value("position")
-							local u_pos = e_data.m_pos
-							if mvector3.distance(spawn_pos, u_pos) < 3000 then
-								sp_data.delay_t = self._t + math.random(7.5, 10)
-							elseif mvector3.distance(spawn_pos, u_pos) > 3000 and mvector3.distance(spawn_pos, u_pos) < 4000 then
-								sp_data.delay_t = self._t + math.random(5, 10)
-							elseif mvector3.distance(spawn_pos, u_pos) > 4000 then
-								sp_data.delay_t = self._t + math.random(5, 7.5)
-							end 
-						end
-					end
-				end
-			end
-		end
-	end
 end
 
 function GroupAIStateBase:_map_spawn_points_to_respective_areas(id, spawn_points)
@@ -688,31 +637,6 @@ function GroupAIStateBase:is_area_safe_assault(area)
 	end
 
 	return true
-end
-
-function GroupAIStateBase:_try_use_task_spawn_event(t, target_area, task_type, target_pos, force)
-	local max_dis = 6000
-	local mvec3_dis = mvector3.distance
-	target_pos = target_pos or target_area.pos
-
-	for event_id, event_data in pairs(self._spawn_events) do
-		if event_data.task_type == task_type or event_data.task_type == "any" then
-			local dis = mvec3_dis(target_pos, event_data.pos)
-
-			if dis < max_dis then
-				if force or math.random() < event_data.chance then
-					self._anticipated_police_force = self._anticipated_police_force + event_data.amount
-					self._police_force = self._police_force + event_data.amount
-
-					self:_use_spawn_event(event_data)
-
-					return
-				else
-					event_data.chance = math.min(1, event_data.chance + event_data.chance_inc)
-				end
-			end
-		end
-	end
 end
 
 function GroupAIStateBase:chk_area_leads_to_enemy(start_nav_seg_id, test_nav_seg_id, enemy_is_criminal)

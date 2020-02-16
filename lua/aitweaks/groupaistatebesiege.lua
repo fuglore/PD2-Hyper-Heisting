@@ -427,6 +427,8 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 		self._assault_was_hell = nil
 	end
 	
+	self:_check_drama_low_p()
+	
 	if assault_task.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
 		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
 	elseif self._assault_number == 2 then
@@ -536,7 +538,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			--fade
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
-		elseif task_data.phase_end_t < t and self._drama_data.amount >= tweak_data.drama.assaultstart or self._drama_data.zone == "high" and not low_carnage then --if drama is high and there are 5 or more enemies engaging all players, start the assault and drop the bass
+		elseif task_data.phase_end_t < t and self._drama_data.amount >= tweak_data.drama.assaultstart or self._drama_data.zone == "high" and not low_carnage or self._hunt_mode then --if drama is high and there are 5 or more enemies engaging all players, start the assault and drop the bass
 			self._assault_number = self._assault_number + 1
 
 			managers.mission:call_global_event("start_assault")
@@ -605,9 +607,9 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 			self._task_data.assault.phase = "sustain"
 			self._task_data.assault.phase_end_t = t + sustain_duration
+			self._task_data.assault.phase_end_t_min = t + 30
 		end
 	elseif task_data.phase == "sustain" then
-		local end_t = self:assault_phase_end_time()
 		task_spawn_allowance = managers.modifiers:modify_value("GroupAIStateBesiege:SustainSpawnAllowance", task_spawn_allowance, force_pool)
 
 		if task_spawn_allowance <= 0 then
@@ -626,7 +628,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 						end					   
 					end	
 				end	
-		elseif end_t < t and not self._hunt_mode and self._enemies_killed_sustain > 50 then
+		elseif self._task_data.assault.phase_end_t < t and not self._hunt_mode and self._enemies_killed_sustain > 50 or self._task_data.assault.phase_end_t_min and self._task_data.assault.phase_end_t_min < t and self:_count_criminals_engaged_force(4) < 5 and self._drama_data.amount < tweak_data.drama.low then
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
 			local time = self._t
@@ -1461,20 +1463,6 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 			end
 		end
 	end
-end
-
-function GroupAIStateBesiege:_verify_anticipation_spawn_point(sp_data)
-	local sp_nav_seg = sp_data.nav_seg
-	local area = self:get_area_from_nav_seg_id(sp_nav_seg)
-
-	for criminal_key, c_data in pairs(self._criminals) do
-		local not_safe_for_spawn = mvector3.distance(sp_data.pos, c_data.m_pos) < 2000 and math.abs(sp_data.pos.z - c_data.m_pos.z) < 300 or mvector3.distance(sp_data.pos, c_data.m_pos) < 1200
-		if not c_data.status and not c_data.is_deployable and not_safe_for_spawn then
-			return
-		end
-	end
-
-	return true
 end
 
 function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)

@@ -668,7 +668,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					cover_wait_time = math.random(0.35, 0.5) --Keep enemies aggressive and active while still preserving some semblance of what used to be the original pacing while not in Shin Shootout mode
 				end
 				
-				if not is_mook or Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() or managers.skirmish:is_skirmish() and not managers.groupai:state():chk_high_fed_density() or data.unit:base():has_tag("takedown") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+				if not is_mook or Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() or data.unit:base():has_tag("takedown") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 					my_data.cover_leave_t = data.t + 0
 				else
 					my_data.cover_leave_t = data.t + cover_wait_time
@@ -705,7 +705,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
 			local cover_search_dis = nil
 					
-			if no_cover_search_dis_change or not is_mook then
+			if not is_mook then
 				cover_search_dis = 100
 			else
 				cover_search_dis = 250

@@ -973,6 +973,11 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 				move_to_cover = true
 			end
+		elseif want_to_take_cover then
+			if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
+				want_flank_cover = true
+			end
+			move_to_cover = true
 		elseif my_data.move_t and my_data.move_t > t or my_data.stay_out_time and my_data.stay_out_time > t then
 			-- Nothing	
 		elseif managers.groupai:state():chk_active_assault_break() and not my_data.has_retreated then
@@ -985,6 +990,8 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 				move_to_cover = true
 			end
+		elseif CopLogicTravel._chk_close_to_criminal(data, my_data) and managers.groupai:state():chk_anticipation() then
+			move_to_cover = true
 		elseif Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() then 
 		
 			if not Global.game_settings.one_down and not managers.skirmish.is_skirmish() then
@@ -1087,28 +1094,6 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 				move_to_cover = true
 			end
-		elseif want_to_take_cover then
-			if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
-				want_flank_cover = true
-			end
-			move_to_cover = true
-		end
-		
-		if want_flank_cover then
-			if not my_data.flank_cover then
-				local sign = math.random() < 0.5 and -1 or 1
-				local step = 30
-				my_data.flank_cover = {
-					step = step,
-					angle = step * sign,
-					sign = sign
-				} 
-				my_data.next_allowed_flank_charge_t = data.t + 2
-				want_flank_cover = nil
-			end
-		else
-			my_data.flank_cover = nil
-			my_data.taken_flank_cover = nil
 		end
 	end
 	
@@ -1334,9 +1319,6 @@ end
 function CopLogicAttack.queue_update(data, my_data)
 	local level = Global.level_data and Global.level_data.level_id
 	local focus_enemy = data.attention_obj
-	local is_close = focus_enemy and focus_enemy.dis <= 3000 and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction
-	local too_far = focus_enemy and focus_enemy.dis > 5000 and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction
-	local delay = 0.5
 	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
 	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter
 	
@@ -1443,14 +1425,7 @@ function CopLogicAttack.queue_update(data, my_data)
 	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
 	CopLogicAttack._update_cover(data)
 	
-	if is_close then
-		delay = 0.35
-	elseif too_far then
-		delay = 0.7
-	else
-		delay = 0.5
-	end
-	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay)
+	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t)
 end
 
 local temp_vec4 = Vector3()

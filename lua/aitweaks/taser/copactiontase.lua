@@ -176,7 +176,12 @@ function CopActionTase:on_attention(attention)
 	local _, __, target_dis = self:_get_target_pos(self._shoot_from_pos, self._attention, t)
 	local lerp_dis = math.min(1, target_dis / self._falloff[#self._falloff].r)
 	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local shoot_delay = difficulty_index > 5 and 0.5 or 1
+	local shoot_delay = 1.5
+	
+	if Global.game_settings.use_intense_AI or difficulty_index > 5 then
+		shoot_delay = 0.8
+	end
+	
 	self._tasing_local_unit = nil
 	self._tasing_player = nil
 

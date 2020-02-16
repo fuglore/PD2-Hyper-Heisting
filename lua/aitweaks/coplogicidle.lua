@@ -272,7 +272,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 
 			local reaction_too_mild = nil
 			
-			if not reaction or best_target_reaction and reaction < best_target_reaction or AIAttentionObject.REACT_SCARED > reaction and not managers.groupai:state():whisper_mode() then
+			if not reaction or best_target_reaction and reaction < best_target_reaction or AIAttentionObject.REACT_AIM > reaction and not managers.groupai:state():whisper_mode() then
 				reaction_too_mild = true
 			elseif distance < 150 and reaction == AIAttentionObject.REACT_IDLE then
 				reaction_too_mild = true
@@ -388,16 +388,14 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 
 					if has_damaged and not murderorspooctargeting then
 						target_priority_slot = target_priority_slot - 2
-					elseif has_alerted and not murderorspooctargeting then
-						target_priority_slot = target_priority_slot - 1
-					elseif data.tactics and data.tactics.harass and pantsdownchk then
-						target_priority_slot = 1
-					else
-						target_priority_slot = target_priority_slot
 					end
 					
 					if old_enemy then
 						target_priority_slot = target_priority_slot - 1
+					end
+					
+					if data.tactics and data.tactics.harass and pantsdownchk then
+						target_priority_slot = 1
 					end
 					
 					target_priority_slot = math.clamp(target_priority_slot, 1, 10)
@@ -409,7 +407,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					if human_chk then
 						target_priority_slot = 1
 					else
-						target_priority_slot = target_priority_slot - 1 
+						target_priority_slot = target_priority_slot - 2 
 					end
 				end
 				

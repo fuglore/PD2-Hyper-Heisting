@@ -6316,31 +6316,31 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
 		self.besiege.assault.force = {
 			1,
 			1,
 			1
 		}
 		self.besiege.assault.force_pool = {
-			30,
-			30,
-			30
+			64,
+			64,
+			64
 		}
 	else
 		self.besiege.assault.force = {
-			16,
-			16,
-			16
+			64,
+			64,
+			64
 		}
 		self.besiege.assault.force_pool = {
-			65,
-			65,
-			65
+			256,
+			256,
+			256
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
 		if difficulty_index <= 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
@@ -6351,7 +6351,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
 				2,
-				3,
+				4,
 				4
 			}
 		else
@@ -6364,35 +6364,35 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
 				2,
-				3,
+				4,
 				4
 			}
 		end
 	elseif difficulty_index <= 7 then
 		self.besiege.assault.force_balance_mul = {
-			1.25,
-			2.5,
-			4,
-			4
+			0.4,
+			0.5,
+			1,
+			1
 		}
 		self.besiege.assault.force_pool_balance_mul = {
+			0.35,
+			0.5,
 			1,
-			2,
-			3,
-			4
+			1
 		}
 	else
 		self.besiege.assault.force_balance_mul = {
-			1.5,
-			3,
-			4.5,
-			4.5
+			0.5,
+			0.75,
+			1.125,
+			1.125
 		}
 		self.besiege.assault.force_pool_balance_mul = {
+			0.5,
+			0.75,
 			1,
-			2,
-			3,
-			4
+			1
 		}
 	end
 
@@ -7152,7 +7152,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	}
 	self.besiege.recon.interval_variation = 10
 	
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" then
+	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
 		if difficulty_index <= 7 then
 			self.besiege.recon.force = {
 				0.5,
