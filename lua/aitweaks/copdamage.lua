@@ -332,6 +332,49 @@ function CopDamage:clbk_suppression_decay()
 	
 end
 
+if PD2THHSHIN and PD2THHSHIN:IsHelmetEnabled() then
+	function CopDamage:_spawn_head_gadget(params)
+		if not self._head_gear then
+			return
+		end
+
+		if self._head_gear_object then
+			if self._nr_head_gear_objects then
+				for i = 1, self._nr_head_gear_objects, 1 do
+					local head_gear_obj_name = self._head_gear_object .. tostring(i)
+
+					self._unit:get_object(Idstring(head_gear_obj_name)):set_visibility(false)
+				end
+			else
+				self._unit:get_object(Idstring(self._head_gear_object)):set_visibility(false)
+			end
+
+			if self._head_gear_decal_mesh then
+				local mesh_name_idstr = Idstring(self._head_gear_decal_mesh)
+
+				self._unit:decal_surface(mesh_name_idstr):set_mesh_material(mesh_name_idstr, Idstring("flesh"))
+			end
+		end
+
+		local unit = World:spawn_unit(Idstring(self._head_gear), params.position, params.rotation)
+
+		if not params.skip_push then
+			local true_dir = params.dir
+			local spread = math.random(6, 9)
+			mvector3.spread(true_dir, spread)
+			local dir = math.UP + true_dir
+			--dir = dir:spread(spread)
+			local body = unit:body(0)
+
+			body:push_at(body:mass(), dir * math.lerp(450, 650, math.random()), unit:position() + Vector3(math.rand(1), math.rand(1), math.rand(1)))
+		end
+
+		self._head_gear = false
+		
+		--log("hell yes!")
+	end
+end
+
 function CopDamage:damage_melee(attack_data)
 	if self._dead or self._invulnerable then
 		return
@@ -872,7 +915,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	local head = self._head_body_name and not self._unit:in_slot(16) and not self._char_tweak.ignore_headshot and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 
 	--prevent headshots against these units unless shot from the front, used for bulldozers
-	if head and self._unit:base():has_tag("protected") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.armor_piercing then
+	if head and self._unit:base():has_tag("protected") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then
 		mvector3.set(mvec_1, attack_data.col_ray.body:position())
 		mvector3.subtract(mvec_1, attack_data.attacker_unit:position())
 		mvector3.normalize(mvec_1)
@@ -885,7 +928,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		end
 	end
 	
-	if head and self._unit:base():has_tag("protected_reverse") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.armor_piercing then
+	if head and self._unit:base():has_tag("protected_reverse") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then
 		mvector3.set(mvec_1, attack_data.col_ray.body:position())
 		mvector3.subtract(mvec_1, attack_data.attacker_unit:position())
 		mvector3.normalize(mvec_1)
@@ -980,11 +1023,19 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	damage = self:_apply_damage_reduction(damage)
 
 	local diff_index = Global.game_settings and tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-
+	
+	if head and self._char_tweak.DAMAGE_CLAMP_BULLET and damage >= self._char_tweak.DAMAGE_CLAMP_BULLET then
+		self:_spawn_head_gadget({
+			position = attack_data.col_ray.body:position(),
+			rotation = attack_data.col_ray.body:rotation(),
+			dir = attack_data.col_ray.ray
+		})
+	end
+	
 	if self._unit:movement():cool() and diff_index and diff_index <= 5 then
 		damage = self._HEALTH_INIT
 	else
-		if self._char_tweak.DAMAGE_CLAMP_BULLET then
+		if self._char_tweak.DAMAGE_CLAMP_BULLET and not attack_data.weapon_unit:base()._can_shoot_through_wall then
 			damage = math.min(damage, self._char_tweak.DAMAGE_CLAMP_BULLET)
 		end
 	end

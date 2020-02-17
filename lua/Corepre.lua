@@ -4,9 +4,11 @@ PD2THHSHIN._mod_path = ModPath
 PD2THHSHIN._options_path = ModPath .. "menu/options.txt"
 PD2THHSHIN._save_path = SavePath .. "shin_settings.txt"
 PD2THHSHIN.settings = {
-	toggle_overhaul_player = true --default on
+	toggle_overhaul_player = true, --default on
+	toggle_helmet = false
 }
 PD2THHSHIN.session_settings = {} --leave empty; generated on load
+PD2THHSHIN.show_popup = nil
 
 function PD2THHSHIN:ChangeSetting(setting_name,value,apply_immediately)
 	self.settings[setting_name] = value
@@ -17,6 +19,10 @@ end
 
 function PD2THHSHIN:IsOverhaulEnabled()
 	return self:GetSessionSetting("toggle_overhaul_player")
+end
+
+function PD2THHSHIN:IsHelmetEnabled()
+	return self:GetSessionSetting("toggle_helmet")
 end
 
 function PD2THHSHIN:GetSessionSetting(setting_name,fallback_value)

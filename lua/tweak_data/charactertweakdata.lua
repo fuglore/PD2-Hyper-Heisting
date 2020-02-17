@@ -1636,13 +1636,6 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.civil = deep_clone(presets.weapon.normal)
 	presets.weapon.complex = deep_clone(presets.weapon.normal)
 	presets.weapon.anarchy = deep_clone(presets.weapon.normal)
-	presets.weapon.akuma = deep_clone(presets.weapon.anarchy)
-	presets.weapon.fbigod = deep_clone(presets.weapon.anarchy)
-	
-	--commonly used presets for enemies replaced by existing presets
-	presets.weapon.good = deep_clone(presets.weapon.civil)
-	presets.weapon.expert = deep_clone(presets.weapon.civil)
-	presets.weapon.deathwish = deep_clone(presets.weapon.complex)
 	
 	--Simple preset begins here, lets players settle in.
 	
@@ -2788,8 +2781,8 @@ function CharacterTweakData:_presets(tweak_data)
 	--civil begins here, noteworthy change being increases in attack rate along with less falloff, plus the increase of focus delay minimum starting range
 	presets.weapon.civil.is_pistol = {
 		aim_delay = { --no aim delay
-			0,
-			0
+			0.35,
+			0.35
 		},
 		focus_delay = 2, --halved focus delay, still a lot, but pistols have good accuracy, so it's fair
 		focus_dis = 500,
@@ -2920,8 +2913,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.akimbo_pistol = { --isnt ever really used, changing it anyways, mostly matches pistol, but with more bang bang bang and less accuracy
 		aim_delay = { --no aim delay
-			0,
-			0
+			0.35,
+			0.35
 		},
 		focus_delay = 1, --less focus delay than pistol, bit eh accuracy wise, so it's fair
 		focus_dis = 500,
@@ -3033,9 +3026,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.civil.is_rifle = {
-		aim_delay = { --aim delay, lower half removed from simple, pdth-like
-			0,
-			0.1
+		aim_delay = {
+			0.4,
+			0.4
 		},
 		focus_delay = 3, --3 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
 		focus_dis = 500, --focus delay starts after 5m
@@ -3177,8 +3170,8 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.civil.is_bullpup = presets.weapon.civil.is_rifle
 	presets.weapon.civil.is_shotgun_pump = {
 		aim_delay = { --aim delay changed to match PDTH style aim-delay
-			0,
-			0.2
+			0.7,
+			0.7
 		},
 		focus_delay = 5, --quicker focus delay build from simple, accuracy remains mostly the same
 		focus_dis = 500, --focus delay only starts past 5m, cqc maps become dangerous fun houses while long-range maps encourage players to kite and keep enemies away
@@ -3290,9 +3283,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.civil.is_shotgun_mag = { --a mix of both shotgun and rifle, its a jack of all trades!
-		aim_delay = { --aim delay changed to match PDTH style aim-delay.
-			0,
-			0.2
+		aim_delay = {
+			0.7,
+			0.7
 		},
 		focus_delay = 3, --shotgun-like focus delay
 		focus_dis = 500, --im sure its unescessary for me to keep commenting this now.
@@ -3391,9 +3384,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.civil.is_smg = { --used by hrts, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
-		aim_delay = { --aim delay kept, the intent of the weapon is just to build suppression on the player and be generally annoying, its damage isnt worth too much consideration most of the time...MOST of the time.
-			0.1,
-			0.1
+		aim_delay = {
+			0.28,
+			0.28
 		},
 		focus_delay = 4,
 		focus_dis = 500, --then again, so was destroying all the spawngroups in housewarming update
@@ -3510,8 +3503,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.is_revolver = { --might be used later for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops
 		aim_delay = { --aim delay
-			0.1,
-			0.1
+			0.4,
+			0.4
 		},
 		focus_delay = 5, --5 second focus delay, justified due to increased accuracy of the weapon along with damage scale
 		focus_dis = 200,
@@ -3642,8 +3635,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.mini = { --only used in crimespree, mostly based on complex with a few tweaks, also, blame overkill for making the minigun dozer look like shit, i really, really want to love it, its design is cool, it's mechanics are awesome, it works to solve lack of movement and encourages smart gameplay for once, and they kinda messed IT ALL UP, BY NOT GIVING IT A PROPER MINIGUN HOLDING ANIMATION BECAUSE YOU CANT GET YOUR PEOPLE TO MAKE NEW 3RD PERSON ANIMATIONS AND YET WE HAD A 3RD PERSON ANIMATIONS UPDATE MONTHS AGO HECK HECK HEEEEEEEEEEEEEEECK
 		aim_delay = {
-			0.1,
-			0.2
+			0.9,
+			0.9
 		},
 		focus_delay = 3,
 		focus_dis = 100,
@@ -3741,9 +3734,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}	
 	presets.weapon.civil.is_lmg = { --unused at this difficulty outside of crime spree, based on complex
-		aim_delay = { --this...is questionable but i feel increases fairness against lmg dozers just a bit.
-			0.35,
-			0.35
+		aim_delay = {
+			0.5,
+			0.5
 		},
 		focus_delay = 1.4, --higher than rifles at this preset, (well, not in this one particular, possibly but, still.) to show it as a suppressing bullet hose at longer ranges, makes the minigun feel comparably close-range oriented while the lmg reaches a tiny bit longer to make the difference. ('course, though, what matters is always technique)
 		focus_dis = 200,
@@ -3875,8 +3868,8 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	presets.weapon.complex.is_pistol = {
 		aim_delay = { --no aim delay
-			0,
-			0
+			0.35,
+			0.35
 		},
 		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
 		focus_dis = 500,
@@ -4006,9 +3999,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.complex.akimbo_pistol = { --isnt ever really used, changing it anyways, mostly matches pistol, but with more bang bang bang and less accuracy, unchanged outside of reload and focus delay for complex
-		aim_delay = { --no aim delay
-			0,
-			0
+		aim_delay = {
+			0.35,
+			0.35
 		},
 		focus_delay = 2.5, --less focus delay than pistol, bit eh accuracy wise, so it's fair
 		focus_dis = 500,
@@ -4120,9 +4113,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.complex.is_rifle = {
-		aim_delay = { --no aim delay for complex
-			0,
-			0
+		aim_delay = {
+			0.35,
+			0.35
 		},
 		focus_delay = 2, --2 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
 		focus_dis = 500, --focus delay starts after 5m
@@ -4264,8 +4257,8 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.complex.is_bullpup = presets.weapon.complex.is_rifle
 	presets.weapon.complex.is_shotgun_pump = {
 		aim_delay = { --no aim delay for complex, focus delay increases significantly
-			0,
-			0
+			0.5,
+			0.5
 		},
 		focus_delay = 3, --significantly quicker focus delay build from civil, peek first, verify, shoot later
 		focus_dis = 500, --focus delay only starts past 5m, unchanged from civil
@@ -4378,8 +4371,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.complex.is_shotgun_mag = { --a mix of both shotgun and rifle, its a jack of all trades, HAZARDOUS FOR THAT PRECISE REASON.
 		aim_delay = { --no more aim delay on complex.
-			0,
-			0
+			0.5,
+			0.5
 		},
 		focus_delay = 4, --focus delay unchanged from civil.
 		focus_dis = 500, --unchanged from civil.
@@ -4497,8 +4490,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.complex.is_smg = { --used by hrts, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
 		aim_delay = { --aim delay kept, the intent of the weapon is just to build suppression on the player and be generally annoying, its damage isnt worth too much consideration most of the time...MOST of the time.
-			0.1,
-			0.1
+			0.28,
+			0.28
 		},
 		focus_delay = 4,
 		focus_dis = 500, 
@@ -4614,9 +4607,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.complex.is_revolver = { --might be used later for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops, mostly unchanged from civil outside of no aim delay, a little bit of increased range and reduced focus delay
-		aim_delay = { --no aim delay on complex
-			0,
-			0
+		aim_delay = {
+			0.4,
+			0.4
 		},
 		focus_delay = 4, --4 second focus delay, justified due to increased accuracy of the weapon along with damage scale
 		focus_dis = 200,
@@ -4846,9 +4839,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.complex.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
-		aim_delay = { --this...is questionable but i feel increases fairness against lmg dozers just a bit.
-			0.1,
-			0.1
+		aim_delay = {
+			0.35,
+			0.35
 		},
 		focus_delay = 1.05, --higher than rifles at this preset to show it as a suppressing bullet hose at longer ranges
 		focus_dis = 200,
@@ -4981,11 +4974,11 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	presets.weapon.anarchy.is_pistol = {
 		aim_delay = { --no aim delay
-			0,
-			0
+			0.35,
+			0.35
 		},
 		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
-		focus_dis = 500,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
 		RELOAD_SPEED = 1.4, --slight reduction from civil
@@ -5112,12 +5105,12 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.akimbo_pistol = { --isnt ever really used, changing it anyways, mostly matches pistol, but with more bang bang bang and less accuracy, unchanged outside of reload and focus delay for anarchy
-		aim_delay = { --no aim delay
-			0,
-			0
+		aim_delay = {
+			0.35,
+			0.35
 		},
 		focus_delay = 2.5, --less focus delay than pistol, bit eh accuracy wise, so it's fair
-		focus_dis = 500,
+		focus_dis = 100,
 		spread = 20,
 		miss_dis = 50,
 		RELOAD_SPEED = 1, --slightly reduced from civil
@@ -5226,12 +5219,12 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.is_rifle = {
-		aim_delay = { --no aim delay for anarchy, unchanged from complex
-			0,
-			0
+		aim_delay = {
+			0.35,
+			0.35
 		},
 		focus_delay = 2, --2 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
-		focus_dis = 500, --focus delay starts after 5m
+		focus_dis = 100,
 		spread = 20, 
 		miss_dis = 5, --experimental change, might make damage feel less forced with the reduced accuracy now
 		RELOAD_SPEED = 1.4, --DW style.
@@ -5312,7 +5305,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5, --light falloff, just enough to count 5 hits on ICTV armor
+				dmg_mul = 4, --light falloff, just enough to count 5 hits on ICTV armor
 				r = 2000,
 				acc = { 
 					0,
@@ -5330,7 +5323,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4, --drop damage by 10, player survivability should be a bit higher now at 6 hits
+				dmg_mul = 3, --drop damage by 10, player survivability should be a bit higher now at 6 hits
 				r = 3000,
 				acc = {
 					0,
@@ -5369,12 +5362,12 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.anarchy.is_bullpup = presets.weapon.anarchy.is_rifle
 	presets.weapon.anarchy.is_shotgun_pump = {
-		aim_delay = { --no aim delay for anarchy
-			0,
-			0.2
+		aim_delay = {
+			0.5,
+			0.5
 		},
 		focus_delay = 2, --focus delay change here.
-		focus_dis = 500, --focus delay only starts past 5m
+		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
 		RELOAD_SPEED = 1.4, --HOW? ARE THEY JUST PILING ALL THE SHELLS ON THEIR HAND AND JUST SHOVING IT IN THERE LIKE CANDY INTO A BOWL???? either way, quite powerful
@@ -5483,12 +5476,12 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.is_shotgun_mag = { --JUGGERNAUT RHGHGHGHGHG
-		aim_delay = { --no aim delay on anarchy.
-			0,
-			0
+		aim_delay = {
+			0.5,
+			0.5
 		},
 		focus_delay = 1.5, --reduced from 2 to 1.5, dozers are priority, you'll see them coming.
-		focus_dis = 500, --unchanged from civil.
+		focus_dis = 100, --unchanged from civil.
 		spread = 20, --spread unchanged from civil.
 		miss_dis = 20,
 		RELOAD_SPEED = 1.4, --whew.
@@ -5602,12 +5595,12 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
-		aim_delay = { --aim delay removed.
-			0,
-			0
+		aim_delay = {
+			0.28,
+			0.28
 		},
 		focus_delay = 2,
-		focus_dis = 500, 
+		focus_dis = 100, 
 		spread = 15,
 		miss_dis = 20,
 		RELOAD_SPEED = 2, --whew.
@@ -5721,12 +5714,12 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.is_revolver = { --used for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops, gains reasonable reduction in recoil to make it more dangerous
-		aim_delay = { --no aim delay on anarchy
-			0,
-			0
+		aim_delay = {
+			0.4,
+			0.4
 		},
 		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
-		focus_dis = 500,
+		focus_dis = 100,
 		spread = 20,
 		miss_dis = 50,
 		RELOAD_SPEED = 1.8, --FAST reload.
@@ -5854,8 +5847,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.anarchy.mini = { --my wrath is finally............gone...........
 		aim_delay = {
-			0.5,
-			0.5
+			0.7,
+			0.7
 		},
 		focus_delay = 0.7,
 		focus_dis = 100,
@@ -5953,12 +5946,12 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
-		aim_delay = { --fair? fair!? FAIR!?!? yes.
-			0.1,
-			0.1
+		aim_delay = {
+			0.35,
+			0.35
 		},
 		focus_delay = 0.7, --higher than rifles, set to 3.
-		focus_dis = 200,
+		focus_dis = 100,
 		spread = 20,
 		miss_dis = 10,
 		RELOAD_SPEED = 1.15, --theres 200 ammo in the fucking thing, it'll take time to empty
@@ -6082,10 +6075,13 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+	
+	presets.weapon.fbigod = deep_clone(presets.weapon.anarchy)
+	
 	presets.weapon.fbigod.is_pistol = { --Only used by FBIs on Anarchy, they're tough guys.
-		aim_delay = { --no aim delay
-			0,
-			0
+		aim_delay = {
+			0.28,
+			0.28
 		},
 		focus_delay = 2, --focus delay.
 		focus_dis = 500,
@@ -6216,8 +6212,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.fbigod.akimbo_pistol = { --oh boy why didnt i do this earlier
 		aim_delay = { --no aim delay
-			0,
-			0
+			0.28,
+			0.28
 		},
 		focus_delay = 2, --focus delay.
 		focus_dis = 500,
@@ -6347,9 +6343,9 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.fbigod.is_rifle = {
-		aim_delay = { --no aim delay for anarchy, unchanged from complex
-			0,
-			0
+		aim_delay = {
+			0.28,
+			0.28
 		},
 		focus_delay = 0.7,
 		focus_dis = 500, --focus delay starts after 5m
@@ -6488,6 +6484,668 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+
+	--commonly used presets for enemies replaced by existing presets
+	presets.weapon.normal = deep_clone(presets.weapon.civil)
+	presets.weapon.good = deep_clone(presets.weapon.civil)
+	presets.weapon.expert = deep_clone(presets.weapon.civil)
+	presets.weapon.deathwish = deep_clone(presets.weapon.complex)
+
+	presets.weapon.gang_member = {
+		is_pistol = {}
+	}
+	presets.weapon.gang_member.is_pistol.aim_delay = {
+		0.2,
+		0.3
+	}
+	presets.weapon.gang_member.is_pistol.focus_delay = 1
+	presets.weapon.gang_member.is_pistol.focus_dis = 200
+	presets.weapon.gang_member.is_pistol.spread = 25
+	presets.weapon.gang_member.is_pistol.miss_dis = 20
+	presets.weapon.gang_member.is_pistol.RELOAD_SPEED = 1.5
+	presets.weapon.gang_member.is_pistol.melee_speed = 3
+	presets.weapon.gang_member.is_pistol.melee_dmg = 3
+	presets.weapon.gang_member.is_pistol.melee_retry_delay = presets.weapon.normal.is_pistol.melee_retry_delay
+	presets.weapon.gang_member.is_pistol.range = presets.weapon.normal.is_pistol.range
+	presets.weapon.gang_member.is_pistol.FALLOFF = {
+		{
+			dmg_mul = 6.4,
+			r = 300,
+			acc = {
+				1,
+				1
+			},
+			recoil = {
+				0.25,
+				0.45
+			},
+			mode = {
+				0.1,
+				0.3,
+				4,
+				7
+			}
+		},
+		{
+			dmg_mul = 2.5,
+			r = 10000,
+			acc = {
+				1,
+				1
+			},
+			recoil = {
+				2,
+				3
+			},
+			mode = {
+				0.1,
+				0.3,
+				4,
+				7
+			}
+		}
+	}
+	presets.weapon.gang_member.is_rifle = {
+		aim_delay = {
+			0.25,
+			0.3
+		},
+		focus_delay = 1,
+		focus_dis = 100,
+		spread = 25,
+		miss_dis = 10,
+		RELOAD_SPEED = 1,
+		melee_speed = 2,
+		melee_dmg = 3,
+		melee_retry_delay = presets.weapon.normal.is_rifle.melee_retry_delay,
+		range = {
+			optimal = 2500,
+			far = 6000,
+			close = 1500
+		},
+		autofire_rounds = {45, 45},
+		FALLOFF = {
+			{
+				dmg_mul = 6.4,
+				r = 300,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					1,
+					1
+				},
+				mode = {
+					0,
+					0.25,
+					0.25,
+					0.5
+				}
+			},
+			{
+				dmg_mul = 6.4,
+				r = 1000,
+				acc = {
+					0.9,
+					0.9
+				},
+				recoil = {
+					1.1,
+					1.35
+				},
+				mode = {
+					0,
+					0.25,
+					0.25,
+					0.5
+				}
+			},
+			{
+				dmg_mul = 6.4,
+				r = 2000,
+				acc = {
+					0.5,
+					0.5
+				},
+				recoil = {
+					1.5,
+					1.75
+				},
+				mode = {
+					0,
+					0.25,
+					0.5,
+					0.25
+				}
+			},
+			{
+				dmg_mul = 6.4,
+				r = 6000,
+				acc = {
+					0,
+					0.25
+				},
+				recoil = {
+					1.5,
+					2
+				},
+				mode = {
+					0,
+					0.5,
+					0.25,
+					0.25
+				}
+			},
+		}
+	}
+	presets.weapon.gang_member.is_sniper = {
+		aim_delay = {
+			0.25,
+			1
+		},
+		focus_delay = 1.5,
+		focus_dis = 200,
+		spread = 25,
+		miss_dis = 10,
+		RELOAD_SPEED = 1,
+		melee_speed = 2,
+		melee_dmg = 3,
+		melee_retry_delay = presets.weapon.normal.is_rifle.melee_retry_delay,
+		range = {
+			optimal = 4000,
+			far = 6000,
+			close = 2000
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 10,
+				r = 500,
+				acc = {
+					0,
+					1
+				},
+				recoil = {
+					1,
+					1
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 10,
+				r = 1000,
+				acc = {
+					0,
+					1
+				},
+				recoil = {
+					1,
+					1.5
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 10,
+				r = 2500,
+				acc = {
+					0,
+					1
+				},
+				recoil = {
+					1.5,
+					2
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 5,
+				r = 4000,
+				acc = {
+					0,
+					1
+				},
+				recoil = {
+					2,
+					4
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 5,
+				r = 6000,
+				acc = {
+					0,
+					1
+				},
+				recoil = {
+					3,
+					6
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			}
+		}
+	}
+	presets.weapon.gang_member.is_lmg = {
+		aim_delay = {
+			0.35,
+			0.35
+		},
+		focus_delay = 1,
+		focus_dis = 100,
+		spread = 30,
+		miss_dis = 10,
+		RELOAD_SPEED = 0.7,
+		melee_speed = 2,
+		melee_dmg = 3,
+		melee_retry_delay = presets.weapon.normal.is_lmg.melee_retry_delay,
+		range = {
+			optimal = 2500,
+			far = 6000,
+			close = 1500
+		},
+		autofire_rounds = {100, 200},
+		FALLOFF = {
+			{
+				dmg_mul = 4,
+				r = 100,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					2.5,
+					3.5
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3,
+				r = 1000,
+				acc = {
+					0.6,
+					0.6
+				},
+				recoil = {
+					2.5,
+					3.5
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 2,
+				r = 2000,
+				acc = {
+					0.3,
+					0.3
+				},
+				recoil = {
+					2.5,
+					3.5
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 3000,
+				acc = {
+					0.2,
+					0.2
+				},
+				recoil = {
+					2.5,
+					3.5
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0.4,
+				r = 4000,
+				acc = {
+					0.1,
+					0.1
+				},
+				recoil = {
+					1,
+					2
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0.25,
+				r = 6000,
+				acc = {
+					0.01,
+					0.1
+				},
+				recoil = {
+					2,
+					3
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			}
+		}
+	}
+	presets.weapon.gang_member.is_shotgun_pump = {
+		aim_delay = {
+			0.25,
+			0.3
+		},
+		focus_delay = 3,
+		focus_dis = 100,
+		spread = 15,
+		miss_dis = 10,
+		RELOAD_SPEED = 2,
+		melee_speed = 2,
+		melee_dmg = 3,
+		melee_retry_delay = presets.weapon.normal.is_shotgun_pump.melee_retry_delay,
+		range = presets.weapon.normal.is_shotgun_pump.range,
+		FALLOFF = {
+			{
+				dmg_mul = 3,
+				r = 300,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 1.5,
+				r = 1500,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1.5
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 0.5,
+				r = 3000,
+				acc = {
+					0.5,
+					0.75
+				},
+				recoil = {
+					2,
+					3
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			}
+		}
+	}
+	presets.weapon.gang_member.is_shotgun_mag = {
+		aim_delay = {
+			0.25,
+			0.35
+		},
+		focus_delay = 1,
+		focus_dis = 200,
+		spread = 18,
+		miss_dis = 10,
+		RELOAD_SPEED = 1.6,
+		melee_speed = 2,
+		melee_dmg = 3,
+		melee_retry_delay = presets.weapon.normal.is_shotgun_mag.melee_retry_delay,
+		range = presets.weapon.normal.is_shotgun_mag.range,
+		autofire_rounds = {
+			4,
+			8
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 5,
+				r = 100,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.1,
+					0.1
+				},
+				mode = {
+					1,
+					1,
+					4,
+					6
+				}
+			},
+			{
+				dmg_mul = 5,
+				r = 500,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.1,
+					0.1
+				},
+				mode = {
+					1,
+					1,
+					4,
+					5
+				}
+			},
+			{
+				dmg_mul = 4,
+				r = 1000,
+				acc = {
+					0.85,
+					0.95
+				},
+				recoil = {
+					0.1,
+					0.15
+				},
+				mode = {
+					1,
+					2,
+					4,
+					4
+				}
+			},
+			{
+				dmg_mul = 1.5,
+				r = 2000,
+				acc = {
+					0.75,
+					0.9
+				},
+				recoil = {
+					0.25,
+					0.45
+				},
+				mode = {
+					1,
+					4,
+					4,
+					1
+				}
+			},
+			{
+				dmg_mul = 0.5,
+				r = 3000,
+				acc = {
+					0.4,
+					0.7
+				},
+				recoil = {
+					0.4,
+					0.5
+				},
+				mode = {
+					4,
+					2,
+					1,
+					0
+				}
+			},
+			{
+				dmg_mul = 0.1,
+				r = 5000,
+				acc = {
+					0.05,
+					0.2
+				},
+				recoil = {
+					0.5,
+					1
+				},
+				mode = {
+					2,
+					1,
+					0,
+					0
+				}
+			}
+		}
+	}
+	presets.weapon.gang_member.is_smg = presets.weapon.gang_member.is_rifle
+	presets.weapon.gang_member.is_pistol = presets.weapon.gang_member.is_pistol
+	presets.weapon.gang_member.is_revolver = presets.weapon.gang_member.is_pistol
+	presets.weapon.gang_member.is_bullpup = presets.weapon.gang_member.is_rifle
+	presets.weapon.gang_member.mac11 = presets.weapon.gang_member.is_smg
+	presets.weapon.gang_member.rifle = deep_clone(presets.weapon.gang_member.is_pistol)
+	presets.weapon.gang_member.rifle.autofire_rounds = nil
+	presets.weapon.gang_member.rifle.FALLOFF = {
+		{
+			dmg_mul = 10,
+			r = 300,
+			acc = {
+				0,
+				1
+			},
+			recoil = {
+				0.45,
+				1
+			},
+			mode = {
+				0.5,
+				0.5,
+				0,
+				0
+			}
+		},
+		{
+			dmg_mul = 10,
+			r = 3000,
+			acc = {
+				0,
+				1
+			},
+			recoil = {
+				0.45,
+				1.25
+			},
+			mode = {
+				0.5,
+				0.5,
+				0,
+				0
+			}
+		},
+		{
+			dmg_mul = 2.5,
+			r = 10000,
+			acc = {
+				0,
+				1
+			},
+			recoil = {
+				2,
+				3
+			},
+			mode = {
+				1,
+				0,
+				0,
+				0
+			}
+		}
+	}
+	presets.weapon.gang_member.akimbo_pistol = presets.weapon.gang_member.is_pistol
+	
+	presets.weapon.akuma = deep_clone(presets.weapon.anarchy)
 	
 	presets.weapon.akuma.is_smg = { --oh? on god?
 		aim_delay = {
@@ -7563,12 +8221,12 @@ Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, pre
 	end
 end)
 
-Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
+Hooks:PostHook(CharacterTweakData, "_init_gensec", "hhpost_gensec", function(self, presets)
 	self.gensec.HEALTH_INIT = 6
 	self.gensec.headshot_dmg_mul = 12
 end)
 
-Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
+Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(self, presets)
 	self.security.HEALTH_INIT = 6
 	self.security.headshot_dmg_mul = 12
 end)
@@ -8300,9 +8958,6 @@ function CharacterTweakData:_set_overkill_145()
 		self.heavy_swat.dodge = self.presets.dodge.heavy_complex
 		self.fbi_heavy_swat.dodge = self.presets.dodge.heavy_complex
 		self.spooc.dodge = self.presets.dodge.ninja_complex
-		--cop health
-		self.cop.HEALTH_INIT = 10
-		self.cop_female.HEALTH_INIT = 10
 		self.flashbang_multiplier = 2
 		self.concussion_multiplier = 1
 	else
@@ -8326,9 +8981,6 @@ function CharacterTweakData:_set_overkill_145()
 		--special movespeed
 		self.taser.move_speed = self.presets.move_speed.civil_consistency
 		self.medic.move_speed = self.presets.move_speed.civil_consistency
-		--cop health
-		self.cop.HEALTH_INIT = 8
-		self.cop_female.HEALTH_INIT = 8
 		self.flashbang_multiplier = 1.75
 		self.concussion_multiplier = 1
 	end
@@ -8356,441 +9008,6 @@ function CharacterTweakData:_set_easy_wish()
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
-	self.presets.weapon.gang_member.is_pistol.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_rifle.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_sniper.FALLOFF = {
-		{
-			dmg_mul = 20,
-			r = 500,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 20,
-			r = 1000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 20,
-			r = 2500,
-			acc = {
-				0.95,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 10,
-			r = 4000,
-			acc = {
-				0.9,
-				0.95
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 10,
-			r = 10000,
-			acc = {
-				0.85,
-				0.9
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_lmg.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 100,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 7.5,
-			r = 1000,
-			acc = {
-				0.85,
-				0.9
-			},
-			recoil = {
-				0.4,
-				0.65
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 2000,
-			acc = {
-				0.6,
-				0.8
-			},
-			recoil = {
-				0.8,
-				1.25
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 3,
-			r = 3000,
-			acc = {
-				0.5,
-				0.7
-			},
-			recoil = {
-				0.8,
-				1.25
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 2,
-			r = 4000,
-			acc = {
-				0.02,
-				0.25
-			},
-			recoil = {
-				1,
-				2
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 0.5,
-			r = 10000,
-			acc = {
-				0.01,
-				0.1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_shotgun_pump.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_shotgun_mag.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 100,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.1,
-				0.1
-			},
-			mode = {
-				1,
-				1,
-				4,
-				6
-			}
-		},
-		{
-			dmg_mul = 8,
-			r = 500,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.1,
-				0.1
-			},
-			mode = {
-				1,
-				1,
-				4,
-				5
-			}
-		},
-		{
-			dmg_mul = 7,
-			r = 1000,
-			acc = {
-				0.85,
-				0.95
-			},
-			recoil = {
-				0.1,
-				0.15
-			},
-			mode = {
-				1,
-				2,
-				4,
-				4
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 2000,
-			acc = {
-				0.75,
-				0.9
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				1,
-				4,
-				4,
-				1
-			}
-		},
-		{
-			dmg_mul = 2,
-			r = 3000,
-			acc = {
-				0.4,
-				0.7
-			},
-			recoil = {
-				0.4,
-				0.5
-			},
-			mode = {
-				4,
-				2,
-				1,
-				0
-			}
-		},
-		{
-			dmg_mul = 0.2,
-			r = 10000,
-			acc = {
-				0.05,
-				0.2
-			},
-			recoil = {
-				0.5,
-				1
-			},
-			mode = {
-				2,
-				1,
-				0,
-				0
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_smg = self.presets.weapon.gang_member.is_rifle
-	self.presets.weapon.gang_member.is_pistol = self.presets.weapon.gang_member.is_pistol
-	self.presets.weapon.gang_member.is_revolver = self.presets.weapon.gang_member.is_pistol
-	self.presets.weapon.gang_member.is_rifle = self.presets.weapon.gang_member.is_rifle
-	self.presets.weapon.gang_member.is_shotgun_pump = self.presets.weapon.gang_member.is_shotgun_pump
-	self.presets.weapon.gang_member.mac11 = self.presets.weapon.gang_member.is_smg
-	self.presets.weapon.gang_member.rifle = deep_clone(self.presets.weapon.gang_member.is_rifle)
-	self.presets.weapon.gang_member.rifle.autofire_rounds = nil
-	self.presets.weapon.gang_member.akimbo_pistol = self.presets.weapon.gang_member.is_pistol
 
 	self:_set_characters_weapon_preset("complex")
 
@@ -8804,11 +9021,11 @@ function CharacterTweakData:_set_easy_wish()
 	}
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 10
+	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
-	self.cop.HEALTH_INIT = 10
+	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
-	self.gensec.HEALTH_INIT = 10
+	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
 	--fbi setup
 	self.fbi.weapon = self.presets.weapon.anarchy
@@ -8979,442 +9196,6 @@ function CharacterTweakData:_set_overkill_290()
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
-	self.presets.weapon.gang_member.is_pistol.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_rifle.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_sniper.FALLOFF = {
-		{
-			dmg_mul = 20,
-			r = 500,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 20,
-			r = 1000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 20,
-			r = 2500,
-			acc = {
-				0.95,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 10,
-			r = 4000,
-			acc = {
-				0.9,
-				0.95
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 10,
-			r = 10000,
-			acc = {
-				0.85,
-				0.9
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_lmg.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 100,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 7.5,
-			r = 1000,
-			acc = {
-				0.85,
-				0.9
-			},
-			recoil = {
-				0.4,
-				0.65
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 2000,
-			acc = {
-				0.6,
-				0.8
-			},
-			recoil = {
-				0.8,
-				1.25
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 3,
-			r = 3000,
-			acc = {
-				0.5,
-				0.7
-			},
-			recoil = {
-				0.8,
-				1.25
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 2,
-			r = 4000,
-			acc = {
-				0.02,
-				0.25
-			},
-			recoil = {
-				1,
-				2
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 0.5,
-			r = 10000,
-			acc = {
-				0.01,
-				0.1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_shotgun_pump.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_shotgun_mag.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 100,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.1,
-				0.1
-			},
-			mode = {
-				1,
-				1,
-				4,
-				6
-			}
-		},
-		{
-			dmg_mul = 8,
-			r = 500,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.1,
-				0.1
-			},
-			mode = {
-				1,
-				1,
-				4,
-				5
-			}
-		},
-		{
-			dmg_mul = 7,
-			r = 1000,
-			acc = {
-				0.85,
-				0.95
-			},
-			recoil = {
-				0.1,
-				0.15
-			},
-			mode = {
-				1,
-				2,
-				4,
-				4
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 2000,
-			acc = {
-				0.75,
-				0.9
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				1,
-				4,
-				4,
-				1
-			}
-		},
-		{
-			dmg_mul = 2,
-			r = 3000,
-			acc = {
-				0.4,
-				0.7
-			},
-			recoil = {
-				0.4,
-				0.5
-			},
-			mode = {
-				4,
-				2,
-				1,
-				0
-			}
-		},
-		{
-			dmg_mul = 0.2,
-			r = 10000,
-			acc = {
-				0.05,
-				0.2
-			},
-			recoil = {
-				0.5,
-				1
-			},
-			mode = {
-				2,
-				1,
-				0,
-				0
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_smg = self.presets.weapon.gang_member.is_rifle
-	self.presets.weapon.gang_member.is_pistol = self.presets.weapon.gang_member.is_pistol
-	self.presets.weapon.gang_member.is_revolver = self.presets.weapon.gang_member.is_pistol
-	self.presets.weapon.gang_member.is_rifle = self.presets.weapon.gang_member.is_rifle
-	self.presets.weapon.gang_member.is_shotgun_pump = self.presets.weapon.gang_member.is_shotgun_pump
-	self.presets.weapon.gang_member.mac11 = self.presets.weapon.gang_member.is_smg
-	self.presets.weapon.gang_member.rifle = deep_clone(self.presets.weapon.gang_member.is_rifle)
-	self.presets.weapon.gang_member.rifle.autofire_rounds = nil
-	self.presets.weapon.gang_member.akimbo_pistol = self.presets.weapon.gang_member.is_pistol
-	self.presets.weapon.gang_member.is_shotgun_mag = deep_clone(self.presets.weapon.gang_member.is_shotgun_pump)
 
 	self:_set_characters_weapon_preset("complex")
 
@@ -9429,11 +9210,11 @@ function CharacterTweakData:_set_overkill_290()
 	
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 10
+	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
-	self.cop.HEALTH_INIT = 10
+	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
-	self.gensec.HEALTH_INIT = 10
+	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
 	--sniper stuff
 	self.sniper.weapon.is_rifle.focus_delay = 2
@@ -9607,442 +9388,6 @@ function CharacterTweakData:_set_sm_wish()
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
 	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
-	self.presets.weapon.gang_member.is_pistol.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_rifle.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_sniper.FALLOFF = {
-		{
-			dmg_mul = 20,
-			r = 500,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 20,
-			r = 1000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 20,
-			r = 2500,
-			acc = {
-				0.95,
-				1
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 10,
-			r = 4000,
-			acc = {
-				0.9,
-				0.95
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 10,
-			r = 10000,
-			acc = {
-				0.85,
-				0.9
-			},
-			recoil = {
-				1,
-				1
-			},
-			mode = {
-				1,
-				0,
-				0,
-				0
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_lmg.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 100,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 7.5,
-			r = 1000,
-			acc = {
-				0.85,
-				0.9
-			},
-			recoil = {
-				0.4,
-				0.65
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 2000,
-			acc = {
-				0.6,
-				0.8
-			},
-			recoil = {
-				0.8,
-				1.25
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 3,
-			r = 3000,
-			acc = {
-				0.5,
-				0.7
-			},
-			recoil = {
-				0.8,
-				1.25
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 2,
-			r = 4000,
-			acc = {
-				0.02,
-				0.25
-			},
-			recoil = {
-				1,
-				2
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 0.5,
-			r = 10000,
-			acc = {
-				0.01,
-				0.1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_shotgun_pump.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 300,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 10000,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				2,
-				3
-			},
-			mode = {
-				0.1,
-				0.3,
-				4,
-				7
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_shotgun_mag.FALLOFF = {
-		{
-			dmg_mul = 10,
-			r = 100,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.1,
-				0.1
-			},
-			mode = {
-				1,
-				1,
-				4,
-				6
-			}
-		},
-		{
-			dmg_mul = 8,
-			r = 500,
-			acc = {
-				1,
-				1
-			},
-			recoil = {
-				0.1,
-				0.1
-			},
-			mode = {
-				1,
-				1,
-				4,
-				5
-			}
-		},
-		{
-			dmg_mul = 7,
-			r = 1000,
-			acc = {
-				0.85,
-				0.95
-			},
-			recoil = {
-				0.1,
-				0.15
-			},
-			mode = {
-				1,
-				2,
-				4,
-				4
-			}
-		},
-		{
-			dmg_mul = 5,
-			r = 2000,
-			acc = {
-				0.75,
-				0.9
-			},
-			recoil = {
-				0.25,
-				0.45
-			},
-			mode = {
-				1,
-				4,
-				4,
-				1
-			}
-		},
-		{
-			dmg_mul = 2,
-			r = 3000,
-			acc = {
-				0.4,
-				0.7
-			},
-			recoil = {
-				0.4,
-				0.5
-			},
-			mode = {
-				4,
-				2,
-				1,
-				0
-			}
-		},
-		{
-			dmg_mul = 0.2,
-			r = 10000,
-			acc = {
-				0.05,
-				0.2
-			},
-			recoil = {
-				0.5,
-				1
-			},
-			mode = {
-				2,
-				1,
-				0,
-				0
-			}
-		}
-	}
-	self.presets.weapon.gang_member.is_smg = self.presets.weapon.gang_member.is_rifle
-	self.presets.weapon.gang_member.is_pistol = self.presets.weapon.gang_member.is_pistol
-	self.presets.weapon.gang_member.is_revolver = self.presets.weapon.gang_member.is_pistol
-	self.presets.weapon.gang_member.is_rifle = self.presets.weapon.gang_member.is_rifle
-	self.presets.weapon.gang_member.is_shotgun_pump = self.presets.weapon.gang_member.is_shotgun_pump
-	self.presets.weapon.gang_member.mac11 = self.presets.weapon.gang_member.is_smg
-	self.presets.weapon.gang_member.rifle = deep_clone(self.presets.weapon.gang_member.is_rifle)
-	self.presets.weapon.gang_member.rifle.autofire_rounds = nil
-	self.presets.weapon.gang_member.akimbo_pistol = self.presets.weapon.gang_member.is_pistol
-	self.presets.weapon.gang_member.is_shotgun_mag = deep_clone(self.presets.weapon.gang_member.is_shotgun_pump)
 
 	self:_set_characters_weapon_preset("anarchy")
 
@@ -10057,11 +9402,11 @@ function CharacterTweakData:_set_sm_wish()
 	
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 10
+	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
 	self.cop.no_arrest = true
-	self.cop.HEALTH_INIT = 10
-	self.gensec.HEALTH_INIT = 10
+	self.cop.HEALTH_INIT = 16
+	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.ninja_complex

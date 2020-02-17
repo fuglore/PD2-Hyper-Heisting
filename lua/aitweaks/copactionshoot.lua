@@ -48,7 +48,7 @@ function CopActionShoot:init(action_desc, common_data)
 	local weapon_usage_tweak = common_data.char_tweak.weapon[weap_tweak.usage]
 	self._weapon_unit = weapon_unit
 	self._weapon_base = weapon_unit:base()
-	local suppressive = self._weapon_base.suppression and self._weapon_base.suppression >= 5
+	local suppressive = self._weapon_base.suppression and self._weapon_base.suppression >= 2
 	self.fireline_t = suppressive and 2 or 0.7
 	self._weap_tweak = weap_tweak
 	self._w_usage_tweak = weapon_usage_tweak

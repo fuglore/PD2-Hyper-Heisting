@@ -35,16 +35,20 @@ function MenuCallbackHandler:accept_skirmish_weekly_contract(item, node)
 end
 
 Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
-
+	local show_popup = nil
 	MenuCallbackHandler.callback_shin_toggle_overhaul_player = function(self,item) --toggle
 		PD2THHSHIN:ChangeSetting("toggle_overhaul_player",item:value() == "on")
+		PD2THHSHIN.show_popup = true
+	end
+	
+	MenuCallbackHandler.callback_shin_toggle_helmet = function(self,item) --toggle
+		PD2THHSHIN:ChangeSetting("toggle_helmet",item:value() == "on")
 	end
 	
 	--you can disable the "requires restart" popup if you want, just change show_popup to false
-	local show_popup = true
-	
+
 	MenuCallbackHandler.callback_shin_close = function(self,item) --toggle
-		if show_popup then 
+		if PD2THHSHIN and PD2THHSHIN.show_popup then 
 			local has_change = false
 			local settings_list = "\n"
 			for setting_name,value in pairs(PD2THHSHIN.session_settings) do 
@@ -61,9 +65,10 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 						is_cancel_button = true
 					}
 				},true)
-				PD2THHSHIN:SaveSettings(true)
 			end
+			PD2THHSHIN.show_popup = nil
 		end
+		PD2THHSHIN:SaveSettings(true)
 	end
 	
 	MenuHelper:LoadFromJsonFile(PD2THHSHIN._options_path, PD2THHSHIN, PD2THHSHIN.settings)

@@ -91,8 +91,10 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["loading_hh_11"] = "Join the Hyper Heisting Discord! You can find a link to it in the ModWorkshop page!",
 		["loading_hh_12"] = "Ninja enemies are particularly hard to dominate, but are very strong when converted into Jokers!",
 		["shin_options_title"] = "Hyper Heisting Options!",
+		["shin_toggle_helmet_title"] = "Extreme Helmet Popping!",
+		["shin_toggle_helmet_desc"] = "Enhances the force and power of flying helmets, and changes it's calculations to give that feeling of extra oomph!",
 		["shin_toggle_overhaul_player_title"] = "HH Player-Side Rebalance!",
-		["shin_toggle_overhaul_player_desc"] = "Enables a modified version of Gambyt's VIWR mod! Featuring various reworks of existing skills to make the game feel fresh!",
+		["shin_toggle_overhaul_player_desc"] = "Enables a modified version of Gambyt's VIWR mod! Featuring various reworks of existing skills to make the game feel fresh! WARNING: ONLY TAKES EFFECT AFTER FULL GAME RESTART!!!",
 		["shin_requires_restart_title"] = "Restart required!",
 		["shin_requires_restart_desc"] = "You have made changes to the following settings:\n$SETTINGSLIST\nChanges will take effect on game restart.\nHave a nice day!"
 	})

@@ -80,7 +80,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 		filter = "all",
 		uncover_range = 400,
 		notice_requires_FOV = true,
-		verification_interval = 1.5,
+		verification_interval = 0.5,
 		release_delay = 1,
 		weight_mul = 1
 	}
@@ -90,7 +90,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 		notice_requires_FOV = true,
 		turn_around_range = 15000,
 		weight_mul = 1.25,
-		verification_interval = 2,
+		verification_interval = 0.5,
 		release_delay = 5,
 		filter = "all_enemy"
 	}
@@ -99,7 +99,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 		reaction = "REACT_COMBAT",
 		release_delay = 1,
 		weight_mul = 1.25,
-		verification_interval = 1.5,
+		verification_interval = 1,
 		relation = "foe",
 		filter = "combatant"
 	}

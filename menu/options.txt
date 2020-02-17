@@ -11,6 +11,14 @@
 			"description" : "shin_toggle_overhaul_player_desc",
 			"callback" : "callback_shin_toggle_overhaul_player",
 			"value" : "toggle_overhaul_player"
+		},
+		{
+			"type" : "toggle",
+			"id" : "shin_toggle_helmet",
+			"title" : "shin_toggle_helmet_title",
+			"description" : "shin_toggle_helmet_desc",
+			"callback" : "callback_shin_toggle_helmet",
+			"value" : "toggle_helmet"
 		}
 	]
 }
