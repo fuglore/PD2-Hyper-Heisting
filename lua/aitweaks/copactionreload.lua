@@ -122,7 +122,7 @@ function CopActionReload:init(action_desc, common_data)
 
 		--local testing = true
 		if testing or Global.game_settings.magnetstorm then
-			if self._unit:base():has_tag("law") and not self._execute_storm_t then
+			if self._ext_base:has_tag("law") and not self._execute_storm_t then
 				self._execute_storm_t = t + 0.75
 				local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
 
