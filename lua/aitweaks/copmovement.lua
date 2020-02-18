@@ -455,8 +455,9 @@ end
 function CopMovement:on_suppressed(state)
 	local suppression = self._suppression
 	local end_value = state and 1 or 0
+	local vis_state = self._ext_base:lod_stage()
 	
-	if end_value ~= suppression.value then
+	if vis_state and end_value ~= suppression.value then
 		local t = TimerManager:game():time()
 		local duration = 0.5 * math.abs(end_value - suppression.value)
 		suppression.transition = {
