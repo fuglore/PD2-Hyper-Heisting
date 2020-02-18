@@ -676,7 +676,7 @@ function CopLogicIdle.action_complete_clbk(data, action)
 		my_data.tasing = nil
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
-		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 		end
@@ -737,7 +737,7 @@ function CopLogicIdle.action_complete_clbk(data, action)
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			CopLogicAttack._upd_combat_movement(data)
+			--CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 end

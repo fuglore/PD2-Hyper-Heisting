@@ -300,6 +300,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		my_data.flank_cover = nil
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
+		SpoocLogicAttack._cancel_spooc_attempt(data, my_data)
 		if my_data.has_retreated and managers.groupai:state():chk_active_assault_break() then
 			my_data.in_retreat_pos = true
 		elseif my_data.surprised then
@@ -335,6 +336,8 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math.random() <= data.char_tweak.spooc_attack_use_smoke_chance and not managers.groupai:state():is_smoke_grenade_active() then
 			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)
 		end
+
+		my_data.spooc_attack = nil
 		
 		if action:expired() then
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
@@ -342,13 +345,14 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
 		end
-
-		my_data.spooc_attack = nil
+		
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
-		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
-			data.logic._upd_aim(data, my_data)
+		if action:expired() then
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
+			SpoocLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "turn" then
 		my_data.turning = nil
@@ -366,11 +370,12 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 	elseif action_type == "hurt" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
+		SpoocLogicAttack._cancel_spooc_attempt(data, my_data)
 		
 		--Removed the requirement for being important here.
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
-			data.logic._upd_aim(data, my_data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
 		end
@@ -382,12 +387,380 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		end
 
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+		SpoocLogicAttack._cancel_spooc_attempt(data, my_data)
 
 		if action:expired() then
-			SpoocLogicAttack._upd_aim(data, my_data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
 		end
 	end
+end
+
+SpoocLogicTravel = class(CopLogicTravel)
+
+function SpoocLogicTravel.action_complete_clbk(data, action)
+	local my_data = data.internal_data
+	local action_type = action:type()
+	
+	local mook_units = {
+		"security",
+		"security_undominatable",
+		"cop",
+		"cop_scared",
+		"cop_female",
+		"gensec",
+		"fbi",
+		"swat",
+		"heavy_swat",
+		"fbi_swat",
+		"fbi_heavy_swat",
+		"city_swat",
+		"gangster",
+		"biker",
+		"mobster",
+		"bolivian",
+		"bolivian_indoors",
+		"medic",
+		"taser"
+	}
+	local is_mook = nil
+	for _, name in ipairs(mook_units) do
+		if data.unit:base()._tweak_table == name then
+			is_mook = true
+		end
+	end
+	
+	
+	--if is_mook then
+		--log("AHAHAHAHAH FUCK YEAH IS_MOOK")
+	--end
+
+	if action_type == "walk" then
+		--if CopLogicTravel.chk_slide_conditions(data) then 
+			--data.unit:movement():play_redirect("e_nl_slide_fwd_4m")
+		--end
+		SpoocLogicAttack._cancel_spooc_attempt(data, my_data)
+		
+		if action:expired() and not my_data.starting_advance_action and my_data.coarse_path_index and not my_data.has_old_action and my_data.advancing then
+			my_data.coarse_path_index = my_data.coarse_path_index + 1
+
+			if my_data.coarse_path_index > #my_data.coarse_path then
+				debug_pause_unit(data.unit, "[CopLogicTravel.action_complete_clbk] invalid coarse path index increment", data.unit, inspect(my_data.coarse_path), my_data.coarse_path_index)
+
+				my_data.coarse_path_index = my_data.coarse_path_index - 1
+			end
+		end
+
+		my_data.advancing = nil
+
+		if my_data.moving_to_cover then
+			if action:expired() then
+				if my_data.best_cover then
+					managers.navigation:release_cover(my_data.best_cover[1])
+				end
+
+				my_data.best_cover = my_data.moving_to_cover
+
+				CopLogicBase.chk_cancel_delayed_clbk(my_data, my_data.cover_update_task_key)
+
+				local high_ray = CopLogicTravel._chk_cover_height(data, my_data.best_cover[1], data.visibility_slotmask)
+				my_data.best_cover[4] = high_ray
+				my_data.in_cover = true
+				
+				local cover_wait_time = nil
+				
+				local should_tacticool_wait = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(2, 4) and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250 or managers.groupai:state():chk_high_fed_density() --if an enemy is not at semi equal height, and further than 12 meters, and we've seen him at least two to four seconds ago, do a slower, more tacticool approach
+				
+				if should_tacticool_wait then
+					cover_wait_time = math.random(0.4, 0.64) --If there is a height advantage/disadvantage, act tacticool and approach slower.
+					--log("HH: cop waiting due to height difference")
+				else
+					cover_wait_time = math.random(0.35, 0.5) --Keep enemies aggressive and active while still preserving some semblance of what used to be the original pacing while not in Shin Shootout mode
+				end
+				
+				if not is_mook or Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() or data.unit:base():has_tag("takedown") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+					my_data.cover_leave_t = data.t + 0
+				else
+					my_data.cover_leave_t = data.t + cover_wait_time
+				end
+				
+			else
+				managers.navigation:release_cover(my_data.moving_to_cover[1])
+
+				if my_data.best_cover then
+					local facing_cover = nil
+					local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
+					local cover_search_dis = nil
+					
+					if no_cover_search_dis_change or not is_mook then
+						cover_search_dis = 100
+					else
+						cover_search_dis = 250
+					end
+					
+					--if cover_search_dis == 200 then
+						--log("thats hot")
+					--end
+
+					if dis > cover_search_dis then
+						managers.navigation:release_cover(my_data.best_cover[1])
+
+						my_data.best_cover = nil
+					end
+				end
+			end
+
+			my_data.moving_to_cover = nil
+		elseif my_data.best_cover then
+			local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
+			local cover_search_dis = nil
+					
+			if not is_mook then
+				cover_search_dis = 100
+			else
+				cover_search_dis = 250
+			end
+			
+			if dis > cover_search_dis then
+				managers.navigation:release_cover(my_data.best_cover[1])
+
+				my_data.best_cover = nil
+			end
+		end
+
+		if not action:expired() then
+			if my_data.processing_advance_path then
+				local pathing_results = data.pathing_results
+
+				if pathing_results and pathing_results[my_data.advance_path_search_id] then
+					data.pathing_results[my_data.advance_path_search_id] = nil
+					my_data.processing_advance_path = nil
+				end
+			elseif my_data.advance_path then
+				my_data.advance_path = nil
+			end
+
+			data.unit:brain():abort_detailed_pathing(my_data.advance_path_search_id)
+		end
+	elseif action_type == "shoot" then
+		my_data.shooting = nil
+	elseif action_type == "tase" then
+		if action:expired() and my_data.tasing then
+			local record = managers.groupai:state():criminal_record(my_data.tasing.target_u_key)
+
+			if record and record.status then
+				data.tase_delay_t = TimerManager:game():time() + 45
+			end
+			TaserLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+
+		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
+
+		my_data.tasing = nil
+	elseif action_type == "spooc" then
+		data.spooc_attack_timeout_t = TimerManager:game():time() + math.lerp(data.char_tweak.spooc_attack_timeout[1], data.char_tweak.spooc_attack_timeout[2], math.random())
+
+		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math.random() <= data.char_tweak.spooc_attack_use_smoke_chance and not managers.groupai:state():is_smoke_grenade_active() then
+			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)
+		end
+
+		my_data.spooc_attack = nil
+		
+		if action:expired() then
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			SpoocLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			SpoocLogicTravel.upd_advance(data)
+		end
+	elseif action_type == "reload" then
+		--Removed the requirement for being important here.
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+		end
+	elseif action_type == "turn" then
+		my_data.turning = nil
+	elseif action_type == "act" then
+		--CopLogicAttack._cancel_cover_pathing(data, my_data)
+		--CopLogicAttack._cancel_charge(data, my_data)
+		
+		--Fixed panic never waking up cops.
+		if action:expired() then
+			SpoocLogicAttack._upd_aim(data, my_data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			SpoocLogicTravel.upd_advance(data)
+		end
+	elseif action_type == "hurt" then
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+		SpoocLogicAttack._cancel_spooc_attempt(data, my_data)
+		
+		--Removed the requirement for being important here.
+		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			SpoocLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			SpoocLogicTravel.upd_advance(data)
+		end
+	elseif action_type == "dodge" then
+		local timeout = action:timeout()
+
+		if timeout then
+			data.dodge_timeout_t = TimerManager:game():time() + math.lerp(timeout[1], timeout[2], math.random())
+		end
+
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+		SpoocLogicAttack._cancel_spooc_attempt(data, my_data)
+
+		if action:expired() then
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			SpoocLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			SpoocLogicTravel.upd_advance(data)
+		end
+	end
+end
+
+function SpoocLogicTravel.queued_update(data)
+    local my_data = data.internal_data
+    data.t = TimerManager:game():time()
+    my_data.close_to_criminal = nil
+    local delay = SpoocLogicTravel._upd_enemy_detection(data)
+    
+    if data.internal_data ~= my_data then
+    	return
+    end
+    
+    SpoocLogicTravel.upd_advance(data)
+    
+    if data.internal_data ~= my_data then
+    	return
+    end
+    
+    if not delay then
+    	debug_pause_unit(data.unit, "crap!!!", inspect(data))	
+    
+    	delay = 0.35
+    end
+	
+	local level = Global.level_data and Global.level_data.level_id
+	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
+	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter
+	
+	if hostage_count > 0 and not managers.groupai:state():chk_assault_active_atm() then --make sure the hostage count is actually above zero before replacing any of the lines
+		if hostage_count > 3 then  -- hostage count needs to be above 3
+			if math.random() < 0.4 then --40% chance
+				chosen_panic_chatter = "controlpanic"
+			else
+				chosen_panic_chatter = "hostagepanic2" --more panicky "GET THOSE HOSTAGES OUT RIGHT NOW!!!" line for when theres too many hostages on the map
+			end
+		else
+			if math.random() < 0.4 then
+				chosen_panic_chatter = "controlpanic"
+			else
+				chosen_panic_chatter = "hostagepanic1" --less panicky "Delay the assault until those hostages are out." line
+			end
+		end
+	end
+	
+	local chosen_sabotage_chatter = "sabotagegeneric" --set default sabotage chatter for variety's sake
+	local skirmish_map = level == "skm_mus" or level == "skm_red2" or level == "skm_run" or level == "skm_watchdogs_stage2" --these shouldnt play on holdout
+	local ignore_radio_rules = nil
+	
+	if level == "branchbank" then --bank heist
+		chosen_sabotage_chatter = "sabotagedrill"
+	elseif level == "nmh" or level == "man" or level == "framing_frame_3" or level == "rat" or level == "election_day_1" then --various heists where turning off the power is a frequent occurence
+		chosen_sabotage_chatter = "sabotagepower"
+	elseif level == "chill_combat" or level == "watchdogs_1" or level == "watchdogs_1_night" or level == "watchdogs_2" or level == "watchdogs_2_day" or level == "cane" then
+		chosen_sabotage_chatter = "sabotagebags"
+		ignore_radio_rules = true
+	else
+		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
+	end
+	
+	local cant_say_clear = data.attention_obj and data.attention_obj.reaction <= AIAttentionObject.REACT_COMBAT and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 5
+	
+    if not data.unit:base():has_tag("special") then
+    	if data.char_tweak.chatter.clear and not cant_say_clear and not data.is_converted then
+			if data.unit:movement():cool() then
+				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
+			else
+				local clearchk = math.random(0, 90)
+				local say_clear = 30
+				if clearchk > 60 then
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
+				elseif clearchk > 30 then
+					if not skirmish_map and my_data.radio_voice or not skirmish_map and ignore_radio_rules then
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
+					end
+				else
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
+				end
+			end
+		end
+    end
+	
+	if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
+    	if not cant_say_clear then
+			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
+		end
+    end
+	
+	if data.unit:base()._tweak_table == "akuma" then
+		managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "lotusapproach" )
+	end
+	
+	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
+	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
+	
+	if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted and not data.unit:base():has_tag("special") then
+		if managers.groupai:state():chk_assault_active_atm() or not data.unit:base():has_tag("law") then
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.alert_t and data.t - data.attention_obj.alert_t < 1 and data.attention_obj.dis <= 3000 then
+				if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
+					local roll = math.random(1, 100)
+					local chance_suppanic = 30
+					
+					if roll <= chance_suppanic then
+						local nroll = math.random(1, 100)
+						local chance_help = 50
+						if roll <= chance_suppanic or not data.unit:base():has_tag("law") then
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed1" )
+						else
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed2" )
+						end
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+					end
+				else
+					if math.random() < 0.1 and data.unit:base():has_tag("law") then
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+					end
+				end
+			end
+		end
+	end
+	
+	local objective = data.objective or nil
+	
+	data.logic._update_haste(data, data.internal_data)
+	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
+	SpoocLogicAttack._upd_spooc_attack(data, my_data)
+	
+	if CopLogicBase.should_enter_attack(data) then
+		CopLogicBase._exit(data.unit, "attack")
+		return
+	end
+      
+    SpoocLogicTravel.queue_update(data, data.internal_data, delay)
 end

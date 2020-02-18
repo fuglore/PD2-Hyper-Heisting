@@ -1251,6 +1251,9 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			if record and record.status then
 				data.tase_delay_t = TimerManager:game():time() + 45
 			end
+			TaserLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
 		end
 
 		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
@@ -1275,6 +1278,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		if action:expired() then
 			data.logic._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "turn" then
 		my_data.turning = nil
@@ -1286,7 +1290,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			CopLogicAttack._upd_combat_movement(data)
+			--CopLogicAttack._upd_combat_movement(data)
 		end
 		
 	elseif action_type == "hurt" then
@@ -1297,6 +1301,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			data.logic._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
 		end
 		
 	elseif action_type == "dodge" then
@@ -1307,7 +1312,8 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		end
 
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
-
+		CopLogicAttack._cancel_charge(data, my_data)
+		
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)

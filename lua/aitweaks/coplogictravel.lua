@@ -741,6 +741,9 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			if record and record.status then
 				data.tase_delay_t = TimerManager:game():time() + 45
 			end
+			TaserLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicTravel.upd_advance(data)
 		end
 
 		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
@@ -756,13 +759,13 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			--CopLogicAttack._upd_combat_movement(data)
+			CopLogicTravel.upd_advance(data)
 		end
 
 		my_data.spooc_attack = nil
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
-		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 		end
@@ -776,7 +779,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			--CopLogicAttack._upd_combat_movement(data)
+			CopLogicTravel.upd_advance(data)
 		end
 	elseif action_type == "hurt" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
@@ -786,7 +789,9 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicTravel.upd_advance(data)
 		end
+		
 	elseif action_type == "dodge" then
 		local timeout = action:timeout()
 
@@ -795,11 +800,12 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
-
+		CopLogicAttack._cancel_charge(data, my_data)
+		
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			--CopLogicAttack._upd_combat_movement(data)
+			CopLogicTravel.upd_advance(data)
 		end
 	end
 end
