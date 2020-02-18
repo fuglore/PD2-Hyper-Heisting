@@ -29,16 +29,16 @@ function CopActionTurn:_upd_wait_full_blend(t)
 				end
 			end
 
-			if self._action_desc.speed then
-				local speed = self._action_desc.speed or 1
-				
-				if Global.game_settings.incsmission then
-					if managers.crime_spree then
-						local copturnspdadd = managers.crime_spree:get_turn_spd_add()
-						speed = speed + copturnspdadd
-					end
-				end
+			local speed = self._action_desc.speed or 1
 
+			if Global.game_settings.incsmission then
+				if managers.crime_spree then
+					local copturnspdadd = managers.crime_spree:get_turn_spd_add()
+					speed = speed + copturnspdadd
+				end
+			end
+
+			if speed ~= 1 then
 				self._machine:set_speed_soft(redir_res, speed, 0.9)
 			end
 
