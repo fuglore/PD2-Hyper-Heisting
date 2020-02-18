@@ -241,6 +241,31 @@ function CopActionShoot:init(action_desc, common_data)
 	return true
 end
 
+function CopActionShoot:on_exit()
+	if self._is_server then
+		if not self._exiting_to_reload then
+			if not self._attention or not self._attention.reaction or self._attention.reaction < AIAttentionObject.REACT_AIM then
+				self._ext_movement:set_stance_by_code(2)
+			end
+		end
+
+		self._common_data.ext_network:send("action_aim_state", false)
+	end
+
+	if self._modifier_on then
+		self[self._ik_preset.stop](self)
+	end
+
+	if self._autofiring then
+		self._weapon_base:stop_autofire()
+		self._ext_movement:play_redirect("up_idle")
+	end
+
+	if self._shooting_player and alive(self._attention.unit) then
+		self._attention.unit:movement():on_targetted_for_attack(false, self._common_data.unit)
+	end
+end
+
 function CopActionShoot:on_attention(attention, old_attention)
 	if self._shooting_player and old_attention and alive(old_attention.unit) then
 		old_attention.unit:movement():on_targetted_for_attack(false, self._common_data.unit)
