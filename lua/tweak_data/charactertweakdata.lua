@@ -5619,7 +5619,6 @@ function CharacterTweakData:_presets(tweak_data)
 			32,
 			60
 		},
-		
 		FALLOFF = {
 			{
 				dmg_mul = 4, --damage unchanged from civil, keep as is.
