@@ -836,7 +836,7 @@ function CopActionShoot:check_melee_start(t, attention, target_dis, autotarget, 
 	return false
 end
 
-function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_range, shooting_local_player)
+function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shooting_local_player)
 	local shoot_hist = self._shoot_history
 	local focus_delay, focus_prog = nil
 
@@ -922,9 +922,9 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, w_tweak, falloff, i_ran
 		local error_vec_len = nil
 		
 		if shooting_local_player then
-			error_vec_len = w_tweak.spread + w_tweak.miss_dis
+			error_vec_len = self._spread + self._miss_dis
 		else
-			error_vec_len = w_tweak.spread + w_tweak.miss_dis * 2
+			error_vec_len = self._spread + self._miss_dis * 2
 		end
 
 		mvec3_set_l(error_vec, error_vec_len)
