@@ -90,6 +90,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["loading_hh_10"] = "If you see extra-bright powerful tracers that distort the area around them, that's probably coming from some important enemy! Like a Shotgunner, or a Bulldozer!",
 		["loading_hh_11"] = "Join the Hyper Heisting Discord! You can find a link to it in the ModWorkshop page!",
 		["loading_hh_12"] = "Ninja enemies are particularly hard to dominate, but are very strong when converted into Jokers!",
+		["loading_hh_13"] = "Heavy SWATs, Maximum Force Responders, and ZEAL Heavy SWATs gain protection from bullet-based and explosive-based instant kills on Death Sentence! But only from weapons that can't shoot through walls!",
 		["shin_options_title"] = "Hyper Heisting Options!",
 		["shin_toggle_helmet_title"] = "Extreme Helmet Popping!",
 		["shin_toggle_helmet_desc"] = "Enhances the force and power of flying helmets, and changes it's calculations to give that feeling of extra oomph!",
