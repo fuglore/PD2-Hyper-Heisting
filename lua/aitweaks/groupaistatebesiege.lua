@@ -444,12 +444,6 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.use_spawn_event = true
 	assault_task.force_spawned = 0
 
-	if self._hostage_headcount > 0 then
-		assault_task.phase_end_t = assault_task.phase_end_t + self:_get_difficulty_dependent_value(self._tweak_data.assault.hostage_hesitation_delay)
-		assault_task.is_hesitating = true
-		assault_task.voice_delay = self._t + (assault_task.phase_end_t - self._t) / 2
-	end
-
 	self._downs_during_assault = 0
 
 	if self._hunt_mode then
@@ -561,28 +555,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 		else
 			managers.hud:check_anticipation_voice(task_data.phase_end_t - t)
 			managers.hud:check_start_anticipation_music(task_data.phase_end_t - t)
-
-			if task_data.is_hesitating and task_data.voice_delay < self._t then
-				if self._hostage_headcount > 0 then
-					local best_group = nil
-
-					for _, group in pairs(self._groups) do
-						if group.objective.type == "reenforce_area" then
-							best_group = group
-						elseif group.objective.type ~= "reenforce_area" and group.objective.type ~= "retire" then
-							best_group = group
-						elseif not best_group then
-							best_group = group
-						end
-					end
-
-					if best_group and self:_voice_delay_assault(best_group) then
-						self._task_data.assault.is_hesitating = nil
-					end
-				else
-					self._task_data.assault.is_hesitating = nil
-				end
-			end
 		end
 	elseif task_data.phase == "build" then
 		if task_spawn_allowance <= 0 then
@@ -1943,6 +1915,12 @@ function GroupAIStateBesiege:_end_regroup_task()
 			local assault_delay = self._tweak_data.assault.delay
 			local breaktime = self._assault_was_hell and 15 or 0
 			self._task_data.assault.next_dispatch_t = self._t + self:_get_difficulty_dependent_value(assault_delay) + breaktime
+			
+			if self._hostage_headcount > 3 then
+				self._task_data.assault.next_dispatch_t = self._task_data.assault.next_dispatch_t + 25
+			elseif self._hostage_headcount > 0 then
+				self._task_data.assault.next_dispatch_t = self._task_data.assault.next_dispatch_t + self:_get_difficulty_dependent_value(self._tweak_data.assault.hostage_hesitation_delay)
+			end
 		end
 
 		if self._draw_drama then

@@ -1565,10 +1565,10 @@ function CharacterTweakData:_presets(tweak_data)
 	--Custom sniper preset to make them work differently, they work as a mini turret of sorts, dealing big damage with good accuracy, standing in their line of fire isn't wise as they'll suppress the shit out of you and take off armor very quickly.
 	presets.weapon.rhythmsniper = deep_clone(presets.weapon.sniper)
 	presets.weapon.rhythmsniper.is_rifle.autofire_rounds = nil	
-	presets.weapon.rhythmsniper.is_rifle.focus_delay = 3  
+	presets.weapon.rhythmsniper.is_rifle.focus_delay = 5  
 	presets.weapon.rhythmsniper.is_rifle.aim_delay = {
-		0.1,
-		0.1
+		0.8,
+		0.8
 	}
 	presets.weapon.rhythmsniper.is_rifle.FALLOFF = {
 		{
@@ -1613,6 +1613,24 @@ function CharacterTweakData:_presets(tweak_data)
 			acc = {
 				0,
 				0.3
+			},
+			recoil = {
+				0.8,
+				0.8
+			},
+			mode = {
+				0,
+				0,
+				0,
+				1
+			}
+		},
+		{
+			dmg_mul = 1,
+			r = 9000,
+			acc = {
+				0,
+				0.1
 			},
 			recoil = {
 				0.8,
@@ -1906,7 +1924,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0,
 			0
 		},
-		tase_sphere_cast_radius = 30,
+		tase_sphere_cast_radius = 5,
 		range = {
 			optimal = 3000,
 			far = 4000, --longer range style firing patterns begin, enemy movement gets complexer due to the close range being increased
@@ -3046,7 +3064,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0,
 			0
 		},
-		tase_sphere_cast_radius = 30,
+		tase_sphere_cast_radius = 5,
 		range = {
 			optimal = 3000,
 			far = 4000, --longer range style firing patterns begin, enemy movement gets complexer due to the close range being increased
@@ -4133,7 +4151,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0,
 			0
 		},
-		tase_sphere_cast_radius = 30,
+		tase_sphere_cast_radius = 5,
 		range = {
 			optimal = 3000,
 			far = 4000, --longer range style firing patterns begin, enemy movement gets complexer due to the close range being increased
@@ -5239,7 +5257,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0,
 			0
 		},
-		tase_sphere_cast_radius = 30,
+		tase_sphere_cast_radius = 5,
 		range = {
 			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
 			far = 4000, 
@@ -9415,8 +9433,8 @@ function CharacterTweakData:_set_sm_wish()
 	self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--sniper setup
-	self.sniper.weapon.is_rifle.focus_delay = 1.5
-	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
+	self.sniper.weapon.is_rifle.focus_delay = 3
+	self.sniper.weapon.is_rifle.aim_delay = {0.64, 0.64}
 	self.sniper.weapon.is_rifle.FALLOFF = {
 		{
 			dmg_mul = 3.75,
@@ -9459,7 +9477,25 @@ function CharacterTweakData:_set_sm_wish()
 			r = 6000,
 			acc = {
 				0,
-				0.5
+				0.3
+			},
+			recoil = {
+				0.64,
+				0.64
+			},
+			mode = {
+				0,
+				0,
+				0,
+				1
+			}
+		},
+		{
+			dmg_mul = 1,
+			r = 9000,
+			acc = {
+				0,
+				0.1
 			},
 			recoil = {
 				0.64,

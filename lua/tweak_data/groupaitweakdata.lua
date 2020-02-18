@@ -55,7 +55,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 4,
 	    duration = {0.5, 0.5},
-	    interval = {0.75, 1.5},
+	    interval = {1.75, 2.5},
 	    group_min = 0,
 	    queue = "lk3b"
 	}
@@ -63,7 +63,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 4,
 	    duration = {0.5, 0.5},
-	    interval = {0.75, 1.5},
+	    interval = {1.75, 2.5},
 	    group_min = 0,
 	    queue = "hlp"
 	}
@@ -71,7 +71,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {0.5, 0.5},
-	    interval = {1, 2},
+	    interval = {1.75, 2.5},
 	    group_min = 0,
 	    queue = "c01"
 	}
@@ -119,7 +119,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 5,
 		duration = {2, 4},
-		interval = {0.5, 3},
+		interval = {2, 3},
 		group_min = 0,
 		queue = "rdy"
 	}
@@ -191,7 +191,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {1, 1},
-	    interval = {2, 4.5},
+	    interval = {6, 8},
 	    group_min = 1,
 	    queue = "p01"
 	}
@@ -199,9 +199,9 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {1, 1},
-	    interval = {2, 4.5},
+	    interval = {6, 8},
 	    group_min = 1,
-	    queue = "p01"
+	    queue = "p02"
 	}
 	self.enemy_chatter.clear = {
 		radius = 2000,

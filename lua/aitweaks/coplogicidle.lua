@@ -287,7 +287,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local nr_enemies = crim_record and crim_record.engaged_force
 				local old_enemy = nil
 				
-				if attention_data.acquire_t and attention_data.verified and data.attention_obj and data.attention_obj.verified and data.attention_obj.is_person and reaction >= AIAttentionObject.REACT_COMBAT and data.attention_obj.u_key == u_key then
+				if attention_data.acquire_t and attention_data.verified and data.attention_obj and data.attention_obj.verified and data.attention_obj.is_person and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and AIAttentionObject.REACT_COMBAT <= reaction and data.attention_obj.u_key == u_key then
 					old_enemy = true
 				end
 
@@ -415,7 +415,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					target_priority_slot = 1
 				end
 
-				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.murder and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified and data.attention_obj.is_person and data.attention_obj.u_key ~= u_key then
+				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.murder and not old_enemy and not human_chk then
 					target_priority_slot = 20 + target_priority_slot + math.max(0, AIAttentionObject.REACT_COMBAT - reaction)
 				end
 
