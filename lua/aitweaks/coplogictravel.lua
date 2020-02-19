@@ -602,6 +602,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		"cop_female",
 		"gensec",
 		"fbi",
+		"fbi_xc45",
 		"swat",
 		"heavy_swat",
 		"fbi_swat",
@@ -613,7 +614,14 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		"bolivian",
 		"bolivian_indoors",
 		"medic",
-		"taser"
+		"taser",
+		"spooc",
+		"shadow_spooc",
+		"spooc_heavy",
+		"tank_ftsu",
+		"tank_mini",
+		"tank",
+		"tank_medic"
 	}
 	local is_mook = nil
 	for _, name in ipairs(mook_units) do
@@ -639,6 +647,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 				my_data.coarse_path_index = my_data.coarse_path_index - 1
 			end
+			CopLogicTravel.upd_advance(data)
 		end
 
 		my_data.advancing = nil
@@ -659,7 +668,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				
 				local cover_wait_time = nil
 				
-				local should_tacticool_wait = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(2, 4) and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250 or managers.groupai:state():chk_high_fed_density() --if an enemy is not at semi equal height, and further than 12 meters, and we've seen him at least two to four seconds ago, do a slower, more tacticool approach
+				local should_tacticool_wait = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(0.35, 1) and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250 --if an enemy is not at semi equal height, and further than 12 meters, and we've seen him at least two to four seconds ago, do a slower, more tacticool approach
 				
 				if should_tacticool_wait then
 					cover_wait_time = math.random(0.4, 0.64) --If there is a height advantage/disadvantage, act tacticool and approach slower.
@@ -668,8 +677,8 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					cover_wait_time = math.random(0.35, 0.5) --Keep enemies aggressive and active while still preserving some semblance of what used to be the original pacing while not in Shin Shootout mode
 				end
 				
-				if not is_mook or Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() or data.unit:base():has_tag("takedown") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
-					my_data.cover_leave_t = data.t + 0
+				if not is_mook or Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+					my_data.cover_leave_t = data.t - 1
 				else
 					my_data.cover_leave_t = data.t + cover_wait_time
 				end
@@ -927,10 +936,9 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		"cop",
 		"cop_scared",
 		"cop_female",
-		"heavy_swat_sniper",
 		"gensec",
-		"shield",
 		"fbi",
+		"fbi_xc45",
 		"swat",
 		"heavy_swat",
 		"fbi_swat",
@@ -942,7 +950,14 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		"bolivian",
 		"bolivian_indoors",
 		"medic",
-		"taser"
+		"taser",
+		"spooc",
+		"shadow_spooc",
+		"spooc_heavy",
+		"tank_ftsu",
+		"tank_mini",
+		"tank",
+		"tank_medic"
 	}
 	local is_mook = nil
 	for _, name in ipairs(mook_units) do

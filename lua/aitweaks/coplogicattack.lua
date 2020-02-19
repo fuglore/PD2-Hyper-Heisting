@@ -511,6 +511,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 		"cop_female",
 		"gensec",
 		"fbi",
+		"fbi_xc45",
 		"swat",
 		"heavy_swat",
 		"fbi_swat",
@@ -523,7 +524,13 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 		"bolivian_indoors",
 		"medic",
 		"taser",
-		"shield"
+		"spooc",
+		"shadow_spooc",
+		"spooc_heavy",
+		"tank_ftsu",
+		"tank_mini",
+		"tank",
+		"tank_medic"
 	}
 	local is_mook = nil
 	for _, name in ipairs(mook_units) do
@@ -649,6 +656,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 		"cop_female",
 		"gensec",
 		"fbi",
+		"fbi_xc45",
 		"swat",
 		"heavy_swat",
 		"fbi_swat",
@@ -661,7 +669,13 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 		"bolivian_indoors",
 		"medic",
 		"taser",
-		"shield"
+		"spooc",
+		"shadow_spooc",
+		"spooc_heavy",
+		"tank_ftsu",
+		"tank_mini",
+		"tank",
+		"tank_medic"
 	}
 	local is_mook = nil
 	for _, name in ipairs(mook_units) do
@@ -863,36 +877,32 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 	
-	local ranged_fire_sot_bonus = 1
+	local ranged_fire_sot_bonus = 0.5
 	
 	if my_data.stay_out_time and not my_data.at_cover_shoot_pos or my_data.stay_out_time and action_taken then
 		my_data.stay_out_time = nil
 	elseif my_data.attitude == "engage" and not my_data.stay_out_time and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
-		if Global.game_settings.one_down or managers.skirmish.is_skirmish() then
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				my_data.stay_out_time = t + 1.05
-			else
-				my_data.stay_out_time = t + 0.35
-			end
+		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
+			my_data.stay_out_time = t - 1
 			--log("interesting")
 		else
 			if diff_index <= 5 then
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 2 + ranged_fire_sot_bonus
-				else
-					my_data.stay_out_time = t + 2
-				end
-			elseif diff_index == 6 then
 				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
 					my_data.stay_out_time = t + 1 + ranged_fire_sot_bonus
 				else
 					my_data.stay_out_time = t + 1
 				end
-			else
+			elseif diff_index == 6 then
 				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
 					my_data.stay_out_time = t + 0.5 + ranged_fire_sot_bonus
 				else
 					my_data.stay_out_time = t + 0.5
+				end
+			else
+				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+					my_data.stay_out_time = t + 0.5
+				else
+					my_data.stay_out_time = t - 1
 				end
 			end
 		end
@@ -959,13 +969,6 @@ function CopLogicAttack._upd_combat_movement(data)
 		if my_data.walking_to_cover_shoot_pos then
 			-- nothing
 		elseif my_data.at_cover_shoot_pos then
-			--ranged fire cops also signal the END of their movement and positioning
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				if not data.unit:in_slot(16) and not data.is_converted and data.char_tweak.chatter.ready then
-					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "inpos")
-				end
-			end
-			
 			--i went ahead and included these to make sure flankers are always getting flanking positions instead of regular ones, it helps them stay predictable in regards to their choices of movement, you can tell a flank team by 1. smoke grenades being present 2. their chatter and 3. how they prefer to move around the map.
 			if my_data.stay_out_time and my_data.stay_out_time < t or not focus_enemy.verified then
 				if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
@@ -994,16 +997,16 @@ function CopLogicAttack._upd_combat_movement(data)
 			move_to_cover = true
 		elseif Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() then 
 		
-			if not Global.game_settings.one_down and not managers.skirmish.is_skirmish() then
-				if diff_index <= 5 and not Global.game_settings.aggroAI then
-					my_data.move_t = data.t + 1.05
-				elseif diff_index == 6 then
-					my_data.move_t = data.t + 0.7
-				else
-					my_data.move_t = data.t + 0.35
-				end
+			if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
+				my_data.move_t = data.t - 1
 			else
-				my_data.move_t = data.t + 0.032
+				if diff_index <= 5 and not Global.game_settings.use_intense_AI then
+					my_data.move_t = data.t + 0.7
+				elseif diff_index == 6 then
+					my_data.move_t = data.t + 0.35
+				else
+					my_data.move_t = data.t + 0.25
+				end
 			end
 			
 			if data.tactics and data.tactics.charge and charge_failed_t_chk or my_data.taken_flank_cover and charge_failed_t_chk or charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
@@ -1677,6 +1680,7 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 		"cop_female",
 		"gensec",
 		"fbi",
+		"fbi_xc45",
 		"swat",
 		"heavy_swat",
 		"fbi_swat",

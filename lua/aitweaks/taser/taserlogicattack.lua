@@ -455,6 +455,7 @@ function TaserLogicTravel.action_complete_clbk(data, action)
 
 				my_data.coarse_path_index = my_data.coarse_path_index - 1
 			end
+			TaserLogicTravel.upd_advance(data)
 		end
 
 		my_data.advancing = nil

@@ -36,7 +36,9 @@ local security_variant = logic_variants.security
 function CopBrain:post_init()
 	
 	CopBrain._logic_variants.tank_ftsu = clone(security_variant)
-	CopBrain._logic_variants.tank_ftsu.attack = TankCopLogicAttack
+	CopBrain._logic_variants.tank.attack = CopLogicAttack
+	CopBrain._logic_variants.tank_medic.attack = CopLogicAttack
+	CopBrain._logic_variants.tank_mini.attack = CopLogicAttack
 	CopBrain._logic_variants.spooc_heavy = clone(security_variant)
 	CopBrain._logic_variants.spooc_heavy.idle = SpoocLogicIdle
 	CopBrain._logic_variants.spooc_heavy.attack = SpoocLogicAttack

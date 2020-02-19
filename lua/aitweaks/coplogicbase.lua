@@ -270,7 +270,14 @@ function CopLogicBase._update_haste(data, my_data)
 		"bolivian",
 		"bolivian_indoors",
 		"medic",
-		"taser"
+		"taser",
+		"spooc",
+		"shadow_spooc",
+		"spooc_heavy",
+		"tank_ftsu",
+		"tank_mini",
+		"tank",
+		"tank_medic"
 	}
 	local is_mook = nil
 	for _, name in ipairs(mook_units) do
@@ -361,20 +368,6 @@ function CopLogicBase._update_haste(data, my_data)
 			if not data.unit:anim_data()[pose] then
 				CopLogicAttack["_chk_request_action_" .. pose](data)
 			end	
-		elseif data.unit:base():has_tag("tank") then
-			local run_dist = 900
-			
-			if data.attention_obj and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and data.attention_obj.verified then
-				run_dist = 1200
-			end
-			
-			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= run_dist and data.unit:anim_data().run and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 then
-				haste = "walk"
-				my_data.has_reset_walk_cycle = nil
-			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > run_dist and data.unit:anim_data().move and not data.unit:anim_data().run then
-				haste = "run"
-				my_data.has_reset_walk_cycle = nil
-			end
 		end
 	end	
 	 
@@ -396,10 +389,9 @@ function CopLogicBase._update_haste(data, my_data)
 				pose = pose,
 				end_pose = end_pose
 			}
-			my_data.cover_path = nil
-			my_data.advancing = data.unit:brain():action_request(new_action_data)
-
+			
 			if my_data.advancing then
+				my_data.advancing = data.unit:brain():action_request(new_action_data)
 				my_data.moving_to_cover = my_data.best_cover
 				my_data.at_cover_shoot_pos = nil
 				my_data.in_cover = nil
