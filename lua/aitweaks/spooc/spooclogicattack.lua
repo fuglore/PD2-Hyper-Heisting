@@ -764,3 +764,66 @@ function SpoocLogicTravel.queued_update(data)
       
     SpoocLogicTravel.queue_update(data, data.internal_data, delay)
 end
+
+function SpoocLogicTravel._upd_enemy_detection(data)
+	managers.groupai:state():on_unit_detection_updated(data.unit)
+
+	local my_data = data.internal_data
+	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, SpoocLogicAttack._chk_reaction_to_attention_object)
+	local old_att_obj = data.attention_obj
+
+	CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
+
+	local objective = data.objective
+	local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
+
+	if allow_trans and (obj_failed or not objective or objective.type ~= "follow") then
+		local wanted_state = CopLogicBase._get_logic_state_from_reaction(data)
+
+		if wanted_state and wanted_state ~= data.name then
+			if obj_failed then
+				data.objective_failed_clbk(data.unit, data.objective)
+			end
+
+			if my_data == data.internal_data and not objective.is_default then
+				debug_pause_unit(data.unit, "[SpoocLogicTravel._upd_enemy_detection] exiting without discarding objective", data.unit, inspect(objective))
+				CopLogicBase._exit(data.unit, wanted_state)
+			end
+
+			CopLogicBase._report_detections(data.detected_attention_objects)
+
+			return delay
+		end
+	end
+
+	if my_data == data.internal_data then
+		if data.cool and new_reaction == AIAttentionObject.REACT_SUSPICIOUS and CopLogicBase._upd_suspicion(data, my_data, new_attention) then
+			CopLogicBase._report_detections(data.detected_attention_objects)
+
+			return delay
+		elseif new_reaction and new_reaction <= AIAttentionObject.REACT_SCARED then
+			local set_attention = data.unit:movement():attention()
+
+			if not set_attention or set_attention.u_key ~= new_attention.u_key then
+				CopLogicBase._set_attention(data, new_attention, nil)
+			end
+		end
+
+		SpoocLogicAttack._upd_aim(data, my_data)
+	end
+
+	CopLogicBase._report_detections(data.detected_attention_objects)
+
+	if new_attention and data.char_tweak.chatter.entrance and not data.entrance and new_attention.criminal_record and new_attention.verified and AIAttentionObject.REACT_SCARED <= new_reaction and math.abs(data.m_pos.z - new_attention.m_pos.z) < 4000 then
+		data.unit:sound():say(data.brain.entrance_chatter_cue or "entrance", true, nil)
+
+		data.entrance = true
+	end
+
+	if data.cool then
+		SpoocLogicTravel.upd_suspicion_decay(data)
+	end
+
+	return delay
+end

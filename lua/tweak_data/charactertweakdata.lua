@@ -3045,8 +3045,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.is_rifle = {
 		aim_delay = {
-			0.4,
-			0.4
+			0.35,
+			0.35
 		},
 		focus_delay = 3, --3 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
 		focus_dis = 500, --focus delay starts after 5m
@@ -3188,8 +3188,8 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.civil.is_bullpup = presets.weapon.civil.is_rifle
 	presets.weapon.civil.is_shotgun_pump = {
 		aim_delay = { --aim delay changed to match PDTH style aim-delay
-			0.7,
-			0.7
+			0.6,
+			0.6
 		},
 		focus_delay = 5, --quicker focus delay build from simple, accuracy remains mostly the same
 		focus_dis = 500, --focus delay only starts past 5m, cqc maps become dangerous fun houses while long-range maps encourage players to kite and keep enemies away
@@ -3302,8 +3302,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.is_shotgun_mag = { --a mix of both shotgun and rifle, its a jack of all trades!
 		aim_delay = {
-			0.7,
-			0.7
+			0.6,
+			0.6
 		},
 		focus_delay = 3, --shotgun-like focus delay
 		focus_dis = 500, --im sure its unescessary for me to keep commenting this now.
@@ -4132,8 +4132,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.complex.is_rifle = {
 		aim_delay = {
-			0.35,
-			0.35
+			0.25,
+			0.25
 		},
 		focus_delay = 2, --2 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
 		focus_dis = 500, --focus delay starts after 5m
@@ -4992,8 +4992,8 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	presets.weapon.anarchy.is_pistol = {
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.25,
+			0.25
 		},
 		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
 		focus_dis = 100,
@@ -5124,8 +5124,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.anarchy.akimbo_pistol = { --isnt ever really used, changing it anyways, mostly matches pistol, but with more bang bang bang and less accuracy, unchanged outside of reload and focus delay for anarchy
 		aim_delay = {
-			0.35,
-			0.35
+			0.25,
+			0.25
 		},
 		focus_delay = 2.5, --less focus delay than pistol, bit eh accuracy wise, so it's fair
 		focus_dis = 100,
@@ -5238,8 +5238,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.anarchy.is_rifle = {
 		aim_delay = {
-			0.35,
-			0.35
+			0.25,
+			0.25
 		},
 		focus_delay = 2, --2 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
 		focus_dis = 100,
@@ -5381,8 +5381,8 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.anarchy.is_bullpup = presets.weapon.anarchy.is_rifle
 	presets.weapon.anarchy.is_shotgun_pump = {
 		aim_delay = {
-			0.5,
-			0.5
+			0.4,
+			0.4
 		},
 		focus_delay = 2, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
@@ -5495,8 +5495,8 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.anarchy.is_shotgun_mag = { --JUGGERNAUT RHGHGHGHGHG
 		aim_delay = {
-			0.5,
-			0.5
+			0.4,
+			0.4
 		},
 		focus_delay = 1.5, --reduced from 2 to 1.5, dozers are priority, you'll see them coming.
 		focus_dis = 100, --unchanged from civil.

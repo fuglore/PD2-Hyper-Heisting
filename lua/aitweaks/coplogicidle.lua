@@ -238,9 +238,6 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 		end
 	end
 
-	local near_threshold = data.internal_data.weapon_range.optimal
-	local too_close_threshold = data.internal_data.weapon_range.close
-
 	for u_key, attention_data in pairs(attention_objects) do
 		local att_unit = attention_data.unit
 		local crim_record = attention_data.criminal_record
@@ -285,11 +282,6 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local dmg_dt = attention_data.dmg_t and data.t - attention_data.dmg_t or 10000
 				local status = crim_record and crim_record.status
 				local nr_enemies = crim_record and crim_record.engaged_force
-				local old_enemy = nil
-				
-				if attention_data.acquire_t and attention_data.verified and data.attention_obj and data.attention_obj.verified and data.attention_obj.is_person and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and AIAttentionObject.REACT_COMBAT <= reaction and data.attention_obj.u_key == u_key then
-					old_enemy = true
-				end
 
 				local weight_mul = attention_data.settings.weight_mul
 
@@ -327,7 +319,9 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					dmg_dt = dmg_dt and dmg_dt * weight_mul
 					distance = distance * weight_mul
 				end
-
+				
+				local near_threshold = data.internal_data.weapon_range.optimal
+				local too_close_threshold = data.internal_data.weapon_range.close
 				local assault_reaction = reaction == AIAttentionObject.REACT_SPECIAL_ATTACK
 				local visible = attention_data.verified
 				local near = distance < near_threshold
@@ -338,6 +332,9 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local reviving = nil
 				local focus_enemy = attention_data
 				local human_chk = attention_data.is_husk_player or attention_data.is_local_player
+				local human_current_target_chk = data.attention_obj and data.attention_obj.is_husk_player or data.attention_obj and data.attention_obj.is_local_player
+				local old_enemy = nil
+				local old_enemy_murder = nil
 				
 				if not data.unit:in_slot(16) and focus_enemy and focus_enemy.is_local_player or not data.unit:in_slot(16) and focus_enemy and focus_enemy.is_husk_player then
 					local anim_data = att_unit:anim_data()
@@ -357,65 +354,71 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						end
 					end
 				end
-
-				if attention_data.is_local_player then
-					local iparams = att_unit:movement():current_state()._interact_params
-
-					if iparams and managers.criminals:character_name_by_unit(iparams.object) ~= nil then
-						reviving = true
+				
+				if data.tactics and data.tactics.murder then
+					if attention_data.acquire_t and human_chk and attention_data.verified and data.attention_obj and data.attention_obj.verified and AIAttentionObject.REACT_AIM <= data.attention_obj.reaction and AIAttentionObject.REACT_AIM <= reaction and data.attention_obj.u_key == u_key and human_att_obj_chk then
+						old_enemy_murder = true
 					end
-				else
-					reviving = att_unit:anim_data() and att_unit:anim_data().revive
+				end
+				
+				if attention_data.acquire_t and attention_data.verified and data.attention_obj and data.attention_obj.verified and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and AIAttentionObject.REACT_COMBAT <= reaction and data.attention_obj.u_key == u_key then
+					old_enemy = true
 				end
 
 				local target_priority = distance
 				local target_priority_slot = 0
 				
 				if visible then
-					local murderorspooctargeting = data.tactics and data.tactics.murder or data.tactics and data.tactics.spooctargeting
 					local justmurder = data.tactics and data.tactics.murder
 					local justharass = data.tactics and data.tactics.harass
 					
-					if distance < 250 and not murderorspooctargeting then
+					if distance < 250 then
 						target_priority_slot = 1
-					elseif too_near and not murderorspooctargeting then
+					elseif too_near then
 						target_priority_slot = 2
-					elseif near and not murderorspooctargeting then
+					elseif near then
 						target_priority_slot = 4
-					elseif not justmurder then
+					else
 						target_priority_slot = 6
 					end
+					
+					if justmurder and human_chk and not human_current_target_chk then
+						target_priority_slot = 1
+					end
 
-					if has_damaged and not murderorspooctargeting then
+					if has_damaged then
 						target_priority_slot = target_priority_slot - 2
 					end
 					
-					if old_enemy then
+					if old_enemy and not justmurder then
 						target_priority_slot = target_priority_slot - 1
 					end
 					
-					if data.tactics and data.tactics.harass and pantsdownchk then
-						target_priority_slot = 1
+					if not free_status and not justmurder or pantsdownchk and not justharass then
+						target_priority_slot = target_priority_slot + 4
 					end
 					
 					target_priority_slot = math.clamp(target_priority_slot, 1, 10)
-				elseif free_status and not justmurder or pantsdownchk and not justharass then
-					target_priority_slot = 7
+				else
+					target_priority_slot = 10
+					if not free_status and not justmurder or pantsdownchk and not justharass then
+						target_priority_slot = target_priority_slot + 10
+					end
 				end
 				
-				if old_enemy and data.tactics and data.tactics.murder then
-					if human_chk then
-						target_priority_slot = 1
-					else
-						target_priority_slot = target_priority_slot - 2 
-					end
+				if old_enemy_murder and data.tactics and data.tactics.murder then
+					target_priority_slot = 1
+				end
+				
+				if data.tactics and data.tactics.harass and pantsdownchk then
+					target_priority_slot = 1
 				end
 					
 				if assault_reaction and distance < 1500 then
 					target_priority_slot = 1
 				end
 
-				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.murder and not old_enemy and not human_chk then
+				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.murder and not old_enemy_murder and not human_chk then
 					target_priority_slot = 20 + target_priority_slot + math.max(0, AIAttentionObject.REACT_COMBAT - reaction)
 				end
 
