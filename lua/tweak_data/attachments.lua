@@ -15,6 +15,112 @@ self.parts.wpn_fps_ass_g3_b_short.custom_stats = nil
 self.parts.wpn_fps_ass_g3_b_sniper.stats = { value = 2, damage = 0, total_ammo_mod = 0, extra_ammo= 0, spread = 1, concealment = -1}
 self.parts.wpn_fps_ass_g3_b_sniper.custom_stats = nil
 self.parts.wpn_fps_ass_g3_b_sniper.override = nil
+			
+			self.parts.wpn_fps_upg_a_slug.custom_stats = {
+					armor_piercing_add = 1,
+					can_shoot_through_shield = true,
+					can_shoot_through_wall = true,
+					damage_far_mul = 5,
+					damage_near_mul = 5,
+					can_shoot_through_enemy = true,
+					rays = 1
+	}
+	
+self.parts.wpn_fps_upg_a_piercing.custom_stats = {
+					damage_near_mul = 3,
+					armor_piercing_add = 1,
+					damage_far_mul = 3
+	}
+
+self.wpn_fps_shot_serbu.override = {
+			wpn_fps_upg_a_slug = {
+				desc_id = "bm_wp_upg_a_slug2_desc",
+				custom_stats = {
+					armor_piercing_add = 1,
+					can_shoot_through_shield = true,
+					can_shoot_through_wall = true,
+					damage_far_mul = 5,
+					damage_near_mul = 5,
+					can_shoot_through_enemy = true,
+					rays = 1
+				}
+			},
+			wpn_fps_upg_a_custom = {
+				desc_id = "bm_wp_upg_a_custom2_desc",
+				custom_stats = {}
+			},
+			wpn_fps_upg_a_custom_free = {
+				desc_id = "bm_wp_upg_a_custom2_desc",
+				custom_stats = {}
+			}
+}
+
+self.wpn_fps_sho_striker.override = {
+			wpn_upg_o_marksmansight_rear_vanilla = {a_obj = "a_o_r"},
+			wpn_upg_o_marksmansight_front = {a_obj = "a_o_f"},
+			wpn_fps_upg_a_slug = {
+				desc_id = "bm_wp_upg_a_slug2_desc",
+				custom_stats = {
+					armor_piercing_add = 1,
+					can_shoot_through_shield = true,
+					can_shoot_through_wall = true,
+					damage_far_mul = 5,
+					damage_near_mul = 5,
+					can_shoot_through_enemy = true,
+					rays = 1
+				}
+			},
+			wpn_fps_upg_a_custom = {
+				desc_id = "bm_wp_upg_a_custom2_desc",
+				custom_stats = {}
+			},
+			wpn_fps_upg_a_custom_free = {
+				desc_id = "bm_wp_upg_a_custom2_desc",
+				custom_stats = {}
+			}
+}
+	
+self.wpn_fps_pis_judge.override = {
+			wpn_fps_upg_ns_shot_shark = {parent = "slide"},
+			wpn_fps_upg_ns_shot_thick = {parent = "slide"},
+			wpn_fps_upg_shot_ns_king = {parent = "slide"},
+			wpn_fps_upg_ns_sho_salvo_large = {parent = "slide"},
+			wpn_fps_upg_ns_duck = {parent = "slide"},
+			wpn_fps_upg_a_piercing = {custom_stats = {
+				damage_near_mul = 3,
+				armor_piercing_add = 1,
+				damage_far_mul = 3
+			}},
+			wpn_fps_upg_a_explosive = {custom_stats = {
+				ignore_statistic = true,
+				damage_far_mul = 2.5,
+				damage_near_mul = 2,
+				bullet_class = "InstantExplosiveBulletBase",
+				rays = 1
+			}},
+			wpn_fps_pis_judge_body_standard = {animations = {}},
+			wpn_fps_pis_judge_body_modern = {animations = {}}
+}
+
+self.wpn_fps_pis_x_judge.override = {
+			wpn_fps_upg_ns_shot_shark = {parent = "slide"},
+			wpn_fps_upg_ns_shot_thick = {parent = "slide"},
+			wpn_fps_upg_shot_ns_king = {parent = "slide"},
+			wpn_fps_upg_ns_sho_salvo_large = {parent = "slide"},
+			wpn_fps_upg_ns_duck = {parent = "slide"},
+			wpn_fps_upg_a_piercing = {custom_stats = {
+				damage_near_mul = 3,
+				armor_piercing_add = 1,
+				damage_far_mul = 3
+			}},
+			wpn_fps_upg_a_explosive = {custom_stats = {
+				ignore_statistic = true,
+				damage_far_mul = 2.5,
+				damage_near_mul = 2,
+				bullet_class = "InstantExplosiveBulletBase",
+				rays = 1
+			}}
+}
 
 if self.wpn_fps_ass_sg416 then
 self.parts.wpn_fps_ass_komodo_body_tactical.stats = { value = 0, damage = 0, total_ammo_mod = 0, extra_ammo= 0, recoil = 1, spread = 0}
