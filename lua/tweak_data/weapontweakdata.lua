@@ -1857,8 +1857,8 @@ self.coach.stats_modifiers = {damage = 2}
 self.coach.stats.damage = 200
 self.coach.stats_modifiers = {damage = 2}
 self.coach.AMMO_MAX = 36
-self.coach.damage_near = 450
-self.coach.damage_far = 950
+self.coach.damage_near = 500
+self.coach.damage_far = 1000
 self.coach.fire_mode_data.fire_rate = 0.075
 self.coach.kick = {
 standing = {
@@ -1885,6 +1885,8 @@ crouching = {
 self.huntsman.stats.damage = 200
 self.huntsman.stats_modifiers = {damage = 2}
 self.huntsman.fire_mode_data.fire_rate = 0.075
+self.huntsman.damage_near = 500
+self.huntsman.damage_far = 1000
 self.huntsman.kick = {
 standing = {
 		4,
@@ -1905,12 +1907,11 @@ crouching = {
 		1
 }
 }
-
 --Joceline
 self.b682.stats.damage = 200
 self.b682.stats_modifiers = {damage = 2}
-self.b682.damage_near = 450
-self.b682.damage_far = 950
+self.b682.damage_near = 500
+self.b682.damage_far = 1000
 self.b682.fire_mode_data.fire_rate = 0.075
 self.b682.kick = {
 standing = {
