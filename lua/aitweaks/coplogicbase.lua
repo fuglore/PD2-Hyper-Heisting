@@ -760,18 +760,16 @@ end
 
 function CopLogicBase.should_enter_attack(data)
 	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+	local my_data = data.internal_data
 	
 	if data.unit:base()._tweak_table == "sniper" then
 		return
 	end
-		
-	if reactions_chk and not data.attention_obj.verified_t then
-		return
-	end
 	
-	if not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and reactions_chk and data.internal_data.attitude and data.internal_data.attitude == "engage" then
+	
+	
+	if not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and reactions_chk and data.internal_data.attitude and data.internal_data.attitude == "engage" or not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and reactions_chk and my_data.firing then
 		local att_obj = data.attention_obj
-		local my_data = data.internal_data
 		local criminal_in_my_area = nil
 		local criminal_in_neighbour = nil
 		local ranged_fire_group = nil
@@ -789,17 +787,28 @@ function CopLogicBase.should_enter_attack(data)
 			end
 		end
 		
-		local attack_distance = 800
+		local attack_distance = 1000
 		
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			attack_distance = 1000
+			attack_distance = 1500
 			ranged_fire_group = true
 		end
 		
-		local criminal_near = criminal_in_my_area or ranged_fire_group and criminal_in_neighbour
+		local criminal_near = criminal_in_my_area or criminal_in_neighbour
+		
+		if my_data.advance_path and not criminal_in_my_area then
+			return
+		end
+		
 		local visibility_chk = att_obj.verified
 		
-		if my_data.charge_path or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and att_obj.dis <= 5000 or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or visibility_chk and att_obj.dis <= attack_distance and math.abs(data.m_pos.z - att_obj.m_pos.z) < 180 or visibility_chk and criminal_near then
+		if my_data.processing_cover_path and my_data.want_to_take_cover and att_obj.dis <= data.internal_data.weapon_range.close or my_data.cover_path and my_data.want_to_take_cover and att_obj.dis <= data.internal_data.weapon_range.close or my_data.cover_test_step and my_data.cover_test_step <= 2 and visibility_chk and att_obj.dis <= data.internal_data.weapon_range.close then
+			return true
+		end
+		
+		
+		
+		if my_data.charge_path or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and att_obj.dis <= 5000 or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or visibility_chk and att_obj.dis <= attack_distance and math.abs(data.m_pos.z - att_obj.m_pos.z) < 100 or visibility_chk and criminal_near and math.abs(data.m_pos.z - att_obj.m_pos.z) < 400 then
 			return true
 		end
 		

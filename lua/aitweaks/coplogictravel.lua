@@ -472,6 +472,7 @@ end
 local temp_vec4 = Vector3()
 local temp_vec5 = Vector3()
 local temp_vec6 = Vector3()
+local fuckingvector = Vector3()
 function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local cover = nil
 	local search_area = nil
@@ -480,18 +481,23 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local threat_area = nil
 	
 	if data.objective and data.objective.type == "follow" and data.tactics and data.tactics.shield_cover and not data.unit:base()._tweak_table == "shield" and data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-		 local enemy_tracker = data.attention_obj.nav_tracker
-		 local threat_pos = enemy_tracker:field_position()
-		 local heister_pos = data.attention_obj.m_pos --the threat
-		 local shield_pos = data.objective.follow_unit:movement():m_pos() --the pillar
-		 local shield_direction = mvector3.direction(temp_vec4, my_pos, shield_pos)
-		 local heister_direction = mvector3.direction(temp_vec5, my_pos, heister_pos)
-		 local following_direction = mvector3.direction(temp_vec6, shield_direction, heister_direction)
-		 local following_dis = following_direction * 120
-		 local near_pos = data.objective.follow_unit:movement():m_pos() + following_dis
-		 local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
+		local enemy_tracker = data.attention_obj.nav_tracker
+		local threat_pos = enemy_tracker:field_position()
+		local heister_pos = data.attention_obj.m_pos --the threat
+		local shield_pos = data.objective.follow_unit:movement():m_pos() --the pillar
+		local shield_direction = mvector3.direction(temp_vec4, my_pos, shield_pos)
+		local heister_direction = mvector3.direction(temp_vec5, my_pos, heister_pos)
+		local following_direction = mvector3.direction(temp_vec6, shield_direction, heister_direction)
+		mvector3.set(temp_vec4, my_pos)
+		mvector3.direction(temp_vec5, temp_vec4, shield_pos)
+		mvec3_norm(temp_vec5)
+		mvector3.direction(fuckingvector, temp_vec5, heister_direction)
+		mvec3_norm(fuckingvector)
+		local following_dis = fuckingvector
+		local near_pos = data.objective.follow_unit:movement():m_pos() + following_dis
+		local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 		 
-		 local cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
+		local cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
 		 
 	elseif data.objective and data.objective.type == "follow" then
 		search_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
@@ -557,8 +563,11 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		
 		if not cover then
 			if data.tactics and data.tactics.flank and threat_area and threat_tracker then
-				near_pos = CopLogicAttack._find_flank_pos(data, data.internal_data, threat_tracker, 1500)
-				cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, data.internal_data.weapon_range.far, near_pos, threat_pos)
+				local flank_pos = CopLogicAttack._find_flank_pos(data, data.internal_data, threat_tracker, 6000)
+				
+				if flank_pos then
+					cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, data.internal_data.weapon_range.far, flank_pos, threat_pos)
+				end
 				
 				if cover then
 					--log("ohworm")
@@ -567,9 +576,12 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			end
 			
 			if data.tactics and data.tactics.charge and threat_area and threat_tracker then
-				near_pos = CopLogicTravel._get_pos_on_wall(threat_tracker:field_position(), optimal_threat_dis, 45, nil)
-				cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
+				local charge_pos = CopLogicTravel._get_pos_on_wall(threat_tracker:field_position(), optimal_threat_dis, 45, nil)
 				
+				if charge_pos then
+					cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, optimal_threat_dis, charge_pos, threat_pos)
+				end
+
 				if cover then
 					--log("ohworm")
 					return cover
@@ -577,6 +589,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			end
 			
 			--log("notohworm")
+			
 			cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
 		end
 	end

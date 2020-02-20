@@ -29,6 +29,37 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._stopassaultbreak_t = nil
 end
 
+function GroupAIStateBesiege:_upd_police_activity()
+	self._police_upd_task_queued = false
+
+	if self._police_activity_blocked then
+		return
+	end
+
+	if self._ai_enabled then
+		self:_upd_SO()
+		self:_upd_grp_SO()
+		self:_check_spawn_phalanx()
+		self:_check_phalanx_group_has_spawned()
+		self:_check_phalanx_damage_reduction_increase()
+
+		if self._enemy_weapons_hot then
+			self:_claculate_drama_value()
+			self:_upd_regroup_task()
+			self:_upd_reenforce_tasks()
+			self:_upd_recon_tasks()
+			self:_upd_assault_task()
+			self:_begin_new_tasks()
+			if not self._activeassaultbreak and not self._feddensityhigh then
+				self:_upd_group_spawning()
+			end
+			self:_upd_groups()
+		end
+	end
+
+	self:_queue_police_upd_task()
+end
+
 function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		local next_upd_t = 0.8
@@ -110,28 +141,26 @@ function GroupAIStateBesiege:update(t, dt)
 				end
 			end
 			
-			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t or self._enemies_killed_sustain_guaranteed_break < self._enemies_killed_sustain and not self._stopassaultbreak_t then
+			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t or self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
 				self._activeassaultbreak = true
 				if managers.skirmish:is_skirmish() then
 					self._stopassaultbreak_t = self._t + 5
 				else
 					self._stopassaultbreak_t = self._t + math.random(5, 10)
 				end
-				self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
-				if self._enemies_killed_sustain_guaranteed_break < self._enemies_killed_sustain then
-					self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain_guaranteed_break + 50
-				end
-				--log("assaultbreakon")
-			end
-			
-			if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
-				self._stopassaultbreak_t = nil
-				self._activeassaultbreak = nil
 				self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
 				if diff_index >= 6 or Global.game_settings.aggroAI then
 					self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20) 
 				end
-				--log("assaultbreakreset")
+				self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
+				self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 50
+				log("assaultbreakon")
+			end
+			
+			if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+				self._stopassaultbreak_t = nil
+				self._activeassaultbreak = nil
+				log("assaultbreakreset")
 			end
 		else
 			self._stopassaultbreak_t = nil
@@ -747,10 +776,10 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 	nr_wanted = task_data.force - self:_count_police_force("assault")
 
-	if nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh then
+	if nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh or self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil
 
-		if task_data.use_spawn_event and task_data.phase ~= "anticipation" then
+		if task_data.use_spawn_event and task_data.phase ~= "anticipation" or task_data.use_spawn_event and self._hunt_mode then
 			task_data.use_spawn_event = false
 
 			if self:_try_use_task_spawn_event(t, primary_target_area, "assault") then
@@ -2025,9 +2054,6 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 	local spawn_points = spawn_task.spawn_group.spawn_pts
 
 	local function _try_spawn_unit(u_type_name, spawn_entry)
-		if self._feddensityhigh or self._activeassaultbreak then
-			return
-		end
 		
 		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
 			return

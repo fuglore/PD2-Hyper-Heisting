@@ -1046,9 +1046,9 @@ function CopLogicAttack._upd_combat_movement(data)
 					local height = nil
 
 					if in_cover[4] then
-						height = 150
-					else
 						height = 80
+					else
+						height = 150
 					end
 
 					local my_tracker = unit:movement():nav_tracker()
@@ -1440,6 +1440,7 @@ end
 local temp_vec4 = Vector3()
 local temp_vec5 = Vector3()
 local temp_vec6 = Vector3()
+local fuckingvector = Vector3()
 function CopLogicAttack._update_cover(data)
 	local my_data = data.internal_data
 	local cover_release_dis_sq = 10000
@@ -1461,7 +1462,12 @@ function CopLogicAttack._update_cover(data)
 				local shield_direction = mvector3.direction(temp_vec4, my_pos, shield_pos)
 				local heister_direction = mvector3.direction(temp_vec5, my_pos, heister_pos)
 				local following_direction = mvector3.direction(temp_vec6, shield_direction, heister_direction)
-				local following_dis = following_direction * 120
+				mvector3.set(temp_vec4, my_pos)
+				mvector3.direction(temp_vec5, temp_vec4, shield_pos)
+				mvec3_norm(temp_vec5)
+				mvector3.direction(fuckingvector, temp_vec5, heister_direction)
+				mvec3_norm(fuckingvector)
+				local following_dis = fuckingvector
 				local near_pos = data.objective.follow_unit:movement():m_pos() + following_dis
 				
 				local notbestcovernotfollowcoverchk = not best_cover or CopLogicAttack._verify_follow_cover(data, best_cover[1], near_pos, threat_pos, 60, 120)
@@ -1659,12 +1665,37 @@ function CopLogicAttack._update_cover(data)
 		local in_cover = my_data.in_cover
 
 		if in_cover then
-			local threat_pos = data.attention_obj.verified_pos
+			local threat_pos = data.attention_obj.m_pos
 			in_cover[3], in_cover[4] = CopLogicAttack._chk_covered(data, my_pos, threat_pos, data.visibility_slotmask)
 		end
 	elseif best_cover and cover_release_dis_sq < mvector3.distance_sq(best_cover[1][1], my_pos) then
 		CopLogicAttack._set_best_cover(data, my_data, nil)
 	end
+end
+
+function CopLogicAttack._chk_covered(data, cover_pos, threat_pos, slotmask)
+	local ray_from = temp_vec1
+
+	mvec3_set(ray_from, math.UP)
+	mvector3.multiply(ray_from, 80)
+	mvector3.add(ray_from, cover_pos)
+
+	local ray_to_pos = temp_vec2
+
+	mvector3.step(ray_to_pos, ray_from, threat_pos, 300)
+
+	local low_ray = World:raycast("ray", ray_from, ray_to_pos, "slot_mask", slotmask)
+	local high_ray = nil
+
+	if not low_ray then
+		--log("unexposed")
+		mvector3.set_z(ray_from, ray_from.z + 60)
+		mvector3.step(ray_to_pos, ray_from, threat_pos, 300)
+
+		high_ray = World:raycast("ray", ray_from, ray_to_pos, "slot_mask", slotmask)
+	end
+
+	return low_ray, high_ray
 end
 
 function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos, enemy_pos)
@@ -1736,23 +1767,24 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 end
 
 function CopLogicAttack._verify_cover(data, cover, threat_pos, min_dis, max_dis)
-	local threat_dis = mvector3.direction(temp_vec1, cover[1], threat_pos)
+	local threat_dis = mvector3.distance(temp_vec1, cover[1], threat_pos)
 	
-	if max_dis and max_dis < threat_dis or min_dis and threat_dis < min_dis then
+	if min_dis and threat_dis < min_dis or max_dis and threat_dis > max_dis then
+		--log("damnit!")
 		return
 	end
-
-	local cover_dot = mvector3.dot(temp_vec1, cover[2])
-
-	if cover_dot < 0.67 then
-		return
-	end
+	
+	--log("acceptable!")
 
 	return true
 end
 
 function CopLogicAttack._verify_follow_cover(data, cover, near_pos, threat_pos, min_dis, max_dis)
-	if CopLogicAttack._verify_cover(data, cover, threat_pos, min_dis, max_dis) and mvector3.distance(near_pos, cover[1]) < 400 then
+	if data.tactics and data.tactics.shield_cover and mvector3.distance(near_pos, cover[1]) < 120 then
+		return true
+	end
+	
+	if not data.tactics or not data.tactics.shield_cover and mvector3.distance(near_pos, cover[1]) < 240 then
 		return true
 	end
 end
