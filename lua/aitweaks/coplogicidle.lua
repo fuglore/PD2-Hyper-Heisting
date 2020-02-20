@@ -576,8 +576,6 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 
 		if objective_type == "free" and my_data.exiting then
 			--nothing
-		elseif CopLogicBase.should_enter_attack(data) then
-			CopLogicBase._exit(data.unit, "attack")
 		elseif CopLogicIdle._chk_objective_needs_travel(data, new_objective) and not CopLogicBase.should_enter_attack(data) then
 			CopLogicBase._exit(data.unit, "travel")
 		elseif objective_type == "guard" then
@@ -590,7 +588,7 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 			CopLogicBase._exit(data.unit, "phalanx")
 		elseif objective_type == "surrender" then
 			CopLogicBase._exit(data.unit, "intimidated", new_objective.params)
-		elseif new_objective.action or not data.attention_obj or AIAttentionObject.REACT_AIM > data.attention_obj.reaction then
+		elseif new_objective.action or not data.attention_obj or not CopLogicBase.should_enter_attack(data) then
 			CopLogicBase._exit(data.unit, "idle")
 		else
 			CopLogicBase._exit(data.unit, "attack")

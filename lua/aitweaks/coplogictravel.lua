@@ -859,6 +859,26 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicTravel.upd_advance(data)
 		end
+		
+		local objective = data.objective
+		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, nil)
+
+		if allow_trans then
+			local wanted_state = data.logic._get_logic_state_from_reaction(data)
+
+			if wanted_state and wanted_state ~= data.name and obj_failed then
+				if data.unit:in_slot(managers.slot:get_mask("enemies")) or data.unit:in_slot(17) then
+					data.objective_failed_clbk(data.unit, data.objective)
+				elseif data.unit:in_slot(managers.slot:get_mask("criminals")) then
+					managers.groupai:state():on_criminal_objective_failed(data.unit, data.objective, false)
+				end
+
+				if my_data == data.internal_data then
+					debug_pause_unit(data.unit, "[CopLogicTravel.action_complete_clbk] exiting without discarding objective", data.unit, inspect(data.objective))
+					CopLogicBase._exit(data.unit, wanted_state)
+				end
+			end
+		end
 	end
 end
 
@@ -1389,4 +1409,17 @@ function CopLogicTravel.get_pathing_prio(data)
 	end
 
 	return prio
+end
+
+function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
+	if not CopLogicTravel.chk_group_ready_to_move(data, my_data) then
+		return
+	end
+
+	local to_pos = CopLogicTravel._get_exact_move_pos(data, my_data.coarse_path_index + 1)
+	my_data.processing_advance_path = true
+	local prio = CopLogicTravel.get_pathing_prio(data)
+	local nav_segs = CopLogicTravel._get_allowed_travel_nav_segs(data, my_data, to_pos)
+
+	data.unit:brain():search_for_path(my_data.advance_path_search_id, to_pos, prio, nil, nav_segs)
 end
