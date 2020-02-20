@@ -1,6 +1,14 @@
 Hooks:PostHook(TipsTweakData, "init", "hh_tips", function(self)
 	table.insert(self.tips, 
 		{
+			cat_index = 52,
+			image = "general_loadout",
+			consoles = true,
+			category = "heister"
+		}
+	)
+	table.insert(self.tips, 
+		{
 			cat_index = 1,
 			image = "enemy_zeal",
 			consoles = true,
@@ -103,6 +111,23 @@ Hooks:PostHook(TipsTweakData, "init", "hh_tips", function(self)
 			category = "hh"
 		}
 	)
+	table.insert(self.tips, 
+		{
+			cat_index = 14,
+			image = "general_heisters",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips, 
+		{
+			cat_index = 15,
+			image = "enemy_melee",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	
 	
     for _, tip in ipairs(self.tips) do
 		if not self.category_totals[tip.category] or self.category_totals[tip.category] < tip.cat_index then

@@ -6,7 +6,7 @@ end
 Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(self)
 	local level = Global.level_data and Global.level_data.level_id
 	local cover_line_to_use = "hud_assault_cover"
-	local FG_chance = math.random(1, 125)
+	local FG_chance = math.random(1, 128)
 	
 	local versusline = "hud_assault_faction_swat"
 	

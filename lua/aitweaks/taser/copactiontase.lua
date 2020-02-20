@@ -194,7 +194,7 @@ function CopActionTase:on_attention(attention)
 	self.update = nil
 	self._attention = attention
 
-	local shoot_delay = 1.5
+	local shoot_delay = 1.15
 
 	if self._shorter_tase_delay then
 		shoot_delay = 0.8
