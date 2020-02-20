@@ -272,7 +272,7 @@ function CopActionShoot:on_attention(attention, old_attention)
 	end
 
 	self._shooting_player = nil
-	self._shooting_husk_player = nil
+	self._shooting_husk_unit = nil
 	self._next_vis_ray_t = nil
 
 	if attention then
@@ -562,7 +562,7 @@ function CopActionShoot:update(t)
 
 				self._shoot_t = t + moving_cooldown
 			elseif self._line_of_sight_t then
-				if not self._shooting_husk_unit or self._next_vis_ray_t < t then
+				if not self._shooting_husk_unit or self._shooting_husk_unit and self._next_vis_ray_t and self._next_vis_ray_t < t or not self._next_vis_ray_t and self._shooting_husk_unit then
 					if self._shooting_husk_unit then
 						self._next_vis_ray_t = t + 2
 					end
