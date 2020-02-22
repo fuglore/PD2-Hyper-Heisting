@@ -403,7 +403,7 @@ function CopLogicBase._update_haste(data, my_data)
 end 
 
 function CopLogicBase.action_taken(data, my_data)
-	return my_data.turning or my_data.moving_to_cover or my_data.walking_to_cover_shoot_pos or my_data.surprised or my_data.has_old_action or data.unit:movement():chk_action_forbidden("walk")
+	return my_data.turning or my_data.moving_to_cover or my_data.walking_to_cover_shoot_pos or my_data.surprised or my_data.has_old_action or data.unit:movement():chk_action_forbidden("walk") or my_data.charge_path or my_data.cover_path or my_data.firing
 end
 	
 function CopLogicBase.chk_should_turn(data, my_data)
@@ -758,15 +758,109 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	return delay
 end
 
+function CopLogicBase.on_new_logic_needed(data, objective)
+	
+	local my_data = data.internal_data
+	local focus_enemy = data.attention_obj
+	local t = data.t
+	
+	if not my_data.next_unstuck_try_t or my_data.next_unstuck_try_t < t then
+		if objective then
+			local objective_type = objective.type
+			local should_enter_travel = objective.nav_seg or objective.type == "follow"
+			
+			if objective_type == "free" and my_data.exiting then
+				--nothing
+			elseif should_enter_travel and CopLogicBase.should_enter_travel(data, objective) then
+				CopLogicBase._exit(data.unit, "travel")
+				my_data.next_allowed_attack_logic_t = t + 0.16666
+				--log("looping unit hopefully fixed!")
+			elseif objective_type == "guard" then
+				CopLogicBase._exit(data.unit, "guard")
+				my_data.next_allowed_attack_logic_t = t + 0.16666
+			elseif objective_type == "security" then
+				CopLogicBase._exit(data.unit, "idle")
+				my_data.next_allowed_attack_logic_t = t + 0.16666
+			elseif objective_type == "sniper" then
+				CopLogicBase._exit(data.unit, "sniper")
+				my_data.next_allowed_attack_logic_t = t + 0.16666
+			elseif objective_type == "phalanx" then
+				CopLogicBase._exit(data.unit, "phalanx")
+				my_data.next_allowed_attack_logic_t = t + 0.16666
+			elseif objective_type == "surrender" then
+				CopLogicBase._exit(data.unit, "intimidated", objective.params)
+			elseif objective.action or not data.attention_obj then
+				CopLogicBase._exit(data.unit, "idle")
+				my_data.next_allowed_attack_logic_t = t + 0.16666
+				--log("looping unit hopefully fixed!")
+			else
+				--log("attack is still fine!")
+				my_data.anti_stuck_t = nil
+				my_data.next_unstuck_try_t = data.t + 10
+				CopLogicBase._exit(data.unit, "attack")
+			end
+		end
+	end
+end
+
+function CopLogicBase.should_enter_travel(data, objective)
+	
+	if not objective.nav_seg and objective.type ~= "follow" then
+		return
+	end
+
+	if objective.in_place then
+		return
+	end
+
+	if objective.pos then
+		return true
+	end
+
+	if objective.area and objective.area.nav_segs[data.unit:movement():nav_tracker():nav_segment()] then
+		objective.in_place = true
+
+		return
+	end
+
+	return true
+end	
+
 function CopLogicBase.should_enter_attack(data)
 	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
 	local my_data = data.internal_data
+	local t = data.t
 	
 	if data.unit:base()._tweak_table == "sniper" then
 		return
 	end
 	
+	if data.name ~= "attack" and my_data.next_allowed_attack_logic_t and my_data.next_allowed_attack_logic_t > t then
+		--log("cannot enter attack logic yet!")
+		return
+	else
+		my_data.next_allowed_attack_logic_t = nil
+	end
 	
+	if not my_data.next_unstuck_try_t or my_data.next_unstuck_try_t < t then
+		if data.name == "attack" and data.objective and not CopLogicBase.action_taken(data, my_data) then
+			if not my_data.anti_stuck_t then
+				my_data.anti_stuck_t = t + 5
+			elseif my_data.anti_stuck_t < t then
+				--log("attempting to fix looping unit")
+				local objective = data.objective
+				
+				if objective then
+					CopLogicBase.on_new_logic_needed(data, objective)
+				end
+				
+				my_data.anti_stuck_t = nil
+				return
+			end
+		else
+			my_data.anti_stuck_t = nil
+		end
+	end
 	
 	if not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and reactions_chk and data.internal_data.attitude and data.internal_data.attitude == "engage" or not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and reactions_chk and my_data.firing then
 		local att_obj = data.attention_obj
@@ -796,7 +890,9 @@ function CopLogicBase.should_enter_attack(data)
 		
 		local criminal_near = criminal_in_my_area or criminal_in_neighbour
 		
-		if my_data.advance_path and not criminal_in_my_area then
+		local travel_data_chk = my_data.processing_advance_path or my_data.processing_coarse_path or my_data.advance_path or my_data.coarse_path
+		
+		if travel_data_chk and not criminal_near then
 			return
 		end
 		
@@ -1016,14 +1112,14 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 		}
 	end
 	
-	if data.unit:base():has_tag("special") or data.unit:base():has_tag("takedown") or data.internal_data.shooting or data.attention_obj and data.t and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 3000 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1500 or data.is_converted or data.unit:in_slot(16) then
+	if data.unit:base():has_tag("special") or data.unit:base():has_tag("takedown") or data.internal_data.shooting or data.attention_obj and data.t and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 3000 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1500 or data.is_converted or data.unit:in_slot(16) or data.internal_data and data.internal_data.next_allowed_attack_logic_t then
 		asap = true
-		if data.is_converted or data.unit:in_slot(16) then
+		if data.is_converted or data.unit:in_slot(16) or data.internal_data.next_allowed_attack_logic_t then
 			exec_t = data.t
 		elseif data.attention_obj and data.attention_obj.dis <= 1500 and data.t and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 then
-			exec_t = data.t + 0.15
+			exec_t = data.t + 0.06444
 		else
-			exec_t = data.t + 0.3
+			exec_t = data.t + 0.16666
 		end
 	elseif data.t and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 		asap = nil

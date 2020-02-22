@@ -527,10 +527,10 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_spook_hvh_1/ene_spook_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_cloaker/ene_zeal_cloaker")
 				}
 			},
@@ -550,10 +550,10 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_spook_hvh_1/ene_spook_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker"),
 					Idstring("units/payday2/characters/ene_spook_1/ene_spook_1")
 				}
 			},

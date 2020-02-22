@@ -229,11 +229,7 @@ function GroupAIStateBase:_draw_current_logics()
 		if data.unit:brain() and data.unit:brain().is_current_logic then
 			local brain = data.unit:brain()
 			
-			if brain:is_current_logic("arrest") then
-				local draw_duration = 0.1
-				local new_brush = Draw:brush(Color.blue:with_alpha(1), draw_duration)
-				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
-			elseif brain:is_current_logic("attack") then
+			if brain:is_current_logic("attack") then
 				local draw_duration = 0.1
 				local new_brush = Draw:brush(Color.red:with_alpha(1), draw_duration)
 				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
@@ -241,25 +237,9 @@ function GroupAIStateBase:_draw_current_logics()
 				local draw_duration = 0.1
 				local new_brush = Draw:brush(Color.white:with_alpha(0.5), draw_duration)
 				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
-			elseif brain:is_current_logic("flee") then
-				local draw_duration = 0.1
-				local new_brush = Draw:brush(Color.orange:with_alpha(0.5), draw_duration)
-				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
-			elseif brain:is_current_logic("guard") then
-				local draw_duration = 0.1
-				local new_brush = Draw:brush(Color.blue:with_alpha(0.1), draw_duration)
-				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
 			elseif brain:is_current_logic("idle") then
 				local draw_duration = 0.1
 				local new_brush = Draw:brush(Color.green:with_alpha(0.5), draw_duration)
-				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
-			elseif brain:is_current_logic("inactive") then
-				local draw_duration = 0.1
-				local new_brush = Draw:brush(Color.black:with_alpha(0.5), draw_duration)
-				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
-			elseif brain:is_current_logic("intimidated") then
-				local draw_duration = 0.1
-				local new_brush = Draw:brush(Color.black:with_alpha(0.5), draw_duration)
 				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
 			elseif brain:is_current_logic("sniper") then
 				local draw_duration = 0.1

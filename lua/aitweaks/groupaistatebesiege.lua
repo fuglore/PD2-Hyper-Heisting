@@ -126,6 +126,7 @@ function GroupAIStateBesiege:update(t, dt)
 			self._feddensity_reset_t = nil
 			self._max_fedfuck_t = nil
 			self._rolled_dramatalk_chance = nil
+			self:_upd_group_spawning()
 			--log("resetting feddensity")
 		end
 		
@@ -148,24 +149,27 @@ function GroupAIStateBesiege:update(t, dt)
 				else
 					self._stopassaultbreak_t = self._t + math.random(5, 10)
 				end
-				self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
-				if diff_index >= 6 or Global.game_settings.aggroAI then
-					self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20) 
-				end
+				
 				self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
 				self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 50
 				log("assaultbreakon")
 			end
 			
 			if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+				self:_upd_group_spawning()
 				self._stopassaultbreak_t = nil
 				self._activeassaultbreak = nil
+				self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
+				if diff_index >= 6 or Global.game_settings.aggroAI then
+					self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20) 
+				end
 				log("assaultbreakreset")
 			end
 		else
 			self._stopassaultbreak_t = nil
 			self._activeassaultbreak = nil
 			self._activeassaultnextbreak_t = nil
+			self:_upd_group_spawning()
 		end
 		
 

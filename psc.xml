@@ -157,7 +157,21 @@
 	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco_contour"/>	
 	<object path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco" />
 	<model path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco" />	
-	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"/>	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"/>
+
+	<!--FOOTBALL CLOAKER FOOTBALL CLOAKER AAAAAAA-->	
+	<unit_mat path="units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker" load="true"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker_contour"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker_husk" load="true"/>
+	<sequence_manager path="units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker"/>
+	<texture path="units/pd2_mod_psc/characters/ene_murky_cloaker/material_body_df" />
+	
+	<model path="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_body_debris" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_head_debris" />
+	<unit path="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_body_debris" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_head_debris" load="true"/>
+	<object path="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_body_debris" />
+	<object path="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_head_debris" />
 	
 	<!-- SHARED TEXTURES -->
 	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_df" />	
