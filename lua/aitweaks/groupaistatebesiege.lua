@@ -126,50 +126,53 @@ function GroupAIStateBesiege:update(t, dt)
 			self._feddensity_reset_t = nil
 			self._max_fedfuck_t = nil
 			self._rolled_dramatalk_chance = nil
-			self:_upd_group_spawning()
 			--log("resetting feddensity")
 		end
 		
-		if self._task_data.assault and self._task_data.assault.phase == "build" or self._task_data.assault and self._task_data.assault.phase == "sustain" then
-			if not self._activeassaultbreak then
-				if not self._activeassaultnextbreak_t then
-					--log("assaultstartedbreakset")
-					self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
-					if diff_index >= 6 or Global.game_settings.aggroAI then
-						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20)
-						--log("breaksetforDW")
+		local level = Global.level_data and Global.level_data.level_id
+		
+		if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "pbr" then
+			--Nothing
+		else
+			if self._task_data.assault and self._task_data.assault.phase == "build" or self._task_data.assault and self._task_data.assault.phase == "sustain" then
+				if not self._activeassaultbreak then
+					if not self._activeassaultnextbreak_t then
+						--log("assaultstartedbreakset")
+						self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
+						if diff_index >= 6 or Global.game_settings.aggroAI then
+							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20)
+							--log("breaksetforDW")
+						end
 					end
 				end
-			end
-			
-			if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t or self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
-				self._activeassaultbreak = true
-				if managers.skirmish:is_skirmish() then
-					self._stopassaultbreak_t = self._t + 5
-				else
-					self._stopassaultbreak_t = self._t + math.random(5, 10)
+				
+				if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t or self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
+					self._activeassaultbreak = true
+					if managers.skirmish:is_skirmish() then
+						self._stopassaultbreak_t = self._t + 5
+					else
+						self._stopassaultbreak_t = self._t + math.random(5, 10)
+					end
+					
+					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
+					self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 50
+					log("assaultbreakon")
 				end
 				
-				self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
-				self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 50
-				log("assaultbreakon")
-			end
-			
-			if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
-				self:_upd_group_spawning()
+				if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+					self._stopassaultbreak_t = nil
+					self._activeassaultbreak = nil
+					self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
+					if diff_index >= 6 or Global.game_settings.aggroAI then
+						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20) 
+					end
+					log("assaultbreakreset")
+				end
+			else
 				self._stopassaultbreak_t = nil
 				self._activeassaultbreak = nil
-				self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
-				if diff_index >= 6 or Global.game_settings.aggroAI then
-					self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20) 
-				end
-				log("assaultbreakreset")
+				self._activeassaultnextbreak_t = nil
 			end
-		else
-			self._stopassaultbreak_t = nil
-			self._activeassaultbreak = nil
-			self._activeassaultnextbreak_t = nil
-			self:_upd_group_spawning()
 		end
 		
 
@@ -2058,7 +2061,6 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 	local spawn_points = spawn_task.spawn_group.spawn_pts
 
 	local function _try_spawn_unit(u_type_name, spawn_entry)
-		
 		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
 			return
 		end
@@ -2070,6 +2072,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 			local category = group_ai_tweak.unit_categories[u_type_name]
 			local stop_please = sp_data.accessibility == "any" or category.access[sp_data.accessibility]
 			local please_stop = not sp_data.amount or sp_data.amount > 0
+			
 			if stop_please and please_stop and sp_data.mission_element:enabled() then
 				hopeless = false
 
@@ -2080,64 +2083,68 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 					local spawned_unit = sp_data.mission_element:produce(produce_data)
 					local u_key = spawned_unit:key()
 					local objective = nil
+					
+					if spawned_unit then
+						if spawn_task.objective then
+							objective = self.clone_objective(spawn_task.objective)
+						else
+							objective = spawn_task.group.objective.element:get_random_SO(spawned_unit)
 
-					if spawn_task.objective then
-						objective = self.clone_objective(spawn_task.objective)
+							if not objective then
+								spawned_unit:set_slot(0)
+
+								return true
+							end
+
+							objective.grp_objective = spawn_task.group.objective
+						end
+
+						local u_data = self._police[u_key]
+
+						self:set_enemy_assigned(objective.area, u_key)
+
+						if spawn_entry.tactics then
+							u_data.tactics = spawn_entry.tactics
+							u_data.tactics_map = {}
+
+							for _, tactic_name in ipairs(u_data.tactics) do
+								u_data.tactics_map[tactic_name] = true
+							end
+						end
+
+						spawned_unit:brain():set_spawn_entry(spawn_entry, u_data.tactics_map)
+
+						u_data.rank = spawn_entry.rank
+
+						self:_add_group_member(spawn_task.group, u_key)
+
+						if spawned_unit:brain():is_available_for_assignment(objective) then
+							if objective.element then
+								objective.element:clbk_objective_administered(spawned_unit)
+							end
+
+							spawned_unit:brain():set_objective(objective)
+						else
+							spawned_unit:brain():set_followup_objective(objective)
+						end
+
+						nr_units_spawned = nr_units_spawned + 1
+
+						if spawn_task.ai_task then
+							spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
+							spawned_unit:brain()._logic_data.spawned_in_phase = spawn_task.ai_task.phase
+						end
+
+						sp_data.delay_t = self._t + sp_data.interval
+
+						if sp_data.amount then
+							sp_data.amount = sp_data.amount - 1
+						end
+
+						return true
 					else
-						objective = spawn_task.group.objective.element:get_random_SO(spawned_unit)
-
-						if not objective then
-							spawned_unit:set_slot(0)
-
-							return true
-						end
-
-						objective.grp_objective = spawn_task.group.objective
+						hopeless = true
 					end
-
-					local u_data = self._police[u_key]
-
-					self:set_enemy_assigned(objective.area, u_key)
-
-					if spawn_entry.tactics then
-						u_data.tactics = spawn_entry.tactics
-						u_data.tactics_map = {}
-
-						for _, tactic_name in ipairs(u_data.tactics) do
-							u_data.tactics_map[tactic_name] = true
-						end
-					end
-
-					spawned_unit:brain():set_spawn_entry(spawn_entry, u_data.tactics_map)
-
-					u_data.rank = spawn_entry.rank
-
-					self:_add_group_member(spawn_task.group, u_key)
-
-					if spawned_unit:brain():is_available_for_assignment(objective) then
-						if objective.element then
-							objective.element:clbk_objective_administered(spawned_unit)
-						end
-
-						spawned_unit:brain():set_objective(objective)
-					else
-						spawned_unit:brain():set_followup_objective(objective)
-					end
-
-					nr_units_spawned = nr_units_spawned + 1
-
-					if spawn_task.ai_task then
-						spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
-						spawned_unit:brain()._logic_data.spawned_in_phase = spawn_task.ai_task.phase
-					end
-
-					sp_data.delay_t = self._t + sp_data.interval
-
-					if sp_data.amount then
-						sp_data.amount = sp_data.amount - 1
-					end
-
-					return true
 				end
 			end
 		end
@@ -2195,5 +2202,3 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 		end
 	end
 end
-
-

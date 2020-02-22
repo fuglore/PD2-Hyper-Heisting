@@ -9742,7 +9742,8 @@ function CharacterTweakData:character_map()
 			"ene_murky_DS_shield",
 			"ene_murky_punk_bronco",
 			"ene_murky_punk_mp5",
-			"ene_murky_punk_moss"
+			"ene_murky_punk_moss",
+			"ene_murky_cloaker"
 		}
 	}
 	char_map.ftsu = {
