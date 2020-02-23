@@ -456,7 +456,7 @@ function CopMovement:on_suppressed(state)
 	local suppression = self._suppression
 	local end_value = state and 1 or 0
 	local vis_state = self._ext_base:lod_stage()
-	
+
 	if vis_state and end_value ~= suppression.value then
 		local t = TimerManager:game():time()
 		local duration = 0.5 * math.abs(end_value - suppression.value)
@@ -475,23 +475,170 @@ function CopMovement:on_suppressed(state)
 	end
 
 	self._action_common_data.is_suppressed = state and true or nil
-	
-	local pose_chk = self._tweak_data.allowed_poses and self._tweak_data.allowed_poses.crouch or self._tweak_data.allowed_poses and self._tweak_data.allowed_poses.stand
-	
-	if Network:is_server() and state then
-		if pose_chk or self:chk_action_forbidden("walk") or not self._unit:base():has_tag("law") then
-			--nothing
-		else
-			local crumble_chance = self._tweak_data and self._tweak_data.crumble_chance or 0.25
-			
-			if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-				crumble_chance = 1000
-			end
-			
-			-- the fact i need to do this is why i hate everything about the panic effect
-			if state == "panic" and not self:chk_action_forbidden("act") and math.random() < crumble_chance and not self._tweak_data.no_fumbling then
-				if self._ext_anim.run and self._ext_anim.move_fwd then
-					if Global.game_settings.one_down then
+
+	if Network:is_server() then
+		if state and self._unit:base():has_tag("law") then
+			local pose_chk = self._tweak_data.allowed_poses and self._tweak_data.allowed_poses.crouch or self._tweak_data.allowed_poses and self._tweak_data.allowed_poses.stand
+
+			if not pose_chk and not self:chk_action_forbidden("walk") then
+				local is_shin_shootout = Global.game_settings.one_down
+				local try_something_else = true
+
+				-- the fact i need to do this is why i hate everything about the panic effect
+				if state == "panic" and not self._tweak_data.no_fumbling and not self:chk_action_forbidden("act") then
+					local crumble_chance = self._tweak_data and self._tweak_data.crumble_chance or 0.25
+
+					if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
+						crumble_chance = 1000
+					end
+
+					if math.random() < crumble_chance then
+						if self._ext_anim.run and self._ext_anim.move_fwd then
+							if is_shin_shootout then
+								local vec_from = temp_vec1
+								local vec_to = temp_vec2
+								local ray_params = {
+									allow_entry = false,
+									trace = true,
+									tracker_from = self:nav_tracker(),
+									pos_from = vec_from,
+									pos_to = vec_to
+								}
+
+								mvec3_set(ray_params.pos_from, self:m_pos())
+								mvec3_set(ray_params.pos_to, self:m_rot():y())
+								mvec3_mul(ray_params.pos_to, 380) --small offset from 4m
+								mvec3_add(ray_params.pos_to, self:m_pos())
+
+								if not managers.navigation:raycast(ray_params) then
+									local action_desc = {
+										clamp_to_graph = true,
+										type = "act",
+										body_part = 1,
+										variant = "e_nl_slide_fwd_4m",
+										blocks = {
+											action = -1,
+											act = -1,
+											tase = -1,
+											bleedout = -1,
+											dodge = -1,
+											walk = -1,
+											hurt = -1,
+											heavy_hurt = -1
+										}
+									}
+
+									if self:action_request(action_desc) then
+										--self._unit:sound():say("lk3b", true) 
+										try_something_else = false
+									end
+								end
+							else
+								local action_desc = {
+									clamp_to_graph = true,
+									type = "act",
+									body_part = 1,
+									variant = "e_so_sup_fumble_run_fwd",
+									blocks = {
+										action = -1,
+										walk = -1
+									}
+								}
+
+								if self:action_request(action_desc) then
+									--self._unit:sound():say("hr01")
+									try_something_else = false
+								end
+							end
+						else
+							local allow = nil
+							local vec_from = temp_vec1
+							local vec_to = temp_vec2
+							local ray_params = {
+								allow_entry = false,
+								trace = true,
+								tracker_from = self:nav_tracker(),
+								pos_from = vec_from,
+								pos_to = vec_to
+							}
+							local allowed_fumbles = {
+								"e_so_sup_fumble_inplace_3",
+							}
+
+							if self._tweak_data.allow_pass_out and math.random() < 0.3 then
+								table.insert(allowed_fumbles, "e_sp_dizzy_fall_get_up") --light swats and commons have a decent chance of doing this, heavies and up dont
+							end
+
+							mvec3_set(ray_params.pos_from, self:m_pos())
+							mvec3_set(ray_params.pos_to, self:m_rot():y())
+							mvec3_mul(ray_params.pos_to, -100)
+							mvec3_add(ray_params.pos_to, self:m_pos())
+
+							allow = not managers.navigation:raycast(ray_params)
+
+							if allow then
+								table.insert(allowed_fumbles, "e_so_sup_fumble_inplace_1")
+							end
+
+							mvec3_set(ray_params.pos_from, self:m_pos())
+							mvec3_set(ray_params.pos_to, self:m_rot():x())
+							mvec3_mul(ray_params.pos_to, 200)
+							mvec3_add(ray_params.pos_to, self:m_pos())
+
+							allow = not managers.navigation:raycast(ray_params)
+
+							if allow then
+								table.insert(allowed_fumbles, "e_so_sup_fumble_inplace_2")
+							end
+
+							mvec3_set(ray_params.pos_from, self:m_pos())
+							mvec3_set(ray_params.pos_to, self:m_rot():x())
+							mvec3_mul(ray_params.pos_to, -200)
+							mvec3_add(ray_params.pos_to, self:m_pos())
+
+							allow = not managers.navigation:raycast(ray_params)
+
+							if allow then
+								table.insert(allowed_fumbles, "e_so_sup_fumble_inplace_4")
+							end
+
+							if #allowed_fumbles > 0 then
+								local action_desc = {
+									body_part = 1,
+									type = "act",
+									variant = allowed_fumbles[math.random(#allowed_fumbles)],
+									blocks = {
+										action = -1,
+										walk = -1
+									}
+								}
+
+								if self:action_request(action_desc) then
+									--self._unit:sound():say("hr01")
+									try_something_else = false
+								end
+							end
+						end
+					end
+				end
+
+				if try_something_else and is_shin_shootout and self._ext_anim.run and self._ext_anim.move_fwd and not self:chk_action_forbidden("act") then
+					local vec_from = temp_vec1
+					local vec_to = temp_vec2
+					local ray_params = {
+						allow_entry = false,
+						trace = true,
+						tracker_from = self:nav_tracker(),
+						pos_from = vec_from,
+						pos_to = vec_to
+					}
+
+					mvec3_set(ray_params.pos_from, self:m_pos())
+					mvec3_set(ray_params.pos_to, self:m_rot():y())
+					mvec3_mul(ray_params.pos_to, 380) --small offset from 4m
+					mvec3_add(ray_params.pos_to, self:m_pos())
+
+					if not managers.navigation:raycast(ray_params) then
 						local action_desc = {
 							clamp_to_graph = true,
 							type = "act",
@@ -508,155 +655,56 @@ function CopMovement:on_suppressed(state)
 								heavy_hurt = -1
 							}
 						}
-						
-						--self._unit:sound():say("lk3b", true) 
-						self:action_request(action_desc)
-					else
-						local action_desc = {
-							clamp_to_graph = true,
-							type = "act",
-							body_part = 1,
-							variant = "e_so_sup_fumble_run_fwd",
-							blocks = {
-								action = -1,
-								walk = -1
-							}
-						}
-						
-						--self._unit:sound():say("hr01")
-						self:action_request(action_desc)					
-					end
-				else
-					local function debug_fumble(result, from, to)
-					end
-					
-					local vec_from = temp_vec1
-					local vec_to = temp_vec2
-					local ray_params = {
-						allow_entry = false,
-						trace = true,
-						tracker_from = self:nav_tracker(),
-						pos_from = vec_from,
-						pos_to = vec_to
-					}
-					local allowed_fumbles = {
-						"e_so_sup_fumble_inplace_3",
-					}
-					
-					if self._tweak_data.allow_pass_out and math.random() < 0.3 then
-						table.insert(allowed_fumbles, "e_sp_dizzy_fall_get_up") --light swats and commons have a decent chance of doing this, heavies and up dont
-					end
-					
-					local allow = nil
-					mvec3_set(vec_from, self:m_pos())
-					mvec3_set(vec_to, self:m_rot():y())
-					mvec3_mul(vec_to, -100)
-					mvec3_add(vec_to, self:m_pos())
 
-					allow = not managers.navigation:raycast(ray_params)
-
-					debug_fumble(allow, vec_from, vec_to)
-
-					if allow then
-						table.insert(allowed_fumbles, "e_so_sup_fumble_inplace_1")
-					end
-
-					mvec3_set(vec_from, self:m_pos())
-					mvec3_set(vec_to, self:m_rot():x())
-					mvec3_mul(vec_to, 200)
-					mvec3_add(vec_to, self:m_pos())
-
-					allow = not managers.navigation:raycast(ray_params)
-
-					debug_fumble(allow, vec_from, vec_to)
-
-					if allow then
-						table.insert(allowed_fumbles, "e_so_sup_fumble_inplace_2")
-					end
-
-					mvec3_set(vec_from, self:m_pos())
-					mvec3_set(vec_to, self:m_rot():x())
-					mvec3_mul(vec_to, -200)
-					mvec3_add(vec_to, self:m_pos())
-
-					allow = not managers.navigation:raycast(ray_params)
-
-					debug_fumble(allow, vec_from, vec_to)
-
-					if allow then
-						table.insert(allowed_fumbles, "e_so_sup_fumble_inplace_4")
-					end
-
-					if #allowed_fumbles > 0 then
-						local action_desc = {
-							body_part = 1,
-							type = "act",
-							variant = allowed_fumbles[math.random(#allowed_fumbles)],
-							blocks = {
-								action = -1,
-								walk = -1
-							}
-						}
-
-						self:action_request(action_desc)
-						--self._unit:sound():say("hr01")
+						if self:action_request(action_desc) then
+							try_something_else = false
+						end
 					end
 				end
-			elseif self._ext_anim.idle and (not self._active_actions[2] or self._active_actions[2]:type() == "idle") and not self:chk_action_forbidden("act") and not self._tweak_data.no_suppression_reaction then
-				if Global.game_settings.one_down and not self._ext_anim.crouch and not self:chk_action_forbidden("act") then
-					local action_desc = {
-						clamp_to_graph = true,
-						type = "act",
-						body_part = 1,
-						variant = "suppressed_reaction", --they crouch into cover instead of freezing on shin shootout.
-						blocks = {
-							walk = -1
-						}
-					}
-					
-					self:action_request(action_desc)
-				else
-					local action_desc = {
-						clamp_to_graph = true,
-						type = "act",
-						body_part = 1,
-						variant = "surprised", --they freeze in their spot and play the "surprised" animation when out of shin shootout.
-						blocks = {
-							walk = -1
-						}
-					}
-					
-					self:action_request(action_desc)
-				end
-			elseif self._ext_anim.run and not self:chk_action_forbidden("act") and Global.game_settings.one_down then
-				local action_desc = {
-					clamp_to_graph = true,
-					type = "act",
-					body_part = 1,
-					variant = "e_nl_slide_fwd_4m",
-					blocks = {
-						action = -1,
-						act = -1,
-						tase = -1,
-						bleedout = -1,
-						dodge = -1,
-						walk = -1,
-						hurt = -1,
-						heavy_hurt = -1
-					}
-				}
 
-				self:action_request(action_desc)
+				if try_something_else and not self._tweak_data.no_suppression_reaction then
+					if self._ext_anim.idle then
+						if not self._active_actions[2] or self._active_actions[2]:type() == "idle" then
+							if not self:chk_action_forbidden("act") then
+								if is_shin_shootout then
+									if not self._ext_anim.crouch then
+										local action_desc = {
+											clamp_to_graph = true,
+											type = "act",
+											body_part = 2,
+											variant = "suppressed_reaction", --they do an unique crouching animation instead of freezing on shin shootout.
+											blocks = {
+												walk = -1
+											}
+										}
+
+										self:action_request(action_desc)
+									end
+								else
+									local action_desc = {
+										clamp_to_graph = true,
+										type = "act",
+										body_part = 1,
+										variant = "surprised", --they freeze in their spot and play the "surprised" animation when out of shin shootout.
+										blocks = {
+											walk = -1,
+											action = -1
+										}
+									}
+
+									self:action_request(action_desc)
+								end
+							end
+						end
+					end
+				end
 			end
 		end
-	end
 
-	self:enable_update()
-
-	if Network:is_server() then
 		managers.network:session():send_to_peers_synched("suppressed_state", self._unit, state and true or false)
 	end
 
+	self:enable_update()
 end
 
 function CopMovement:damage_clbk(my_unit, damage_info)
