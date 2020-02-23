@@ -57,6 +57,10 @@ function SpoocLogicAttack.queued_update(data)
 	data.t = t
 	local unit = data.unit
 	local my_data = data.internal_data
+	
+	 if data.internal_data ~= my_data then
+    	return
+    end
 
 	if my_data.spooc_attack then
 		if my_data.spooc_attack.action:complete() and data.attention_obj and (not data.attention_obj.criminal_record or not data.attention_obj.criminal_record.status) and (data.attention_obj.verified or data.attention_obj.nearly_visible) and data.attention_obj.dis < my_data.weapon_range.close then
@@ -119,9 +123,11 @@ function SpoocLogicAttack.queued_update(data)
 		CopLogicAttack._update_cover(data)
 		CopLogicAttack._upd_combat_movement(data)
 	end
-
-	SpoocLogicAttack.queue_update(data, my_data)
-	CopLogicBase._report_detections(data.detected_attention_objects)
+	
+	if data.internal_data == my_data then
+		SpoocLogicAttack.queue_update(data, my_data)
+		CopLogicBase._report_detections(data.detected_attention_objects)
+	end
 end
 
 function SpoocLogicAttack._upd_spooc_attack(data, my_data)
@@ -203,7 +209,7 @@ end
 
 function SpoocLogicAttack.queue_update(data, my_data)
 	my_data.update_queued = true
-
+	
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, SpoocLogicAttack.queued_update, data, data.t + 0)
 end
 

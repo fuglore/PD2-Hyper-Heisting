@@ -198,22 +198,23 @@ function TaserLogicAttack._upd_enemy_detection(data)
 	local my_data = data.internal_data
 	local min_reaction = AIAttentionObject.REACT_AIM
 	
-	
 	CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
 
-	local find_new_focus_enemy = nil
 	local tasing = my_data.tasing
 	local tased_u_key = tasing and tasing.target_u_key
-	local tase_in_effect = tasing and tasing.target_u_data.unit:movement():tased()
+	local tase_in_effect = nil
 
-	if tase_in_effect or tasing then
-		find_new_focus_enemy = nil
-		return
-	else
-		find_new_focus_enemy = true
+	if tasing then
+		if data.unit:movement()._active_actions[3] and data.unit:movement()._active_actions[3]:type() == "tase" then
+			local tase_action = data.unit:movement()._active_actions[3]
+
+			if tase_action._discharging or tase_action._firing_at_husk or tase_action._discharging_on_husk then
+				tase_in_effect = true
+			end
+		end
 	end
 
-	if not find_new_focus_enemy then
+	if tase_in_effect then
 		return
 	end
 
@@ -670,7 +671,27 @@ function TaserLogicTravel._upd_enemy_detection(data)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
 	local my_data = data.internal_data
-	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+	local min_reaction = AIAttentionObject.REACT_AIM
+	local delay = CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
+	
+	local tasing = my_data.tasing
+	local tased_u_key = tasing and tasing.target_u_key
+	local tase_in_effect = nil
+
+	if tasing then
+		if data.unit:movement()._active_actions[3] and data.unit:movement()._active_actions[3]:type() == "tase" then
+			local tase_action = data.unit:movement()._active_actions[3]
+
+			if tase_action._discharging or tase_action._firing_at_husk or tase_action._discharging_on_husk then
+				tase_in_effect = true
+			end
+		end
+	end
+
+	if tase_in_effect then
+		return
+	end
+	
 	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, TaserLogicTravel._chk_reaction_to_attention_object)
 	local old_att_obj = data.attention_obj
 

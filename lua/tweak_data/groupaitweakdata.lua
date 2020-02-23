@@ -437,6 +437,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		acrobatic = true,
 		walk = true
 	}
+	
 	if Global.game_settings and Global.game_settings.use_intense_AI then -- spicy
 		self.special_unit_spawn_limits = {
 			shield = 8,
@@ -815,6 +816,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		},
 		access = access_type_walk_only
 	}
+	
 	self.unit_categories.CS_cop_stealth_MP5 = {
 		unit_types = {
 			america = {
@@ -6066,6 +6068,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
+
 end)
 
 Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", function(self, difficulty_index, difficulty)

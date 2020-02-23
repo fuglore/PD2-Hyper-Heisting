@@ -202,7 +202,6 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 			end
 		end
 	end
-	
 end
 
 function CopLogicBase.chk_am_i_aimed_at(data, attention_obj, max_dot)
@@ -1090,7 +1089,13 @@ end
 function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 	if internal_data.unit and internal_data ~= internal_data.unit:brain()._logic_data.internal_data then
 		log("how is this man")
+		return
 		--debug_pause("[CopLogicBase.queue_task] Task queued from the wrong logic", internal_data.unit, id, func, data, exec_t, asap)
+	end
+	
+	if not id then
+		log("nonono!!!")
+		return
 	end
 	
 	if asap then

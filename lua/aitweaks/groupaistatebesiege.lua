@@ -743,8 +743,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	end
 	
-	local assaultactive = task_data.phase == "build" or task_data.phase == "sustain"
-	local revealchk = not self._next_allowed_drama_reveal_t or self._next_allowed_drama_reveal_t < t
 	local primary_target_area = task_data.target_areas[1]
 
 	if self:is_area_safe_assault(primary_target_area) then

@@ -191,7 +191,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	
 	if focus_enemy and AIAttentionObject.REACT_AIM <= focus_enemy.reaction then
 		local last_sup_t = data.unit:character_damage():last_suppression_t()
-
+		
 		if focus_enemy.verified or focus_enemy.nearly_visible then
 			
 			--harass: attempt to engage enemies who are leaving themselves open, with things like interactions, changing weapons or reloading 
@@ -271,6 +271,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 					end
 
 					if not shoot and not managers.groupai:state():whisper_mode() and my_data.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() then
+						local height_difference = math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
 						local z_check = height_difference and 0.75 or 1
 						if focus_enemy.verified_dis < firing_range * z_check or focus_enemy.reaction == AIAttentionObject.REACT_SHOOT then
 							if dense_mook and managers.groupai:state():chk_high_fed_density() and not my_data.firing then
@@ -1104,6 +1105,27 @@ function CopLogicAttack._upd_combat_movement(data)
 	
 	local icbc_chk = not in_cover or best_cover and best_cover[1] ~= in_cover[1]
 	
+	if want_flank_cover then
+		if not my_data.flank_cover then
+			local sign = math.random() < 0.5 and -1 or 1
+			local step = 30
+			my_data.flank_cover = {
+				step = step,
+				angle = step * sign,
+				sign = sign
+			}
+			my_data.next_allowed_flank_charge_t = data.t + 2
+			want_flank_cover = nil
+			if not data.unit:in_slot(16) and not data.is_converted then --flankers signal their presence whenever they move around
+				if data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
+					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
+				end
+			end
+		end
+	else
+		my_data.flank_cover = nil
+	end
+	
 	if not my_data.processing_cover_path and not my_data.cover_path and not my_data.charge_path_search_id and not action_taken and best_cover and icbc_chk and path_fail_chk then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 
@@ -1326,6 +1348,11 @@ function CopLogicAttack.action_complete_clbk(data, action)
 end
 
 function CopLogicAttack.queue_update(data, my_data)
+
+	if my_data ~= data.internal_data then
+		return
+	end
+
 	local level = Global.level_data and Global.level_data.level_id
 	local focus_enemy = data.attention_obj
 	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
@@ -1621,9 +1648,9 @@ function CopLogicAttack._update_cover(data)
 						end
 					end
 
-					local min_threat_dis, cone_angle = nil
+					local cone_angle = nil
 
-					if flank_cover then
+					if flank_cover and not flank_cover.failed then
 						cone_angle = flank_cover.step
 					else
 						cone_angle = math.lerp(90, 60, math.min(1, optimal_dis / 3000))
@@ -1635,7 +1662,7 @@ function CopLogicAttack._update_cover(data)
 						search_nav_seg = data.objective.area and data.objective.area.nav_segs or data.objective.nav_seg
 					end
 
-					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, nil, cone_angle, min_threat_dis, search_nav_seg, optimal_dis, data.pos_rsrv_id)
+					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, nil, cone_angle, min_dis, search_nav_seg, optimal_dis, data.pos_rsrv_id)
 					
 					local notbcorvc_chk = nil
 					
