@@ -551,7 +551,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 		
 		if data.unit:movement():cool() then
 			haste = "walk"
-		elseif data.attention_obj and data.attention_obj.dis > 10000 or data.unit:in_slot(16) or data.is_converted then
+		elseif data.attention_obj and data.attention_obj.dis > 10000 or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 			haste = "run"
 		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
@@ -575,7 +575,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 		local end_pose = nil
 		local enemy_visible15m_or_10m_chk = data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj.dis <= 1000
 	
-		if data.attention_obj and data.attention_obj.dis > 10000 or data.unit:in_slot(16) or data.is_converted then
+		if data.attention_obj and data.attention_obj.dis > 10000 or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 			stand_chance = 1
 			pose = "stand"
 			end_pose = "stand"
@@ -701,7 +701,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 		
 		if data.unit:movement():cool() then
 			haste = "walk"
-		elseif data.is_converted or data.unit:in_slot(16) or data.attention_obj and data.attention_obj.dis > 10000 then 
+		elseif data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.attention_obj and data.attention_obj.dis > 10000 then 
 			haste = "run"
 		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
@@ -726,7 +726,7 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 		
 		local enemy_visible15m_or_10m_chk = data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj.dis <= 1000
 		
-		if data.attention_obj and data.attention_obj.dis > 10000 or data.is_converted or data.unit:in_slot(16) then
+		if data.attention_obj and data.attention_obj.dis > 10000 or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 			stand_chance = 1
 			pose = "stand"
 			end_pose = "stand"
@@ -1307,17 +1307,6 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		end
 	elseif action_type == "turn" then
 		my_data.turning = nil
-	elseif action_type == "act" then
-		--CopLogicAttack._cancel_cover_pathing(data, my_data)
-		--CopLogicAttack._cancel_charge(data, my_data)
-		
-		--Fixed panic never waking up cops.
-		if action:expired() then
-			CopLogicAttack._upd_aim(data, my_data)
-			data.logic._upd_stance_and_pose(data, data.internal_data)
-			--CopLogicAttack._upd_combat_movement(data)
-		end
-		
 	elseif action_type == "hurt" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
@@ -1765,7 +1754,7 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 	
 	local speed = nil
 	
-	if data.is_converted or data.unit:in_slot(16) or data.unit:base()._tweak_table == "sniper" then
+	if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.unit:base()._tweak_table == "sniper" then
 		speed = 2.5
 	elseif diff_index == 8 and is_mook then
 		speed = 1.75

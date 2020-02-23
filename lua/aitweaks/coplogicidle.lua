@@ -269,7 +269,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 
 			local reaction_too_mild = nil
 			
-			if not reaction or best_target_reaction and reaction < best_target_reaction or AIAttentionObject.REACT_SCARED > reaction and not managers.groupai:state():whisper_mode() then
+			if not reaction or best_target_reaction and reaction < best_target_reaction then
 				reaction_too_mild = true
 			elseif distance < 150 and reaction == AIAttentionObject.REACT_IDLE then
 				reaction_too_mild = true
@@ -614,10 +614,12 @@ function CopLogicIdle._chk_objective_needs_travel(data, new_objective)
 	
 	if not new_objective.nav_seg and new_objective.type ~= "follow" then
 		return
-	end
+	end	
 	
-	if CopLogicBase.should_enter_attack(data) then
-		return
+	if not data.team.id == tweak_data.levels:get_default_team_ID("player") and not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) then
+		if CopLogicBase.should_enter_attack(data) then
+			return
+		end
 	end
 
 	if new_objective.in_place then
@@ -745,7 +747,7 @@ end
 
 function CopLogicIdle._chk_relocate(data)
 	
-	if not data.unit:in_slot(16) and not data.is_converted then
+	if not data.team.id == tweak_data.levels:get_default_team_ID("player") and not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) then
 		if CopLogicBase.should_enter_attack(data) then
 			return
 		end

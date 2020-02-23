@@ -114,6 +114,11 @@
 		
 	</group>
 	
+	<group :script_path="aitweaks/civilians/" :hook_id="units/civilians/">
+		<post :script_path="civilianlogictravel.lua" :hook_id="logics/civilianlogictravel"/>
+		<post :script_path="civilianlogicflee.lua" :hook_id="logics/civilianlogicflee"/>
+	</group>
+	
 	<group :script_path="custompros/" :hook_id="units/weapons/">
 		
 		<post :script_path="quickflashgrenade.lua" :hook_id="grenades/quickflashgrenade"/>

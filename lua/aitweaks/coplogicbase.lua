@@ -102,6 +102,10 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 		return
 	end
 	
+	if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+		return
+	end
+	
 	
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 
@@ -233,6 +237,10 @@ end
 function CopLogicBase._update_haste(data, my_data)
 	if my_data ~= data.internal_data then
 		log("how is this man")
+		return
+	end
+	
+	if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 		return
 	end
 	
@@ -830,6 +838,10 @@ function CopLogicBase.should_enter_attack(data)
 	local my_data = data.internal_data
 	local t = data.t
 	
+	if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+		return
+	end
+	
 	if data.unit:base()._tweak_table == "sniper" then
 		return
 	end
@@ -1097,10 +1109,6 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 		log("nonono!!!")
 		return
 	end
-	
-	if asap then
-		asap = nil
-	end
 
 	local qd_tasks = internal_data.queued_tasks
 
@@ -1117,9 +1125,9 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 		}
 	end
 	
-	if data.unit:base():has_tag("special") or data.unit:base():has_tag("takedown") or data.internal_data.shooting or data.attention_obj and data.t and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 3000 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1500 or data.is_converted or data.unit:in_slot(16) or data.internal_data and data.internal_data.next_allowed_attack_logic_t then
+	if data.unit and data.unit:base():has_tag("special") or data.unit and data.unit:base():has_tag("takedown") or data.internal_data.shooting or data.attention_obj and data.t and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 3000 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1500 or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit and data.unit:in_slot(16) or data.unit and data.unit:in_slot(managers.slot:get_mask("criminals")) or data.internal_data and data.internal_data.next_allowed_attack_logic_t then
 		asap = true
-		if data.is_converted or data.unit:in_slot(16) or data.internal_data.next_allowed_attack_logic_t then
+		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.internal_data.next_allowed_attack_logic_t then
 			exec_t = data.t
 		elseif data.attention_obj and data.attention_obj.dis <= 1500 and data.t and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 then
 			exec_t = data.t + 0.06444

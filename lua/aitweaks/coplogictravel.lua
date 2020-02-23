@@ -419,7 +419,7 @@ end
 function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	local my_objective = data.objective
 	
-	if data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+	if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 		return true
 	end
 	
@@ -720,7 +720,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					cover_wait_time = math.random(0.35, 0.5) --Keep enemies aggressive and active while still preserving some semblance of what used to be the original pacing while not in Shin Shootout mode
 				end
 				
-				if not is_mook or Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+				if not is_mook or Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") then
 					my_data.cover_leave_t = data.t - 1
 				else
 					my_data.cover_leave_t = data.t + cover_wait_time
@@ -823,16 +823,6 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 	elseif action_type == "turn" then
 		my_data.turning = nil
-	elseif action_type == "act" then
-		--CopLogicAttack._cancel_cover_pathing(data, my_data)
-		--CopLogicAttack._cancel_charge(data, my_data)
-		
-		--Fixed panic never waking up cops.
-		if action:expired() then
-			CopLogicAttack._upd_aim(data, my_data)
-			data.logic._upd_stance_and_pose(data, data.internal_data)
-			CopLogicTravel.upd_advance(data)
-		end
 	elseif action_type == "hurt" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
@@ -1039,7 +1029,7 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		
 		if data.unit:movement():cool() then
 				haste = "walk"
-		elseif data.is_converted or data.unit:in_slot(16) or data.attention_obj and data.attention_obj.dis > 10000 then
+		elseif data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.attention_obj and data.attention_obj.dis > 10000 then
 			haste = "run"
 		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 1200 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
@@ -1403,7 +1393,7 @@ function CopLogicTravel.get_pathing_prio(data)
 			end
 		end
 		
-		if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
 			prio = prio + 2
 		end	
 	end
