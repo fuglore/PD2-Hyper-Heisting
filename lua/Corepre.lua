@@ -4,8 +4,9 @@ PD2THHSHIN._mod_path = ModPath
 PD2THHSHIN._options_path = ModPath .. "menu/options.txt"
 PD2THHSHIN._save_path = SavePath .. "shin_settings.txt"
 PD2THHSHIN.settings = {
-	toggle_overhaul_player = true, --default on
-	toggle_helmet = false
+	toggle_overhaul_player = false,
+	toggle_helmet = false,
+	first_launch = true
 }
 PD2THHSHIN.session_settings = {} --leave empty; generated on load
 PD2THHSHIN.show_popup = nil
@@ -43,6 +44,7 @@ end
 
 function PD2THHSHIN:LoadSettings()
 	local file = io.open(self._save_path, "r")
+	
 	if (file) then
 		for k, v in pairs(json.decode(file:read("*all"))) do
 			self.settings[k] = v
@@ -65,6 +67,11 @@ function PD2THHSHIN:SaveSettings(apply_immediately)
 end
 
 PD2THHSHIN:LoadSettings()
+
+if PD2THHSHIN.settings.first_launch then
+	PD2THHSHIN.settings.first_launch = false
+	PD2THHSHIN:SaveSettings(true)
+end
 
 PD2THHSHIN_Maps = PD2THHSHIN_Maps or class(MapFramework)
 PD2THHSHIN_Maps._directory = ModPath .. "mapaifixing"
