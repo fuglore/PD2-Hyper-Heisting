@@ -228,6 +228,14 @@ function GroupAIStateBesiege:chk_assault_number()
 	return self._assault_number
 end
 
+function GroupAIStateBesiege:chk_has_civilian_hostages()
+	if self._police_hostage_headcount and self._hostage_headcount > 0 then
+		if self._hostage_headcount - self._police_hostage_headcount > 0 then
+			return true
+		end
+	end
+end
+
 function GroupAIStateBesiege:chk_no_fighting_atm()
 
 	if self._drama_data.amount > tweak_data.drama.consistentcombat then
@@ -239,6 +247,10 @@ end
 
 function GroupAIStateBesiege:chk_active_assault_break()
 	return self._activeassaultbreak
+end
+
+function GroupAIStateBesiege:chk_had_hostages()
+	return self._had_hostages
 end
 
 function GroupAIStateBesiege:chk_anticipation()
@@ -584,6 +596,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 			task_data.phase = "build"
 			task_data.phase_end_t = self._t + self._tweak_data.assault.build_duration
+			self._had_hostages = nil
 			task_data.is_hesitating = nil
 
 			self:set_assault_mode(true)
@@ -1010,6 +1023,8 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 	objective.interrupt_health = grp_objective.interrupt_health or objective.interrupt_health
 	objective.interrupt_suppression = nil
 	objective.pos = grp_objective.pos
+	objective.bagjob = grp_objective.bagjob or nil
+	objective.hostagejob = grp_objective.hostagejob or nil
 	
 	if not objective.running then
 		objective.running = grp_objective.running or nil
@@ -1384,11 +1399,12 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 				attitude = "avoid",
 				area = current_objective.area,
 				target_area = recon_area,
-				coarse_path = coarse_path
+				coarse_path = coarse_path,
+				bagjob = recon_area.loot or nil,
+				hostagejob = recon_area.hostages or nil
 			}
 
 			self:_set_objective_to_enemy_group(group, grp_objective)
-			self:_voice_looking_for_angle(group)
 
 			current_objective = group.objective
 		end
@@ -1414,7 +1430,9 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 							type = "recon_area",
 							stance = "hos",
 							area = self:get_area_from_nav_seg_id(current_objective.coarse_path[#current_objective.coarse_path][1]),
-							target_area = current_objective.target_area
+							target_area = current_objective.target_area,
+							bagjob = current_objective.target_area.loot or nil,
+							hostagejob = current_objective.target_area.hostages or nil
 						}
 
 						self:_set_objective_to_enemy_group(group, grp_objective)
@@ -1447,7 +1465,9 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 					attitude = "avoid",
 					area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
 					target_area = current_objective.target_area,
-					coarse_path = coarse_path
+					coarse_path = coarse_path,
+					bagjob = current_objective.target_area.loot or nil,
+					hostagejob = current_objective.target_area.hostages or nil
 				}
 
 				self:_set_objective_to_enemy_group(group, grp_objective)
@@ -1461,7 +1481,9 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 				pose = math.random() < 0.5 and "crouch" or "stand",
 				type = "recon_area",
 				attitude = "avoid",
-				area = current_objective.target_area
+				area = current_objective.target_area,
+				bagjob = current_objective.target_area.loot or nil,
+				hostagejob = current_objective.target_area.hostages or nil
 			}
 
 			self:_set_objective_to_enemy_group(group, grp_objective)
@@ -1962,8 +1984,11 @@ function GroupAIStateBesiege:_end_regroup_task()
 			
 			if self._hostage_headcount > 3 then
 				self._task_data.assault.next_dispatch_t = self._task_data.assault.next_dispatch_t + 25
+				self._had_hostages = true
 			elseif self._hostage_headcount > 0 then
 				self._task_data.assault.next_dispatch_t = self._task_data.assault.next_dispatch_t + self:_get_difficulty_dependent_value(self._tweak_data.assault.hostage_hesitation_delay)
+			else
+				self._had_hostages = nil
 			end
 		end
 

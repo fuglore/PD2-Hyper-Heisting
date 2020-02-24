@@ -820,7 +820,7 @@ function CopLogicBase.should_enter_travel(data, objective)
 		return
 	end
 
-	if objective.pos then
+	if objective.pos or objective.running then
 		return true
 	end
 
@@ -835,10 +835,19 @@ end
 
 function CopLogicBase.should_enter_attack(data)
 	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+	local objective = data.objective
 	local my_data = data.internal_data
 	local t = data.t
 	
 	if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+		return
+	end
+	
+	if not objective then
+		return
+	end
+	
+	if objective.running then
 		return
 	end
 	
@@ -859,11 +868,8 @@ function CopLogicBase.should_enter_attack(data)
 				my_data.anti_stuck_t = t + 5
 			elseif my_data.anti_stuck_t < t then
 				--log("attempting to fix looping unit")
-				local objective = data.objective
 				
-				if objective then
-					CopLogicBase.on_new_logic_needed(data, objective)
-				end
+				CopLogicBase.on_new_logic_needed(data, objective)
 				
 				my_data.anti_stuck_t = nil
 				return
@@ -873,7 +879,7 @@ function CopLogicBase.should_enter_attack(data)
 		end
 	end
 	
-	if not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and reactions_chk and data.internal_data.attitude and data.internal_data.attitude == "engage" or not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) and data.unit:base():has_tag("law") and reactions_chk and my_data.firing then
+	if data.unit:base():has_tag("law") and reactions_chk and data.internal_data.attitude and data.internal_data.attitude == "engage" or data.unit:base():has_tag("law") and reactions_chk and my_data.firing then
 		local att_obj = data.attention_obj
 		local criminal_in_my_area = nil
 		local criminal_in_neighbour = nil
@@ -909,14 +915,22 @@ function CopLogicBase.should_enter_attack(data)
 		
 		local visibility_chk = att_obj.verified
 		
-		if my_data.processing_cover_path and my_data.want_to_take_cover and att_obj.dis <= data.internal_data.weapon_range.close or my_data.cover_path and my_data.want_to_take_cover and att_obj.dis <= data.internal_data.weapon_range.close or my_data.cover_test_step and my_data.cover_test_step <= 2 and visibility_chk and att_obj.dis <= data.internal_data.weapon_range.close then
+		
+		if managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and att_obj.dis <= 5000 then
 			return true
 		end
 		
+		if data.attention_obj.dis <= 2000 then
 		
+			local path_fail_chk = not my_data.cover_path_failed_t or data.t - my_data.cover_path_failed_t > 5
 		
-		if my_data.charge_path or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and att_obj.dis <= 5000 or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or visibility_chk and att_obj.dis <= attack_distance and math.abs(data.m_pos.z - att_obj.m_pos.z) < 100 or visibility_chk and criminal_near and math.abs(data.m_pos.z - att_obj.m_pos.z) < 400 then
-			return true
+			if my_data.want_to_take_cover and path_fail_chk and att_obj.dis <= data.internal_data.weapon_range.close or my_data.in_cover and my_data.cover_test_step and my_data.cover_test_step <= 2 and att_obj.dis <= data.internal_data.weapon_range.close then
+				return true
+			end
+			
+			if my_data.charge_path or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or visibility_chk and att_obj.dis <= attack_distance and math.abs(data.m_pos.z - att_obj.m_pos.z) < 100 or visibility_chk and criminal_near and math.abs(data.m_pos.z - att_obj.m_pos.z) < 400 then
+				return true
+			end
 		end
 		
 		return

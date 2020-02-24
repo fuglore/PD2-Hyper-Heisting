@@ -1,6 +1,8 @@
 <table directory="assets">	
 	<!--Base Game Asset Replacements-->
 	
+	<texture path="units/payday2/characters/shared_textures/spook_il" />
+	
 	<!--sniper helmet popping-->
 	<unit_mat path="units/payday2/characters/ene_acc_sniper_cap/ene_acc_sniper_cap" load="true"/>
 	
