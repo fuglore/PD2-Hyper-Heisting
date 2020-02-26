@@ -135,19 +135,50 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		--log("how did this happen!?")
 		return
 	end
-	
+
+	if my_data.spooc_attack then
+		return
+	end
+
+	if data.spooc_attack_timeout_t and data.spooc_attack_timeout_t >= data.t then
+		return
+	end
+
 	local focus_enemy = data.attention_obj
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local spooc_attack_timeout_chk = not data.spooc_attack_timeout_t or data.spooc_attack_timeout_t < data.t
-	if focus_enemy and not my_data.spooc_attack and spooc_attack_timeout_chk and focus_enemy.reaction == AIAttentionObject.REACT_SPECIAL_ATTACK and not data.unit:movement():chk_action_forbidden("walk") then
+
+	if focus_enemy and focus_enemy.nav_tracker and focus_enemy.is_person and focus_enemy.reaction == AIAttentionObject.REACT_SPECIAL_ATTACK and not data.unit:movement():chk_action_forbidden("walk") then
+		if focus_enemy.criminal_record then
+			if focus_enemy.criminal_record.status then
+				return
+			else
+				if SpoocLogicAttack._is_last_standing_criminal(focus_enemy) then
+					return
+				end
+			end
+		end
+
+		if focus_enemy.unit:movement().zipline_unit and focus_enemy.unit:movement():zipline_unit() then
+			return
+		end
+
+		if focus_enemy.unit:movement().is_SPOOC_attack_allowed and not focus_enemy.unit:movement():is_SPOOC_attack_allowed() then
+			return
+		end
+
+		if focus_enemy.unit:movement().chk_action_forbidden and focus_enemy.unit:movement():chk_action_forbidden("hurt") then
+			return true
+		end
+
 		if math.abs(data.m_pos.z - focus_enemy.m_pos.z) < 200 then
-			
 			if focus_enemy.verified and focus_enemy.dis <= 1500 then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakercontact")
 			end
 			
 			if math.abs(data.m_pos.z - focus_enemy.m_pos.z) < 100 and focus_enemy.dis > 600 or math.abs(data.m_pos.z - focus_enemy.m_pos.z) < 100 and math.random() < 0.5 then
-				if diff_index >= 6 and focus_enemy.verified_dis <= 250 or Global.game_settings.use_intense_AI and focus_enemy.verified_dis <= 250 then
+				local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+				local diff_pass = diff_index >= 6 or Global.game_settings.use_intense_AI
+
+				if diff_pass and focus_enemy.verified_dis <= 250 then
 					if my_data.attention_unit ~= focus_enemy.u_key then
 						CopLogicBase._set_attention(data, focus_enemy)
 						
@@ -205,6 +236,49 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			end
 		end
 	end
+end
+
+function SpoocLogicAttack._chk_request_action_spooc_attack(data, my_data, flying_strike)
+	if data.unit:anim_data().crouch then
+		CopLogicAttack._chk_request_action_stand(data)
+
+		return
+	end
+
+	data.unit:movement():set_stance_by_code(2)
+
+	local new_action = {
+		sync = true,
+		body_part = 3,
+		type = "idle"
+	}
+
+	data.unit:brain():action_request(new_action)
+
+	local new_action_data = {
+		body_part = 1,
+		type = "spooc",
+		flying_strike = flying_strike
+	}
+
+	if flying_strike then
+		new_action_data.blocks = {
+			light_hurt = -1,
+			heavy_hurt = -1,
+			idle = -1,
+			turn = -1,
+			fire_hurt = -1,
+			walk = -1,
+			act = -1,
+			hurt = -1,
+			expl_hurt = -1,
+			taser_tased = -1
+		}
+	end
+
+	local action = data.unit:brain():action_request(new_action_data)
+
+	return action
 end
 
 function SpoocLogicAttack.queue_update(data, my_data)
