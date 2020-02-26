@@ -50,6 +50,8 @@ end
 Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	
 	--begin new weapon setup
+	self.xkill_npc = deep_clone(self.c45_npc)
+	self.xkill_npc.sounds.prefix = "c45_npc"
 	self.bayou_npc = deep_clone(self.r870_npc)
 	self.bayou_npc.sounds.prefix = "spas_npc"
 	self.quagmire_npc = deep_clone(self.m4_npc)
@@ -130,6 +132,8 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.heavy_snp_npc.spread = 1 --Spread for internal changes
 	
 	--A bunch of NPC weapon clone/consistency issues, fixed in minutes back when I made fixed weapon preset scaling because OVERKILL sucks.
+	self.c45_npc.sounds.prefix = "g17_npc"
+	self.x_c45_npc.sounds.prefix = "g17_npc"
 	self.s552_npc = deep_clone(self.m4_npc)
 	self.s552_npc.sounds.prefix = "sig552_npc"
 	self.s552_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"

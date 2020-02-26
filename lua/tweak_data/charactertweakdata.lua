@@ -6125,8 +6125,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.18,
+					0.2
 				},
 				mode = {
 					1,
@@ -6143,8 +6143,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.85
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.18,
+					0.2
 				},
 				mode = {
 					1,
@@ -6161,8 +6161,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.7 --higher accuracy
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.18,
+					0.2
 				},
 				mode = {
 					1,
@@ -6179,8 +6179,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.5
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.18,
+					0.2
 				},
 				mode = {
 					1,
@@ -6197,8 +6197,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.35
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.18,
+					0.2
 				},
 				mode = {
 					1,
@@ -6215,8 +6215,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.18,
+					0.2
 				},
 				mode = {
 					1,
@@ -9626,7 +9626,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"blazter",
 		"bayou_spas",
 		"quagmire",
-		"em_disruptor"
+		"em_disruptor",
+		"xkill"
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -9666,6 +9667,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"),
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"),
 		Idstring("units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"),
+		Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill")
+		
 	}
 end
 
