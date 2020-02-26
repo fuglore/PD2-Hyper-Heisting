@@ -1600,7 +1600,7 @@ function CopLogicAttack._update_cover(data)
 					local max_dis = nil
 					local not_ranged_fire_group_chk = not data.tactics or not data.tactics.ranged_fire and not data.tactics.elite_ranged_fire
 
-					if want_to_take_cover or my_data.firing then
+					if want_to_take_cover then
 						if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
 							if optimal_dis < my_data.weapon_range.optimal then
 								optimal_dis = optimal_dis

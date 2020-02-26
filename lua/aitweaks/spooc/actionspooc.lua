@@ -239,7 +239,7 @@ function ActionSpooc:init(action_desc, common_data)
 
 	local detect_sound = self:get_sound_event("detect")
 
-	if detect_sound then
+	if tweak_data:difficulty_to_index(Global.game_settings.difficulty) <= 7 and detect_sound then
 		self._unit:sound():play(detect_sound)
 	end
 
