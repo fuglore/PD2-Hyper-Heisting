@@ -1244,9 +1244,15 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
-		--Removed the requirement for being important here.
 		if action:expired() then
-			log("hey this actually works!")
+			CopLogicAttack._upd_aim(data, my_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+	elseif action_type == "heal" then
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+	
+		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			CopLogicAttack._upd_combat_movement(data)
 		end
