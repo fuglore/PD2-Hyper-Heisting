@@ -735,18 +735,18 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
 		if action:expired() then
-			--log("hey this actually works!")
 			CopLogicAttack._upd_aim(data, my_data)
-			CopLogicAttack._upd_combat_movement(data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicTravel.upd_advance(data)
 		end
 	elseif action_type == "heal" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
-
+	
 		if action:expired() then
-			--log("hey this actually works!")
 			CopLogicAttack._upd_aim(data, my_data)
-			CopLogicAttack._upd_combat_movement(data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicTravel.upd_advance(data)
 		end
 	elseif action_type == "walk" then
 		--if CopLogicTravel.chk_slide_conditions(data) then 

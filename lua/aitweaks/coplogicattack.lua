@@ -1253,6 +1253,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
 		if action:expired() then
+			--log("hey this actually works!")
 			CopLogicAttack._upd_aim(data, my_data)
 			CopLogicAttack._upd_combat_movement(data)
 		end
