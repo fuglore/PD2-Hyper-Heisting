@@ -17,6 +17,9 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	if faction then
 		if faction == "russia" then
 			versusline = "hud_assault_faction_mad"
+		elseif faction == "federales" then
+			versusline = "hud_assault_faction_federales"
+			assaultline = "hud_assault_assault_mexcross"
 		elseif faction == "murkywater" then
 			if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" then
 				versusline = "hud_assault_faction_mexcross"
@@ -49,7 +52,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	if FG_chance <= 29 then
 		cover_line_to_use = "hud_assault_FG_cover" .. FG_chance
 	else
-		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" then
+		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
 			cover_line_to_use = "hud_assault_cover_mexcross"
 		elseif faction == "zombie" then
 			cover_line_to_use = "hud_assault_coverhvh"

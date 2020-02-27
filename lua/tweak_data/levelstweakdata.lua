@@ -1,4 +1,4 @@
---the fact i have to do this is why i dont like overkill and their weird, weird little systems
+--[[the fact i have to do this is why i dont like overkill and their weird, weird little systems
 LevelsTweakData = LevelsTweakData or class()
 LevelsTweakData.LevelType = {
 	America = "america",
@@ -62,7 +62,7 @@ function LevelsTweakData:init()
 		self.nail.ai_group_type = zombie
 		self.help.ai_group_type = zombie
 	end
-end
+end]]
 
 function LevelsTweakData:get_ai_group_type()
 	local level_data = Global.level_data and Global.level_data.level_id and self[Global.level_data.level_id]
@@ -72,6 +72,7 @@ function LevelsTweakData:get_ai_group_type()
 		if ai_group_type and ai_group_type == "zombie" and Global.game_settings and Global.game_settings.incsmission then
 			return "america"
 		elseif ai_group_type then
+			log("group type name is" .. ai_group_type .. "woo")
 			return ai_group_type
 		end
 	end

@@ -544,7 +544,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	end
 
-	self.unit_categories = {}
+	--[[self.unit_categories = {}
 
 	if difficulty_index == 8 then
 		self.unit_categories.spooc = {
@@ -2288,9 +2288,10 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			}
 		},
 		access = access_type_walk_only
-	}
+	}]]
 end)
 
+--[[
 Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_spawn_groups", function(self, difficulty_index)
 	self._tactics = {	
 		Phalanx_minion = {
@@ -7415,4 +7416,4 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 
 	self.safehouse = self.besiege
 end
-)
+)]]
