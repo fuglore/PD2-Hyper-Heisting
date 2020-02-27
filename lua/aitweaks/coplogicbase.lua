@@ -56,7 +56,7 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 		
 		local not_acting = data.unit:anim_data().idle or data.unit:anim_data().move
 		
-		if AIAttentionObject.REACT_SHOOT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and not_acting and new_att_obj.is_person and data.char_tweak.chatter and data.char_tweak.chatter.contact then --the fact i have to do this is just hghghghg
+		if AIAttentionObject.REACT_COMBAT <= new_reaction and new_att_obj.verified and contact_chatter_time_ok and not_acting and new_att_obj.is_person and data.char_tweak.chatter and data.char_tweak.chatter.contact and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), new_att_obj.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "ignore_unit", new_att_obj.unit, "report") then --the fact i have to do this is just hghghghg
 			if data.unit:base()._tweak_table == "gensec" then
 				data.unit:sound():say("a01", true)			
 			elseif data.unit:base()._tweak_table == "security" then
