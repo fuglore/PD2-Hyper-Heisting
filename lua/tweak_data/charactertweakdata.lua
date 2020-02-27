@@ -7286,22 +7286,37 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	presets.enemy_chatter = {
 		no_chatter = {},
-		cop = {
+		security = {
 			aggressive = true,
 			contact = true,
-			enemyidlepanic = true,
 			clear_whisper = true,
 			ecm = true,
 			saw = true,
 			trip_mines = true,
 			sentry = true,
 			suppress = true,
-			dodge = true
+			dodge = true,
+			cuffed = true
+		},
+		cop = {
+			aggressive = true,
+			contact = true,
+			enemyidlepanic = true,
+			controlpanic = true,
+			clear_whisper = true,
+			ecm = true,
+			saw = true,
+			trip_mines = true,
+			sentry = true,
+			suppress = true,
+			dodge = true,
+			cuffed = true
 		},
 		swat = {
 			entry = true,
 			aggressive = true,
 			enemyidlepanic = true,
+			controlpanic = true,
 			retreat = true,
 			contact = true,
 			clear = true,
@@ -7321,12 +7336,14 @@ function CharacterTweakData:_presets(tweak_data)
 			deathguard = true,
 			open_fire = true,
 			suppress = true,
-			dodge = true
+			dodge = true,
+			cuffed = true
 		},
 		shield = {
             entry = true,
 			aggressive = true,
 			enemyidlepanic = true,
+			controlpanic = true,
 			retreat = true,
 			contact = true,
 			clear = true,
@@ -7343,7 +7360,8 @@ function CharacterTweakData:_presets(tweak_data)
 			follow_me = true,
 			deathguard = true,
 			open_fire = true,
-			suppress = true
+			suppress = true,
+			cuffed = true
         },
 		bulldozer = {
 			contact = true,
@@ -8241,11 +8259,13 @@ end)
 Hooks:PostHook(CharacterTweakData, "_init_gensec", "hhpost_gensec", function(self, presets)
 	self.gensec.HEALTH_INIT = 6
 	self.gensec.headshot_dmg_mul = 12
+	self.gensec.chatter = presets.enemy_chatter.security
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(self, presets)
 	self.security.HEALTH_INIT = 6
 	self.security.headshot_dmg_mul = 12
+	self.security.chatter = presets.enemy_chatter.security
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_mobster_boss", "hhpost_mboss", function(self, presets)

@@ -9,6 +9,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
+	self._last_killed_cop_t = 0
 	local drama_tweak = tweak_data.drama
 	self._drama_data = {
 		amount = 0,
@@ -42,6 +43,7 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
+	self._last_killed_cop_t = 0
 	local drama_tweak = tweak_data.drama
 	self._drama_data = {
 		amount = 0,
@@ -105,6 +107,14 @@ function GroupAIStateBase:_check_drama_low_p()
 	elseif self._assault_number >= 3 then
 		self._drama_data.low_p = drama_tweak.low_3rd
 	end
+end
+
+function GroupAIStateBase:_check_assault_panic_chatter()
+	if self._t and self._last_killed_cop_t and self._t - self._last_killed_cop_t < math.random(1, 3.5) then
+		return true
+	end
+	
+	return
 end
 
 function GroupAIStateBase:chk_random_drama_comment()
@@ -386,8 +396,9 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 
 	if e_data.group then
 		self:_remove_group_member(e_data.group, u_key, dead)
-		if dead and self._task_data and self._task_data.assault then
+		if dead and self._task_data and self._task_data.assault and self._task_data.assault.active then
 			self:_voice_friend_dead(e_data.group)
+			self._last_killed_cop_t = self._t
 		end
 	end
 	

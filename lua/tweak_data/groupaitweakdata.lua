@@ -6,7 +6,7 @@ function GroupAITweakData:init(tweak_data)
 
 	--print("[GroupAITweakData:init] difficulty", difficulty, "difficulty_index", difficulty_index)
 
-	self.ai_tick_rate =  0.016666
+	self.ai_tick_rate = 0.014444444444444444
 
 	self:_read_mission_preset(tweak_data)
 	self:_create_table_structure()
@@ -123,6 +123,14 @@ function GroupAITweakData:_init_chatter_data()
 		group_min = 0,
 		queue = "rdy"
 	}
+	self.enemy_chatter.cuffed = {
+		radius = 1000,
+	    max_nr = 1,
+	    duration = {0.5, 0.5},
+	    interval = {2, 6},
+	    group_min = 0,
+	    queue = "hr01 "
+	}
 	self.enemy_chatter.contact = {
 		radius = 2000,
 		max_nr = 20,
@@ -199,7 +207,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {1, 1},
-	    interval = {6, 8},
+	    interval = {8, 12},
 	    group_min = 1,
 	    queue = "p01"
 	}
@@ -207,7 +215,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {1, 1},
-	    interval = {6, 8},
+	    interval = {8, 12},
 	    group_min = 1,
 	    queue = "p02"
 	}
@@ -215,7 +223,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {1, 1},
-	    interval = {6, 8},
+	    interval = {8, 12},
 	    group_min = 1,
 	    queue = "p03"
 	}
@@ -231,7 +239,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 1,
 	    duration = {60, 60},
-	    interval = {4, 5},
+	    interval = {3, 8},
 	    group_min = 1,
 	    queue = "clr"
 	}

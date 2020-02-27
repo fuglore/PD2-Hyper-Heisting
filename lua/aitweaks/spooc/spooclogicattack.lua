@@ -278,7 +278,7 @@ end
 function SpoocLogicAttack._chk_reaction_to_attention_object(data, attention_data, stationary)
     local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
 
-    if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or attention_data.criminal_record.status or not attention_data.is_person then
+    if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
         return reaction
     end
 

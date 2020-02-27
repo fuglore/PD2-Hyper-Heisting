@@ -62,13 +62,15 @@ end
 
 function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
-		local next_upd_t = 0.8
+		local next_upd_t = 0.028888888888888888
+		local asap = true
 		if next(self._spawning_groups) then
-			next_upd_t = 0.4
+			next_upd_t = 0.014444444444444444
+			asap = true
 		end
 		self._police_upd_task_queued = true
 
-		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + next_upd_t) --please dont let your own algorithms implode like that, ovk, thanks
+		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + next_upd_t, nil, asap) --please dont let your own algorithms implode like that, ovk, thanks
 	end
 end
 
