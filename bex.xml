@@ -1,0 +1,17 @@
+<table directory="assets"> <!-- VAMOS A CORTAR LAS VERGAS -->
+	<!--FEDERALES SWAT SHOTGUNNER-->
+	<unit path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh_contour"/>	
+	<object path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh" />
+	<model path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh" />	
+	<cooked_physics path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh"/>
+	
+	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_bexfucker/ene_acc_bexfucker" load="true"/>
+	
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/mask_df" />
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/mask_nm" />	
+
+	
+</table>

@@ -10,5 +10,6 @@
 	<GlobalValue id="hyperheist" color="Color(1, 0.5, 0)"/>
 	<MaskPattern id="truthrunes" texture="patterns/真_fv" global_value="hyperheist"/>
 	<Package id="packages/hhnewreapers" file="hhnewreapers.xml" use_clbk="self:DebugLoadAssets"/>
-	<Package id="packages/hhmurkies" file="psc.xml" use_clbk="self:DebugLoadAssets"/>	
+	<Package id="packages/hhmurkies" file="psc.xml" use_clbk="self:DebugLoadAssets"/>
+	<Package id="packages/hhbex" file="bex.xml" use_clbk="self:DebugLoadAssets"/>	
 </table>

@@ -37,6 +37,9 @@ function LevelsTweakData:init()
 	self.mex.package = {"packages/hhmurkies", "packages/job_mex"}
 	self.mex_cooking.package = {"packages/hhmurkies", "packages/job_mex2"}
 	
+	-- Federales heists
+	self.bex.package = {"packages/hhbex", "packages/job_bex"}
+	
 	--fix missing ganster vo, ty rino
 	self.short2_stage1.package = {"packages/job_short2_stage1", "levels/narratives/dentist/mia/stage2/world_sounds"}
 	self.nightclub.package = {"packages/vlad_nightclub", "levels/narratives/dentist/mia/stage2/world_sounds"}
