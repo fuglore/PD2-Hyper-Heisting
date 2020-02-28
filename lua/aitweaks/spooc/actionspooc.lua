@@ -101,14 +101,13 @@ function ActionSpooc:init(action_desc, common_data)
 	end
 
 	if self._was_interrupted then
-		local is_local = action_desc.is_local
-
-		if is_local then
-			local attention = common_data.attention
-			self._attention = attention
-			self._target_unit = attention and attention.unit
+		if action_desc.is_local then
 			self._is_local = true
 		end
+
+		local attention = common_data.attention
+		self._attention = attention
+		self._target_unit = attention and attention.unit
 	else
 		local attention = common_data.attention
 
@@ -233,13 +232,17 @@ function ActionSpooc:init(action_desc, common_data)
 		if not self._is_server and action_desc.flying_strike and #self._nav_path > 1 then
 			self:_set_updator("_upd_flying_strike_first_frame")
 		else
-			self:_wait()
+			if action_desc.start_anim_time then
+				self:_strike()
+			else
+				self:_wait()
+			end
 		end
 	end
 
-	local detect_sound = self:get_sound_event("detect")
+	local detect_sound = tweak_data:difficulty_to_index(Global.game_settings.difficulty) < 8 and self:get_sound_event("detect")
 
-	if tweak_data:difficulty_to_index(Global.game_settings.difficulty) <= 7 and detect_sound then
+	if detect_sound then
 		self._unit:sound():play(detect_sound)
 	end
 
@@ -261,10 +264,13 @@ function ActionSpooc:init(action_desc, common_data)
 		if self._ext_base:has_tag("spooc") then
 			local ai_type = tweak_data.levels:get_ai_group_type()
 			local r = LevelsTweakData.LevelType.Russia
+			local f = LevelsTweakData.LevelType.Federales
 
 			if not self._taunt_during_assault then
 				if ai_type == r then
 					self._taunt_during_assault = "rcloaker_taunt_during_assault"
+				elseif ai_type == f then
+					self._taunt_during_assault = "mcloaker_taunt_during_assault"
 				else
 					self._taunt_during_assault = "cloaker_taunt_during_assault"
 				end
@@ -273,6 +279,8 @@ function ActionSpooc:init(action_desc, common_data)
 			if not self._taunt_after_assault then
 				if ai_type == r then
 					self._taunt_after_assault = "rcloaker_taunt_after_assault"
+				elseif ai_type == f then
+					self._taunt_after_assault = "mcloaker_taunt_after_assault"
 				else
 					self._taunt_after_assault = "cloaker_taunt_after_assault"
 				end
@@ -291,8 +299,8 @@ function ActionSpooc:on_exit()
 			self._unit:sound():play(detect_stop_sound)
 		end
 	else
-		if self._ext_base:char_tweak().spawn_sound_event then
-			self._unit:sound():play(self._ext_base:char_tweak().spawn_sound_event)
+		if self._common_data.char_tweak.spawn_sound_event then
+			self._unit:sound():play(self._common_data.char_tweak.spawn_sound_event)
 		end
 
 		if self._is_local and self._taunt_at_beating_played and not self._unit:sound():speaking(TimerManager:game():time()) then
@@ -431,7 +439,13 @@ function ActionSpooc:_upd_strike_first_frame(t)
 		return
 	end
 
-	local redir_result = self._ext_movement:play_redirect("spooc_strike")
+	local redir_result = nil
+
+	if self._action_desc.start_anim_time then
+		redir_result = self._ext_movement:play_redirect("spooc_strike", self._action_desc.start_anim_time)
+	else
+		redir_result = self._ext_movement:play_redirect("spooc_strike")
+	end
 
 	if redir_result then
 		self._ext_movement:spawn_wanted_items()
@@ -518,7 +532,7 @@ function ActionSpooc:_upd_chase_path()
 end
 
 function ActionSpooc:_upd_sprint(t)
-	if self._is_local and not self._was_interrupted then
+	if self._is_local then
 		if self:_chk_target_invalid() then
 			if self._is_server then
 				self:_expire()
@@ -668,7 +682,7 @@ function ActionSpooc:_upd_start_anim_first_frame(t)
 end
 
 function ActionSpooc:_upd_start_anim(t)
-	if self._is_local and not self._was_interrupted then
+	if self._is_local then
 		if self:_chk_target_invalid() then
 			if self._is_server then
 				self:_expire()
@@ -848,6 +862,15 @@ function ActionSpooc:save(save_data)
 	end
 
 	save_data.nav_path = sync_path
+
+	if self._ext_anim.act or self._ext_anim.spooc_enter then
+		save_data.start_anim_time = self._machine:segment_real_time(ids_base)
+
+		if self._is_flying_strike then
+			save_data.flying_speed_mul = math_lerp(3, 1, math_min(1, self._flying_strike_data.travel_dis_scaling_xy))
+			save_data.flying_pos_z = mvec3_z(self._common_data.pos)
+		end
+	end
 end
 
 function ActionSpooc:_nav_chk(t, dt)
@@ -987,7 +1010,7 @@ function ActionSpooc:_upd_striking(t)
 		return
 	end
 
-	if self._is_local and not self._was_interrupted then
+	if self._is_local then
 		local expire = nil
 
 		if not target_unit then
@@ -1005,6 +1028,10 @@ function ActionSpooc:_upd_striking(t)
 			end
 
 			if not downed and not arrested then
+				expire = true
+			end
+
+			if self._beating_end_t and self._beating_end_t < t then
 				expire = true
 			end
 		end
@@ -1119,10 +1146,6 @@ function ActionSpooc:sync_strike(pos)
 	end
 end
 
-function ActionSpooc:chk_block(action_type, t)
-	return CopActionAct.chk_block(self, action_type, t)
-end
-
 function ActionSpooc:chk_block_client(action_desc, action_type, t)
 	if CopActionAct.chk_block(self, action_type, t) then
 		if not action_desc or action_desc.body_part ~= 3 then
@@ -1195,7 +1218,9 @@ function ActionSpooc:anim_act_clbk(anim_act)
 	managers.modifiers:run_func("OnPlayerCloakerKicked", self._unit)
 
 	if not self._is_local then
-		self._beating_end_t = self._stroke_t + self._beating_time
+		if not self._is_flying_strike then
+			self._beating_end_t = self._stroke_t + 1
+		end
 
 		return
 	end
@@ -1448,7 +1473,15 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 	mvec3_sub(target_vec, my_pos)
 
 	local target_dis = mvec3_len(target_vec)
-	local redir_result = self._ext_movement:play_redirect("spooc_flying_strike")
+	local redir_result = nil
+
+	if self._action_desc.start_anim_time then
+		redir_result = self._ext_movement:play_redirect("spooc_flying_strike", self._action_desc.start_anim_time)
+
+		self._ext_movement:set_position(self._ext_movement:m_pos():with_z(self._action_desc.flying_pos_z))
+	else
+		redir_result = self._ext_movement:play_redirect("spooc_flying_strike")
+	end
 
 	if not redir_result then
 		--debug_pause_unit(self._unit, "[ActionSpooc:_chk_start_flying_strike] failed redirect spooc_flying_strike in ", self._machine:segment_state(ids_base), self._unit)
@@ -1467,7 +1500,13 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 		start_t = TimerManager:game():time(),
 		travel_dis_scaling_xy = target_dis / anim_travel_dis_xy
 	}
-	local speed_mul = math_lerp(3, 1, math_min(1, self._flying_strike_data.travel_dis_scaling_xy))
+	local speed_mul = 1
+
+	if self._action_desc.flying_speed_mul then
+		speed_mul = self._action_desc.flying_speed_mul
+	else
+		speed_mul = math_lerp(3, 1, math_min(1, self._flying_strike_data.travel_dis_scaling_xy))
+	end
 
 	self._machine:set_speed(redir_result, speed_mul)
 
@@ -1587,7 +1626,7 @@ function ActionSpooc:is_flying_strike()
 end
 
 function ActionSpooc:get_sound_event(sound)
-	local sound_events = self._ext_base:char_tweak().spooc_sound_events
+	local sound_events = self._common_data.char_tweak.spooc_sound_events
 
 	if not sound_events then
 		return
