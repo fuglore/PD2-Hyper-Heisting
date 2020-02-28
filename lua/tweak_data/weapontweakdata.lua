@@ -2488,6 +2488,28 @@ crouching = {
 	-0.5,
 	0.5
 }}
+			
+--Automatic Bernetti
+self.beer.stats.damage = 36
+self.beer.stats.spread = 16
+self.beer.AMMO_MAX = 180
+self.x_beer.stats.damage = 36
+self.x_beer.stats.spread = 16
+self.x_beer.AMMO_MAX = 200
+
+--Czech 92
+self.czech.stats.damage = 42
+self.x_czech.stats.damage = 42
+
+--Igor
+self.stech.AMMO_MAX = 80
+self.stech.stats.damage = 79
+self.stech.stats.spread = 18
+self.stech.fire_mode_data.fire_rate = 0.075
+self.x_stech.fire_mode_data.fire_rate = 0.075
+self.x_stech.stats.spread = 18
+self.x_stech.stats.damage = 79
+self.x_stech.AMMO_MAX = 90
 
 -- AKIMBO PISTOLS--
 
