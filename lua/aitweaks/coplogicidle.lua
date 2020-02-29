@@ -276,8 +276,6 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 			end
 
 			if not reaction_too_mild then
-				local aimed_at = CopLogicIdle.chk_am_i_aimed_at(data, attention_data, attention_data.aimed_at and 0.95 or 0.985)
-				attention_data.aimed_at = aimed_at
 				local alert_dt = attention_data.alert_t and data.t - attention_data.alert_t or 10000
 				local dmg_dt = attention_data.dmg_t and data.t - attention_data.dmg_t or 10000
 				local status = crim_record and crim_record.status
@@ -355,7 +353,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				end
 				
 				if data.tactics and data.tactics.murder then
-					if attention_data.acquire_t and human_chk and attention_data.verified and data.attention_obj and data.attention_obj.verified and AIAttentionObject.REACT_AIM <= data.attention_obj.reaction and AIAttentionObject.REACT_AIM <= reaction and data.attention_obj.u_key == u_key and human_att_obj_chk then
+					if attention_data.acquire_t and human_chk and attention_data.verified and data.attention_obj and data.attention_obj.verified and AIAttentionObject.REACT_AIM <= data.attention_obj.reaction and AIAttentionObject.REACT_AIM <= reaction and data.attention_obj.u_key == u_key and human_att_obj_chk and free_status then
 						old_enemy_murder = true
 					end
 				end
@@ -370,6 +368,8 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				if visible then
 					local justmurder = data.tactics and data.tactics.murder
 					local justharass = data.tactics and data.tactics.harass
+					local aimed_at = CopLogicIdle.chk_am_i_aimed_at(data, attention_data, attention_data.aimed_at and 0.95 or 0.985)
+					attention_data.aimed_at = aimed_at
 					
 					if distance < 250 then
 						target_priority_slot = 1
@@ -427,12 +427,16 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					target_priority_slot = 1
 				end
 				
-				if data.tactics and data.tactics.harass and pantsdownchk then
-					target_priority_slot = 1
-				end
+				if visible then
+				
+					if data.tactics and data.tactics.harass and pantsdownchk then
+						target_priority_slot = 1
+					end
+						
+					if assault_reaction and distance < 1500 then
+						target_priority_slot = 1
+					end
 					
-				if assault_reaction and distance < 1500 then
-					target_priority_slot = 1
 				end
 
 				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.murder and not old_enemy_murder and not human_chk then
