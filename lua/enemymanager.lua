@@ -495,3 +495,34 @@ function EnemyManager:get_magnet_storm_targets(unit)
 	
 	return targets_to_tase
 end
+
+function EnemyManager:queue_task(id, task_clbk, data, execute_t, verification_clbk, asap)
+	local task_data = {
+		clbk = task_clbk,
+		id = id,
+		data = data,
+		t = execute_t,
+		v_cb = verification_clbk,
+		asap = true
+	}
+
+	table.insert(self._queued_tasks, task_data)
+
+	if not execute_t and #self._queued_tasks <= 1 and not self._queued_task_executed then
+		self:_execute_queued_task(1)
+	end
+end
+
+function EnemyManager:update_queue_task(id, task_clbk, data, execute_t, verification_clbk, asap)
+	local task_data, _ = table.find_value(self._queued_tasks, function (td)
+		return td.id == id
+	end)
+
+	if task_data then
+		task_data.clbk = task_clbk or task_data.clbk
+		task_data.data = data or task_data.data
+		task_data.t = execute_t or task_data.t
+		task_data.v_cb = verification_clbk or task_data.v_cb
+		task_data.asap = true
+	end
+end

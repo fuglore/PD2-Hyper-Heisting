@@ -749,9 +749,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			CopLogicTravel.upd_advance(data)
 		end
 	elseif action_type == "walk" then
-		--if CopLogicTravel.chk_slide_conditions(data) then 
-			--data.unit:movement():play_redirect("e_nl_slide_fwd_4m")
-		--end
+		
 		if action:expired() and not my_data.starting_advance_action and my_data.coarse_path_index and not my_data.has_old_action and my_data.advancing then
 			my_data.coarse_path_index = my_data.coarse_path_index + 1
 
@@ -760,7 +758,6 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 				my_data.coarse_path_index = my_data.coarse_path_index - 1
 			end
-			CopLogicTravel.upd_advance(data)
 		end
 
 		my_data.advancing = nil
@@ -854,6 +851,12 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 			data.unit:brain():abort_detailed_pathing(my_data.advance_path_search_id)
 		end
+		
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicTravel.upd_advance(data)
+		end
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
 	elseif action_type == "tase" then
@@ -892,6 +895,12 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 		end
 	elseif action_type == "turn" then
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicTravel.upd_advance(data)
+		end
+		
 		my_data.turning = nil
 	elseif action_type == "hurt" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)

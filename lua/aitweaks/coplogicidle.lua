@@ -327,7 +327,6 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local near = distance < near_threshold
 				local too_near = distance < too_close_threshold and math.abs(attention_data.m_pos.z - data.m_pos.z) < 250
 				local free_status = status == nil
-				local has_alerted = alert_dt < 3.5
 				local has_damaged = dmg_dt < 5
 				local reviving = nil
 				local focus_enemy = attention_data
@@ -390,8 +389,26 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						target_priority_slot = target_priority_slot - 2
 					end
 					
+					if attention_data.aimed_at then
+						target_priority_slot = target_priority_slot - 1
+					end
+					
 					if old_enemy and not justmurder then
 						target_priority_slot = target_priority_slot - 1
+					end
+					
+					if not justmurder and nr_enemies then
+						if nr_enemies > 4 then
+							target_priority_slot = target_priority_slot + 1
+						elseif nr_enemies > 8 then
+							target_priority_slot = target_priority_slot + 2
+						elseif nr_enemies > 13 then
+							target_priority_slot = target_priority_slot + 3
+						elseif nr_enemies > 18 then
+							target_priority_slot = target_priority_slot + 4
+						elseif nr_enemies < 4 then
+							target_priority_slot = target_priority_slot - 1
+						end
 					end
 					
 					if not free_status and not justmurder or pantsdownchk and not justharass then

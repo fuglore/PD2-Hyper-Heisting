@@ -1246,6 +1246,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 	
 		if action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "heal" then
@@ -1255,6 +1256,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		if action:expired() then
 			--log("hey this actually works!")
 			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "walk" then
@@ -1284,6 +1286,13 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			my_data.walking_to_cover_shoot_pos = nil
 			my_data.at_cover_shoot_pos = true
 		end
+		
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+		
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
 	elseif action_type == "tase" then
@@ -1323,6 +1332,12 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			CopLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "turn" then
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+		
 		my_data.turning = nil
 	elseif action_type == "hurt" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)

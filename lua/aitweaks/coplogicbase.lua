@@ -72,20 +72,13 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 	end
 end
 
-function CopLogicBase.should_duck_on_alert(data, alert_data)
-	--this fucking sucks.
+function CopLogicBase.should_get_att_obj_position_from_alert(data, alert_data)
 	
-	--if data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.crouch or alert_data[1] == "voice" or data.unit:anim_data().crouch or data.unit:movement():chk_action_forbidden("walk") then
-		--return
-	--end
-
-	--local lower_body_action = data.unit:movement()._active_actions[2]
-
-	--if lower_body_action and lower_body_action:type() == "walk" and not data.char_tweak.crouch_move then
-		--return
-	--end
+	if alert_data[1] == "voice" then
+		return
+	end
 	
-	return
+	return true
 end
 
 function CopLogicBase._chk_nearly_visible_chk_needed(data, attention_info, u_key)
@@ -412,6 +405,12 @@ end
 function CopLogicBase.action_taken(data, my_data)
 	return my_data.turning or my_data.moving_to_cover or my_data.walking_to_cover_shoot_pos or my_data.surprised or my_data.has_old_action or data.unit:movement():chk_action_forbidden("walk") or my_data.charge_path or my_data.cover_path or my_data.firing
 end
+
+function CopLogicBase.should_duck_on_alert(data, alert_data)
+	--this fucking sucks.
+	
+	return
+end
 	
 function CopLogicBase.chk_should_turn(data, my_data)
 	return not my_data.turning and not my_data.has_old_action and not data.unit:movement():chk_action_forbidden("walk") and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos and not my_data.surprised
@@ -432,7 +431,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	local is_detection_persistent = managers.groupai:state():chk_assault_active_atm() --LMAO
 	local delay = 0.7
 	
-	if diff_index == 8 then
+	if diff_index >= 6 then
 		delay = 0.35
 	end
 	
@@ -729,14 +728,12 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 					attention_info.verified_dis = dis
 				elseif data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask) then
 					if attention_info.criminal_record and AIAttentionObject.REACT_COMBAT <= attention_info.settings.reaction then
-						local seeninlast5seconds = attention_info.verified_t and attention_info.verified_t - t <= 3
-						if not is_detection_persistent and not seeninlast5seconds and mvector3.distance(attention_pos, attention_info.verified_pos) > 250 then
+						local seeninlast2seconds = attention_info.verified_t and attention_info.verified_t - t <= 2
+						if not is_detection_persistent and not seeninlast2seconds and mvector3.distance(attention_pos, attention_info.verified_pos) > 250 then
 							CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 						else
-							if diff_index > 6 or Global.game_settings.use_intense_AI then
-								attention_info.verified_pos = mvector3.copy(attention_info.criminal_record.pos)
-								attention_info.verified_dis = dis
-							end
+							attention_info.verified_pos = mvector3.copy(attention_info.criminal_record.pos)
+							attention_info.verified_dis = dis
 
 							if attention_info.vis_ray and data.logic._chk_nearly_visible_chk_needed(data, attention_info, u_key) then
 								_nearly_visible_chk(attention_info, attention_pos)
@@ -1097,39 +1094,16 @@ function CopLogicBase.on_suppressed_state(data)
 	end
 end
 
-function CopLogicBase.on_attention_obj_identified(data, attention_u_key, attention_info)
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	if data.group then
-		for u_key, u_data in pairs(data.group.units) do
-			if u_key ~= data.key then
-				if alive(u_data.unit) and diff_index >= 6 or alive(u_data.unit) and Global.game_settings.use_intense_AI then
-					u_data.unit:brain():clbk_group_member_attention_identified(data.unit, attention_u_key)
-				else
-					--Application:error("[CopLogicBase.on_attention_obj_identified] destroyed group member", data.unit, inspect(data.group), inspect(u_data), u_key)
-				end
-			end
-		end
-	end
-end
-
 function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 	if internal_data.unit and internal_data ~= internal_data.unit:brain()._logic_data.internal_data then
-		log("how is this man")
-		return
-		--debug_pause("[CopLogicBase.queue_task] Task queued from the wrong logic", internal_data.unit, id, func, data, exec_t, asap)
-	end
-	
-	if not id then
-		log("nonono!!!")
-		return
+		debug_pause("[CopLogicBase.queue_task] Task queued from the wrong logic", internal_data.unit, id, func, data, exec_t, asap)
 	end
 
 	local qd_tasks = internal_data.queued_tasks
 
 	if qd_tasks then
 		if qd_tasks[id] then
-			log("queued something twice!!!")
-			--debug_pause("[CopLogicBase.queue_task] Task queued twice", internal_data.unit, id, func, data, exec_t, asap)
+			debug_pause("[CopLogicBase.queue_task] Task queued twice", internal_data.unit, id, func, data, exec_t, asap)
 		end
 
 		qd_tasks[id] = true
@@ -1139,24 +1113,20 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 		}
 	end
 	
-	if data.unit and data.unit:base():has_tag("special") or data.unit and data.unit:base():has_tag("takedown") or data.internal_data.shooting or data.attention_obj and data.t and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 3000 and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 or data.attention_obj and data.attention_obj.is_human_player and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 1500 or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit and data.unit:in_slot(16) or data.unit and data.unit:in_slot(managers.slot:get_mask("criminals")) or data.internal_data and data.internal_data.next_allowed_attack_logic_t or data.internal_data and data.internal_data.exiting then
-		asap = true
-		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.internal_data.next_allowed_attack_logic_t or data.unit:base():has_tag("special") or data.internal_data and data.internal_data.exiting then
-			exec_t = data.t
-		elseif data.attention_obj and data.attention_obj.dis <= 1500 and data.t and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t <= 2 then
-			exec_t = data.t + 0.01
-		else
-			exec_t = data.t + 0.06
-		end
-	elseif data.t and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-		asap = nil
-		if data.attention_obj.dis <= 4000 then
-			exec_t = data.t + 0.5
-		else
-			exec_t = data.t + 1
-		end
+	if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit and data.unit:in_slot(16) or data.unit and data.unit:in_slot(managers.slot:get_mask("criminals")) or data.unit and data.unit:base():has_tag("special") then
+		exec_t = 0
 	end
 	
+	if data.t then
 	
+		if exec_t and exec_t > 0.7 then
+			exec_t = data.t + 0.7
+		end
+		
+		if not exec_t then
+			exec_t = data.t
+		end
+	end
+
 	managers.enemy:queue_task(id, func, data, exec_t, callback(CopLogicBase, CopLogicBase, "on_queued_task", internal_data), asap)
 end
