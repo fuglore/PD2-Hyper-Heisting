@@ -935,6 +935,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
 				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_city/ene_swat_policia_federale_city"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_city/ene_swat_policia_federale_city"),
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale")
 				},
 				shared = {
@@ -992,6 +994,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
 				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_city/ene_swat_policia_federale_city"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_city/ene_swat_policia_federale_city"),
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale")
 				},
 				shared = {
@@ -1556,8 +1560,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
 				federales = {
-					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_city_fbi/ene_swat_policia_federale_city_fbi"),
-					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_city_fbi/ene_swat_policia_federale_city_fbi"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_city/ene_swat_policia_federale_city"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_city/ene_swat_policia_federale_city"),
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale")
 				},
 				shared = {
