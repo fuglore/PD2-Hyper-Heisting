@@ -15,7 +15,7 @@
 	<!--FEDERALES SWAT SMG-->
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5" load="true"/>
 	<unit path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5_husk" load="true"/>
-	<material_config path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh_contour"/>	
+	<material_config path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5_contour"/>	
 	
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_mp5_hat/ene_acc_mp5_hat" load="true"/>
 	

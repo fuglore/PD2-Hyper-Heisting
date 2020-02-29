@@ -9704,7 +9704,8 @@ function CharacterTweakData:character_map()
 	char_map.bexhh = {
 		path = "units/pd2_dlc_bex/characters/",
 		list = {
-			"ene_swat_policia_federale_r870_hh"
+			"ene_swat_policia_federale_r870_hh",
+			"ene_swat_policia_federale_mp5"
 		}
 	}
 	char_map.drm = {
