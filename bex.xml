@@ -7,11 +7,17 @@
 	<object path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh" />
 	<model path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh" />	
 	<cooked_physics path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh"/>
-	
-	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_bexfucker/ene_acc_bexfucker" load="true"/>
-	
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/mask_df" />
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/mask_nm" />	
+	
+	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_bexfucker/ene_acc_bexfucker" load="true"/>
 
+	<!--FEDERALES SWAT SMG-->
+	<unit_mat path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5_husk" load="true"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh_contour"/>	
+	
+	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_mp5_hat/ene_acc_mp5_hat" load="true"/>
+	
 	
 </table>
