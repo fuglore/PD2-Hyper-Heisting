@@ -160,6 +160,10 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 			end
 		end
 	end
+	
+	if agg_pose then
+		return
+	end
 
 	if not agg_pose and objective then
 		if objective.stance then
@@ -209,17 +213,18 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 		end
 	end
 
-	if can_stand_or_crouch and not obj_has_pose and not agg_pose then
+	if data.char_tweak.allowed_poses and can_stand_or_crouch and not obj_has_pose and not agg_pose then
 		for pose_name, state in pairs(data.char_tweak.allowed_poses) do
 			if state then
-				if pose_name == "crouch" then
-					CopLogicAttack._chk_request_action_crouch(data)
+			
+				if pose_name == "stand" then
+					CopLogicAttack._chk_request_action_stand(data)
 
 					break
 				end
-
-				if pose_name == "stand" then
-					CopLogicAttack._chk_request_action_stand(data)
+				
+				if pose_name == "crouch" then
+					CopLogicAttack._chk_request_action_crouch(data)
 
 					break
 				end
@@ -736,7 +741,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 				end
 
 				attention_info.dis = dis
-				attention_info.vis_ray = vis_ray and vis_ray.dis or nil
+				attention_info.vis_ray = vis_ray or nil
 				local is_ignored = false
 
 				if attention_info.unit:movement() and attention_info.unit:movement().is_cuffed then
