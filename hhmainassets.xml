@@ -801,6 +801,9 @@
 	<!--federales fbi heavy swat texture changes-->
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_body_df" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_policia_federale_heavy_helmet_df" force="true"/>
+	
+	<!-- need to force load this texture from here otherwise it goes into missing textures randomly -->
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/helmets_swat_r870_df" load="true"/>
 
 	<!--JA! SE ACABO, PUTOS!-->
 	

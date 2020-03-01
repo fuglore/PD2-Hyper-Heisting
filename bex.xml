@@ -25,8 +25,6 @@
 	<unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh_husk" load="true"/>
 	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh_contour"/>
 	
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/helmets_swat_r870_df" />
-	
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_heavy_shotgunner_helmet/ene_acc_heavy_shotgunner_helmet" load="true"/>
 	
 	<!-- FEDERALES RIFLE MEDIC -->
