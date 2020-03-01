@@ -9547,6 +9547,18 @@ function CharacterTweakData:_set_sm_wish()
 			self.fbi_swat.speech_prefix_p2 = "n"
 			self.city_swat.speech_prefix_p2 = "n"
 		end
+		if faction == "federales" then
+			self.swat.speech_prefix_p1 = "m"
+			self.swat.speech_prefix_count = 4	
+			self.heavy_swat.speech_prefix_p1 = "m"
+			self.heavy_swat.speech_prefix_count = 4	
+			self.fbi.speech_prefix_p1 = "m"
+			self.fbi_swat.speech_prefix_p1 = "m"
+			self.city_swat.speech_prefix_p1 = "m"
+			self.shield.speech_prefix_p1 = "m"
+			self.shield.speech_prefix_p2 = "n"
+			self.shield.speech_prefix_count = 4	
+		end
 		if faction == "russia" then
 			self.swat.speech_prefix_p1 = "r"
 			self.swat.speech_prefix_count = 4	
@@ -9555,6 +9567,9 @@ function CharacterTweakData:_set_sm_wish()
 			self.fbi.speech_prefix_p1 = "r"
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
+			self.shield.speech_prefix_p1 = "r"
+			self.shield.speech_prefix_p2 = "n"
+			self.shield.speech_prefix_count = 4	
 		end
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
@@ -9707,7 +9722,9 @@ function CharacterTweakData:character_map()
 			"ene_swat_policia_federale_r870_hh",
 			"ene_swat_policia_federale_mp5",
 			"ene_medic_federale_rifle_hh",
-			"ene_medic_federale_r870_hh"
+			"ene_medic_federale_r870_hh",
+			"ene_swat_heavy_policia_federale_fbi_r870_hh",
+			"ene_bex_ninja_m4"
 		}
 	}
 	char_map.drm = {
