@@ -330,9 +330,7 @@ CopActionWalk._anim_block_presets = {
 function CopActionWalk:init(action_desc, common_data)
 	self._common_data = common_data
 	local action_desc = action_desc
-	action_desc.path_simplified = true
 	self._action_desc = action_desc
-	self._action_desc.path_simplified = true
 	self._unit = common_data.unit
 	self._ext_movement = common_data.ext_movement
 	self._ext_anim = common_data.ext_anim
@@ -391,9 +389,11 @@ function CopActionWalk:init(action_desc, common_data)
 		return
 	end
 	
-	if self._unit:base():has_tag("spooc") and self._haste == "run" and not Global.mutators.telespooc then
-		self._unit:damage():run_sequence_simple("kill_spook_lights")
-		self._unit:sound():play("cloaker_presence_stop")
+	if self._unit:base():has_tag("spooc") then
+		if not self._unit:character_damage():dead() and self._haste ~= "walk" then
+			self._unit:sound():play(self._unit:base():char_tweak().spawn_sound_event)
+			self._unit:damage():run_sequence_simple("turn_on_spook_lights")
+		end
 	end
 
 	self._ext_movement:enable_update()
@@ -931,10 +931,10 @@ function CopActionWalk:on_exit()
 	end
 	
 	
-	if self._unit:base():has_tag("spooc") then
+	if self._unit:base():has_tag("spooc") and not Global.mutators.telespooc then
 		if not self._unit:character_damage():dead() then
-			self._unit:sound():play(self._unit:base():char_tweak().spawn_sound_event)
-			self._unit:damage():run_sequence_simple("turn_on_spook_lights")
+			self._unit:damage():run_sequence_simple("kill_spook_lights")
+			self._unit:sound():play("cloaker_presence_stop")
 		end
 	end
 	

@@ -137,8 +137,15 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
 					elseif data.unit:base():has_tag("shield") then
 						local shield_knock_cooldown = math.random(3, 6)
-						if not data.attack_sound_t or data.t - data.attack_sound_t > shield_knock_cooldown then
-							data.unit:sound():say("shield_identification", true)
+						if not my_data.shield_knock_cooldown or my_data.shield_knock_cooldown < data.t then
+							local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)	
+							my_data.shield_knock_cooldown = data.t + shield_knock_cooldown
+									
+							if diff_index < 8 then
+								data.unit:sound():play("shield_identification", nil, true)
+							else
+								data.unit:sound():play("hos_shield_indication_sound_terminator_style", nil, true)
+							end
 						end
 					else
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "contact")
@@ -254,7 +261,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 							else
 								shoot = true
 							end
-						elseif not dense_mook and visibility_chk and focus_enemy.dis <= firing_range or dense_mook and visibility_chk and focus_enemy.aimed_at and focus_enemy.dis <= firing_range then
+						elseif not dense_mook and visibility_chk and focus_enemy.dis <= firing_range or dense_mook and visibility_chk and focus_enemy.aimed_at and focus_enemy.dis <= 1500 then
 							shoot = true
 						end
 					end
@@ -445,17 +452,17 @@ function CopLogicAttack._upd_aim(data, my_data)
 	end
 
 	if aim or shoot then
-		if expected_pos then
-			if my_data.attention_unit ~= expected_pos then
-				CopLogicBase._set_attention_on_pos(data, mvector3.copy(expected_pos))
-
-				my_data.attention_unit = mvector3.copy(expected_pos)
-			end
-		elseif focus_enemy.verified or focus_enemy.nearly_visible then
+		if focus_enemy.verified or focus_enemy.nearly_visible then
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)
 
 				my_data.attention_unit = focus_enemy.u_key
+			end
+		elseif expected_pos and not data.char_tweak.always_face_enemy then
+			if my_data.attention_unit ~= expected_pos then
+				CopLogicBase._set_attention_on_pos(data, mvector3.copy(expected_pos))
+
+				my_data.attention_unit = mvector3.copy(expected_pos)
 			end
 		else
 			local look_pos = focus_enemy.last_verified_pos or focus_enemy.verified_pos
@@ -816,7 +823,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local focus_enemy = data.attention_obj
 	local in_cover = my_data.in_cover
 	local best_cover = my_data.best_cover
-	local enemy_visible = focus_enemy and focus_enemy.verified or focus_enemy and focus_enemy.nearly_visible
+	local enemy_visible = focus_enemy and focus_enemy.verified
 	local enemy_visible_soft = nil
 	
 	if Global.game_settings.one_down then
@@ -1457,9 +1464,19 @@ function CopLogicAttack.queue_update(data, my_data)
 			else
 				if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
 					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
-				end
-				
-				if data.unit:base()._tweak_table == "akuma" then
+				elseif data.unit:base()._tweak_table == "shield" then
+					local shield_knock_cooldown = math.random(6, 12)
+					if not my_data.shield_knock_cooldown or my_data.shield_knock_cooldown < data.t then
+						local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)	
+						my_data.shield_knock_cooldown = data.t + shield_knock_cooldown
+									
+						if diff_index < 8 then
+							data.unit:sound():play("shield_identification", nil, true)
+						else
+							data.unit:sound():play("hos_shield_indication_sound_terminator_style", nil, true)
+						end
+					end
+				elseif data.unit:base()._tweak_table == "akuma" then
 					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "lotusapproach" )
 				end
 			end

@@ -424,13 +424,11 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				end
 				
 				if visible then
+					
 					if old_enemy_murder and data.tactics and data.tactics.murder then
 						target_priority_slot = 1
 					end
-				end
-				
-				if visible then
-				
+					
 					if data.tactics and data.tactics.harass and pantsdownchk then
 						target_priority_slot = 1
 					end
@@ -488,7 +486,7 @@ function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, st
 		return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_COMBAT)
 	end
 
-	local visible = attention_data.verified or attention_data.nearly_visible
+	local visible = attention_data.verified
 
 	if record.status == "dead" then
 		return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_AIM)
@@ -630,6 +628,141 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 
 	if old_objective and old_objective.fail_clbk then
 		old_objective.fail_clbk(data.unit)
+	end
+end
+
+function CopLogicIdle._chk_objective_needs_travel(data, new_objective)
+	
+	if not new_objective.nav_seg and new_objective.type ~= "follow" then
+		return
+	end	
+	
+	if not data.team.id == tweak_data.levels:get_default_team_ID("player") and not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) then
+		if CopLogicBase.should_enter_attack(data) then
+			return
+		end
+	end
+
+	if new_objective.in_place then
+		return
+	end
+
+	if new_objective.pos then
+		return true
+	end
+
+	if new_objective.area and new_objective.area.nav_segs[data.unit:movement():nav_tracker():nav_segment()] then
+		new_objective.in_place = true
+
+		return
+	end
+
+	return true
+end	
+
+function CopLogicIdle.action_complete_clbk(data, action)
+	local action_type = action:type()
+	local my_data = data.internal_data
+	
+	if action_type == "walk" then
+		my_data.advancing = nil
+		my_data.flank_cover = nil
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+		if my_data.has_retreated and managers.groupai:state():chk_active_assault_break() then
+			my_data.in_retreat_pos = true
+		elseif my_data.surprised then
+			my_data.surprised = false
+		elseif my_data.moving_to_cover then
+			if action:expired() then
+				my_data.in_cover = my_data.moving_to_cover
+				my_data.cover_enter_t = data.t
+			end
+
+			my_data.moving_to_cover = nil
+		elseif my_data.walking_to_cover_shoot_pos then
+			my_data.walking_to_cover_shoot_pos = nil
+			my_data.at_cover_shoot_pos = true
+		end
+	elseif action_type == "shoot" then
+		my_data.shooting = nil
+	elseif action_type == "tase" then
+		if action:expired() and my_data.tasing then
+			local record = managers.groupai:state():criminal_record(my_data.tasing.target_u_key)
+
+			if record and record.status then
+				data.tase_delay_t = TimerManager:game():time() + 45
+			end
+		end
+
+		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
+
+		my_data.tasing = nil
+	elseif action_type == "reload" then
+		--Removed the requirement for being important here.
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+		end
+	elseif action_type == "turn" then
+		data.internal_data.turning = nil
+
+		if data.internal_data.fwd_offset then
+			local return_spin = data.internal_data.rubberband_rotation:to_polar_with_reference(data.unit:movement():m_rot():y(), math.UP).spin
+
+			if math.abs(return_spin) < 15 then
+				data.internal_data.fwd_offset = nil
+			end
+		end
+	elseif action_type == "act" then
+
+		if my_data.action_started == action then
+			if my_data.scan and not my_data.exiting and (not my_data.queued_tasks or not my_data.queued_tasks[my_data.wall_stare_task_key]) and not my_data.stare_path_pos then
+				CopLogicBase.queue_task(my_data, my_data.wall_stare_task_key, CopLogicIdle._chk_stare_into_wall_1, data, data.t)
+			end
+
+			if action:expired() then
+				if not my_data.action_timeout_clbk_id then
+					data.objective_complete_clbk(data.unit, data.objective)
+				end
+			elseif not my_data.action_expired then
+				data.objective_failed_clbk(data.unit, data.objective)
+			end
+		end
+		
+		--CopLogicAttack._cancel_cover_pathing(data, my_data)
+		--CopLogicAttack._cancel_charge(data, my_data)
+		
+		--Fixed panic never waking up cops.
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+		
+	elseif action_type == "hurt" then
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+		
+		--Removed the requirement for being important here.
+		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+		end
+	elseif action_type == "dodge" then
+		local timeout = action:timeout()
+
+		if timeout then
+			data.dodge_timeout_t = TimerManager:game():time() + math.lerp(timeout[1], timeout[2], math.random())
+		end
+
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			--CopLogicAttack._upd_combat_movement(data)
+		end
 	end
 end
 
