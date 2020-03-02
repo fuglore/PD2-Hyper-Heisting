@@ -197,9 +197,13 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 	local player_unit = managers.player:player_unit()
 	local cur_state = self._unit:movement():current_state_name()
 	if attack_data then
+		local next_allowed_dmg_t = type(self._next_allowed_dmg_t) == "number" and self._next_allowed_dmg_t or Application:digest_value(self._next_allowed_dmg_t, false)
+		local t = managers.player:player_timer():time()
 		
-		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
-			if alive(player_unit) and self._unit:movement():current_state().on_melee_stun and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi" or tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_xc45" then
+		--enemies were meleeing players and taking their guns away during invincibility frames and thats no bueno
+		
+		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and next_allowed_dmg_t and next_allowed_dmg_t < t then
+			if alive(player_unit) and self._unit:movement():current_state().on_melee_stun and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi" and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_xc45" then
 				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), 0.8)
 			end
 		end

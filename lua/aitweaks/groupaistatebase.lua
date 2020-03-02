@@ -88,7 +88,7 @@ function GroupAIStateBase:update(t, dt)
 
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
-	--self:_draw_current_logics()
+	self:_draw_current_logics()
 	
 	if self._draw_drama then
 		self:_debug_draw_drama(t)

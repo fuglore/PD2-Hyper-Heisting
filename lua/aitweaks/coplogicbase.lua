@@ -72,15 +72,6 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 	end
 end
 
-function CopLogicBase.should_get_att_obj_position_from_alert(data, alert_data)
-	
-	if alert_data[1] == "voice" then
-		return
-	end
-	
-	return true
-end
-
 function CopLogicBase._chk_nearly_visible_chk_needed(data, attention_info, u_key)
 	return not attention_info.criminal_record or attention_info.is_human_player
 end
@@ -863,7 +854,7 @@ function CopLogicBase.should_enter_travel(data, objective)
 end	
 
 function CopLogicBase.should_enter_attack(data)
-	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_SHOOT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
 	local objective = data.objective
 	local my_data = data.internal_data
 	local t = data.t
@@ -872,11 +863,7 @@ function CopLogicBase.should_enter_attack(data)
 		return
 	end
 	
-	if not objective then
-		return
-	end
-	
-	if objective.running then
+	if objective and objective.running then
 		return
 	end
 	
@@ -921,45 +908,28 @@ function CopLogicBase.should_enter_attack(data)
 			for _, nbr in pairs(my_area.neighbours) do
 				if next(nbr.criminal.units) then
 					criminal_in_neighbour = true
-
 					break
 				end
 			end
 		end
-		
-		local attack_distance = 1000
-		
+			
+		local attack_distance = 1200
+			
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			attack_distance = 1500
+			attack_distance = 2000
 			ranged_fire_group = true
 		end
-		
-		local criminal_near = criminal_in_my_area or criminal_in_neighbour
-		
-		local travel_data_chk = my_data.processing_advance_path or my_data.processing_coarse_path or my_data.advance_path or my_data.coarse_path
-		
-		if travel_data_chk and not criminal_near then
-			return
-		end
-		
-		local visibility_chk = att_obj.verified
-		
-		
-		if managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and att_obj.dis <= 5000 then
-			return true
-		end
-		
-		if data.attention_obj.dis <= 2000 then
-		
-			local path_fail_chk = not my_data.cover_path_failed_t or data.t - my_data.cover_path_failed_t > 5
-		
-			if my_data.want_to_take_cover and path_fail_chk and att_obj.dis <= data.internal_data.weapon_range.close or my_data.in_cover and my_data.cover_test_step and my_data.cover_test_step <= 2 and att_obj.dis <= data.internal_data.weapon_range.close then
-				return true
-			end
 			
-			if my_data.charge_path or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or visibility_chk and att_obj.dis <= attack_distance and math.abs(data.m_pos.z - att_obj.m_pos.z) < 100 or visibility_chk and criminal_near and math.abs(data.m_pos.z - att_obj.m_pos.z) < 400 then
-				return true
-			end
+		local criminal_near = criminal_in_my_area or criminal_in_neighbour
+			
+		if not criminal_near and ranged_fire_group and att_obj.dis <= attack_distance then
+			criminal_near = true
+		end
+			
+		local visibility_chk = att_obj.verified or att_obj.nearly_visible or att_obj.verified_t and att_obj.verified_t - data.t <= 1
+			
+		if my_data.charge_path or data.internal_data and data.internal_data.tasing or data.internal_data and data.internal_data.spooc_attack or AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction or att_obj.dis <= 900 and math.abs(data.m_pos.z - att_obj.m_pos.z) < 250 or my_data.firing and visibility_chk and att_obj.dis <= attack_distance or visibility_chk and att_obj.dis <= attack_distance and criminal_near then
+			return true
 		end
 		
 		return
@@ -1145,18 +1115,22 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 		}
 	end
 	
-	if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit and data.unit:in_slot(16) or data.unit and data.unit:in_slot(managers.slot:get_mask("criminals")) or data.unit and data.unit:base():has_tag("special") then
-		exec_t = 0
-	end
+	--if data.needs_immediate_update then
+		--log("unit needs immediate update")
+	--end
 	
 	if data.t then
+	
+		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit and data.unit:in_slot(16) or data.unit and data.unit:in_slot(managers.slot:get_mask("criminals")) or data.unit and data.unit:base():has_tag("special") or internal_data and internal_data.exiting or data.needs_immediate_update then
+			exec_t = data.t + 0
+		end
 	
 		if exec_t and exec_t > 0.7 then
 			exec_t = data.t + 0.7
 		end
 		
 		if not exec_t then
-			exec_t = data.t
+			exec_t = data.t + 0
 		end
 	end
 

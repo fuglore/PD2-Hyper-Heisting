@@ -344,12 +344,14 @@ function CopActionShoot:on_attention(attention, old_attention)
 							aim_delay = math_lerp(aim_delay_minmax[2], aim_delay_minmax[1], lerp_dis)
 						end
 
-						if self._common_data.is_suppressed then
+						if self._common_data.is_suppressed and self._is_shin_shootout then
 							aim_delay = aim_delay * 1.5
 						end
 					end
 
 					self._shoot_t = t + aim_delay
+					local melee_delay = math_min(aim_delay, 0.35)
+					self._melee_start_allowed_t = t + melee_delay
 					shoot_hist.focus_start_t = t
 				end
 
@@ -364,12 +366,14 @@ function CopActionShoot:on_attention(attention, old_attention)
 						aim_delay = math_lerp(aim_delay_minmax[1], aim_delay_minmax[2], lerp_dis)
 					end
 
-					if self._common_data.is_suppressed then
+					if self._common_data.is_suppressed and self._is_shin_shootout then
 						aim_delay = aim_delay * 1.5
 					end
 				end
 
 				self._shoot_t = t + aim_delay
+				local melee_delay = math_min(aim_delay, 0.35)
+				self._melee_start_allowed_t = t + melee_delay
 
 				shoot_hist = {
 					focus_start_t = t,
@@ -463,8 +467,8 @@ function CopActionShoot:update(t)
 				can_melee = nil
 			end
 		end
-
-		local do_melee = can_melee and self:check_melee_start(t, self._attention, target_dis, autotarget, shoot_from_pos) and self:_chk_start_melee()
+		
+		local do_melee = self._melee_start_allowed_t and self._melee_start_allowed_t < t and can_melee and self:check_melee_start(t, self._attention, target_dis, autotarget, shoot_from_pos) and self:_chk_start_melee()
 
 		if do_melee then
 			if self._autofiring then

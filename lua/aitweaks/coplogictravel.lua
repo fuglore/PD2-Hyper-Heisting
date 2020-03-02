@@ -749,7 +749,6 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			CopLogicTravel.upd_advance(data)
 		end
 	elseif action_type == "walk" then
-		
 		if action:expired() and not my_data.starting_advance_action and my_data.coarse_path_index and not my_data.has_old_action and my_data.advancing then
 			my_data.coarse_path_index = my_data.coarse_path_index + 1
 
@@ -775,7 +774,6 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				local high_ray = CopLogicTravel._chk_cover_height(data, my_data.best_cover[1], data.visibility_slotmask)
 				my_data.best_cover[4] = high_ray
 				my_data.in_cover = true
-				
 				local cover_wait_time = nil
 				
 				local should_tacticool_wait = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(0.35, 1) and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250 --if an enemy is not at semi equal height, and further than 12 meters, and we've seen him at least two to four seconds ago, do a slower, more tacticool approach
@@ -792,26 +790,13 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				else
 					my_data.cover_leave_t = data.t + cover_wait_time
 				end
-				
 			else
 				managers.navigation:release_cover(my_data.moving_to_cover[1])
 
 				if my_data.best_cover then
-					local facing_cover = nil
 					local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
-					local cover_search_dis = nil
-					
-					if no_cover_search_dis_change or not is_mook then
-						cover_search_dis = 100
-					else
-						cover_search_dis = 250
-					end
-					
-					--if cover_search_dis == 200 then
-						--log("thats hot")
-					--end
 
-					if dis > cover_search_dis then
+					if dis > 100 then
 						managers.navigation:release_cover(my_data.best_cover[1])
 
 						my_data.best_cover = nil
@@ -822,15 +807,8 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			my_data.moving_to_cover = nil
 		elseif my_data.best_cover then
 			local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
-			local cover_search_dis = nil
-					
-			if not is_mook then
-				cover_search_dis = 100
-			else
-				cover_search_dis = 250
-			end
-			
-			if dis > cover_search_dis then
+
+			if dis > 100 then
 				managers.navigation:release_cover(my_data.best_cover[1])
 
 				my_data.best_cover = nil
@@ -948,75 +926,6 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				end
 			end
 		end
-	end
-end
-
-function CopLogicTravel._update_cover(ignore_this, data)
-	local my_data = data.internal_data
-	
-	local mook_units = {
-		"security",
-		"security_undominatable",
-		"cop",
-		"cop_scared",
-		"cop_female",
-		"gensec",
-		"fbi",
-		"swat",
-		"heavy_swat",
-		"fbi_swat",
-		"fbi_heavy_swat",
-		"city_swat",
-		"gangster",
-		"biker",
-		"mobster",
-		"bolivian",
-		"bolivian_indoors",
-		"medic",
-		"taser"
-	}
-	local is_mook = nil
-	for _, name in ipairs(mook_units) do
-		if data.unit:base()._tweak_table == name then
-			is_mook = true
-		end
-	end
-
-	CopLogicBase.on_delayed_clbk(my_data, my_data.cover_update_task_key)
-
-	local cover_release_dis = nil
-	
-	if not is_mook then
-		cover_release_dis = 100
-	else
-		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 10000 then
-			cover_release_dis = 500
-		else
-			cover_release_dis = 150
-		end
-	end
-	
-	local nearest_cover = my_data.nearest_cover
-	local best_cover = my_data.best_cover
-	local m_pos = data.m_pos
-	local facing_cover = nil
-
-	if not my_data.in_cover and nearest_cover and cover_release_dis < mvector3.distance(nearest_cover[1][1], m_pos) then
-		managers.navigation:release_cover(nearest_cover[1])
-
-		my_data.nearest_cover = nil
-		nearest_cover = nil
-	end
-
-	if best_cover and cover_release_dis < mvector3.distance(best_cover[1][1], m_pos) then
-		managers.navigation:release_cover(best_cover[1])
-
-		my_data.best_cover = nil
-		best_cover = nil
-	end
-
-	if nearest_cover or best_cover then
-		CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
 	end
 end
 

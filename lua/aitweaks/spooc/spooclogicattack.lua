@@ -135,7 +135,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 
 	if focus_enemy and focus_enemy.nav_tracker and focus_enemy.is_person and AIAttentionObject.REACT_SPECIAL_ATTACK == focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") then
 		
-		if focus_enemy.verified and focus_enemy.verified_dis <= 1500 then
+		if focus_enemy.verified and focus_enemy.dis <= 1500 then
 			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakercontact")
 		end
 		
@@ -157,7 +157,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 
 				return true
 			end
-		elseif focus_enemy.verified and focus_enemy.verified_dis <= 1500 and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "ignore_unit", focus_enemy.unit, "report") and ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) then
+		elseif focus_enemy.verified and focus_enemy.dis <= 1500 and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "ignore_unit", focus_enemy.unit, "report") and ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) then
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)
 
