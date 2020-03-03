@@ -1353,7 +1353,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		
 		--Removed the requirement for being important here.
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
-			data.logic._upd_aim(data, my_data)
+			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
 		end

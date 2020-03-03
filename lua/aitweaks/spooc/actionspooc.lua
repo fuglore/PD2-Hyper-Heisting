@@ -374,18 +374,22 @@ function ActionSpooc:_chk_target_invalid()
 	local record = managers.groupai:state():criminal_record(target_unit:key())
 
 	if record then
-		local is_last_standing = true
-
-		for u_key, u_data in pairs(managers.groupai:state():all_char_criminals()) do
-			if not u_data.status and target_unit:key() ~= u_key then
-				is_last_standing = false
-
-				break
-			end
-		end
-
-		if is_last_standing then
+		if record.status then
 			return true
+		else
+			local is_last_standing = true
+
+			for u_key, u_data in pairs(managers.groupai:state():all_char_criminals()) do
+				if not u_data.status and target_unit:key() ~= u_key then
+					is_last_standing = false
+
+					break
+				end
+			end
+
+			if is_last_standing then
+				return true
+			end
 		end
 	end
 

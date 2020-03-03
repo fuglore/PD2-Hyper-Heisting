@@ -1138,9 +1138,7 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 	
 	if data.t then
 	
-		if exec_t and exec_t > 0.7 then
-			exec_t = data.t + 0.7
-		end
+		exec_t = data.t + 0.016
 		
 		if not exec_t then
 			exec_t = data.t

@@ -857,7 +857,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicTravel.upd_advance(data)
 		end
-	elseif action_type == "shoot" then
+	elseif action_type == "shoot" then		
 		my_data.shooting = nil
 	elseif action_type == "tase" then
 		if action:expired() and my_data.tasing then
