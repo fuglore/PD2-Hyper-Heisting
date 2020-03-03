@@ -5,10 +5,7 @@ function SpoocLogicAttack.queued_update(data)
 	local my_data = data.internal_data
 
 	if my_data.spooc_attack then
-		if my_data.spooc_attack.action:complete() then
-			SpoocLogicAttack._cancel_spooc_attempt(data, my_data)
-		end
-
+		
 		if data.internal_data == my_data then
 			CopLogicBase._report_detections(data.detected_attention_objects)
 			SpoocLogicAttack.queue_update(data, my_data)
