@@ -70,6 +70,11 @@ function SpoocLogicAttack.queued_update(data)
 end
 
 function SpoocLogicAttack._upd_spooc_attack(data, my_data)
+
+	if not my_data then
+		return
+	end
+
 	if my_data.spooc_attack then
 		return
 	end
@@ -250,7 +255,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
-			SpoocLogicAttack._upd_spooc_attack(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
 	elseif action_type == "shoot" then
@@ -281,7 +286,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
-			SpoocLogicAttack._upd_spooc_attack(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 
 		my_data.spooc_attack = nil
@@ -291,14 +296,14 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
-			SpoocLogicAttack._upd_spooc_attack(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 	elseif action_type == "turn" then
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
-			SpoocLogicAttack._upd_spooc_attack(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
 		my_data.turning = nil
@@ -311,7 +316,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
-			SpoocLogicAttack._upd_spooc_attack(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
 	elseif action_type == "dodge" then
@@ -328,7 +333,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
-			SpoocLogicAttack._upd_spooc_attack(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 	end
 end
@@ -505,6 +510,7 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicTravel.upd_advance(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 	elseif action_type == "shoot" then	
 		my_data.shooting = nil
@@ -534,6 +540,7 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicTravel.upd_advance(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 
 		my_data.spooc_attack = nil
@@ -543,12 +550,14 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicTravel.upd_advance(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 	elseif action_type == "turn" then
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicTravel.upd_advance(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
 		my_data.turning = nil
@@ -561,6 +570,7 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicTravel.upd_advance(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
 	elseif action_type == "dodge" then
@@ -577,6 +587,7 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicTravel.upd_advance(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
 		local objective = data.objective
