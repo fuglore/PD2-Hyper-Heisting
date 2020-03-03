@@ -2022,11 +2022,66 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	return true
 end
 
-function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
-	if CopLogicBase.should_enter_attack(data) then
+function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
+	managers.groupai:state():on_unit_detection_updated(data.unit)
+
+	data.t = TimerManager:game():time()
+	local my_data = data.internal_data
+	local delay = nil
+	
+	if data.cool then
+		delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+	else
+		delay = CopLogicBase._upd_attention_obj_detection(data, AIAttentionObject.REACT_COMBAT, AIAttentionObject.REACT_SPECIAL_ATTACK)
+	end
+	
+	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
+	local old_att_obj = data.attention_obj
+
+	CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
+	
+	if not CopLogicBase.should_enter_attack(data) then
+		CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
+	end
+
+	if my_data ~= data.internal_data then
 		return
 	end
 
+	if new_attention then
+		if old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
+			CopLogicAttack._cancel_charge(data, my_data)
+
+			my_data.flank_cover = nil
+
+			if not data.unit:movement():chk_action_forbidden("walk") then
+				CopLogicAttack._cancel_walking_to_cover(data, my_data)
+			end
+
+			CopLogicAttack._set_best_cover(data, my_data, nil)
+		end
+	elseif old_att_obj then
+		CopLogicAttack._cancel_charge(data, my_data)
+
+		my_data.flank_cover = nil
+	end
+
+	CopLogicBase._chk_call_the_police(data)
+
+	if my_data ~= data.internal_data then
+		return
+	end
+
+	CopLogicAttack._upd_aim(data, my_data)
+
+	if not is_synchronous then
+		CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, delay and data.t + delay, data.important and true)
+	end
+
+	CopLogicBase._report_detections(data.detected_attention_objects)
+end
+
+function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
 	if not data.unit:movement():chk_action_forbidden("walk") then
 		local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
 

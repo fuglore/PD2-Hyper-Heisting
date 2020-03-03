@@ -815,20 +815,32 @@ function CopLogicBase.should_enter_travel(data, objective)
 end	
 
 function CopLogicBase.should_enter_attack(data)
-	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
 	local objective = data.objective
 	local my_data = data.internal_data
 	local t = data.t
 	
-	if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+	if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or not data.unit:base():has_tag("law") then
+		--log("fuck off1")
 		return
 	end
 	
 	if objective and objective.running then
+		--log("fuck off2")
 		return
 	end
 	
 	if data.unit:base()._tweak_table == "sniper" then
+		return
+	end
+	
+	local reactions_chk = data.attention_obj and AIAttentionObject.REACT_AIM <= data.attention_obj.reaction or data.attention_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= data.attention_obj.reaction
+	
+	if not reactions_chk then
+		return
+	end
+	
+	if not data.attention_obj.verified_t then
+		--log("valid but fuck off")
 		return
 	end
 	
@@ -856,12 +868,16 @@ function CopLogicBase.should_enter_attack(data)
 		end
 	end
 	
-	if data.unit:base():has_tag("law") and reactions_chk then
+	if data.unit:base():has_tag("law") then
 		local att_obj = data.attention_obj
 		local criminal_in_my_area = nil
 		local criminal_in_neighbour = nil
 		local ranged_fire_group = nil
 		local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
+		
+		if att_obj and AIAttentionObject.REACT_SPECIAL_ATTACK <= att_obj.reaction then
+			return true
+		end
 
 		if next(my_area.criminal.units) then
 			criminal_in_my_area = true
@@ -888,21 +904,27 @@ function CopLogicBase.should_enter_attack(data)
 			criminal_near = true
 		end
 		
-		local visibility_chk = att_obj.verified or att_obj.nearly_visible or att_obj.verified_t and att_obj.verified_t - data.t <= 2
+		local visibility_chk = att_obj.verified
 		
 		if managers.groupai:state():chk_active_assault_break() and not my_data.in_retreat_pos and att_obj.dis <= 5000 then
+			--log("yes1")
 			return true
 		end
 		
 		if data.attention_obj.dis <= 2000 and visibility_chk then
 		
 			if criminal_near or att_obj.dis <= attack_distance then
+				--log("yes2")
 				return true
 			end
 		end
 		
+		--log("fuck off3")
+		
 		return
 	end
+	
+	log("fuck off WHAT WHAT IN THE SHIT")
 	
 	return
 end

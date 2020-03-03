@@ -363,7 +363,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				end
 
 				local target_priority = distance
-				local target_priority_slot = 0
+				local target_priority_slot = nil
 				
 				if visible then
 					local justmurder = data.tactics and data.tactics.murder
@@ -443,7 +443,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					target_priority_slot = 20 + target_priority_slot + math.max(0, AIAttentionObject.REACT_COMBAT - reaction)
 				end
 
-				if target_priority_slot ~= 0 then
+				if target_priority_slot then
 					local best = false
 
 					if not best_target then

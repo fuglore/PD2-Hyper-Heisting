@@ -211,7 +211,14 @@ function CopLogicTravel._upd_enemy_detection(data)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
 	local my_data = data.internal_data
-	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+	local delay = nil
+	
+	if data.cool then
+		delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+	else
+		delay = CopLogicBase._upd_attention_obj_detection(data, AIAttentionObject.REACT_AIM, AIAttentionObject.REACT_SPECIAL_ATTACK)
+	end
+	
 	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
 	local old_att_obj = data.attention_obj
 
