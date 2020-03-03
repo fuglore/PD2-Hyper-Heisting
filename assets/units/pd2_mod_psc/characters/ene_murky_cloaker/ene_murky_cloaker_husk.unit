@@ -4,10 +4,11 @@
 	<object file="units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker" />
 
 	<dependencies>
-		
-		<depends_on bnk="soundbanks/regular_vox" />
+	
 		<depends_on effect="effects/particles/character/cloaker_goggle" />
 		<depends_on unit="units/payday2/characters/ene_acc_baton/ene_acc_baton" />
+		<depends_on unit="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_head_debris" />
+		<depends_on unit="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_body_debris" />
 	</dependencies>
 
 	<extensions>

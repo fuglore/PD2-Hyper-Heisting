@@ -362,15 +362,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 							end
 						end
 					else
-						aim = true
 						
-						if focus_enemy and aim and focus_enemy.verified_t and data.t - focus_enemy.verified_t < 5 and data.tactics and data.tactics.harass then
-							if dense_mook and managers.groupai:state():chk_high_fed_density() then
-								--log("not firing due to FEDS")
-							else
-								shoot = true
-							end
-						end
 					end
 				end
 			end
@@ -424,12 +416,15 @@ function CopLogicAttack._upd_aim(data, my_data)
 		local verified_or_nearvis_chk = focus_enemy and focus_enemy.verified or focus_enemy and focus_enemy.nearly_visible
 		local FE_or_EP_chk = focus_enemy or expected_pos
 		
-		if focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and data.unit:anim_data().run and my_data.weapon_range.close < focus_enemy.dis then
+		if focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and running or expected_pos and running then
 			local walk_to_pos = data.unit:movement():get_walk_to_pos()
 
 			if walk_to_pos then
+				
+				local attention_position = focus_enemy and focus_enemy.m_pos or expected_pos
+				
 				mvector3.direction(temp_vec1, data.m_pos, walk_to_pos)
-				mvector3.direction(temp_vec2, data.m_pos, focus_enemy.m_pos)
+				mvector3.direction(temp_vec2, data.m_pos, attention_position)
 
 				local dot = mvector3.dot(temp_vec1, temp_vec2)
 
@@ -1572,7 +1567,7 @@ function CopLogicAttack._update_cover(data)
 		if find_new then
 			local enemy_tracker = data.attention_obj.nav_tracker
 			local threat_pos = enemy_tracker:field_position()
-			local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 2
+			local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(0.35, 2)
 			
 			if data.objective and data.objective.type == "follow" and data.tactics and data.tactics.shield_cover and not data.unit:base()._tweak_table == "shield" then
 				local heister_pos = data.attention_obj.m_pos --the threat
@@ -1648,11 +1643,22 @@ function CopLogicAttack._update_cover(data)
 				local flank_cover = my_data.flank_cover
 				local min_dis, max_dis = nil
 
-				if want_to_take_cover or my_data.firing then
-					if data.tactics and not data.tactics.ranged_fire and not data.tactics.elite_ranged_fire then
-						min_dis = 250
+				if want_to_take_cover then
+					if not enemyseeninlast2secs then
+						min_dis = 30
+						max_dis = data.attention_obj.dis
 					else
-						min_dis = math.max(data.attention_obj.dis * 0.9, data.attention_obj.dis - 200)
+						min_dis = math.max(data.attention_obj.dis * 1.2, data.attention_obj.dis + 200)
+						
+						if min_dis > data.attention_obj.dis + 1000 then
+							min_dis = data.attention_obj.dis + 500
+						end
+						
+						max_dis = math.min(min_dis + 500, data.attention_obj.dis + 1000)
+						
+						if min_dis > max_dis then
+							min_dis = min_dis - max_dis
+						end
 					end
 				end
 				
@@ -1670,7 +1676,7 @@ function CopLogicAttack._update_cover(data)
 					local max_dis = nil
 					local not_ranged_fire_group_chk = not data.tactics or not data.tactics.ranged_fire and not data.tactics.elite_ranged_fire
 
-					if want_to_take_cover then
+					if want_to_take_cover and enemyseeninlast2secs then
 						if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
 							if optimal_dis < my_data.weapon_range.optimal then
 								optimal_dis = optimal_dis
@@ -1699,7 +1705,7 @@ function CopLogicAttack._update_cover(data)
 							max_dis = math.max(optimal_dis + 200, my_data.weapon_range.far)
 						end
 						
-					elseif not_ranged_fire_group_chk and optimal_dis > my_data.weapon_range.close then
+					elseif not_ranged_fire_group_chk and optimal_dis > my_data.weapon_range.close or not enemyseeninlast2secs then
 						optimal_dis = my_data.weapon_range.close
 
 						mvector3.set_length(my_vec, optimal_dis)
@@ -1884,6 +1890,11 @@ end
 function CopLogicAttack._verify_cover(data, cover, threat_pos, min_dis, max_dis)
 	local threat_dis = mvector3.distance(temp_vec1, cover[1], threat_pos)
 	
+	if not data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(0.35, 2) then
+		return true
+	end
+	
+	
 	if min_dis and threat_dis < min_dis or max_dis and threat_dis > max_dis then
 		--log("damnit!")
 		return
@@ -1971,8 +1982,12 @@ end
 
 function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	local my_data = data.internal_data
-
+	
 	if my_data.exiting then
+		return
+	end
+	
+	if CopLogicBase.should_enter_attack(data) then
 		return
 	end
 
@@ -1989,10 +2004,6 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	end
 
 	if data.is_suppressed and not Global.game_settings.one_down and not managers.skirmish:is_skirmish() then
-		return
-	end
-
-	if CopLogicBase.should_enter_attack(data) then
 		return
 	end
 

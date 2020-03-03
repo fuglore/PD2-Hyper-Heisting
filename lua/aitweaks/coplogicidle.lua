@@ -597,8 +597,13 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 
 		if objective_type == "free" and my_data.exiting then
 			--nothing
-		elseif CopLogicIdle._chk_objective_needs_travel(data, new_objective) and not CopLogicBase.should_enter_attack(data) then
-			CopLogicBase._exit(data.unit, "travel")
+		elseif CopLogicIdle._chk_objective_needs_travel(data, new_objective) then
+			if CopLogicBase.should_enter_attack(data) then
+				log("entered attack")
+				CopLogicBase._exit(data.unit, "attack")
+			else
+				CopLogicBase._exit(data.unit, "travel")
+			end
 		elseif objective_type == "guard" then
 			CopLogicBase._exit(data.unit, "guard")
 		elseif objective_type == "security" then
@@ -635,12 +640,6 @@ function CopLogicIdle._chk_objective_needs_travel(data, new_objective)
 	
 	if not new_objective.nav_seg and new_objective.type ~= "follow" then
 		return
-	end	
-	
-	if not data.team.id == tweak_data.levels:get_default_team_ID("player") and not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) then
-		if CopLogicBase.should_enter_attack(data) then
-			return
-		end
 	end
 
 	if new_objective.in_place then
@@ -770,7 +769,9 @@ function CopLogicIdle._chk_relocate(data)
 	
 	if not data.team.id == tweak_data.levels:get_default_team_ID("player") and not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) then
 		if CopLogicBase.should_enter_attack(data) then
-			return
+			data.logic._exit(data.unit, "attack")
+			
+			return true
 		end
 	end
 	
