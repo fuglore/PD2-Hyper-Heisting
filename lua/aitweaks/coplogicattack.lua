@@ -412,36 +412,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 		shoot = nil
 	end
 	
-	if aim or shoot then
-		local verified_or_nearvis_chk = focus_enemy and focus_enemy.verified or focus_enemy and focus_enemy.nearly_visible
-		local FE_or_EP_chk = focus_enemy or expected_pos
-		
-		if focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and running or expected_pos and running then
-			local walk_to_pos = data.unit:movement():get_walk_to_pos()
-
-			if walk_to_pos then
-				
-				local attention_position = focus_enemy and focus_enemy.m_pos or expected_pos
-				
-				mvector3.direction(temp_vec1, data.m_pos, walk_to_pos)
-				mvector3.direction(temp_vec2, data.m_pos, attention_position)
-
-				local dot = mvector3.dot(temp_vec1, temp_vec2)
-
-				if dot < 0.6 then
-					shoot = false
-					aim = false
-				end
-			end
-		end
-
-		if shoot and CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk or aim and CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk or CopLogicAttack.chk_should_turn(data, my_data) and focus_enemy and focus_enemy.alert_t and data.t - focus_enemy.alert_t < math.random(2, 4) then
-			local enemy_pos = verified_or_nearvis_chk and focus_enemy.m_pos or focus_enemy and focus_enemy.verified_pos or expected_pos
-
-			CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
-		end
-	end
-	
 	if not aim and data.char_tweak.always_face_enemy and focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction then
 		aim = true
 	end
@@ -493,6 +463,36 @@ function CopLogicAttack._upd_aim(data, my_data)
 			CopLogicBase._reset_attention(data)
 
 			my_data.attention_unit = nil
+		end
+	end
+	
+	if aim or shoot then
+		local verified_or_nearvis_chk = focus_enemy and focus_enemy.verified or focus_enemy and focus_enemy.nearly_visible
+		local FE_or_EP_chk = focus_enemy or expected_pos
+		
+		if focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and running or expected_pos and running then
+			local walk_to_pos = data.unit:movement():get_walk_to_pos()
+
+			if walk_to_pos then
+				
+				local attention_position = focus_enemy and focus_enemy.m_pos or expected_pos
+				
+				mvector3.direction(temp_vec1, data.m_pos, walk_to_pos)
+				mvector3.direction(temp_vec2, data.m_pos, attention_position)
+
+				local dot = mvector3.dot(temp_vec1, temp_vec2)
+
+				if dot < 0.6 then
+					shoot = false
+					aim = false
+				end
+			end
+		end
+
+		if shoot and CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk or aim and CopLogicAttack.chk_should_turn(data, my_data) and FE_or_EP_chk or CopLogicAttack.chk_should_turn(data, my_data) and focus_enemy and focus_enemy.alert_t and data.t - focus_enemy.alert_t < math.random(2, 4) then
+			local enemy_pos = verified_or_nearvis_chk and focus_enemy.m_pos or focus_enemy and focus_enemy.verified_pos or expected_pos
+
+			CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
 		end
 	end
 
