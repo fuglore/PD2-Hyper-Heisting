@@ -597,7 +597,7 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.active = true
 	assault_task.next_dispatch_t = nil
 	assault_task.target_areas = assault_areas or self._assault_areas
-	self._current_target_area = math.random(#task_data.target_areas)
+	self._current_target_area = math.random(#assault_task.target_areas)
 	self._used_assault_area_i = 0
 	assault_task.phase = "anticipation"
 	assault_task.start_t = self._t
