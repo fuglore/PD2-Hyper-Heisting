@@ -350,10 +350,18 @@ function GroupAIStateBesiege:get_hostage_count_for_chatter()
 	return 0
 end
 
-function GroupAIStateBesiege:_upd_assault_areas()
+function GroupAIStateBesiege:_upd_assault_areas(current_area)
+	local all_areas = self._area_data
+	local nav_manager = managers.navigation
+	local all_nav_segs = nav_manager._nav_segments
+	local task_data = self._task_data
+	local t = self._t
+	
+	local assault_candidates = {}
+	local assault_data = task_data.assault
+
 	local found_areas = {}
 	local to_search_areas = {}
-	local assault_candidates = {}
 
 	for area_id, area in pairs(all_areas) do
 		if area.spawn_points then
@@ -362,6 +370,8 @@ function GroupAIStateBesiege:_upd_assault_areas()
 					table.insert(to_search_areas, area)
 
 					found_areas[area_id] = true
+
+					break
 				end
 			end
 		end
@@ -372,25 +382,33 @@ function GroupAIStateBesiege:_upd_assault_areas()
 					table.insert(to_search_areas, area)
 
 					found_areas[area_id] = true
+
+					break
 				end
 			end
 		end
 	end
-	
-	for criminal_key, criminal_data in pairs(self._char_criminals) do
-		if not criminal_data.status then
-			local nav_seg = criminal_data.tracker:nav_segment()
-			local area = self:get_area_from_nav_seg_id(nav_seg)
-			found_areas[area] = true
-				
-			for _, nbr in pairs(area.neighbours) do
-				found_areas[nbr] = true
-			end
 
-			table.insert(assault_candidates, area)
+	if #to_search_areas == 0 then
+		return current_area
+	end
+
+	if assault_candidates then
+		for criminal_key, criminal_data in pairs(self._char_criminals) do
+			if not criminal_data.status then
+				local nav_seg = criminal_data.tracker:nav_segment()
+				local area = self:get_area_from_nav_seg_id(nav_seg)
+				found_areas[area] = true
+				
+				for _, nbr in pairs(area.neighbours) do
+					found_areas[nbr] = true
+				end
+
+				table.insert(assault_candidates, area)
+			end
 		end
 	end
-	
+
 	local i = 1
 
 	repeat
@@ -400,11 +418,13 @@ function GroupAIStateBesiege:_upd_assault_areas()
 		local nr_police = table.size(area.police.units)
 		local nr_criminals = table.size(area.criminal.units)
 
-		for criminal_key, _ in pairs(area.criminal.units) do
-			if not self._criminals[criminal_key].is_deployable then
-				table.insert(assault_candidates, area)
+		if assault_candidates then
+			for criminal_key, _ in pairs(area.criminal.units) do
+				if not self._criminals[criminal_key].is_deployable then
+					table.insert(assault_candidates, area)
 
-				break
+					break
+				end
 			end
 		end
 
@@ -412,7 +432,6 @@ function GroupAIStateBesiege:_upd_assault_areas()
 			for neighbour_area_id, neighbour_area in pairs(area.neighbours) do
 				if not found_areas[neighbour_area_id] then
 					table.insert(to_search_areas, neighbour_area)
-					i = i - 1
 
 					found_areas[neighbour_area_id] = true
 				end
@@ -420,10 +439,9 @@ function GroupAIStateBesiege:_upd_assault_areas()
 		end
 
 		i = i + 1
-	until i > #to_search_areas 
-	
+	until i > #to_search_areas
+
 	if assault_candidates and #assault_candidates > 0 then
-		self._assault_areas = assault_candidates
 		return assault_candidates
 	end
 	
@@ -597,7 +615,7 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.active = true
 	assault_task.next_dispatch_t = nil
 	assault_task.target_areas = assault_areas or self._assault_areas
-	self._current_target_area = math.random(#assault_task.target_areas)
+	self._current_target_area = self._task_data.assault.target_areas[1]
 	self._used_assault_area_i = 0
 	assault_task.phase = "anticipation"
 	assault_task.start_t = self._t
@@ -903,13 +921,11 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	if self._current_target_area then
 		primary_target_area = self._current_target_area
-		self._used_assault_area_i = self._used_assault_area_i + 1
 	end
 
-	if not primary_target_area or not self._current_target_area or self:is_area_safe_assault(primary_target_area) or self._used_assault_area_i and self._used_assault_area_i > 3 then
-		self._used_assault_area_i = 0
-		self._task_data.assault.target_areas = self:upd_assault_areas()
-		self._current_target_area = math.random(#task_data.target_areas)
+	if not primary_target_area or not self._current_target_area or self:is_area_safe_assault(primary_target_area) or self._force_assault_end_t then
+		self._task_data.assault.target_areas = self:_upd_assault_areas()
+		self._current_target_area = self._task_data.assault.target_areas[1]
 		primary_target_area = self._current_target_area
 	end
 	
