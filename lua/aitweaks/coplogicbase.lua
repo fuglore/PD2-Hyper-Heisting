@@ -746,6 +746,45 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	return delay
 end
 
+function CopLogicBase.upd_objective_logic(data, objective)
+	
+	local my_data = data.internal_data
+	local focus_enemy = data.attention_obj
+	local t = data.t
+	
+	if objective then
+		local objective_type = objective.type
+		local should_enter_travel = objective.nav_seg or objective.type == "follow"
+			
+		local objective_type = objective.type
+
+		if objective_type == "free" and my_data.exiting then
+			--nothing
+		elseif CopLogicIdle._chk_objective_needs_travel(data, objective) then
+			if CopLogicBase.should_enter_attack(data) then
+				log("entered attack")
+				CopLogicBase._exit(data.unit, "attack")
+			else
+				CopLogicBase._exit(data.unit, "travel")
+			end
+		elseif objective_type == "guard" then
+			CopLogicBase._exit(data.unit, "guard")
+		elseif objective_type == "security" then
+			CopLogicBase._exit(data.unit, "idle")
+		elseif objective_type == "sniper" then
+			CopLogicBase._exit(data.unit, "sniper")
+		elseif objective_type == "phalanx" then
+			CopLogicBase._exit(data.unit, "phalanx")
+		elseif objective_type == "surrender" then
+			CopLogicBase._exit(data.unit, "intimidated", objective.params)
+		elseif objective.action or not data.attention_obj or not CopLogicBase.should_enter_attack(data) then
+			CopLogicBase._exit(data.unit, "idle")
+		else
+			CopLogicBase._exit(data.unit, "attack")
+		end
+	end
+end
+
 function CopLogicBase.on_new_logic_needed(data, objective)
 	
 	local my_data = data.internal_data
@@ -869,6 +908,11 @@ function CopLogicBase.should_enter_attack(data)
 	end
 	
 	if data.unit:base():has_tag("law") then
+		
+		if my_data.cover_test_step and my_data.cover_test_step <= 2 or my_data.at_cover_shoot_pos or my_data.charge_path then
+			return true
+		end
+		
 		local att_obj = data.attention_obj
 		local criminal_in_my_area = nil
 		local criminal_in_neighbour = nil
@@ -891,18 +935,9 @@ function CopLogicBase.should_enter_attack(data)
 			end
 		end
 		
-		local attack_distance = 1000
-		
-		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			attack_distance = 1500
-			ranged_fire_group = true
-		end
+		local engage_range = my_data.weapon_range.close or 1500
 		
 		local criminal_near = criminal_in_my_area or criminal_in_neighbour
-		
-		if not criminal_near and ranged_fire_group then
-			criminal_near = true
-		end
 		
 		local visibility_chk = att_obj.verified
 		
@@ -913,7 +948,7 @@ function CopLogicBase.should_enter_attack(data)
 		
 		if data.attention_obj.dis <= 2000 and visibility_chk then
 		
-			if criminal_near or att_obj.dis <= attack_distance then
+			if criminal_near or att_obj.dis <= engage_range then
 				--log("yes2")
 				return true
 			end

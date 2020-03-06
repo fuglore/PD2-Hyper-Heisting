@@ -15,7 +15,7 @@ function SpoocLogicAttack.queued_update(data)
 	end
 
 	if my_data.has_old_action then
-		CopLogicAttack._upd_stop_old_action(data, my_data)
+		SpoocLogicAttack._upd_stop_old_action(data, my_data)
 		SpoocLogicAttack.queue_update(data, my_data)
 
 		return
@@ -40,10 +40,10 @@ function SpoocLogicAttack.queued_update(data)
 		return
 	end
 
-	CopLogicAttack._process_pathing_results(data, my_data)
+	SpoocLogicAttack._process_pathing_results(data, my_data)
 
 	if not data.attention_obj or data.attention_obj.reaction < AIAttentionObject.REACT_AIM then
-		CopLogicAttack._upd_enemy_detection(data, true)
+		SpoocLogicAttack._upd_enemy_detection(data, true)
 
 		if my_data ~= data.internal_data or not data.attention_obj then
 			return
@@ -59,10 +59,10 @@ function SpoocLogicAttack.queued_update(data)
 	end
 
 	if AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-		my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
+		my_data.want_to_take_cover = SpoocLogicAttack._chk_wants_to_take_cover(data, my_data)
 
-		CopLogicAttack._update_cover(data)
-		CopLogicAttack._upd_combat_movement(data)
+		SpoocLogicAttack._update_cover(data)
+		SpoocLogicAttack._upd_combat_movement(data)
 	end
 
 	SpoocLogicAttack.queue_update(data, my_data)
@@ -152,7 +152,7 @@ end
 
 function SpoocLogicAttack._chk_request_action_spooc_attack(data, my_data, flying_strike)
 	if data.unit:anim_data().crouch then
-		CopLogicAttack._chk_request_action_stand(data)
+		SpoocLogicAttack._chk_request_action_stand(data)
 
 		return
 	end
@@ -269,7 +269,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 			end
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			CopLogicAttack._upd_combat_movement(data)
+			SpoocLogicAttack._upd_combat_movement(data)
 		end
 
 		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
@@ -391,16 +391,27 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
 	elseif action_type == "heal" then
 		SpoocLogicAttack._cancel_cover_pathing(data, my_data)
 		SpoocLogicAttack._cancel_charge(data, my_data)
+		SpoocLogicAttack._upd_spooc_attack(data, my_data)
 	
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
 	elseif action_type == "walk" then
 		
@@ -408,7 +419,7 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 			my_data.coarse_path_index = my_data.coarse_path_index + 1
 
 			if my_data.coarse_path_index > #my_data.coarse_path then
-				debug_pause_unit(data.unit, "[CopLogicTravel.action_complete_clbk] invalid coarse path index increment", data.unit, inspect(my_data.coarse_path), my_data.coarse_path_index)
+				debug_pause_unit(data.unit, "[SpoocLogicTravel.action_complete_clbk] invalid coarse path index increment", data.unit, inspect(my_data.coarse_path), my_data.coarse_path_index)
 
 				my_data.coarse_path_index = my_data.coarse_path_index - 1
 			end
@@ -474,6 +485,11 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 			end
 
 			my_data.moving_to_cover = nil
+		elseif my_data.walking_to_cover_shoot_pos then
+			if action:expired() then
+				my_data.walking_to_cover_shoot_pos = nil
+				my_data.at_cover_shoot_pos = true
+			end
 		elseif my_data.best_cover then
 			local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
 			local cover_search_dis = nil
@@ -509,10 +525,14 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
-	elseif action_type == "shoot" then	
+	elseif action_type == "shoot" then		
 		my_data.shooting = nil
 	elseif action_type == "tase" then
 		if action:expired() and my_data.tasing then
@@ -523,7 +543,12 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 			end
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
+			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
 
 		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
@@ -539,8 +564,12 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
 
 		my_data.spooc_attack = nil
@@ -549,15 +578,23 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
 	elseif action_type == "turn" then
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
 		
 		my_data.turning = nil
@@ -569,8 +606,12 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
 		
 	elseif action_type == "dodge" then
@@ -586,8 +627,12 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicTravel.upd_advance(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+				SpoocLogicTravel._upd_combat_movement(data)
+			else
+				SpoocLogicTravel.upd_advance(data)
+			end
 		end
 		
 		local objective = data.objective
@@ -604,7 +649,7 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 				end
 
 				if my_data == data.internal_data then
-					debug_pause_unit(data.unit, "[CopLogicTravel.action_complete_clbk] exiting without discarding objective", data.unit, inspect(data.objective))
+					debug_pause_unit(data.unit, "[SpoocLogicTravel.action_complete_clbk] exiting without discarding objective", data.unit, inspect(data.objective))
 					CopLogicBase._exit(data.unit, wanted_state)
 				end
 			end

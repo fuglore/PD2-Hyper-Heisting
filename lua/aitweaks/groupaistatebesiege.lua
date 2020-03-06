@@ -614,7 +614,7 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	local assault_task = self._task_data.assault
 	assault_task.active = true
 	assault_task.next_dispatch_t = nil
-	assault_task.target_areas = assault_areas or self._assault_areas
+	assault_task.target_areas = assault_areas or self:_upd_assault_areas(nil)
 	self._current_target_area = self._task_data.assault.target_areas[1]
 	self._used_assault_area_i = 0
 	assault_task.phase = "anticipation"
@@ -921,15 +921,21 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	if self._current_target_area then
 		primary_target_area = self._current_target_area
+	elseif self._task_data.assault.target_areas then
+		self._current_target_area = self._task_data.assault.target_areas[1]
+		primary_target_area = self._current_target_area
 	end
 
 	if not primary_target_area or not self._current_target_area or self:is_area_safe_assault(primary_target_area) or self._force_assault_end_t then
 		self._task_data.assault.target_areas = self:_upd_assault_areas()
-		self._current_target_area = self._task_data.assault.target_areas[1]
-		primary_target_area = self._current_target_area
+		
+		if self._task_data.assault.target_areas then
+			self._current_target_area = self._task_data.assault.target_areas[1]
+			primary_target_area = self._current_target_area
+		end
 	end
 	
-	if task_data.phase ~= "fade" and task_data.phase ~= "anticipation"  and not self._activeassaultbreak and not self._feddensityhigh then
+	if self._task_data.assault.target_areas and primary_target_area and task_data.phase ~= "fade" and task_data.phase ~= "anticipation"  and not self._activeassaultbreak and not self._feddensityhigh then
 		if task_data.use_smoke_timer < t then
 			task_data.use_smoke = true
 		end
@@ -943,7 +949,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 	nr_wanted = task_data.force - self:_count_police_force("assault")
 
-	if nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh or self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak and not self._feddensityhigh then
+	if self._task_data.assault.target_areas and primary_target_area and nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh or self._task_data.assault.target_areas and primary_target_area and self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil
 
 		if task_data.use_spawn_event and task_data.phase ~= "anticipation" or task_data.use_spawn_event and self._hunt_mode then
@@ -980,8 +986,10 @@ function GroupAIStateBesiege:_upd_assault_task()
 			end
 		end
 	end
-
-	self:_assign_enemy_groups_to_assault(task_data.phase)
+	
+	if self._task_data.assault.target_areas then
+		self:_assign_enemy_groups_to_assault(task_data.phase)
+	end
 end
 
 function GroupAIStateBesiege:is_smoke_grenade_active()
