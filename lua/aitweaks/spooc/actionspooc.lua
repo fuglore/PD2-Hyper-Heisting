@@ -43,15 +43,13 @@ function ActionSpooc:init(action_desc, common_data)
 	self._machine = common_data.machine
 	self._unit = common_data.unit
 
+	common_data.ext_movement:play_redirect("idle")
+
 	if not self._ext_anim.pose then
 		--print("[ActionSpooc:init] no pose in anim", self._machine:segment_state(ids_base), self._unit)
-		common_data.ext_movement:play_redirect("idle")
+		--debug_pause()]]
 
-		--[[if not self._ext_anim.pose then
-			debug_pause()]]
-
-			return
-		--end
+		return
 	end
 
 	self._action_desc = action_desc
@@ -130,7 +128,7 @@ function ActionSpooc:init(action_desc, common_data)
 	end
 
 	if self._is_local and self._target_unit and self._target_unit:base().is_local_player then
-		self._target_unit:movement():on_targetted_for_attack(false, self._unit)
+		self._target_unit:movement():on_targetted_for_attack(true, self._unit)
 	end
 
 	if self._is_server then
@@ -1191,14 +1189,14 @@ function ActionSpooc:anim_act_clbk(anim_act)
 
 	if self._stroke_t then
 		if self._strike_unit then
-			self._unit:sound():say(sound_string, nil, true)
+			self._unit:sound():play(sound_string)
 		end
 
 		return
 	end
 
 	self._stroke_t = TimerManager:game():time()
-	self._unit:sound():say(sound_string, nil, true)
+	self._unit:sound():play(sound_string)
 
 	local detect_stop_sound = self:get_sound_event("detect_stop")
 
