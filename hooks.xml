@@ -35,7 +35,9 @@
 	
 	<post :script_path="dialogmanager.lua" :hook_id="managers/dialogmanager"/>
 	
+	<post :script_path="dotmanager.lua" :hook_id="managers/dotmanager"/>
 	<post :script_path="firemanager.lua" :hook_id="managers/firemanager"/>
+	<post :script_path="explosionmanager.lua" :hook_id="managers/explosionmanager"/>
 	<post :script_path="crimespreemanager.lua" :hook_id="managers/crimespreemanager"/>
 	
 	<post :script_path="enemymanager.lua" :hook_id="managers/enemymanager"/>
@@ -57,6 +59,7 @@
 	<post :script_path="aitweaks/raycastweaponbase.lua" :hook_id="units/weapons/raycastweaponbase"/>
 	<post :script_path="aitweaks/npcraycastweaponbase.lua" :hook_id="units/weapons/npcraycastweaponbase"/>	
 	<post :script_path="aitweaks/newflamethrowerbase.lua" :hook_id="units/weapons/newflamethrowerbase"/>
+	<post :script_path="aitweaks/tripminebase.lua" :hook_id="units/weapons/trip_mine/tripminebase"/>
 	<post :script_path="aitweaks/sentrygunweapon.lua" :hook_id="units/weapons/sentrygunweapon"/>
 	<post :script_path="aitweaks/sentries/sentrygunbrain.lua" :hook_id="units/equipment/sentry_gun/sentrygunbrain"/>
 	<post :script_path="aitweaks/interactionext.lua" :hook_id="units/interactions/interactionext"/>
