@@ -710,23 +710,33 @@ end
 function CopMovement:damage_clbk(my_unit, damage_info)
 	local hurt_type = damage_info.result.type
 
-	if damage_info.variant == "explosion" or damage_info.variant == "bullet" or damage_info.variant == "fire" or damage_info.variant == "poison" then
+	if not hurt_type then
+		return
+	end
+
+	if damage_info.variant == "bullet" or damage_info.variant == "explosion" or damage_info.variant == "fire" or damage_info.variant == "poison" or damage_info.variant == "graze" then
 		hurt_type = managers.modifiers:modify_value("CopMovement:HurtType", hurt_type)
-	end
-
-	if hurt_type == "stagger" then
-		hurt_type = "heavy_hurt"
-	end
-
-	if hurt_type == "hurt" or hurt_type == "heavy_hurt" or hurt_type == "knock_down" then
-		if self._anim_global and self._anim_global == "shield" then
+	elseif damage_info.variant == "stun" and self._anim_global == "shield" then
+		hurt_type = "expl_hurt"
+		damage_info.result = {
+			variant = damage_info.variant,
+			type = "expl_hurt"
+		}
+	elseif hurt_type == "stagger" or hurt_type == "knock_down" then
+		if self._anim_global == "shield" then
+			hurt_type = "expl_hurt"
+		else
+			hurt_type = "hurt"
+		end
+	elseif hurt_type == "hurt" or hurt_type == "heavy_hurt" then
+		if self._anim_global == "shield" then
 			hurt_type = "expl_hurt"
 		end
 	end
 
 	local block_type = hurt_type
 
-	if hurt_type == "knock_down" or hurt_type == "expl_hurt" or hurt_type == "fire_hurt" or hurt_type == "poison_hurt" or hurt_type == "taser_tased" then
+	if hurt_type == "expl_hurt" or hurt_type == "fire_hurt" or hurt_type == "poison_hurt" or hurt_type == "taser_tased" then
 		block_type = "heavy_hurt"
 	end
 
@@ -734,30 +744,19 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		self._queued_actions = {}
 	end
 
-	if not hurt_type or Network:is_server() and self:chk_action_forbidden(block_type) then
-		if hurt_type == "death" then
+	if Network:is_server() and self:chk_action_forbidden(block_type) then
+		--[[if hurt_type == "death" then
 			debug_pause_unit(self._unit, "[CopMovement:damage_clbk] Death action skipped!!!", self._unit)
 			Application:draw_cylinder(self._m_pos, self._m_pos + math.UP * 5000, 30, 1, 0, 0)
 
 			for body_part, action in ipairs(self._active_actions) do
 				if action then
-					--print(body_part, action:type(), inspect(action._blocks))
+					print(body_part, action:type(), inspect(action._blocks))
 				end
 			end
-		end
+		end]]
 
 		return
-	end
-
-	if damage_info.variant == "stun" and alive(self._ext_inventory and self._ext_inventory._shield_unit) then
-		hurt_type = "shield_knock"
-		block_type = "shield_knock"
-		damage_info.variant = "melee"
-		damage_info.result = {
-			variant = "melee",
-			type = "shield_knock"
-		}
-		damage_info.shield_knock = true
 	end
 
 	if hurt_type == "death" then
@@ -799,25 +798,24 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			blocks.bleedout = -1
 			blocks.hurt = -1
 			blocks.heavy_hurt = -1
+			blocks.stagger = -1
+			blocks.knock_down = -1
+			blocks.counter_tased = -1
 			blocks.hurt_sick = -1
+			blocks.expl_hurt = -1
+			blocks.fire_hurt = -1
+			blocks.taser_tased = -1
+			blocks.poison_hurt = -1
+			blocks.shield_knock = -1
 			blocks.concussion = -1
-		end
-
-		if hurt_type == "shield_knock" then
-			blocks.light_hurt = -1
-			blocks.concussion = -1
-		end
-
-		if hurt_type == "concussion" or hurt_type == "counter_tased" then
+		elseif hurt_type == "shield_knock" or hurt_type == "concussion" or hurt_type == "counter_tased" then
 			blocks.hurt = -1
-			blocks.light_hurt = -1
 			blocks.heavy_hurt = -1
 			blocks.stagger = -1
 			blocks.knock_down = -1
 			blocks.counter_tased = -1
 			blocks.hurt_sick = -1
 			blocks.expl_hurt = -1
-			blocks.counter_spooc = -1
 			blocks.fire_hurt = -1
 			blocks.taser_tased = -1
 			blocks.poison_hurt = -1
@@ -826,37 +824,45 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		end
 	end
 
+	local client_interrupt = nil
+
 	if damage_info.variant == "tase" then
 		block_type = "bleedout"
-	elseif hurt_type == "expl_hurt" or hurt_type == "fire_hurt" or hurt_type == "poison_hurt" or hurt_type == "taser_tased" then
-		block_type = "heavy_hurt"
 	else
+		if Network:is_client() then
+			client_interrupt = true
+		end
+
 		block_type = hurt_type
-	end
-
-	local client_interrupt = nil
-	
-	local horribly_long_hurt_chk = hurt_type == "light_hurt" or hurt_type == "hurt" and damage_info.variant ~= "tase" or hurt_type == "heavy_hurt" or hurt_type == "expl_hurt" or hurt_type == "shield_knock" or hurt_type == "counter_tased" or hurt_type == "taser_tased" or hurt_type == "counter_spooc" or hurt_type == "death" or hurt_type == "hurt_sick" or hurt_type == "fire_hurt" or hurt_type == "poison_hurt" or hurt_type == "concussion"
-
-	if Network:is_client() and horribly_long_hurt_chk then
-		client_interrupt = true
 	end
 
 	local tweak = self._tweak_data
 	local action_data = nil
 
 	if hurt_type == "healed" then
-		if Network:is_client() then
-			client_interrupt = true
+		if self._unit:contour() then
+			self._unit:contour():add("medic_heal")
+			self._unit:contour():flash("medic_heal", 0.2)
+		end
+
+		if tweak.ignore_medic_revive_animation then
+			return
 		end
 
 		action_data = {
-			body_part = 3,
+			body_part = 1,
 			type = "healed",
 			client_interrupt = client_interrupt
 		}
 	else
-		local death_severity_chk = tweak.damage.death_severity and tweak.damage.death_severity < damage_info.damage / tweak.HEALTH_INIT and "heavy" or "normal"
+		local death_type = "normal"
+
+		if tweak.damage.death_severity then
+			if tweak.damage.death_severity < damage_info.damage / tweak.HEALTH_INIT then
+				death_type = "heavy"
+			end
+		end
+
 		action_data = {
 			type = "hurt",
 			block_type = block_type,
@@ -868,27 +874,17 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			blocks = blocks,
 			client_interrupt = client_interrupt,
 			attacker_unit = damage_info.attacker_unit,
-			death_type = death_severity_chk or "normal",
+			death_type = death_type,
 			ignite_character = damage_info.ignite_character,
 			start_dot_damage_roll = damage_info.start_dot_damage_roll,
 			is_fire_dot_damage = damage_info.is_fire_dot_damage,
 			fire_dot_data = damage_info.fire_dot_data,
-			is_synced = damage_info.is_synced --to check in copactionhurt and avoid syncing back to sender
+			is_synced = damage_info.is_synced
 		}
 	end
 
-	local request_action = Network:is_server() or not self:chk_action_forbidden(action_data)
-
-	if damage_info.is_synced and (hurt_type == "knock_down" or hurt_type == "heavy_hurt") then
-		request_action = false
-	end
-
-	if request_action then
+	if Network:is_server() or not self:chk_action_forbidden(action_data) then
 		self:action_request(action_data)
-
-		if hurt_type == "death" and self._queued_actions then
-			self._queued_actions = {}
-		end
 	end
 end
 
@@ -915,5 +911,128 @@ function CopMovement:synch_attention(attention)
 		if action and action.on_attention then
 			action:on_attention(attention, old_attention)
 		end
+	end
+end
+
+function CopMovement:drop_held_items()
+	self._spawneditems = {}
+
+	if not self._droppable_gadgets then
+		return
+	end
+
+	for _, drop_item_unit in ipairs(self._droppable_gadgets) do
+		local wanted_item_key = drop_item_unit:key()
+
+		if alive(drop_item_unit) then
+			for align_place, item_list in pairs(self._equipped_gadgets) do
+				if wanted_item_key then
+					for i_item, item_unit in ipairs(item_list) do
+						if item_unit:key() == wanted_item_key then
+							table.remove(item_list, i_item)
+
+							wanted_item_key = nil
+
+							break
+						end
+					end
+				else
+					break
+				end
+			end
+
+			drop_item_unit:unlink()
+			drop_item_unit:set_slot(0)
+		else
+			for align_place, item_list in pairs(self._equipped_gadgets) do
+				if wanted_item_key then
+					for i_item, item_unit in ipairs(item_list) do
+						if not alive(item_unit) then
+							table.remove(item_list, i_item)
+						end
+					end
+				end
+			end
+		end
+	end
+
+	self._droppable_gadgets = nil
+end
+
+function CopMovement:_equip_item(item_type, align_place, droppable)
+	if item_type == "needle" then
+		align_place = "hand_l"
+	end
+
+	local align_name = self._gadgets.aligns[align_place]
+
+	if not align_name then
+		--print("[CopMovement:anim_clbk_equip_item] non existent align place:", align_place)
+
+		return
+	end
+
+	local align_obj = self._unit:get_object(align_name)
+	local available_items = self._gadgets[item_type]
+
+	if not available_items then
+		--print("[CopMovement:anim_clbk_equip_item] non existent item_type:", item_type)
+
+		return
+	end
+
+	local item_name = available_items[math.random(available_items)]
+
+	if self._spawneditems[item_type] ~= nil then
+		return
+	end
+
+	self._spawneditems[item_type] = true
+
+	if item_type == "needle" then
+		align_place = "hand_l"
+	end
+
+	--print("[CopMovement]Spawning: " .. item_type)
+
+	local item_unit = World:spawn_unit(item_name, align_obj:position(), align_obj:rotation())
+
+	self._unit:link(align_name, item_unit, item_unit:orientation_object():name())
+
+	self._equipped_gadgets = self._equipped_gadgets or {}
+	self._equipped_gadgets[align_place] = self._equipped_gadgets[align_place] or {}
+
+	table.insert(self._equipped_gadgets[align_place], item_unit)
+
+	if droppable then
+		self._droppable_gadgets = self._droppable_gadgets or {}
+
+		table.insert(self._droppable_gadgets, item_unit)
+	end
+end
+
+function CopMovement:_get_latest_tase_action()
+	if self._queued_actions then
+		for i = #self._queued_actions, 1, -1 do
+			local action = self._queued_actions[i]
+
+			if action.type == "tase" then
+				return self._queued_actions[i], true
+			end
+		end
+	end
+
+	if self._active_actions[3] and self._active_actions[3]:type() == "tase" and not self._active_actions[3]:expired() then
+		return self._active_actions[3]
+	end
+end
+
+function CopMovement:sync_taser_fire()
+	local tase_action, is_queued = self:_get_latest_tase_action()
+
+	if is_queued then
+		tase_action.firing_at_husk = true
+	elseif tase_action then
+		tase_action:fire_taser()
 	end
 end
