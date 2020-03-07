@@ -75,6 +75,8 @@
 		
 		<post :script_path="tank/tankcoplogicattack.lua" :hook_id="tank/logics/tankcoplogicattack"/>
 		
+		<post :script_path="medicactionheal.lua" :hook_id="medic/actions/upper_body/medicactionheal"/>
+		
 		<post :script_path="copdamage.lua" :hook_id="cop/copdamage"/>
 		<post :script_path="copbrain.lua" :hook_id="cop/copbrain"/>
 		<post :script_path="copbase.lua" :hook_id="cop/copbase"/>
@@ -87,6 +89,7 @@
 		<post :script_path="copactionwalk.lua" :hook_id="cop/actions/lower_body/copactionwalk"/>
 		<post :script_path="copactionturn.lua" :hook_id="cop/actions/lower_body/copactionturn"/>
 		<post :script_path="copactionshoot.lua" :hook_id="cop/actions/upper_body/copactionshoot"/>
+		<post :script_path="copactionhealed.lua" :hook_id="cop/actions/upper_body/copactionhealed"/>
 		<post :script_path="copactionreload.lua" :hook_id="cop/actions/upper_body/copactionreload"/>
 		<post :script_path="coplogicarrest.lua" :hook_id="cop/logics/coplogicarrest"/>
 		<post :script_path="coplogicidle.lua" :hook_id="cop/logics/coplogicidle"/>
