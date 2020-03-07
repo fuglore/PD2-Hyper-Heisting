@@ -1227,9 +1227,10 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 	local head = self._head_body_name and not self._unit:in_slot(16) and not self._char_tweak.ignore_headshot and body and body:name() == self._ids_head_body_name
 	local damage = damage_percent * self._HEALTH_INIT_PRECENT
 	local attack_data = {}
-	local hit_pos = mvector3.copy(self._unit:movement():m_pos())
+	local hit_pos = mvector3.copy(body:center_of_mass())
+	--local hit_pos = mvector3.copy(self._unit:movement():m_pos())
 
-	mvector3.set_z(hit_pos, hit_pos.z + hit_offset_height)
+	--mvector3.set_z(hit_pos, hit_pos.z + hit_offset_height)
 
 	attack_data.pos = hit_pos
 	attack_data.attacker_unit = attacker_unit
@@ -1237,7 +1238,9 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 	local attack_dir, distance = nil
 
 	if attacker_unit then
-		attack_dir = hit_pos - attacker_unit:movement():m_head_pos()
+		local from_pos = attacker_unit:movement().m_detect_pos and attacker_unit:movement():m_detect_pos() or attacker_unit:movement():m_head_pos()
+
+		attack_dir = hit_pos - from_pos
 		distance = mvector3.normalize(attack_dir)
 	else
 		attack_dir = self._unit:rotation():y()
@@ -1275,8 +1278,32 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 			self:_check_special_death_conditions("bullet", body, attacker_unit, data.weapon_unit)
 			managers.statistics:killed_by_anyone(data)
 
-			if not data.weapon_unit:base().thrower_unit and data.weapon_unit:base():is_category("shotgun") and distance and distance < ((attacker_unit:base() and attacker_unit:base().is_husk_player or managers.groupai:state():is_unit_team_AI(attacker_unit)) and managers.game_play_central:get_shotgun_push_range() or 500) then
-				shotgun_push = true
+			if distance and managers.enemy:is_corpse_disposal_enabled() and not data.weapon_unit:base().thrower_unit and data.weapon_unit:base().is_category and data.weapon_unit:base():is_category("shotgun") then
+				local negate_push = nil
+
+				if data.weapon_unit:base()._parts then
+					for part_id, part in pairs(data.weapon_unit:base()._parts) do
+						if tweak_data.weapon.factory.parts[part_id].custom_stats and tweak_data.weapon.factory.parts[part_id].custom_stats.rays == 1 then
+							negate_push = true
+
+							break
+						end
+					end
+				end
+
+				if not negate_push then
+					local max_distance = 500
+
+					if attacker_unit:base() then
+						if attacker_unit:base().is_husk_player or managers.groupai:state():is_unit_team_AI(attacker_unit) then
+							max_distance = managers.game_play_central:get_shotgun_push_range()
+						end
+					end
+
+					if distance < max_distance then
+						shotgun_push = true
+					end
+				end
 			end
 		end
 	else
@@ -1328,7 +1355,23 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 	self:_on_damage_received(attack_data)
 
 	if shotgun_push then
-		managers.game_play_central:_do_shotgun_push(self._unit, hit_pos, attack_dir, distance, attacker_unit)
+		local push_dir = attack_dir
+		local push_hit_pos = hit_pos
+
+		if attacker_unit and alive(attacker_unit) then
+			if attacker_unit:movement() and attacker_unit:movement().detect_look_dir then
+				push_dir = attacker_unit:movement():detect_look_dir()
+			end
+
+			local from_pos = attacker_unit:movement().m_detect_pos and attacker_unit:movement():m_detect_pos() or attacker_unit:movement():m_head_pos()
+			local hit_ray = World:raycast("ray", from_pos, body:center_of_mass(), "target_body", body)
+
+			if hit_ray then
+				push_hit_pos = hit_ray.position
+			end
+		end
+
+		managers.game_play_central:_do_shotgun_push(self._unit, push_hit_pos, push_dir, distance, attacker_unit)
 	end
 end
 
