@@ -820,6 +820,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local best_cover = my_data.best_cover
 	local enemy_visible = focus_enemy and focus_enemy.verified
 	local enemy_visible_soft = nil
+	local engage_range = my_data.weapon_range.close or 1500
 	
 	if Global.game_settings.one_down then
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
@@ -913,14 +914,21 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 
 	--removed the need for being important, moved it up in priority
+	if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
+		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
+		if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
+			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
+		end
+	end
+	
 	if not action_taken and not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and CopLogicAttack._can_move(data) and data.attention_obj.verified and not spoocavoidancemovementqualify then
 		if data.is_suppressed and data.t - data.unit:character_damage():last_suppression_t() < 0.7 then
 			action_taken = CopLogicBase.chk_start_action_dodge(data, "scared")
-			if data.char_tweak.chatter.dodge then
+			if data.char_tweak.chatter and data.char_tweak.chatter.dodge then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
 			end
 			
-			if data.char_tweak.chatter.cloakeravoidance then
+			if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
 			end
 		end
@@ -945,20 +953,13 @@ function CopLogicAttack._upd_combat_movement(data)
 
 			if dodge and focus_enemy.aimed_at then
 				action_taken = CopLogicBase.chk_start_action_dodge(data, "preemptive")
-				if data.char_tweak.chatter.dodge then
+				if data.char_tweak.chatter and data.char_tweak.chatter.dodge then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
 				end
-				if data.char_tweak.chatter.cloakeravoidance then
+				if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
 				end
 			end
-		end
-	end
-	
-	if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
-		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
-		if data.char_tweak.chatter.cloakeravoidance then
-			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
 		end
 	end
 	
@@ -1756,7 +1757,7 @@ function CopLogicAttack._update_cover(data)
 						search_nav_seg = data.objective.area and data.objective.area.nav_segs or data.objective.nav_seg
 					end
 
-					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, nil, cone_angle, min_dis, search_nav_seg, optimal_dis, data.pos_rsrv_id)
+					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, my_pos, cone_angle, min_dis, search_nav_seg, optimal_dis, data.pos_rsrv_id)
 					
 					local notbcorvc_chk = nil
 					

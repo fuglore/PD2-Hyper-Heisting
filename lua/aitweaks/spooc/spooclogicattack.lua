@@ -380,6 +380,8 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		end
 	end
 	
+	local engage_range = my_data.weapon_range.close or 1500
+	
 	
 	--if is_mook then
 		--log("AHAHAHAHAH FUCK YEAH IS_MOOK")

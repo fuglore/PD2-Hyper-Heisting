@@ -1,4 +1,8 @@
 <table directory="assets"> <!-- VAMOS A CORTAR LAS VERGAS -->
+	<!--FEDERALES HEAVY SWAT RIFLE TEXTURES-->
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/tank_glass_df" />
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/dark_glass_op" />
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/glass_reflection" />
 	
 	<!--FEDERALES SWAT SHOTGUNNER-->
 	<unit path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh" load="true"/>

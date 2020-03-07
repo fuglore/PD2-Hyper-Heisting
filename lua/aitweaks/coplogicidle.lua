@@ -599,7 +599,7 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 			--nothing
 		elseif CopLogicIdle._chk_objective_needs_travel(data, new_objective) then
 			if CopLogicBase.should_enter_attack(data) then
-				log("entered attack")
+				--log("entered attack")
 				CopLogicBase._exit(data.unit, "attack")
 			else
 				CopLogicBase._exit(data.unit, "travel")

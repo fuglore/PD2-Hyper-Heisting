@@ -298,6 +298,8 @@ function CopLogicTravel._upd_combat_movement(data)
 			return
 		end
 	end
+	
+	local engage_range = my_data.weapon_range.close or 1500
 
 	local action_taken = CopLogicAttack.action_taken(data, my_data)
 	local focus_enemy = data.attention_obj
@@ -399,16 +401,22 @@ function CopLogicTravel._upd_combat_movement(data)
 			end
 		end
 	end
-
-	--removed the need for being important, moved it up in priority
+	
+	if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
+		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
+		if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
+			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
+		end
+	end
+	
 	if not action_taken and not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and CopLogicAttack._can_move(data) and data.attention_obj.verified and not spoocavoidancemovementqualify then
 		if data.is_suppressed and data.t - data.unit:character_damage():last_suppression_t() < 0.7 then
 			action_taken = CopLogicBase.chk_start_action_dodge(data, "scared")
-			if data.char_tweak.chatter.dodge then
+			if data.char_tweak.chatter and data.char_tweak.chatter.dodge then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
 			end
 			
-			if data.char_tweak.chatter.cloakeravoidance then
+			if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
 			end
 		end
@@ -433,20 +441,13 @@ function CopLogicTravel._upd_combat_movement(data)
 
 			if dodge and focus_enemy.aimed_at then
 				action_taken = CopLogicBase.chk_start_action_dodge(data, "preemptive")
-				if data.char_tweak.chatter.dodge then
+				if data.char_tweak.chatter and data.char_tweak.chatter.dodge then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
 				end
-				if data.char_tweak.chatter.cloakeravoidance then
+				if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
 				end
 			end
-		end
-	end
-	
-	if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
-		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
-		if data.char_tweak.chatter.cloakeravoidance then
-			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
 		end
 	end
 	
@@ -489,7 +490,7 @@ function CopLogicTravel._upd_combat_movement(data)
 					action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path)
 					
 					if data.tactics and data.tactics.flank then
-						if data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
+						if data.char_tweak.chatter and data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
 							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
 						end
 					end
@@ -540,7 +541,7 @@ function CopLogicTravel._upd_combat_movement(data)
 						--ranged fire cops signal the start of their movement and positioning
 						if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
 							if not data.unit:in_slot(16) and not data.is_converted then
-								if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.ready then
+								if data.group and data.group.leader_key == data.key and data.char_tweak.chatter and data.char_tweak.chatter.ready then
 									managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "ready")
 								end
 							end
@@ -555,7 +556,7 @@ function CopLogicTravel._upd_combat_movement(data)
 			elseif my_data.at_cover_shoot_pos then
 				--ranged fire cops also signal the END of their movement and positioning
 				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					if not data.unit:in_slot(16) and not data.is_converted and data.char_tweak.chatter.ready then
+					if not data.unit:in_slot(16) and not data.is_converted and data.char_tweak.chatter and data.char_tweak.chatter.ready then
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "inpos")
 					end
 				end
@@ -913,6 +914,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local threat_tracker = nil
 	local threat_area = nil
+	local allow_fwd = nil
 	
 	if data.objective and data.objective.type == "follow" and data.tactics and data.tactics.shield_cover and not data.unit:base()._tweak_table == "shield" and data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 		local enemy_tracker = data.attention_obj.nav_tracker
@@ -932,6 +934,10 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 		 
 		local cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
+		
+		if cover then
+			return cover
+		end
 		 
 	elseif data.objective and data.objective.type == "follow" then
 		search_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
@@ -950,22 +956,42 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			else
 				optimal_threat_dis = 1400
 			end
-		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" then --charge is an aggressive tactic, so i want it actually being aggressive as possible
-			optimal_threat_dis = data.internal_data.weapon_range.close * 0.5
-		elseif data.objective.attitude == "engage" and data.tactics and not data.tactics.charge then --everything else is not required to find it.
-			if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-				optimal_threat_dis = data.internal_data.weapon_range.optimal
+		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() then --charge is an aggressive tactic, so i want it actually being aggressive as possible
+			if data.attention_obj then
+				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
+					optimal_threat_dis = 60
+				else
+					optimal_threat_dis = data.internal_data.weapon_range.close * 0.5
+				end
 			else
-				optimal_threat_dis = data.internal_data.weapon_range.close
+				optimal_threat_dis = 60
+			end
+		elseif data.objective.attitude == "engage" and data.tactics and not data.tactics.charge and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() then --everything else is not required to find it.
+			if data.attention_obj then
+				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
+					optimal_threat_dis = 60
+					allow_fwd = true
+				else
+					if diff_index <= 5 and not Global.game_settings.use_intense_AI then
+						optimal_threat_dis = data.internal_data.weapon_range.optimal
+					else
+						optimal_threat_dis = data.internal_data.weapon_range.close
+					end
+				end
+			else
+				optimal_threat_dis = 60
+				allow_fwd = true
 			end
 		else
 			optimal_threat_dis = data.internal_data.weapon_range.far
+			allow_fwd = true
 		end
 
 		near_pos = near_pos or search_area.pos
 		
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.is_person then
 			threat_pos = data.attention_obj.m_pos
+			--near_pos = threat_pos
 			threat_tracker = data.attention_obj.nav_tracker
 			threat_area = managers.groupai:state():get_area_from_nav_seg_id(threat_tracker:nav_segment())
 			--log("got an area!")
@@ -978,6 +1004,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 
 				if crim_area == search_area then
 					threat_pos = u_data.m_pos
+					--near_pos = threat_pos
 					threat_tracker = u_data.tracker
 					threat_area = managers.groupai:state():get_area_from_nav_seg_id(threat_tracker:nav_segment())
 					--log("got an area!")
@@ -1000,7 +1027,15 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 				local flank_pos = CopLogicAttack._find_flank_pos(data, data.internal_data, threat_tracker, 6000)
 				
 				if flank_pos then
-					cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, data.internal_data.weapon_range.far, flank_pos, threat_pos)
+					if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
+						cover = managers.navigation:find_cover_near_pos_1(flank_pos, threat_pos, 2000, optimal_threat_dis, allow_fwd)
+						if cover then
+							--log("flanking ranged fire")
+							return cover
+						end
+					else
+						cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, data.internal_data.weapon_range.far, flank_pos, threat_pos)
+					end
 				end
 				
 				if cover then
@@ -1019,12 +1054,32 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 				if cover then
 					--log("ohworm")
 					return cover
+				else
+					cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, optimal_threat_dis, threat_pos, threat_pos)
+					
+					if cover then
+						--log("alt aggro charge")
+						return cover
+					end
 				end
 			end
 			
 			--log("notohworm")
+			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+				cover = managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 2000, optimal_threat_dis, allow_fwd)
+				
+				if cover then
+					--log("ranged_fire")
+					return cover
+				end
+			end
+			
 			
 			cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
+			
+			if cover then
+				--log("eh")
+			end
 		end
 	end
 

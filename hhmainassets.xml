@@ -799,6 +799,10 @@
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_helmets_df" force="true"/>
 	
 	<!--federales fbi heavy swat texture changes-->
+	<model path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
+	<object path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi_contour" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_body_df" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_policia_federale_heavy_helmet_df" force="true"/>
 	
