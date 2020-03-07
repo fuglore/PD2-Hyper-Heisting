@@ -1267,26 +1267,79 @@ function ActionSpooc:anim_act_clbk(anim_act)
 	self._strike_unit = self._target_unit
 	local spooc_res = nil
 
-	if self._strike_unit:movement().on_SPOOCed then
+	if self._common_data.char_tweak.non_lethal_kick_damage and type(self._common_data.char_tweak.non_lethal_kick_damage) == "number" then
+		local attack_ray = nil
+		local defense_data = nil
+
+		if self._strike_unit:base().is_local_player then
+			player_head_pos = self._strike_unit:movement():m_head_pos()
+			local kick_vec_tmp = Vector3()
+			mvec3_dir(kick_vec_tmp, self._ext_movement:m_com(), player_head_pos)
+
+			attack_ray = {
+				unit = self._strike_unit,
+				position = player_head_pos,
+				ray = mvec3_copy(kick_vec_tmp:normalized())
+			}
+
+			local attack_data = {
+				variant = "melee",
+				damage = self._common_data.char_tweak.non_lethal_kick_damage,
+				attacker_unit = self._unit,
+				push_vel = mvec3_copy(attack_ray.ray:with_z(0.1)) * 600,
+				col_ray = attack_ray
+			}
+
+			defense_data = self._strike_unit:character_damage():damage_melee(attack_data)
+		else
+			attack_ray = self._unit:raycast("ray", self._ext_movement:m_com(), self._strike_unit:movement():m_com(), "sphere_cast_radius", 20, "target_unit", self._strike_unit)
+
+			local attack_data = {
+				damage = self._common_data.char_tweak.non_lethal_kick_damage,
+				damage_effect = self._common_data.char_tweak.non_lethal_kick_damage * 2,
+				variant = "melee",
+				attacker_unit = self._unit,
+				col_ray = attack_ray,
+				attack_dir = attack_ray.ray
+			}
+
+			defense_data = self._strike_unit:character_damage():damage_melee(attack_data)
+		end
+
+		if defense_data and defense_data ~= "friendly_fire" then
+			if defense_data == "countered" then
+				spooc_res = "countered"
+			else
+				self._beating_end_t = 0
+
+				if type(defense_data) == "table" and defense_data.type == "death" then
+					managers.game_play_central:do_shotgun_push(self._strike_unit, attack_ray.position, attack_ray.ray, attack_ray.distance, self._unit)
+					managers.game_play_central:do_shotgun_push(self._strike_unit, attack_ray.position, attack_ray.ray, attack_ray.distance, self._unit)
+				end
+			end
+		end
+	elseif self._strike_unit:movement().on_SPOOCed then
 		spooc_res = self._strike_unit:movement():on_SPOOCed(self._unit, self._is_flying_strike and "flying_strike" or "sprint_attack")
-	elseif self._strike_unit:character_damage().damage_melee then
+	elseif self._strike_unit:movement().m_com and self._strike_unit:character_damage().damage_melee and self._strike_unit:character_damage().damage_mission then
 		local attack_ray = self._unit:raycast("ray", self._ext_movement:m_com(), self._strike_unit:movement():m_com(), "sphere_cast_radius", 20, "target_unit", self._strike_unit)
-		local action_data = {
-			damage = self._strike_unit:character_damage()._HEALTH_INIT,
-			damage_effect = damage,
-			variant = "melee",
-			attacker_unit = self._unit,
-			col_ray = attack_ray,
-			attack_dir = attack_ray.ray,
-			name_id = self._ext_base:melee_weapon()
+		local attack_data = {
+			variant = "explosion",
+			attacker_unit = self._unit
 		}
 
-		local defense_data = self._strike_unit:character_damage():damage_melee(action_data)
+		local defense_data = self._strike_unit:character_damage():damage_mission(attack_data)
 
-		if defense_data and defense_data.type == "death" then
-			managers.game_play_central:do_shotgun_push(self._strike_unit, attack_ray.position, attack_ray.ray, attack_ray.distance, self._unit)
-			managers.game_play_central:do_shotgun_push(self._strike_unit, attack_ray.position, attack_ray.ray, attack_ray.distance, self._unit)
-			self._beating_end_t = 0
+		if defense_data and defense_data ~= "friendly_fire" then
+			if defense_data == "countered" then
+				spooc_res = "countered"
+			else
+				self._beating_end_t = 0
+
+				if type(defense_data) == "table" and defense_data.type == "death" then
+					managers.game_play_central:do_shotgun_push(self._strike_unit, attack_ray.position, attack_ray.ray, attack_ray.distance, self._unit)
+					managers.game_play_central:do_shotgun_push(self._strike_unit, attack_ray.position, attack_ray.ray, attack_ray.distance, self._unit)
+				end
+			end
 		end
 	end
 
