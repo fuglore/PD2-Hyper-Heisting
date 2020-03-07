@@ -152,15 +152,12 @@ end
 
 function SpoocLogicAttack._chk_request_action_spooc_attack(data, my_data, flying_strike)
 	if data.unit:anim_data().crouch then
-		SpoocLogicAttack._chk_request_action_stand(data)
-
-		return
+		CopLogicAttack._chk_request_action_stand(data)
 	end
 
 	data.unit:movement():set_stance_by_code(2)
 
 	local new_action = {
-		sync = true,
 		body_part = 3,
 		type = "idle"
 	}
