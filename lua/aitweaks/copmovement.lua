@@ -1036,3 +1036,80 @@ function CopMovement:sync_taser_fire()
 		tase_action:fire_taser()
 	end
 end
+
+function CopMovement:sync_action_spooc_nav_point(pos, action_id)
+	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
+
+	if is_queued then
+		if spooc_action.stop_pos and not spooc_action.nr_expected_nav_points then
+			return
+		end
+
+		table.insert(spooc_action.nav_path, pos)
+
+		if spooc_action.nr_expected_nav_points then
+			if spooc_action.nr_expected_nav_points == 1 then
+				spooc_action.nr_expected_nav_points = nil
+
+				table.insert(spooc_action.nav_path, spooc_action.stop_pos)
+			else
+				spooc_action.nr_expected_nav_points = spooc_action.nr_expected_nav_points - 1
+			end
+		end
+	elseif spooc_action then
+		spooc_action:sync_append_nav_point(pos)
+	end
+end
+
+function CopMovement:sync_action_spooc_stop(pos, nav_index, action_id)
+	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
+
+	if is_queued then
+		if spooc_action.host_stop_pos_inserted then
+			nav_index = nav_index + spooc_action.host_stop_pos_inserted
+		end
+
+		local nav_path = spooc_action.nav_path
+
+		while nav_index < #nav_path do
+			table.remove(nav_path)
+		end
+
+		spooc_action.stop_pos = pos
+
+		if #nav_path < nav_index - 1 then
+			spooc_action.nr_expected_nav_points = nav_index - #nav_path + 1
+		else
+			table.insert(nav_path, pos)
+		end
+
+		spooc_action.path_index = math.max(1, math.min(spooc_action.path_index, #nav_path - 1))
+	elseif spooc_action then
+		if Network:is_server() then
+			self:action_request({
+				sync = true,
+				body_part = 1,
+				type = "idle"
+			})
+		else
+			spooc_action:sync_stop(pos, nav_index)
+		end
+	end
+end
+
+function CopMovement:sync_action_spooc_strike(pos, action_id)
+	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
+
+	if is_queued then
+		if spooc_action.stop_pos and not spooc_action.nr_expected_nav_points then
+			return
+		end
+
+		table.insert(spooc_action.nav_path, pos)
+
+		spooc_action.strike_nav_index = #spooc_action.nav_path
+		spooc_action.strike = true
+	elseif spooc_action then
+		spooc_action:sync_strike(pos)
+	end
+end
