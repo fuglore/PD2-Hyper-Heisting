@@ -1489,46 +1489,50 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 		}
 
 		repeat
-			local search_area = table.remove(to_search_areas, 1)
+			for _, area_location in ipairs(to_search_areas) do
+				local search_area = area_location
 
-			if search_area.loot or search_area.hostages then
-				local occupied = nil
+				if search_area.loot or search_area.hostages then
+					local occupied = nil
 
-				for test_group_id, test_group in pairs(self._groups) do
-					if test_group ~= group and (test_group.objective.target_area == search_area or test_group.objective.area == search_area) then
+					for test_group_id, test_group in pairs(self._groups) do
+						if test_group ~= group and (test_group.objective.target_area == search_area or test_group.objective.area == search_area) then
+							occupied = true
+
+							break
+						end
+					end
+
+					if not occupied and group.visited_areas and group.visited_areas[search_area] then
 						occupied = true
+					end
 
-						break
+					if not occupied then
+						local is_area_safe = not next(search_area.criminal.units)
+
+						if is_area_safe then
+							recon_area = search_area
+
+							break
+						else
+							recon_area = recon_area or search_area
+						end
 					end
 				end
 
-				if not occupied and group.visited_areas and group.visited_areas[search_area] then
-					occupied = true
-				end
+				if not next(search_area.criminal.units) then
+					for other_area_id, other_area in pairs(search_area.neighbours) do
+						if not found_areas[other_area] then
+							table.insert(to_search_areas, other_area)
 
-				if not occupied then
-					local is_area_safe = not next(search_area.criminal.units)
-
-					if is_area_safe then
-						recon_area = search_area
-
-						break
-					else
-						recon_area = recon_area or search_area
-					end
-				end
-			end
-
-			if not next(search_area.criminal.units) then
-				for other_area_id, other_area in pairs(search_area.neighbours) do
-					if not found_areas[other_area] then
-						table.insert(to_search_areas, other_area)
-
-						found_areas[other_area] = search_area
+							found_areas[other_area] = search_area
+						end
 					end
 				end
 			end
-		until #to_search_areas == 0
+			
+			table.remove(to_search_areas, 1)
+		until #to_search_areas <= 0
 
 		if recon_area then
 			local coarse_path = {
@@ -1888,93 +1892,96 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		}
 
 		repeat
-			local search_area = table.remove(to_search_areas, 1)
-			-- they never used this function for some reason, now i use it, so thats nice
-			if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) then
-				local assault_from_here = true
-				
-				if search_area then
-						--local cop_units = assault_from_area.police.units
+			for _, area_location in ipairs(to_search_areas) do
+				local search_area = area_location
+				if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) then
+					local assault_from_here = true
+					
+					if search_area then
+							--local cop_units = assault_from_area.police.units
 
-						for u_key, u_data in pairs(group.units) do
-							if u_data.group and u_data.group.objective.type == "assault_area" then
+							for u_key, u_data in pairs(group.units) do
+								if u_data.group and u_data.group.objective.type == "assault_area" then
 
-							if not alternate_assault_area then
-								local search_params = {
-									id = "GroupAI_assault",
-									from_seg = current_objective.area.pos_nav_seg,
-									to_seg = search_area.pos_nav_seg,
-									access_pos = self._get_group_acces_mask(group),
-									verify_clbk = callback(self, self, "is_nav_seg_safe")
-								}
-								alternate_assault_path = managers.navigation:search_coarse(search_params)
+								if not alternate_assault_area then
+									local search_params = {
+										id = "GroupAI_assault",
+										from_seg = current_objective.area.pos_nav_seg,
+										to_seg = search_area.pos_nav_seg,
+										access_pos = self._get_group_acces_mask(group),
+										verify_clbk = callback(self, self, "is_nav_seg_safe")
+									}
+									alternate_assault_path = managers.navigation:search_coarse(search_params)
 
-								if alternate_assault_path then
-									local clean_path = self:_merge_coarse_path_by_area(alternate_assault_path)
-									
-									alternate_assault_path = clean_path
-									
-									alternate_assault_area = search_area
-									alternate_assault_area_from = current_objective.area
+									if alternate_assault_path then
+										local clean_path = self:_merge_coarse_path_by_area(alternate_assault_path)
+										
+										alternate_assault_path = clean_path
+										
+										alternate_assault_area = search_area
+										alternate_assault_area_from = current_objective.area
+									end
 								end
+
+								found_areas[search_area] = nil
+
+								break
 							end
-
-							found_areas[search_area] = nil
-
-							break
 						end
-					end
-				
-					if assault_from_here then
-						local search_params = {
-							id = "GroupAI_assault",
-							from_seg = current_objective.area.pos_nav_seg,
-							to_seg = search_area.pos_nav_seg,
-							access_pos = self._get_group_acces_mask(group),
-							verify_clbk = callback(self, self, "is_nav_seg_safe")
-						}
-						assault_path = managers.navigation:search_coarse(search_params)
+					
+						if assault_from_here then
+							local search_params = {
+								id = "GroupAI_assault",
+								from_seg = current_objective.area.pos_nav_seg,
+								to_seg = search_area.pos_nav_seg,
+								access_pos = self._get_group_acces_mask(group),
+								verify_clbk = callback(self, self, "is_nav_seg_safe")
+							}
+							assault_path = managers.navigation:search_coarse(search_params)
 
-						if assault_path then
-							local clean_path = self:_merge_coarse_path_by_area(assault_path)
-							
-							assault_path = clean_path
-							assault_area = search_area
-							
-							if not assault_area_uno then
-								assault_area_uno = assault_area
-							elseif not assault_area_dos then
-								assault_area_dos = assault_area
-							elseif not assault_area_tres then
-								assault_area_tres = assault_area
-							elseif not assault_area_quatro then
-								assault_area_quatro = assault_area
-							end
-							
-							if not assault_path_uno then
-								assault_path_uno = assault_path
-							elseif not assault_path_dos then
-								assault_path_dos = assault_path
-							elseif not assault_path_tres then
-								assault_path_tres = assault_path
-							elseif not assault_path_quatro then
-								assault_path_quatro = assault_path
-							end
+							if assault_path then
+								local clean_path = self:_merge_coarse_path_by_area(assault_path)
+								
+								assault_path = clean_path
+								assault_area = search_area
+								
+								if not assault_area_uno then
+									assault_area_uno = assault_area
+								elseif not assault_area_dos then
+									assault_area_dos = assault_area
+								elseif not assault_area_tres then
+									assault_area_tres = assault_area
+								elseif not assault_area_quatro then
+									assault_area_quatro = assault_area
+								end
+								
+								if not assault_path_uno then
+									assault_path_uno = assault_path
+								elseif not assault_path_dos then
+									assault_path_dos = assault_path
+								elseif not assault_path_tres then
+									assault_path_tres = assault_path
+								elseif not assault_path_quatro then
+									assault_path_quatro = assault_path
+								end
 
-							break
+								break
+							end
 						end
-					end
-				else
-					for other_area_id, other_area in pairs(search_area.neighbours) do
-						if not found_areas[other_area] then
-							table.insert(to_search_areas, other_area)
+					else
+						for other_area_id, other_area in pairs(search_area.neighbours) do
+							if not found_areas[other_area] then
+								table.insert(to_search_areas, other_area)
 
-							found_areas[other_area] = search_area
+								found_areas[other_area] = search_area
+							end
 						end
 					end
 				end
 			end
-		until #to_search_areas == 0
+			
+			table.remove(to_search_areas, 1)
+		until #to_search_areas <= 0
 
 		if not assault_path_uno or not assault_area_uno then
 			--log("dicks")
