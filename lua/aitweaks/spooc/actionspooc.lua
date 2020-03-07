@@ -43,13 +43,21 @@ function ActionSpooc:init(action_desc, common_data)
 	self._machine = common_data.machine
 	self._unit = common_data.unit
 
-	common_data.ext_movement:play_redirect("idle")
+	local stand = common_data.ext_anim.stand or common_data.ext_movement:play_redirect("stand")
 
-	if not self._ext_anim.pose then
-		--print("[ActionSpooc:init] no pose in anim", self._machine:segment_state(ids_base), self._unit)
-		--debug_pause()]]
-
+	if not stand then
 		return
+	end
+
+	if not common_data.ext_anim.pose then
+		--print("[ActionSpooc:init] no pose in anim", self._machine:segment_state(ids_base), self._unit)
+		common_data.ext_movement:play_redirect("idle")
+
+		if not common_data.ext_anim.pose then
+			--debug_pause()]]
+
+			return
+		end
 	end
 
 	self._action_desc = action_desc
@@ -77,7 +85,6 @@ function ActionSpooc:init(action_desc, common_data)
 		end
 	end
 
-	self._strike_now = action_desc.strike and true or nil
 	self._beating_end_t = self._stroke_t and self._stroke_t + self._beating_time
 	self._strike_nav_index = action_desc.strike_nav_index
 	self._haste = "run"
@@ -223,10 +230,14 @@ function ActionSpooc:init(action_desc, common_data)
 			self:_start_sprint()
 		end
 	else
-		if not self._is_server and action_desc.flying_strike and #self._nav_path > 1 then
-			self:_set_updator("_upd_flying_strike_first_frame")
-		else
+		if self._is_server then
 			self:_wait()
+		else
+			if action_desc.strike then
+				self:_start_sprint()
+			elseif action_desc.flying_strike and #self._nav_path > 1 then
+				self:_set_updator("_upd_flying_strike_first_frame")
+			end
 		end
 	end
 
@@ -620,7 +631,6 @@ function ActionSpooc:_upd_sprint(t)
 
 		self._ext_movement:set_rotation(rot_new)
 
-		--fucking
 		local pose = self._stance.values[4] > 0 and "wounded" or self._ext_anim.pose or "stand"
 		local real_velocity = self._cur_vel
 		local variant = nil
@@ -807,8 +817,7 @@ function ActionSpooc:get_husk_interrupt_desc()
 		flying_strike = self._is_flying_strike,
 		is_local = self._is_local,
 		action_id = self._action_id,
-		last_sent_pos = self._last_sent_pos,
-		strike = self._strike_now
+		last_sent_pos = self._last_sent_pos
 	}
 
 	if self._blocks then
@@ -833,7 +842,6 @@ function ActionSpooc:save(save_data)
 	save_data.path_index = self._nav_index
 	save_data.strike_nav_index = self._strike_nav_index
 	save_data.flying_strike = self._is_flying_strike
-	save_data.strike = self._strike_now
 	save_data.stroke_t = self._stroke_t and true
 	save_data.blocks = {
 		act = -1,
