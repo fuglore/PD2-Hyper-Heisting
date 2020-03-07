@@ -469,7 +469,7 @@ function EnemyManager:_upd_shield_disposal()
 	enemy_data.nr_shields = nr_shields - nr_found
 
 	if enemy_data.nr_shields > 0 then
-		local delay = self:corpse_limit() < enemy_data.nr_shields and 0 or self._shield_disposal_upd_interval
+		local delay = self:shield_limit() < enemy_data.nr_shields and 0 or self._shield_disposal_upd_interval
 
 		self:queue_task("EnemyManager._upd_shield_disposal", EnemyManager._upd_shield_disposal, self, t + delay)
 	end
