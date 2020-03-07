@@ -2078,7 +2078,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if not retreat_area and not do_not_retreat and current_objective.coarse_path then
 			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
 
-			if forwardmost_i_nav_point then
+			if forwardmost_i_nav_point and type(current_objective.coarse_path) ~= "table" then
 				local nearest_safe_nav_seg_id = current_objective.coarse_path(forwardmost_i_nav_point)
 				retreat_area = self:get_area_from_nav_seg_id(nearest_safe_nav_seg_id)
 			end
