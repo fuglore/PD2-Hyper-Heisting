@@ -1294,17 +1294,18 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			
 			local search_nav_seg = threat_area.nav_segs or search_area.nav_segs
 			local search_from_pos = data.m_pos
-			--local is_husk = data.attention_obj.is_husk_player need to figure out a less bad calculation for this
 			local cone_dir = nil
 
 			if data.attention_obj.is_husk_player then
 				cone_dir = data.attention_obj.unit:movement():detect_look_dir()
-			elseif data.attention_obj.is_local_player then
-				cone_dir = data.attention_obj.unit:movement():m_head_rot():y()
 			else
 				cone_dir = tmp_vec_cone_dir
 
-				mrot.z(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
+				if data.attention_obj.is_local_player then
+					mrot.y(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
+				else
+					mrot.z(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
+				end
 			end
 
 			local cone_base = cone_top + cone_dir * 400
