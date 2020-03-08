@@ -1248,7 +1248,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
@@ -1257,7 +1257,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			--log("hey this actually works!")
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
@@ -1291,7 +1291,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			my_data.at_cover_shoot_pos = true
 		end
 		
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
@@ -1300,7 +1300,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
 	elseif action_type == "tase" then
-		if action:expired() and my_data.tasing then
+		if not data.unit:character_damage():dead() and action:expired() and my_data.tasing then
 			local record = managers.groupai:state():criminal_record(my_data.tasing.target_u_key)
 
 			if record and record.status then
@@ -1321,7 +1321,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)
 		end
 		
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
@@ -1330,13 +1330,13 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		my_data.spooc_attack = nil
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "turn" then
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
@@ -1348,7 +1348,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_charge(data, my_data)
 		
 		--Removed the requirement for being important here.
-		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)
@@ -1364,7 +1364,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
 		
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			CopLogicAttack._upd_combat_movement(data)

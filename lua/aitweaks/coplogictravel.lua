@@ -754,6 +754,7 @@ function CopLogicTravel.queued_update(data)
 			my_data.engage_mode = true
 			--log("on it")
 			CopLogicTravel._upd_combat_movement(data)
+			CopLogicTravel._upd_pathing(data, my_data)
 		else
 			my_data.engage_mode = nil
 			my_data.want_to_take_cover = nil
@@ -943,6 +944,10 @@ function CopLogicTravel.upd_advance(data)
 	local objective = data.objective
 	local t = TimerManager:game():time()
 	data.t = t
+	
+	if my_data.engage_mode then
+		return
+	end
 	
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
@@ -1494,7 +1499,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			
@@ -1508,7 +1513,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
@@ -1626,7 +1631,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			data.unit:brain():abort_detailed_pathing(my_data.advance_path_search_id)
 		end
 		
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
@@ -1638,7 +1643,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 	elseif action_type == "shoot" then		
 		my_data.shooting = nil
 	elseif action_type == "tase" then
-		if action:expired() and my_data.tasing then
+		if not data.unit:character_damage():dead() and action:expired() and my_data.tasing then
 			local record = managers.groupai:state():criminal_record(my_data.tasing.target_u_key)
 
 			if record and record.status then
@@ -1663,7 +1668,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)
 		end
 		
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
@@ -1676,7 +1681,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		my_data.spooc_attack = nil
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
@@ -1686,7 +1691,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			end
 		end
 	elseif action_type == "turn" then
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
@@ -1702,7 +1707,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_charge(data, my_data)
 		
 		--Removed the requirement for being important here.
-		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
@@ -1722,7 +1727,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
 		
-		if action:expired() then
+		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
