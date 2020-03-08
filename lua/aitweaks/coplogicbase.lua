@@ -201,7 +201,11 @@ function CopLogicBase.chk_am_i_aimed_at(data, attention_obj, max_dot)
 	else
 		enemy_look_dir = tmp_vec1
 
-		mrotation.y(attention_obj.unit:movement():m_head_rot(), enemy_look_dir)
+		if attention_obj.is_local_player then
+			mrotation.y(attention_obj.unit:movement():m_head_rot(), enemy_look_dir)
+		else
+			mrotation.z(attention_obj.unit:movement():m_head_rot(), enemy_look_dir)
+		end
 	end
 
 	local enemy_vec = tmp_vec2
