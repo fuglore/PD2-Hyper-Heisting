@@ -387,7 +387,7 @@ function CopLogicBase._update_haste(data, my_data)
 end 
 
 function CopLogicBase.action_taken(data, my_data)
-	return my_data.turning or my_data.moving_to_cover or my_data.walking_to_cover_shoot_pos or my_data.surprised or my_data.has_old_action or data.unit:movement():chk_action_forbidden("walk")
+	return my_data.turning or my_data.moving_to_cover or my_data.walking_to_cover_shoot_pos or my_data.has_old_action or data.unit:movement():chk_action_forbidden("walk")
 end
 
 function CopLogicBase.should_duck_on_alert(data, alert_data)
@@ -857,6 +857,12 @@ function CopLogicBase.should_enter_attack(data)
 	local objective = data.objective
 	local my_data = data.internal_data
 	local t = data.t
+	local testing = true
+	
+	if testing then
+		return
+	end
+	
 	
 	if data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or not data.unit:base():has_tag("law") then
 		--log("fuck off1")

@@ -614,7 +614,7 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 			CopLogicBase._exit(data.unit, "phalanx")
 		elseif objective_type == "surrender" then
 			CopLogicBase._exit(data.unit, "intimidated", new_objective.params)
-		elseif new_objective.action or not data.attention_obj or not CopLogicBase.should_enter_attack(data) then
+		elseif new_objective.action or not data.attention_obj then
 			CopLogicBase._exit(data.unit, "idle")
 		else
 			CopLogicBase._exit(data.unit, "attack")
@@ -767,13 +767,13 @@ end
 
 function CopLogicIdle._chk_relocate(data)
 	
-	if not data.team.id == tweak_data.levels:get_default_team_ID("player") and not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) then
+	--[[if not data.team.id == tweak_data.levels:get_default_team_ID("player") and not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) then
 		if CopLogicBase.should_enter_attack(data) then
 			data.logic._exit(data.unit, "attack")
 			
-			return true
+			return
 		end
-	end
+	end]]
 	
 	if data.objective and data.objective.type == "follow" then
 		if data.is_converted then

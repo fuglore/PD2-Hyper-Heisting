@@ -793,16 +793,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	elseif task_data.phase == "sustain" then
 		task_spawn_allowance = managers.modifiers:modify_value("GroupAIStateBesiege:SustainSpawnAllowance", task_spawn_allowance, force_pool)
-		
-		if not self._activeassaultbreak and self._task_data.assault.phase_end_t_min and self._task_data.assault.phase_end_t_min < t and self:_count_criminals_engaged_force(4) < 3 and self._drama_data.amount < tweak_data.drama.low then
-			if not self._force_assault_end_t then
-				self._force_assault_end_t = t + 10
-			end
-		else
-			if self._force_assault_end_t then
-				self._force_assault_end_t = nil
-			end
-		end
 
 		if task_spawn_allowance <= 0 then
 			task_data.phase = "fade"
@@ -820,7 +810,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 						end					   
 					end	
 				end	
-		elseif self._task_data.assault.phase_end_t < t and not self._hunt_mode and self._enemies_killed_sustain > 50 or self._force_assault_end_t and self._force_assault_end_t < t then
+		elseif self._task_data.assault.phase_end_t < t and not self._hunt_mode and self._enemies_killed_sustain > 50 then
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
 			local time = self._t

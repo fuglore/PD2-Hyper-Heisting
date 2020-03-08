@@ -288,6 +288,8 @@ function CopLogicTravel._upd_combat_movement(data)
 	local unit = data.unit
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
+	--log("dicks")
+	
 	if not data.attention_obj then
 		--log("got it")
 		return
@@ -301,7 +303,7 @@ function CopLogicTravel._upd_combat_movement(data)
 	
 	local engage_range = my_data.weapon_range.close or 1500
 
-	local action_taken = CopLogicAttack.action_taken(data, my_data)
+	local action_taken = data.logic.action_taken(data, my_data)
 	local focus_enemy = data.attention_obj
 	local in_cover = my_data.in_cover
 	local best_cover = my_data.best_cover
@@ -452,6 +454,7 @@ function CopLogicTravel._upd_combat_movement(data)
 	end
 	
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
+	
 	if not action_taken then
 	
 		local move_t_chk = not my_data.move_t or my_data.move_t < data.t
@@ -461,12 +464,12 @@ function CopLogicTravel._upd_combat_movement(data)
 	
 		if my_data.walking_to_cover_shoot_pos then
 			-- nothing
+		elseif want_to_take_cover then
+			move_to_cover = true
 		elseif my_data.at_cover_shoot_pos then
 			if my_data.stay_out_time and my_data.stay_out_time < t or not focus_enemy.verified then
 				move_to_cover = true
 			end
-		elseif want_to_take_cover then
-			move_to_cover = true
 		elseif my_data.move_t and my_data.move_t > t or my_data.stay_out_time and my_data.stay_out_time > t then
 			-- Nothing
 		elseif Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() then 
@@ -485,7 +488,7 @@ function CopLogicTravel._upd_combat_movement(data)
 			
 			if data.tactics and data.tactics.charge and charge_failed_t_chk or data.tactics and data.tactics.flank and charge_failed_t_chk or charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
 				if my_data.charge_path then
-					--log("yay")
+					log("yes")
 					local path = my_data.charge_path
 					action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path)
 					
@@ -572,14 +575,163 @@ function CopLogicTravel._upd_combat_movement(data)
 		end
 	end
 	
-	if move_to_cover then
-		--log("not in the mood")
-		my_data.next_movement_attempt = data.t + math.random(2, 4)
-		my_data.at_cover_shoot_pos = nil
-		return
+	if data.tactics and data.tactics.flank then
+		if not my_data.flank_cover then
+			local sign = math.random() < 0.5 and -1 or 1
+			local step = 30
+			my_data.flank_cover = {
+				step = step,
+				angle = step * sign,
+				sign = sign
+			}
+			my_data.next_allowed_flank_charge_t = data.t + 2
+			want_flank_cover = nil
+			--if not data.unit:in_slot(16) and not data.is_converted then --flankers signal their presence whenever they move around
+			--	if data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
+					--managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
+			--	end
+			--end
+		end
+	else
+		my_data.flank_cover = nil
+	end
+	
+	local path_fail_chk = not my_data.cover_path_failed_t or data.t - my_data.cover_path_failed_t > 5
+	
+	if move_to_cover and data.objective and data.objective.nav_seg and not my_data.cover_path and not path_fail_chk and not action_taken then
+		--log("yay!")
+		if my_data.engage_cover then
+			if not my_data.processing_cover_path and not my_data.cover_path and not my_data.charge_path_search_id then
+				CopLogicAttack._cancel_cover_pathing(data, my_data)
+				log("done")
+
+				local search_id = tostring(unit:key()) .. "cover"
+
+				if data.unit:brain():search_for_path_to_cover(search_id, my_data.engage_cover[1]) then
+					my_data.cover_path_search_id = search_id
+					my_data.processing_cover_path = my_data.engage_cover
+				end
+			end
+		else
+			--log("they're trying")
+			cover = CopLogicTravel._find_cover(data, data.objective.nav_seg, nil)
+			CopLogicTravel._set_engage_cover(data, my_data, cover)
+		end
+	end
+
+	if not action_taken and move_to_cover and my_data.cover_path then
+		--log("got it")
+		action_taken = CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 	end
 	
 	action_taken = action_taken or CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
+end
+
+function CopLogicTravel._upd_pathing(data, my_data)
+	if data.pathing_results then
+		local pathing_results = data.pathing_results
+		data.pathing_results = nil
+		local path = pathing_results[my_data.advance_path_search_id]
+
+		if path and my_data.processing_advance_path then
+			my_data.processing_advance_path = nil
+
+			if path ~= "failed" then
+				my_data.advance_path = path
+			else
+				data.path_fail_t = data.t
+
+				data.objective_failed_clbk(data.unit, data.objective)
+
+				return
+			end
+		end
+
+		local path = pathing_results[my_data.coarse_path_search_id]
+
+		if path and my_data.processing_coarse_path then
+			my_data.processing_coarse_path = nil
+
+			if path ~= "failed" then
+				my_data.coarse_path = path
+				my_data.coarse_path_index = 1
+			elseif my_data.path_safely then
+				my_data.path_safely = nil
+			else
+				print("[CopLogicTravel:_upd_pathing] coarse_path failed unsafe", data.unit, my_data.coarse_path_index)
+
+				data.path_fail_t = data.t
+
+				data.objective_failed_clbk(data.unit, data.objective)
+
+				return
+			end
+		end
+		
+		local path = pathing_results[my_data.cover_path_search_id]
+
+		if path then
+			if path ~= "failed" then
+				my_data.cover_path = path
+			else
+				print(data.unit, "[CopLogicAttack._process_pathing_results] cover path failed", data.unit)
+				CopLogicAttack._set_engage_cover(data, my_data, nil)
+				--log("hmm")
+
+				my_data.cover_path_failed_t = TimerManager:game():time()
+			end
+
+			my_data.processing_cover_path = nil
+			my_data.cover_path_search_id = nil
+		end
+
+		path = pathing_results[my_data.charge_path_search_id]
+
+		if path then
+			if path ~= "failed" then
+				my_data.charge_path = path
+			else
+				print("[CopLogicAttack._process_pathing_results] charge path failed", data.unit)
+				--log("hmm")
+			end
+
+			my_data.charge_path_search_id = nil
+			my_data.charge_path_failed_t = TimerManager:game():time()
+		end
+		
+		path = pathing_results[my_data.expected_pos_path_search_id]
+
+		if path then
+			if path ~= "failed" then
+				my_data.expected_pos_path = path
+			end
+
+			my_data.expected_pos_path_search_id = nil
+		end
+		
+	end
+end
+
+function CopLogicTravel._chk_wants_to_take_cover(data, my_data)
+	if not data.attention_obj or data.attention_obj.reaction < AIAttentionObject.REACT_COMBAT then
+		return
+	end
+	
+	if managers.groupai:state():chk_active_assault_break() then
+		--log("i want cover")
+		return true
+	end
+
+	if my_data.moving_to_cover or data.is_suppressed or my_data.attitude ~= "engage" or data.unit:anim_data().reload then
+		--log("i want cover")
+		return true
+	end
+
+	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
+
+	if ammo / ammo_max < 0.2 then
+		return true
+	end
 end
 
 function CopLogicTravel.queued_update(data)
@@ -596,14 +748,21 @@ function CopLogicTravel.queued_update(data)
 	local engage_range = my_data.weapon_range.close or 1500
 	
 	if not my_data.next_movement_attempt or my_data.next_movement_attempt < data.t then
+		my_data.want_to_take_cover = CopLogicTravel._chk_wants_to_take_cover(data, my_data)
 		if my_data.at_cover_shoot_pos or my_data.charge_path or data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= engage_range then
 			my_data.next_movement_attempt = nil
+			my_data.engage_mode = true
 			--log("on it")
 			CopLogicTravel._upd_combat_movement(data)
 		else
+			my_data.engage_mode = nil
+			my_data.want_to_take_cover = nil
+			CopLogicTravel._set_engage_cover(data, my_data, nil)
 			CopLogicTravel.upd_advance(data)
 		end
 	else
+		my_data.engage_mode = nil
+		my_data.want_to_take_cover = nil
 		CopLogicTravel.upd_advance(data)
 	end
     
@@ -908,6 +1067,14 @@ local temp_vec4 = Vector3()
 local temp_vec5 = Vector3()
 local temp_vec6 = Vector3()
 local fuckingvector = Vector3()
+local cone_top = Vector3()
+local tmp_vec_cone_dir = Vector3()
+local mvec3_set = mvector3.set
+local mvec3_
+local math_lerp = math.lerp
+local math_min = math.min
+local mrot = mrotation
+
 function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local cover = nil
 	local search_area = nil
@@ -915,6 +1082,8 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local threat_tracker = nil
 	local threat_area = nil
 	local allow_fwd = nil
+	local my_data = data.internal_data
+	local my_pos = data.m_pos
 	
 	if data.objective and data.objective.type == "follow" and data.tactics and data.tactics.shield_cover and not data.unit:base()._tweak_table == "shield" and data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 		local enemy_tracker = data.attention_obj.nav_tracker
@@ -945,6 +1114,10 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
 	end
 	
+	local want_to_take_cover = my_data.want_to_take_cover
+	local flank_cover = my_data.flank_cover
+	local min_dis, max_dis = nil
+	
 	if data.unit:movement():cool() then
 		cover = managers.navigation:find_cover_in_nav_seg_1(search_area.nav_segs)
 	else
@@ -959,17 +1132,17 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() then --charge is an aggressive tactic, so i want it actually being aggressive as possible
 			if data.attention_obj then
 				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
-					optimal_threat_dis = 60
+					optimal_threat_dis = 120
 				else
 					optimal_threat_dis = data.internal_data.weapon_range.close * 0.5
 				end
 			else
-				optimal_threat_dis = 60
+				optimal_threat_dis = 120
 			end
 		elseif data.objective.attitude == "engage" and data.tactics and not data.tactics.charge and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() then --everything else is not required to find it.
 			if data.attention_obj then
 				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
-					optimal_threat_dis = 60
+					optimal_threat_dis = 120
 					allow_fwd = true
 				else
 					if diff_index <= 5 and not Global.game_settings.use_intense_AI then
@@ -979,7 +1152,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 					end
 				end
 			else
-				optimal_threat_dis = 60
+				optimal_threat_dis = 120
 				allow_fwd = true
 			end
 		else
@@ -991,7 +1164,6 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.is_person then
 			threat_pos = data.attention_obj.m_pos
-			--near_pos = threat_pos
 			threat_tracker = data.attention_obj.nav_tracker
 			threat_area = managers.groupai:state():get_area_from_nav_seg_id(threat_tracker:nav_segment())
 			--log("got an area!")
@@ -1019,6 +1191,135 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 						closest_crim_dis = crim_dis
 					end
 				end
+			end
+		end
+		
+		if threat_pos and my_data.engage_mode then
+			local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(0.5, 2)
+			
+			if want_to_take_cover then
+				if not enemyseeninlast2secs then
+					min_dis = 30
+					max_dis = data.attention_obj.dis
+				else
+					min_dis = math.max(data.attention_obj.dis * 1.2, data.attention_obj.dis + 200)
+								
+					if min_dis > data.attention_obj.dis + 1000 then
+						min_dis = data.attention_obj.dis + 500
+					end
+								
+					max_dis = math.min(min_dis + 500, data.attention_obj.dis + 1000)
+								
+					if min_dis > max_dis then
+						min_dis = min_dis - max_dis
+					end
+				end
+			end
+				
+			local my_vec = my_pos - threat_pos
+			
+			if flank_cover then
+				mvector3.rotate_with(my_vec, Rotation(flank_cover.angle))
+			end
+			
+			
+			local optimal_dis = my_vec:length()
+			local not_ranged_fire_group_chk = not data.tactics or not data.tactics.ranged_fire and not data.tactics.elite_ranged_fire
+
+			if want_to_take_cover and enemyseeninlast2secs then
+				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+					if optimal_dis < my_data.weapon_range.optimal then
+						optimal_dis = optimal_dis
+
+						mvector3.set_length(my_vec, optimal_dis)
+					else
+						optimal_dis = my_data.weapon_range.optimal
+
+						mvector3.set_length(my_vec, optimal_dis)
+					end
+				else
+					if optimal_dis < my_data.weapon_range.close then
+						optimal_dis = optimal_dis
+
+						mvector3.set_length(my_vec, optimal_dis)
+					else
+						optimal_dis = my_data.weapon_range.close
+
+						mvector3.set_length(my_vec, optimal_dis)
+					end
+				end
+								
+				if not_ranged_fire_group_chk then
+					max_dis = math.max(optimal_dis + 200, my_data.weapon_range.far * 0.5)
+				else							
+					max_dis = math.max(optimal_dis + 200, my_data.weapon_range.far)
+				end
+								
+			elseif not_ranged_fire_group_chk and optimal_dis > my_data.weapon_range.close or not enemyseeninlast2secs then
+				optimal_dis = my_data.weapon_range.close
+
+				mvector3.set_length(my_vec, optimal_dis)
+
+				max_dis = my_data.weapon_range.optimal
+			elseif optimal_dis > my_data.weapon_range.optimal then
+				optimal_dis = my_data.weapon_range.optimal
+
+				mvector3.set_length(my_vec, optimal_dis)
+
+				max_dis = my_data.weapon_range.far
+			end
+			
+			local my_side_pos = threat_pos + my_vec
+
+			mvector3.set_length(my_vec, max_dis)
+
+			local furthest_side_pos = threat_pos + my_vec
+
+			if flank_cover then
+				local angle = flank_cover.angle
+				local sign = flank_cover.sign
+
+				if math.sign(angle) ~= sign then
+					angle = -angle + flank_cover.step * sign
+
+					if math.abs(angle) > 90 then
+						flank_cover.failed = true
+					else
+						flank_cover.angle = angle
+					end
+				else
+					flank_cover.angle = -angle
+				end
+			end
+			
+			local search_nav_seg = threat_area.nav_segs or search_area.nav_segs
+			local search_from_pos = data.m_pos
+			--local is_husk = data.attention_obj.is_husk_player need to figure out a less bad calculation for this
+			local cone_dir = nil
+
+			if data.attention_obj.is_husk_player then
+				cone_dir = data.attention_obj.unit:movement():detect_look_dir()
+			elseif data.attention_obj.is_local_player then
+				cone_dir = data.attention_obj.unit:movement():m_head_rot():y()
+			else
+				cone_dir = tmp_vec_cone_dir
+
+				mrot.z(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
+			end
+
+			local cone_base = cone_top + cone_dir * 400
+			local cone_angle = nil
+
+			if flank_cover and not flank_cover.failed then
+				cone_angle = flank_cover.angle
+			else
+				cone_angle = math_lerp(90, 60, math_min(1, optimal_dis / 3000))
+			end
+
+			cover = managers.navigation:find_cover_from_threat_2(search_nav_seg, optimal_threat_dis, near_pos, threat_pos, search_from_pos, max_dis, cone_base, cone_angle, data.pos_rsrv_id)
+			
+			if cover then
+				return cover
 			end
 		end
 		
@@ -1084,6 +1385,26 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	end
 
 	return cover
+end
+
+function CopLogicTravel._set_engage_cover(data, my_data, cover_data)
+	local engage_cover = my_data.engage_cover
+
+	if engage_cover then
+		managers.navigation:release_cover(engage_cover[1])
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+	end
+
+	if cover_data then
+		managers.navigation:reserve_cover(cover_data[1], data.pos_rsrv_id)
+
+		my_data.engage_cover = cover_data
+
+		--my_data.cover_enter_t = data.t
+	else
+		my_data.engage_cover = nil
+		my_data.flank_cover = nil
+	end
 end
 
 function CopLogicTravel.apply_wall_offset_to_cover(data, my_data, cover, wall_fwd_offset)
