@@ -5,6 +5,8 @@ local mvec3_dir = mvector3.direction
 local mvec3_dot = mvector3.dot
 local mvec3_dis = mvector3.distance
 local mvec3_dis_sq = mvector3.distance_sq
+local m_rot_y = mrotation.y
+local m_rot_z = mrotation.z
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 
@@ -186,7 +188,7 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 end
 
 function CopLogicBase.chk_am_i_aimed_at(data, attention_obj, max_dot)
-	if not attention_obj.is_person then
+	if not attention_obj.is_person or attention_obj.unit:character_damage().dead and attention_obj.unit:character_damage():dead() then
 		return
 	end
 
@@ -195,6 +197,7 @@ function CopLogicBase.chk_am_i_aimed_at(data, attention_obj, max_dot)
 	end
 
 	local enemy_look_dir = nil
+	local weapon_rot = nil
 
 	if attention_obj.is_husk_player then
 		enemy_look_dir = attention_obj.unit:movement():detect_look_dir()
@@ -202,14 +205,27 @@ function CopLogicBase.chk_am_i_aimed_at(data, attention_obj, max_dot)
 		enemy_look_dir = tmp_vec1
 
 		if attention_obj.is_local_player then
-			mrotation.y(attention_obj.unit:movement():m_head_rot(), enemy_look_dir)
+			m_rot_y(attention_obj.unit:movement():m_head_rot(), enemy_look_dir)
 		else
-			mrotation.z(attention_obj.unit:movement():m_head_rot(), enemy_look_dir)
+			if attention_obj.unit:inventory() and attention_obj.unit:inventory():equipped_unit() then
+				if attention_obj.unit:movement()._stance.values[3] >= 0.6 then
+					local weapon_fire_obj = attention_obj.unit:inventory():equipped_unit():get_object(Idstring("fire"))
+
+					if alive(weapon_fire_obj) then
+						weapon_rot = weapon_fire_obj:rotation()
+					end
+				end
+			end
+
+			if weapon_rot then
+				m_rot_y(weapon_rot, enemy_look_dir)
+			else
+				m_rot_z(attention_obj.unit:movement():m_head_rot(), enemy_look_dir)
+			end
 		end
 	end
 
 	local enemy_vec = tmp_vec2
-
 	mvec3_dir(enemy_vec, attention_obj.m_head_pos, data.unit:movement():m_com())
 
 	return max_dot < mvec3_dot(enemy_vec, enemy_look_dir)
