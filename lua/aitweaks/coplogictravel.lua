@@ -1,5 +1,28 @@
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
+local tmp_vec3 = Vector3()
+local cone_top = Vector3()
+local tmp_vec_cone_dir = Vector3()
+local mvec3_set = mvector3.set
+local mvec3_add = mvector3.add
+local mvec3_mul = mvector3.multiply
+local mvec3_set_l = mvector3.set_length
+local mvec3_dir = mvector3.direction
+local mvec3_copy = mvector3.copy
+local mvec3_norm = mvector3.normalize
+local mvec3_dis = mvector3.distance
+local mvec3_dis_sq = mvector3.distance_sq
+local mvec3_rot_with = mvector3.rotate_with
+local math_lerp = math.lerp
+local math_min = math.min
+local math_max = math.max
+local math_abs = math.abs
+local math_random = math.random
+local math_UP = math.UP
+local math_sign = math.sign
+local mrot_y = mrotation.y
+local mrot_z = mrotation.z
+local table_insert = table.insert
 
 function CopLogicTravel.chk_slide_conditions(data)
 	local my_data = data.internal_data
@@ -12,13 +35,13 @@ function CopLogicTravel.chk_slide_conditions(data)
 		local c_dis, bc_dis, mtc_dis, csp_dis, c_pos, bc_pos, mtc_pos, csp_pos  = nil
 			
 		if my_data.moving_to_cover then
-			mtc_dis = mvector3.distance(my_data.moving_to_cover[1][1], data.unit:movement():m_pos())
+			mtc_dis = mvec3_dis(my_data.moving_to_cover[1][1], data.unit:movement():m_pos())
 			mtc_pos = my_data.moving_to_cover[1][1]
 		elseif my_data.best_cover then
-			bc_dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
+			bc_dis = mvec3_dis(my_data.best_cover[1][1], data.unit:movement():m_pos())
 			bc_pos = my_data.best_cover[1][1]
 		elseif my_data.nearest_cover then
-			c_dis = mvector3.distance(my_data.nearest_cover[1][1], data.unit:movement():m_pos())
+			c_dis = mvec3_dis(my_data.nearest_cover[1][1], data.unit:movement():m_pos())
 			c_pos = my_data.nearest_cover[1][1]
 		end
 			
@@ -34,7 +57,7 @@ function CopLogicTravel.chk_slide_conditions(data)
 		if data.unit:base()._tweak_table == "fbi_swat" or data.unit:base()._tweak_table == "fbi_heavy_swat" then
 			if running then
 				--if my_data.next_allowed_slide_t and my_data.next_allowed_slide_t < data.t then
-					log("my dad abandoned me")
+					--log("my dad abandoned me")
 					CopLogicAttack._cancel_cover_pathing(data, my_data)
 					CopLogicAttack._cancel_charge(data, my_data)
 					CopLogicAttack._cancel_expected_pos_path(data, my_data)
@@ -122,17 +145,17 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 
 		if path_style == "precise" then
 			local path = {
-				mvector3.copy(data.m_pos)
+				mvec3_copy(data.m_pos)
 			}
 
 			for _, point in ipairs(path_data.points) do
-				table.insert(path, mvector3.copy(point.position))
+				table_insert(path, mvec3_copy(point.position))
 			end
 
 			my_data.advance_path = path
 			my_data.coarse_path_index = 1
 			local start_seg = data.unit:movement():nav_tracker():nav_segment()
-			local end_pos = mvector3.copy(path[#path])
+			local end_pos = mvec3_copy(path[#path])
 			local end_seg = managers.navigation:get_nav_seg_from_pos(end_pos)
 			my_data.coarse_path = {
 				{
@@ -157,10 +180,10 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 			}
 
 			for _, point in ipairs(path_data.points) do
-				local pos = mvector3.copy(point.position)
+				local pos = mvec3_copy(point.position)
 				local nav_seg = f_get_nav_seg(nav_manager, pos)
 
-				table.insert(path, {
+				table_insert(path, {
 					nav_seg,
 					pos
 				})
@@ -269,7 +292,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 
 	CopLogicBase._report_detections(data.detected_attention_objects)
 
-	if new_attention and data.char_tweak.chatter.entrance and not data.entrance and new_attention.criminal_record and new_attention.verified and AIAttentionObject.REACT_SCARED <= new_reaction and math.abs(data.m_pos.z - new_attention.m_pos.z) < 4000 then
+	if new_attention and data.char_tweak.chatter.entrance and not data.entrance and new_attention.criminal_record and new_attention.verified and AIAttentionObject.REACT_SCARED <= new_reaction and math_abs(data.m_pos.z - new_attention.m_pos.z) < 4000 then
 		data.unit:sound():say(data.brain.entrance_chatter_cue or "entrance", true, nil)
 
 		data.entrance = true
@@ -313,22 +336,22 @@ function CopLogicTravel._upd_combat_movement(data)
 	
 	if Global.game_settings.one_down then
 		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(0.3, 1.05)
+			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(0.3, 1.05)
 		else
 			enemy_visible_soft = focus_enemy and focus_enemy.verified
 		end
 	else
 		if diff_index <= 5 then
 			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(3.1, 3.8)
+				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(3.1, 3.8)
 			else
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(1.05, 1.4)
+				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(1.05, 1.4)
 			end
 		else
 			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(2, 3)
+				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(2, 3)
 			else
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math.random(0.35, 1.05)
+				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(0.35, 1.05)
 			end
 		end
 	end
@@ -348,7 +371,7 @@ function CopLogicTravel._upd_combat_movement(data)
 	--hitnrun: approach enemies, back away once the enemy is visible, creating a variating degree of aggressiveness
 	--eliterangedfire: open fire at enemies from longer distances, back away if the enemy gets too close for comfort
 	--spoocavoidance: attempt to approach enemies, if aimed at/seen, retreat away into cover and disengage until ready to try again
-	local hitnrunmovementqualify = data.tactics and data.tactics.hitnrun and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1000 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 200
+	local hitnrunmovementqualify = data.tactics and data.tactics.hitnrun and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1000 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) < 200
 	local spoocavoidancemovementqualify = data.tactics and data.tactics.spoocavoidance and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 2000 and focus_enemy.aimed_at
 	local eliterangedfiremovementqualify = data.tactics and data.tactics.elite_ranged_fire and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1500
 	
@@ -549,11 +572,11 @@ function CopLogicTravel._upd_combat_movement(data)
 								end
 							end
 						end
-						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, math.random() < 0.5 and "run" or "walk")
+						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, math_random() < 0.5 and "run" or "walk")
 					else
 						my_data.cover_test_step = my_data.cover_test_step + 1
 					end
-				elseif math.random() < 0.25 then
+				elseif math_random() < 0.25 then
 					move_to_cover = true
 				end
 			elseif my_data.at_cover_shoot_pos then
@@ -577,7 +600,7 @@ function CopLogicTravel._upd_combat_movement(data)
 	
 	if data.tactics and data.tactics.flank then
 		if not my_data.flank_cover then
-			local sign = math.random() < 0.5 and -1 or 1
+			local sign = math_random() < 0.5 and -1 or 1
 			local step = 30
 			my_data.flank_cover = {
 				step = step,
@@ -783,13 +806,13 @@ function CopLogicTravel.queued_update(data)
 	
 	if hostage_count > 0 then --make sure the hostage count is actually above zero before replacing any of the lines
 		if hostage_count > 3 then  -- hostage count needs to be above 3
-			if math.random() < 0.4 then --40% chance for regular panic if hostages are present
+			if math_random() < 0.4 then --40% chance for regular panic if hostages are present
 				chosen_panic_chatter = "controlpanic"
 			else
 				chosen_panic_chatter = "hostagepanic2" --more panicky "GET THOSE HOSTAGES OUT RIGHT NOW!!!" line for when theres too many hostages on the map
 			end
 		else
-			if math.random() < 0.4 then
+			if math_random() < 0.4 then
 				chosen_panic_chatter = "controlpanic"
 			else
 				chosen_panic_chatter = "hostagepanic1" --less panicky "Delay the assault until those hostages are out." line
@@ -798,7 +821,7 @@ function CopLogicTravel.queued_update(data)
 			
 		if managers.groupai:state():chk_has_civilian_hostages() then
 			--log("they got sausages!")
-			if math.random() < 0.5 then
+			if math_random() < 0.5 then
 				chosen_panic_chatter = chosen_panic_chatter
 			else
 				chosen_panic_chatter = "civilianpanic"
@@ -806,7 +829,7 @@ function CopLogicTravel.queued_update(data)
 		end
 			
 	elseif managers.groupai:state():chk_had_hostages() then
-		if math.random() < 0.4 then
+		if math_random() < 0.4 then
 			chosen_panic_chatter = "controlpanic"
 		else
 			chosen_panic_chatter = "hostagepanic3" -- no more hostages!!! full force!!!
@@ -829,7 +852,7 @@ function CopLogicTravel.queued_update(data)
 		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
 	end
 		
-	local clear_t_chk = not data.attention_obj or not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t > math.random(2.5, 5)	
+	local clear_t_chk = not data.attention_obj or not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t > math_random(2.5, 5)	
 		
 	local cant_say_clear = not data.attention_obj or AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and clear_t_chk and not data.is_converted
 		
@@ -839,7 +862,7 @@ function CopLogicTravel.queued_update(data)
 		elseif not data.unit:movement():cool() then
 			if not data.unit:base():has_tag("special") and not managers.groupai:state():chk_assault_active_atm() then
 				if data.char_tweak.chatter and data.char_tweak.chatter.controlpanic then
-					local clearchk = math.random(0, 90)
+					local clearchk = math_random(0, 90)
 					local say_clear = 30
 					if clearchk > 60 then
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
@@ -875,11 +898,11 @@ function CopLogicTravel.queued_update(data)
 			if managers.groupai:state():chk_assault_active_atm() then
 				if managers.groupai:state():_check_assault_panic_chatter() then
 					if data.attention_obj and data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj and data.attention_obj.verified then
-						local roll = math.random(1, 100)
+						local roll = math_random(1, 100)
 						local chance_suppanic = 50
 						
 						if roll <= chance_suppanic then
-							local nroll = math.random(1, 100)
+							local nroll = math_random(1, 100)
 							local chance_help = 50
 							if roll <= chance_suppanic then
 								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed1" )
@@ -890,14 +913,14 @@ function CopLogicTravel.queued_update(data)
 							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
 						end
 					else
-						if math.random() < 0.2 then
+						if math_random() < 0.2 then
 							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
 						else
 							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
 						end
 					end
 				else
-					local clearchk = math.random(0, 90)
+					local clearchk = math_random(0, 90)
 						
 					if clearchk > 60 then
 						if not skirmish_map and my_data.radio_voice or not skirmish_map and ignore_radio_rules then
@@ -911,11 +934,11 @@ function CopLogicTravel.queued_update(data)
 		elseif not data.unit:base():has_tag("special") and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_t or not data.unit:base():has_tag("special") and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.alert_t then
 		
 			if data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj.verified then
-				local roll = math.random(1, 100)
+				local roll = math_random(1, 100)
 				local chance_suppanic = 50
 						
 				if roll <= chance_suppanic then
-					local nroll = math.random(1, 100)
+					local nroll = math_random(1, 100)
 					local chance_help = 50
 					if roll <= chance_suppanic then
 						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed1" )
@@ -955,7 +978,7 @@ function CopLogicTravel.upd_advance(data)
 		local action_desc = {
 			body_part = 1,
 			type = "warp",
-			position = mvector3.copy(objective.pos),
+			position = mvec3_copy(objective.pos),
 			rotation = objective.rot
 		}
 
@@ -1068,18 +1091,6 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	return true
 end
 
-local temp_vec4 = Vector3()
-local temp_vec5 = Vector3()
-local temp_vec6 = Vector3()
-local fuckingvector = Vector3()
-local cone_top = Vector3()
-local tmp_vec_cone_dir = Vector3()
-local mvec3_set = mvector3.set
-local mvec3_
-local math_lerp = math.lerp
-local math_min = math.min
-local mrot = mrotation
-
 function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local cover = nil
 	local search_area = nil
@@ -1090,31 +1101,28 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local my_data = data.internal_data
 	local my_pos = data.m_pos
 	
-	if data.objective and data.objective.type == "follow" and data.tactics and data.tactics.shield_cover and not data.unit:base()._tweak_table == "shield" and data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-		local enemy_tracker = data.attention_obj.nav_tracker
-		local threat_pos = enemy_tracker:field_position()
-		local heister_pos = data.attention_obj.m_pos --the threat
-		local shield_pos = data.objective.follow_unit:movement():m_pos() --the pillar
-		local shield_direction = mvector3.direction(temp_vec4, my_pos, shield_pos)
-		local heister_direction = mvector3.direction(temp_vec5, my_pos, heister_pos)
-		local following_direction = mvector3.direction(temp_vec6, shield_direction, heister_direction)
-		mvector3.set(temp_vec4, my_pos)
-		mvector3.direction(temp_vec5, temp_vec4, shield_pos)
-		mvec3_norm(temp_vec5)
-		mvector3.direction(fuckingvector, temp_vec5, heister_direction)
-		mvec3_norm(fuckingvector)
-		local following_dis = fuckingvector
-		local near_pos = data.objective.follow_unit:movement():m_pos() + following_dis
-		local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
-		 
-		local cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
-		
-		if cover then
-			return cover
+	if data.objective and data.objective.type == "follow" then
+		if data.tactics and data.tactics.shield_cover and data.attention_obj and data.attention_obj.nav_tracker and data.attention_obj.reaction and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
+			local threat_nav_pos = data.attention_obj.nav_tracker:field_position()
+
+			local threat_pos = data.attention_obj.m_pos --the threat
+			local shield_pos = mvec3_copy(data.objective.follow_unit:movement():m_pos()) --the pillar
+			mvec3_dir(temp_vec1, threat_pos, shield_pos)
+			mvec3_norm(temp_vec1)
+
+			local near_pos = shield_pos + temp_vec1 * 120
+			local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
+			local objective_dis = data.objective.distance and data.objective.distance * 0.9 or nil
+			local cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, objective_dis, near_pos, threat_nav_pos)
+
+			if cover then
+				return cover
+			end
+		elseif data.objective.follow_unit:movement():nav_tracker() then
+			search_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
+		else
+			search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
 		end
-		 
-	elseif data.objective and data.objective.type == "follow" then
-		search_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 	else
 		search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
 	end
@@ -1187,7 +1195,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 					--log("got an area!")
 					break
 				else
-					local crim_dis = mvector3.distance_sq(near_pos, u_data.m_pos)
+					local crim_dis = mvec3_dis_sq(near_pos, u_data.m_pos)
 
 					if not closest_crim_dis or crim_dis < closest_crim_dis then
 						threat_pos = u_data.m_pos
@@ -1200,20 +1208,20 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		end
 		
 		if threat_pos and my_data.engage_mode then
-			local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(0.5, 2)
+			local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math_random(0.5, 2)
 			
 			if want_to_take_cover then
 				if not enemyseeninlast2secs then
 					min_dis = 30
 					max_dis = data.attention_obj.dis
 				else
-					min_dis = math.max(data.attention_obj.dis * 1.2, data.attention_obj.dis + 200)
+					min_dis = math_max(data.attention_obj.dis * 1.2, data.attention_obj.dis + 200)
 								
 					if min_dis > data.attention_obj.dis + 1000 then
 						min_dis = data.attention_obj.dis + 500
 					end
 								
-					max_dis = math.min(min_dis + 500, data.attention_obj.dis + 1000)
+					max_dis = math_min(min_dis + 500, data.attention_obj.dis + 1000)
 								
 					if min_dis > max_dis then
 						min_dis = min_dis - max_dis
@@ -1224,7 +1232,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			local my_vec = my_pos - threat_pos
 			
 			if flank_cover then
-				mvector3.rotate_with(my_vec, Rotation(flank_cover.angle))
+				mvec3_rot_with(my_vec, Rotation(flank_cover.angle))
 			end
 			
 			
@@ -1236,47 +1244,47 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 					if optimal_dis < my_data.weapon_range.optimal then
 						optimal_dis = optimal_dis
 
-						mvector3.set_length(my_vec, optimal_dis)
+						mvec3_set_l(my_vec, optimal_dis)
 					else
 						optimal_dis = my_data.weapon_range.optimal
 
-						mvector3.set_length(my_vec, optimal_dis)
+						mvec3_set_l(my_vec, optimal_dis)
 					end
 				else
 					if optimal_dis < my_data.weapon_range.close then
 						optimal_dis = optimal_dis
 
-						mvector3.set_length(my_vec, optimal_dis)
+						mvec3_set_l(my_vec, optimal_dis)
 					else
 						optimal_dis = my_data.weapon_range.close
 
-						mvector3.set_length(my_vec, optimal_dis)
+						mvec3_set_l(my_vec, optimal_dis)
 					end
 				end
 								
 				if not_ranged_fire_group_chk then
-					max_dis = math.max(optimal_dis + 200, my_data.weapon_range.far * 0.5)
+					max_dis = math_max(optimal_dis + 200, my_data.weapon_range.far * 0.5)
 				else							
-					max_dis = math.max(optimal_dis + 200, my_data.weapon_range.far)
+					max_dis = math_max(optimal_dis + 200, my_data.weapon_range.far)
 				end
 								
 			elseif not_ranged_fire_group_chk and optimal_dis > my_data.weapon_range.close or not enemyseeninlast2secs then
 				optimal_dis = my_data.weapon_range.close
 
-				mvector3.set_length(my_vec, optimal_dis)
+				mvec3_set_l(my_vec, optimal_dis)
 
 				max_dis = my_data.weapon_range.optimal
 			elseif optimal_dis > my_data.weapon_range.optimal then
 				optimal_dis = my_data.weapon_range.optimal
 
-				mvector3.set_length(my_vec, optimal_dis)
+				mvec3_set_l(my_vec, optimal_dis)
 
 				max_dis = my_data.weapon_range.far
 			end
 			
 			local my_side_pos = threat_pos + my_vec
 
-			mvector3.set_length(my_vec, max_dis)
+			mvec3_set_l(my_vec, max_dis)
 
 			local furthest_side_pos = threat_pos + my_vec
 
@@ -1284,10 +1292,10 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 				local angle = flank_cover.angle
 				local sign = flank_cover.sign
 
-				if math.sign(angle) ~= sign then
+				if math_sign(angle) ~= sign then
 					angle = -angle + flank_cover.step * sign
 
-					if math.abs(angle) > 90 then
+					if math_abs(angle) > 90 then
 						flank_cover.failed = true
 					else
 						flank_cover.angle = angle
@@ -1307,9 +1315,9 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 				cone_dir = tmp_vec_cone_dir
 
 				if data.attention_obj.is_local_player then
-					mrot.y(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
+					mrot_y(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
 				else
-					mrot.z(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
+					mrot_z(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
 				end
 			end
 
@@ -1416,9 +1424,9 @@ end
 function CopLogicTravel.apply_wall_offset_to_cover(data, my_data, cover, wall_fwd_offset)
 	local to_pos_fwd = tmp_vec1
 
-	mvector3.set(to_pos_fwd, cover[2])
-	mvector3.multiply(to_pos_fwd, wall_fwd_offset)
-	mvector3.add(to_pos_fwd, cover[1])
+	mvec3_set(to_pos_fwd, cover[2])
+	mvec3_mul(to_pos_fwd, wall_fwd_offset)
+	mvec3_add(to_pos_fwd, cover[1])
 
 	local ray_params = {
 		trace = true,
@@ -1432,12 +1440,12 @@ function CopLogicTravel.apply_wall_offset_to_cover(data, my_data, cover, wall_fw
 	end
 
 	local col_pos_fwd = ray_params.trace[1]
-	local space_needed = mvector3.distance(col_pos_fwd, to_pos_fwd) + wall_fwd_offset * 1.15 --15% extra space for no clippy clip
+	local space_needed = mvec3_dis(col_pos_fwd, to_pos_fwd) + wall_fwd_offset * 1.15 --15% extra space for no clippy clip
 	local to_pos_bwd = tmp_vec2
 
-	mvector3.set(to_pos_bwd, cover[2])
-	mvector3.multiply(to_pos_bwd, -space_needed)
-	mvector3.add(to_pos_bwd, cover[1])
+	mvec3_set(to_pos_bwd, cover[2])
+	mvec3_mul(to_pos_bwd, -space_needed)
+	mvec3_add(to_pos_bwd, cover[1])
 
 	local ray_params = {
 		trace = true,
@@ -1446,7 +1454,7 @@ function CopLogicTravel.apply_wall_offset_to_cover(data, my_data, cover, wall_fw
 	}
 	local collision = managers.navigation:raycast(ray_params)
 
-	return collision and ray_params.trace[1] or mvector3.copy(to_pos_bwd)
+	return collision and ray_params.trace[1] or mvec3_copy(to_pos_bwd)
 end
 
 function CopLogicTravel.action_complete_clbk(data, action)
@@ -1552,13 +1560,13 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				
 				local cover_wait_time = nil
 				
-				local should_tacticool_wait = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math.random(0.35, 1) and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250 --if an enemy is not at semi equal height, and further than 12 meters, and we've seen him at least two to four seconds ago, do a slower, more tacticool approach
+				local should_tacticool_wait = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math_random(0.35, 1) and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250 --if an enemy is not at semi equal height, and further than 12 meters, and we've seen him at least two to four seconds ago, do a slower, more tacticool approach
 				
 				if should_tacticool_wait then
-					cover_wait_time = math.random(0.4, 0.64) --If there is a height advantage/disadvantage, act tacticool and approach slower.
+					cover_wait_time = math_random(0.4, 0.64) --If there is a height advantage/disadvantage, act tacticool and approach slower.
 					--log("HH: cop waiting due to height difference")
 				else
-					cover_wait_time = math.random(0.35, 0.5) --Keep enemies aggressive and active while still preserving some semblance of what used to be the original pacing while not in Shin Shootout mode
+					cover_wait_time = math_random(0.35, 0.5) --Keep enemies aggressive and active while still preserving some semblance of what used to be the original pacing while not in Shin Shootout mode
 				end
 				
 				if not is_mook or Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") then
@@ -1572,7 +1580,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 				if my_data.best_cover then
 					local facing_cover = nil
-					local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
+					local dis = mvec3_dis(my_data.best_cover[1][1], data.unit:movement():m_pos())
 					local cover_search_dis = nil
 					
 					if no_cover_search_dis_change or not is_mook then
@@ -1600,7 +1608,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				my_data.at_cover_shoot_pos = true
 			end
 		elseif my_data.best_cover then
-			local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
+			local dis = mvec3_dis(my_data.best_cover[1][1], data.unit:movement():m_pos())
 			local cover_search_dis = nil
 					
 			if not is_mook then
@@ -1662,10 +1670,10 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 		my_data.tasing = nil
 	elseif action_type == "spooc" then
-		data.spooc_attack_timeout_t = TimerManager:game():time() + math.lerp(data.char_tweak.spooc_attack_timeout[1], data.char_tweak.spooc_attack_timeout[2], math.random())
+		data.spooc_attack_timeout_t = TimerManager:game():time() + math_lerp(data.char_tweak.spooc_attack_timeout[1], data.char_tweak.spooc_attack_timeout[2], math_random())
 
-		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math.random() <= data.char_tweak.spooc_attack_use_smoke_chance and not managers.groupai:state():is_smoke_grenade_active() then
-			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)
+		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math_random() <= data.char_tweak.spooc_attack_use_smoke_chance and not managers.groupai:state():is_smoke_grenade_active() then
+			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math_UP * 10, data.unit:movement():m_head_pos(), math_lerp(15, 30, math_random()), false)
 		end
 		
 		if not data.unit:character_damage():dead() and action:expired() then
@@ -1721,7 +1729,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		local timeout = action:timeout()
 
 		if timeout then
-			data.dodge_timeout_t = TimerManager:game():time() + math.lerp(timeout[1], timeout[2], math.random())
+			data.dodge_timeout_t = TimerManager:game():time() + math_lerp(timeout[1], timeout[2], math_random())
 		end
 
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
@@ -1809,14 +1817,14 @@ function CopLogicTravel._update_cover(ignore_this, data)
 	local m_pos = data.m_pos
 	local facing_cover = nil
 
-	if not my_data.in_cover and nearest_cover and cover_release_dis < mvector3.distance(nearest_cover[1][1], m_pos) then
+	if not my_data.in_cover and nearest_cover and cover_release_dis < mvec3_dis(nearest_cover[1][1], m_pos) then
 		managers.navigation:release_cover(nearest_cover[1])
 
 		my_data.nearest_cover = nil
 		nearest_cover = nil
 	end
 
-	if best_cover and cover_release_dis < mvector3.distance(best_cover[1][1], m_pos) then
+	if best_cover and cover_release_dis < mvec3_dis(best_cover[1][1], m_pos) then
 		managers.navigation:release_cover(best_cover[1])
 
 		my_data.best_cover = nil
@@ -1911,8 +1919,8 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		local pose_chk = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
 		local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
 		local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
-		local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
-		local height_difference_penalty = data.attention_obj and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0
+		local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
+		local height_difference_penalty = data.attention_obj and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0
 		
 		if data.unit:movement():cool() then
 				haste = "walk"
@@ -1936,7 +1944,7 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 
 		local no_strafe, end_pose = nil
 		
-		local crouch_roll = math.random(0.01, 1)
+		local crouch_roll = math_random(0.01, 1)
 		local stand_chance = nil
 		local enemy_visible15m_or_10m_chk = data.attention_obj and data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj and data.attention_obj.dis <= 1000
 		
@@ -1975,7 +1983,7 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		end
 		
 		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
-			local randomwalkchance = math.random(0.01, 1)
+			local randomwalkchance = math_random(0.01, 1)
 			if randomwalkchance > 0.10 then
 				haste = "walk"
 			else
@@ -2105,37 +2113,37 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 			stand_dis = 120
 		else
 			stand_dis = 90
-			local mid_pos = mvector3.copy(revive_u_fwd)
+			local mid_pos = mvec3_copy(revive_u_fwd)
 
-			mvector3.multiply(mid_pos, -20)
-			mvector3.add(mid_pos, revive_u_pos)
+			mvec3_mul(mid_pos, -20)
+			mvec3_add(mid_pos, revive_u_pos)
 
 			ray_params.pos_to = mid_pos
 			local ray_res = managers.navigation:raycast(ray_params)
 			revive_u_pos = ray_params.trace[1]
 		end
 
-		local rand_side_mul = math.random() > 0.5 and 1 or -1
-		local revive_pos = mvector3.copy(revive_u_right)
+		local rand_side_mul = math_random() > 0.5 and 1 or -1
+		local revive_pos = mvec3_copy(revive_u_right)
 
-		mvector3.multiply(revive_pos, rand_side_mul * stand_dis)
-		mvector3.add(revive_pos, revive_u_pos)
+		mvec3_mul(revive_pos, rand_side_mul * stand_dis)
+		mvec3_add(revive_pos, revive_u_pos)
 
 		ray_params.pos_to = revive_pos
 		local ray_res = managers.navigation:raycast(ray_params)
 
 		if ray_res then
-			local opposite_pos = mvector3.copy(revive_u_right)
+			local opposite_pos = mvec3_copy(revive_u_right)
 
-			mvector3.multiply(opposite_pos, -rand_side_mul * stand_dis)
-			mvector3.add(opposite_pos, revive_u_pos)
+			mvec3_mul(opposite_pos, -rand_side_mul * stand_dis)
+			mvec3_add(opposite_pos, revive_u_pos)
 
 			ray_params.pos_to = opposite_pos
 			local old_trace = ray_params.trace[1]
 			local opposite_ray_res = managers.navigation:raycast(ray_params)
 
 			if opposite_ray_res then
-				if mvector3.distance(revive_pos, revive_u_pos) < mvector3.distance(ray_params.trace[1], revive_u_pos) then
+				if mvec3_dis(revive_pos, revive_u_pos) < mvec3_dis(ray_params.trace[1], revive_u_pos) then
 					revive_pos = ray_params.trace[1]
 				else
 					revive_pos = old_trace
@@ -2148,7 +2156,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 		end
 
 		local revive_rot = revive_u_pos - revive_pos
-		local revive_rot = Rotation(revive_rot, math.UP)
+		local revive_rot = Rotation(revive_rot, math_UP)
 		occupation = {
 			type = "revive",
 			pos = revive_pos,
@@ -2257,7 +2265,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 	if not reservation and wants_reservation then
 		data.brain:add_pos_rsrv("path", {
 			radius = 30,
-			position = mvector3.copy(to_pos)
+			position = mvec3_copy(to_pos)
 		})
 	end
 
