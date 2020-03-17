@@ -56,5 +56,13 @@
 	
 	<texture path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/bex_ninja_df" />
 	
+    <!--federales normal/hard heavy texture-->
+    <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/policia_heavy_df"/>    
+    <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/helmets_swat_df"/>
+
+    <!--federales n/h heavy shotgunner-->
+    <unit_mat path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_r870/ene_swat_heavy_policia_federale_r870" load="true"/>
+    <unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_r870/ene_swat_heavy_policia_federale_r870_husk" load="true"/>
+    <material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_r870/ene_swat_heavy_policia_federale_r870_contour" />
 	
 </table>

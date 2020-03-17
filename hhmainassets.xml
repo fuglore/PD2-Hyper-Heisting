@@ -805,7 +805,12 @@
 	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi_contour" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_body_df" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_policia_federale_heavy_helmet_df" force="true"/>
-	
+
+    <!--normal/hard federales heavy-->
+    <unit_mat path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale" force="true"/>
+    <unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale_husk" force="true"/>
+    <material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale_contour" force="true"/>    
+		
 	<!-- need to force load this texture from here otherwise it goes into missing textures randomly -->
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/helmets_swat_r870_df" load="true"/>
 
