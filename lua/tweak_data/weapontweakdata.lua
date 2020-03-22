@@ -3688,9 +3688,6 @@ if self.toz66 then
 self.toz66.stats.damage = 200
 self.toz66.stats_modifiers = {damage = 2}
 self.toz66.fire_mode_data.fire_rate = 0.075
-self.x_toz66.stats.damage = 200
-self.x_toz66.stats_modifiers = {damage = 2}
-self.x_toz66.fire_mode_data.fire_rate = 0.075
 self.toz66.kick = {
 standing = {
 		4,
@@ -3713,6 +3710,11 @@ crouching = {
 }
 end
 
+if self.x_toz66 then
+	self.x_toz66.stats.damage = 200
+	self.x_toz66.stats_modifiers = {damage = 2}
+	self.x_toz66.fire_mode_data.fire_rate = 0.075
+end
 --Abzats
 if self.abzats then 
 self.abzats.fire_mode_data.fire_rate = 0.35294117647
