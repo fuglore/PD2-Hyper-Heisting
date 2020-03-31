@@ -118,6 +118,12 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 	})
 end)
 
+ if _G.HopLib then
+	Hooks:Add("LocalizationManagerPostInit", "HH_PoggersMoment", function(loc)
+		loc:load_localization_file(ModPath .. "loc/fuck.txt")
+	end)
+ end
+
 Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		LocalizationManager:add_localized_strings({
