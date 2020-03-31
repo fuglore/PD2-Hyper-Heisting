@@ -1497,7 +1497,13 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 	end
 	
-	local engage_range = my_data.weapon_range.close or 1500
+	local engage_range = nil
+	
+	if my_data.weapon_range and my_data.weapon_range.close then
+			engage_range = my_data.weapon_range.close
+		else
+			engage_range = 1500
+		end
 	
 	
 	--if is_mook then
