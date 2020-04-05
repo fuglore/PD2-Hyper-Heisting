@@ -7671,7 +7671,24 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 		detect_stop = "cloaker_detect_stop",
 		detect = "cloaker_detect_mono"
 	}
+	self.spooc.special_deaths = {
+		melee = {
+			[("head"):id():key()] = {
+				sequence = "dismember_head",
+				melee_weapon_id = "sandsteel",
+				character_name = "dragon",
+				sound_effect = "split_gen_head"
+			},
+			[("body"):id():key()] = {
+				sequence = "dismember_body_top",
+				melee_weapon_id = "sandsteel",
+				character_name = "dragon",
+				sound_effect = "split_gen_body"
+			}
+		}
+	}	
 	self.spooc_heavy = deep_clone(self.spooc)
+	self.spooc_heavy.special_deaths = nil
 
 	table.insert(self._enemy_list, "spooc")
 	table.insert(self._enemy_list, "spooc_heavy")
