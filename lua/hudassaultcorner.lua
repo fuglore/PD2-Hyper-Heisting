@@ -15,6 +15,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local assaultline = "hud_assault_assault"
 	
 	if faction then
+		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)				
 		if faction == "russia" then
 			versusline = "hud_assault_faction_mad"
 		elseif faction == "federales" then
@@ -27,6 +28,16 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 			else
 				versusline = "hud_assault_faction_psc"
 			end
+		elseif faction == "shared" then
+			if diff_index == 4 or diff_index == 5 then
+				versusline = "hud_assault_faction_sharedfbi"		
+			elseif diff_index == 6 or diff_index == 7 then
+				versusline = "hud_assault_faction_sharedgensec"		
+			elseif diff_index == 8 then
+				versusline = "hud_assault_faction_sharedzeal"
+			else
+				versusline = "hud_assault_faction_sharedswat"					
+			end			
 		elseif faction == "zombie" then
 			versusline = "hud_assault_faction_hvh"
 			assaultline = "hud_assault_assaulthvh"

@@ -8,6 +8,10 @@ function CharacterTweakData:init(tweak_data)
 	origin_init(self, tweak_data)
 end
 
+function CharacterTweakData:_init_region_shared()
+	self:_init_region_america()
+end
+
 --LANDMARK: SHARK
 
 --TODO: Lots of untested stuff right now, get testing it solo, if it works, it works, if it doesn't, make it work.

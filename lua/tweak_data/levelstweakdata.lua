@@ -2,6 +2,7 @@
 LevelsTweakData = LevelsTweakData or class()
 LevelsTweakData.LevelType = {
 	America = "america",
+	Shared = "shared",	
 	Russia = "russia",
 	Zombie = "zombie",
 	Murkywater = "murkywater",
@@ -11,6 +12,7 @@ local old_level_init = LevelsTweakData.init
 function LevelsTweakData:init()
     old_level_init(self)
 	local america = LevelsTweakData.LevelType.America
+	local shared = LevelsTweakData.LevelType.Shared	
 	local russia = LevelsTweakData.LevelType.Russia
 	local zombie = LevelsTweakData.LevelType.Zombie
 	local murkywater = LevelsTweakData.LevelType.Murkywater
@@ -18,6 +20,7 @@ function LevelsTweakData:init()
 	self.ai_groups = {
 		default = america,
 		america = america,
+		shared = Shared,		
 		russia = russia,
 		zombie = zombie,
 		murkywater = murkywater,
@@ -28,6 +31,7 @@ function LevelsTweakData:init()
 	
 	-- Murkywater Heists
 	self.shoutout_raid.package = {"packages/hhmurkies", "packages/vlad_shout"}
+	self.pbr.ai_group_type = shared
 	self.pbr.package = {"packages/hhmurkies", "packages/narr_jerry1"}
 	self.des.package = {"packages/hhmurkies", "packages/job_des"}
 	self.bph.package = {"packages/hhmurkies", "packages/dlcs/bph/job_bph"}

@@ -627,7 +627,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
 					Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-				}
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
+				}				
 			},
 			access = access_type_walk_only
 		}
@@ -658,7 +666,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
 					Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-				}
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+				}				
 			},
 			access = access_type_walk_only
 		}
@@ -690,7 +706,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
 					Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-				}
+				},
+				shared = {
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
+				}				
 			},
 			access = access_type_walk_only
 		}
@@ -721,7 +745,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
 					Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-				}
+				},
+				shared = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+				}								
 			},
 			access = access_type_walk_only
 		}
@@ -821,12 +853,10 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_g36/ene_swat_heavy_policia_federale_fbi_g36")
 				},
 				shared = {
-					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),					
 					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),
-					Idstring("units/payday2/characters/ene_city_swat_3/ene_city_swat_3"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+					Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),					
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				}
 			},
 			access = access_type_all
@@ -856,11 +886,9 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				shared = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/ene_zeal_swat_heavy_hh"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				}
 			},
 			access = access_type_all
@@ -891,7 +919,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			murkywater = {
 				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")
-			}
+			},
+			shared = {
+				Idstring("units/payday2/characters/ene_cop_1/ene_cop_1"),
+				Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+				Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),			
+				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"), --fuck we really gotta make murky beatcops
+				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"),
+				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")				
+			}			
 		},
 		access = access_type_walk_only
 	}
@@ -912,7 +948,11 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			federales = {
 				Idstring("units/payday2/characters/ene_cop_2/ene_cop_2")
-			}
+			},
+			shared = {
+				Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light")				
+			}			
 		},
 		access = access_type_walk_only
 	}
@@ -940,12 +980,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3")
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")					
 				}
 			},
 			access = access_type_all
@@ -966,7 +1006,11 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh")
-				}
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_swat_2/ene_swat_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")					
+				}				
 			},
 			access = access_type_all
 		}
@@ -999,12 +1043,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"),
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_5"),
+					Idstring("units/payday2/characters/ene_swat_3/ene_swat_3"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				}	
 			},
 			access = access_type_all
@@ -1027,8 +1071,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"),
-					Idstring("units/payday2/characters/ene_swat_2/ene_swat_2")
+					Idstring("units/payday2/characters/ene_swat_2/ene_swat_2"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
 				}
 			},
 			access = access_type_all
@@ -1053,13 +1097,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale")
 				},
+				shared = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
+				}				
 			},
 			access = access_type_all
 		}
 		self.unit_categories.CS_heavy_R870 = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870")
+					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870") --what
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_heavy_r870/ene_akan_cs_heavy_r870")
@@ -1072,7 +1120,11 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
-				}
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870")
+				}				
 			},
 			access = access_type_all
 		}
@@ -1090,9 +1142,13 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
 				},
-				federales = {
+				federales = {				
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale")
-				}
+				},
+				shared = {		
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")		
+				}				
 			},
 			access = access_type_walk_only
 		}
@@ -1115,8 +1171,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle"),
-					Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1")
+					Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
 				}
 			},
 			access = access_type_all
@@ -1139,8 +1195,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_r870/ene_swat_heavy_policia_federale_r870")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870"),
-					Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870")
+					Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870")
 				}
 			},
 			access = access_type_all
@@ -1163,8 +1219,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle"),
-					Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1")
+					Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")					
 				}
 			},
 			access = access_type_walk_only
@@ -1245,6 +1301,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9")
 				},
 				shared = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/ene_zeal_swat_shield_hh"),				
 					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
 				}
 			},
@@ -1293,12 +1350,19 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_2/ene_fbi_hvh_2")
 			},
 			murkywater = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_fbi/ene_murkywater_light_fbi")
+				Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")				
 			},
 			federales = {
 				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
 				Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2")
 			},
+			shared = {
+				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+				Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")				
+			}			
 		},
 		access = access_type_all
 	}
@@ -1429,7 +1493,11 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			murkywater = {
 				Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
-			}
+			},
+			shared = {
+				Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),			
+				Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+			}			
 		},
 		access = access_type_all
 	}
@@ -1610,6 +1678,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),					
 					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),
 					Idstring("units/payday2/characters/ene_city_swat_3/ene_city_swat_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
@@ -1935,8 +2004,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-					Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870")
+					Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				}
 			},
 			access = access_type_all
@@ -1959,11 +2028,11 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				},
 				federales = {
-					Idstring(		"units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870")
+					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				}
 			},
 			access = access_type_all
@@ -1987,8 +2056,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870")
+					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				}
 			},
 			access = access_type_all
@@ -2012,8 +2081,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
 				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870")
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				}
 			},
 			access = access_type_all
@@ -2037,7 +2106,11 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
-				}
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy")					
+				}				
 			},
 			access = access_type_walk_only
 		}
@@ -2058,7 +2131,11 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_g36/ene_swat_heavy_policia_federale_fbi_g36")
-				}
+				},
+				shared = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy")					
+				}							
 			},
 			access = access_type_walk_only
 		}
@@ -2240,12 +2317,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
 					Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
-					Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3")
+					Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")					
 				}
 			},
 			access = access_type_walk_only
@@ -2301,19 +2378,19 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				--Lord, I hate everything about how this physically and visually presents itself.
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
 					Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"),
 					Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
 					Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),					
 					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic")
 				}
 			},
@@ -2374,14 +2451,6 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_medic_policia_federale/ene_swat_dozer_medic_policia_federale")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3"),
@@ -2389,7 +2458,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3"),
 					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic"),
-					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic")					
 				}
 			},
 			access = access_type_walk_only
@@ -2416,8 +2493,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/ene_medic_federale_rifle_hh")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"),
-					Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4")
+					Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4"),				
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic")
 				}
 			},
 			access = access_type_all
@@ -2441,8 +2518,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/ene_medic_federale_r870_hh")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"),
-					Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870")
+					Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870"),
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")					
 				}
 			},
 			access = access_type_all
@@ -2518,7 +2595,10 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			federales = {
 				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
-			}
+			},
+			shared = {
+				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
+			}			
 		},
 		access = access_type_walk_only
 	}
@@ -2541,7 +2621,10 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			federales = {
 				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
-			}
+			},
+			shared = {
+				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
+			}			
 		},
 		access = access_type_walk_only
 	}

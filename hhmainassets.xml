@@ -662,6 +662,15 @@
 	<object path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3" />
 	<model path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3" />	
 	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3"/>
+
+	<!--Zombie MP5 FBI SWAT-->	
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" load="true"/>
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3_husk" load="true"/>
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3"/>	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3_contour"/>		
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" />
+	<model path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3"/>	
 			
 	<!--Zombie Mosconi Punkimus-->
 	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" load="true" force="true"/>
