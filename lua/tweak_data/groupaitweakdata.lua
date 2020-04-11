@@ -2212,7 +2212,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield")

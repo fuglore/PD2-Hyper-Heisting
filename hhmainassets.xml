@@ -713,19 +713,19 @@
 	<model path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1" force="true" />	
 	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1" force="true"/>	
 
-	<!--Zombie Armoured Shield-->
-	<unit path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh" load="true" />
-	<unit path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh_husk" load="true" />
-	<material_config path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh" />	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh_contour" />		
-	<object path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh"  />
-	<model path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh"  />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh" />	
+	<!--Zombie FBI Heavy Shield-->
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" load="true" />
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds_husk" load="true" />
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" />	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds_contour" />		
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds"  />
+	<model path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds"  />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" />	
+
+	<unit_mat path="units/pd2_dlc_hvh/characters/ene_acc_shield_hvh/ene_acc_shield_hvh" load="true" />	
 
 	<texture path="units/pd2_dlc_hvh/characters/ene_cop_hvh_1/police_hvh_df" force="true"/>	
-	<texture path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/material_head_df" />
-	<texture path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/swat_heavy_il" />		
-	<texture path="units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/swat_heavy_df" />	
+	<texture path="units/pd2_dlc_hvh/characters/ene_acc_shield_hvh/ene_acc_shield_hvh_lights_df" />	
 
 	<!-- BRAIINNNSS end	-->	
 

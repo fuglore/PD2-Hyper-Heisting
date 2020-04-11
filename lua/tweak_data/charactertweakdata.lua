@@ -9858,7 +9858,7 @@ function CharacterTweakData:character_map()
 			"ene_fbi_heavy_hvh_1",
 			"ene_fbi_heavy_hvh_r870",
 			"ene_sniper_hvh_2",
-			"ene_zeal_swat_shield_hvh"
+			"ene_fbi_swat_shield_ds"
 		}
 	}
 	char_map.mad = {
