@@ -31,6 +31,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["hud_assault_FG_cover29"] = "CHAKA CHAKA PATA PON", --i gushed to a friend for like 30 minutes over how fun modding pd2 is and they told me to make a patapon reference, i am not allowed to say no
 		["hud_assault_FG_cover30"] = "DEROGATORY COMMENTS GO HERE",
 		["hud_assault_FG_cover31"] = "BATTLE TILL YOU DROP",
+		["hud_assault_FG_cover32"] = "YOU MAY TAKE COVER EVERY TIME YOU SCARE THE SHIT",
 		["hud_assault_faction_federales"] = "VS. LOS FEDERALES",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_sharedswat"] = "VS. SWAT TEAM & MURKY BATTALION",		

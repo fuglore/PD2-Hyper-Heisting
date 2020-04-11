@@ -918,14 +918,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
 			},
 			murkywater = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")
+				Idstring("units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")				
 			},
 			shared = {
 				Idstring("units/payday2/characters/ene_cop_1/ene_cop_1"),
 				Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
 				Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),			
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"), --fuck we really gotta make murky beatcops
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45"), --PLACEHOLDER BEATCOP
+				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
 				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")				
 			}			
 		},
@@ -2102,14 +2104,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy")					
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")					
 				}				
 			},
 			access = access_type_walk_only
@@ -2127,14 +2129,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_g36/ene_swat_heavy_policia_federale_fbi_g36")
 				},
 				shared = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy")					
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")					
 				}							
 			},
 			access = access_type_walk_only
@@ -7222,14 +7224,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				13.05
 			},
 			tac_swat_rifle = {
-				13.2,
-				13.2,
-				13.2
+				13.1,
+				13.1,
+				13.1
 			},
 			tac_swat_rifle_flank = {
-				13.2,
-				13.2,
-				13.2
+				13.15,
+				13.15,
+				13.15
 			},
 			punks_A = {
 				5.25,
@@ -7262,19 +7264,19 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				3
 			},
 			tac_tazer_flanking = {
-				5,
-				5,
-				5
+				4.95,
+				4.95,
+				4.95
 			},
 			tac_tazer_charge = {
-				5,
-				5,
-				5
+				4.95,
+				4.95,
+				4.95
 			},
 			FBI_spoocs = {
-				6.25,
-				6.25,
-				6.25
+				6.5,
+				6.5,
+				6.5
 			},
 			tac_bull_rush = {
 				6.50,

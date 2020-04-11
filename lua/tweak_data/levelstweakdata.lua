@@ -31,11 +31,15 @@ function LevelsTweakData:init()
 	
 	-- Murkywater Heists
 	self.shoutout_raid.package = {"packages/hhmurkies", "packages/vlad_shout"}
+	self.shoutout_raid.ai_group_type = shared
 	self.pbr.ai_group_type = shared
-	self.pbr.package = {"packages/hhmurkies", "packages/narr_jerry1"}
+	self.pbr.package = {"packages/hhmurkies", "packages/narr_jerry1"}	
+	self.dinner.ai_group_type = shared
+	self.dinner.package = {"packages/narr_dinner", "packages/hhmurkies"}		
 	self.des.package = {"packages/hhmurkies", "packages/job_des"}
-	self.bph.package = {"packages/hhmurkies", "packages/dlcs/bph/job_bph"}
+	self.bph.package = {"packages/hhmurkies", "packages/dlcs/bph/job_bph"}	
 	self.vit.package = {"packages/hhmurkies", "packages/dlcs/vit/job_vit"}
+	self.vit.ai_group_type = shared		
 	self.wwh.package = {"packages/hhmurkies", "packages/lvl_wwh"}
 	self.arm_for.package = {"packages/hhmurkies", "packages/narr_arm_for"}
 	self.mex.package = {"packages/hhmurkies", "packages/job_mex"}

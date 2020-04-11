@@ -17,6 +17,64 @@
 	<model path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump" />	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"/>	
 
+	<!--Vanilla Murky Sniper(for packages)-->
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>	
+
+	<!--Vanilla Murky Tazer(for packages)-->
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"/>
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"/>
+
+	<!--Vanilla Murky Shield(for packages)-->
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"/>
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"/>
+	
+	<unit path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>
+	<sequence_manager path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights" />
+	<model path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights" />	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
+
+	<!--Vanilla Murky Medic(for packages)-->
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"/>
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"/>	
+
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870_husk" load="true"/>	
+	
+	<!--Vanilla Murky Light(for packages)-->
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"/>
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"/>
+
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870_husk" load="true"/>	
+	
 	<!--Murky Light Shotgunner-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870_husk" load="true"/>	
@@ -119,9 +177,7 @@
 	<object path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" />
 	<model path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" />	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
-	<texture path="units/pd2_mod_psc/characters/ene_acc_shield_lights/material_df" />	
-	<texture path="units/pd2_mod_psc/characters/ene_acc_shield_lights/material_nm" />
-
+	
 	<!--Jovanny/Sawed-Off Murky Punk-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss_husk" load="true"/>	
@@ -134,6 +190,15 @@
 	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_nm" />
 	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_df" />	
 	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_nm" />
+
+	<!--C45 Murky COP-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45"/>		
 
 	<!--MP5 Murky Punk-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5" load="true"/>
@@ -201,4 +266,91 @@
 	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_shotgun_heavy_df" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_shotgun_heavy_nm" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_light_df" />		
+	
+	<!-- NEW Murky Accs -->
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_medic_back/ene_acc_bulldozer_medic_back" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_medic_chest/ene_acc_bulldozer_medic_chest" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_medic_neck/ene_acc_bulldozer_medic_neck" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_medic_stomache/ene_acc_bulldozer_medic_stomache" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_medic_throat/ene_acc_bulldozer_medic_throat" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_medic_helmet_plate/ene_acc_bulldozer_medic_helmet_plate" load="true"/>	
+	
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_back/ene_acc_bulldozer_back_1/ene_acc_bulldozer_back_1" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_chest/ene_acc_bulldozer_chest_1/ene_acc_bulldozer_chest_1" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_neck/ene_acc_bulldozer_neck_1/ene_acc_bulldozer_neck_1" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_stomache/ene_acc_bulldozer_stomache_1/ene_acc_bulldozer_stomache_1" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_helmet_plate/ene_acc_bulldozer_helmet_plate_1/ene_acc_bulldozer_helmet_plate_1" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_throat/ene_acc_bulldozer_throat_1/ene_acc_bulldozer_throat_1" load="true"/>	
+
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_back/ene_acc_bulldozer_back_2/ene_acc_bulldozer_back_2" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_chest/ene_acc_bulldozer_chest_2/ene_acc_bulldozer_chest_2" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_neck/ene_acc_bulldozer_neck_2/ene_acc_bulldozer_neck_2" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_stomache/ene_acc_bulldozer_stomache_2/ene_acc_bulldozer_stomache_2" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_helmet_plate/ene_acc_bulldozer_helmet_plate_2/ene_acc_bulldozer_helmet_plate_2" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_throat/ene_acc_bulldozer_throat_2/ene_acc_bulldozer_throat_2" load="true"/>		
+
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_back/ene_acc_bulldozer_back_3/ene_acc_bulldozer_back_3" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_chest/ene_acc_bulldozer_chest_3/ene_acc_bulldozer_chest_3" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_neck/ene_acc_bulldozer_neck_3/ene_acc_bulldozer_neck_3" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_stomache/ene_acc_bulldozer_stomache_3/ene_acc_bulldozer_stomache_3" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_helmet_plate/ene_acc_bulldozer_helmet_plate_3/ene_acc_bulldozer_helmet_plate_3" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_throat/ene_acc_bulldozer_throat_3/ene_acc_bulldozer_throat_3" load="true"/>			
+
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_back/ene_acc_bulldozer_back_4/ene_acc_bulldozer_back_4" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_chest/ene_acc_bulldozer_chest_4/ene_acc_bulldozer_chest_4" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_neck/ene_acc_bulldozer_neck_4/ene_acc_bulldozer_neck_4" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_stomache/ene_acc_bulldozer_stomache_4/ene_acc_bulldozer_stomache_4" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_helmet_plate/ene_acc_bulldozer_helmet_plate_4/ene_acc_bulldozer_helmet_plate_4" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_bulldozer_throat/ene_acc_bulldozer_throat_4/ene_acc_bulldozer_throat_4" load="true"/>			
+	
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_murkywater_hat/ene_acc_murkywater_hat" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_murkywater_medic_helmet/ene_acc_murkywater_medic_helmet" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" load="true"/>
+
+	<!--Vanilla Murky Dozers (i hate you ugly pricks FUCK you stupid dumbasses!!!)-->
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"/>
+	<sequence_manager path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"/>	
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"/>			
+	
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"/>
+	<sequence_manager path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"/>	
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"/>			
+	
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"/>
+	<sequence_manager path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"/>	
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"/>			
+
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"/>
+	<sequence_manager path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"/>	
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"/>
+
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4" load="true"/>
+	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>
+	<sequence_manager path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>				
+	
 </table>
