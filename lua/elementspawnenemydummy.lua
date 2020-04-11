@@ -135,11 +135,16 @@
 		end
 
 		if ai_type == "shared" then
-			if difficulty_index == 8 then
+			if difficulty_index == 8 and job ~= "dinner" then
 				if murkywetew_highdiff[self._values.enemy] then
 					self._values.enemy = murkywetew_highdiff[self._values.enemy]
 				end
 				self._values.enemy = murkywetew_highdiff[self._values.enemy] or self._values.enemy
+			elseif job == "dinner" and difficulty_index == 8 then
+				if sm_wish[self._values.enemy] then
+					self._values.enemy = sm_wish[self._values.enemy]
+				end
+				self._values.enemy = sm_wish[self._values.enemy] or self._values.enemy			
 			elseif difficulty_index >= 6 then
 				if overkill_290_and_easywish[self._values.enemy] then
 					self._values.enemy = overkill_290_and_easywish[self._values.enemy]
