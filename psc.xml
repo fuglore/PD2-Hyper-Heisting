@@ -191,14 +191,14 @@
 	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_df" />	
 	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_nm" />
 
-	<!--C45 Murky COP-->
-	<unit path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45" load="true"/>
-	<unit path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45_husk" load="true"/>	
-	<material_config path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45"/>
-	<material_config path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45_contour"/>	
-	<object path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45" />
-	<model path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45" />	
-	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45"/>		
+	<!--C45 Murky PUNK-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45"/>		
 
 	<!--MP5 Murky Punk-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5" load="true"/>

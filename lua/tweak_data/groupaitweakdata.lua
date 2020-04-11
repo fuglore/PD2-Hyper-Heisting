@@ -918,7 +918,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
 			},
 			murkywater = {
-				Idstring("units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45"),
 				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
 				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")				
 			},
@@ -926,7 +926,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/payday2/characters/ene_cop_1/ene_cop_1"),
 				Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
 				Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),			
-				Idstring("units/pd2_mod_psc/characters/ene_murky_cop_c45/ene_murky_cop_c45"), --PLACEHOLDER BEATCOP
+				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45"), --PLACEHOLDER BEATCOP
 				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
 				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")				
 			}			
