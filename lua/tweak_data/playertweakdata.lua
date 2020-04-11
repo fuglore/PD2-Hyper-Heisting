@@ -1,3 +1,9 @@
+Hooks:PostHook(PlayerTweakData, "init", "hhplayertweakbullshit", function(self, tweak_data)
+	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
+		self.put_on_mask_time = 1
+	end
+end)
+
 --TODO: Nothing currently.
 function PlayerTweakData:_set_normal()
 	self.damage.automatic_respawn_time = 120
