@@ -8431,6 +8431,9 @@ function CharacterTweakData:_set_normal()
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
+		if faction == "federales" then
+			self.fbi.speech_prefix_p1 = "m"
+		end												
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
 			self.heavy_swat.spawn_scream = "g90"
@@ -8583,6 +8586,9 @@ function CharacterTweakData:_set_hard()
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
+		if faction == "federales" then
+			self.fbi.speech_prefix_p1 = "m"
+		end										
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
 			self.heavy_swat.spawn_scream = "g90"
@@ -8747,6 +8753,9 @@ function CharacterTweakData:_set_overkill()
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
+		if faction == "federales" then
+			self.fbi.speech_prefix_p1 = "m"
+		end								
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
 			self.heavy_swat.spawn_scream = "g90"
@@ -8922,6 +8931,9 @@ function CharacterTweakData:_set_overkill_145()
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
+		if faction == "federales" then --should probably just add this to the init_region. don't feel like it tho so enjoy this lil band aid fix.
+			self.fbi.speech_prefix_p1 = "m"
+		end						
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
 			self.heavy_swat.spawn_scream = "g90"
@@ -9097,6 +9109,9 @@ function CharacterTweakData:_set_easy_wish()
 	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
+		if faction == "federales" then
+			self.fbi.speech_prefix_p1 = "m"
+		end				
 		if faction == "america" then
 			self.fbi_heavy_swat.speech_prefix_p2 = "d"
 			self.fbi_heavy_swat.speech_prefix_count = 5
@@ -9291,6 +9306,9 @@ function CharacterTweakData:_set_overkill_290()
 			self.fbi_heavy_swat.speech_prefix_p2 = "d"
 			self.fbi_heavy_swat.speech_prefix_count = 5
 		end
+		if faction == "federales" then
+			self.fbi.speech_prefix_p1 = "m"
+		end		
 		if faction == "russia" then
 			self.swat.speech_prefix_p1 = "r"
 			self.swat.speech_prefix_count = 4	
