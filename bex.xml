@@ -79,6 +79,15 @@
 		
 	<texture path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/bex_ninja_df" />
 	
+	<!-- FEDERALES NINJA C45 -->
+	<unit path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45_contour"/>	
+	<object path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45" />
+	<model path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45" />	
+	<cooked_physics path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"/>	
+	
     <!--federales normal/hard heavy texture-->
     <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/policia_heavy_df"/>    
     <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/helmets_swat_df"/>
