@@ -103,6 +103,42 @@ function CopBrain:search_for_path_to_unit(search_id, other_unit, access_neg)
 	return true
 end
 
+function CopBrain:search_for_path_to_cover(search_id, cover, offset_pos, access_neg)
+	local params = {
+		tracker_from = self._unit:movement():nav_tracker(),
+		tracker_to = cover[3],
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		access_pos = self._SO_access,
+		access_neg = access_neg
+	}
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
+function CopBrain:search_for_coarse_path(search_id, to_seg, verify_clbk, access_neg)
+	local params = {
+		from_tracker = self._unit:movement():nav_tracker(),
+		to_seg = to_seg,
+		access = {
+			"walk"
+		},
+		id = search_id,
+		results_clbk = callback(self, self, "clbk_coarse_pathing_results", search_id),
+		verify_clbk = verify_clbk,
+		access_pos = self._logic_data.char_tweak.access,
+		access_neg = access_neg
+	}
+	self._logic_data.active_searches[search_id] = 2
+
+	managers.navigation:search_coarse(params)
+
+	return true
+end
+
 function CopBrain:on_alarm_pager_interaction(status, player)
 	if not managers.groupai:state():whisper_mode() then
 		return
