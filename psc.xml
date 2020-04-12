@@ -171,6 +171,8 @@
 	<model path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" />	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield"/>	
 
+	<df_nm path="units/pd2_mod_psc/characters/ene_acc_shield_lights/material" />
+	
 	<unit path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>
 	<sequence_manager path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>	
 	<material_config path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	

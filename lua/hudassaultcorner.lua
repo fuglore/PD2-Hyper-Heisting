@@ -18,6 +18,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)				
 		if faction == "russia" then
 			versusline = "hud_assault_faction_mad"
+			assaultline = "hud_assault_assaultrepers"			
 		elseif faction == "federales" then
 			versusline = "hud_assault_faction_federales"
 			assaultline = "hud_assault_assault_mexcross"
@@ -67,6 +68,8 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 			cover_line_to_use = "hud_assault_cover_mexcross"
 		elseif faction == "zombie" then
 			cover_line_to_use = "hud_assault_coverhvh"
+		elseif faction == "russia" then
+			cover_line_to_use = "hud_assault_cover_repers"			
 		else
 			cover_line_to_use = "hud_assault_cover"
 		end
