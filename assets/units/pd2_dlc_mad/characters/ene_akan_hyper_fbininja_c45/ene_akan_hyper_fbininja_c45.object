@@ -16,7 +16,7 @@
 			<object name="root_point"/>
 			<object name="c_capsule_mover_blocker" collision_type="capsule"/>
 		</body>
-
+		
 <!-- RAGDOLL -->
 		<body name="rag_Head" enabled="false" template="corpse" friction="0.01" sweep="true" collision_class="ragdoll" keyframed="false" collision_script_quiet_time="0.5" collision_script_tag="small" ray="block" lin_damping="0.6" ang_damping="20" collides_with="0" tag="flesh" restitution="0">
 			<object name="Neck" />
@@ -191,22 +191,24 @@
 	</constraints>
 
 	<decal_surfaces default_material="flesh" />
-	
+
 	<graphics>
-		<graphic_group name="character" enabled="true" culling_object="g_body">
-
+		<graphic_group name="character" enabled="true" culling_object="g_body_lod0">
 			<lod_object name="lod_body">
-				<object name="g_body" 		enabled="true"  max_distance="2000"  max_draw_lod="0"/>
-				<object name="g_body_lod1" 	enabled="true" lod="1" />
+				<object name="g_body_lod0" 		enabled="true"  max_distance="1000" cpy_material_vars="contour_color, contour_opacity">
+	                <material materials="mtr_body"            max_distance="600" />
+	                <material materials="mtr_body_lod1"/>
+	        	</object>
+				<object name="g_body_lod1" 	enabled="true" lod="1" cpy_material_vars="contour_color, contour_opacity"/>
 			</lod_object>
-
-			<lod_object name="lod_head">
-				<object name="g_head" 		enabled="true"  max_distance="2000"  max_draw_lod="0"/>
-				<object name="g_head_lod1" 	enabled="true" lod="1" />
+			<lod_object name="lod_hair">
+				<object name="g_head_lod0" 		enabled="true"  max_distance="1000" cpy_material_vars="contour_color, contour_opacity">
+	                <material materials="mtr_head"            max_distance="600" />
+	                <material materials="mtr_head_lod1"/>
+	        	</object>
+				<object name="g_head_lod1" 	enabled="true" lod="1" cpy_material_vars="contour_color, contour_opacity"/>
 			</lod_object>
-
-			<object name="s_body" enabled="true" shadow_caster="true"/>
-
+				<object name="s_body" enabled="true" shadow_caster="true"/>
 		</graphic_group>
 	</graphics>
 

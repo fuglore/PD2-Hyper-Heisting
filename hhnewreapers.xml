@@ -46,5 +46,6 @@
 
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/fbi_akmsu_df" />	
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/fbininja_c45_df" />	
+	<df_nm path="units/pd2_dlc_mad/characters/shared_textures/fbininja_c45_head" />		
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/fbininja_m4_df" />	
 </table>
