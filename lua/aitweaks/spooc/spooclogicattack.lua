@@ -280,7 +280,6 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		end
 		
 		if action:expired() then
-			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_combat_movement(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
@@ -561,7 +560,6 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		end
 		
 		if action:expired() then
-			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
