@@ -10,9 +10,12 @@ function ModifierShieldPhalanx:init(data)
 	
 	table.insert(tweak_data.group_ai.unit_categories.FBI_swat_R870.unit_types.murkywater, Idstring("units/pd2_dlc_drm/characters/ene_city_swat_saiga/ene_city_swat_saiga"))
 	
+	table.insert(tweak_data.group_ai.unit_categories.FBI_swat_R870.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_city_swat_saiga/ene_city_swat_saiga"))
+	
 	if Global.game_settings.heavymutator then
 		table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_R870.unit_types.america, Idstring("units/pd2_dlc_drm/characters/ene_city_swat_saiga/ene_city_swat_saiga"))
 		table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_R870.unit_types.murkywater, Idstring("units/pd2_dlc_drm/characters/ene_city_swat_saiga/ene_city_swat_saiga"))
+		table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_R870.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_city_swat_saiga/ene_city_swat_saiga"))	
 	end
 	
 	--tweak_data.group_ai.unit_categories.CS_shield = tweak_data.group_ai.unit_categories.Phalanx_minion

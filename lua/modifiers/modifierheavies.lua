@@ -6,6 +6,7 @@ ModifierHeavies.unit_swaps = {
 		
 	["units/payday2/characters/ene_spook_1/ene_spook_1"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",
 	["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",
+	["units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",
 	
 	["units/payday2/characters/ene_medic_m4/ene_medic_m4"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",
 	["units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",
@@ -30,6 +31,9 @@ function ModifierHeavies:init(data)
 	
 	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.murkywater, Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"))
 	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.murkywater, Idstring("units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"))
+
+	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.shared, Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")) 
+	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"))	
 	
 	Global.game_settings.heavymutator = true --used to track various things related to unit distribution as to keep stuff consistent, not sure if i actually used this at all by now tbh
 	

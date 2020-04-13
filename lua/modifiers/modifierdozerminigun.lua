@@ -19,4 +19,8 @@ function ModifierDozerMinigun:init(data)
 	table.insert(unit_types.russia, unit_name_medic)
 	table.insert(unit_types.murkywater, unit_name_murker)
 	table.insert(unit_types.murkywater, unit_name_murkmedic)
+	table.insert(unit_types.shared, unit_name_murker)
+	table.insert(unit_types.shared, unit_name_murkmedic)	
+	table.insert(unit_types.shared, unit_name_murker)
+	table.insert(unit_types.shared, unit_name_murkmedic)		
 end

@@ -16,6 +16,9 @@ function ModifierMedicAdrenaline:init(data)
 	table.insert(unit_types.america, unit_name)
 	table.insert(unit_types.russia, unit_name)
 	table.insert(unit_types.murkywater, unit_name)
+	
+	table.insert(unit_types.shared, unit_name)
+	table.insert(unit_types.shared, unit_name)	
 end
 
 function ModifierMedicAdrenaline:OnEnemyHealed(medic, target)

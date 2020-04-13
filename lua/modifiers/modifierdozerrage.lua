@@ -9,6 +9,8 @@ function ModifierDozerRage:init(data)
 	table.insert(tweak_data.group_ai.unit_categories.FBI_suit_M4_MP5.unit_types.america, Idstring("units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"))
 	table.insert(tweak_data.group_ai.unit_categories.FBI_suit_M4_MP5.unit_types.russia, Idstring("units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"))
 	table.insert(tweak_data.group_ai.unit_categories.FBI_suit_M4_MP5.unit_types.murkywater, Idstring("units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"))
+	table.insert(tweak_data.group_ai.unit_categories.FBI_suit_M4_MP5.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"))
+	table.insert(tweak_data.group_ai.unit_categories.FBI_suit_M4_MP5.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"))	
 end
 
 function ModifierDozerRage:OnTankVisorShatter(unit, damage_info)
