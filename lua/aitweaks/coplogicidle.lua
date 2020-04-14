@@ -659,7 +659,7 @@ function CopLogicIdle._chk_objective_needs_travel(data, new_objective)
 	return true
 end	
 
-function CopLogicIdle.action_complete_clbk(data, action)
+--[[function CopLogicIdle.action_complete_clbk(data, action)
 	local action_type = action:type()
 	local my_data = data.internal_data
 	
@@ -763,7 +763,7 @@ function CopLogicIdle.action_complete_clbk(data, action)
 			--CopLogicAttack._upd_combat_movement(data)
 		end
 	end
-end
+end]]
 
 function CopLogicIdle._chk_relocate(data)
 	
