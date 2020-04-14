@@ -234,14 +234,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
 	local my_data = data.internal_data
-	local delay = nil
-	
-	if data.cool then
-		delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
-	else
-		delay = CopLogicBase._upd_attention_obj_detection(data, AIAttentionObject.REACT_AIM, AIAttentionObject.REACT_SPECIAL_ATTACK)
-	end
-	
+	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
 	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
 	local old_att_obj = data.attention_obj
 
@@ -769,7 +762,7 @@ function CopLogicTravel.queued_update(data)
     end
 	
 	local engage_range = my_data.weapon_range.close or 1500
-	
+    if not data.cool and data.attention_obj and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT  then
 	if not my_data.next_movement_attempt or my_data.next_movement_attempt < data.t then
 		my_data.want_to_take_cover = CopLogicTravel._chk_wants_to_take_cover(data, my_data)
 		if my_data.at_cover_shoot_pos or my_data.charge_path or data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= engage_range then
@@ -789,7 +782,12 @@ function CopLogicTravel.queued_update(data)
 		my_data.want_to_take_cover = nil
 		CopLogicTravel.upd_advance(data)
 	end
-    
+    else
+        my_data.engage_mode = nil
+        my_data.want_to_take_cover = nil
+        CopLogicTravel.upd_advance(data) 
+    end 
+
     if data.internal_data ~= my_data then
     	return
     end
