@@ -2028,14 +2028,8 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 
 	data.t = TimerManager:game():time()
 	local my_data = data.internal_data
-	local delay = nil
-	
-	if data.cool then
-		delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
-	else
-		delay = CopLogicBase._upd_attention_obj_detection(data, AIAttentionObject.REACT_COMBAT, AIAttentionObject.REACT_SPECIAL_ATTACK)
-	end
-	
+	local delay = delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+
 	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
 	local old_att_obj = data.attention_obj
 
@@ -2080,24 +2074,4 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	end
 
 	CopLogicBase._report_detections(data.detected_attention_objects)
-end
-
-function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
-	if not data.unit:movement():chk_action_forbidden("walk") then
-		local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
-
-		if wanted_state ~= data.name then
-			local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, nil)
-
-			if allow_trans then
-				if obj_failed then
-					data.objective_failed_clbk(data.unit, data.objective)
-				elseif wanted_state ~= "idle" or not managers.groupai:state():on_cop_jobless(data.unit) then
-					CopLogicBase._exit(data.unit, wanted_state)
-				end
-
-				CopLogicBase._report_detections(data.detected_attention_objects)
-			end
-		end
-	end
 end
