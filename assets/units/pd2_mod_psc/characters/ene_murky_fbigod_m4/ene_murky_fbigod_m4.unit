@@ -12,13 +12,15 @@
 		<extension name="unit_data" class="ScriptUnitData" />
 		<extension name="base" class="CopBase" >
 			<var name="_tweak_table" value="fbi" />
-			<var name="_default_weapon_id" value="m4" />
+			<var name="_default_weapon_id" value="scar_murky" />
 		</extension>
 		<extension name="inventory" class="CopInventory" />
 		<extension name="brain" class="CopBrain" />
 		<extension name="anim_data" class="PlayerAnimationData" />
 		<extension name="character_damage" class="CopDamage">
 			<var name="_head_body_name" value="head" />
+			<var name="_head_gear_object" value="g_hat" />
+			<var name="_head_gear" value="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret" />
 		</extension>
 		<extension name="movement" class="CopMovement" >
 			<var name="_footwear" value="hardsole" />

@@ -24,5 +24,11 @@
 		<bump_normal_texture file="units/payday2/characters/shared_textures/murkywater_nm" mip="4"/>
 		<diffuse_texture file="units/pd2_mod_psc/characters/shared_textures/murky_fbi_chonk_df" mip="4"/>
 	</material>
+
+	<material name="mtr_hat" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS" version="2">
+		<bump_normal_texture 	file="units/pd2_dlc_bph/characters/ene_murkywater_light/material_nm"/>
+		<diffuse_texture 	file="units/pd2_mod_psc/characters/shared_textures/murky_fbi_iclonic_df"/>
+	</material>
+
     <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
 </materials>

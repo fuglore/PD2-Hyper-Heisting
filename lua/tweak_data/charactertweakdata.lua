@@ -7905,6 +7905,13 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.speech_prefix_count = nil
 	self.taser.spawn_sound_event = self._prefix_data_p1.taser() .. "_entrance"
 	self.taser.access = "taser"
+	self.taser.special_deaths.melee = {
+		[("head"):id():key()] = {
+			melee_weapon_id = "fists",
+			character_name = "dragan",
+			sequence = "kill_tazer_headshot"
+		}
+	}	
 	self.taser.melee_weapon = "fists"
 	self.taser.chatter = presets.enemy_chatter.taser
 	self.taser.dodge = presets.dodge.athletic
