@@ -51,7 +51,7 @@
 			["units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic"] = "units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1",												
 			["units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun"] = "units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1",
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper",
-			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"			
+			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"			
 		}
 	local murkywetew = {
 			["units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",

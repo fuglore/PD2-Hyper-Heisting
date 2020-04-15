@@ -31,6 +31,7 @@ function LevelsTweakData:init()
 	
 	-- Murkywater Heists
 	self.shoutout_raid.package = {"packages/hhmurkies", "packages/vlad_shout"}
+	self.shoutout_raid.ai_group_type = shared
 	self.pbr2.package = {"packages/hhmurkies", "packages/narr_jerry2"}
 	self.pbr.ai_group_type = shared
 	self.pbr.package = {"packages/hhmurkies", "packages/narr_jerry1"}
