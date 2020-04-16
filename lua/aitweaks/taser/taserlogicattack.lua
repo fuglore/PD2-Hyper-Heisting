@@ -342,7 +342,6 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 		if action:expired() and not my_data.tasing then
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			TaserLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
@@ -350,8 +349,6 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 			TaserLogicAttack._cancel_tase_attempt(data, my_data)
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			TaserLogicAttack._upd_combat_movement(data)
-		end
 	elseif action_type == "turn" then
 		my_data.turning = nil
 	elseif action_type == "act" then
@@ -363,7 +360,6 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 			TaserLogicAttack._cancel_tase_attempt(data, my_data)
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			TaserLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "hurt" then
 		TaserLogicAttack._cancel_cover_pathing(data, my_data)
@@ -374,7 +370,6 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 			TaserLogicAttack._cancel_tase_attempt(data, my_data)
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			TaserLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "dodge" then
 		local timeout = action:timeout()
@@ -389,7 +384,6 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 			TaserLogicAttack._cancel_tase_attempt(data, my_data)
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			TaserLogicAttack._upd_combat_movement(data)
 		end
 	end
 end
