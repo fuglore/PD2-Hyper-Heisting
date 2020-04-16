@@ -207,7 +207,6 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicAttack._upd_combat_movement(data)
 			SpoocLogicAttack._upd_spooc_attack(data)
 		end
 	elseif action_type == "heal" then
@@ -251,7 +250,6 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicAttack._upd_combat_movement(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
@@ -266,7 +264,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 			end
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicAttack._upd_combat_movement(data)
+			--SpoocLogicAttack._upd_combat_movement(data)
 		end
 
 		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
@@ -281,7 +279,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		
 		if action:expired() then
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicAttack._upd_combat_movement(data)
+			--SpoocLogicAttack._upd_combat_movement(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 
@@ -291,14 +289,14 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicAttack._upd_combat_movement(data)
+			--SpoocLogicAttack._upd_combat_movement(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 	elseif action_type == "turn" then
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicAttack._upd_combat_movement(data)
+			--SpoocLogicAttack._upd_combat_movement(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
@@ -311,7 +309,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicAttack._upd_combat_movement(data)
+			--SpoocLogicAttack._upd_combat_movement(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 		
@@ -328,7 +326,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		if action:expired() then
 			SpoocLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			SpoocLogicAttack._upd_combat_movement(data)
+			--SpoocLogicAttack._upd_combat_movement(data)
 			SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		end
 	end
