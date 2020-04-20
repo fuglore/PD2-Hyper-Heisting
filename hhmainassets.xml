@@ -401,7 +401,6 @@
 	<sequence_manager path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_lazer"/>
 	
 	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_df" />	
-	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_nm" />	
 	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_il" />
 		
 	<unit path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" load="true"/>
