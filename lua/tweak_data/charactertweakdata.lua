@@ -7769,8 +7769,8 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.experience = {}
 	self.shield.weapon = presets.weapon.simple
 	self.shield.detection = presets.detection.enemymook
-	self.shield.HEALTH_INIT = 16
-	self.shield.headshot_dmg_mul = 12
+	self.shield.HEALTH_INIT = 14
+	self.shield.headshot_dmg_mul = 6
 	self.shield.allowed_stances = {
 		cbt = true
 	}
@@ -7834,7 +7834,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.weapon = presets.weapon.civil
 	self.medic.detection = presets.detection.enemymook
 	self.medic.HEALTH_INIT = 18 --health lowered slightly to keep medics less tanky, tanky medics create unsolvable situations and aren't too fun.
-	self.medic.headshot_dmg_mul = 12
+	self.medic.headshot_dmg_mul = 6
 	self.medic.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.medic.damage.no_suppression_crouch = true
 	self.medic.suppression = presets.suppression.stalwart_nil
@@ -7965,7 +7965,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.no_suppression_reaction = true
 	self.fbi.no_retreat = nil
 	self.fbi.HEALTH_INIT = 16
-	self.fbi.headshot_dmg_mul = 6
+	self.fbi.headshot_dmg_mul = 9
 	self.fbi.move_speed = presets.move_speed.civil_consistency
 	self.fbi.damage.no_suppression_crouch = true
 	self.fbi.suppression = presets.suppression.stalwart_nil
@@ -8317,7 +8317,7 @@ end)
 --difficulty tweaks begin here.
 
 function CharacterTweakData:_set_normal()
-	self:_multiply_all_hp(2, 3)
+	self:_multiply_all_hp(2, 1.5)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.5, 0.3, 0.9)
 
@@ -8471,7 +8471,7 @@ end
 --HARD setup begins here, landmark (POW)
 
 function CharacterTweakData:_set_hard()
-	self:_multiply_all_hp(2, 3)
+	self:_multiply_all_hp(2, 1.5)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.5, 0.3, 0.9)
 	
@@ -8625,7 +8625,7 @@ end
 
 --VH setup, landmark (DOG)
 function CharacterTweakData:_set_overkill()
-	self:_multiply_all_hp(4, 3)
+	self:_multiply_all_hp(4, 1.5)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
@@ -8802,7 +8802,7 @@ end
 --OVK setup, landmark (QBY)
 
 function CharacterTweakData:_set_overkill_145()	
-	self:_multiply_all_hp(4, 3)
+	self:_multiply_all_hp(4, 1.5)
 	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
 	self.tank_mini.HEALTH_INIT = 1800
@@ -9070,7 +9070,7 @@ end
 --MH setup, landmark (1ST ATT)
 
 function CharacterTweakData:_set_easy_wish()
-	self:_multiply_all_hp(4, 2)
+	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.3, 0.15, 0.75)
 	
 	self.tank_mini.HEALTH_INIT = 1800
@@ -9169,7 +9169,7 @@ end
 --DW setup, landmark (2ND IMP)
 
 function CharacterTweakData:_set_overkill_290()
-	self:_multiply_all_hp(4, 2)
+	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.3, 0.15, 0.75)
 	
 	self.tank_mini.HEALTH_INIT = 1800
@@ -9362,7 +9362,7 @@ end
 --DS setup, the 3rd Strike is what counts. (3RD STR)
 
 function CharacterTweakData:_set_sm_wish()
-	self:_multiply_all_hp(4, 1.5)
+	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.25, 0.15, 0.6)
 	
 	self.tank.HEALTH_INIT = 1400
