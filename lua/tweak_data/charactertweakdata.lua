@@ -1198,22 +1198,22 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.detection.enemymook.combat.dis_max = 10000
 	presets.detection.enemymook.combat.angle_max = 360
 	presets.detection.enemymook.combat.delay = {
-		0.35,
-		0.35
+		0,
+		0
 	}
 	presets.detection.enemymook.combat.use_uncover_range = true
 	presets.detection.enemymook.recon.dis_max = 10000
 	presets.detection.enemymook.recon.angle_max = 360
 	presets.detection.enemymook.recon.delay = {
-		0.35,
-		0.35
+		0,
+		0
 	}
 	presets.detection.enemymook.recon.use_uncover_range = true
 	presets.detection.enemymook.guard.dis_max = 10000
 	presets.detection.enemymook.guard.angle_max = 360
 	presets.detection.enemymook.guard.delay = {
-		0.35,
-		0.35
+		0,
+		
 	}
 	presets.detection.enemymook.ntl.dis_max = 2000
 	presets.detection.enemymook.ntl.angle_max = 55
