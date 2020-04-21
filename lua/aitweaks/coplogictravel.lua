@@ -1513,7 +1513,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 	
 		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			CopLogicAttack._upd_aim(data, my_data)
-			data.logic._upd_stance_and_pose(data, data.internal_data)
+			--data.logic._upd_stance_and_pose(data, data.internal_data)
 			
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
 				CopLogicTravel._upd_combat_movement(data)
@@ -1527,7 +1527,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 	
 		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
-			data.logic._upd_stance_and_pose(data, data.internal_data)
+			--data.logic._upd_stance_and_pose(data, data.internal_data)
 			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
 				CopLogicTravel._upd_combat_movement(data)
 			else
@@ -1643,15 +1643,15 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			data.unit:brain():abort_detailed_pathing(my_data.advance_path_search_id)
 		end
 		
-		if not data.unit:character_damage():dead() and action:expired() then
-			CopLogicAttack._upd_aim(data, my_data)
-			data.logic._upd_stance_and_pose(data, data.internal_data)
-			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
-				CopLogicTravel._upd_combat_movement(data)
-			else
-				CopLogicTravel.upd_advance(data)
-			end
-		end
+		--if not data.unit:character_damage():dead() and action:expired() then
+		--	CopLogicAttack._upd_aim(data, my_data)
+		--	data.logic._upd_stance_and_pose(data, data.internal_data)
+		--	if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+		--		CopLogicTravel._upd_combat_movement(data)
+		--	else
+		--		CopLogicTravel.upd_advance(data)
+		--	end
+		--end
 	elseif action_type == "shoot" then		
 		my_data.shooting = nil
 	elseif action_type == "tase" then
@@ -1696,21 +1696,21 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
-				CopLogicTravel._upd_combat_movement(data)
-			else
-				CopLogicTravel.upd_advance(data)
-			end
+			--if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+			--	CopLogicTravel._upd_combat_movement(data)
+			--else
+			--	CopLogicTravel.upd_advance(data)
+			--end
 		end
 	elseif action_type == "turn" then
 		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
-			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
-				CopLogicTravel._upd_combat_movement(data)
-			else
-				CopLogicTravel.upd_advance(data)
-			end
+			--if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_dis <= engage_range and data.attention_obj.verified_t and data.attention_obj.verified_t - data.t < 2 then
+			--	CopLogicTravel._upd_combat_movement(data)
+			--else
+			--	CopLogicTravel.upd_advance(data)
+			--end
 		end
 		
 		my_data.turning = nil
