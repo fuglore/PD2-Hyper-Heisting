@@ -40,7 +40,6 @@ function LevelsTweakData:init()
 	self.des.package = {"packages/hhmurkies", "packages/job_des"}
 	self.bph.package = {"packages/hhmurkies", "packages/dlcs/bph/job_bph"}	
 	self.vit.package = {"packages/hhmurkies", "packages/dlcs/vit/job_vit"}
-	self.vit.ai_group_type = shared		
 	self.wwh.package = {"packages/hhmurkies", "packages/lvl_wwh"}
 	self.arm_for.package = {"packages/hhmurkies", "packages/narr_arm_for"}
 	self.mex.package = {"packages/hhmurkies", "packages/job_mex"}
