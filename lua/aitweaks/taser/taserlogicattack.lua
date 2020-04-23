@@ -837,4 +837,5 @@ function TaserLogicTravel._upd_enemy_detection(data)
 	end
 
 	return delay
+	end
 end

@@ -1793,7 +1793,7 @@ function CopLogicAttack._update_cover(data)
 	elseif best_cover and cover_release_dis_sq < mvector3.distance_sq(best_cover[1][1], my_pos) then
 		CopLogicAttack._set_best_cover(data, my_data, nil)
 	end
-end
+end	
 
 function CopLogicAttack._chk_covered(data, cover_pos, threat_pos, slotmask)
 	local ray_from = temp_vec1
@@ -2028,7 +2028,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 
 	data.t = TimerManager:game():time()
 	local my_data = data.internal_data
-	local delay = delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
 
 	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
 	local old_att_obj = data.attention_obj

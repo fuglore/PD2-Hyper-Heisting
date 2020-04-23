@@ -9837,6 +9837,8 @@ function CharacterTweakData:character_map()
 			"ene_murky_fbigod_m4",
 			"ene_murky_fbigod_c45",
 			"ene_murky_fbigod_c45_DS",
+			"ene_murky_shield",
+			"ene_murky_shield_ld",						
 			"ene_murky_DS_shield",
 			"ene_murky_punk_c45",						
 			"ene_murky_punk_bronco",

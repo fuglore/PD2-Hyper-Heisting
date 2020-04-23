@@ -4,6 +4,7 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 		"m4_npc",
 		"m4_yellow_npc",
 		"ak47_npc",
+		"ak47_ass_npc",		
 		"g36_npc",
 		"smoke_npc",
 		"scar_npc",
@@ -139,7 +140,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.s552_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
 	self.s552_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
 	self.ak47_ass_npc = deep_clone(self.m4_npc)
-	self.ak47_ass_npc.sounds.prefix = "akm_npc"
+	self.ak47_ass_npc.sounds.prefix = "ak74_npc"
 	self.ak47_ass_npc.muzzleflash = "effects/payday2/particles/weapons/762_auto"
 	self.mp5_tactical_npc = deep_clone(self.mp5_npc)
 	self.mp5_tactical_npc.has_suppressor = "suppressed_a"
@@ -147,13 +148,11 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.ump_npc = deep_clone(self.mp5_npc)
 	self.ump_npc.sounds.prefix = "schakal_npc"
 	self.akmsu_smg_npc = deep_clone(self.mp5_npc)
-	self.akmsu_smg_npc.sounds.prefix = "akmsu_npc"
+	self.akmsu_smg_npc.sounds.prefix = "coal_npc"
 	self.akmsu_smg_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
-	self.akmsu_smg_npc.has_suppressor = "suppressed_b"
 	self.asval_smg_npc = deep_clone(self.mp5_npc)
-	self.asval_smg_npc.sounds.prefix = "val_npc"
+	self.asval_smg_npc.sounds.prefix = "akmsu_npc"
 	self.asval_smg_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
-	self.asval_smg_npc.has_suppressor = "suppressed_a"
 	self.asval_smg_npc.no_vis = true
 	self.mac11_npc.sounds.prefix = "mac10_npc"
 	self.benelli_npc.sounds.prefix = "benelli_m4_npc"

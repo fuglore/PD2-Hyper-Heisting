@@ -35,22 +35,13 @@
 	<model path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"/>	
 	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"/>
 
-	<!--Vanilla Murky Shield(for packages)-->
-	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield" load="true"/>
-	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield_husk" load="true"/>	
-	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"/>
-	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield_contour"/>	
-	<object path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"/>
-	<model path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"/>	
-	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"/>
-	
-	<unit path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>
-	<sequence_manager path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>	
-	<material_config path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
-	<object path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights" />
-	<model path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights" />	
-	<cooked_physics path="units/pd2_dlc_bph/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
+	<!--Murky Shields-->
+	<unit path="units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield_husk" load="true"/>	
 
+	<unit path="units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld" load="true"/>
+	<unit path="units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld_husk" load="true"/>		
+	
 	<!--Vanilla Murky Medic(for packages)-->
 	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic" load="true"/>
 	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic_husk" load="true"/>	
@@ -165,20 +156,11 @@
 	<!--Murky Armoured Shield-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield_husk" load="true"/>	
-	<material_config path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield"/>
-	<material_config path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield_contour"/>	
-	<object path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" />
-	<model path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" />	
-	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield"/>	
-
-	<df_nm path="units/pd2_mod_psc/characters/ene_acc_shield_lights/material" />
 	
-	<unit path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>
-	<sequence_manager path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" load="true"/>	
-	<material_config path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
-	<object path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" />
-	<model path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights" />	
-	<cooked_physics path="units/pd2_mod_psc/characters/ene_acc_shield_lights/ene_acc_shield_lights"/>	
+	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_shield_murky_shield/ene_acc_shield_murky" load="true"/>
+	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_shield_murky_shield_small/ene_acc_shield_murky_shield_small" load="true"/>
+
+	<texture path="units/pd2_mod_psc/characters/shared_textures/shield_df"/>		
 	
 	<!--Jovanny/Sawed-Off Murky Punk-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss" load="true"/>
@@ -259,7 +241,7 @@
 	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_fbi_iclonic_df" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_fbi_chonk_df" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/ene_soldier_akan_head_df" />		
-	<texture path="units/pd2_mod_psc/characters/shared_textures/DS_murky_shield_head_df" />		
+	<!-- <texture path="units/pd2_mod_psc/characters/shared_textures/DS_murky_shield_head_df" />		 -->
 	<texture path="units/pd2_mod_psc/characters/shared_textures/helmet_NH_murks_df" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/murky_swat_heavy_df" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/helmet_NH_murks_nm" />		
