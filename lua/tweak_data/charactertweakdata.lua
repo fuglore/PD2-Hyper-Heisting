@@ -1213,7 +1213,7 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.detection.enemymook.guard.angle_max = 360
 	presets.detection.enemymook.guard.delay = {
 		0,
-		
+		0
 	}
 	presets.detection.enemymook.ntl.dis_max = 2000
 	presets.detection.enemymook.ntl.angle_max = 55
