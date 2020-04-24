@@ -2,15 +2,28 @@ local old_init = CopBase.init
 
 function CopBase:init(unit)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local DS_c45_units = {
+	local highdiff_c45_units = {
 		Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
 		Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45_husk"),		
+		Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"),
+		Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45_husk"),		
 		Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45"),
-		Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45_husk")
+		Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45_husk"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45_husk"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1"),
+		Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1_husk"),		
+		Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+		Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1_husk"),
+		Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"),
+		Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45_husk")		
+		
 	}
 	
-	if diff_index == 8 then
-		for _, pistoleer in ipairs(DS_c45_units) do
+	if diff_index >= 6 then
+		for _, pistoleer in ipairs(highdiff_c45_units) do
 			if unit_name == pistoleer then
 				self._tweak_table = "fbi_xc45"
 			end
@@ -67,6 +80,7 @@ function CopBase:default_weapon_name()
 	local heather = Idstring("units/pd2_dlc_mad/weapons/wpn_npc_sr2/wpn_npc_sr2")
 	local ak762_akan = Idstring("units/pd2_dlc_mad/weapons/wpn_npc_ak47/wpn_npc_ak47")
 	local crosskill_chimano_akimbo = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_x_c45")
+	local crosskill_45_akimbo = Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_x_xkill")	
 	local little_friend = Idstring("units/pd2_dlc_chico/weapons/wpn_npc_sg417/wpn_npc_sg417")
 	local suppressed_grom = Idstring("units/pd2_dlc_spa/weapons/wpn_npc_svd_silenced/wpn_npc_svd_silenced")
 	local vulcan_minigun = Idstring("units/pd2_dlc_drm/weapons/wpn_npc_mini/wpn_npc_mini")
@@ -91,10 +105,27 @@ function CopBase:default_weapon_name()
 	
 	local bex_swat = unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale") or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_husk")
 	
-	local DS_c45_units = unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45") or unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45_husk")
+	local highdiff_c45_units = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45") 
+	or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45_husk")	
+	or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45")
+	or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45_husk")
+	or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45")
+	or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45_husk")	
+	or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45")
+	or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45_husk")
+	or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1")
+	or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1_husk")	
+	or unit_name == Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1")
+	or unit_name == Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1_husk")	
+	or unit_name == Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45")	
+	or unit_name == Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45_husk")		
 	
-	if DS_c45_units then 
+	local professor_miller = unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45") or unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk")
+	
+	if highdiff_c45_units and diff_index >= 6 then 
 		return crosskill_chimano_akimbo
+	elseif professor_miller and diff_index >= 6 then 
+		return crosskill_45_akimbo		
 	elseif bex_swat then
 		return car4
 	elseif zombie_taser then

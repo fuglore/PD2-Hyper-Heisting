@@ -53,19 +53,7 @@
 
 	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870" load="true"/>
 	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870_husk" load="true"/>	
-	
-	<!--Vanilla Murky Light(for packages)-->
-	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light" load="true"/>
-	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light_husk" load="true"/>	
-	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"/>
-	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light_contour"/>	
-	<object path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"/>
-	<model path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"/>	
-	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"/>
-
-	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870" load="true"/>
-	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870_husk" load="true"/>	
-	
+		
 	<!--Murky Light Shotgunner-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870_husk" load="true"/>	
@@ -175,7 +163,7 @@
 	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_df" />	
 	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_nm" />
 
-	<!--C45 Murky PUNK-->
+	<!--C45 Murky Punk-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45_husk" load="true"/>	
 	<material_config path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45"/>
@@ -227,6 +215,15 @@
 	<object path="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_head_debris" />
 	
 	<!-- SHARED TEXTURES -->
+	<!-- Vanilla murky Special ASSet replacements (you can do those in packages just not reapers) -->
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/material_v3_df" force="true" />
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/material_v2_df" force="true" />	
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/material_v4_df" force="true" />	
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_medic/material_body_df" force="true" />	
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_medic/material_head_df" force="true" />		
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/material_body_df" force="true" />	
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/material_head_df" force="true" />		
+	<!-- Vanilla murky Special ASSet replacements (you can do those in packages just not reapers) -->	
 	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_df" />	
 	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_head_df" />	
 	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_head_nm" />
@@ -331,7 +328,7 @@
 	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4" load="true"/>
 	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4_husk" load="true"/>	
 	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>
-	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4_contour"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4_contour" force="true" />	
 	<object path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>
 	<sequence_manager path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	
 	<model path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	

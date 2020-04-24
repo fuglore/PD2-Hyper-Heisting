@@ -42,19 +42,6 @@
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_heavy_ak47_ass/ene_akan_cs_heavy_ak47_ass" force="true" />	
 	<!--enemy bullet impact fixes end-->	
 
-
-	<!-- murky Special ASSet replacements (cause you just can't do those in packages) -->
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/material_v3_df" force="true" />
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/material_v2_df" force="true" />	
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/material_v4_df" force="true" />	
-	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4_contour" force="true" />	
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_medic/material_body_df" force="true" />	
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_medic/material_head_df" force="true" />		
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_cloaker/material_body_df" force="true" />	
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/material_body_df" force="true" />	
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_tazer/material_head_df" force="true" />		
-	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_light/material_df" force="true" />		
-
 	<unit path="units/pd2_dlc_bph/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" load="true" force="true"/>
 	<material_config path="units/pd2_dlc_bph/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" force="true"/>	
 	<object path="units/pd2_dlc_bph/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" force="true"/>
@@ -315,7 +302,7 @@
 	
 	<!-- thank you jray ... cool and awsome	 -->
 	
-	<!--NON AKIMBO ZEALOT-->	
+	<!--AKIMBO ZEALOT-->	
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45" load="true"/>
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45_husk" load="true"/>	
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45"/>
@@ -428,7 +415,7 @@
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_df" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_nm" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_il" load="true" />	
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/danial_il" />		
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/danial_il"  load="true" />		
 	<texture path="units/pd2_dlc_gitgud/characters/ene_acc_shield_new_swat_hh/shield_il" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_acc_shield_new_swat_hh/shield_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_df" />	
@@ -485,6 +472,8 @@
 	<model path="units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill" />	
 	<cooked_physics path="units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill"/>	
 	<sequence_manager path="units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill"/>
+
+	<unit path="units/payday2/weapons/wpn_npc_xkill/wpn_npc_x_xkill" load="true"/>
 	
 	<texture path="units/payday2/weapons/wpn_npc_xkill/xkill_df" />
 	<texture path="units/payday2/weapons/wpn_npc_xkill/xkill_nm" />
