@@ -108,6 +108,9 @@
 	<model path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"/>	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"/>
 
+	<!--Murky Accessory-->
+	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_murkfucker/ene_acc_murkfucker" load="true"/>
+	
 	<!--Murky Heavy M4-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar_husk" load="true"/>	
