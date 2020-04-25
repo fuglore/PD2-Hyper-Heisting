@@ -468,7 +468,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 	return best_target, best_target_priority_slot, best_target_reaction
 end
 
-function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
+--[[function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
 	local record = attention_data.criminal_record
 	local can_arrest = CopLogicBase._can_arrest(data)
 	
@@ -523,7 +523,7 @@ function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, st
 	end
 
 	return math.min(attention_data.settings.reaction, AIAttentionObject.REACT_COMBAT)
-end
+end]]
 
 function CopLogicIdle.on_alert(data, alert_data)
 	local alert_type = alert_data[1]
@@ -584,7 +584,7 @@ function CopLogicIdle.on_alert(data, alert_data)
 	end
 end
 
-function CopLogicIdle.on_new_objective(data, old_objective)
+--[[function CopLogicIdle.on_new_objective(data, old_objective)
 	local new_objective = data.objective
 
 	CopLogicBase.on_new_objective(data, old_objective)
@@ -634,7 +634,7 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 	if old_objective and old_objective.fail_clbk then
 		old_objective.fail_clbk(data.unit)
 	end
-end
+end]]
 
 function CopLogicIdle._chk_objective_needs_travel(data, new_objective)
 	
