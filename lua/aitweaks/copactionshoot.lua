@@ -1097,7 +1097,7 @@ function CopActionShoot:anim_clbk_melee_strike()
 		else
 			if self._is_server then --only allow melee damage against NPCs for the host (used in case an enemy targets a client locally but hits something else instead)
 				if character_unit:character_damage() then
-					if character_unit:base().sentry_gun then
+					if character_unit:base() and character_unit():base().sentry_gun then
 						local action_data = {
 							variant = "bullet",
 							damage = damage,
