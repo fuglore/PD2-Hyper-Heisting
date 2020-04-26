@@ -1096,7 +1096,7 @@ function CopActionShoot:anim_clbk_melee_strike()
 			defense_data = character_unit:character_damage():damage_melee(action_data)
 		else
 			if self._is_server then --only allow melee damage against NPCs for the host (used in case an enemy targets a client locally but hits something else instead)
-				if character_unit:character_damage() then
+				if character_unit:character_damage() and character_unit:base() then
 					if character_unit:base().sentry_gun then
 						local action_data = {
 							variant = "bullet",
@@ -1140,19 +1140,24 @@ function CopActionShoot:anim_clbk_melee_strike()
 			if defense_data == "countered" then
 				self._common_data.melee_countered_t = TimerManager:game():time()
 
-				--use a sphere ray to properly attack the countered unit by getting a proper direction, position of the hit, etc
-				local counter_ray = World:raycast("ray", character_unit:movement():m_head_pos(), self._unit:movement():m_com(), "sphere_cast_radius", 20, "target_unit", self._unit)
-				local action_data = {
-					damage_effect = 1,
+				local attack_dir = self._unit:movement():m_com() - character_unit:movement():m_head_pos()
+				mvec3_norm(attack_dir)
+
+				local counter_data = {
 					damage = 0,
+					damage_effect = 1,
 					variant = "counter_spooc",
 					attacker_unit = character_unit,
-					col_ray = counter_ray,
-					attack_dir = counter_ray.ray,
+					attack_dir = attack_dir,
+					col_ray = {
+						position = mvec3_copy(self._unit:movement():m_com()),
+						body = self._unit:body("body"),
+						ray = attack_dir
+					},
 					name_id = character_unit == local_player and managers.blackmarket:equipped_melee_weapon() or character_unit:base():melee_weapon()
 				}
 
-				self._unit:character_damage():damage_melee(action_data)
+				self._unit:character_damage():damage_melee(counter_data)
 			else
 				if not shield_knock and character_unit ~= local_player and character_unit:character_damage() and not character_unit:character_damage()._no_blood then
 					if character_unit:base().sentry_gun then
