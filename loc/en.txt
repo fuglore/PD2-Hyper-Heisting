@@ -1,8 +1,6 @@
 {
     "menu_jukebox_insertcredit" : "Welcome to Hyper Heisting",
     "menu_jukebox_screen_insertcredit" : "Welcome to Hyper Heisting",
-    "pattern_truthrunes_title" : "Truth Runes",
-    "menu_l_global_value_hyperheist" : "This is a Hyper Heisting item!",
     "bm_wp_g3_b_short" : "Short Barrel",
     "bm_wp_g3_b_sniper" : "Long Barrel"
 }
