@@ -140,31 +140,9 @@
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
 		}
 	local sniper = {
-			["units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",	
-			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",									
-			["units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",	
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",										
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_city/ene_murkywater_light_city"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",				
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_city_r870/ene_murkywater_light_city_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",			
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_fbi/ene_murkywater_light_fbi"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_fbi_r870/ene_murkywater_light_fbi_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",
-			["units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",
-			["units/pd2_dlc_bph/characters/ene_murkywater_heavy_g36/ene_murkywater_heavy_g36"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",
-			["units/pd2_dlc_bph/characters/ene_murkywater_heavy_shotgun/ene_murkywater_heavy_shotgun"] = "units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870",	
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/payday2/characters/ene_sniper_1/ene_sniper_1"
 		}
 	local sniper_fed = {
-			["units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",	
-			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",									
-			["units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",	
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",										
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_city/ene_murkywater_light_city"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",				
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_city_r870/ene_murkywater_light_city_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",			
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_fbi/ene_murkywater_light_fbi"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",
-			["units/pd2_dlc_bph/characters/ene_murkywater_light_fbi_r870/ene_murkywater_light_fbi_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",
-			["units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",
-			["units/pd2_dlc_bph/characters/ene_murkywater_heavy_g36/ene_murkywater_heavy_g36"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",
-			["units/pd2_dlc_bph/characters/ene_murkywater_heavy_shotgun/ene_murkywater_heavy_shotgun"] = "units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870",	
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
 		}		
 		
