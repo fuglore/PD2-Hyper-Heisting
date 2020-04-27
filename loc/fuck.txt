@@ -61,5 +61,7 @@
   "ene_murky_heavy_scar" : "Murkywater Heavy Marine",
   "ene_murky_heavy_scar_r870" : "Murkywater Heavy Marine",
   "ene_murky_DS_shield" : "Shield",
+  "ene_murky_shield" : "Shield",
+  "ene_murky_shield_ld" : "Shield", 
   "ene_murky_cloaker" : "Cloaker"
 }
