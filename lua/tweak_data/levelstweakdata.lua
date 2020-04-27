@@ -82,8 +82,10 @@ function LevelsTweakData:get_ai_group_type()
 
 	if level_data then
 		local ai_group_type = level_data.ai_group_type
-		if ai_group_type and ai_group_type == "zombie" and Global.game_settings and Global.game_settings.incsmission or ai_group_type and ai_group_type == "shared" and Global.game_settings and Global.game_settings.incsmission then
+		if ai_group_type and ai_group_type == "zombie" and Global.game_settings and Global.game_settings.incsmission then
 			return "america"
+		elseif ai_group_type and ai_group_type == "shared" and Global.game_settings and Global.game_settings.incsmission then
+			return "murkywater"			
 		elseif ai_group_type then
 			--log("group type name is" .. ai_group_type .. "woo")
 			return ai_group_type

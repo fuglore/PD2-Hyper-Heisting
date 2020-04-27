@@ -139,10 +139,32 @@
 			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/payday2/characters/ene_shield_1/ene_shield_1",
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
 		}
-	local sniper_fed = {
+	local sniper = {
+			["units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",	
+			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",									
+			["units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",	
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",										
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_city/ene_murkywater_light_city"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",				
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_city_r870/ene_murkywater_light_city_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",			
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_fbi/ene_murkywater_light_fbi"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_fbi_r870/ene_murkywater_light_fbi_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",
+			["units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",
+			["units/pd2_dlc_bph/characters/ene_murkywater_heavy_g36/ene_murkywater_heavy_g36"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",
+			["units/pd2_dlc_bph/characters/ene_murkywater_heavy_shotgun/ene_murkywater_heavy_shotgun"] = "units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870",	
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/payday2/characters/ene_sniper_1/ene_sniper_1"
 		}
-	local sniper = {
+	local sniper_fed = {
+			["units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",	
+			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",									
+			["units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",	
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",										
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_city/ene_murkywater_light_city"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",				
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_city_r870/ene_murkywater_light_city_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",			
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_fbi/ene_murkywater_light_fbi"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",
+			["units/pd2_dlc_bph/characters/ene_murkywater_light_fbi_r870/ene_murkywater_light_fbi_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",
+			["units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",
+			["units/pd2_dlc_bph/characters/ene_murkywater_heavy_g36/ene_murkywater_heavy_g36"] = "units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle",
+			["units/pd2_dlc_bph/characters/ene_murkywater_heavy_shotgun/ene_murkywater_heavy_shotgun"] = "units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870",	
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
 		}		
 		
@@ -203,19 +225,19 @@
 		--always replace snipers
 		if job == "firestarter_2" and difficulty_index >= 4 then  --FBI Snipers over regular, if on firestarter 2
 			 if sniper[self._values.enemy] then
-				self._values.enemy = sniper[self._values.enemy]
-			 end
-			 self._values.enemy = sniper[self._values.enemy] or self._values.enemy
-		elseif difficulty_index == 4 or difficulty_index == 5 then --FBI Snipers over regular
-			 if sniper[self._values.enemy] then
-				self._values.enemy = sniper[self._values.enemy]
-			 end
-			 self._values.enemy = sniper[self._values.enemy] or self._values.enemy
-		elseif difficulty_index == 2 or difficulty_index == 3 then --Regular Snipers over FBI
-			if sniper_fed[self._values.enemy] then
 				self._values.enemy = sniper_fed[self._values.enemy]
 			 end
 			 self._values.enemy = sniper_fed[self._values.enemy] or self._values.enemy
+		elseif difficulty_index == 4 or difficulty_index == 5 then --FBI Snipers over regular
+			 if sniper_fed[self._values.enemy] then
+				self._values.enemy = sniper_fed[self._values.enemy]
+			 end
+			 self._values.enemy = sniper[self._values.enemy] or self._values.enemy
+		elseif difficulty_index == 2 or difficulty_index == 3 then --Regular Snipers over FBI
+			if sniper[self._values.enemy] then
+				self._values.enemy = sniper[self._values.enemy]
+			 end
+			 self._values.enemy = sniper[self._values.enemy] or self._values.enemy
 		end
 											
 		self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
