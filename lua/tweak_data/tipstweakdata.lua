@@ -9,6 +9,14 @@ Hooks:PostHook(TipsTweakData, "init", "hh_tips", function(self)
 	)
 	table.insert(self.tips, 
 		{
+			cat_index = 93,
+			image = "heister_dragan",
+			consoles = true,
+			category = "trivia"
+		}
+	)	
+	table.insert(self.tips, 
+		{
 			cat_index = 1,
 			image = "enemy_zeal",
 			consoles = true,
