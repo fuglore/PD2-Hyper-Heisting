@@ -120,6 +120,8 @@
 	<model path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>	
 
+	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_rifle_helmet/ene_acc_rifle_helmet" load="true"/>
+
 	<!--Murky Pistol FBI Ninja-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk" load="true"/>	
