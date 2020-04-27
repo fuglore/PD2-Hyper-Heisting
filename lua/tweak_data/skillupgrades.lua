@@ -117,5 +117,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 	self.values.player.jackpot_safety = {
 		true
 	}
+	self.weapon_movement_penalty.lmg = 0.8
+	self.weapon_movement_penalty.minigun = 0.6
 	
 end )
