@@ -102,6 +102,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["loading_trivia_60"] = "01110111 01101001 01101110 01110100 01100101 01110010 01110011",
 		["loading_trivia_61"] = "winters",
 		["loading_trivia_62"] = "Captain Winters is not ",
+		["loading_trivia_93"] = "Dragan absolutely loathes Tasers! Try punching one in the face with your bare hands while playing as him! You won't regret it!",		
 		["loading_hh_title"] = "Hyper Heisting tips",
 		["loading_hh_1"] = "Enemies on Death Sentence tend to perform a lot of different tactics, try to identify which groups do which to get an advantage!",
 		["loading_hh_2"] = "Ninja enemies deal more damage, and are way better at dodging than the regular assault force! Look out for less armored, more unique units during the assault!",
