@@ -769,6 +769,26 @@ self.x_m1928.AMMO_MAX = 150
 self.m1928.kick.standing = self.new_m4.kick.standing
 self.m1928.kick.crouching = self.new_m4.kick.crouching
 self.m1928.kick.steelsight = self.new_m4.kick.steelsight
+self.x_m1928.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Jackal
 self.schakal.stats.spread = 17
@@ -780,6 +800,26 @@ self.x_schakal.stats.damage = 78
 self.x_schakal.AMMO_PICKUP = {3, 6.5}
 self.x_schakal.AMMO_MAX = 120
 self.x_schakal.AMMO_PICKUP = {2, 5}
+self.x_schakal.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- MP40
 self.erma.stats.spread = 20
@@ -789,7 +829,27 @@ self.x_erma.AMMO_MAX = 90
 self.erma.AMMO_PICKUP = {2, 5}
 self.erma.kick = {
 standing = {
-		1.5,
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
+self.x_erma.kick = {
+standing = {
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -816,6 +876,26 @@ self.x_sr2.AMMO_MAX = 150
 self.sr2.kick.standing = self.new_m4.kick.standing
 self.sr2.kick.crouching = self.new_m4.kick.crouching
 self.sr2.kick.steelsight = self.new_m4.kick.steelsight
+self.x_sr2.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Para
 self.olympic.CLIP_AMMO_MAX = 30
@@ -824,6 +904,26 @@ self.x_olympic.AMMO_MAX = 150
 self.olympic.kick.standing = self.new_m4.kick.standing
 self.olympic.kick.crouching = self.new_m4.kick.crouching
 self.olympic.kick.steelsight = self.new_m4.kick.steelsight
+self.x_olympic.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Patchett
 self.sterling.stats.damage = 128
@@ -832,7 +932,7 @@ self.sterling.AMMO_PICKUP = {1, 3}
 self.sterling.AMMO_MAX = 60
 self.sterling.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -855,6 +955,26 @@ self.x_sterling.stats.damage = 128
 self.x_sterling.stats.spread = 17
 self.x_sterling.AMMO_PICKUP = {1, 3}
 self.x_sterling.AMMO_MAX = 50
+self.x_sterling.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Micro Uzi
 self.baka.stats.damage = 49
@@ -879,14 +999,9 @@ crouching = {
 	-0.5,
 	0.5
 }}
-
--- Swedish K
-self.m45.AMMO_MAX = 80
-self.x_m45.AMMO_MAX = 90
-self.m45.AMMO_PICKUP = {2, 5}
-self.m45.kick = {
+self.x_baka.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -905,6 +1020,52 @@ crouching = {
 }
 }
 
+-- Swedish K
+self.m45.AMMO_MAX = 80
+self.x_m45.AMMO_MAX = 90
+self.m45.AMMO_PICKUP = {2, 5}
+self.m45.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
+self.x_m45.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
+
+
 -- Tatonka
 self.coal.AMMO_PICKUP = {4, 8}
 self.coal.AMMO_MAX = 120
@@ -918,6 +1079,26 @@ self.x_coal.AMMO_MAX = 150
 self.x_coal.stats.spread = 17
 self.x_coal.stats.damage = 59
 self.x_coal.AMMO_PICKUP = {1.5, 7}
+self.x_m45.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Cobra
 self.scorpion.stats.spread = 16
@@ -943,6 +1124,26 @@ crouching = {
 	0.5
 }}
 self.x_scorpion.AMMO_MAX = 200
+self.x_scorpion.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- CMP
 self.mp9.stats.spread = 16
@@ -968,6 +1169,26 @@ crouching = {
 	-0.5,
 	0.5
 }}
+self.x_mp9.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Jacket's Piece
 self.cobray.stats.spread = 15
@@ -978,6 +1199,26 @@ self.x_cobray.stats.damage = 61
 self.cobray.kick.standing = self.new_m4.kick.standing
 self.cobray.kick.crouching = self.new_m4.kick.crouching
 self.cobray.kick.steelsight = self.new_m4.kick.steelsight
+self.x_cobray.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Kross Vertex
 self.polymer.stats.spread = 15
@@ -986,14 +1227,65 @@ self.x_polymer.AMMO_MAX = 150
 self.polymer.kick.standing = self.new_m4.kick.standing
 self.polymer.kick.crouching = self.new_m4.kick.crouching
 self.polymer.kick.steelsight = self.new_m4.kick.steelsight
+self.x_polymer.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Kobus 90
-self.p90.stats.spread = 16
-self.p90.AMMO_MAX = 120
-self.x_p90.AMMO_MAX = 150    
-self.p90.kick.standing = self.new_m4.kick.standing
-self.p90.kick.crouching = self.new_m4.kick.crouching
-self.p90.kick.steelsight = self.new_m4.kick.steelsight
+self.p90.AMMO_PICKUP = {0.5, 3}
+self.x_p90.AMMO_PICKUP = {0.5, 3}
+self.p90.stats.spread = 12
+self.x_p90.stats.spread = 12
+self.p90.stats.damage = 39
+self.x_p90.stats.damage = 39
+self.p90.AMMO_MAX = 100
+self.x_p90.AMMO_MAX = 120
+self.p90.can_shoot_through_shield = true
+self.p90.can_shoot_through_enemy = true
+self.p90.can_shoot_through_wall = true
+self.x_p90.can_shoot_through_shield = true
+self.x_p90.can_shoot_through_enemy = true
+self.x_p90.can_shoot_through_wall = true
+self.p90.kick.standing = self.akm.kick.standing
+self.p90.kick.crouching = self.akm.kick.crouching
+self.p90.kick.steelsight = self.akm.kick.steelsight
+self.x_p90.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Blaster 9mm
 self.tec9.stats.spread = 16
@@ -1018,6 +1310,26 @@ crouching = {
 	-0.5,
 	0.5
 }}
+self.x_tec9.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 self.x_tec9.stats.spread = 16
 self.x_tec9.AMMO_MAX = 200
@@ -1037,6 +1349,26 @@ self.x_shepheard.stats.spread = 16
 self.x_shepheard.stats.damage = 59
 self.x_shepheard.stats.recoil = 15
 self.x_shepheard.AMMO_PICKUP = {1.5, 7}
+self.x_shepheard.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Uzi
 self.uzi.AMMO_MAX = 150
@@ -1061,6 +1393,26 @@ crouching = {
 	-0.5,
 	0.5
 }}
+self.x_uzi.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Compact-5
 self.new_mp5.stats.spread = 16
@@ -1076,6 +1428,26 @@ self.x_mp5.AMMO_PICKUP = {1.5, 7}
 self.new_mp5.kick.standing = self.new_m4.kick.standing
 self.new_mp5.kick.crouching = self.new_m4.kick.crouching
 self.new_mp5.kick.steelsight = self.new_m4.kick.steelsight
+self.x_mp5.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- Mark 10
 self.mac10.AMMO_MAX = 120  
@@ -1083,6 +1455,26 @@ self.x_mac10.AMMO_MAX = 150
 self.mac10.kick.standing = self.new_m4.kick.standing
 self.mac10.kick.crouching = self.new_m4.kick.crouching
 self.mac10.kick.steelsight = self.new_m4.kick.steelsight
+self.x_mac10.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 -- SpecOps
 self.mp7.AMMO_MAX = 120
@@ -1090,6 +1482,26 @@ self.x_mp7.AMMO_MAX = 150
 self.mp7.kick.standing = self.new_m4.kick.standing
 self.mp7.kick.crouching = self.new_m4.kick.crouching
 self.mp7.kick.steelsight = self.new_m4.kick.steelsight
+self.x_mp7.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 --Krinkov
 self.akmsu.AMMO_PICKUP = {3, 6.5}
@@ -1115,6 +1527,26 @@ crouching = {
 		0.1
 }
 }
+self.x_akmsu.kick = {
+standing = {
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
 
 self.x_akmsu.AMMO_MAX = 120
 self.x_akmsu.stats.damage = 78
@@ -1125,7 +1557,27 @@ self.hajk.AMMO_PICKUP = {2, 5}
 self.hajk.AMMO_MAX = 80 
 self.hajk.kick = {
 standing = {
-		1.5,
+		1.3,
+		2.5,
+		-0.2,
+		0.5
+},
+steelsight = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+},
+crouching = {
+		0.7,
+		1.6,
+		-0.1,
+		0.2
+}
+}
+self.x_hajk.kick = {
+standing = {
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -1367,7 +1819,7 @@ self.scar.AMMO_MAX = 100
 self.scar.AMMO_PICKUP = {2, 6}
 self.scar.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -1392,7 +1844,7 @@ self.akm.AMMO_PICKUP = {2, 6}
 self.akm.AMMO_MAX = 100
 self.akm.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -1416,7 +1868,7 @@ self.akm_gold.AMMO_PICKUP = {2, 6}
 self.akm_gold.AMMO_MAX = 100
 self.akm_gold.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -1441,7 +1893,7 @@ self.flint.AMMO_MAX = 100
 self.flint.CLIP_AMMO_MAX = 30
 self.flint.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -1464,7 +1916,7 @@ crouching = {
 self.fal.AMMO_PICKUP = {2, 6}
 self.fal.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -1488,7 +1940,7 @@ self.m16.AMMO_PICKUP = {2, 6}
 self.m16.AMMO_MAX = 100
 self.m16.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -1580,7 +2032,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -1608,13 +2060,33 @@ self.rota.AMMO_MAX = 50
 self.x_rota.AMMO_MAX = 50
 self.x_rota.stats.damage = 130
 self.rota.stats.damage = 130
-self.rota.damage_near = 450
-self.rota.damage_far = 950
-self.x_rota.damage_near = 450
-self.x_rota.damage_far = 950
+self.rota.damage_near = 550
+self.rota.damage_far = 1050
+self.x_rota.damage_near = 550
+self.x_rota.damage_far = 1050
 self.x_rota.AMMO_PICKUP = {2, 3}
 self.rota.AMMO_PICKUP = {2, 3}
 self.rota.kick = {
+standing = {
+		4,
+		5,
+		-1,
+		1
+},
+steelsight = {
+		3,
+		3.5,
+		-1,
+		1
+},
+crouching = {
+		3,
+		3.5,
+		-1,
+		1
+}
+}
+self.x_rota.kick = {
 standing = {
 		4,
 		5,
@@ -1638,8 +2110,8 @@ crouching = {
 --Reinfeld
 self.r870.fire_mode_data.fire_rate = 0.35294117647
 self.r870.stats.damage = 190
-self.r870.damage_near = 450
-self.r870.damage_far = 950
+self.r870.damage_near = 550
+self.r870.damage_far = 1050
 self.r870.AMMO_PICKUP = {1.8, 2.9}
 self.r870.kick = {
 standing = {
@@ -1664,8 +2136,8 @@ crouching = {
 
 --Locomotive
 self.serbu.stats.damage = 190
-self.serbu.damage_near = 450
-self.serbu.damage_far = 950
+self.serbu.damage_near = 550
+self.serbu.damage_far = 1050
 self.serbu.AMMO_PICKUP = {1.8, 2.9}
 self.serbu.fire_mode_data.fire_rate = 0.35294117647
 self.serbu.kick = {
@@ -1691,8 +2163,8 @@ crouching = {
 
 --M1014
 self.benelli.stats.damage = 130
-self.benelli.damage_near = 450
-self.benelli.damage_far = 950
+self.benelli.damage_near = 550
+self.benelli.damage_far = 1050
 self.benelli.AMMO_PICKUP = {2, 3}
 self.benelli.AMMO_MAX = 50
 self.benelli.kick = {
@@ -1718,8 +2190,8 @@ crouching = {
 
 --Predator
 self.spas12.stats.damage = 130
-self.spas12.damage_near = 450
-self.spas12.damage_far = 950
+self.spas12.damage_near = 550
+self.spas12.damage_far = 1050
 self.spas12.AMMO_PICKUP = {2, 4}
 self.spas12.fire_mode_data.fire_rate = 0.14
 self.spas12.AMMO_MAX = 50
@@ -1746,8 +2218,8 @@ crouching = {
 
 --Steakout
 self.aa12.stats.damage = 80
-self.aa12.damage_near = 450
-self.aa12.damage_far = 950
+self.aa12.damage_near = 550
+self.aa12.damage_far = 1050
 self.aa12.AMMO_PICKUP = {2, 3}
 self.aa12.AMMO_MAX = 60
 self.aa12.kick = {
@@ -1773,8 +2245,8 @@ crouching = {
 
 --Raven
 self.ksg.stats.damage = 190
-self.ksg.damage_near = 450
-self.ksg.damage_far = 950
+self.ksg.damage_near = 550
+self.ksg.damage_far = 1050
 self.ksg.AMMO_PICKUP = {1.8, 2.9}
 self.ksg.kick = {
 standing = {
@@ -1801,11 +2273,11 @@ crouching = {
 self.x_basset.AMMO_MAX = 60
 self.x_basset.stats.damage = 80
 self.basset.stats.damage = 80
-self.basset.damage_near = 450
+self.basset.damage_near = 550
 self.basset.AMMO_MAX = 60
-self.basset.damage_far = 950
-self.x_basset.damage_near = 450
-self.x_basset.damage_far = 950
+self.basset.damage_far = 1050
+self.x_basset.damage_near = 550
+self.x_basset.damage_far = 1050
 self.basset.AMMO_PICKUP = {2, 3}
 self.x_basset.AMMO_PICKUP = {2, 3}
 self.basset.kick = {
@@ -1828,11 +2300,31 @@ crouching = {
 		1
 }
 }
+self.x_basset.kick = {
+standing = {
+		4,
+		5,
+		-1,
+		1
+},
+steelsight = {
+		3,
+		3.5,
+		-1,
+		1
+},
+crouching = {
+		3,
+		3.5,
+		-1,
+		1
+}
+}
 
 --Izhma
 self.saiga.stats.damage = 80
-self.saiga.damage_near = 450
-self.saiga.damage_far = 950
+self.saiga.damage_near = 550
+self.saiga.damage_far = 1050
 self.saiga.AMMO_PICKUP = {2, 3}
 self.saiga.AMMO_MAX = 60
 self.saiga.kick = {
@@ -1862,8 +2354,8 @@ self.coach.stats_modifiers = {damage = 2}
 self.coach.stats.damage = 200
 self.coach.stats_modifiers = {damage = 2}
 self.coach.AMMO_MAX = 36
-self.coach.damage_near = 500
-self.coach.damage_far = 1000
+self.coach.damage_near = 750
+self.coach.damage_far = 1450
 self.coach.fire_mode_data.fire_rate = 0.075
 self.coach.kick = {
 standing = {
@@ -1890,8 +2382,8 @@ crouching = {
 self.huntsman.stats.damage = 200
 self.huntsman.stats_modifiers = {damage = 2}
 self.huntsman.fire_mode_data.fire_rate = 0.075
-self.huntsman.damage_near = 500
-self.huntsman.damage_far = 1000
+self.huntsman.damage_near = 750
+self.huntsman.damage_far = 1450
 self.huntsman.kick = {
 standing = {
 		4,
@@ -1912,11 +2404,12 @@ crouching = {
 		1
 }
 }
+
 --Joceline
 self.b682.stats.damage = 200
 self.b682.stats_modifiers = {damage = 2}
-self.b682.damage_near = 500
-self.b682.damage_far = 1000
+self.b682.damage_near = 750
+self.b682.damage_far = 1450
 self.b682.fire_mode_data.fire_rate = 0.075
 self.b682.kick = {
 standing = {
@@ -1944,10 +2437,10 @@ self.judge.stats.damage = 200
 self.judge.stats_modifiers = {damage = 2}
 self.x_judge.stats.damage = 200
 self.x_judge.stats_modifiers = {damage = 2}
-self.judge.damage_near = 450
-self.judge.damage_far = 950
-self.x_judge.damage_near = 450
-self.x_judge.damage_far = 950
+self.judge.damage_near = 550
+self.judge.damage_far = 1050
+self.x_judge.damage_near = 550
+self.x_judge.damage_far = 1050
 self.judge.AMMO_PICKUP = {0.28, 0.88}
 self.judge.AMMO_MAX = 32
 self.x_judge.AMMO_MAX = 36
@@ -1971,12 +2464,32 @@ crouching = {
 		1
 }
 }
+self.x_judge.kick = {
+standing = {
+		4,
+		5,
+		-1,
+		1
+},
+steelsight = {
+		3,
+		3.5,
+		-1,
+		1
+},
+crouching = {
+		3,
+		3.5,
+		-1,
+		1
+}
+}
 
 --Breaker
 self.boot.stats.damage = 200
 self.boot.stats_modifiers = {damage = 2}
-self.boot.damage_near = 450
-self.boot.damage_far = 950
+self.boot.damage_near = 550
+self.boot.damage_far = 1050
 self.boot.AMMO_MAX = 30
 self.boot.AMMO_PICKUP = {0.32, 1.12}
 self.boot.kick = {
@@ -2002,8 +2515,8 @@ crouching = {
 
 --Street Sweeper
 self.striker.stats.damage = 130
-self.striker.damage_near = 450
-self.striker.damage_far = 950
+self.striker.damage_near = 550
+self.striker.damage_far = 1050
 self.striker.AMMO_PICKUP = {2, 3}
 self.striker.fire_mode_data.fire_rate = 0.10695187165
 self.striker.AMMO_MAX = 50
@@ -2033,8 +2546,8 @@ crouching = {
 self.m37.AMMO_MAX = 32
 self.m37.stats.damage = 200
 self.m37.stats_modifiers = {damage = 2}
-self.m37.damage_near = 450
-self.m37.damage_far = 950
+self.m37.damage_near = 550
+self.m37.damage_far = 1050
 self.m37.kick = {
 standing = {
 		4,
@@ -2061,50 +2574,50 @@ crouching = {
 --KSP 58
 self.par.AMMO_PICKUP = {6, 14}
 self.par.stats.damage = 59
-self.par.stats.recoil = 11
+self.par.stats.recoil = 13
 self.par.kick = {
 standing = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 
 --KSP
 self.m249.AMMO_PICKUP = {6, 14}
 self.m249.stats.damage = 59
-self.m249.stats.recoil = 7
+self.m249.stats.recoil = 9
 self.m249.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 
@@ -2112,75 +2625,75 @@ crouching = {
 self.mg42.AMMO_PICKUP = {6, 14}
 self.mg42.stats.damage = 59
 self.mg42.stats.recoil = 9
-self.mg42.stats.spread = 13
+self.mg42.stats.spread = 15
 self.mg42.kick = {
 standing = {
-		0.7,
-		1.7,
-		-0.8,
-		0.8
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		0.7,
-		1.7,
-		-0.8,
-		0.8
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		0.7,
-		1.7,
-		-0.8,
-		0.8
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 
 --Brenner
 self.hk21.AMMO_PICKUP = {2, 8}
 self.hk21.stats.damage = 79
-self.hk21.stats.recoil = 8
+self.hk21.stats.recoil = 10
 self.hk21.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 
 --RPK
 self.rpk.AMMO_PICKUP = {2, 8}
 self.rpk.stats.damage = 79
-self.rpk.stats.recoil = 17
+self.rpk.stats.recoil = 18
 self.rpk.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 
@@ -2358,6 +2871,28 @@ self.glock_18c.stats.spread = 16
 self.glock_18c.stats.recoil = 6
 self.glock_18c.AMMO_MAX = 140
 
+--Automatic Bernetti
+self.beer.stats.damage = 36
+self.beer.stats.spread = 16
+self.beer.AMMO_MAX = 180
+self.x_beer.stats.damage = 36
+self.x_beer.stats.spread = 16
+self.x_beer.AMMO_MAX = 200
+
+--Czech 92
+self.czech.stats.damage = 42
+self.x_czech.stats.damage = 42
+
+--Igor
+self.stech.AMMO_MAX = 80
+self.stech.stats.damage = 79
+self.stech.stats.spread = 18
+self.stech.fire_mode_data.fire_rate = 0.075
+self.x_stech.fire_mode_data.fire_rate = 0.075
+self.x_stech.stats.spread = 18
+self.x_stech.stats.damage = 79
+self.x_stech.AMMO_MAX = 90
+
 --Gruber Kurz
 self.ppk.fire_mode_data.fire_rate = 0.09
 self.ppk.stats.spread = 15
@@ -2410,9 +2945,10 @@ self.c96.AMMO_PICKUP = {0.75, 2.5}
 --5/7
 self.lemming.fire_mode_data.fire_rate = 0.166
 self.lemming.stats.spread = 17
-self.lemming.AMMO_MAX = 50
-self.lemming.stats.recoil = 8
-self.lemming.AMMO_PICKUP = {0.5, 1}
+self.lemming.AMMO_MAX = 90
+self.lemming.stats.recoil = 9
+self.lemming.stats.damage = 41
+self.lemming.AMMO_PICKUP = {1, 3}
 
 --Peacemaker
 self.peacemaker.fire_mode_data.fire_rate = 0.09
@@ -2489,28 +3025,6 @@ crouching = {
 	-0.5,
 	0.5
 }}
-			
---Automatic Bernetti
-self.beer.stats.damage = 36
-self.beer.stats.spread = 16
-self.beer.AMMO_MAX = 180
-self.x_beer.stats.damage = 36
-self.x_beer.stats.spread = 16
-self.x_beer.AMMO_MAX = 200
-
---Czech 92
-self.czech.stats.damage = 42
-self.x_czech.stats.damage = 42
-
---Igor
-self.stech.AMMO_MAX = 80
-self.stech.stats.damage = 79
-self.stech.stats.spread = 18
-self.stech.fire_mode_data.fire_rate = 0.075
-self.x_stech.fire_mode_data.fire_rate = 0.075
-self.x_stech.stats.spread = 18
-self.x_stech.stats.damage = 79
-self.x_stech.AMMO_MAX = 90
 
 -- AKIMBO PISTOLS--
 
@@ -2772,8 +3286,8 @@ self.arblast.AMMO_PICKUP = {0.54, 1}
 --AMR12
 if self.amr12 then 
 self.amr12.stats.damage = 130
-self.amr12.damage_near = 450
-self.amr12.damage_far = 950
+self.amr12.damage_near = 550
+self.amr12.damage_far = 1050
 self.amr12.AMMO_PICKUP = {2, 3}
 self.amr12.AMMO_MAX = 50
 self.amr12.kick = {
@@ -2808,8 +3322,8 @@ end
 --Reinbeck
 if self.beck then 
 self.beck.stats.damage = 190
-self.beck.damage_near = 450
-self.beck.damage_far = 950
+self.beck.damage_near = 550
+self.beck.damage_far = 1050
 self.beck.AMMO_PICKUP = {1.8, 2.9}
 self.beck.AMMO_MAX = 42
 self.beck.fire_mode_data.fire_rate = 0.35294117647
@@ -3284,22 +3798,22 @@ self.m60e4.stats.damage = 79
 self.m60e4.stats.recoil = 8
 self.m60e4.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end	
@@ -3311,22 +3825,22 @@ self.m60.stats.damage = 79
 self.m60.stats.recoil = 8
 self.m60.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end	
@@ -3339,22 +3853,22 @@ self.lewis.stats.damage = 79
 self.lewis.stats.recoil = 8
 self.lewis.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3366,22 +3880,22 @@ self.rpd.stats.damage = 59
 self.rpd.stats.recoil = 11
 self.rpd.kick = {
 standing = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3393,22 +3907,22 @@ self.ultimax.stats.damage = 59
 self.ultimax.stats.recoil = 11
 self.ultimax.kick = {
 standing = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3420,22 +3934,22 @@ self.mg4.stats.damage = 59
 self.mg4.stats.recoil = 11
 self.mg4.kick = {
 standing = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3447,22 +3961,22 @@ self.mg3.stats.damage = 79
 self.mg3.stats.recoil = 8
 self.mg3.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3474,22 +3988,22 @@ self.zweihander.stats.damage = 59
 self.zweihander.stats.recoil = 11
 self.zweihander.kick = {
 standing = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3499,22 +4013,22 @@ if self.m1919a6 then
 self.m1919a6.AMMO_PICKUP = {2, 8}
 self.m1919a6.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3526,22 +4040,22 @@ self.sumitomo.stats.damage = 59
 self.sumitomo.stats.recoil = 11
 self.sumitomo.kick = {
 standing = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3553,22 +4067,22 @@ self.negev.stats.damage = 59
 self.negev.stats.recoil = 11
 self.negev.kick = {
 standing = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-2,
-		2
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3578,22 +4092,22 @@ if self.dp28 then
 self.dp28.AMMO_PICKUP = {2, 8}
 self.dp28.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3606,22 +4120,22 @@ self.mg34.stats.damage = 79
 self.mg34.stats.recoil = 8
 self.mg34.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
@@ -3633,34 +4147,34 @@ self.mg5.stats.damage = 79
 self.mg5.stats.recoil = 8
 self.mg5.kick = {
 standing = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 steelsight = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 },
 crouching = {
-		1.5,
-		2.5,
-		-1,
-		1
+		1.0,
+		2.1,
+		-0.6,
+		0.6
 }
 }
 end
 
---ADD ON LMGs
+--ADD ON Shotguns
 
 --Siege Shotgun
 if self.dokkasho then 
 self.dokkasho.stats.damage = 200
 self.dokkasho.stats_modifiers = {damage = 2}
-self.dokkasho.damage_near = 450
-self.dokkasho.damage_far = 950
+self.dokkasho.damage_near = 550
+self.dokkasho.damage_far = 1050
 self.dokkasho.fire_mode_data.fire_rate = 0.075
 self.dokkasho.kick = {
 standing = {
@@ -3689,6 +4203,9 @@ if self.toz66 then
 self.toz66.stats.damage = 200
 self.toz66.stats_modifiers = {damage = 2}
 self.toz66.fire_mode_data.fire_rate = 0.075
+self.x_toz66.stats.damage = 200
+self.x_toz66.stats_modifiers = {damage = 2}
+self.x_toz66.fire_mode_data.fire_rate = 0.075
 self.toz66.kick = {
 standing = {
 		4,
@@ -3711,17 +4228,12 @@ crouching = {
 }
 end
 
-if self.x_toz66 then
-	self.x_toz66.stats.damage = 200
-	self.x_toz66.stats_modifiers = {damage = 2}
-	self.x_toz66.fire_mode_data.fire_rate = 0.075
-end
 --Abzats
 if self.abzats then 
 self.abzats.fire_mode_data.fire_rate = 0.35294117647
 self.abzats.stats.damage = 190
-self.abzats.damage_near = 450
-self.abzats.damage_far = 950
+self.abzats.damage_near = 550
+self.abzats.damage_far = 1050
 self.abzats.AMMO_PICKUP = {1.8, 2.9}
 self.abzats.AMMO_MAX = 42
 self.abzats.kick = {
@@ -3751,8 +4263,8 @@ end
 if self.trench then 
 self.trench.stats.damage = 200
 self.trench.stats_modifiers = {damage = 2}
-self.trench.damage_near = 450
-self.trench.damage_far = 950
+self.trench.damage_near = 550
+self.trench.damage_far = 1050
 self.trench.kick = {
 standing = {
 		4,
@@ -3778,8 +4290,8 @@ end
 --STF
 if self.stf12 then 
 self.stf12.stats.damage = 190
-self.stf12.damage_near = 450
-self.stf12.damage_far = 950
+self.stf12.damage_near = 550
+self.stf12.damage_far = 1050
 self.stf12.AMMO_PICKUP = {1.8, 2.9}
 self.stf12.fire_mode_data.fire_rate = 0.35294117647
 self.stf12.kick = {
@@ -3808,8 +4320,8 @@ end
 if self.sideload then 
 self.sideload.fire_mode_data.fire_rate = 0.35294117647
 self.sideload.stats.damage = 190
-self.sideload.damage_near = 450
-self.sideload.damage_far = 950
+self.sideload.damage_near = 550
+self.sideload.damage_far = 1050
 self.sideload.AMMO_PICKUP = {1.8, 2.9}
 self.sideload.kick = {
 standing = {
@@ -3837,8 +4349,8 @@ end
 --Auto 5
 if self.auto5 then 
 self.auto5.stats.damage = 130
-self.auto5.damage_near = 450
-self.auto5.damage_far = 950
+self.auto5.damage_near = 550
+self.auto5.damage_far = 1050
 self.auto5.AMMO_PICKUP = {2, 3}
 self.auto5.AMMO_MAX = 50
 self.auto5.kick = {
@@ -3867,8 +4379,8 @@ end
 if self.sjogren then 
 self.sjogren.stats.damage = 200
 self.sjogren.stats_modifiers = {damage = 2}
-self.sjogren.damage_near = 450
-self.sjogren.damage_far = 950
+self.sjogren.damage_near = 550
+self.sjogren.damage_far = 1050
 self.sjogren.AMMO_MAX = 30
 self.sjogren.AMMO_PICKUP = {0.32, 1.12}
 self.sjogren.kick = {
@@ -3897,8 +4409,8 @@ end
 if self.m1912 then 
 self.m1912.fire_mode_data.fire_rate = 0.35294117647
 self.m1912.stats.damage = 190
-self.m1912.damage_near = 450
-self.m1912.damage_far = 950
+self.m1912.damage_near = 550
+self.m1912.damage_far = 1050
 self.m1912.AMMO_PICKUP = {1.8, 2.9}
 self.m1912.kick = {
 standing = {
@@ -3952,8 +4464,8 @@ end
 --Vepr
 if self.vepr12 then 
 self.vepr12.stats.damage = 80
-self.vepr12.damage_near = 450
-self.vepr12.damage_far = 950
+self.vepr12.damage_near = 550
+self.vepr12.damage_far = 1050
 self.vepr12.AMMO_PICKUP = {2, 3}
 self.vepr12.AMMO_MAX = 60
 self.vepr12.kick = {
@@ -3981,8 +4493,8 @@ end
 --AK12/76
 if self.ak12_76 then 
 self.ak12_76.stats.damage = 80
-self.ak12_76.damage_near = 450
-self.ak12_76.damage_far = 950
+self.ak12_76.damage_near = 550
+self.ak12_76.damage_far = 1050
 self.ak12_76.AMMO_PICKUP = {2, 3}
 self.ak12_76.AMMO_MAX = 60
 self.ak12_76.kick = {
@@ -4012,8 +4524,8 @@ end
 if self.toz34 then 
 self.toz34.stats.damage = 200
 self.toz34.stats_modifiers = {damage = 2}
-self.toz34.damage_near = 450
-self.toz34.damage_far = 950
+self.toz34.damage_near = 550
+self.toz34.damage_far = 1050
 self.toz34.fire_mode_data.fire_rate = 0.075
 self.toz34.kick = {
 standing = {
@@ -4041,8 +4553,8 @@ end
 if self.m590 then 
 self.m590.fire_mode_data.fire_rate = 0.35294117647
 self.m590.stats.damage = 190
-self.m590.damage_near = 450
-self.m590.damage_far = 950
+self.m590.damage_near = 550
+self.m590.damage_far = 1050
 self.m590.AMMO_PICKUP = {1.8, 2.9}
 self.m590.kick = {
 standing = {
@@ -4072,10 +4584,10 @@ self.jackhammer.AMMO_MAX = 50
 self.x_jackhammer.AMMO_MAX = 50
 self.x_jackhammer.stats.damage = 130
 self.jackhammer.stats.damage = 130
-self.jackhammer.damage_near = 450
-self.jackhammer.damage_far = 950
-self.x_jackhammer.damage_near = 450
-self.x_jackhammer.damage_far = 950
+self.jackhammer.damage_near = 550
+self.jackhammer.damage_far = 1050
+self.x_jackhammer.damage_near = 550
+self.x_jackhammer.damage_far = 1050
 self.x_jackhammer.AMMO_PICKUP = {2, 3}
 self.jackhammer.AMMO_PICKUP = {2, 3}
 self.jackhammer.kick = {
@@ -4102,8 +4614,8 @@ end
 
 --Ashot
 if self.ashot then 
-self.ashot.damage_near = 450
-self.ashot.damage_far = 950
+self.ashot.damage_near = 550
+self.ashot.damage_far = 1050
 self.ashot.kick = {
 standing = {
 		3,
@@ -4128,8 +4640,8 @@ end
 
 --TOZ106
 if self.toz106 then 
-self.toz106.damage_near = 450
-self.toz106.damage_far = 950
+self.toz106.damage_near = 550
+self.toz106.damage_far = 1050
 self.toz106.kick = {
 standing = {
 		3,
@@ -4182,8 +4694,8 @@ end
 if self.mts255 then 
 self.mts255.fire_mode_data.fire_rate = 0.35294117647
 self.mts255.stats.damage = 190
-self.mts255.damage_near = 450
-self.mts255.damage_far = 950
+self.mts255.damage_near = 550
+self.mts255.damage_far = 1050
 self.mts255.AMMO_PICKUP = {1.8, 2.9}
 self.mts255.kick = {
 standing = {
@@ -4212,8 +4724,8 @@ if self.fpsix then
 self.fpsix.AMMO_MAX = 42
 self.fpsix.fire_mode_data.fire_rate = 0.35294117647
 self.fpsix.stats.damage = 190
-self.fpsix.damage_near = 450
-self.fpsix.damage_far = 950
+self.fpsix.damage_near = 550
+self.fpsix.damage_far = 1050
 self.fpsix.AMMO_PICKUP = {1.8, 2.9}
 self.fpsix.kick = {
 standing = {
@@ -4267,8 +4779,8 @@ end
 --SPAS15
 if self.spas15 then 
 self.spas15.stats.damage = 80
-self.spas15.damage_near = 450
-self.spas15.damage_far = 950
+self.spas15.damage_near = 550
+self.spas15.damage_far = 1050
 self.spas15.AMMO_PICKUP = {2, 3}
 self.spas15.AMMO_MAX = 60
 self.spas15.kick = {
@@ -4297,8 +4809,8 @@ end
 if self.novas then 
 self.novas.AMMO_MAX = 42
 self.novas.stats.damage = 190
-self.novas.damage_near = 450
-self.novas.damage_far = 950
+self.novas.damage_near = 550
+self.novas.damage_far = 1050
 self.novas.AMMO_PICKUP = {1.8, 2.9}
 self.novas.kick = {
 standing = {
@@ -4325,8 +4837,8 @@ end
 --MP153
 if self.mp153 then 
 self.mp153.stats.damage = 130
-self.mp153.damage_near = 450
-self.mp153.damage_far = 950
+self.mp153.damage_near = 550
+self.mp153.damage_far = 1050
 self.mp153.AMMO_PICKUP = {2, 3}
 self.mp153.AMMO_MAX = 50
 self.mp153.kick = {
@@ -4354,8 +4866,8 @@ end
 --Widowmaker
 if self.wmtx then 
 self.wmtx.stats.damage = 130
-self.wmtx.damage_near = 450
-self.wmtx.damage_far = 950
+self.wmtx.damage_near = 550
+self.wmtx.damage_far = 1050
 self.wmtx.AMMO_PICKUP = {2, 3}
 self.wmtx.AMMO_MAX = 50
 self.wmtx.kick = {
@@ -4411,8 +4923,8 @@ end
 if self.toz194 then 
 self.toz194.AMMO_MAX = 42
 self.toz194.stats.damage = 190
-self.toz194.damage_near = 450
-self.toz194.damage_far = 950
+self.toz194.damage_near = 550
+self.toz194.damage_far = 1050
 self.toz194.AMMO_PICKUP = {1.8, 2.9}
 self.toz194.kick = {
 standing = {
@@ -4439,8 +4951,8 @@ end
 --M1216
 if self.m1216 then 
 self.m1216.stats.damage = 80
-self.m1216.damage_near = 450
-self.m1216.damage_far = 950
+self.m1216.damage_near = 550
+self.m1216.damage_far = 1050
 self.m1216.AMMO_PICKUP = {2, 3}
 self.m1216.AMMO_MAX = 60
 self.m1216.kick = {
@@ -4469,8 +4981,8 @@ end
 if self.candy then 
 self.candy.stats.damage = 200
 self.candy.stats_modifiers = {damage = 2}
-self.candy.damage_near = 450
-self.candy.damage_far = 950
+self.candy.damage_near = 550
+self.candy.damage_far = 1050
 self.candy.kick = {
 standing = {
 		4,
@@ -4524,8 +5036,8 @@ end
 if self.f500 then 
 self.f500.AMMO_MAX = 42
 self.f500.stats.damage = 190
-self.f500.damage_near = 450
-self.f500.damage_far = 950
+self.f500.damage_near = 550
+self.f500.damage_far = 1050
 self.f500.AMMO_PICKUP = {1.8, 2.9}
 self.f500.kick = {
 standing = {
@@ -4568,7 +5080,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -4606,7 +5118,7 @@ self.munmu.AMMO_PICKUP = {2, 6}
 self.munmu.AMMO_MAX = 100
 self.munmu.kick = {
 standing = {
-		1.5,
+		1.3,
 		2.5,
 		-0.2,
 		0.5
@@ -4720,7 +5232,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -4771,7 +5283,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -4991,7 +5503,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -5015,7 +5527,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -5041,7 +5553,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -5292,7 +5804,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -5343,7 +5855,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
@@ -5396,7 +5908,7 @@ steelsight = {
 		0.5
 },
 crouching = {
-		1.5,
+		1.3,
 		2,
 		-0.2,
 		0.2
