@@ -1,5 +1,20 @@
 Hooks:PostHook( WeaponFactoryTweakData, "init", "gwepmodsrebalance", function(self)
 if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
+self.parts.wpn_fps_m4_upg_m_quick.stats.reload = 5
+self.parts.wpn_fps_m4_upg_m_quick.stats.concealment = -1
+self.parts.wpn_fps_upg_ak_m_quick.stats.reload = 5
+self.parts.wpn_fps_upg_ak_m_quick.stats.concealment = -1
+self.parts.wpn_fps_ass_g36_m_quick.stats.reload = 5
+self.parts.wpn_fps_ass_g36_m_quick.stats.concealment = -1
+self.parts.wpn_fps_smg_p90_m_strap.stats.reload = 5
+self.parts.wpn_fps_smg_p90_m_strap.stats.concealment = -1
+self.parts.wpn_fps_ass_aug_m_quick.stats.reload = 5
+self.parts.wpn_fps_ass_aug_m_quick.stats.concealment = -1
+self.parts.wpn_fps_smg_mac10_m_quick.stats.reload = 5
+self.parts.wpn_fps_smg_mac10_m_quick.stats.concealment = -1
+self.parts.wpn_fps_smg_sr2_m_quick.stats.reload = 5
+self.parts.wpn_fps_smg_sr2_m_quick.stats.concealment = -1
+
 self.parts.wpn_fps_pis_c96_b_long.stats = { value = 2, damage = 0, total_ammo_mod = 0, extra_ammo= 0, spread = 1}
 self.parts.wpn_fps_pis_c96_b_long.custom_stats = nil
 self.parts.wpn_fps_smg_shepheard_mag_extended.stats = { value = 2, extra_ammo= 5}
@@ -15,8 +30,7 @@ self.parts.wpn_fps_ass_g3_b_short.custom_stats = nil
 self.parts.wpn_fps_ass_g3_b_sniper.stats = { value = 2, damage = 0, total_ammo_mod = 0, extra_ammo= 0, spread = 1, concealment = -1}
 self.parts.wpn_fps_ass_g3_b_sniper.custom_stats = nil
 self.parts.wpn_fps_ass_g3_b_sniper.override = nil
-			
-			self.parts.wpn_fps_upg_a_slug.custom_stats = {
+self.parts.wpn_fps_upg_a_slug.custom_stats = {
 					armor_piercing_add = 1,
 					can_shoot_through_shield = true,
 					can_shoot_through_wall = true,
@@ -97,9 +111,7 @@ self.wpn_fps_pis_judge.override = {
 				damage_near_mul = 2,
 				bullet_class = "InstantExplosiveBulletBase",
 				rays = 1
-			}},
-			wpn_fps_pis_judge_body_standard = {animations = {}},
-			wpn_fps_pis_judge_body_modern = {animations = {}}
+			}}
 }
 
 self.wpn_fps_pis_x_judge.override = {
@@ -124,11 +136,13 @@ self.wpn_fps_pis_x_judge.override = {
 
 if self.wpn_fps_ass_sg416 then
 self.parts.wpn_fps_ass_komodo_body_tactical.stats = { value = 0, damage = 0, total_ammo_mod = 0, extra_ammo= 0, recoil = 1, spread = 0}
-self.parts.wpn_fps_ass_s552_m_ak.pcs = nil
+self.parts.wpn_fps_ass_s552_m_ak.stats = { value = 2, damage = 2, total_ammo_mod = 0, extra_ammo= 0, recoil = -2, spread = 1}
 self.parts.wpn_fps_ass_m4_m_stick.pcs = nil
 self.parts.wpn_fps_ass_m4_m_stick_heavy.pcs = nil
 self.parts.wpn_fps_ass_m4_m_stick_sg.pcs = nil
 self.parts.wpn_fps_ass_m4_m_stick_amcar.pcs = nil
+self.parts.wpn_fps_ass_ak_m_proto.stats.concealment = -2
+self.parts.wpn_fps_ass_ak_m_proto.stats.reload = 3
 end
 
 -- PX4
