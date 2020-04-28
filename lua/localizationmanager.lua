@@ -155,6 +155,12 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_prison_wife_beta"] = "Jackpot",
 			["menu_prison_wife_beta_desc"] = "BASIC: ##$basic##\nYou regenerate ##5## armor for each successful headshot. This effect cannot occur more than once every ##2## seconds.\n\nACE: ##$pro##\nUpon killing an enemy with a headshot, you gain the ability to resist damage that would otherwise down you. This is lost after taking lethal damage, and can only be activated every ##5## seconds.\n\n ##Let's rock, baby!##",
+			-- weapon stuff below	
+			["bm_wp_g3_b_short"] = "Short Barrel",
+			["bm_wp_g3_b_sniper"] = "Long Barrel",
+			["bm_w_p90"] = "Kobus 90 AP Submachine Gun",
+			["bm_w_x_p90"] = "Akimbo Kobus 90 AP Submachine Guns",
+			
 		})
 	end
 end)
