@@ -580,7 +580,6 @@
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"/>
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_head_df"/>
-	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_head_nm"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_df"/>
 
 	<!--Classic Heavy Shield ty jarey <33333-->	
