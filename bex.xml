@@ -13,8 +13,7 @@
 	<model path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh" />	
 	<cooked_physics path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh"/>
 	
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/mask_df" />
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/mask_nm" />	
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/mask_df" />	
 	
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_bexfucker/ene_acc_bexfucker" load="true"/>
 
