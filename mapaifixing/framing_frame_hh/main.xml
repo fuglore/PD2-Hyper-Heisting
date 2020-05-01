@@ -143,7 +143,7 @@
 		</script_data_mods>
 	</level>
 	<Localization default="english.txt" directory="loc"/>
-	<narrative briefing_event="elp_framing_brf" contact="the_elephant" debrief_event="elp_framing_debrief" id="framing_frame_1" jc="50" load_screen="guis/dlcs/pic/textures/loading/job_framingframe_01">
+	<narrative brief_id="heist_framing_frame_crimenet" briefing_event="elp_framing_brf" contact="the_elephant" debrief_event="elp_framing_debrief" icon="guis/dlcs/bro/textures/pd2/crimenet/gallery" id="framing_frame" jc="50" load_screen="guis/dlcs/pic/textures/loading/job_framingframe_01" name_id="heist_framing_frame">
 		<chain>
 			<table level_id="framing_frame_1" type="e" type_id="heist_type_knockover">
 				<mission_filter>
