@@ -17,6 +17,14 @@
 	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>	
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 
+	
+	<!-- NAV MESH BULLSHIT. TEST RIGHT NOWWWW!!!! -->
+	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
+	<continent path="levels/narratives/e_framing_frame/stage_1/editor_only/editor_only" force="true" unload="true"/> 
+	<mission path="levels/narratives/e_framing_frame/stage_1/editor_only/editor_only" force="true" unload="true"/> 
+	<cover_data path="levels/narratives/e_framing_frame/stage_1/cover_data" force="true" unload="true"/> 
+	<nav_data path="levels/narratives/e_framing_frame/stage_1/nav_manager_data" force="true" unload="true"/> 
+	
 	<!--enemy bullet impact fixes-->	
 	<object path="units/pd2_dlc_flat/characters/npc_chavez/npc_chavez" force="true" />
 	<object path="units/pd2_dlc_flat/characters/npc_jamaican/npc_jamaican" force="true" />		
@@ -580,6 +588,7 @@
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"/>
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_head_df"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_head_nm"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_df"/>
 
 	<!--Classic Heavy Shield ty jarey <33333-->	
@@ -591,6 +600,7 @@
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_classic_shield/ene_acc_classic_shield"/>	
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_acc_classic_shield/ene_acc_classic_shield_df"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_acc_classic_shield/ene_acc_classic_shield_nm"/>
 
 	<unit path="units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy" load="true"/>
 	<unit path="units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy_husk" load="true"/>	
@@ -860,7 +870,7 @@
 	<model path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss" />	
 	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"/>
 	
-	<!--gensec double-barrel punkerton-->
+	<!--gensec mp5 punkerton-->
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5" load="true"/>
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5_husk" load="true"/>
 	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"/>
@@ -875,40 +885,5 @@
 	
 	<!--Truth Runes Pattern-->
 	<texture path="patterns/真_fv"/>
-	
-	<!--federales light swat model/texture changes-->
-	<model path="units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale" force="true"/>
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_body_df" force="true"/>
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_heads_df" force="true"/>
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_helmets_df" force="true"/>
-	
-	<!--federales fbi heavy swat texture changes-->
-	<model path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
-	<object path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
-	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
-	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi_contour" force="true"/>
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_body_df" force="true"/>
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_policia_federale_heavy_helmet_df" force="true"/>
-
-    <!--normal/hard federales heavy-->	
-    <unit_mat path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale" force="true"/>
-    <unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale_husk" force="true"/>
-    <material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale_contour" force="true"/>    
-		
-	<!-- need to force load this texture from here otherwise it goes into missing textures randomly -->
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/helmets_swat_r870_df" load="true"/>
-
-	<!--JA! SE ACABO, PUTOS!-->
-	
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_akan_dozer_policia_federale_body_df" force="true"/>
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_akan_dozer_policia_federale_masks_df" force="true"/>
-	
-	<material_config path="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga" force="true"/>
-	<material_config path="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga_contour" force="true"/>
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/saiga_df" force="true"/>
-
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_dozer_policia_federale_body_minigun_df" force="true"/>
-	<texture path="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_dozer_policia_federale_body_grey_df" force="true"/>
-	
 </table>
 	
