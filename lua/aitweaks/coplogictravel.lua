@@ -1205,7 +1205,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			end
 		end
 		
-		if threat_pos and my_data.engage_mode then
+		--[[if threat_pos and my_data.engage_mode then
 			local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math_random(0.5, 2)
 			
 			if want_to_take_cover then
@@ -1333,7 +1333,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			if cover then
 				return cover
 			end
-		end
+		end]]
 		
 		if not cover then
 			if data.tactics and data.tactics.flank and threat_area and threat_tracker then
@@ -1455,7 +1455,9 @@ function CopLogicTravel.apply_wall_offset_to_cover(data, my_data, cover, wall_fw
 	return collision and ray_params.trace[1] or mvec3_copy(to_pos_bwd)
 end
 
-function CopLogicTravel.action_complete_clbk(data, action)
+--commented out for testing smh
+
+--[[function CopLogicTravel.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()
 	
@@ -1769,7 +1771,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			end
 		end
 	end
-end
+end]]
 
 function CopLogicTravel._update_cover(ignore_this, data)
 	local my_data = data.internal_data
