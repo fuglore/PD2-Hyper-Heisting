@@ -1240,7 +1240,7 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 	end
 end
 
-function CopLogicAttack.action_complete_clbk(data, action)
+--[[function CopLogicAttack.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()
 	
@@ -1370,7 +1370,9 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			CopLogicAttack._upd_combat_movement(data)
 		end
 	end
-end
+end]]
+
+--*4 jeromes holding a coffin while dancing and chanting "bad coder bad coder" to beat of the music while i choke to death from lack of air inside ir*
 
 function CopLogicAttack.queue_update(data, my_data)
 
