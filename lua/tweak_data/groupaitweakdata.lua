@@ -462,6 +462,8 @@ function GroupAITweakData:_init_chatter_data()
 end
 
 Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_categories", function(self, difficulty_index)
+	local level = Global.level_data and Global.level_data.level_id
+
 	local access_type_walk_only = {
 		walk = true
 	}
@@ -639,6 +641,41 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			access = access_type_walk_only
 		}
+	elseif difficulty_index <= 3 and level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" then
+		self.unit_categories.punk_group = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"), 
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss")
+				},								
+				shared = {
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"), 
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+				}				
+			},
+			access = access_type_walk_only
+		}
+	elseif difficulty_index <= 3 and level == "rvd1" or level == "rvd2" or level == "jolly" then
+		self.unit_categories.punk_group = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"), 
+					Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2")
+				}
+			},
+			access = access_type_walk_only
+		}		
 	elseif difficulty_index == 4 or difficulty_index == 5 then
 		self.unit_categories.punk_group = {
 			unit_types = {
@@ -678,7 +715,41 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			access = access_type_walk_only
 		}
-		
+	elseif difficulty_index == 4 or difficulty_index == 5 and level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" then
+		self.unit_categories.punk_group = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"), 
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+				},				
+				shared = {
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"), 
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+				}				
+			},
+			access = access_type_walk_only
+		}
+	elseif difficulty_index == 4 or difficulty_index == 5 and level == "rvd1" or level == "rvd2" or level == "jolly" then
+		self.unit_categories.punk_group = {
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"), 
+					Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4")
+				}
+			},
+			access = access_type_walk_only
+		}			
 	elseif difficulty_index == 6 or difficulty_index == 7 then
 		self.unit_categories.punk_group = {
 			unit_types = {

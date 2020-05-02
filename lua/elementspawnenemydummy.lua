@@ -1,5 +1,19 @@
 	--CREDIT: SC for res' elementspawnenemydummy.
 	--America Difficulty Settings
+	local nypd_beatpricks = {
+			["units/payday2/characters/ene_cop_1/ene_cop_1"] = "units/pd2_mod_beatpricks/characters/ene_cop_1/ene_cop_1",
+			["units/payday2/characters/ene_cop_2/ene_cop_2"] = "units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2",
+			["units/payday2/characters/ene_cop_3/ene_cop_3"] = "units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3",
+			["units/payday2/characters/ene_cop_4/ene_cop_4"] = "units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4"			
+		}
+
+	local lapd_beatpricks = {
+			["units/payday2/characters/ene_cop_1/ene_cop_1"] = "units/pd2_dlc_rvd/characters/ene_cop_1/ene_cop_1",
+			["units/payday2/characters/ene_cop_2/ene_cop_2"] = "units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2",
+			["units/payday2/characters/ene_cop_3/ene_cop_3"] = "units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3",
+			["units/payday2/characters/ene_cop_4/ene_cop_4"] = "units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4"			
+		}		
+	
 	local sm_wish = {
 			["units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"] = "units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1",	
 			["units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3"] = "units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2",	
@@ -166,6 +180,23 @@
 				self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 			end
 		end
+		
+		--NYPD Cops Spawn Overwrite
+		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "dinner" then  
+			 if nypd_beatpricks[self._values.enemy] then
+				self._values.enemy = nypd_beatpricks[self._values.enemy]
+			 end
+			 self._values.enemy = nypd_beatpricks[self._values.enemy] or self._values.enemy
+		end
+
+		--LAPD Cops Spawn Overwrite
+		if level == "rvd1" or level == "rvd2" or level == "jolly" then  
+			 if lapd_beatpricks[self._values.enemy] then
+				self._values.enemy = lapd_beatpricks[self._values.enemy]
+			 end
+			 self._values.enemy = lapd_beatpricks[self._values.enemy] or self._values.enemy
+		end		
+	
 
 		if ai_type == "shared" then
 			if difficulty_index == 8 and job ~= "dinner" then

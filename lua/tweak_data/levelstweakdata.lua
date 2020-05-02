@@ -36,7 +36,7 @@ function LevelsTweakData:init()
 	self.pbr.ai_group_type = shared
 	self.pbr.package = {"packages/hhmurkies", "packages/narr_jerry1"}
 	self.dinner.ai_group_type = shared
-	self.dinner.package = {"packages/narr_dinner", "packages/hhmurkies"}		
+	self.dinner.package = {"packages/narr_dinner", "packages/hhmurkies", "packages/thabeatpricks"}
 	self.des.package = {"packages/hhmurkies", "packages/job_des"}
 	self.bph.package = {"packages/hhmurkies", "packages/dlcs/bph/job_bph"}	
 	self.vit.package = {"packages/hhmurkies", "packages/dlcs/vit/job_vit"}
@@ -51,9 +51,21 @@ function LevelsTweakData:init()
 	--fix missing ganster vo, ty rino
 	self.short2_stage1.package = {"packages/job_short2_stage1", "levels/narratives/dentist/mia/stage2/world_sounds"}
 	self.nightclub.package = {"packages/vlad_nightclub", "levels/narratives/dentist/mia/stage2/world_sounds"}
-	self.spa.package = {"packages/job_spa", "levels/narratives/dentist/mia/stage2/world_sounds"}
+	self.spa.package = {"packages/job_spa", "levels/narratives/dentist/mia/stage2/world_sounds", "packages/thabeatpricks"}
 	self.friend.package = {"levels/narratives/h_alex_must_die/stage_1/world_sounds", "packages/lvl_friend"}
 	self.cane.package = {"packages/cane", "levels/narratives/e_welcome_to_the_jungle/stage_1/world_sounds"}
+
+	--nypd beatfucks or some bullshit
+	self.glace.package = {"packages/narr_glace", "packages/thabeatpricks"}
+	self.flat.package = {"packages/narr_flat", "packages/thabeatpricks"}
+	self.red2.package = {"packages/narr_red2", "packages/thabeatpricks"}
+	self.brb.package = {"packages/lvl_brb", "packages/thabeatpricks"}
+	self.run.package = {"packages/narr_run", "packages/thabeatpricks"}
+	
+	-- lapd beatfucks
+	self.rvd1.package = {"packages/job_rvd", "packages/thabeatpricks"}
+	self.rvd2.package = {"packages/job_rvd2", "packages/thabeatpricks"}
+	self.jolly.package = {"packages/jolly", "packages/thabeatpricks"}
 	
 	if Global.game_settings and not Global.game_settings.incsmission then
 		self.haunted.package = {

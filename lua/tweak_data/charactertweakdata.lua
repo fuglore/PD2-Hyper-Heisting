@@ -9778,6 +9778,15 @@ function CharacterTweakData:character_map()
 			"ene_bex_ninja_c45"			
 		}
 	}
+	char_map.beatpricks = {
+		path = "units/pd2_mod_beatpricks/characters/",
+		list = {
+			"ene_cop_3",
+			"ene_cop_2",
+			"ene_cop_1",
+			"ene_cop_4"
+		}
+	}	
 	char_map.drm = {
 		path = "units/pd2_dlc_drm/characters/",
 		list = {

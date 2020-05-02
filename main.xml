@@ -8,6 +8,7 @@
     </HeistMusic>
 	<AddFiles file="hhmainassets.xml"/>
 	<Package id="packages/hhnewreapers" file="hhnewreapers.xml" use_clbk="self:DebugLoadAssets"/>
+	<Package id="packages/thabeatpricks" file="beatpricks.xml" use_clbk="self:DebugLoadAssets"/>	
 	<Package id="packages/hhmurkies" file="psc.xml" use_clbk="self:DebugLoadAssets"/>
 	<Package id="packages/hhbex" file="bex.xml" use_clbk="self:DebugLoadAssets"/>	
 </table>
