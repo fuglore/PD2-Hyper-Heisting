@@ -16,7 +16,9 @@
 	and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
 	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>	
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
-	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 
+	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
+
+	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 		
 	<!--enemy bullet impact fixes-->	
 	<object path="units/pd2_dlc_flat/characters/npc_chavez/npc_chavez" force="true" />
