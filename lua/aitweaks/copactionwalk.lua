@@ -44,7 +44,7 @@ function CopActionWalk:init(action_desc, common_data)
 	self._common_data = common_data
 	self._action_desc = action_desc
 	self._unit = common_data.unit
-	self._brain = common_data.ext_brain
+	self._ext_brain = common_data.ext_brain
 	self._ext_movement = common_data.ext_movement
 	self._ext_anim = common_data.ext_anim
 	self._ext_base = common_data.ext_base
@@ -309,8 +309,8 @@ function CopActionWalk:_init()
 	end
 
 	if self._sync then
-		self._brain:rem_pos_rsrv("stand")
-		self._brain:add_pos_rsrv("move_dest", {
+		common_data.ext_brain:rem_pos_rsrv("stand")
+		common_data.ext_brain:add_pos_rsrv("move_dest", {
 			radius = 30,
 			position = mvec3_cpy(self._simplified_path[#self._simplified_path])
 		})
@@ -667,7 +667,7 @@ function CopActionWalk:on_exit()
 	end
 
 	if self._sync then
-		self._brain:rem_pos_rsrv("move_dest")
+		self._ext_brain:rem_pos_rsrv("move_dest")
 	end
 end
 
