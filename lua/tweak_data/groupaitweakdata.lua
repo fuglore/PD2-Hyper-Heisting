@@ -601,7 +601,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	end
 	
-	if not Global.game_settings.incsmission then
+	if Global.game_settings and not Global.game_settings.incsmission then
 		if level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" then 
 			if difficulty_index <= 3 then
 				self.unit_categories.punk_group = {
