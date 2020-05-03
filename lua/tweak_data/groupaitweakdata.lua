@@ -601,485 +601,484 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	end
 	
-	if level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" and Global.game_settings and not Global.game_settings.incsmission then 
-		if difficulty_index <= 3 then
-			self.unit_categories.punk_group = {
-				unit_types = {
-					america = {
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"),
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4")
+	if not Global.game_settings.incsmission then
+		if level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" then 
+			if difficulty_index <= 3 then
+				self.unit_categories.punk_group = {
+					unit_types = {
+						america = {
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"),
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4")
+						},
+						russia = {
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+						},
+						zombie = {
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+						},
+						murkywater = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						},
+						federales = {
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+							Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						},
+						shared = {
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"),
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
+						}				
 					},
-					russia = {
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+					access = access_type_walk_only
+				}		
+			elseif difficulty_index == 4 or difficulty_index == 5 then
+				self.unit_categories.punk_group = {
+					unit_types = {
+						america = {
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"),
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4")
+						},
+						russia = {
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+						},
+						zombie = {
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+						},
+						murkywater = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						},
+						federales = {
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+							Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						},
+						shared = {
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"),
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
+							Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4"),				
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						}				
 					},
-					zombie = {
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+					access = access_type_walk_only
+				}
+				
+			elseif difficulty_index == 6 or difficulty_index == 7 then
+				self.unit_categories.punk_group = {
+					unit_types = {
+						america = {
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")
+						},
+						russia = {
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+						},
+						zombie = {
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+						},
+						murkywater = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						},
+						federales = {
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+							Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						},
+						shared = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
+						}				
 					},
-					murkywater = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+					access = access_type_walk_only
+				}
+			else
+				self.unit_categories.punk_group = {
+					unit_types = {
+						america = {
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco")
+						},
+						russia = {
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+						},
+						zombie = {
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+						},
+						murkywater = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						},
+						federales = {
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+							Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						},
+						shared = {
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						}								
 					},
-					federales = {
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-					},
-					shared = {
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"),
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
-					}				
-				},
-				access = access_type_walk_only
-			}		
-		elseif difficulty_index == 4 or difficulty_index == 5 then
-			self.unit_categories.punk_group = {
-				unit_types = {
-					america = {
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"),
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4")
-					},
-					russia = {
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-					},
-					zombie = {
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-					},
-					murkywater = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					},
-					federales = {
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-					},
-					shared = {
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3"),
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2"),
-						Idstring("units/pd2_mod_beatpricks/characters/ene_cop_4/ene_cop_4"),				
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					}				
-				},
-				access = access_type_walk_only
-			}
-			
-		elseif difficulty_index == 6 or difficulty_index == 7 then
-			self.unit_categories.punk_group = {
-				unit_types = {
-					america = {
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")
-					},
-					russia = {
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-					},
-					zombie = {
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-					},
-					murkywater = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					},
-					federales = {
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-					},
-					shared = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
-					}				
-				},
-				access = access_type_walk_only
-			}
-		else
-			self.unit_categories.punk_group = {
-				unit_types = {
-					america = {
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco")
-					},
-					russia = {
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-					},
-					zombie = {
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-					},
-					murkywater = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					},
-					federales = {
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-					},
-					shared = {
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					}								
-				},
-				access = access_type_walk_only
-			}
-		end
-	if level == "rvd1" or level == "rvd2" or level == "jolly" and Global.game_settings and not Global.game_settings.incsmission then 
-		if difficulty_index <= 3 then
-			self.unit_categories.punk_group = {
-				unit_types = {
-					america = {
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"),
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4")
-					},
-					russia = {
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-					},
-					zombie = {
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-					},
-					murkywater = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					},
-					federales = {
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-					},
-					shared = {
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"),
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
-					}				
-				},
-				access = access_type_walk_only
-			}		
-		elseif difficulty_index == 4 or difficulty_index == 5 then
-			self.unit_categories.punk_group = {
-				unit_types = {
-					america = {
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"),
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4")
-					},
-					russia = {
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-					},
-					zombie = {
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-					},
-					murkywater = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					},
-					federales = {
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-					},
-					shared = {
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"),
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
-						Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4"),				
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					}				
-				},
-				access = access_type_walk_only
-			}
-			
-		elseif difficulty_index == 6 or difficulty_index == 7 then
-			self.unit_categories.punk_group = {
-				unit_types = {
-					america = {
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")
-					},
-					russia = {
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-					},
-					zombie = {
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-					},
-					murkywater = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					},
-					federales = {
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-					},
-					shared = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
-						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
-					}				
-				},
-				access = access_type_walk_only
-			}
-		else
-			self.unit_categories.punk_group = {
-				unit_types = {
-					america = {
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco")
-					},
-					russia = {
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-					},
-					zombie = {
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-					},
-					murkywater = {
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					},
-					federales = {
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-					},
-					shared = {
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
-						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-					}								
-				},
-				access = access_type_walk_only
-			}
-		end		
-	else
-	if difficulty_index <= 3 then
-		self.unit_categories.punk_group = {
-			unit_types = {
-				america = {
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
-					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
-					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
-				},
-				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-				},
-				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-				},
-				murkywater = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				},
-				federales = {
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-					Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-				},
-				shared = {
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
-					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
-					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
-				}				
-			},
-			access = access_type_walk_only
-		}		
-	elseif difficulty_index == 4 or difficulty_index == 5 then
-		self.unit_categories.punk_group = {
-			unit_types = {
-				america = {
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
-					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
-					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
-				},
-				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-				},
-				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-				},
-				murkywater = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				},
-				federales = {
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-					Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-				},
-				shared = {
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
-					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
-					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),				
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				}				
-			},
-			access = access_type_walk_only
-		}
-		
-	elseif difficulty_index == 6 or difficulty_index == 7 then
-		self.unit_categories.punk_group = {
-			unit_types = {
-				america = {
-					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
-					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
-					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")
-				},
-				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-				},
-				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-				},
-				murkywater = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				},
-				federales = {
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-					Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-				},
-				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
-					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
-					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
-					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
-				}				
-			},
-			access = access_type_walk_only
-		}
-	else
-		self.unit_categories.punk_group = {
-			unit_types = {
-				america = {
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco")
-				},
-				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
-				},
-				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
-				},
-				murkywater = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				},
-				federales = {
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-					Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
-				},
-				shared = {
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				}								
-			},
-			access = access_type_walk_only
-		}
+					access = access_type_walk_only
+				}
 			end
+		elseif level == "rvd1" or level == "rvd2" or level == "jolly" then
+			if difficulty_index <= 3 then
+				self.unit_categories.punk_group = {
+					unit_types = {
+						america = {
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"),
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4")
+						},
+						russia = {
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+						},
+						zombie = {
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+						},
+						murkywater = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						},
+						federales = {
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+							Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						},
+						shared = {
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"),
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
+						}				
+					},
+					access = access_type_walk_only
+				}		
+			elseif difficulty_index == 4 or difficulty_index == 5 then
+				self.unit_categories.punk_group = {
+					unit_types = {
+						america = {
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"),
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4")
+						},
+						russia = {
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+						},
+						zombie = {
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+						},
+						murkywater = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						},
+						federales = {
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+							Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						},
+						shared = {
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3"),
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2"),
+							Idstring("units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4"),				
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						}				
+					},
+					access = access_type_walk_only
+				}
+				
+			elseif difficulty_index == 6 or difficulty_index == 7 then
+				self.unit_categories.punk_group = {
+					unit_types = {
+						america = {
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")
+						},
+						russia = {
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+						},
+						zombie = {
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+						},
+						murkywater = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						},
+						federales = {
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+							Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						},
+						shared = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+							Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
+						}				
+					},
+					access = access_type_walk_only
+				}
+			else
+				self.unit_categories.punk_group = {
+					unit_types = {
+						america = {
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco")
+						},
+						russia = {
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+							Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+						},
+						zombie = {
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+							Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+						},
+						murkywater = {
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						},
+						federales = {
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+							Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+							Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						},
+						shared = {
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
+							Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+							Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+						}								
+					},
+					access = access_type_walk_only
+				}
+			end		
+		elseif difficulty_index <= 3 then
+			self.unit_categories.punk_group = {
+				unit_types = {
+					america = {
+						Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+						Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+						Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
+					},
+					russia = {
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+					},
+					zombie = {
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+					},
+					murkywater = {
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+					},
+					federales = {
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+					},
+					shared = {
+						Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+						Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+						Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
+					}				
+				},
+				access = access_type_walk_only
+			}		
+		elseif difficulty_index == 4 or difficulty_index == 5 then
+			self.unit_categories.punk_group = {
+				unit_types = {
+					america = {
+						Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+						Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+						Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
+					},
+					russia = {
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+					},
+					zombie = {
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+					},
+					murkywater = {
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+					},
+					federales = {
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+					},
+					shared = {
+						Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+						Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+						Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),				
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+					}				
+				},
+				access = access_type_walk_only
+			}
+		elseif difficulty_index == 6 or difficulty_index == 7 then
+			self.unit_categories.punk_group = {
+				unit_types = {
+					america = {
+						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")
+					},
+					russia = {
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+					},
+					zombie = {
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+					},
+					murkywater = {
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+					},
+					federales = {
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+					},
+					shared = {
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
+						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+						Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
+					}				
+				},
+				access = access_type_walk_only
+			}
+		else
+			self.unit_categories.punk_group = {
+				unit_types = {
+					america = {
+						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
+						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco")
+					},
+					russia = {
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870"),
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg"),
+						Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
+					},
+					zombie = {
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+						Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
+					},
+					murkywater = {
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+					},
+					federales = {
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+					},
+					shared = {
+						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
+						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+					}								
+				},
+				access = access_type_walk_only
+			}
 		end
 	end
+
 	if difficulty_index < 6 then
 		self.unit_categories.FBI_LHmix = {
 			unit_types = {
