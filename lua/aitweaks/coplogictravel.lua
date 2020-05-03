@@ -1105,10 +1105,10 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 
 			local threat_pos = data.attention_obj.m_pos --the threat
 			local shield_pos = mvec3_copy(data.objective.follow_unit:movement():m_pos()) --the pillar
-			mvec3_dir(temp_vec1, threat_pos, shield_pos)
-			mvec3_norm(temp_vec1)
+			mvec3_dir(tmp_vec1, threat_pos, shield_pos)
+			mvec3_norm(tmp_vec1)
 
-			local near_pos = shield_pos + temp_vec1 * 120
+			local near_pos = shield_pos + tmp_vec1 * 120
 			local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 			local objective_dis = data.objective.distance and data.objective.distance * 0.9 or nil
 			local cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, objective_dis, near_pos, threat_nav_pos)
