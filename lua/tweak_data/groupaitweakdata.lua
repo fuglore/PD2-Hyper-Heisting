@@ -601,7 +601,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	end
 	
-	if level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" then 
+	if level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" and not Global.game_settings and Global.game_settings.incsmission then 
 		if difficulty_index <= 3 then
 			self.unit_categories.punk_group = {
 				unit_types = {
@@ -760,7 +760,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				access = access_type_walk_only
 			}
 		end
-	if level == "rvd1" or level == "rvd2" or level == "jolly" then 
+	if level == "rvd1" or level == "rvd2" or level == "jolly" and not Global.game_settings and Global.game_settings.incsmission then 
 		if difficulty_index <= 3 then
 			self.unit_categories.punk_group = {
 				unit_types = {
