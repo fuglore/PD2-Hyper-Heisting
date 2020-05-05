@@ -199,7 +199,7 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 		local num_rays = (tweak_data.weapon[self._name_id] or {}).rays or 1
 		local trail_direction = furthest_hit and furthest_hit.ray or direction
 
-		for i = 1, num_rays, 1 do
+		for i = 1, num_rays do
 			mvector3.set(mvec_spread, trail_direction)
 
 			if i > 1 then
