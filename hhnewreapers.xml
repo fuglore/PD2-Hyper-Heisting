@@ -51,6 +51,26 @@
 	<!--White Streak for Reaper Hobo Ninja-->	
 	<unit path="units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14" load="true"/>	
 
+	<!--akan/bex medic dozer-->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic_husk" load="true"/>
+	<object path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"/>
+	<model path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic_contour"/>
+	<sequence_manager path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/bulldozer_df"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/maska_df"/>
+
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/debris"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/back/back"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/chest/chest"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/neck/neck"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/plate/plate"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/stomach/stomach"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/throat/throat"/>
+
+
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/fbi_akmsu_df" />	
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/fbininja_c45_df" />	
 	<df_nm path="units/pd2_dlc_mad/characters/shared_textures/fbininja_c45_head" />		

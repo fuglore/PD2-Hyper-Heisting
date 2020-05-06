@@ -9937,7 +9937,8 @@ function CharacterTweakData:character_map()
 			"ene_akan_hyper_fbininja_ak47_ass",
 			"ene_akan_hyper_fbininja_c45",
 			"ene_akan_hyper_fbininja_c45_DS",
-			"ene_akan_hyper_DS_shield"
+			"ene_akan_hyper_DS_shield",
+			"ene_akan_dozer_medic"
 		}
 	}	
 	return char_map
