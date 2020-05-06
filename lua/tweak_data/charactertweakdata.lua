@@ -9710,7 +9710,9 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"quagmire",
 		"em_disruptor",
 		"xkill",
-		"x_xkill"
+		"x_xkill",
+		"streak",		
+		"x_streak"	
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -9752,8 +9754,9 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"),
 		Idstring("units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"),
 		Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill"),
-		Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_x_xkill")
-		
+		Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_x_xkill"),
+		Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_pl14"),		
+		Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14")				
 	}
 end
 
