@@ -223,7 +223,7 @@
 					self._values.enemy = murkywetew_highdiff[self._values.enemy]
 				end
 				self._values.enemy = murkywetew_highdiff[self._values.enemy] or self._values.enemy
-			elseif difficulty_index >= 6 then
+			elseif difficulty_index >= 2 then
 				if murkywetew[self._values.enemy] then
 					self._values.enemy = murkywetew[self._values.enemy]
 				end
