@@ -14,7 +14,7 @@
 		<extension name="unit_data" class="ScriptUnitData" />
 		<extension name="base" class="CopBase" >
 			<var name="_tweak_table" value="swat" />
-			<var name="_default_weapon_id" value="bayou_spas" />
+			<var name="_default_weapon_id" value="benelli" />
 		</extension>
 		<extension name="inventory" class="CopInventory" />
 		<extension name="brain" class="CopBrain" />
