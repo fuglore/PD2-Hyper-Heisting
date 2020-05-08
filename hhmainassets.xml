@@ -51,7 +51,7 @@
 	<model path="units/pd2_dlc_bph/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" force="true"/>
 	<cooked_physics path="units/pd2_dlc_bph/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" force="true"/>
 	<!-- murky Special ASSet replacements END -->
-	
+		
 	<!--functional weapon sounds-->	
 	<unit path="units/payday2/weapons/wpn_npc_ump/wpn_npc_ump" load="true" force="true"/>
 	<unit path="units/payday2/weapons/wpn_npc_c45/wpn_npc_c45" load="true" force="true"/>
@@ -284,6 +284,7 @@
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/pants_df" />	
 	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4"/>
 	
+	
 	<!-- jareys awesomesauce m4s -->	
 	<!--NPC M4-->
 	<model path="units/payday2/weapons/wpn_npc_m4/wpn_npc_m4" force="true"/>
@@ -320,6 +321,11 @@
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_nm" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/body_il" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/mask_il" />
+
+	<!--AKIMBO ZEALOT K&M 45. TACTICAL-->	
+	<unit_mat path="units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac" load="true"/>
+	<cooked_physics path="units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac"/>
 
 	<!--AKIMBO ZEALOT MASK-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_mask/ene_acc_zeal_mask" load="true"/>
@@ -626,7 +632,7 @@
 	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper_contour"/>	
 	<object path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" />
 	<model path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" />	
-	<cooked_physics path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"/> 
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"/>
 
     <unit_mat path="units/pd2_dlc_drm/characters/ene_acc_bulldozer_sniper/ene_acc_bulldozer_chest_sniper/ene_acc_bulldozer_chest_sniper" load="true"/>
     <unit_mat path="units/pd2_dlc_drm/characters/ene_acc_bulldozer_sniper/ene_acc_bulldozer_neck_sniper/ene_acc_bulldozer_neck_sniper" load="true"/>

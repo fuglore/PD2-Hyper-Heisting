@@ -54,11 +54,15 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.xkill_npc = deep_clone(self.c45_npc)
 	self.xkill_npc.sounds.prefix = "c45_npc"
 	self.streak_npc = deep_clone(self.c45_npc)
-	self.streak_npc.sounds.prefix = "pl14_npc"	
+	self.streak_npc.sounds.prefix = "pl14_npc"
+	self.kmtac_npc = deep_clone(self.c45_npc)
+	self.kmtac_npc.sounds.prefix = "usp45_npc"		
 	self.x_xkill_npc = deep_clone(self.x_c45_npc)
 	self.x_xkill_npc.sounds.prefix = "c45_npc"	
 	self.x_streak_npc = deep_clone(self.x_c45_npc)
-	self.x_streak_npc.sounds.prefix = "pl14_npc"		
+	self.x_streak_npc.sounds.prefix = "pl14_npc"
+	self.x_kmtac_npc = deep_clone(self.x_c45_npc)
+	self.x_kmtac_npc.sounds.prefix = "usp45_npc"			
 	self.bayou_npc = deep_clone(self.r870_npc)
 	self.bayou_npc.sounds.prefix = "spas_npc"
 	self.quagmire_npc = deep_clone(self.m4_npc)

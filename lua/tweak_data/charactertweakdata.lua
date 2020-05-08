@@ -9712,8 +9712,10 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"xkill",
 		"x_xkill",
 		"streak",		
-		"x_streak"	
-	}
+		"x_streak",
+		"kmtac",		
+		"x_kmtac"
+		}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
 		Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45"),
@@ -9756,7 +9758,9 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill"),
 		Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_x_xkill"),
 		Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_pl14"),		
-		Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14")				
+		Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14"),
+		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac"),		
+		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac")	
 	}
 end
 
