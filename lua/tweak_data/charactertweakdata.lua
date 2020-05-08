@@ -1793,16 +1793,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.simple.akimbo_pistol = { --isnt ever really used, changing it anyways, mostly matches pistol, but with more bang bang bang and less accuracy
+	presets.weapon.simple.akimbo_pistol = { --fuck this shit, akimbos are now cosmetic
 		aim_delay = { --no aim delay
 			0,
 			0
 		},
-		focus_delay = 1, --less focus delay than pistol, bit eh accuracy wise, so it's fair
+		focus_delay = 2, --halved focus delay, still a lot, but pistols have good accuracy, so it's fair
 		focus_dis = 500,
-		spread = 20,
-		miss_dis = 50,
-		RELOAD_SPEED = 0.3, --slightly reduced from simple
+		spread = 25,
+		miss_dis = 30,
+		RELOAD_SPEED = 0.6, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
 		melee_speed = 1.5,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -1810,26 +1810,26 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000,
-			far = 4000,
-			close = 2000
+			optimal = 3000, --cant walk and shoot past this range
+			far = 4000, --40m cut off range.
+			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3,
+				dmg_mul = 3, --increased average damage for vh and ovk, increases immediate threat of enemy fire from pistol cops
 				r = 100,
 				acc = {
-					0.1,
+					0.1, --focus delay build up
 					0.9
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.4,
+					0.45
 				},
-				mode = {
+				mode = { --tap fire like crazy
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -1838,34 +1838,34 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 500,
 				acc = {
 					0.1,
-					0.7
+					0.85
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.45,
+					0.45
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 2,
+				dmg_mul = 2, --moderate falloff begins, still ok.
 				r = 1000,
 				acc = {
 					0,
-					0.5
+					0.55
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.5,
+					0.6
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -1874,34 +1874,52 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = {
 					0,
-					0.5
+					0.45
 				},
-				recoil = {
-					0.2,
-					0.3
+				recoil = { --reduced from simple, keeps them still moderately effective at this range
+					0.55,
+					0.6
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 0.1, --shorter falloff
+				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
 				r = 3000,
 				acc = {
 					0,
-					0.01
+					0.2
 				},
 				recoil = {
-					0.4,
+					0.9,
 					1
 				},
 				mode = {
 					1,
 					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
+				r = 4000,
+				acc = {
+					0,
+					0.01
+				},
+				recoil = {
+					0.9,
+					1.2
+				},
+				mode = {
 					1,
+					0,
+					0,
 					0
 				}
 			}
@@ -2933,16 +2951,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.civil.akimbo_pistol = { --isnt ever really used, changing it anyways, mostly matches pistol, but with more bang bang bang and less accuracy
+	presets.weapon.civil.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
 			0.35,
 			0.35
 		},
-		focus_delay = 1, --less focus delay than pistol, bit eh accuracy wise, so it's fair
+		focus_delay = 2, --halved focus delay, still a lot, but pistols have good accuracy, so it's fair
 		focus_dis = 500,
-		spread = 20,
-		miss_dis = 50,
-		RELOAD_SPEED = 0.6, --slightly reduced from simple
+		spread = 25,
+		miss_dis = 30,
+		RELOAD_SPEED = 0.9, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
 		melee_speed = 0.75,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -2950,26 +2968,26 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000,
-			far = 4000,
-			close = 2000
+			optimal = 3000, --cant walk and shoot past this range
+			far = 4000, --40m cut off range.
+			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3,
+				dmg_mul = 3, --increased average damage for vh and ovk, increases immediate threat of enemy fire from pistol cops
 				r = 100,
 				acc = {
-					0.1,
+					0.1, --focus delay build up
 					0.9
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.25,
+					0.35
 				},
-				mode = {
+				mode = { --tap fire like crazy
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -2978,34 +2996,34 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 500,
 				acc = {
 					0.1,
-					0.7
+					0.85
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.35,
+					0.35
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 2,
+				dmg_mul = 2, --moderate falloff begins, still ok.
 				r = 1000,
 				acc = {
 					0,
-					0.5
+					0.55
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.4,
+					0.5
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -3014,34 +3032,52 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = {
 					0,
-					0.5
+					0.45
 				},
-				recoil = {
-					0.2,
-					0.3
+				recoil = { --reduced from simple, keeps them still moderately effective at this range
+					0.5,
+					0.6
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 0.1, --shorter falloff
+				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
 				r = 3000,
 				acc = {
 					0,
-					0.01
+					0.2
 				},
 				recoil = {
-					0.4,
+					0.6,
 					1
 				},
 				mode = {
 					1,
 					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
+				r = 4000,
+				acc = {
+					0,
+					0.01
+				},
+				recoil = {
+					0.6,
+					1.2
+				},
+				mode = {
 					1,
+					0,
+					0,
 					0
 				}
 			}
@@ -4020,16 +4056,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.akimbo_pistol = { --isnt ever really used, changing it anyways, mostly matches pistol, but with more bang bang bang and less accuracy, unchanged outside of reload and focus delay for complex
-		aim_delay = {
+	presets.weapon.complex.akimbo_pistol = { --akimbos cosmetic
+		aim_delay = { --no aim delay
 			0.35,
 			0.35
 		},
-		focus_delay = 2.5, --less focus delay than pistol, bit eh accuracy wise, so it's fair
+		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
 		focus_dis = 500,
-		spread = 20,
-		miss_dis = 50,
-		RELOAD_SPEED = 0.9,
+		spread = 25,
+		miss_dis = 30,
+		RELOAD_SPEED = 1,
 		melee_speed = 0.75,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -4037,26 +4073,26 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000,
-			far = 4000,
-			close = 2000
+			optimal = 3000, --cant walk and shoot past this range
+			far = 4000, --40m cut off range.
+			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3,
+				dmg_mul = 3, --unchanged from civil
 				r = 100,
 				acc = {
 					0.1,
 					0.9
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.25,
+					0.25
 				},
-				mode = {
+				mode = { --tap fire like crazy, unchanged from civil
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -4065,34 +4101,34 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 500,
 				acc = {
 					0.1,
-					0.7
+					0.85
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.3,
+					0.35
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 2,
+				dmg_mul = 3, --falloff does not begin, save it for 20m, the harsh drop is kept ofc
 				r = 1000,
 				acc = {
 					0,
-					0.5
+					0.6 --increased slightly from .55 to .6
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.3,
+					0.4
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -4101,22 +4137,40 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = {
 					0,
-					0.5
+					0.45
 				},
-				recoil = {
-					0.2,
-					0.3
+				recoil = { 
+					0.35,
+					0.4 --reduced from civil by .1, shouldnt matter too much but keeps a certain feeling of noteworthyness
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 0.1, --shorter falloff
+				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
 				r = 3000,
+				acc = {
+					0,
+					0.25 --slight increase from .2 to .25, matters, due to fbi gunslingers being quite the nuisance
+				},
+				recoil = {
+					0.35,
+					1
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
+				r = 4000,
 				acc = {
 					0,
 					0.01
@@ -4128,7 +4182,7 @@ function CharacterTweakData:_presets(tweak_data)
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			}
@@ -5126,16 +5180,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.anarchy.akimbo_pistol = { --isnt ever really used, changing it anyways, mostly matches pistol, but with more bang bang bang and less accuracy, unchanged outside of reload and focus delay for anarchy
-		aim_delay = {
+	presets.weapon.anarchy.akimbo_pistol = { --akimbos cosmetic
+		aim_delay = { --no aim delay
 			0.25,
 			0.25
 		},
-		focus_delay = 2.5, --less focus delay than pistol, bit eh accuracy wise, so it's fair
+		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
 		focus_dis = 100,
-		spread = 20,
-		miss_dis = 50,
-		RELOAD_SPEED = 1, --slightly reduced from civil
+		spread = 25,
+		miss_dis = 30,
+		RELOAD_SPEED = 1.4, --slight reduction from civil
 		melee_speed = 0.75,
 		melee_dmg = 5,
 		melee_retry_delay = {
@@ -5143,26 +5197,26 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000,
-			far = 4000,
-			close = 2000
+			optimal = 4000, --cant walk and shoot past this range
+			far = 4000, --40m cut off range.
+			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4,
+				dmg_mul = 4, --increased from complex
 				r = 100,
 				acc = {
-					0,
+					0, --focus delay build up, unchanged from civil
 					0.9
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.2,
+					0.25
 				},
-				mode = {
+				mode = { --tap fire like crazy, unchanged from civil
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
@@ -5171,58 +5225,76 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 500,
 				acc = {
 					0,
-					0.7
+					0.85
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.25,
+					0.35
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 3,
+				dmg_mul = 4, --falloff does not begin, save it for 20m
 				r = 1000,
 				acc = {
 					0,
-					0.5
+					0.6
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.3,
+					0.4
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 2,
+				dmg_mul = 2, --harsh drop slightly reduced, 
 				r = 2000,
 				acc = {
 					0,
-					0.5
+					0.45
 				},
-				recoil = {
-					0.2,
-					0.3
+				recoil = { 
+					0.3,
+					0.45
 				},
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			},
 			{
-				dmg_mul = 0.1, --shorter falloff
+				dmg_mul = 2, --still dangerous, acc drops hard, but not recoil or firing pattern
 				r = 3000,
+				acc = {
+					0,
+					0.25
+				},
+				recoil = {
+					0.35,
+					1
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
+				r = 4000,
 				acc = {
 					0,
 					0.01
@@ -5234,12 +5306,12 @@ function CharacterTweakData:_presets(tweak_data)
 				mode = {
 					1,
 					0,
-					1,
+					0,
 					0
 				}
 			}
 		}
-	}
+	}	
 	presets.weapon.anarchy.is_rifle = {
 		aim_delay = {
 			0.25,
