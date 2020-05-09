@@ -127,7 +127,20 @@
 	<model path="units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3" />
 	<cooked_physics path="units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3"/>
 
-    <unit_mat path="units/payday2/characters/ene_acc_smg_cap/ene_acc_smg_cap" load="true"/>
+    <unit_mat path="units/payday2/characters/ene_acc_smg_cap/ene_acc_smg_cap" load="true"/>	
+	
+	<!--Trolliam Epicson-->	
+	<unit path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun" load="true"/>
+	<unit path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun_husk" load="true"/>	
+	<material_config path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun"/>
+	<material_config path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun_contour"/>	
+	<object path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun" />
+	<model path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun" />
+	<cooked_physics path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun"/>
+	<texture path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/danial_il" />
+	
+    <unit_mat path="units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm" load="true"/>
+    <cooked_physics path="units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm" />
 	
 	<!--Heavy SWAT R870 fix-->
 	<unit path="units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870_husk" load="true" force="true"/>

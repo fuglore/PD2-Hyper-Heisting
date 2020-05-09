@@ -7682,12 +7682,40 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_ftsu.move_speed = presets.move_speed.mini_consistency
 	self.tank_ftsu.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_ftsu.always_face_enemy = nil
+	
+	self.trolliam_epicson = deep_clone(self.tank) --trolliam
+	self.trolliam_epicson.tags = {
+		"law",
+		"tank",
+		"spooc",
+		"special"
+	}
+	self.trolliam_epicson.HEALTH_INIT = 999999
+	self.trolliam_epicson.move_speed = presets.move_speed.lightning_constant
+	self.trolliam_epicson.spawn_sound_event = nil
+	self.trolliam_epicson.always_face_enemy = true
+	self.trolliam_epicson.access = "spooc"
+	self.trolliam_epicson.melee_weapon = "baton"
+	self.trolliam_epicson.use_animation_on_fire_damage = false
+	self.trolliam_epicson.flammable = false
+	self.trolliam_epicson.dodge = presets.dodge.ninja
+	self.trolliam_epicson.chatter = presets.enemy_chatter.spooc
+	self.trolliam_epicson.spooc_attack_timeout = {
+		0.35,
+		0.35
+	}
+	self.trolliam_epicson.spooc_attack_beating_time = {
+		3,
+		3
+	}
+	
 
 	table.insert(self._enemy_list, "tank")
 	table.insert(self._enemy_list, "tank_hw")
 	table.insert(self._enemy_list, "tank_medic")
 	table.insert(self._enemy_list, "tank_mini")
 	table.insert(self._enemy_list, "tank_ftsu")
+	table.insert(self._enemy_list, "trolliam_epicson")	
 end
 
 function CharacterTweakData:_init_spooc(presets) --Can't make this into a post hook, dodge with grenades gets re-enabled if I do, which isn't good for anybody, destroys framerates and doesn't let him use ninja_complex dodges.
@@ -9786,7 +9814,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"streak",		
 		"x_streak",
 		"kmtac",		
-		"x_kmtac"
+		"x_kmtac",
+		"trolliam_sidearm"
 		}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -9832,7 +9861,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_pl14"),		
 		Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac"),		
-		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac")	
+		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac"),	
+		Idstring("units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm")
 	}
 end
 
@@ -10031,6 +10061,7 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.tank.HEALTH_INIT = self.tank.HEALTH_INIT * hp_mul
 	self.tank_mini.HEALTH_INIT = self.tank_mini.HEALTH_INIT * hp_mul
 	self.tank_ftsu.HEALTH_INIT = self.tank_ftsu.HEALTH_INIT * hp_mul
+	self.trolliam_epicson.HEALTH_INIT = self.trolliam_epicson.HEALTH_INIT * hp_mul	
 	self.tank_medic.HEALTH_INIT = self.tank_medic.HEALTH_INIT * hp_mul
 	self.spooc.HEALTH_INIT = self.spooc.HEALTH_INIT * hp_mul
 	self.spooc_heavy.HEALTH_INIT = self.spooc_heavy.HEALTH_INIT * hp_mul
@@ -10160,6 +10191,10 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	
 	if self.tank_ftsu.headshot_dmg_mul then
 		self.tank_ftsu.headshot_dmg_mul = self.tank_ftsu.headshot_dmg_mul * hs_mul
+	end
+	
+	if self.trolliam_epicson.headshot_dmg_mul then
+		self.trolliam_epicson.headshot_dmg_mul = self.trolliam_epicson.headshot_dmg_mul * hs_mul
 	end
 	
 	if self.fbi_xc45.headshot_dmg_mul then

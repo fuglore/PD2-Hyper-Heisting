@@ -132,6 +132,15 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 	})
 end)
 
+ if _G.BB or FullSpeedSwarm or Iter or _G.SC or _G.deathvox then
+	Hooks:Add("LocalizationManagerPostInit", "HH_Incompatible", function(loc)
+	LocalizationManager:add_localized_strings({	
+		["menu_toggle_one_down"] = "PLEASE UNINSTALL YOUR AI MODS",
+		["menu_one_down"] = "PLEASE UNINSTALL YOUR AI MODS"
+	})		
+	end)
+ end
+
  if _G.HopLib then
 	Hooks:Add("LocalizationManagerPostInit", "HH_PoggersMoment", function(loc)
 		loc:load_localization_file(ModPath .. "loc/fuck.txt")
