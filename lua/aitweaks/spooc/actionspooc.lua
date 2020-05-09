@@ -44,10 +44,8 @@ function ActionSpooc:init(action_desc, common_data)
 	self._machine = common_data.machine
 	self._unit = common_data.unit
 
-	local stand = common_data.ext_anim.stand or common_data.ext_movement:play_redirect("stand")
-
-	if not stand then
-		return
+	if not common_data.ext_anim.stand or common_data.ext_anim.crouch then
+		common_data.ext_movement:play_redirect("stand")
 	end
 
 	if not common_data.ext_anim.pose then
@@ -65,6 +63,8 @@ function ActionSpooc:init(action_desc, common_data)
 
 	common_data.ext_movement:enable_update()
 
+	self._no_run_start = common_data.char_tweak.no_run_start
+	self._no_run_stop = common_data.char_tweak.no_run_stop
 	self._is_flying_strike = action_desc.flying_strike
 	self._host_stop_pos_inserted = action_desc.host_stop_pos_inserted
 	self._stop_pos = action_desc.stop_pos
@@ -315,10 +315,12 @@ function ActionSpooc:on_exit()
 
 	if self._root_blend_disabled then
 		self._ext_movement:set_root_blend(true)
+
+		self._root_blend_disabled = nil
 	end
 
 	if self._changed_driving then
-		self._common_data.unit:set_driving("script")
+		self._unit:set_driving("script")
 
 		self._changed_driving = nil
 	end
@@ -728,6 +730,12 @@ function ActionSpooc:_upd_start_anim(t)
 		self._start_run_turn = nil
 		self._start_run_straight = nil
 		self._last_pos = mvec3_copy(self._common_data.pos)
+
+		if self._root_blend_disabled then
+			self._ext_movement:set_root_blend(true)
+
+			self._root_blend_disabled = nil
+		end
 
 		self:_set_updator("_upd_sprint")
 		self:update(t)
