@@ -24,6 +24,9 @@ elseif level == "vit" and diff_index == 8 then
 	}
 elseif _G.BB or FullSpeedSwarm or Iter or _G.SC or _G.deathvox then
 	replacement_table = {
+		["units/payday2/characters/ene_swat_1/ene_swat_1"] = "units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun",
+		["units/payday2/characters/ene_swat_2/ene_swat_2"] = "units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun",	
+		["units/payday2/characters/ene_swat_3/ene_swat_3"] = "units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun",	
 		["units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"] = "units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun",
 		["units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"] = "units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun",
 		["units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"] = "units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun",
