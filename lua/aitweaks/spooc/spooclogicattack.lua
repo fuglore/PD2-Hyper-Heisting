@@ -151,10 +151,6 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 end
 
 function SpoocLogicAttack._chk_request_action_spooc_attack(data, my_data, flying_strike)
-	if data.unit:anim_data().crouch then
-		CopLogicAttack._chk_request_action_stand(data)
-	end
-
 	data.unit:movement():set_stance_by_code(2)
 
 	local new_action = {
