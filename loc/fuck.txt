@@ -40,7 +40,7 @@
   "ene_akan_hyper_DS_shield" : "Shield",
   "ene_akan_hyper_fbi_akmsu_smg" : "Heavy Mercenary",
   "ene_akan_hyper_fbininja_ak47_ass" : "Grichka",
-  "ene_akan_hyper_fbininja_c45" : "Igor",
+  "ene_akan_hyper_fbininja_c45" : "Вася Велмон",
   "ene_akan_hyper_swat_akmsu_smg" : "Light Mercenary",
   "ene_gensec_punk_bronco" : "Punk",
   "ene_gensec_punk_moss" : "Punk",
