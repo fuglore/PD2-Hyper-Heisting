@@ -141,6 +141,15 @@ end)
 	end)
  end
 
+  if InFmenu.settings.rainbowassault == true or InFmenu.settings.sanehp == true or InFmenu.settings.copmiss == true or InFmenu.settings.copfalloff or InFmenu.settings.skulldozersahoy == 2 or InFmenu.settings.skulldozersahoy == 3 then
+	Hooks:Add("LocalizationManagerPostInit", "HH_IncompatibleIren", function(loc)
+	LocalizationManager:add_localized_strings({	
+		["menu_toggle_one_down"] = "DISABLE ALL OF IRENFIST'S ENEMY AND ENEMY SPAWN ADJUSTMENTS",
+		["menu_one_down"] = "DISABLE ALL OF IRENFIST'S ENEMY AND ENEMY SPAWN ADJUSTMENTS"
+	})		
+	end)
+ end
+
  if _G.HopLib then
 	Hooks:Add("LocalizationManagerPostInit", "HH_PoggersMoment", function(loc)
 		loc:load_localization_file(ModPath .. "loc/fuck.txt")
