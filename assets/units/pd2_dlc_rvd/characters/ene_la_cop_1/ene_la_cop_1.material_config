@@ -4,12 +4,12 @@
         <diffuse_texture file="units/pd2_mod_beatpricks/characters/shared_textures/heads_cop_la_df"/>
     </material>
     <material render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SKINNED_3WEIGHTS" name="mtr_police_head_lod_1" version="2">
-        <bump_normal_texture file="units/pd2_mod_lapd/characters/shared_textures/heads_cop_la_nm" mip="1"/>
-        <diffuse_texture file="units/pd2_mod_lapd/characters/shared_textures/heads_cop_la_df" mip="1"/>
+        <bump_normal_texture file="units/pd2_mod_beatpricks/characters/shared_textures/heads_cop_la_nm" mip="1"/>
+        <diffuse_texture file="units/pd2_mod_beatpricks/characters/shared_textures/heads_cop_la_df" mip="1"/>
     </material>
     <material render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SKINNED_3WEIGHTS" name="mtr_police_head_lod_2" version="2">
-        <bump_normal_texture file="units/pd2_mod_lapd/characters/shared_textures/heads_cop_la_nm" mip="4"/>
-        <diffuse_texture file="units/pd2_mod_lapd/characters/shared_textures/heads_cop_la_df" mip="4"/>
+        <bump_normal_texture file="units/pd2_mod_beatpricks/characters/shared_textures/heads_cop_la_nm" mip="4"/>
+        <diffuse_texture file="units/pd2_mod_beatpricks/characters/shared_textures/heads_cop_la_df" mip="4"/>
     </material>
     
     <material render_template="generic:DIFFUSE_TEXTURE:GLOBAL_ENVIRONMENT_MAPPING:GLOSS_BLURS_CUBEMAP:GSMA_TEXTURE:NORMALMAP:RL_COPS:SKINNED_3WEIGHTS" name="mtr_police_body" version="2">
