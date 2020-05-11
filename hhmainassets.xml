@@ -603,7 +603,6 @@
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"/>
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_head_df"/>
-	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_head_nm"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_df"/>
 
 	<!--Classic Heavy Shield ty jarey <33333-->	
@@ -615,7 +614,6 @@
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_classic_shield/ene_acc_classic_shield"/>	
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_acc_classic_shield/ene_acc_classic_shield_df"/>
-	<texture path="units/pd2_dlc_drm/characters/ene_acc_classic_shield/ene_acc_classic_shield_nm"/>
 
 	<unit path="units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy" load="true"/>
 	<unit path="units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy_husk" load="true"/>	
@@ -801,7 +799,6 @@
 
 	<unit_mat path="units/pd2_dlc_hvh/characters/ene_acc_shield_hvh/ene_acc_shield_hvh" load="true" />	
 
-	<texture path="units/pd2_dlc_hvh/characters/ene_cop_hvh_1/police_hvh_df" force="true"/>	
 	<texture path="units/pd2_dlc_hvh/characters/ene_acc_shield_hvh/ene_acc_shield_hvh_lights_df" />	
 
 	<!-- BRAIINNNSS end	-->	

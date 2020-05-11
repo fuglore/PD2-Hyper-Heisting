@@ -1,7 +1,7 @@
 --CREDIT: OFFYEROCKER
 local level = Global.level_data and Global.level_data.level_id
 local difficulty = Global.game_settings and Global.game_settings.difficulty or "normal"
-local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)			
+local diff_index = tweak_data:difficulty_to_index(difficulty)
 local replacement_table = {}
 
 if level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" then
