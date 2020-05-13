@@ -160,7 +160,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_overkill_beta_desc"] = "BASIC: ##$basic##\nKilling an enemy at medium range has a ##75%## chance to spread panic among your enemies. \n\nACE: ##$pro##\nWhen you kill an enemy with a shotgun, shotguns recieve a ##35%## damage increase that lasts for ##8## seconds.",
 			-- this was sposed to have a 15% speed bonus but fuck you 
-			["menu_juggernaut_beta_desc"] = "BASIC: ##$basic##\nUnlocks the ability to wear the Improved Combined Tactical Vest. Your total armor value is increased by ##30%##. \n\nACE: ##$pro##\nYour total armor value is further increased by ##20%##.\n\n ##For you.##",
+			["menu_juggernaut_beta_desc"] = "BASIC: ##$basic##\nUnlocks the ability to wear the Improved Combined Tactical Vest. Your total armor value is increased by ##30%##. \n\nACE: ##$pro##\nYour total armor value is further increased by ##20%##.\n\n##For you.##",
 			["menu_juggernaut_beta"] = "Big Guy",
 			
 			["menu_gun_fighter_beta_desc"] = "BASIC: ##$basic##\nPistols gain ##5## more damage points. \n\nACE: ##$pro##\nPistols gain an additional ##5## damage points.",
