@@ -3120,7 +3120,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 100,
 				acc = { 
 					0,
-					0.15
+					0.2
 				},
 				recoil = { --super low recoil at this range
 					0.2,
@@ -3138,7 +3138,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 500,
 				acc = {
 					0,
-					0.15
+					0.2
 				},
 				recoil = {
 					0.2,
@@ -3156,7 +3156,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 1000,
 				acc = { --accuracy increased slightly from simple for this range, not a main feature, just a tiny little boost
 					0,
-					0.08
+					0.1
 				},
 				recoil = {
 					0.2,
@@ -3174,7 +3174,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = { 
 					0,
-					0.02
+					0.05
 				},
 				recoil = { --no top recoil increase, just lower half
 					0.2,
@@ -3192,7 +3192,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 3000,
 				acc = {
 					0,
-					0.01
+					0.025
 				},
 				recoil = {
 					0.2,
@@ -4221,11 +4221,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5, --damage mostly maintains the layout from simple, but rather, focuses on removing falloff, damage increases with presets, begin in complex, instead, focus on using this one to measure changes in weapontweakdata
+				dmg_mul = 5.5, --damage mostly maintains the layout from simple, but rather, focuses on removing falloff, damage increases with presets, begin in complex, instead, focus on using this one to measure changes in weapontweakdata
 				r = 100,
 				acc = { 
 					0,
-					0.15
+					0.25
 				},
 				recoil = { 
 					0.2,
@@ -4243,7 +4243,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 500,
 				acc = {
 					0, 
-					0.15
+					0.25
 				},
 				recoil = {
 					0.2,
@@ -4257,11 +4257,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4, --damage, recoil and acc falloff begins, still quite good, 40 damage, increased by 10 from civil, very, very active
+				dmg_mul = 5,
 				r = 1000,
 				acc = { --accuracy slightly higher than civil
 					0,
-					0.1
+					0.15
 				},
 				recoil = {
 					0.2,
@@ -4279,7 +4279,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = { 
 					0,
-					0.05
+					0.1
 				},
 				recoil = { 
 					0.25,
@@ -4297,7 +4297,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 3000,
 				acc = {
 					0,
-					0.025
+					0.05
 				},
 				recoil = {
 					0.25,
@@ -5312,7 +5312,7 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}	
-	presets.weapon.anarchy.is_rifle = {
+	presets.weapon.anarchy. = {
 		aim_delay = {
 			0.25,
 			0.25
@@ -5345,11 +5345,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5.5, --damage increased from 50 to 55
+				dmg_mul = 6,
 				r = 100,
 				acc = { 
 					0,
-					0.2
+					0.4
 				},
 				recoil = { --increased recoil a tiiiiny bit to make sure it doesn't get too ballistic
 					0.2,
@@ -5363,11 +5363,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5.5,
+				dmg_mul = 6,
 				r = 500,
 				acc = {
 					0, --increased from simple to create consistency at close ranges in regards to danger
-					0.2
+					0.4
 				},
 				recoil = {
 					0.2,
@@ -5381,11 +5381,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5, --light damage, recoil and acc falloff begins, really good still, powerful, even
+				dmg_mul = 5.5, --light damage, recoil and acc falloff begins, really good still, powerful, even
 				r = 1000,
 				acc = { 
 					0,
-					0.15
+					0.2
 				},
 				recoil = {
 					0.2,
@@ -5481,8 +5481,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 100,
 				acc = {
-					0,
-					0.9
+					0.2,
+					1
 				},
 				recoil = { --slightly lowered recoil from civil, lower end has more variance
 					0.8,
@@ -5499,8 +5499,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --150 damage, pop your ICTV in two shots
 				r = 500,
 				acc = {
-					0,
-					0.9
+					0.2,
+					1
 				},
 				recoil = {
 					0.8,
