@@ -1,6 +1,5 @@
 Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_data)
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-	
 		self.values.player.body_armor = {
 			armor = {
 				0,
@@ -101,23 +100,66 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		self.values.temporary.overkill_damage_multiplier = {{1.35, 8}}
 		self.values.pistol.damage_addend = {0.5, 1}
 		self.values.pistol.fire_rate_multiplier = {1.25}
-		self.values.pistol.reload_speed_multiplier = {1.25}
-	end
+		self.values.pistol.reload_speed_multiplier = {1.25}		
+		self.values.player.pick_lock_easy_speed_multiplier = {0.75, 0.5}		
+		self.values.player.armor_multiplier = {1.3, 1.5}
+		end
 		
-	self.definitions.player_jackpot_safety = {
-		name_id = "menu_jackpot_safety",
-		category = "feature",
-		upgrade = {
-			value = 1,
-			upgrade = "jackpot_safety",
-			category = "player"
+		--fuck you you piece of shit i'm not doing all this shit to make you function properly you fuck i hate your guts i hate you i hate you FUCK YOU
+		
+		--[[ note if anyone wants to actually fix this: this is supposed to stack with the perk deck speed bonus which is why i did this.
+		self.values.player.passive_armor_movement_penalty_multiplier_bigguy = {0.75}						
+		self.definitions.player_passive_armor_movement_penalty_multiplier_bigguy = { 
+			name_id = "menu_passive_armor_movement_penalty_multiplier",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "passive_armor_movement_penalty_multiplier_bigguy",
+				category = "player"
+			}
+		}--]]
+		
+		self.definitions.player_armor_multiplier_cooler = {
+			name_id = "menu_player_armor_multiplier",
+			category = "feature",
+			upgrade = {
+				value = 2,
+				upgrade = "armor_multiplier",
+				category = "player"
+			}
 		}
-	}
+		
+		self.definitions.player_pick_lock_easy_speed_multiplier_1 = {
+			name_id = "menu_player_pick_lock_easy_speed_multiplier",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "pick_lock_easy_speed_multiplier",
+				category = "player"
+			}
+		}
+		self.definitions.player_pick_lock_easy_speed_multiplier_2 = {
+			name_id = "menu_player_pick_lock_easy_speed_multiplier",
+			category = "feature",
+			upgrade = {
+				value = 2,
+				upgrade = "pick_lock_easy_speed_multiplier",
+				category = "player"
+			}
+		}
+		self.definitions.player_jackpot_safety = {
+			name_id = "menu_jackpot_safety",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "jackpot_safety",
+				category = "player"
+			}
+		}		
+		self.values.player.jackpot_safety = {
+			true
+		}
+		self.weapon_movement_penalty.lmg = 0.8
+		self.weapon_movement_penalty.minigun = 0.6
 	
-	self.values.player.jackpot_safety = {
-		true
-	}
-	self.weapon_movement_penalty.lmg = 0.8
-	self.weapon_movement_penalty.minigun = 0.6
-	
-end )
+end)
