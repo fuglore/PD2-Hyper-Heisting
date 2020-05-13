@@ -5312,7 +5312,7 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}	
-	presets.weapon.anarchy. = {
+	presets.weapon.anarchy.is_rifle = {
 		aim_delay = {
 			0.25,
 			0.25
