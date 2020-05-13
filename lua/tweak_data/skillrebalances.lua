@@ -1,6 +1,6 @@
 Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, tweak_data)
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-	
+		table.insert(self.default_upgrades, "carry_movement_penalty_nullifier")
 		self.skills.overkill[2].upgrades = {"player_overkill_damage_multiplier"}
 		self.skills.overkill[1].upgrades = {"player_killshot_close_panic_chance"}	
 		self.skills.perseverance[2].upgrades = {"temporary_berserker_damage_multiplier_2"}

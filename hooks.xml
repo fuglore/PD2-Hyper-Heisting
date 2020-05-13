@@ -35,6 +35,7 @@
 	<post :script_path="unitnetworkhandler.lua" :hook_id="network/handlers/unitnetworkhandler"/>
 	
 	<post :script_path="playerdamage.lua" :hook_id="units/beings/player/playerdamage"/> <!-- Reduced I-frame Damage -->
+	<post :script_path="playercarry.lua" :hook_id="units/beings/player/states/playercarry"/> <!-- bag sprinting bullshit so penalty to movement still applies -->
 	
 	<post :script_path="localizationmanager.lua" :hook_id="managers/localizationmanager"/>
 	
