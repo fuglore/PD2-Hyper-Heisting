@@ -17,7 +17,6 @@
 	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>	
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
-
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 		
 	<!--enemy bullet impact fixes-->	
@@ -894,6 +893,7 @@
 	<!--Textures-->	
     <df_nm path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_head" />    	
 	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_df" />
+	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_pis_df" />
 	
 	<!--Truth Runes Pattern-->
 	<texture path="patterns/真_fv"/>
