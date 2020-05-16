@@ -230,7 +230,7 @@
 			</lod_object>	
 			
 			<lod_object name="lod_helmet2">			
-				<object name="g_helmet_lod2" 	enabled="true"  max_draw_lod="0">
+				<object name="g_helmet_lod2" 	enabled="false"  max_draw_lod="0">
 					<material materials="mtr_heavy_helmet" max_distance="0" />
 					<material materials="mtr_heavy_helmet_lod_2" max_distance="1500" />
 				</object>
