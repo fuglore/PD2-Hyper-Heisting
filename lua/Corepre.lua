@@ -5,6 +5,7 @@ PD2THHSHIN._options_path = ModPath .. "menu/options.txt"
 PD2THHSHIN._save_path = SavePath .. "shin_settings.txt"
 PD2THHSHIN.settings = {
 	toggle_overhaul_player = false,
+	enable_albanian_content = false,
 	toggle_helmet = false,
 	first_launch = true
 }
@@ -24,6 +25,15 @@ end
 
 function PD2THHSHIN:IsHelmetEnabled()
 	return self:GetSessionSetting("toggle_helmet")
+end
+
+function PD2THHSHIN:IsAlbanianContentEnabled()
+	return self:GetSessionSetting("enable_albanian_content") and PD2THHSHIN:LoadAlbAssets()
+end
+
+function PD2THHSHIN:LoadAlbAssets()
+	PackageManager:load("packages/hhalbaniancontent")
+	return true
 end
 
 function PD2THHSHIN:GetSessionSetting(setting_name,fallback_value)
@@ -65,6 +75,7 @@ function PD2THHSHIN:SaveSettings(apply_immediately)
 		end
 	end
 end
+
 
 PD2THHSHIN:LoadSettings()
 

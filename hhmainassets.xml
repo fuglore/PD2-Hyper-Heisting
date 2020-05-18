@@ -905,6 +905,6 @@
 	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_pis_df" />
 	
 	<!--Truth Runes Pattern-->
-	<texture path="patterns/?_fv"/>
+	<texture path="patterns/真_fv"/>
 </table>
 	

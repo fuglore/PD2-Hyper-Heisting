@@ -45,6 +45,11 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 		PD2THHSHIN:ChangeSetting("toggle_helmet",item:value() == "on")
 	end
 	
+	MenuCallbackHandler.callback_shin_albanian_content_enable = function(self,item) --toggle
+		PD2THHSHIN:ChangeSetting("enable_albanian_content",item:value() == "on")
+		PD2THHSHIN.show_popup = true		
+	end
+			
 	--you can disable the "requires restart" popup if you want, just change show_popup to false
 
 	MenuCallbackHandler.callback_shin_close = function(self,item) --toggle

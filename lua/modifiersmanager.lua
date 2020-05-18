@@ -24,7 +24,7 @@ elseif level == "vit" and diff_index == 8 then
 		["units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"] = "units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5",
 		["units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"] = "units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"
 	}
-elseif _G.BB or FullSpeedSwarm or Iter or _G.SC or _G.deathvox then
+elseif _G.BB or FullSpeedSwarm or Iter or _G.SC or _G.deathvox or PD2THHSHIN and PD2THHSHIN:IsAlbanianContentEnabled() then
 	replacement_table = {
 		["units/payday2/characters/ene_swat_1/ene_swat_1"] = "units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun",
 		["units/payday2/characters/ene_swat_2/ene_swat_2"] = "units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun",	

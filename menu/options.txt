@@ -19,6 +19,14 @@
 			"description" : "shin_toggle_helmet_desc",
 			"callback" : "callback_shin_toggle_helmet",
 			"value" : "toggle_helmet"
-		}
+		},
+		{
+			"type" : "toggle",
+			"id" : "shin_enable_albanian_content",
+			"title" : "shin_albanian_content_enable_title",
+			"description" : "shin_albanian_content_enable_desc",
+			"callback" : "callback_shin_albanian_content_enable",
+			"value" : "enable_albanian_content"
+		}		
 	]
 }

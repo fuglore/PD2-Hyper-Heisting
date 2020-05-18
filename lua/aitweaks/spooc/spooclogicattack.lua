@@ -357,6 +357,8 @@ function SpoocLogicTravel.action_complete_clbk(data, action)
 		"taser",
 		"spooc",
 		"shadow_spooc",
+		"trolliam_epicson",
+		"gangster_ninja",
 		"spooc_heavy",
 		"tank_ftsu",
 		"tank_mini",
