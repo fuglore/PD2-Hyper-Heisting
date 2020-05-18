@@ -81,6 +81,7 @@ function CopBase:default_weapon_name()
 	local ak762_akan = Idstring("units/pd2_dlc_mad/weapons/wpn_npc_ak47/wpn_npc_ak47")
 	local crosskill_chimano_akimbo = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_x_c45")
 	local crosskill_45_akimbo = Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_x_xkill")	
+	local kmtac = Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac")			
 	local kmtac_akimbo = Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac")		
 	local white_streak_akimbo = Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14")		
 	local little_friend = Idstring("units/pd2_dlc_chico/weapons/wpn_npc_sg417/wpn_npc_sg417")
@@ -106,6 +107,51 @@ function CopBase:default_weapon_name()
 	local missing_r870_husk_case = unit_name == Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870_husk")
 	
 	local bex_swat = unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale") or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_husk")
+
+	local secrit_servis = unit_name == Idstring("units/payday2/characters/ene_secret_service_1/ene_secret_service_1") 
+	or unit_name == Idstring("units/payday2/characters/ene_secret_service_1/ene_secret_service_1_husk") 
+	or unit_name == Idstring("units/payday2/characters/ene_secret_service_2/ene_secret_service_2") 
+	or unit_name == Idstring("units/payday2/characters/ene_secret_service_2/ene_secret_service_2_husk") 
+	
+	local gang_mackas = unit_name == Idstring("units/payday2/characters/ene_gang_mexican_1/ene_gang_mexican_1") 
+	or unit_name == Idstring("units/payday2/characters/ene_gang_mexican_1/ene_gang_mexican_1_husk") 
+	or unit_name == Idstring("units/payday2/characters/ene_gang_black_1/ene_gang_black_1") 
+	or unit_name == Idstring("units/payday2/characters/ene_gang_black_1/ene_gang_black_1_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_biker_1/ene_biker_1") 
+	or unit_name == Idstring("units/payday2/characters/ene_biker_1/ene_biker_1_husk")	
+	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_4/ene_gang_russian_4") 
+	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_4/ene_gang_russian_4_husk")
+	or unit_name == Idstring("units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_02/ene_bolivian_thug_outdoor_02") 
+	or unit_name == Idstring("units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_02/ene_bolivian_thug_outdoor_02_husk")
+	
+	local gang_mosconis = unit_name == Idstring("units/payday2/characters/ene_gang_mexican_2/ene_gang_mexican_2")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_mexican_2/ene_gang_mexican_2_husk")	
+	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_3/ene_gang_russian_3")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_3/ene_gang_russian_3_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_black_2/ene_gang_black_2")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_black_2/ene_gang_black_2_husk")
+	or unit_name == Idstring("units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_01/ene_bolivian_thug_outdoor_01")
+	or unit_name == Idstring("units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_01/ene_bolivian_thug_outdoor_01_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_biker_2/ene_biker_2")		
+	or unit_name == Idstring("units/payday2/characters/ene_biker_2/ene_biker_2_husk")		
+	
+	local gang_aks = unit_name == Idstring("units/payday2/characters/ene_gang_mexican_3/ene_gang_mexican_3") 
+	or unit_name == Idstring("units/payday2/characters/ene_gang_mexican_3/ene_gang_mexican_3_husk")	
+	or unit_name == Idstring("units/payday2/characters/ene_gang_black_3/ene_gang_black_3")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_black_3/ene_gang_black_3_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_mexican_3/ene_gang_mexican_3_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_mexican_3/ene_gang_mexican_3_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_1/ene_gang_russian_1")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_1/ene_gang_russian_1_husk")
+	
+	local gang_broncos = unit_name == Idstring("units/payday2/characters/ene_gang_mexican_4/ene_gang_mexican_4") 
+	or unit_name == Idstring("units/payday2/characters/ene_gang_mexican_4/ene_gang_mexican_4_husk")
+	or unit_name == Idstring("units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager")
+	or unit_name == Idstring("units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_2/ene_gang_russian_2")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_2/ene_gang_russian_2_husk")	
+	or unit_name == Idstring("units/payday2/characters/ene_gang_black_4/ene_gang_black_4")
+	or unit_name == Idstring("units/payday2/characters/ene_gang_black_4/ene_gang_black_4_husk")
 	
 	local highdiff_c45_units = unit_name == Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45")
 	or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45_husk")	
@@ -128,8 +174,18 @@ function CopBase:default_weapon_name()
 		return crosskill_45_akimbo
 	elseif vagrant and diff_index >= 6 then 
 		return white_streak_akimbo
+	elseif secrit_servis then 
+		return kmtac		
+	elseif gang_mosconis then 
+		return sawn_off_mosconi
+	elseif gang_mackas then 
+		return mark10										
+	elseif gang_broncos then 
+		return bronco										
+	elseif gang_aks then 
+		return ak762										
 	elseif crank_dat_soulja then 
-		return kmtac_akimbo						
+		return kmtac_akimbo		
 	elseif bex_swat then
 		return car4
 	elseif zombie_taser then

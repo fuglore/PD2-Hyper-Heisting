@@ -15,13 +15,19 @@
 	<mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, 
 	and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
 	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>	
+	<continent path="levels/narratives/elephant/born/world/world" force="true" unload="true"/><!--fixes cars clipping into ground-->		
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 		
 	<!--enemy bullet impact fixes-->	
 	<object path="units/pd2_dlc_flat/characters/npc_chavez/npc_chavez" force="true" />
+	
+	<!--you're that ninja!-->	
+	<unit path="units/pd2_dlc_flat/characters/npc_jamaican/npc_jamaican" force="true" />		
 	<object path="units/pd2_dlc_flat/characters/npc_jamaican/npc_jamaican" force="true" />		
+	<unit path="units/pd2_dlc_flat/characters/npc_jamaican/npc_jamaican_husk" force="true" />	
+	
 	<!-- scarface fuckers -->
 	<object path="units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_01/ene_bolivian_thug_outdoor_01" force="true" />
 	<object path="units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_02/ene_bolivian_thug_outdoor_02" force="true" />	
@@ -899,6 +905,6 @@
 	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_pis_df" />
 	
 	<!--Truth Runes Pattern-->
-	<texture path="patterns/真_fv"/>
+	<texture path="patterns/?_fv"/>
 </table>
 	
