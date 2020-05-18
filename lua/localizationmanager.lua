@@ -156,15 +156,27 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		LocalizationManager:add_localized_strings({
 			["menu_second_chances_beta_desc"] = "BASIC: ##$basic##\nYou gain the ability to disable ##1## camera from detecting you and your crew. Effect lasts for ##25## seconds.\n\nACE: ##$pro##\nYou lockpick ##75%## faster. You also gain the ability to lockpick safes.",
-			["menu_perseverance_beta_desc"] = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##3## seconds with a ##60%## movement penalty before going down. \n\nACE: ##$pro##\nIncreases the duration of Swan Song to ##6## seconds.",
 			
+			["menu_perseverance_beta_desc"] = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##3## seconds with a ##60%## movement penalty before going down. \n\nACE: ##$pro##\nIncreases the duration of Swan Song to ##6## seconds.",
+						
 			["menu_overkill_beta_desc"] = "BASIC: ##$basic##\nKilling an enemy at medium range has a ##75%## chance to spread panic among your enemies. \n\nACE: ##$pro##\nWhen you kill an enemy with a shotgun, shotguns recieve a ##35%## damage increase that lasts for ##8## seconds.",
-			-- this was sposed to have a 15% speed bonus but fuck you 
-			["menu_juggernaut_beta_desc"] = "BASIC: ##$basic##\nUnlocks the ability to wear the Improved Combined Tactical Vest. Your total armor value is increased by ##30%##. \n\nACE: ##$pro##\nYour total armor value is further increased by ##20%##.\n\n##For you.##",
+			
+			["menu_martial_arts_beta"] = "Martial Master",			
+			["menu_martial_arts_beta_desc"] = "BASIC:##$basic##\nYou take ##50%## less damage from all melee attacks.\n\nACE: ##$pro##\nYou are ##100%## more likely to knock down enemies with a melee strike.",
+			
+			["menu_carbon_blade_beta_desc"] = "BASIC: ##$basic##\nYour saws no longer wear down on damage to enemies. Your saws deal ##100%## more damage.\n\n##Don't forget, huh, I mean for real, my saws all rule, with the world, with appeal!## \n\nACE: ##$pro##\nYou can now saw through shields with your OVE9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10m## radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.",
+			
+			-- ["menu_single_shot_ammo_return_beta_desc"] = "BASIC: ##$basic##\nGetting ##2## headshots in less than ##6## seconds without missing will magically refund ##1## bullet to your used weapon. Can only be triggered by SMGs, Assault Rifles and Sniper Rifles in any firemode.\n\nACE: ##$pro##\nThe amount of headshots required is reduced to ##1##.",
+			
+			-- this was sposed to have a 15% speed bonus but fuck you 			
 			["menu_juggernaut_beta"] = "Big Guy",
+			["menu_juggernaut_beta_desc"] = "BASIC: ##$basic##\nUnlocks the ability to wear the Improved Combined Tactical Vest. Your total armor value is increased by ##30%##. \n\nACE: ##$pro##\nYour total armor value is further increased by ##20%##.\n\n##For you.##",
+			
+			["menu_fast_fire_beta"] = "Spray & Pray",
+			["menu_fast_fire_beta_desc"] = "BASIC: ##$basic##\nYour ranged weapons can now pierce through enemy body armor. This does not apply to throwable weapons. \n\nACE: ##$pro##\nYour SMGs, LMGs and Assault Rifles gain ##15## more bullets in their magazines. This does not affect Lock n' Load aced.",
 			
 			["menu_gun_fighter_beta_desc"] = "BASIC: ##$basic##\nPistols gain ##5## more damage points. \n\nACE: ##$pro##\nPistols gain an additional ##5## damage points.",
-			
+		
 			["menu_dance_instructor_desc"] = "BASIC: ##$basic##\nYour pistol magazine sizes are increased by ##5## bullets. \n\nACE: ##$pro##\nYou gain a ##25%## increased rate of fire with pistols.",
 			
 			["menu_expert_handling_desc"] = "BASIC: ##$basic##\nEach successful pistol hit gives you a ##10%## increased accuracy bonus for ##10## seconds and can stack ##4## times.  \n\nACE: ##$pro##\nYou reload all pistols ##25%## faster.",
