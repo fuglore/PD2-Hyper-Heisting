@@ -674,6 +674,8 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 		"medic",
 		"taser",
 		"spooc",
+		"trolliam_epicson",
+		"gangster_ninja",						
 		"shadow_spooc",
 		"spooc_heavy",
 		"tank_ftsu",
