@@ -29,13 +29,20 @@
 	<unit path="units/pd2_dlc_flat/characters/npc_jamaican/npc_jamaican_husk" force="true" />	
 	
 	<!-- scarface fuckers -->
+	<object path="units/pd2_dlc_friend/characters/ene_drug_lord_boss/ene_drug_lord_boss" force="true" />
+	<unit path="units/pd2_dlc_friend/characters/ene_drug_lord_boss/ene_drug_lord_boss" force="true" />	
+	<unit path="units/pd2_dlc_friend/characters/ene_drug_lord_boss/ene_drug_lord_boss_husk" force="true" />
+
+	<object path="units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager" force="true" />
+	<unit path="units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager" force="true" />	
+	<unit path="units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager_husk" force="true" />
+	
 	<object path="units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_01/ene_bolivian_thug_outdoor_01" force="true" />
 	<object path="units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_02/ene_bolivian_thug_outdoor_02" force="true" />	
 	<object path="units/pd2_dlc_friend/characters/ene_thug_indoor_01/ene_thug_indoor_01" force="true" />
-	<object path="units/pd2_dlc_friend/characters/ene_thug_indoor_02/ene_thug_indoor_02" force="true" />	
-	<object path="units/pd2_dlc_friend/characters/ene_drug_lord_boss/ene_drug_lord_boss" force="true" />		
+	<object path="units/pd2_dlc_friend/characters/ene_thug_indoor_02/ene_thug_indoor_02" force="true" />		
 	<object path="units/pd2_dlc_friend/characters/ene_drug_lord_boss_stealth/ene_drug_lord_boss_stealth" force="true" />			
-	<object path="units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager" force="true" />
+
 	<!-- repers (replasements)-->
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass" force="true" />		
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870" force="true" />	

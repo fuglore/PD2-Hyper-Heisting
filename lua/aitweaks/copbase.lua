@@ -146,8 +146,6 @@ function CopBase:default_weapon_name()
 	
 	local gang_broncos = unit_name == Idstring("units/payday2/characters/ene_gang_mexican_4/ene_gang_mexican_4") 
 	or unit_name == Idstring("units/payday2/characters/ene_gang_mexican_4/ene_gang_mexican_4_husk")
-	or unit_name == Idstring("units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager")
-	or unit_name == Idstring("units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager_husk")
 	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_2/ene_gang_russian_2")
 	or unit_name == Idstring("units/payday2/characters/ene_gang_russian_2/ene_gang_russian_2_husk")	
 	or unit_name == Idstring("units/payday2/characters/ene_gang_black_4/ene_gang_black_4")
