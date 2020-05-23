@@ -32,7 +32,7 @@ if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 				ammo_usage = 0
 			end
 			
-			if managers.player:has_category_upgrade("saw", "enemy_slicer") then
+			if managers.player:has_category_upgrade("saw", "enemy_slicer") and ray_res.hit_enemy then
 				ammo_usage = 0
 			end
 
