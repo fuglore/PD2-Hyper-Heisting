@@ -1984,7 +1984,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			end
 		else
 			local path_and_area_to_choose = math.random(1, 4)
-			if not tactics_map or tactics_map and not tactics_map.flank then 
+			if 	path_and_area_to_choose == 1 then 
 				assault_area = assault_area_uno
 				assault_path = assault_path_uno
 			elseif path_and_area_to_choose == 2 then
