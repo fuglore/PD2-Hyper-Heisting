@@ -2306,6 +2306,7 @@ function CopLogicTravel._get_all_paths(data)
 	return {
 		advance_path = data.internal_data.advance_path,
 		cover_path = data.internal_data.cover_path,
+		coarse_path = data.internal_data.coarse_path,
 		flank_path = data.internal_data.flank_path,
 		expected_pos_path = data.internal_data.expected_pos_path,
 		charge_path = data.internal_data.charge_path
@@ -2315,6 +2316,7 @@ end
 function CopLogicTravel._set_verified_paths(data, verified_paths)
 	data.internal_data.advance_path = verified_paths.advance_path
 	data.internal_data.cover_path = verified_paths.cover_path
+	data.internal_data.coarse_path = verified_paths.coarse_path
 	data.internal_data.flank_path = verified_paths.flank_path
 	data.internal_data.expected_pos_path = verified_paths.expected_pos_path
 	data.internal_data.charge_path = verified_paths.charge_path
