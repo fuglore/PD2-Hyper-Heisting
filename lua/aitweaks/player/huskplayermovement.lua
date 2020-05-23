@@ -16,8 +16,8 @@ end
 
 local init_original = HuskPlayerMovement.init
 function HuskPlayerMovement:init(unit)
-	self._draw_player_newest_pos = true
-	self._draw_player_detect_pos = true
+	self._draw_player_newest_pos = false
+	self._draw_player_detect_pos = false
 	self._stand_detection_offset_z = mvec3_z(tweak_data.player.stances.default.standard.head.translation)
 	init_original(self, unit)
 end
