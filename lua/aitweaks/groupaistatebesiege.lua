@@ -136,6 +136,7 @@ function GroupAIStateBesiege:update(t, dt)
 	if Network:is_server() then
 		self:_queue_police_upd_task()
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		local testing = true
 		
 		if self._downcountleniency > 5 then
 			self._downcountleniency = 5
@@ -168,7 +169,7 @@ function GroupAIStateBesiege:update(t, dt)
 			self._max_fedfuck_t = nil
 		end
 		
-		if not self._feddensityhigh then
+		if not self._feddensityhigh and not testing then
 			if activedrama and self._max_fedfuck_t and self._max_fedfuck_t < self._t or highdrama then
 				self._feddensityhigh = true
 				self._max_fedfuck_t = nil
@@ -189,7 +190,7 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		local level = Global.level_data and Global.level_data.level_id
 		
-		if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "pbr" then
+		if testing or level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "pbr" then
 			--Nothing
 		else
 			if self._task_data.assault and self._task_data.assault.phase == "build" or self._task_data.assault and self._task_data.assault.phase == "sustain" then
