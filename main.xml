@@ -9,6 +9,9 @@
         <event name="assault" start_source="assaultintro.ogg" source="assault.ogg" alt_source="assaultalt.ogg"/>
         <event name="control" start_source="controlintro.ogg" source="control.ogg"/>
     </HeistMusic>
+    <Hooks directory="lua">
+		<hook file="CoreScriptData.lua" source_file="core/lib/managers/coresequencemanager"/>	
+    </Hooks>	
 	<AddFiles file="hhmainassets.xml"/>
 	<Package id="packages/hhalbaniancontent" file="albanianchontent.xml" use_clbk="self:LoadAlbAssets"/>
 	<Package id="packages/hhnewreapers" file="hhnewreapers.xml" use_clbk="self:DebugLoadAssets"/>	
