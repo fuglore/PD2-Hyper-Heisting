@@ -8,6 +8,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		self.skills.juggernaut[2].upgrades = {"player_armor_multiplier_cooler"}
 		self.skills.juggernaut[1].upgrades = {"player_armor_multiplier", "body_armor6"}
 		
+		-- self.skills.more_fire_power[2].upgrades = {"shape_charge_quantity_increase_2", "trip_mine_quantity_increase_2", "player_trip_mine_deploy_time_multiplier_2"}
+		-- self.skills.more_fire_power[1].upgrades = {"shape_charge_quantity_increase_1", "trip_mine_quantity_increase_1", "player_trip_mine_deploy_time_multiplier_1"}
+		
 		self.skills.overkill[2].upgrades = {"player_overkill_damage_multiplier"}
 		self.skills.overkill[1].upgrades = {"player_killshot_close_panic_chance"}	
 		
