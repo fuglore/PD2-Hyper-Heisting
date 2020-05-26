@@ -4,6 +4,7 @@
 	
 	<pre :script_path="Corepre.lua" :hook_id="entry"/>
 	<post :script_path="tweak_data/charactertweakdata.lua" :hook_id="tweak_data/charactertweakdata"/>
+	<post :script_path="tweak_data/equipmentstweakdata.lua" :hook_id="tweak_data/equipmentstweakdata"/>
 	<post :script_path="tweak_data/groupaitweakdata.lua" :hook_id="tweak_data/groupaitweakdata"/>
 	<post :script_path="tweak_data/weapontweakdata.lua" :hook_id="tweak_data/weapontweakdata"/>
 	<post :script_path="tweak_data/levelstweakdata.lua" :hook_id="tweak_data/levelstweakdata"/>

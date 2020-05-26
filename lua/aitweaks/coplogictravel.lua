@@ -308,13 +308,13 @@ function CopLogicTravel._upd_combat_movement(data)
 	
 	if not data.attention_obj then
 		--log("got it
-		CopLogicTravel.upd_advance(data)
+		-- CopLogicTravel.upd_advance(data)
 		return
 	else
 		local definitely_not_reactions_chk = AIAttentionObject.REACT_COMBAT > data.attention_obj.reaction
 
 		if definitely_not_reactions_chk then
-			CopLogicTravel.upd_advance(data)		
+			-- CopLogicTravel.upd_advance(data)		
 			return
 		end
 	end
@@ -474,7 +474,7 @@ function CopLogicTravel._upd_combat_movement(data)
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
 	
 	if not action_taken then
-	
+
 		local move_t_chk = not my_data.move_t or my_data.move_t < data.t
 		local charge_failed_t_chk = not my_data.charge_path_failed_t or my_data.charge_path_failed_t and data.t - my_data.charge_path_failed_t > 6
 		local flank_charge_t_chk = not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t
@@ -483,61 +483,14 @@ function CopLogicTravel._upd_combat_movement(data)
 		
 		if my_data.walking_to_cover_shoot_pos then
 			-- nothing
-		elseif want_to_take_cover then
-			move_to_cover = true
 		elseif my_data.at_cover_shoot_pos then
 			if my_data.stay_out_time and my_data.stay_out_time < t or not focus_enemy.verified then
-				move_to_cover = true
+				my_data.stay_out_time = nil
+				my_data.peek_cooldown_t = nil
 			end
-		elseif my_data.move_t and my_data.move_t > t or my_data.stay_out_time and my_data.stay_out_time > t then
-			-- Nothing
-		elseif Global.game_settings.one_down and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() or move_t_chk and not managers.groupai:state():chk_high_fed_density() and not managers.groupai:state():chk_active_assault_break() and managers.groupai:state():chk_assault_active_atm() then 
-			
-			if testing_move_t or Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
-				my_data.move_t = data.t - 1
-			else
-				if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-					my_data.move_t = data.t + 0.7
-				elseif diff_index == 6 then
-					my_data.move_t = data.t + 0.35
-				else
-					my_data.move_t = data.t + 0.25
-				end
-			end
-			
-			if data.tactics and data.tactics.charge and charge_failed_t_chk or data.tactics and data.tactics.flank and charge_failed_t_chk or charge_failed_t_chk and ranged_fire_group and managers.groupai:state():chk_no_fighting_atm() then
-				if my_data.charge_path then
-					log("yes")
-					local path = my_data.charge_path
-					action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path)
-					
-					if data.tactics and data.tactics.flank then
-						if data.char_tweak.chatter and data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
-							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
-						end
-					end
-					
-					my_data.charge_path = nil
-				elseif not my_data.charge_path_search_id and data.attention_obj.nav_tracker then
-					if data.tactics and data.tactics.charge then
-						my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil)
-					else
-						my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, 3000)
-					end
-
-					if my_data.charge_pos then
-						my_data.charge_path_search_id = "charge" .. tostring(data.key)
-
-						unit:brain():search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
-								
-						--my_data.taken_flank_cover = nil
-					else
-						debug_pause_unit(data.unit, "failed to find charge_pos", data.unit)
-
-						my_data.charge_path_failed_t = TimerManager:game():time()
-					end
-				end
-			elseif in_cover then
+		elseif not my_data.peek_cooldown_t or my_data.peek_cooldown_t < t then 
+						
+			if in_cover then
 				if my_data.cover_test_step <= 2 then
 					local height = nil
 					
@@ -568,13 +521,11 @@ function CopLogicTravel._upd_combat_movement(data)
 								end
 							end
 						end
-						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, math_random() < 0.5 and "run" or "walk")
+						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, math_random() < 0.8 and "run" or "walk")
 					else
 						my_data.cover_test_step = my_data.cover_test_step + 1
 					end
-				elseif math_random() < 0.25 then
-					move_to_cover = true
-				end
+				end 
 			elseif my_data.at_cover_shoot_pos then
 				--ranged fire cops also signal the END of their movement and positioning
 				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
@@ -583,45 +534,13 @@ function CopLogicTravel._upd_combat_movement(data)
 					end
 				end
 				if my_data.stay_out_time and my_data.stay_out_time < t then
-					move_to_cover = true
+					my_data.peek_cooldown_t = t + 2
 				end				
 			else
-				if data.tactics and data.tactics.flank and not my_data.taken_flank_cover then
-					want_flank_cover = true
-				end
-				move_to_cover = true
+				my_data.peek_cooldown_t = t + 2
 			end
 		end
-	end
-	
-	if data.tactics and data.tactics.flank then
-		if not my_data.flank_cover then
-			local sign = math_random() < 0.5 and -1 or 1
-			local step = 30
-			my_data.flank_cover = {
-				step = step,
-				angle = step * sign,
-				sign = sign
-			}
-			my_data.next_allowed_flank_charge_t = data.t + 2
-			want_flank_cover = nil
-			--if not data.unit:in_slot(16) and not data.is_converted then --flankers signal their presence whenever they move around
-			--	if data.char_tweak.chatter.look_for_angle and managers.groupai:state():chk_assault_active_atm() then
-					--managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "look_for_angle")
-			--	end
-			--end
-		end
-	else
-		my_data.flank_cover = nil
-	end
-	
-	local path_fail_chk = not my_data.cover_path_failed_t or data.t - my_data.cover_path_failed_t > 5
-	
-	if move_to_cover and not action_taken then
-		CopLogicTravel.upd_advance(data)
-	end
-	
-	action_taken = action_taken or CopLogicTravel.upd_advance(data)
+	end	
 end
 
 function CopLogicTravel._upd_pathing(data, my_data)
@@ -737,7 +656,11 @@ function CopLogicTravel.queued_update(data)
     data.t = TimerManager:game():time()
     my_data.close_to_criminal = nil
     local delay = CopLogicTravel._upd_enemy_detection(data)
-    
+	
+    if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
+		CopLogicTravel._upd_combat_movement(data)
+	end
+	
     if data.internal_data ~= my_data then
     	return
     end
