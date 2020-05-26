@@ -657,6 +657,10 @@ function CopLogicTravel.queued_update(data)
     my_data.close_to_criminal = nil
     local delay = CopLogicTravel._upd_enemy_detection(data)
 	
+    if data.internal_data ~= my_data then
+    	return
+    end
+	
     if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 		CopLogicTravel._upd_combat_movement(data)
 	end
