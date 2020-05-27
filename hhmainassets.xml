@@ -623,7 +623,7 @@
 	<model path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown"/>
 	
-	<unit path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" load="true"/>	
+	<unit_mat path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" load="true"/>	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" load="true"/>	
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_head_df"/>
