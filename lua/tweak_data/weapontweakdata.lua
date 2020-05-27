@@ -51,6 +51,10 @@ end
 Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	
 	--begin new weapon setup
+	self.degle_npc = deep_clone(self.raging_bull_npc)
+	self.degle_npc.CLIP_AMMO_MAX = 10
+	self.degle_npc.armor_piercing = true	
+	self.degle_npc.sounds.prefix = "deagle_npc"	
 	self.xkill_npc = deep_clone(self.c45_npc)
 	self.xkill_npc.sounds.prefix = "c45_npc"
 	self.trolliam_sidearm_npc = deep_clone(self.saiga_npc)

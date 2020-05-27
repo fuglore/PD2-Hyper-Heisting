@@ -356,6 +356,11 @@
 	<unit_mat path="units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac" load="true"/>
 	<unit path="units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac" load="true"/>
 	<cooked_physics path="units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac"/>
+	
+	<!--Big Pistol -->	
+	<unit_mat path="units/payday2/weapons/wpn_npc_degle/wpn_npc_degle" load="true"/>
+	<unit path="units/payday2/weapons/wpn_npc_degle/wpn_npc_degle" load="true"/>
+	<cooked_physics path="units/payday2/weapons/wpn_npc_degle/wpn_npc_degle"/>
 
 	<!--AKIMBO ZEALOT MASK-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_zeal_mask/ene_acc_zeal_mask" load="true"/>
@@ -609,17 +614,20 @@
 	<model path="units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870"/>	
 	
-	<!--BRONCO SWAT-->
-	<unit path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco" load="true"/>
-	<unit path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco_husk" load="true"/>	
-	<material_config path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"/>
-	<material_config path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco_contour"/>	
-	<object path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco" />
-	<model path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco" />	
-	<cooked_physics path="units/pd2_dlc_drm/characters/ene_swat_bronco/ene_swat_bronco"/>
+	<!--Goodbye Bronco SWAT :( (Crackdown Medic)-->
+	<unit path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown" load="true"/>
+	<unit path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown_contour"/>	
+	<object path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown" />
+	<model path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown" />	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown"/>
 	
-	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_head_df"/>
-	<texture path="units/pd2_dlc_drm/characters/ene_swat_bronco/swat_bronco_df"/>
+	<unit path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" load="true"/>	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" load="true"/>	
+	
+	<texture path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_head_df"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_df"/>
 
 	<!--Classic Heavy Shield ty jarey <33333-->	
 	<unit path="units/pd2_dlc_drm/characters/ene_acc_classic_shield/ene_acc_classic_shield" load="true"/>

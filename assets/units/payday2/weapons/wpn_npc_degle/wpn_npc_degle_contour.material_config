@@ -1,0 +1,37 @@
+<materials version="3" group="wpn_npc_c45">
+	<material name="barrel" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:RL_3RD_WEAPONS" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_pis_deagle_pts/barrel_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0.5" type="scalar" name="contour_opacity"/>		
+    </material>	
+	<material name="base" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:RL_3RD_WEAPONS" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_pis_deagle_pts/frame_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0.5" type="scalar" name="contour_opacity"/>				
+    </material>		
+	<material name="rear" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:RL_3RD_WEAPONS" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_pis_deagle_pts/rear_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0.5" type="scalar" name="contour_opacity"/>				
+    </material>
+	<material name="mag" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:RL_3RD_WEAPONS" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_pis_deagle_pts/mag_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0.5" type="scalar" name="contour_opacity"/>				
+    </material>		
+	<material name="grip" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:RL_3RD_WEAPONS" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_pis_deagle_pts/grip_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0.5" type="scalar" name="contour_opacity"/>				
+    </material>		
+	<material name="front1" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:RL_3RD_WEAPONS" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_pis_deagle_pts/front_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0.5" type="scalar" name="contour_opacity"/>				
+    </material>		
+	<material name="slide" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:RL_3RD_WEAPONS" version="2">
+        <diffuse_texture file="units/payday2/weapons/wpn_third_pis_deagle_pts/slide_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0.5" type="scalar" name="contour_opacity"/>				
+    </material>			
+</materials>

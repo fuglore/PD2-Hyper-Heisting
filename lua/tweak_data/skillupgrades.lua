@@ -115,7 +115,6 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		self.values.saw.damage_multiplier = {1.528} --closest i Could get!!! atleast the menu rounds up correctly. still, without perkdecks the 100% increase is somehow wrong. shouldn't matter regardless cause everyone and their grandma plays with an aced perk deck.
 		self.values.pistol.fire_rate_multiplier = {1.25}
 		self.values.pistol.reload_speed_multiplier = {1.25}		
-		self.values.player.trip_mine_deploy_time_multiplier = {1.8, 1.6}				
 		self.values.player.melee_knockdown_mul = {2}		
 		self.values.player.pick_lock_easy_speed_multiplier = {0.75, 0.5}	
 		self.values.player.armor_multiplier = {1.3, 1.5}
@@ -164,28 +163,6 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				category = "saw"
 			}
 		}
-
-	self.definitions.player_trip_mine_deploy_time_multiplier_1 = {
-		incremental = true,
-		name_id = "menu_player_trip_mine_deploy_time_multiplier",
-		category = "feature",
-		upgrade = {
-			value = 1,
-			upgrade = "trip_mine_deploy_time_multiplier",
-			category = "player"
-		}
-	}
-	
-	self.definitions.player_trip_mine_deploy_time_multiplier_2 = {
-		incremental = true,
-		name_id = "menu_player_trip_mine_deploy_time_multiplier",
-		category = "feature",
-		upgrade = {
-			value = 2,
-			upgrade = "trip_mine_deploy_time_multiplier",
-			category = "player"
-		}
-	}			
 				
 		self.definitions.player_pick_lock_easy_speed_multiplier_1 = {
 			name_id = "menu_player_pick_lock_easy_speed_multiplier",

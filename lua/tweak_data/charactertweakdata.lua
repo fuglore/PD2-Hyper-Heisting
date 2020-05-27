@@ -9845,7 +9845,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"x_streak",
 		"kmtac",		
 		"x_kmtac",
-		"trolliam_sidearm"
+		"trolliam_sidearm",
+		"degle"		
 		}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -9892,7 +9893,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac"),		
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac"),	
-		Idstring("units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm")
+		Idstring("units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm"),
+		Idstring("units/payday2/weapons/wpn_npc_degle/wpn_npc_degle")
 	}
 end
 
@@ -9943,7 +9945,7 @@ function CharacterTweakData:character_map()
 			"ene_medic_heavy_m4",
 			"ene_medic_heavy_r870",
 			"ene_city_swat_saiga",
-			"ene_swat_bronco",
+			"ene_medic_carkdown",
 			"ene_true_lotus_master"
 		}
 	}

@@ -72,7 +72,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["menu_cs_modifier_heavy_sniper"] = "Adds a chance for Sniperdozers to spawn.",
 		["menu_cs_modifier_dozer_lmg"] = "EVERYTHING IS HORRIBLE!!!",
 		["menu_cs_modifier_unison"] = "WIP NEW MODIFIER, DOES NOTHING CURRENTLY",
-		["menu_cs_modifier_dozer_rage"] = "Adds a chance for Swat Bronco Ninja Marksmen to spawn.",
+		["menu_cs_modifier_dozer_rage"] = "Adds a chance for a Deagle-toting Medic from another dimension to spawn.",
 		["menu_cs_modifier_dozer_immune"] = "Enemies are much more aggressive.",
 		["menu_cs_modifier_dozer_minigun"] = "Adds a chance for Medicdozers and Minigun Dozers to spawn.",
 		["menu_cs_modifier_shield_phalanx"] = "Shotgunners have a chance to be replaced by a Gensec Saiga SWAT.",
