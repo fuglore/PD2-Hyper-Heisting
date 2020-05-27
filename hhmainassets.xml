@@ -359,7 +359,7 @@
 	
 	<!--Big Pistol -->	
 	<unit_mat path="units/payday2/weapons/wpn_npc_degle/wpn_npc_degle" load="true"/>
-	<unit path="units/payday2/weapons/wpn_npc_degle/wpn_npc_degle" load="true"/>
+	<material_config path="units/payday2/weapons/wpn_npc_degle/wpn_npc_degle_contour" />
 	<cooked_physics path="units/payday2/weapons/wpn_npc_degle/wpn_npc_degle"/>
 
 	<!--AKIMBO ZEALOT MASK-->
@@ -622,12 +622,12 @@
 	<object path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown" />
 	<model path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_carkdown"/>
-	
-	<unit_mat path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" load="true"/>	
-	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" load="true"/>	
-	
+		
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_head_df"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_carkdown/ene_medic_df"/>
+	
+	<unit_mat path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" load="true"/>		
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_carkdown_medic_helmet/ene_acc_carkdown_medic_helmet" />	
 
 	<!--Classic Heavy Shield ty jarey <33333-->	
 	<unit path="units/pd2_dlc_drm/characters/ene_acc_classic_shield/ene_acc_classic_shield" load="true"/>
@@ -923,4 +923,3 @@
 	<!--Truth Runes Pattern-->
 	<texture path="patterns/真_fv"/>
 </table>
-	
