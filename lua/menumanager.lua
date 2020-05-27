@@ -1,12 +1,19 @@
-function MenuCallbackHandler:accept_skirmish_contract(item, node)
+function MenuCallbackHandler:accept_skirmish_contract(item)
+	local node = item:parameters().gui_node.node
+
 	managers.menu:active_menu().logic:navigate_back(true)
 	managers.menu:active_menu().logic:navigate_back(true)
 
+	local job_id = (node:parameters().menu_component_data or {}).job_id
 	local job_data = {
 		difficulty = "overkill_145",
-		one_down = true,
-		job_id = managers.skirmish:random_skirmish_job_id()
+		one_down = true,		
+		customize_contract = true,
+		job_id = job_id or managers.skirmish:random_skirmish_job_id(),
+		difficulty_id = tweak_data:difficulty_to_index("overkill_145")
 	}
+
+	managers.job:on_buy_job(job_data.job_id, job_data.difficulty_id or 3)
 
 	if Global.game_settings.single_player then
 		MenuCallbackHandler:start_single_player_job(job_data)
@@ -15,16 +22,16 @@ function MenuCallbackHandler:accept_skirmish_contract(item, node)
 	end
 end
 
-function MenuCallbackHandler:accept_skirmish_weekly_contract(item, node)
+function MenuCallbackHandler:accept_skirmish_weekly_contract(item)
 	managers.menu:active_menu().logic:navigate_back(true)
 	managers.menu:active_menu().logic:navigate_back(true)
 
 	local weekly_skirmish = managers.skirmish:active_weekly()
 	local job_data = {
 		difficulty = "overkill_145",
-		one_down = true,
 		weekly_skirmish = true,
-		job_id = weekly_skirmish.id,
+		one_down = true,				
+		job_id = weekly_skirmish.id
 	}
 
 	if Global.game_settings.single_player then

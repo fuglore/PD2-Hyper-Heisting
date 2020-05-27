@@ -46,7 +46,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative briefing_event="dentist_hd1_cbf_01" contact="skirmish" icon="guis/textures/pd2/skirmish/menu_landing_mus" id="skm_mus" jc="50" max_mission_xp="135900" min_mission_xp="8000" region="street">
+	<narrative briefing_event="dentist_hd1_cbf_01" contact="skirmish" icon="guis/dlcs/bro/textures/pd2/crimenet/museum" id="skm_mus" jc="50" max_mission_xp="135900" min_mission_xp="8000" region="street">
 		<chain>
 			<table level_id="skm_mus_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
