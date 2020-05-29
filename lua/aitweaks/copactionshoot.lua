@@ -900,10 +900,6 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 		hit_chance = hit_chance * 0.5
 	end
 
-	if managers.groupai:state():chk_high_fed_density() then
-		hit_chance = hit_chance * 0.5
-	end
-
 	if self._cs_acc_mul then
 		hit_chance = hit_chance * self._cs_acc_mul
 	end

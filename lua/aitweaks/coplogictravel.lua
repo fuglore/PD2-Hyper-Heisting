@@ -254,11 +254,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 			if my_data == data.internal_data and not objective.is_default then
 				debug_pause_unit(data.unit, "[CopLogicTravel._upd_enemy_detection] exiting without discarding objective", data.unit, inspect(objective))
 				
-				if CopLogicBase.should_enter_attack(data) then
-					CopLogicBase._exit(data.unit, "attack")
-				else
-					CopLogicBase._exit(data.unit, wanted_state)
-				end
+				CopLogicBase._exit(data.unit, wanted_state)
 			end
 
 			CopLogicBase._report_detections(data.detected_attention_objects)
@@ -355,12 +351,7 @@ function CopLogicTravel._upd_combat_movement(data)
 	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4
 	local antipassivecheck = focus_enemy and focus_enemy.verified or my_data.shooting
 	local flank_cover_charge_qualify = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t > 2 or focus_enemy and focus_enemy.verified
-	
-	if not managers.groupai:state():chk_active_assault_break() then
-		my_data.has_retreated = nil
-		my_data.in_retreat_pos = nil
-	end
-	
+		
 	local alert_soft = data.is_suppressed
 	
 	--hitnrun: approach enemies, back away once the enemy is visible, creating a variating degree of aggressiveness
@@ -422,7 +413,7 @@ function CopLogicTravel._upd_combat_movement(data)
 		end
 	end
 	
-	if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or managers.groupai:state():chk_high_fed_density() and not action_taken then
+	if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify then
 		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
 		if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
 			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
@@ -633,11 +624,6 @@ function CopLogicTravel._chk_wants_to_take_cover(data, my_data)
 		return
 	end
 	
-	if managers.groupai:state():chk_active_assault_break() then
-		--log("i want cover")
-		return true
-	end
-
 	if my_data.moving_to_cover or data.is_suppressed or my_data.attitude ~= "engage" or data.unit:anim_data().reload then
 		--log("i want cover")
 		return true
@@ -901,11 +887,7 @@ function CopLogicTravel.upd_advance(data)
 			CopLogicTravel._begin_coarse_pathing(data, my_data)
 		end
 	else
-		if CopLogicBase.should_enter_attack(data) then
-			CopLogicBase._exit(data.unit, "attack")
-		else
 			CopLogicBase._exit(data.unit, "idle")
-		end
 
 		return
 	end
@@ -994,7 +976,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			else
 				optimal_threat_dis = 1400
 			end
-		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() then --charge is an aggressive tactic, so i want it actually being aggressive as possible
+		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" then --charge is an aggressive tactic, so i want it actually being aggressive as possible
 			if data.attention_obj then
 				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
 					optimal_threat_dis = 120
@@ -1004,7 +986,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			else
 				optimal_threat_dis = 120
 			end
-		elseif data.objective.attitude == "engage" and data.tactics and not data.tactics.charge and not managers.groupai:state():chk_active_assault_break() and not managers.groupai:state():chk_high_fed_density() then --everything else is not required to find it.
+		elseif data.objective.attitude == "engage" and data.tactics and not data.tactics.charge then --everything else is not required to find it.
 			if data.attention_obj then
 				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
 					optimal_threat_dis = 120
@@ -1709,15 +1691,6 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 			CopLogicAttack["_chk_request_action_" .. pose](data)
 		end
 		
-		if managers.groupai:state():chk_high_fed_density() and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 3000 then
-			local randomwalkchance = math_random(0.01, 1)
-			if randomwalkchance > 0.10 then
-				haste = "walk"
-			else
-				haste = haste
-			end
-		end
-
 		CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, haste, end_rot, no_strafe, pose, end_pose)
 	end
 end

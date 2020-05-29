@@ -275,10 +275,6 @@ function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 	return origfunc2(self, special_type, ...)
 end
 
-function GroupAIStateBesiege:chk_high_fed_density()
-	return self._feddensityhigh
-end
-
 function GroupAIStateBesiege:chk_assault_number()
 	if not self._assault_number then
 		return 1
@@ -302,10 +298,6 @@ function GroupAIStateBesiege:chk_no_fighting_atm()
 	end
 	
 	return true
-end
-
-function GroupAIStateBesiege:chk_active_assault_break()
-	return self._activeassaultbreak
 end
 
 function GroupAIStateBesiege:chk_had_hostages()
