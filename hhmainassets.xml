@@ -726,6 +726,7 @@
 	
 	<texture path="guis/textures/loading/hints/hh_ninjas" force="false"/>
 	<texture path="guis/textures/loading/hints/hh_shotgunners" force="false"/>
+	<texture path="guis/textures/loading/hints/hh_punks" force="false"/>
 	<texture path="guis/textures/loading/hints/enemy_zeal" force="true"/>
 	<texture path="guis/textures/pd2/mission_briefing/assets/assets_risklevel_6_hh" force="false"/>
 	<!--<texture path="guis/dlcs/cee/textures/pd2/crime_spree/modifiers_atlas" force="true"/>
@@ -923,3 +924,4 @@
 	<!--Truth Runes Pattern-->
 	<texture path="patterns/真_fv"/>
 </table>
+	
