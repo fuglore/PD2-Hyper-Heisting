@@ -128,7 +128,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["shin_toggle_helmet_desc"] = "Enhances the force and power of flying helmets, and changes it's calculations to give that feeling of extra oomph!",
 		["shin_albanian_content_enable_title"] = "enable albanian content",
 		["shin_enable_albanian_content_title"] = "enable albanian content",
-		["shin_albanian_content_enable_desc"] = "nable abanian përmbajtje",		
+		["shin_albanian_content_enable_desc"] = "nable abanian përmbajtje (WARNING: You probably shouldn't enable this!)",		
 		["shin_toggle_overhaul_player_title"] = "HH Player-Side Rebalance!",
 		["shin_toggle_overhaul_player_desc"] = "Enables a modified version of Gambyt's VIWR mod! Featuring various reworks of existing skills to make the game feel fresh! WARNING: ONLY TAKES EFFECT AFTER FULL GAME RESTART!!!",
 		["shin_requires_restart_title"] = "Restart required!",
