@@ -88,8 +88,8 @@
 	<model path="units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/ene_medic_federale_rifle_hh" />	
 	<cooked_physics path="units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/ene_medic_federale_rifle_hh"/>
 	
-	<df_nm path="units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/material_body" />
-	<df_nm path="units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/material_head" />
+	<texture path="units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/material_body_df" />
+	<texture path="units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/material_head_df" />
 	
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_rifle_medic_helmet/ene_acc_rifle_medic_helmet" load="true"/>
 	
@@ -102,8 +102,8 @@
 	<model path="units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/ene_medic_federale_r870_hh" />	
 	<cooked_physics path="units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/ene_medic_federale_r870_hh"/>
 	
-	<df_nm path="units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/material_body" />
-	<df_nm path="units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/material_head" />
+	<texture path="units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/material_body_df" />
+	<texture path="units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/material_head_df" />
 	
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_r870_medic_helmet/ene_acc_r870_medic_helmet" load="true"/>
 	
