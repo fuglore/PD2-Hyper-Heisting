@@ -14,6 +14,7 @@
   "ene_shield_heavy" : "Heavy Shield",
   "ene_murky_heavy_ump" : "Heavy Murky",
   "ene_medic_heavy" : "Heavy Medic",
+  "ene_medic_carkdown" : "Zulu Medic",
   "ene_fbi_heavy_ump" : "FBI Heavy SWAT",
   "ene_city_swat_saiga" : "GenSec SWAT",
   "ene_bulldozer_sniper" : "Sniperdozer",

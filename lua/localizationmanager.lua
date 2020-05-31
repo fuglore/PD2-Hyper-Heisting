@@ -125,7 +125,7 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["menu_l_global_value_hyperheisting_desc"] = "This is a Hyper Heisting item!",		
 		["shin_options_title"] = "Hyper Heisting Options!",		
 		["shin_toggle_helmet_title"] = "Extreme Helmet Popping!",
-		["shin_toggle_helmet_desc"] = "Enhances the force and power of flying helmets, and changes it's calculations to give that feeling of extra oomph!",
+		["shin_toggle_helmet_desc"] = "Enhances the force and power of flying helmets, and changes its calculations to give that feeling of extra oomph!",
 		["shin_albanian_content_enable_title"] = "enable albanian content",
 		["shin_enable_albanian_content_title"] = "enable albanian content",
 		["shin_albanian_content_enable_desc"] = "nable abanian përmbajtje (WARNING: You probably shouldn't enable this!)",		
