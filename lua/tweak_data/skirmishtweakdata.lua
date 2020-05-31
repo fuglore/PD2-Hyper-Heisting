@@ -110,6 +110,11 @@ function SkirmishTweakData:_init_wave_modifiers()
 			}
 		}
 	}
+	self.wave_modifiers[6] = {
+		{
+			class = "ModifierDozerRage"
+		}
+	}	
 	self.wave_modifiers[7] = {
 		{
 			class = "ModifierDozerMedic"
