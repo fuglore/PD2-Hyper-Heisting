@@ -93,7 +93,17 @@ function CopBase:default_weapon_name()
 
 	local unit_name = self._unit:name()
 	
-	local hoxout_m4s = unit_name == Idstring("units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2") or unit_name == Idstring("units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2_husk") or unit_name == Idstring("units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2") or unit_name == Idstring("units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2_husk")
+	local hoxout_m4s = unit_name == Idstring("units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2") or unit_name == Idstring("units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2_husk") 
+	or unit_name == Idstring("units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2") or unit_name == Idstring("units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2_husk")
+	
+	local hoxout_boss = unit_name == Idstring("units/payday2/characters/ene_fbi_boss_1/ene_fbi_boss_1") or unit_name == Idstring("units/payday2/characters/ene_fbi_boss_1/ene_fbi_boss_1_husk")
+
+	local hoxout_shotty = unit_name == Idstring("units/payday2/characters/ene_fbi_office_3/ene_fbi_office_3") or unit_name == Idstring("units/payday2/characters/ene_fbi_office_3/ene_fbi_office_3_husk") 
+	or unit_name == Idstring("units/payday2/characters/ene_fbi_female_3/ene_fbi_female_3") or unit_name == Idstring("units/payday2/characters/ene_fbi_female_3/ene_fbi_female_3_husk")
+
+	local hoxout_dual = unit_name == Idstring("units/payday2/characters/ene_fbi_female_4/ene_fbi_female_4") or unit_name == Idstring("units/payday2/characters/ene_fbi_female_4/ene_fbi_female_4_husk")
+	
+	local hoxout_sub =unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4") or unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4_husk") 
 	
 	--groups of units to modify
 	local mosconi_punks = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870_husk")
@@ -188,8 +198,18 @@ function CopBase:default_weapon_name()
 		return car4
 	elseif zombie_taser then
 		return yellow_car4
+
 	elseif hoxout_m4s then
 		return car4
+	elseif hoxout_boss then
+		return izhma
+	elseif hoxout_shotty then
+		return reinfeld
+	elseif hoxout_sub then
+		return compact5
+	elseif hoxout_dual then
+		return crosskill_chimano_akimbo
+
 	elseif mosconi_punks then
 		return sawn_off_mosconi
 	elseif bronco_punks then
