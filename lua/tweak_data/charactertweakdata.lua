@@ -8394,13 +8394,13 @@ end)
 
 Hooks:PostHook(CharacterTweakData, "_init_gensec", "hhpost_gensec", function(self, presets)
 	self.gensec.HEALTH_INIT = 6
-	self.gensec.headshot_dmg_mul = 12
+	self.gensec.headshot_dmg_mul = 16
 	self.gensec.chatter = presets.enemy_chatter.security
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(self, presets)
 	self.security.HEALTH_INIT = 6
-	self.security.headshot_dmg_mul = 12
+	self.security.headshot_dmg_mul = 16
 	self.security.chatter = presets.enemy_chatter.security
 end)
 
