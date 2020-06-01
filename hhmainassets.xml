@@ -669,7 +669,8 @@
 	<object path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" />
 	<model path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"/>
-
+	
+	<unit_mat path="units/pd2_dlc_drm/characters/ene_acc_bulldozer_sniper/ene_acc_bulldozer_sniper_cap/ene_acc_bulldozer_sniper_cap" load="true"/>
     <unit_mat path="units/pd2_dlc_drm/characters/ene_acc_bulldozer_sniper/ene_acc_bulldozer_chest_sniper/ene_acc_bulldozer_chest_sniper" load="true"/>
     <unit_mat path="units/pd2_dlc_drm/characters/ene_acc_bulldozer_sniper/ene_acc_bulldozer_neck_sniper/ene_acc_bulldozer_neck_sniper" load="true"/>
     <unit_mat path="units/pd2_dlc_drm/characters/ene_acc_bulldozer_sniper/ene_acc_bulldozer_stomache_sniper/ene_acc_bulldozer_stomache_sniper" load="true"/>
