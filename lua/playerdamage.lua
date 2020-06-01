@@ -199,11 +199,12 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 	if attack_data then
 		local next_allowed_dmg_t = type(self._next_allowed_dmg_t) == "number" and self._next_allowed_dmg_t or Application:digest_value(self._next_allowed_dmg_t, false)
 		local t = managers.player:player_timer():time()
+		local dmg_is_allowed = next_allowed_dmg_t and next_allowed_dmg_t > t
 		
 		--enemies were meleeing players and taking their guns away during invincibility frames and thats no bueno
-		
-		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and next_allowed_dmg_t and next_allowed_dmg_t < t then
-			if alive(player_unit) and self._unit:movement():current_state().on_melee_stun and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi" and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_xc45" then
+		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and dmg_is_allowed then
+			-- log("balls")				
+			if alive(player_unit) and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi" and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_xc45" then
 				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), 0.8)
 			end
 		end
@@ -216,7 +217,136 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 			end	
 		end
 	end
+	
+	local go_through_armor = false --manual toggle
+	local health_subtracted = nil
+	local armor_broken = false
+
+	if go_through_armor then
+		health_subtracted = self:_calc_armor_damage(attack_data)
+
+		attack_data.damage = attack_data.damage - health_subtracted
+
+		health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+
+		armor_broken = self:_max_armor() == 0 or self:_max_armor() > 0 and self:get_real_armor() <= 0 --works when armor is broken and health damage is taken by the same hit
+	else
+		local armor_reduction_multiplier = 0
+
+		if self:get_real_armor() <= 0 then --if armor is already broken, don't negate health damage
+			armor_reduction_multiplier = 1
+			armor_broken = true --checked before actually taking damage
+		end
+
+		health_subtracted = self:_calc_armor_damage(attack_data)
+
+		if attack_data.melee_armor_piercing then --for specific cases, like say, making headless Dozers able to go through armor with melee when other enemies can't
+			attack_data.damage = attack_data.damage - health_subtracted
+		else
+			attack_data.damage = attack_data.damage * armor_reduction_multiplier
+		end
+
+		health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+	end
+	
+	if self._bleed_out then
+		self:_bleed_out_damage(attack_data)
+
+		--bleed_out = always taking health damage, so use the appropiate sound and cause a blood effect if the weapon isn't tase capable
+		local hit_sound = "hit_body"
+
+		--unless damage is completely negated
+		if attack_data.damage == 0 then
+			hit_sound = "hit_gen"
+		end
+
+		self:play_melee_hit_sound_and_effects(attack_data, hit_sound, not attack_data.tase_player)
+
+		return
+	end	
+	
+	local hit_sound_type = "hit_gen"
+	local blood_effect = false
+
+	if armor_broken then
+		hit_sound_type = "hit_body"
+		blood_effect = not attack_data.tase_player
+	end
+
+	self:play_melee_hit_sound_and_effects(attack_data, hit_sound_type, blood_effect)	
 end)
+
+local mvec1 = Vector3()
+
+function PlayerDamage:play_melee_hit_sound_and_effects(attack_data, sound_type, play_blood_effect)
+	if play_blood_effect then
+		--make sure the weapon is supposed to cause a blood splatter
+		local blood_effect = attack_data.melee_weapon and attack_data.melee_weapon == "weapon"
+		blood_effect = blood_effect or attack_data.melee_weapon and tweak_data.weapon.npc_melee[attack_data.melee_weapon] and tweak_data.weapon.npc_melee[attack_data.melee_weapon].player_blood_effect or false
+
+		if blood_effect then --spawn a blood splatter in front of the player
+			local pos = mvec1
+
+			mvector3.set(pos, self._unit:camera():forward())
+			mvector3.multiply(pos, 20)
+			mvector3.add(pos, self._unit:camera():position())
+
+			local rot = self._unit:camera():rotation():z()
+
+			World:effect_manager():spawn({
+				effect = Idstring("effects/payday2/particles/impacts/blood/blood_impact_a"),
+				position = pos,
+				normal = rot
+			})
+		end
+	end
+
+	local melee_name_id = nil
+	local attacker_unit = attack_data.attacker_unit
+	local valid_attacker = attacker_unit and alive(attacker_unit) and attacker_unit:base()
+
+	if valid_attacker then
+		--get melee weapon id
+		if attacker_unit:base().is_husk_player then
+			local peer_id = managers.network:session():peer_by_unit(attacker_unit):id()
+			local peer = managers.network:session():peer(peer_id)
+
+			melee_name_id = peer:melee_id()
+		else
+			melee_name_id = attacker_unit:base().melee_weapon and attacker_unit:base():melee_weapon()
+		end
+
+		if melee_name_id then
+			if melee_name_id == "knife_1" then --knife used by NPCs
+				melee_name_id = "kabar"
+			elseif melee_name_id == "helloween" then --titan staff used by headless Dozers
+				melee_name_id = "brass_knuckles"
+			elseif not attacker_unit:base().is_husk_player and melee_name_id == "baton" then --cop baton (otherwise the ballistic baton's sounds are used)
+				melee_name_id = "weapon"
+			end
+
+			local tweak_data = tweak_data.blackmarket.melee_weapons[melee_name_id]
+
+			if tweak_data and tweak_data.sounds and tweak_data.sounds[sound_type] then
+				local post_event = tweak_data.sounds[sound_type]
+				local anim_attack_vars = tweak_data.anim_attack_vars
+				local variation = anim_attack_vars and math.random(#anim_attack_vars)
+
+				if type(post_event) == "table" then
+					if variation then
+						post_event = post_event[variation]
+					else
+						post_event = post_event[1]
+					end
+				end
+
+				--some sounds are too low to hear, playing them twice helps and or accentuates a hit even more)
+				self._unit:sound():play(post_event, nil, false)
+				self._unit:sound():play(post_event, nil, false)
+			end
+		end
+	end
+end
 
 function PlayerDamage:clbk_kill_taunt(attack_data) -- just a nice little detail
 	if attack_data.attacker_unit and attack_data.attacker_unit:alive() then
@@ -499,4 +629,3 @@ Hooks:PostHook(PlayerDamage, "_regenerate_armor", "hh_regenarmor", function(self
 		self:_begin_akuma_snddedampen()
 	end
 end)
-
