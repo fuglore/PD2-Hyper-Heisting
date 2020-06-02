@@ -162,7 +162,7 @@ function GroupAIStateBase:set_importance_weight(u_key, wgt_report)
 
 	local t_rem = table.remove
 	local t_ins = table.insert
-	local max_nr_imp = 32 --oh hey mod runs ok again
+	local max_nr_imp = 6969 --sex
 	local imp_adj = 0
 	local criminals = self._player_criminals
 	local cops = self._police

@@ -823,13 +823,11 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 							attention_info.verified_dis = dis
 						elseif not data.cool and data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask) then
 							if attention_info.criminal_record and AIAttentionObject.REACT_COMBAT <= attention_info.settings.reaction then
-								if not is_detection_persistent and mvec3_dis(attention_info.m_pos, attention_info.criminal_record.pos) > 700 then
+								local seeninlast2seconds = attention_info.verified_t and attention_info.verified_t - t <= 2
+								if not is_detection_persistent and not seeninlast2seconds and mvector3.distance(attention_pos, attention_info.verified_pos) > 250 then
 									CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 								else
-									delay = math_min(0.2, delay)
-									attention_info.next_verify_t = math_min(0.2, attention_info.next_verify_t)
-
-									attention_info.verified_pos = mvec3_cpy(attention_info.criminal_record.pos)
+									attention_info.verified_pos = mvector3.copy(attention_info.criminal_record.pos)
 									attention_info.verified_dis = dis
 
 									if vis_ray and attention_info.is_person and attention_info.dis < 2000 then

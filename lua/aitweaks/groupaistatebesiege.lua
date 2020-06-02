@@ -1,4 +1,4 @@
---Added a bunch of chatter stuff with permission from EvilBobarino, along with a few tweaks to keep things consistent
+--Added a bunch of chatter stuff with permission from Rino, along with a few tweaks to keep things consistent
 
 --Hooks:PostHook(GroupAIStateBase, "init", "shin_debug", function(self, group_ai_state)
 	--self:set_debug_draw_state(true)

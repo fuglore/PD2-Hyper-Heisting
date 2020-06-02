@@ -118,6 +118,38 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		self.values.player.melee_knockdown_mul = {2}		
 		self.values.player.pick_lock_easy_speed_multiplier = {0.75, 0.5}	
 		self.values.player.armor_multiplier = {1.3, 1.5}
+		--temp resmod anarchist values--
+		self.values.player.armor_grinding = {
+			{
+				{2.4, 3.0},
+				{2.8, 3.5},
+				{3.2, 4.0},
+				{3.6, 4.5},
+				{4.0, 5.0},
+				{4.4, 5.5},
+				{4.8, 6.0}
+			}
+		}
+		
+		self.values.player.health_decrease = {0.5}
+		
+		self.values.player.armor_increase = {
+			0.50,
+			0.75,
+			1.00
+		}
+
+		self.values.player.damage_to_armor = {
+			{
+				{2.1, 3},
+				{2.4, 3},
+				{2.7, 3},
+				{3.0, 3},
+				{3.2, 3},
+				{3.4, 3},
+				{3.6, 3}
+			}
+		}
 		end
 		
 		--fuck you you piece of shit i'm not doing all this shit to make you function properly you fuck i hate your guts i hate you i hate you FUCK YOU
