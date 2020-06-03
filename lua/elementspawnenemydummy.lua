@@ -156,6 +156,10 @@
 	local sniper = {
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/payday2/characters/ene_sniper_1/ene_sniper_1"
 		}
+	local sniper_zulu_crackdown_XD = {
+			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper",		
+			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"			
+		}
 	local sniper_fed = {
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
 		}		
@@ -232,11 +236,16 @@
 		end
 			
 		--always replace snipers
-		if job == "firestarter_2" and difficulty_index >= 4 then  --FBI Snipers over regular, if on firestarter 2
+		if job == "firestarter_2" and difficulty_index >= 4 then
 			 if sniper[self._values.enemy] then
 				self._values.enemy = sniper_fed[self._values.enemy]
 			 end
 			 self._values.enemy = sniper_fed[self._values.enemy] or self._values.enemy
+		elseif difficulty_index == 8 then
+			 if sniper[self._values.enemy] then
+				self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
+			 end
+			 self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy			 
 		elseif difficulty_index == 4 or difficulty_index == 5 then --FBI Snipers over regular
 			 if sniper_fed[self._values.enemy] then
 				self._values.enemy = sniper_fed[self._values.enemy]

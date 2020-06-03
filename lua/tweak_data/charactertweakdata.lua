@@ -9973,7 +9973,8 @@ function CharacterTweakData:character_map()
 			"ene_zeal_punk_moss",
 			"ene_zeal_punk_bronco",
 			"ene_zeal_fbigod_m4", --COOL JEROME
-			"ene_zeal_fbigod_c45"
+			"ene_zeal_fbigod_c45",
+			"ene_zeal_sniper"
 		}
 	}
 	char_map.psc = {

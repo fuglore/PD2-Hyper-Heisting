@@ -205,6 +205,19 @@
 	<!--Vanilla Heavy ZEAL SWAT Replacement-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy" load="true" force="true"/>
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy_husk" load="true" force="true"/>
+
+	<!--ZEAL SNIPER-->	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper_contour"/>	
+	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper" />
+	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"/>	
+
+	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_head_atlas" />
+	
+	<unit_mat path="units/pd2_dlc_gitgud/characters/ene_acc_snipercap/ene_acc_snipercap" load="true"/>
 	
 	<!--ZEAL MP5 PUNK-->	
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5" load="true"/>
