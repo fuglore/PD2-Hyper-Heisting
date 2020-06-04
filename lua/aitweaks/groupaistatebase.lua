@@ -157,6 +157,9 @@ function GroupAIStateBase:chk_random_drama_comment()
 	self._rolled_dramatalk_chance = true
 end
 
+function GroupAIStateBase:on_criminal_nav_seg_change(unit, nav_seg_id)
+end
+
 function GroupAIStateBase:chk_taunt()
 	for group_id, group in pairs(self._groups) do
 		for u_key, u_data in pairs(group.units) do
