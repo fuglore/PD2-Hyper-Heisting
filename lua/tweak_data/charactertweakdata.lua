@@ -3721,8 +3721,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 5, --100 damage start
 				r = 100,
 				acc = {
-					0.75,
-					0.75
+					1,
+					1
 				},
 				recoil = {
 					2.7,
@@ -3739,8 +3739,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4, --80
 				r = 1000,
 				acc = {
-					0.75,
-					0.75
+					1,
+					1
 				},
 				recoil = {
 					2.7,
@@ -3757,8 +3757,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --60
 				r = 2000,
 				acc = {
-					0,
-					0.01
+					1,
+					1
 				},
 				recoil = {
 					2.7,
@@ -3772,11 +3772,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0,
+				dmg_mul = 2,
 				r = 3000,
 				acc = {
-					0,
-					0
+					0.5,
+					0.5
 				},
 				recoil = {
 					2.7,
@@ -4895,11 +4895,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0,
+				dmg_mul = 2,
 				r = 3000,
 				acc = {
-					0,
-					0
+					0.5,
+					0.5
 				},
 				recoil = {
 					2.7,
@@ -6019,11 +6019,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0,
+				dmg_mul = 2,
 				r = 3000,
 				acc = {
-					0,
-					0
+					1,
+					1
 				},
 				recoil = {
 					2,
