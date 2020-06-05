@@ -130,6 +130,32 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				{4.8, 6.0}
 			}
 		}
+		--Temp values for stoic nerf
+		self.values.player.armor_to_health_conversion = {
+			100
+		}
+		self.values.player.damage_control_passive = {
+			{
+				66,
+				9
+			}
+		}
+		self.values.player.damage_control_auto_shrug = {
+			5
+		}
+		self.values.player.damage_control_cooldown_drain = {
+			{
+				0,
+				0.5
+			},
+			{
+				35,
+				1
+			}
+		}
+		self.values.player.damage_control_healing = {
+			50
+		}
 		
 		self.values.player.health_decrease = {0.5}
 		
@@ -150,7 +176,9 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				{3.6, 3}
 			}
 		}
+		
 		end
+		
 		
 		--fuck you you piece of shit i'm not doing all this shit to make you function properly you fuck i hate your guts i hate you i hate you FUCK YOU
 		
