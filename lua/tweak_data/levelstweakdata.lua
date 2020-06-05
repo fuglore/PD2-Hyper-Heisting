@@ -30,20 +30,20 @@ function LevelsTweakData:init()
 	self.mad.package = {"packages/hhnewreapers", "packages/lvl_mad"}	
 	
 	-- Murkywater Heists
-	self.shoutout_raid.package = {"packages/hhmurkies", "packages/vlad_shout"}
+	self.shoutout_raid.package = {"packages/murkyassets", "packages/vlad_shout"}
 	self.shoutout_raid.ai_group_type = shared
-	self.pbr2.package = {"packages/hhmurkies", "packages/narr_jerry2"}
+	self.pbr2.package = {"packages/murkyassets", "packages/narr_jerry2"}
 	self.pbr.ai_group_type = shared
-	self.pbr.package = {"packages/hhmurkies", "packages/narr_jerry1"}
+	self.pbr.package = {"packages/murkyassets", "packages/narr_jerry1"}
 	self.dinner.ai_group_type = shared
-	self.dinner.package = {"packages/narr_dinner", "packages/hhmurkies", "packages/thabeatpricks"}
-	self.des.package = {"packages/hhmurkies", "packages/job_des"}
-	self.bph.package = {"packages/hhmurkies", "packages/dlcs/bph/job_bph"}	
-	self.vit.package = {"packages/hhmurkies", "packages/dlcs/vit/job_vit"}
-	self.wwh.package = {"packages/hhmurkies", "packages/lvl_wwh"}
-	self.arm_for.package = {"packages/hhmurkies", "packages/narr_arm_for"}
-	self.mex.package = {"packages/hhmurkies", "packages/job_mex"}
-	self.mex_cooking.package = {"packages/hhmurkies", "packages/job_mex2"}
+	self.dinner.package = {"packages/narr_dinner", "packages/murkyassets", "packages/thabeatpricks"}
+	self.des.package = {"packages/murkyassets", "packages/job_des"}
+	self.bph.package = {"packages/murkyassets", "packages/dlcs/bph/job_bph"}	
+	self.vit.package = {"packages/murkyassets", "packages/dlcs/vit/job_vit"}
+	self.wwh.package = {"packages/murkyassets", "packages/lvl_wwh"}
+	self.arm_for.package = {"packages/murkyassets", "packages/narr_arm_for"}
+	self.mex.package = {"packages/murkyassets", "packages/job_mex"}
+	self.mex_cooking.package = {"packages/murkyassets", "packages/job_mex2"}
 	
 	-- Federales heists
 	self.bex.package = {"packages/hhbex", "packages/job_bex"}
