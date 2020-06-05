@@ -149,6 +149,11 @@
 	<!--Murky Armoured Shield-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield_husk" load="true"/>	
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield"/>
+	<material_config path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield_contour"/>	
+	<object path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" />
+	<model path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield" />	
+	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield"/>	
 	
 	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_shield_murky_shield/ene_acc_shield_murky" load="true"/>
 	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_shield_murky_shield_small/ene_acc_shield_murky_shield_small" load="true"/>
