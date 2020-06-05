@@ -218,7 +218,7 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 		end
 	end
 	
-	local go_through_armor = false --manual toggle
+--[[	local go_through_armor = false --manual toggle
 	local health_subtracted = nil
 	local armor_broken = false
 
@@ -273,10 +273,10 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 		blood_effect = not attack_data.tase_player
 	end
 
-	self:play_melee_hit_sound_and_effects(attack_data, hit_sound_type, blood_effect)	
+	self:play_melee_hit_sound_and_effects(attack_data, hit_sound_type, blood_effect)--]]
 end)
 
-local mvec1 = Vector3()
+--[[local mvec1 = Vector3()
 
 function PlayerDamage:play_melee_hit_sound_and_effects(attack_data, sound_type, play_blood_effect)
 	if play_blood_effect then
@@ -346,7 +346,7 @@ function PlayerDamage:play_melee_hit_sound_and_effects(attack_data, sound_type, 
 			end
 		end
 	end
-end
+end--]]
 
 function PlayerDamage:clbk_kill_taunt(attack_data) -- just a nice little detail
 	if attack_data.attacker_unit and attack_data.attacker_unit:alive() then
