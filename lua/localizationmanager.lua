@@ -1,4 +1,4 @@
-Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
+﻿Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 	LocalizationManager:add_localized_strings({
 		["hud_assault_FG_cover1"] = "KILL EACHOTHER, BUT IT'S GOOD INVERSES",
 		["hud_assault_FG_cover2"] = "RARE FOOTAGE OF DRAGAN ACTUALLY ANGRY",
@@ -26,13 +26,17 @@ Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 		["hud_assault_FG_cover24"] = "FIGHT LIKE A TIGER, WALK IN THE PARK",
 		["hud_assault_FG_cover25"] = "EAT CAPTAIN TO END ASS",
 		["hud_assault_FG_cover26"] = "CHAD WUZ HERE",
-		["hud_assault_FG_cover27"] = "RIP AND TEAR",
+		["hud_assault_FG_cover27"] = "RIP AND TEAR UNTIL IT IS DONE",
 		["hud_assault_FG_cover28"] = "MARANAX INFIRMUX",
 		["hud_assault_FG_cover29"] = "CHAKA CHAKA PATA PON", --i gushed to a friend for like 30 minutes over how fun modding pd2 is and they told me to make a patapon reference, i am not allowed to say no
-		["hud_assault_FG_cover30"] = "DEROGATORY COMMENTS GO HERE",
+		["hud_assault_FG_cover30"] = "DEROGATORY COMMENTS GO HERE", --fuglore? more like buglore
 		["hud_assault_FG_cover31"] = "BATTLE TILL YOU DROP",
 		["hud_assault_FG_cover32"] = "YOU MAY TAKE COVER EVERY TIME YOU SCARE THE SHIT",
-		["hud_assault_FG_cover33"] = "THIS BRINGS NEW INSANITY",		
+		["hud_assault_FG_cover33"] = "THIS BRINGS NEW INSANITY",	
+		["hud_assault_FG_cover34"] = "WHITE VANS SPOTTED",
+		["hud_assault_FG_cover35"] = "NO SWAMP SHARKS INCLUDED",
+		["hud_assault_FG_cover36"] = "OH MY GOD WE'RE DOOOOOMED",
+		["hud_assault_FG_cover37"] = "VERY DANGEROUS", --who the fuck is gonna get this reference? i dont know but i love it
 		["hud_assault_faction_federales"] = "VS. LOS FEDERALES",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_sharedswat"] = "VS. SWAT TEAM & MURKY BATTALION",		
