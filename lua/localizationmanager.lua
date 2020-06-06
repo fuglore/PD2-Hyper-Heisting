@@ -164,12 +164,17 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		LocalizationManager:add_localized_strings({
 			--Anarchist--
-			["menu_deck15_1_desc_sc"] = "Instead of fully regenerating armor when out of combat, The Anarchist will periodically regenerate armor at a rate equivalent to ##8## armor per second. Heavier armor regenerates more armor per tick, but has a longer delay between ticks.\n\nNote: Skills and perks that increases the armor recovery rate are disabled when using this perk deck.",
-			["menu_deck15_3_desc_sc"] = "##50%## of your health is converted into ##50%## armor.",
-			["menu_deck15_5_desc_sc"] = "##50%## of your health is converted into ##75%## armor.",
-			["menu_deck15_7_desc_sc"] = "##50%## of your health is converted into ##100%## armor.",
-			["menu_deck15_9_desc_sc"] = "Dealing damage will grant you armor - This can only occur once every ##3## seconds. Heavier armors are granted more armor.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a PAYDAY is increased by ##10%.##",
-		
+			["menu_deck15_1_desc"] = "Instead of fully regenerating armor when out of combat, The Anarchist will periodically regenerate armor at a rate equivalent to ##8## armor per second. Heavier armor regenerates more armor per tick, but has a longer delay between ticks.\n\nNote: Skills and perks that increases the armor recovery rate are disabled when using this perk deck.",
+			["menu_deck15_3_desc"] = "##50%## of your health is converted into ##50%## armor.",
+			["menu_deck15_5_desc"] = "##50%## of your health is converted into ##75%## armor.",
+			["menu_deck15_7_desc"] = "##50%## of your health is converted into ##100%## armor.",
+			["menu_deck15_9_desc"] = "Dealing damage will grant you armor - This can only occur once every ##3## seconds. Heavier armors are granted more armor.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a PAYDAY is increased by ##10%.##",
+			
+			--Stoic--
+			["menu_deck19_1_desc"] = "Unlocks and equips the Stoic Hip Flask.\n\nDamage taken is now reduced by ##66%##. The remaining damage will be applied directly.\n\nThe ##66%## reduced damage will be applied over-time (##12## seconds) instead.\n\nYou can use the throwable key to activate the Stoic Hip Flask and immediately negate any pending damage. The flask has a ##15## second cooldown but time remaining will be lessened by 1 second per enemy killed.",
+
+			["menu_deck17_9"] = "Push it to The Limit",
+			
 			["menu_second_chances_beta_desc"] = "BASIC: ##$basic##\nYou gain the ability to disable ##1## camera from detecting you and your crew. Effect lasts for ##25## seconds.\n\nACE: ##$pro##\nYou lockpick ##75%## faster. You also gain the ability to lockpick safes.",
 			
 			["menu_perseverance_beta_desc"] = "BASIC: ##$basic##\nInstead of getting downed instantly, you gain the ability to keep on fighting for ##3## seconds with a ##60%## movement penalty before going down. \n\nACE: ##$pro##\nIncreases the duration of Swan Song to ##6## seconds.",
