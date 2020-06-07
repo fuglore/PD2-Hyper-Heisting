@@ -459,6 +459,11 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	local delay = 0.2
 	local player_importance_wgt = data.unit:in_slot(managers.slot:get_mask("enemies")) and {}
 
+	--stops cops from doing raycasts on lower reactions in loud
+	if player_importance_wgt and not managers.groupai:state():whisper_mode() then
+		min_reaction = AIAttentionObject.REACT_SCARED
+	end
+
 	local function _angle_chk(attention_pos, dis, strictness)
 		mvec3_dir(tmp_vec1, my_pos, attention_pos)
 
