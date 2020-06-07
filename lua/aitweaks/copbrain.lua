@@ -90,6 +90,10 @@ function CopBrain:is_converted_chk()
 	end
 end
 
+function CopBrain:clbk_pathing_results(search_id, path)
+    self:_add_pathing_result(search_id, path)
+end
+
 function CopBrain:search_for_path_to_unit(search_id, other_unit, access_neg)
 	local enemy_tracker = other_unit:movement():nav_tracker()
 	local pos_to = enemy_tracker:field_position()

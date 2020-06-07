@@ -173,7 +173,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			--Stoic--
 			["menu_deck19_1_desc"] = "Unlocks and equips the Stoic Hip Flask.\n\nDamage taken is now reduced by ##66%##. The remaining damage will be applied directly.\n\nThe ##66%## reduced damage will be applied over-time (##12## seconds) instead.\n\nYou can use the throwable key to activate the Stoic Hip Flask and immediately negate any pending damage. The flask has a ##15## second cooldown but time remaining will be lessened by 1 second per enemy killed.",
 
-			["menu_deck17_9"] = "Push it to The Limit",
+			["menu_deck17_9"] = "Push It To The Limit",
 			
 			["menu_second_chances_beta_desc"] = "BASIC: ##$basic##\nYou gain the ability to disable ##1## camera from detecting you and your crew. Effect lasts for ##25## seconds.\n\nACE: ##$pro##\nYou lockpick ##75%## faster. You also gain the ability to lockpick safes.",
 			
