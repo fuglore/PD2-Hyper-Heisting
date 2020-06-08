@@ -457,6 +457,7 @@
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_riflesmg_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_df" />	
+	<!-- <texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_nm" />	 -->
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_riflesmg_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_shotgun_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_shotgun_il" load="true" />	
@@ -895,6 +896,15 @@
 	<object path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45" />
 	<model path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45" />	
 	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"/>
+	
+	<!--Gensec Sniper-->
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper" load="true"/>
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper_husk" load="true"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper"/>
+	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper_contour"/>	
+	<object path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper" />
+	<model path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper" />	
+	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper"/>
 	
 	<!--Gensec Ninja Cap-->	
 	<unit path="units/pd2_mod_ftsu/characters/ene_acc_gensec_cap/ene_acc_gensec_cap" load="true"/>

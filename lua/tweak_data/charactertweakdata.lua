@@ -10005,6 +10005,7 @@ function CharacterTweakData:character_map()
 		list = {
 			"ene_gensec_fbigod_c45",
 			"ene_gensec_fbigod_m4",
+			"ene_gensec_sniper",
 			"ene_gensec_punk_mp5",
 			"ene_gensec_punk_moss",
 			"ene_gensec_punk_bronco"

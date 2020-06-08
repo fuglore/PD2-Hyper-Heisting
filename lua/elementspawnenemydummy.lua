@@ -157,8 +157,12 @@
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/payday2/characters/ene_sniper_1/ene_sniper_1"
 		}
 	local sniper_zulu_crackdown_XD = {
-			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper",		
-			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"			
+			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper",
+			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"
+		}
+	local sniper_cumsec = {
+			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper",
+			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper"
 		}
 	local sniper_fed = {
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
@@ -184,6 +188,32 @@
 				self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 			end
 		end
+
+		--SWART Sniper					
+		if difficulty_index <= 3 then
+			if sniper[self._values.enemy] then
+				self._values.enemy = sniper[self._values.enemy]
+			end
+			self._values.enemy = sniper[self._values.enemy] or self._values.enemy
+		--Eff Bee Eye Snipar			
+		elseif difficulty_index <= 5 then
+			if sniper_fed[self._values.enemy] then
+				self._values.enemy = sniper_fed[self._values.enemy]
+			end
+			self._values.enemy = sniper_fed[self._values.enemy] or self._values.enemy
+		--BONESAW IS READY, COME ON MY FACE BROTHER
+		elseif difficulty_index <= 7 then
+			if sniper_cumsec[self._values.enemy] then
+				self._values.enemy = sniper_cumsec[self._values.enemy]
+			end
+			self._values.enemy = sniper_cumsec[self._values.enemy] or self._values.enemy			
+		--Sulu Carkdownz? Replasement Snipar? Real?
+		elseif difficulty_index == 8 then
+			if sniper_zulu_crackdown_XD[self._values.enemy] then
+				self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
+			end
+			self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy							
+		end		
 		
 		--NYPD Cops Spawn Overwrite
 		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "dinner" then  
@@ -233,29 +263,6 @@
 				end
 				self._values.enemy = murkywetew[self._values.enemy] or self._values.enemy
 			end
-		end
-			
-		--always replace snipers
-		if job == "firestarter_2" and difficulty_index >= 4 then
-			 if sniper[self._values.enemy] then
-				self._values.enemy = sniper_fed[self._values.enemy]
-			 end
-			 self._values.enemy = sniper_fed[self._values.enemy] or self._values.enemy
-		elseif difficulty_index == 8 then
-			 if sniper[self._values.enemy] then
-				self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
-			 end
-			 self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy			 
-		elseif difficulty_index == 4 or difficulty_index == 5 then --FBI Snipers over regular
-			 if sniper_fed[self._values.enemy] then
-				self._values.enemy = sniper_fed[self._values.enemy]
-			 end
-			 self._values.enemy = sniper[self._values.enemy] or self._values.enemy
-		elseif difficulty_index == 2 or difficulty_index == 3 then --Regular Snipers over FBI
-			if sniper[self._values.enemy] then
-				self._values.enemy = sniper[self._values.enemy]
-			 end
-			 self._values.enemy = sniper[self._values.enemy] or self._values.enemy
 		end
 											
 		self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
