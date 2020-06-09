@@ -458,7 +458,6 @@
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_riflesmg_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_df" />	
-	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_nm" />
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_riflesmg_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_head_shotgun_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_shotgun_il" load="true" />	
@@ -471,8 +470,6 @@
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/helmets_atlas_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/swat_heavy_il" load="true" />
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_df" />
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_nm" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/danial_il"  load="true" />		
 	<texture path="units/pd2_dlc_gitgud/characters/ene_acc_shield_new_swat_hh/shield_il" />	
