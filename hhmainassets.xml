@@ -216,8 +216,8 @@
 	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"/>	
 
 	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_head_atlas" />
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_head_atlas_il" load="true"/>
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_body_il" load="true"/>
+	<!-- <texture path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_head_atlas_il" load="true"/> -->
+	<!-- <texture path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_body_il" load="true"/> -->
 	<unit_mat path="units/pd2_dlc_gitgud/characters/ene_acc_snipercap/ene_acc_snipercap" load="true"/>
 	
 	<!--ZEAL MP5 PUNK-->	
