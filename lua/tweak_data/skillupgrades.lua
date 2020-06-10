@@ -179,7 +179,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		
 		end
 		
-		
+	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then		
 		--fuck you you piece of shit i'm not doing all this shit to make you function properly you fuck i hate your guts i hate you i hate you FUCK YOU
 		
 		--[[ note if anyone wants to actually fix this: this is supposed to stack with the perk deck speed bonus which is why i did this.
@@ -256,5 +256,5 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 		self.weapon_movement_penalty.lmg = 0.8
 		self.weapon_movement_penalty.minigun = 0.6
-	
+	end
 end)
