@@ -7,4 +7,7 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 	if diff_index == 8 and level == "friend" then
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/shitfaceenvironment.custom_xml", "custom_xml", "environments/pd2_friend/pd2_friend", "environment")
 	end
+	if level == "skm_watchdogs_stage2" then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/purple_notrain.custom_xml", "custom_xml", "units/pd2_dlc_skm/environments/pd2_env_skm_watchdogs_2_exterior", "environment")
+	end	
 end)
