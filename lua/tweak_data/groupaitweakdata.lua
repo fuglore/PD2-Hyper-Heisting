@@ -476,6 +476,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 8,
 			taser = 3,
 			tank = 1,
+			sniper = 3,
 			spooc = 3
 		}
 	elseif difficulty_index <= 2 then
@@ -484,6 +485,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 0,
 			taser = 2,
 			tank = 0,
+			sniper = 3,			
 			spooc = 0
 		}
 	elseif difficulty_index == 3 then
@@ -492,6 +494,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 3,
 			taser = 2,
 			tank = 1,
+			sniper = 3,			
 			spooc = 0
 		}
 	elseif difficulty_index == 4 then
@@ -500,6 +503,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 4,
 			taser = 2,
 			tank = 1,
+			sniper = 3,			
 			spooc = 1
 		}
 	elseif difficulty_index == 5 then
@@ -507,6 +511,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			shield = 6,
 			medic = 4,
 			taser = 3,
+			sniper = 3,						
 			tank = 1,
 			spooc = 2
 		}
@@ -516,6 +521,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 6,
 			taser = 3,
 			tank = 1,
+			sniper = 3,						
 			spooc = 3
 		}
 	elseif difficulty_index == 7 then
@@ -523,6 +529,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			shield = 8,
 			medic = 6,
 			taser = 3,
+			sniper = 3,						
 			tank = 1,
 			spooc = 3
 		}
@@ -532,6 +539,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 8,
 			taser = 3,
 			tank = 1,
+			sniper = 3,						
 			spooc = 3
 		}
 	else
@@ -540,6 +548,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 8,
 			taser = 3,
 			tank = 1,
+			sniper = 3,						
 			spooc = 3
 		}
 	end
@@ -599,6 +608,112 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			access = access_type_all
 		}
 	end
+
+	if difficulty_index < 4 then
+		self.unit_categories.sniper_ass = { --babe it's 4 pm, time for your brain flattening!
+			special_type = "sniper",
+			unit_types = {
+				america = {
+					Idstring("units/payday2/characters/ene_sniper_1/ene_sniper_1")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
+					Idstring("units/payday2/characters/ene_sniper_1/ene_sniper_1")					
+				}
+			},
+			access = access_type_all
+		}
+	elseif difficulty_index == 5 then
+		self.unit_categories.sniper_ass = {
+			special_type = "sniper",
+			unit_types = {
+				america = {
+					Idstring("units/payday2/characters/ene_sniper_2/ene_sniper_2")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
+					Idstring("units/payday2/characters/ene_sniper_2/ene_sniper_2")					
+				}
+			},
+			access = access_type_all
+		}
+	elseif difficulty_index <= 7 then
+		self.unit_categories.sniper_ass = {
+			special_type = "sniper",
+			unit_types = {
+				america = {
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper")					
+				}
+			},
+			access = access_type_all
+		}
+	else 
+		self.unit_categories.sniper_ass = {
+			special_type = "sniper",
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper")					
+				}
+			},
+			access = access_type_all
+		}	
+	end	
 	
 		if difficulty_index <= 3 then
 			self.unit_categories.punk_group = {
@@ -2685,6 +2800,25 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"harass",
 			"groupany"
 		},
+		sniper_direct = {
+			"elite_ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"harass",
+			"groupany",
+			"sniper"
+		},
+		sniper_flank = {
+			"flank",
+			"elite_ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"harass",
+			"groupany",
+			"sniper"
+		},
 		swat_rifle_flank = {
 			"hunter",
 			"flank",
@@ -3391,7 +3525,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 						rank = 1,
 						unit = "punk_group",
 						tactics = self._tactics.swat_shotgun_rush_civil
-					}
+					},
+					{
+						freq = 1,
+						rank = 1,
+						amount_min = 0,												
+						amount_max = 1,						
+						unit = "sniper_ass",
+						tactics = self._tactics.sniper_direct
+					}								
 				}
 			}
 		else
@@ -3424,7 +3566,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 						rank = 1,
 						unit = "punk_group",
 						tactics = self._tactics.swat_shotgun_rush_civil
-					}
+					},
+					{
+						freq = 1,
+						rank = 1,
+						amount_min = 0,												
+						amount_max = 1,						
+						unit = "sniper_ass",
+						tactics = self._tactics.sniper_direct
+					}													
 				}
 			}
 		end
@@ -4026,6 +4176,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush --Basically your worst nightmare.
+				},
+				{
+					freq = 1,
+					rank = 1,
+					amount_min = 1,					
+					amount_max = 2,										
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
 				}
 			}
 		}
@@ -4051,7 +4209,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "CS_heavy_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				}
+				},
+				{
+					freq = 1,
+					rank = 1,
+					unit = "sniper_ass",
+					amount_min = 0,					
+					amount_max = 1,										
+					tactics = self._tactics.sniper_flank
+				}				
 			}
 		}
 	elseif difficulty_index == 3 then
@@ -4084,7 +4250,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 2,
 					unit = "medic_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				}
+				},
+				{
+					freq = 1,
+					rank = 1,
+					amount_min = 0,					
+					amount_max = 1,										
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}								
 			}
 		}
 	elseif difficulty_index == 4 then
@@ -4117,7 +4291,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 2,
 					unit = "medic_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				}
+				},
+				{
+					freq = 1,
+					rank = 1,
+					amount_min = 0,					
+					amount_max = 1,															
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}												
 			}
 		}
 	elseif difficulty_index == 5 then
@@ -4156,7 +4338,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 2,
 					unit = "medic_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				}
+				},
+				{
+					freq = 1,
+					rank = 1,
+					amount_min = 0,					
+					amount_max = 1,
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}																
 			}
 		}
 	elseif difficulty_index == 6 then
@@ -4195,7 +4385,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
 					tactics = self._tactics.swat_rifle_complex --oh no they're dumb
-				}
+				},
+				{
+					freq = 1,
+					rank = 1,
+					amount_min = 0,					
+					amount_max = 2,					
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}																				
 			}
 		}
 	elseif difficulty_index == 7 then
@@ -4234,7 +4432,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
 					tactics = self._tactics.swat_rifle_flank_complex --they're coordinated
-				}
+				},
+				{
+					freq = 1,
+					rank = 1,
+					amount_min = 1,					
+					amount_max = 3,										
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}																				
 			}
 		}
 	else
@@ -4281,7 +4487,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush --Basically your worst nightmare.
-				}
+				},
+				{
+					freq = 1,
+					rank = 1,
+					amount_min = 2,					
+					amount_max = 3,															
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}																				
 			}
 		}
 	end
@@ -6337,6 +6551,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.spoocaggressiveelite
 				},
 				{
+					freq = 0.75,
+					rank = 1,
+					unit = "sniper_ass",
+					amount_max = 1,
+					tactics = self._tactics.sniper_flank
+				},
+				{
 					freq = 1.25,
 					rank = 1,
 					unit = "spooc",
@@ -6357,7 +6578,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooc
-				}
+				},
+				{
+					freq = 0.75,
+					rank = 1,
+					amount_max = 1,																			
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}				
 			}
 		}
 	elseif difficulty_index == 5 then
@@ -6372,7 +6600,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooc
-				}
+				},
+				{
+					freq = 0.75,
+					rank = 1,
+					amount_max = 1,															
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}								
 			}
 		}
 	elseif difficulty_index == 6 then
@@ -6393,7 +6628,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spoocaggressive --these spoocs go hard instead of their normal approach, and use flashes, essentially randomly a pinch group
-				}
+				},
+				{
+					freq = 0.75,
+					rank = 1,
+					amount_max = 1,										
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}												
 			}
 		}
 	elseif difficulty_index == 7 then
@@ -6414,7 +6656,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spoocaggressive --these spoocs go hard instead of their normal approach, and use flashes, essentially randomly a pinch group
-				}
+				},
+				{
+					freq = 0.75,
+					rank = 1,
+					amount_max = 2,					
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}												
 			}
 		}
 	else
@@ -6441,7 +6690,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooccreep --pretty much jerks, they'll hide from sight once aimed at, will otherwise attempt to rush you
-				}
+				},
+				{
+					freq = 0.75,
+					rank = 1,
+					amount_max = 2,
+					unit = "sniper_ass",
+					tactics = self._tactics.sniper_flank
+				}												
 			}
 		}
 	end

@@ -653,7 +653,9 @@ function CopLogicTravel.queued_update(data)
     	return
     end
 	
-	CopLogicTravel.upd_advance(data)
+	if not data.tactics or not data.tactics.sniper or data.tactics.sniper and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 4000 and data.attention_obj.verified then
+		CopLogicTravel.upd_advance(data)
+	end
 
 	if data.internal_data ~= my_data then
 		return
