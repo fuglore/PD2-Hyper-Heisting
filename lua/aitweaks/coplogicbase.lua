@@ -1,3 +1,4 @@
+--cop logic based and redpilled
 local mvec3_x = mvector3.x
 local mvec3_y = mvector3.y
 local mvec3_z = mvector3.z
@@ -92,7 +93,19 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 			else
 				data.unit:sound():say("c01", true)
 			end
+
 		end
+
+		if data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].use_laser then
+			data.unit:inventory():equipped_unit():base():set_laser_enabled(true)
+
+			--turns on sniper lasers for assault snipers because overkill is fucking stupid
+			data.internal_data.weapon_laser_on = true
+
+			managers.enemy:_destroy_unit_gfx_lod_data(data.key)
+			managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.weapon_laser_on)
+		end
+
 	elseif old_att_obj and old_att_obj.criminal_record then
 		managers.groupai:state():on_enemy_disengaging(data.unit, old_att_obj.u_key)
 	end
@@ -1068,4 +1081,16 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 	end
 
 	managers.enemy:queue_task(id, func, data, exec_t, callback(CopLogicBase, CopLogicBase, "on_queued_task", internal_data), asap)
+end
+
+function CopLogicBase.death_clbk(data, damage_info)
+	if data.internal_data.weapon_laser_on then
+		if data.unit:inventory():equipped_unit() then
+			data.unit:inventory():equipped_unit():base():set_laser_enabled(false)
+		end
+
+		data.internal_data.weapon_laser_on = nil
+		managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.weapon_laser_off)
+
+	end
 end

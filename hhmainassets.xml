@@ -894,6 +894,13 @@
 	<object path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45" />
 	<model path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45" />	
 	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"/>
+
+	<!--GenSec (you capitalize the S motherfckers) guards-->
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_c45/ene_gensec_fbiguard_c45" load="true"/>
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_c45/ene_gensec_fbiguard_c45_husk" load="true"/>
+
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_m4/ene_gensec_fbiguard_m4" load="true"/>
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_m4/ene_gensec_fbiguard_m4_husk" load="true"/>
 	
 	<!--Gensec Sniper-->
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper" load="true"/>
