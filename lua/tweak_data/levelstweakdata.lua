@@ -7,7 +7,7 @@ LevelsTweakData.LevelType = {
 	Zombie = "zombie",
 	Murkywater = "murkywater",
 	Federales = "federales"
-}
+} 
 local old_level_init = LevelsTweakData.init
 function LevelsTweakData:init()
     old_level_init(self)
@@ -41,7 +41,6 @@ function LevelsTweakData:init()
 	self.bph.package = {"packages/murkyassets", "packages/dlcs/bph/job_bph"}	
 	self.vit.package = {"packages/murkyassets", "packages/dlcs/vit/job_vit"}
 	self.wwh.package = {"packages/murkyassets", "packages/lvl_wwh"}
-	self.arm_for.package = {"packages/murkyassets", "packages/narr_arm_for"}
 	self.mex.package = {"packages/murkyassets", "packages/job_mex"}
 	self.mex_cooking.package = {"packages/murkyassets", "packages/job_mex2"}
 	

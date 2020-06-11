@@ -36,6 +36,7 @@ local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 
 function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
+	local my_data = data.internal_data
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local old_att_obj = data.attention_obj
 	data.attention_obj = new_att_obj
@@ -96,11 +97,11 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 
 		end
 
-		if data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].use_laser then
+		if data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].use_laser and not data.weapon_laser_on then
 			data.unit:inventory():equipped_unit():base():set_laser_enabled(true)
 
 			--turns on sniper lasers for assault snipers because overkill is fucking stupid
-			data.internal_data.weapon_laser_on = true
+			data.weapon_laser_on = true
 
 			managers.enemy:_destroy_unit_gfx_lod_data(data.key)
 			managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.weapon_laser_on)
@@ -1084,12 +1085,12 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 end
 
 function CopLogicBase.death_clbk(data, damage_info)
-	if data.internal_data.weapon_laser_on then
+	if data.weapon_laser_on then
 		if data.unit:inventory():equipped_unit() then
 			data.unit:inventory():equipped_unit():base():set_laser_enabled(false)
 		end
 
-		data.internal_data.weapon_laser_on = nil
+		data.weapon_laser_on = nil
 		managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.weapon_laser_off)
 
 	end
