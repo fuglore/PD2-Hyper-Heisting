@@ -160,6 +160,15 @@ function GroupAIStateBase:chk_random_drama_comment()
 end
 
 function GroupAIStateBase:on_criminal_nav_seg_change(unit, nav_seg_id)
+	local assault_task = self._task_data.assault
+	if assault_task and assault_task.active then
+		local area = self:get_area_from_nav_seg_id(nav_seg_id)
+		if area then
+			self._current_target_area = area
+		else
+			-- log("jesuschrist")
+		end
+	end
 end
 
 function GroupAIStateBase:chk_taunt()
