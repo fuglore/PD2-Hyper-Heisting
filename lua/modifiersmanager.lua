@@ -4,7 +4,7 @@ local difficulty = Global.game_settings and Global.game_settings.difficulty or "
 local diff_index = tweak_data:difficulty_to_index(difficulty)
 local replacement_table = {}
 
-if level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "dinner" then
+if level == "spa" or level == "glace" or level == "brb" or level == "red2" or level == "run" or level == "flat" or level == "flat_hh" or level == "dinner" then
 	replacement_table = {
 		["units/payday2/characters/ene_cop_3/ene_cop_3"] = "units/pd2_mod_beatpricks/characters/ene_cop_3/ene_cop_3",
 		["units/payday2/characters/ene_cop_2/ene_cop_2"] = "units/pd2_mod_beatpricks/characters/ene_cop_2/ene_cop_2",
