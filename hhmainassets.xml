@@ -189,13 +189,8 @@
 	<unit path="units/payday2/characters/ene_city_shield/ene_city_shield_husk" force="true"/>
 
 	<!--gensec shield accessory-->	
-	<unit path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city" load="true"/>
-	<material_config path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city"/>
-	<object path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city" />
-	<model path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city" />
-	<cooked_physics path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city"/>
+	<unit_mat path="units/payday2/characters/ene_acc_shield_city/ene_acc_shield_city" load="true"/>
 	<texture path="units/payday2/characters/ene_acc_shield_city/cityshield_df" />	
-	<texture path="units/payday2/characters/ene_acc_shield_city/cityshield_nm" />	
 	
 	<!--Base Game Asset Replacements END-->	
 	
