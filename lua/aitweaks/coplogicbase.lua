@@ -96,6 +96,89 @@ function CopLogicBase.should_get_att_obj_position_from_alert(data, alert_data)
 	return true
 end
 
+function CopLogicBase._upd_suspicion(data, my_data, attention_obj)
+	local function _exit_func()
+		attention_obj.unit:movement():on_uncovered(data.unit)
+
+		local reaction, state_name = nil
+
+		if attention_obj.dis < 2000 and attention_obj.verified and not data.char_tweak.no_arrest and not attention_obj.forced then
+			reaction = AIAttentionObject.REACT_ARREST
+			state_name = "arrest"
+		else
+			reaction = AIAttentionObject.REACT_COMBAT
+			state_name = "attack"
+		end
+
+		attention_obj.reaction = reaction
+		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, attention_obj)
+
+		if allow_trans then
+			if obj_failed then
+				data.objective_failed_clbk(data.unit, data.objective)
+
+				if my_data ~= data.internal_data then
+					return true
+				end
+			end
+
+			CopLogicBase._exit(data.unit, state_name)
+
+			return true
+		end
+	end
+
+	local dis = attention_obj.dis
+	local susp_settings = attention_obj.unit:base():suspicion_settings()
+
+	if attention_obj.settings.uncover_range and dis < math.min(attention_obj.settings.max_range, attention_obj.settings.uncover_range) * susp_settings.range_mul then
+		attention_obj.unit:movement():on_suspicion(data.unit, true)
+		managers.groupai:state():criminal_spotted(attention_obj.unit)
+
+		return _exit_func()
+	elseif attention_obj.verified and attention_obj.settings.suspicion_range and dis < math.min(attention_obj.settings.max_range, attention_obj.settings.suspicion_range) * susp_settings.range_mul then
+		if attention_obj.last_suspicion_t then
+			local dt = data.t - attention_obj.last_suspicion_t
+			local range_max = (attention_obj.settings.suspicion_range - (attention_obj.settings.uncover_range or 0)) * susp_settings.range_mul
+			local range_min = (attention_obj.settings.uncover_range or 0) * susp_settings.range_mul
+			local mul = 1 - (dis - range_min) / range_max
+			local progress = dt * mul * susp_settings.buildup_mul / attention_obj.settings.suspicion_duration
+			attention_obj.uncover_progress = (attention_obj.uncover_progress or 0) + progress
+
+			if attention_obj.uncover_progress < 1 then
+				attention_obj.unit:movement():on_suspicion(data.unit, attention_obj.uncover_progress)
+				managers.groupai:state():on_criminal_suspicion_progress(attention_obj.unit, data.unit, attention_obj.uncover_progress)
+			else
+				attention_obj.unit:movement():on_suspicion(data.unit, true)
+				managers.groupai:state():criminal_spotted(attention_obj.unit)
+
+				return _exit_func()
+			end
+		else
+			attention_obj.uncover_progress = 0
+		end
+
+		attention_obj.last_suspicion_t = data.t
+	elseif attention_obj.uncover_progress then
+		if attention_obj.last_suspicion_t then
+			local dt = data.t - attention_obj.last_suspicion_t
+			attention_obj.uncover_progress = attention_obj.uncover_progress - dt
+
+			if attention_obj.uncover_progress <= 0 then
+				attention_obj.uncover_progress = nil
+				attention_obj.last_suspicion_t = nil
+
+				attention_obj.unit:movement():on_suspicion(data.unit, false)
+			else
+				attention_obj.unit:movement():on_suspicion(data.unit, attention_obj.uncover_progress)
+			end
+		else
+			attention_obj.last_suspicion_t = data.t
+		end
+	end
+end
+		
+
 function CopLogicBase._chk_nearly_visible_chk_needed(data, attention_info, u_key)
 	return not attention_info.criminal_record or attention_info.is_human_player
 end
