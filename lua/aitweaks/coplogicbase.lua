@@ -96,7 +96,7 @@ function CopLogicBase.should_get_att_obj_position_from_alert(data, alert_data)
 	return true
 end
 
-function CopLogicBase._upd_suspicion(data, my_data, attention_obj)
+--[[function CopLogicBase._upd_suspicion(data, my_data, attention_obj)
 	local function _exit_func()
 		attention_obj.unit:movement():on_uncovered(data.unit)
 
@@ -176,7 +176,7 @@ function CopLogicBase._upd_suspicion(data, my_data, attention_obj)
 			attention_obj.last_suspicion_t = data.t
 		end
 	end
-end
+end--]]
 		
 
 function CopLogicBase._chk_nearly_visible_chk_needed(data, attention_info, u_key)
