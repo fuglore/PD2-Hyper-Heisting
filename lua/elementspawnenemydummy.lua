@@ -216,7 +216,7 @@
 		end		
 		
 		--NYPD Cops Spawn Overwrite
-		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "dinner" then  
+		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "flat_hh" or job == "dinner" then  
 			 if nypd_beatpricks[self._values.enemy] then
 				self._values.enemy = nypd_beatpricks[self._values.enemy]
 			 end
