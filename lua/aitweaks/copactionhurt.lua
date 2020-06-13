@@ -969,6 +969,16 @@ function CopActionHurt:on_exit()
 
 		self._weapon_unit:base():stop_autofire()
 	end
+	
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	
+	--punk rage buff will only apply on Death Sentence
+	if diff_index == 8 or Global.game_settings.use_intense_AI then
+		if self._unit:base()._tweak_table == "cop_moss" then
+			self._unit:base():add_buff("base_damage", 2)
+			self._unit:character_damage():activate_punk_visual_effect()
+		end
+	end
 
 	--remove tase effect from tased enemies whenever they exit a hurt (like death if killed while being tased)
 	if not managers.groupai:state():is_unit_team_AI(self._unit) then

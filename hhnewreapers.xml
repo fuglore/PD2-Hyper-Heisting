@@ -11,6 +11,9 @@
 	<material_config path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>
 	<cooked_physics path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>
 	
+	<!--Akan Shotgun Punk-->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870" force="true" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870_husk" force="true" load="true"/>	
 
 	<!--Light FBI Akan SMG-->
 	<unit path="units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg" load="true"/>

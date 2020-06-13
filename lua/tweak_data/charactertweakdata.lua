@@ -1350,6 +1350,82 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	
+	presets.hurt_severities.hordepunk = {
+		bullet = {
+			health_reference = 1,
+			zones = {
+				{
+					heavy = 0.2,
+					moderate = 0.8
+				}
+			}
+		},
+		explosion = {
+			health_reference = "current",
+			zones = {
+				{
+					moderate = 0.6,
+					heavy = 0.4,
+					health_limit = 0.2
+				},
+				{
+					explode = 0.4,
+					heavy = 0.6,
+					health_limit = 0.5
+				},
+				{
+					explode = 0.8,
+					heavy = 0.2
+				}
+			}
+		},
+		melee = {
+			health_reference = "current",
+			zones = {
+				{
+					heavy = 0.3,
+					health_limit = 0.05,
+					moderate = 0.7,
+					none = 0
+				},
+				{
+					heavy = 0.4,
+					light = 0,
+					explode = 0,
+					moderate = 0.6,
+					health_limit = 0.2
+				},
+				{
+					heavy = 0.2,
+					explode = 0.4,
+					moderate = 0.4,
+					health_limit = 0.3
+				},
+				{
+					explode = 0.8,
+					heavy = 0.2
+				}
+			}
+		},
+		fire = {
+			health_reference = "current",
+			zones = {
+				{
+					fire = 1
+				}
+			}
+		},
+		poison = {
+			health_reference = "current",
+			zones = {
+				{
+					poison = 1,
+					none = 0
+				}
+			}
+		}
+	}
+	
 	presets.hurt_severities.heavyhordemook = {
 		bullet = {
 			health_reference = "current",
@@ -8094,7 +8170,6 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.chatter = presets.enemy_chatter.swat
 	self.fbi.steal_loot = true
 	self.fbi_pager = deep_clone(self.fbi)
-	self.fbi_pager.access = "security"	
 	self.fbi_pager.has_alarm_pager = true
 	self.fbi_xc45 = deep_clone(self.fbi)
 	self.fbi_xc45.damage.hurt_severity = presets.hurt_severities.no_hurts
@@ -8383,14 +8458,18 @@ Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", 
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
-	self.cop.HEALTH_INIT = 6
-	self.cop.headshot_dmg_mul = 12
+	self.cop.HEALTH_INIT = 15
+	self.cop.headshot_dmg_mul = 16
+	self.cop.damage.hurt_severity = presets.hurt_severities.hordepunk
+	self.cop_moss = deep_clone(self.cop)
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
 		if faction == "america" then
 			self.cop.melee_weapon = "baton"
+			self.cop_moss.melee_weapon = "baton"
 		else
 			self.cop.melee_weapon = nil
+			self.cop_moss.melee_weapon = nil
 		end
 	end
 end)
@@ -8569,8 +8648,7 @@ function CharacterTweakData:_set_normal()
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency	
 	--Cop health tweak
-	self.cop.HEALTH_INIT = 8 --Their health is sorta pathetic otherwise.
-	self.cop_female.HEALTH_INIT = 8
+	self.cop_female.HEALTH_INIT = 15
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
 		0.35,
 		0.35
@@ -8726,8 +8804,7 @@ function CharacterTweakData:_set_hard()
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency
 	--Cop health tweak
-	self.cop.HEALTH_INIT = 8 --Their health is sorta pathetic otherwise.
-	self.cop_female.HEALTH_INIT = 8
+	self.cop_female.HEALTH_INIT = 15
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
 		0.35,
 		0.35
@@ -8911,8 +8988,7 @@ function CharacterTweakData:_set_overkill()
 	self.taser.move_speed = self.presets.move_speed.civil_consistency
 	self.medic.move_speed = self.presets.move_speed.civil_consistency
 	--cop health
-	self.cop.HEALTH_INIT = 10
-	self.cop_female.HEALTH_INIT = 10
+	self.cop_female.HEALTH_INIT = 15
 	self.flashbang_multiplier = 1.75
 	self.concussion_multiplier = 1
 end

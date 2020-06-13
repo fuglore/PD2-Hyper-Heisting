@@ -11,6 +11,23 @@ function CopDamage:is_immune_to_shield_knockback()
 	return false
 end
 
+function CopDamage:activate_punk_visual_effect()
+	self._punk_effect_table = {
+		effect = Idstring("effects/pd2_mod_hh/particles/character/punk_effect"),
+		parent = self._spine2_obj
+	}
+	
+	self._punk_effect = World:effect_manager():spawn(self._punk_effect_table)
+	
+end
+
+function CopDamage:kill_punk_visual_effect()
+	if self._punk_effect then
+		World:effect_manager():fade_kill(self._punk_effect)
+		self._punk_effect = nil
+	end
+end
+
 function CopDamage:die(attack_data)
 	if self._immortal then
 		debug_pause("Immortal character died!")
@@ -21,6 +38,9 @@ function CopDamage:die(attack_data)
 	self:_check_friend_4(attack_data)
 	CopDamage.MAD_3_ACHIEVEMENT(attack_data)
 	self:_remove_debug_gui()
+	if self._punk_effect then
+		self:kill_punk_visual_effect()
+	end
 	self._unit:base():set_slot(self._unit, 17)
 
 	if alive(managers.interaction:active_unit()) then

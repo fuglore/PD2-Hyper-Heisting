@@ -69,6 +69,7 @@ function CopMovement:init(unit)
 	CopMovement._action_variants.fbi_pager = security_variant
 	CopMovement._action_variants.gangster_ninja = security_variant
 	CopMovement._action_variants.armored_swat = security_variant
+	CopMovement._action_variants.cop_moss = security_variant
 	CopMovement._action_variants.akuma = clone(security_variant)
 	CopMovement._action_variants.akuma.hurt = ShieldActionHurt
 	CopMovement._action_variants.akuma.walk = ShieldCopActionWalk
