@@ -8094,6 +8094,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.chatter = presets.enemy_chatter.swat
 	self.fbi.steal_loot = true
 	self.fbi_pager = deep_clone(self.fbi)
+	self.fbi_pager.access = "security"	
 	self.fbi_pager.has_alarm_pager = true
 	self.fbi_xc45 = deep_clone(self.fbi)
 	self.fbi_xc45.damage.hurt_severity = presets.hurt_severities.no_hurts
