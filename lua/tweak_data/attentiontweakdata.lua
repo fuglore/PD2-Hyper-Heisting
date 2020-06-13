@@ -106,7 +106,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	--Fixes for AI reactions
 	self.settings.prop_civ_ene_ntl = {
 		uncover_range = 500,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		verification_interval = 0.4,
 		release_delay = 1,
@@ -114,7 +114,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.prop_ene_ntl_edaycrate = {
 		uncover_range = 300,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		max_range = 700,
 		verification_interval = 0.4,
@@ -123,7 +123,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.prop_ene_ntl = {
 		uncover_range = 500,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		verification_interval = 0.4,
 		release_delay = 1,
@@ -131,7 +131,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.broken_cam_ene_ntl = {
 		uncover_range = 100,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		max_range = 1200,
 		suspicion_range = 1000,
@@ -141,7 +141,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.no_staff_ene_ntl = {
 		uncover_range = 100,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		max_range = 1200,
 		suspicion_range = 1000,
@@ -151,7 +151,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.timelock_ene_ntl = {
 		uncover_range = 100,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		max_range = 1200,
 		suspicion_range = 1000,
@@ -161,7 +161,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.open_security_gate_ene_ntl = {
 		uncover_range = 100,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		max_range = 1200,
 		suspicion_range = 1000,
@@ -171,7 +171,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.open_vault_ene_ntl = {
 		uncover_range = 100,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		max_range = 600,
 		suspicion_range = 500,
@@ -181,7 +181,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.open_elevator_ene_ntl = {
 		uncover_range = 800,
-		reaction = "REACT_SUSPICIOUS",
+		reaction = "REACT_SCARED",
 		notice_requires_FOV = true,
 		max_range = 1500,
 		suspicion_range = 1200,
