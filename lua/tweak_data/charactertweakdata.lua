@@ -8647,6 +8647,8 @@ function CharacterTweakData:_set_normal()
 	self.fbi.move_speed = self.presets.move_speed.civil_consistency
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency	
+	self.fbi_pager.weapon = self.presets.weapon.complex
+	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency	
 	--Cop health tweak
 	self.cop_female.HEALTH_INIT = 15
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
@@ -8803,6 +8805,8 @@ function CharacterTweakData:_set_hard()
 	self.fbi.move_speed = self.presets.move_speed.civil_consistency
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency
+	self.fbi_pager.weapon = self.presets.weapon.complex
+	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency
 	--Cop health tweak
 	self.cop_female.HEALTH_INIT = 15
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
@@ -8971,6 +8975,9 @@ function CharacterTweakData:_set_overkill()
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency	
+	self.fbi_pager.weapon = self.presets.weapon.complex
+	self.fbi_pager.dodge = self.presets.dodge.heavy_complex
+	self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency	
 	self.fbi_xc45.weapon = self.presets.weapon.complex
 	self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
@@ -9153,6 +9160,9 @@ function CharacterTweakData:_set_overkill_145()
 		self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
 		self.gangster_ninja.weapon = self.presets.weapon.fbigod
 		self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
+		self.fbi_pager.dodge = self.presets.dodge.ninja_complex
+		self.fbi_pager.weapon = self.presets.weapon.fbigod
+		self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 		self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 		self.fbi_xc45.weapon = self.presets.weapon.fbigod
 		self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9242,6 +9252,9 @@ function CharacterTweakData:_set_overkill_145()
 		self.gangster_ninja.weapon = self.presets.weapon.complex
 		self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
 		self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency
+		self.fbi_pager.weapon = self.presets.weapon.complex
+		self.fbi_pager.dodge = self.presets.dodge.heavy_complex
+		self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency
 		self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
 		self.fbi_xc45.weapon = self.presets.weapon.complex
 		self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
@@ -9311,6 +9324,9 @@ function CharacterTweakData:_set_easy_wish()
 	self.gangster_ninja.weapon = self.presets.weapon.anarchy
 	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_pager.weapon = self.presets.weapon.anarchy
+	self.fbi_pager.dodge = self.presets.dodge.athletic_complex
+	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 	self.fbi_xc45.weapon = self.presets.weapon.anarchy
 	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9509,6 +9525,9 @@ function CharacterTweakData:_set_overkill_290()
 	self.gangster_ninja.weapon = self.presets.weapon.anarchy
 	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_pager.weapon = self.presets.weapon.anarchy
+	self.fbi_pager.dodge = self.presets.dodge.athletic_complex
+	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 	self.fbi_xc45.weapon = self.presets.weapon.anarchy
 	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9704,6 +9723,9 @@ function CharacterTweakData:_set_sm_wish()
 	self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
 	self.gangster_ninja.weapon = self.presets.weapon.fbigod
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_pager.dodge = self.presets.dodge.ninja_complex
+	self.fbi_pager.weapon = self.presets.weapon.fbigod
+	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 	self.fbi_xc45.weapon = self.presets.weapon.fbigod
 	self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
@@ -10166,6 +10188,7 @@ end
 function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.fbi.HEALTH_INIT = self.fbi.HEALTH_INIT * hp_mul
 	self.gangster_ninja.HEALTH_INIT = self.gangster_ninja.HEALTH_INIT * hp_mul
+	self.fbi_pager.HEALTH_INIT = self.fbi_pager.HEALTH_INIT * hp_mul
 	self.swat.HEALTH_INIT = self.swat.HEALTH_INIT * hp_mul
 	self.heavy_swat.HEALTH_INIT = self.heavy_swat.HEALTH_INIT * hp_mul
 	self.fbi_heavy_swat.HEALTH_INIT = self.fbi_heavy_swat.HEALTH_INIT * hp_mul
@@ -10209,6 +10232,10 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	
 	if self.gangster_ninja.headshot_dmg_mul then
 		self.gangster_ninja.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
+	end
+	
+	if self.fbi_pager.headshot_dmg_mul then
+		self.fbi_pager.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
 	end
 
 	if self.swat.headshot_dmg_mul then
