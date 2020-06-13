@@ -15,6 +15,7 @@
 
 	<mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, 
 	and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
+	<mission path="levels/narratives/classics/red2/world/world" force="true" unload="true"/> <!--Makes FWB Vault Guards Gensex ninjas, mp5=m4, c45=c45-->
 	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>	
 	<continent path="levels/narratives/elephant/born/world/world" force="true" unload="true"/><!--fixes cars clipping into ground-->		
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
