@@ -4,7 +4,7 @@
 	<object file="units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870" />
 
 	<dependencies>
-		
+		<depends_on unit="units/pd2_dlc_drm/characters/ene_acc_medic_heavy/ene_acc_medic_heavy" />					
 
 	</dependencies>
 
@@ -18,8 +18,11 @@
 		<extension name="inventory" class="HuskCopInventory" />
 		<extension name="brain" class="HuskCopBrain" />
 		<extension name="anim_data" class="PlayerAnimationData" />
-		<extension name="character_damage" class="HuskMedicDamage" >
+		<extension name="character_damage" class="MedicDamage">
 			<var name="_head_body_name" value="head" />
+			<var name="_head_gear_object" value="g_helmet_lod1" />
+			<var name="_head_gear" value="units/pd2_dlc_drm/characters/ene_acc_medic_heavy/ene_acc_medic_heavy" />
+			<var name="_head_gear_decal_mesh" value="dm_helmet" />
 		</extension>
 		<extension name="movement" class="HuskCopMovement" >
 			<var name="_footwear" value="hardsole" />

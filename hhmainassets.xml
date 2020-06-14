@@ -597,6 +597,9 @@
 	<model path="units/pd2_dlc_drm/characters/ene_taser_heavy/ene_taser_heavy" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_taser_heavy/ene_taser_heavy"/>
 	
+	<unit_mat path="units/pd2_dlc_drm/characters/ene_acc_taser_heavy/ene_acc_taser_heavy" load="true"/>	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_taser_heavy/ene_acc_taser_heavy"/>
+	
 	<texture path="units/pd2_dlc_drm/characters/ene_taser_heavy/heavy_taser_df"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_taser_heavy/heavy_taser_head_df"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_taser_heavy/heavy_taser_head_nm"/>
@@ -609,6 +612,9 @@
 	<object path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4" />
 	<model path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4"/>
+	
+	<unit_mat path="units/pd2_dlc_drm/characters/ene_acc_medic_heavy/ene_acc_medic_heavy" load="true"/>	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_medic_heavy/ene_acc_medic_heavy"/>
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_df"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_nm"/>
