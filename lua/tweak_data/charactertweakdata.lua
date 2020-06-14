@@ -8171,6 +8171,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.steal_loot = true
 	self.fbi_pager = deep_clone(self.fbi)
 	self.fbi_pager.has_alarm_pager = true
+	table.insert(self._enemy_list, "fbi_pager")
 	self.fbi_xc45 = deep_clone(self.fbi)
 	self.fbi_xc45.damage.hurt_severity = presets.hurt_severities.no_hurts
 	self.fbi_xc45.allowed_stances = {
@@ -8178,9 +8179,13 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	}
 	self.fbi_xc45.use_animation_on_fire_damage = false
 	self.fbi_xc45.melee_weapon = nil
+	table.insert(self._enemy_list, "fbi_xc45")	
 	self.gangster_ninja = deep_clone(self.fbi)	
 	self.gangster_ninja.HEALTH_INIT = 20 --slightly more health. probably not necessary but screw you.
 	self.gangster_ninja.tags = nil
+	self.gangster_ninja.no_retreat = true
+	self.gangster_ninja.surrender = nil	
+	self.gangster_ninja.access = "gangster"	
 	local job = Global.level_data and Global.level_data.level_id
 	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
 		self.gangster_ninja.speech_prefix_p1 = "rt"
@@ -8198,11 +8203,9 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 		self.gangster_ninja.speech_prefix_p1 = "lt"
 		self.gangster_ninja.speech_prefix_p2 = nil
 		self.gangster_ninja.speech_prefix_count = 2
-	end	
-	self.gangster_ninja.no_retreat = true
-	self.gangster_ninja.surrender = nil	
-	self.gangster_ninja.access = "gangster"	
+	end		
 	self.gangster_ninja.challenges = {type = "gangster"}
+	table.insert(self._enemy_list, "gangster_ninja")		
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(self, presets) --TODO: Nothing right now.
@@ -10282,7 +10285,7 @@ end
 function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.fbi.HEALTH_INIT = self.fbi.HEALTH_INIT * hp_mul
 	self.gangster_ninja.HEALTH_INIT = self.gangster_ninja.HEALTH_INIT * hp_mul
-	self.fbi_pager.HEALTH_INIT = self.gangster_ninja.HEALTH_INIT * hp_mul
+	self.fbi_pager.HEALTH_INIT = self.fbi_pager.HEALTH_INIT * hp_mul
 	self.swat.HEALTH_INIT = self.swat.HEALTH_INIT * hp_mul
 	self.heavy_swat.HEALTH_INIT = self.heavy_swat.HEALTH_INIT * hp_mul
 	self.fbi_heavy_swat.HEALTH_INIT = self.fbi_heavy_swat.HEALTH_INIT * hp_mul
