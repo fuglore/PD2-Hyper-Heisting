@@ -141,6 +141,10 @@
 	})
 end)
 
+Hooks:Add("LocalizationManagerPostInit", "HH_PoggersMoment", function(loc)
+	loc:load_localization_file(ModPath .. "loc/fuck.txt")
+end)
+
  if _G.BB or FullSpeedSwarm or Iter or _G.SC or _G.deathvox then
 	Hooks:Add("LocalizationManagerPostInit", "HH_Incompatible", function(loc)
 	LocalizationManager:add_localized_strings({	

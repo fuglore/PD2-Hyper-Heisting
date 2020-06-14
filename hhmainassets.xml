@@ -668,6 +668,17 @@
 	<object path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light" />
 	<model path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_zeal_armored_light/ene_zeal_armored_light"/>
+	
+	<!-- armord snipars-->
+	<unit path="units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper" load="true"/>
+	<unit path="units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper_contour"/>	
+	<object path="units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper" />
+	<model path="units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper" />	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper"/>
+	
+	<texture path="units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper_df" />																																										<!--Lol Trole-->
 
 	<!--sniperdozer-->
 	<unit path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" load="true"/>

@@ -8356,8 +8356,18 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.sniper.chatter = presets.enemy_chatter.no_chatter
 	self.sniper.steal_loot = nil
 	self.sniper.rescue_hostages = false
-
+	self.sniper.die_sound_event = "mga_death_scream"
+	self.sniper.spawn_sound_event = "mga_deploy_snipers"			
 	table.insert(self._enemy_list, "sniper")
+	
+	self.armored_sniper = deep_clone(self.sniper)
+	self.armored_sniper.HEALTH_INIT = 6
+	self.armored_sniper.headshot_dmg_mul = 6
+	self.armored_sniper.dodge = presets.dodge.heavy
+	self.armored_sniper.move_speed = presets.move_speed.simple_consistency
+	self.armored_sniper.damage.hurt_severity = presets.hurt_severities.heavyhordemook
+	
+	table.insert(self._enemy_list, "armored_sniper")
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_gangster", "hhpost_gangster", function(self, presets)
@@ -8642,6 +8652,7 @@ function CharacterTweakData:_set_normal()
 	
 	--Sniper tweak
 	self.sniper.weapon.is_rifle.focus_delay = 6
+	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
 	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.move_speed = self.presets.move_speed.civil_consistency
@@ -8800,13 +8811,14 @@ function CharacterTweakData:_set_hard()
 	
 	--Sniper tweak
 	self.sniper.weapon.is_rifle.focus_delay = 6
+	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
 	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.move_speed = self.presets.move_speed.civil_consistency
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency
 	self.fbi_pager.weapon = self.presets.weapon.complex
-	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency
+	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency		
 	--Cop health tweak
 	self.cop_female.HEALTH_INIT = 15
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
@@ -8983,6 +8995,7 @@ function CharacterTweakData:_set_overkill()
 	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
 	--sniper setup.
 	self.sniper.weapon.is_rifle.focus_delay = 2
+	self.armored_sniper.weapon.is_rifle.focus_delay = 2
 	--Shield speed setup
 	self.shield.move_speed = self.presets.move_speed.shield_civ
 	--Movespeed setups.
@@ -9225,11 +9238,70 @@ function CharacterTweakData:_set_overkill_145()
 				}
 			}
 		}
+		self.armored_sniper.weapon.is_rifle.focus_delay = 1.5
+		self.armored_sniper.weapon.is_rifle.aim_delay = {0, 0}
+		self.armored_sniper.weapon.is_rifle.FALLOFF = {
+			{
+				dmg_mul = 3.75,
+				r = 700,
+				acc = {
+					0,
+					1
+				},
+				recoil = {
+					0.64,
+					0.64
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3.75,
+				r = 3500,
+				acc = {
+					0,
+					0.75
+				},
+				recoil = {
+					0.64,
+					0.64
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3.75,
+				r = 6000,
+				acc = {
+					0,
+					0.5
+				},
+				recoil = {
+					0.64,
+					0.64
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			}
+		}		
 		--Movespeed setups.
 		self.swat.move_speed = self.presets.move_speed.anarchy_consistency
 		self.city_swat.move_speed = self.presets.move_speed.anarchy_consistency
 		self.fbi_swat.move_speed = self.presets.move_speed.anarchy_consistency
 		self.heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
+		self.armored_sniper.move_speed = self.presets.move_speed.anarchy_consistency
 		self.fbi_heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
 		--special movespeed
 		self.taser.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9241,6 +9313,7 @@ function CharacterTweakData:_set_overkill_145()
 		self.city_swat.dodge = self.presets.dodge.athletic_complex
 		self.heavy_swat.dodge = self.presets.dodge.heavy_complex
 		self.fbi_heavy_swat.dodge = self.presets.dodge.heavy_complex
+		self.armored_sniper.dodge = self.presets.dodge.heavy_complex
 		self.spooc.dodge = self.presets.dodge.ninja_complex
 		self.flashbang_multiplier = 2
 		self.concussion_multiplier = 1
@@ -9260,6 +9333,7 @@ function CharacterTweakData:_set_overkill_145()
 		self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
 		--sniper setup.
 		self.sniper.weapon.is_rifle.focus_delay = 2
+		self.armored_sniper.weapon.is_rifle.focus_delay = 2
 		--Shield speed setup
 		self.shield.move_speed = self.presets.move_speed.shield_civ
 		--Movespeed setups.
@@ -9268,6 +9342,7 @@ function CharacterTweakData:_set_overkill_145()
 		self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
 		self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
 		self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
+		self.armored_sniper.move_speed = self.presets.move_speed.civil_consistency		
 		--special movespeed
 		self.taser.move_speed = self.presets.move_speed.civil_consistency
 		self.medic.move_speed = self.presets.move_speed.civil_consistency
@@ -10040,6 +10115,7 @@ function CharacterTweakData:character_map()
 			"ene_murky_heavy_ump",
 			"ene_fbi_heavy_ump",
 			"ene_bulldozer_sniper",
+			"ene_fbi_heavy_sniper",
 			"ene_spook_heavy",
 			"ene_taser_heavy",
 			"ene_shield_heavy",
@@ -10188,11 +10264,12 @@ end
 function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.fbi.HEALTH_INIT = self.fbi.HEALTH_INIT * hp_mul
 	self.gangster_ninja.HEALTH_INIT = self.gangster_ninja.HEALTH_INIT * hp_mul
-	self.fbi_pager.HEALTH_INIT = self.fbi_pager.HEALTH_INIT * hp_mul
+	self.fbi_pager.HEALTH_INIT = self.gangster_ninja.HEALTH_INIT * hp_mul
 	self.swat.HEALTH_INIT = self.swat.HEALTH_INIT * hp_mul
 	self.heavy_swat.HEALTH_INIT = self.heavy_swat.HEALTH_INIT * hp_mul
 	self.fbi_heavy_swat.HEALTH_INIT = self.fbi_heavy_swat.HEALTH_INIT * hp_mul
 	self.sniper.HEALTH_INIT = self.sniper.HEALTH_INIT * hp_mul
+	self.armored_sniper.HEALTH_INIT = self.armored_sniper.HEALTH_INIT * hp_mul
 	self.gangster.HEALTH_INIT = self.gangster.HEALTH_INIT * hp_mul
 	self.biker.HEALTH_INIT = self.biker.HEALTH_INIT * hp_mul
 	self.tank.HEALTH_INIT = self.tank.HEALTH_INIT * hp_mul
@@ -10230,12 +10307,12 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 		self.fbi.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
 	end
 	
-	if self.gangster_ninja.headshot_dmg_mul then
-		self.gangster_ninja.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
-	end
-	
 	if self.fbi_pager.headshot_dmg_mul then
 		self.fbi_pager.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
+	end
+	
+	if self.gangster_ninja.headshot_dmg_mul then
+		self.gangster_ninja.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
 	end
 
 	if self.swat.headshot_dmg_mul then
@@ -10252,6 +10329,10 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 
 	if self.sniper.headshot_dmg_mul then
 		self.sniper.headshot_dmg_mul = self.sniper.headshot_dmg_mul * hs_mul
+	end
+	
+	if self.armored_sniper.headshot_dmg_mul then
+		self.armored_sniper.headshot_dmg_mul = self.armored_sniper.headshot_dmg_mul * hs_mul
 	end
 
 	if self.gangster.headshot_dmg_mul then

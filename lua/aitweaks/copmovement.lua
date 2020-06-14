@@ -67,6 +67,7 @@ function CopMovement:init(unit)
 	CopMovement._action_variants.spooc_heavy = security_variant
 	CopMovement._action_variants.fbi_xc45 = security_variant
 	CopMovement._action_variants.fbi_pager = security_variant
+	CopMovement._action_variants.armored_sniper = security_variant
 	CopMovement._action_variants.gangster_ninja = security_variant
 	CopMovement._action_variants.armored_swat = security_variant
 	CopMovement._action_variants.cop_moss = security_variant

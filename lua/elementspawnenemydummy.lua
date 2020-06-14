@@ -19,7 +19,8 @@
 			["units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3"] = "units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2",	
 			["units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer"] = "units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3",			
 			["units/pd2_dlc_gitgud/characters/ene_zeal_swat/ene_zeal_swat"] = "units/payday2/characters/ene_city_swat_1/ene_city_swat_1",
-			["units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer"] = "units/payday2/characters/ene_tazer_1/ene_tazer_1",			
+			["units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer"] = "units/payday2/characters/ene_tazer_1/ene_tazer_1",
+			["units/pd2_dlc_gitgud/characters/ene_zeal_cloaker/ene_zeal_cloaker"] = "units/payday2/characters/ene_spook_1/ene_spook_1",												
 			["units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield/ene_zeal_swat_shield"] = "units/payday2/characters/ene_city_shield/ene_city_shield",			
 			["units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy"] = "units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36",			
 			["units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"] = "units/payday2/characters/ene_city_swat_1/ene_city_swat_1",
@@ -164,6 +165,21 @@
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper",
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper"
 		}
+	local enemy_annoying = {
+			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper",
+			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper",
+			["units/payday2/characters/ene_tazer_1/ene_tazer_1"] = "units/pd2_dlc_drm/characters/ene_taser_heavy/ene_taser_heavy",						
+			["units/payday2/characters/ene_medic_m4/ene_medic_m4"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",						
+			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
+			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
+			["units/payday2/characters/ene_medic_r870/ene_medic_r870"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870",						
+			["units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"] = "units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper",
+			["units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"] = "units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper",
+			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",
+			["units/payday2/characters/ene_spook_1/ene_spook_1"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",															
+			["units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",															
+			["units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870"															
+		}
 	local sniper_fed = {
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
 		}		
@@ -188,7 +204,13 @@
 				self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 			end
 		end
-
+		--originally for snipers only but fuck you
+		if Global.game_settings and Global.game_settings.heavymutator == true then
+			if enemy_annoying[self._values.enemy] then
+				self._values.enemy = enemy_annoying[self._values.enemy]
+			end
+			self._values.enemy = enemy_annoying[self._values.enemy] or self._values.enemy
+		else
 		--SWART Sniper					
 		if difficulty_index <= 3 then
 			if sniper[self._values.enemy] then
@@ -212,8 +234,9 @@
 			if sniper_zulu_crackdown_XD[self._values.enemy] then
 				self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
 			end
-			self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy							
-		end		
+			self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy	
+			end
+		end
 		
 		--NYPD Cops Spawn Overwrite
 		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "flat_hh" or job == "dinner" or job == "rant_nmh_hh" then  
@@ -252,7 +275,7 @@
 		end		
 
 		if ai_type == "murkywater" then
-			if difficulty_index == 8 then --GenSec over FBI
+			if difficulty_index == 8 then --Murkywater over everyone else
 				if murkywetew_highdiff[self._values.enemy] then
 					self._values.enemy = murkywetew_highdiff[self._values.enemy]
 				end
