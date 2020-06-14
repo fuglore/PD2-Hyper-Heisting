@@ -8181,6 +8181,24 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.gangster_ninja = deep_clone(self.fbi)	
 	self.gangster_ninja.HEALTH_INIT = 20 --slightly more health. probably not necessary but screw you.
 	self.gangster_ninja.tags = nil
+	local job = Global.level_data and Global.level_data.level_id
+	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
+		self.gangster_ninja.speech_prefix_p1 = "rt"
+		self.gangster_ninja.speech_prefix_p2 = nil
+		self.gangster_ninja.speech_prefix_count = 2
+	elseif job == "alex_2" then
+		self.gangster_ninja.speech_prefix_p1 = "ict"
+		self.gangster_ninja.speech_prefix_p2 = nil
+		self.gangster_ninja.speech_prefix_count = 2
+	elseif job == "welcome_to_the_jungle_1" then
+		self.gangster_ninja.speech_prefix_p1 = "bik"
+		self.gangster_ninja.speech_prefix_p2 = nil
+		self.gangster_ninja.speech_prefix_count = 2
+	else
+		self.gangster_ninja.speech_prefix_p1 = "lt"
+		self.gangster_ninja.speech_prefix_p2 = nil
+		self.gangster_ninja.speech_prefix_count = 2
+	end	
 	self.gangster_ninja.no_retreat = true
 	self.gangster_ninja.surrender = nil	
 	self.gangster_ninja.access = "gangster"	

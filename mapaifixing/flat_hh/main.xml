@@ -1,5 +1,5 @@
 <table name="flat_hh">
-	<level ai_group_type="america" briefing_dialog="Play_pln_flt_brf_01" name_id="heist_flat_hl" brief_id="heist_flat_hl_briefing" cube="cube_apply_heist_bank" id="flat_hh" intro_event="Play_pln_flt_intro_01" max_bags="11" outro_event="Play_pln_flt_50">
+	<level ai_group_type="america" brief_id="heist_flat_hl_briefing" briefing_dialog="Play_pln_flt_brf_01" cube="cube_apply_heist_bank" id="flat_hh" intro_event="Play_pln_flt_intro_01" max_bags="11" name_id="heist_flat_hl" outro_event="Play_pln_flt_50">
 		<add file="levels/flat_hh/add.xml"/>
 		<assets/>
 		<include directory="levels/flat_hh">
@@ -24,8 +24,6 @@
 			<file file="world/world.continent" type="binary"/>
 			<file file="world/world.mission" type="binary"/>
 			<file file="cover_data.cover_data" type="binary"/>
-			<file file="environments/greentwilight.environment" type="custom_xml"/>
-			<file file="environments/backrooms.environment" type="custom_xml"/>
 		</include>
 		<music_overrides track_47_gen="track_47_flat"/>
 		<packages>
@@ -49,7 +47,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative briefing_event="pln_flt_cbf_01" contact="classic" name_id="heist_flat_hl" brief_id="heist_flat_hl_briefing" id="flat" jc="30" icon="guis/dlcs/bro/textures/pd2/crimenet/panicroom" load_screen="guis/dlcs/pic/textures/loading/job_panicroom" region="street">
+	<narrative brief_id="heist_flat_hl_briefing" briefing_event="pln_flt_cbf_01" contact="classic" icon="guis/dlcs/bro/textures/pd2/crimenet/panicroom" id="flat" jc="30" load_screen="guis/dlcs/pic/textures/loading/job_panicroom" name_id="heist_flat_hl" region="street">
 		<chain>
 			<table level_id="flat_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
