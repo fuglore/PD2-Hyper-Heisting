@@ -1191,8 +1191,8 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.detection.enemymook.idle.dis_max = 10000
 	presets.detection.enemymook.idle.angle_max = 360
 	presets.detection.enemymook.idle.delay = {
-		0.35,
-		0.35
+		0,
+		0
 	}
 	presets.detection.enemymook.idle.use_uncover_range = true
 	presets.detection.enemymook.combat.dis_max = 10000

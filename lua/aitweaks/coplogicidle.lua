@@ -765,6 +765,68 @@ end
 	end
 end]]
 
+function CopLogicIdle.damage_clbk(data, damage_info)
+	local enemy = damage_info.attacker_unit
+	local enemy_data = nil
+
+	if enemy and enemy:in_slot(data.enemy_slotmask) then
+		local my_data = data.internal_data
+		local enemy_key = enemy:key()
+		enemy_data = data.detected_attention_objects[enemy_key]
+		local t = TimerManager:game():time()
+
+		if enemy_data then
+
+			enemy_data.dmg_t = t
+			enemy_data.alert_t = t
+			enemy_data.notice_delay = nil
+
+			if not enemy_data.identified then
+				enemy_data.identified = true
+				enemy_data.identified_t = t
+				enemy_data.notice_progress = nil
+				enemy_data.prev_notice_chk_t = nil
+
+				if enemy_data.settings.notice_clbk then
+					enemy_data.settings.notice_clbk(data.unit, true)
+				end
+
+				data.logic.on_attention_obj_identified(data, enemy_key, enemy_data)
+			end
+		else
+			local attention_info = managers.groupai:state():get_AI_attention_objects_by_filter(data.SO_access_str)[enemy_key]
+
+			if attention_info then
+				local settings = attention_info.handler:get_attention(data.SO_access, nil, nil, data.team)
+
+				if settings then
+					enemy_data = CopLogicBase._create_detected_attention_object_data(data.t, data.unit, enemy_key, attention_info, settings)
+					enemy_data.dmg_t = t
+					enemy_data.alert_t = t
+					enemy_data.identified = true
+					enemy_data.identified_t = t
+					enemy_data.notice_progress = nil
+					enemy_data.prev_notice_chk_t = nil
+
+					if enemy_data.settings.notice_clbk then
+						enemy_data.settings.notice_clbk(data.unit, true)
+					end
+
+					data.detected_attention_objects[enemy_key] = enemy_data
+
+					data.logic.on_attention_obj_identified(data, enemy_key, enemy_data)
+				end
+			end
+		end
+	end
+
+	if enemy_data and enemy_data.criminal_record then
+		managers.groupai:state():criminal_spotted(enemy)
+		managers.groupai:state():report_aggression(enemy)
+	end
+end
+
+
 function CopLogicIdle._chk_relocate(data)
 	
 	--[[if not data.team.id == tweak_data.levels:get_default_team_ID("player") and not data.is_converted and not data.unit:in_slot(16) and not data.unit:in_slot(managers.slot:get_mask("criminals")) then
