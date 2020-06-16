@@ -125,6 +125,14 @@ function CopDamage:die(attack_data)
 			end
 		end
 	end
+
+	if self._unit:base():char_tweak()["custom_voicework"] then
+		local voicelines = _G.voiceline_framework.BufferedSounds[self._unit:base():char_tweak().custom_voicework]
+		if voicelines and voicelines["death"] then
+			local line_to_use = voicelines.death[math.random(#voicelines.death)]
+			self._unit:base():play_voiceline(line_to_use, true)
+		end
+	end
 end
 
 function CopDamage:build_suppression(amount, panic_chance, was_saw)
