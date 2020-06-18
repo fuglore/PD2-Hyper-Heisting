@@ -462,7 +462,7 @@
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_il" load="true" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/armored_punk_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/glasses_df" />
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_df" />	
+	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_head_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/helmets_atlas_il" load="true" />	
