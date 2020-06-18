@@ -98,26 +98,38 @@ end
 function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 	local line_array = { c01 = "contact",
 		c01x = "contact",
-		rrl = "gogo",
-		e01 = "ready",
-		e02 = "ready",
-		e03 = "ready",
-		e04 = "ready",
-		e05 = "ready",
-		e06 = "ready",
+		burnhurt = "burnhurt",
+		burndeath = "burndeath",
+		rrl = "reload",
+		gr1a = "spawn",
+		gr1b = "spawn",
+		gr1c = "spawn",
+		gr1d = "spawn",
+		gr2a = "spawn",
+		gr2b = "spawn",
+		gr2c = "spawn",
+		gr2d = "spawn",
+		a05 = "clear_stelf",
+		a06 = "clear_stelf",
+		e01 = "disabled_gear", --look into restoring this chatter in general
+		e02 = "disabled_gear",
+		e03 = "disabled_gear",
+		e04 = "disabled_gear",
+		e05 = "disabled_gear",
+		e06 = "disabled_gear",
 		i01 = "contact",
 		i02 = "gogo",
 		i03 = "kill",
-		lk3a = "cover_me",
-		lk3b = "cover_me",
+		lk3a = "buddy_died",  
+		lk3b = "cover_me",  --could use this to add calmer panic between assaults
 		mov = "gogo",
 		med = "buddy_died",
 		amm = "buddy_died",
-		ch1 = "buddy_died",
-		ch2 = "buddy_died",
-		ch3 = "buddy_died",
-		ch4 = "buddy_died",
-		t01 = "gogo",
+		ch1 = "trip_mines",--
+		ch2 = "sentry",--
+		ch3 = "ecm", --
+		ch4 = "saw", -- could add these lines to our units
+		t01 = "flank",
 		pus = "gogo",
 		g90 = "contact",
 		civ = "hostage",
@@ -133,7 +145,6 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 		clr = "clear",
 		att = "gogo",
 		a08 = "gogo",
-		a05 = "gogo",
 		prm = "ready",
 		pos = "ready",
 		d01 = "ready",
@@ -154,7 +165,7 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 		tsr_x02a_any_3p = "death",
 		tsr_x01a_any_3p = "pain",
 		tsr_post_tasing_taunt = "tasing",
-		tsr_g90 = "buddy_died",
+		tsr_g90 = "contact",
 		tsr_entrance = "gogo",
 		tsr_c01 = "contact",
 		bdz_c01 = "contact",
@@ -167,7 +178,7 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 		cloaker_taunt_during_assault = "kill",
 		cpa_taunt_after_assault = "kill",
 		cpa_taunt_during_assault = "kill",
-		police_radio = "radio",
+		police_radio = "radio", -- doesnt work :<
 		clk_x02a_any_3p = "death"
 	}
 	local line_to_check = line_array[sound_name]
@@ -324,10 +335,10 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 				sound_name = "g90"
 			end
 		end
-
-		if self._prefix == "fl1n_" then
+			
+		if self._prefix == "f1n_" then
 			if sound_name == "x02a_any_3p" then
-				full_sound = "fl1n_x01a_any_3p_01"
+				full_sound = "f1n_x01a_any_3p_01"
 			end
 		end
 
