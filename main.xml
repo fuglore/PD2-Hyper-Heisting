@@ -10,9 +10,9 @@
 		<hook file="CoreScriptData.lua" source_file="core/lib/managers/coresequencemanager"/>	
     </Hooks>	
 	<AddFiles file="hhmainassets.xml"/>
+	<AddFiles file="beatpricks.xml"/>
 	<Package id="packages/hhalbaniancontent" file="albanianchontent.xml" use_clbk="self:LoadAlbAssets"/>
 	<Package id="packages/hhnewreapers" file="hhnewreapers.xml" use_clbk="self:DebugLoadAssets"/>	
-	<Package id="packages/thabeatpricks" file="beatpricks.xml" use_clbk="self:DebugLoadAssets"/>	
 	<Package id="packages/murkyassets" file="psc.xml" use_clbk="self:DebugLoadAssets"/>
 	<Package id="packages/hhbex" file="bex.xml" use_clbk="self:DebugLoadAssets"/>	
 </table>
