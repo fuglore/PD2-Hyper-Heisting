@@ -1,17 +1,11 @@
 <materials version="3" group="ene_secret_service_1">
-	<material name="mtr_secret_service_head" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SKINNED_3WEIGHTS" version="2">
+	<material name="mtr_secret_service_head" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SKINNED_3WEIGHTS" version="2">
 		<bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/punk_head_nm"/>
 		<diffuse_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/punk_head_df"/>
-		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/danial_il"/>
-        <variable type="scalar" name="il_bloom" value="5"/>
-        <variable type="scalar" name="il_multiplier" value="neonsign"/>
 	</material>
-	<material name="mtr_secret_service_head_lod_1" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SKINNED_3WEIGHTS" version="2">
+	<material name="mtr_secret_service_head_lod_1" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SKINNED_3WEIGHTS" version="2">
 		<bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/punk_head_nm" mip="1"/>
 		<diffuse_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/punk_head_df" mip="1"/>
-		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/danial_il"/>
-        <variable type="scalar" name="il_bloom" value="5"/>
-        <variable type="scalar" name="il_multiplier" value="neonsign"/>
 	</material>
 	<material name="mtr_secret_service_head_lod_2" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SKINNED_3WEIGHTS" version="2">
 		<bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/punk_head_nm" mip="4"/>
