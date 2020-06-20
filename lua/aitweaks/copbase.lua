@@ -109,13 +109,24 @@ function CopBase:default_weapon_name()
 	local hoxout_dual = unit_name == Idstring("units/payday2/characters/ene_fbi_female_4/ene_fbi_female_4") or unit_name == Idstring("units/payday2/characters/ene_fbi_female_4/ene_fbi_female_4_husk")
 	
 	local hoxout_sub =unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4") or unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4_husk") 
-	
+		
 	--groups of units to modify
-	local mosconi_punks = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870_husk")
+	local mosconi_punks = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870_husk") 
+	or unit_name == Idstring("units/payday2/characters/ene_security_3/ene_security_3") or unit_name == Idstring("units/payday2/characters/ene_security_3/ene_security_3_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_security_7/ene_security_7") or unit_name == Idstring("units/payday2/characters/ene_security_7/ene_security_7_husk")
+	or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_bex_security_02/ene_bex_security_02") or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_bex_security_02/ene_bex_security_02_husk")
+	or unit_name == Idstring("units/pd2_dlc_bex/characters/bex_security_suit_02/bex_security_suit_02") or unit_name == Idstring("units/pd2_dlc_bex/characters/bex_security_suit_02/bex_security_suit_02_husk")
 	
 	local mp5_punks = unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4") or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_security_6/ene_security_6") or unit_name == Idstring("units/payday2/characters/ene_security_6/ene_security_6_husk")
 	
 	local bronco_punks = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_security_1/ene_security_1") or unit_name == Idstring("units/payday2/characters/ene_security_1/ene_security_1_husk")
+	or unit_name == Idstring("units/payday2/characters/ene_security_5/ene_security_5") or unit_name == Idstring("units/payday2/characters/ene_security_5/ene_security_5_husk")
+	or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_bex_security_01/ene_bex_security_01") or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_bex_security_01/ene_bex_security_01_husk")
+	or unit_name == Idstring("units/pd2_dlc_bex/characters/bex_security_suit_01/bex_security_suit_01") or unit_name  == Idstring("units/pd2_dlc_bex/characters/bex_security_suit_01/bex_security_suit_01_husk")
+	
+	local r870_guard = unit_name == Idstring("units/payday2/characters/ene_security_8/ene_security_8") or unit_name == Idstring("units/payday2/characters/ene_security_8/ene_security_8_husk")
 	
 	local zombie_taser = unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1") or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1_husk")
 	
@@ -214,6 +225,9 @@ function CopBase:default_weapon_name()
 		return compact5
 	elseif hoxout_dual then
 		return crosskill_chimano_akimbo
+		
+	elseif r870_guard then
+		return reinfeld
 
 	elseif mosconi_punks then
 		return sawn_off_mosconi
