@@ -36,8 +36,10 @@
 		["hud_assault_FG_cover34"] = "WHITE VANS SPOTTED",
 		["hud_assault_FG_cover35"] = "NO SWAMP SHARKS INCLUDED",
 		["hud_assault_FG_cover36"] = "OH MY GOD WE'RE DOOOOOMED",
-		["hud_assault_FG_cover37"] = "VERY DANGEROUS", --need for speed reference Guys :)
+		["hud_assault_FG_cover37"] = "VERY DANGEROUS", --a mystery.....
 		["hud_assault_FG_cover38"] = "RANDOM CHIMP EVENT",
+		["hud_assault_FG_cover39"] = "ENEMY COUNT; A LOT",
+		["hud_assault_FG_cover40"] = "HI?",
 		["hud_assault_faction_federales"] = "VS. LOS FEDERALES",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_sharedswat"] = "VS. SWAT TEAM & MURKY BATTALION",		
