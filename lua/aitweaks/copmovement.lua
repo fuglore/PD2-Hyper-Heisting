@@ -1124,3 +1124,24 @@ function CopMovement:sync_action_spooc_strike(pos, action_id)
 		spooc_action:sync_strike(pos)
 	end
 end
+
+function HuskCopMovement:sync_fall_position(pos, rot)
+	if self._nr_synced then
+		self._nr_synced = self._nr_synced + 1
+	else
+		self._nr_synced = 1
+	end
+
+	self:set_position(pos)
+	self:set_rotation(rot)
+
+	if self._nr_synced > 1 then
+		local active_actions_1 = self._active_actions[1]
+
+		if active_actions_1 and active_actions_1:type() == "hurt" and active_actions_1._ragdoll_freeze_clbk_id then
+			active_actions_1._ragdoll_freeze_clbk_id = nil
+
+			active_actions_1:_freeze_ragdoll()
+		end
+	end
+end
