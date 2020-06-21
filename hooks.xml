@@ -49,6 +49,7 @@
 	<post :script_path="firemanager.lua" :hook_id="managers/firemanager"/>
 	<post :script_path="explosionmanager.lua" :hook_id="managers/explosionmanager"/>
 	<post :script_path="crimespreemanager.lua" :hook_id="managers/crimespreemanager"/>
+	<post :script_path="gameplaycentralmanager.lua" :hook_id="managers/gameplaycentralmanager"/>
 	
 	<post :script_path="enemymanager.lua" :hook_id="managers/enemymanager"/>
 	<post :script_path="playermanager.lua" :hook_id="managers/playermanager"/>
