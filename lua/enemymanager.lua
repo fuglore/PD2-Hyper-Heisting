@@ -291,8 +291,6 @@ function EnemyManager:on_enemy_died(dead_unit, damage_info)
 
 	if self:is_corpse_disposal_enabled() then
 		Network:detach_unit(dead_unit)
-	else
-		dead_unit:network().sync = "bodies"
 	end
 
 	managers.hud:remove_waypoint("wp_hostage_trade" .. tostring(dead_unit:key()))
@@ -335,8 +333,6 @@ function EnemyManager:on_civilian_died(dead_unit, damage_info)
 
 	if self:is_corpse_disposal_enabled() then
 		Network:detach_unit(dead_unit)
-	else
-		dead_unit:network().sync = "bodies"
 	end
 
 	managers.hud:remove_waypoint("wp_hostage_trade" .. tostring(dead_unit:key()))
