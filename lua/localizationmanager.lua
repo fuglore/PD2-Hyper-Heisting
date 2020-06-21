@@ -41,6 +41,7 @@
 		["hud_assault_FG_cover39"] = "ENEMY COUNT; A LOT",
 		["hud_assault_FG_cover40"] = "HI?",
 		["hud_assault_FG_cover41"] = "ENE_COP_5 SENDS HIS REGARDS",
+		["hud_assault_FG_cover42"] = "YOU WANNA LEARN HOW TO DO A FOCKEN INFINITE",
 		["hud_assault_faction_federales"] = "VS. LOS FEDERALES",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_sharedswat"] = "VS. SWAT TEAM & MURKY BATTALION",		
