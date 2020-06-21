@@ -96,6 +96,12 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			6,
 			5
 		}
+		self.values.player.perkdeck_movespeed_mult = {
+			1.2,
+			1.3,
+			1.4,
+			1.5
+		}		
 		
 		self.values.temporary.overkill_damage_multiplier = {{1.35, 8}}
 		self.values.pistol.damage_addend = {0.5, 1}
@@ -256,5 +262,43 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 		self.weapon_movement_penalty.lmg = 0.8
 		self.weapon_movement_penalty.minigun = 0.6
+		
+			self.definitions.player_damage_dampener_outnumbered_strong = { --Infiltrator/Sociopath movement speed buff stuff
+			name_id = "menu_player_infilpath_1",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "perkdeck_movespeed_mult",
+				category = "player"
+			}
+		}
+		self.definitions.player_damage_dampener_close_contact_1 = {
+			name_id = "menu_player_infilpath_2",
+			category = "feature",
+			upgrade = {
+				value = 2,
+				upgrade = "perkdeck_movespeed_mult",
+				category = "player"
+			}
+		}
+		self.definitions.player_damage_dampener_close_contact_2 = {
+			name_id = "menu_player_infilpath_3",
+			category = "feature",
+			upgrade = {
+				value = 3,
+				upgrade = "perkdeck_movespeed_mult",
+				category = "player"
+			}
+		}
+		self.definitions.player_damage_dampener_close_contact_3 = {
+			name_id = "menu_player_infilpath_4",
+			category = "feature",
+			upgrade = {
+				value = 4,
+				upgrade = "perkdeck_movespeed_mult",
+				category = "player"
+			}
+		}
+		
 	end
 end)

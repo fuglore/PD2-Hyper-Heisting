@@ -41,6 +41,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 				11
 			}
 		}
-	
+
 	end
 end)
