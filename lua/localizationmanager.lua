@@ -40,8 +40,14 @@
 		["hud_assault_FG_cover38"] = "RANDOM CHIMP EVENT",
 		["hud_assault_FG_cover39"] = "ENEMY COUNT; A LOT",
 		["hud_assault_FG_cover40"] = "HI?",
-		["hud_assault_FG_cover41"] = "ENE_COP_5 SENDS HIS REGARDS",
+		["hud_assault_FG_cover41"] = "I EXPECT YOU TO DINE",
 		["hud_assault_FG_cover42"] = "YOU WANNA LEARN HOW TO DO A FOCKEN INFINITE",
+		["hud_assault_FG_cover43"] = "THE MOVIE IS ON",
+		["hud_assault_FG_cover44"] = "NON-STOP DEADLY ACTION",
+		["hud_assault_FG_cover45"] = "KEEP THOSE SAUSAGES SAFE",
+		["hud_assault_FG_cover46"] = "YOU ARE HALF HEISTER, HALF PUSSY",
+		["hud_assault_FG_cover47"] = "GARRETT MUST BE REALLY MAD AT YOU",
+		["hud_assault_FG_cover48"] = "410,757,864,530 DEAD COPS",
 		["hud_assault_faction_federales"] = "VS. LOS FEDERALES",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_sharedswat"] = "VS. SWAT TEAM & MURKY BATTALION",		
@@ -185,7 +191,13 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_deck8_1_desc"] = "Your movement speed is further increased by ##10%##.",
 			
 			["menu_deck8_3_desc"] = "Your movement speed is further increased by ##10%##.",
-			
+
+			["menu_deck9_1"] = "No Talk",
+
+			["menu_deck9_1_desc"] = "Your movement speed is increased by ##20%##. Your second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
+ 
+			["menu_deck9_5_desc"] ="Killing an enemy with a melee weapon regenerates ##10%## health. This cannot occur more than once every ##1## second. Your movement speed is further increased by ##10%##.",
+ 
 			--Stoic--
 			["menu_deck19_1_desc"] = "Unlocks and equips the Stoic Hip Flask.\n\nDamage taken is now reduced by ##66%##. The remaining damage will be applied directly.\n\nThe ##66%## reduced damage will be applied over-time (##12## seconds) instead.\n\nYou can use the throwable key to activate the Stoic Hip Flask and immediately negate any pending damage. The flask has a ##15## second cooldown but time remaining will be lessened by 1 second per enemy killed.",
 
