@@ -82,3 +82,27 @@ function UnitNetworkHandler:action_aim_state(unit, state)
         unit:movement():sync_action_aim_end()
     end
 end
+
+function UnitNetworkHandler:m79grenade_explode_on_client(position, normal, user, damage, range, curve_pow, sender)
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
+		return
+	end
+
+	if not self._verify_character_and_sender(user, sender) then
+		if alive(user) and user:movement() and user:movement._active_actions then --this instance was actually a shotgun push ragdoll pos sync
+			local death_action = user:movement._active_actions[1]
+
+			if death_action and death_action:type() == "hurt" and death_action._hips_obj then
+				local u_body = user:body(damage)
+
+				if u_body:enabled() and u_body:dynamic() then
+					u_body:set_position(position)
+				end
+			end
+		end
+
+		return
+	end
+
+	ProjectileBase._explode_on_client(position, normal, user, damage, range, curve_pow)
+end
