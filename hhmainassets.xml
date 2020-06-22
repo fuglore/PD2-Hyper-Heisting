@@ -247,7 +247,7 @@
 	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco" />
 	
 	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/punk_head" />
-	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/secret_service" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/secret_service_df" />
 	
 	<!--Better But Still Bad Taser-->
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh" load="true"/>
