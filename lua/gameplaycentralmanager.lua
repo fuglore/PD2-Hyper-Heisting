@@ -66,19 +66,23 @@ function GamePlayCentralManager:update(t, dt)
 			if t >= corpse_info.sync_t then
 				local unit = corpse_info.unit
 
-				self:_sync_shotgun_pushed_body(unit)
-
-				local active_actions_1 = unit:movement()._active_actions[1]
-
-				if active_actions_1 and active_actions_1:type() == "hurt" and active_actions_1._ragdoll_freeze_clbk_id then
-					corpse_info.sync_t = t + 0.5
+				if not alive(unit) then
+					self:_remove_corpse_from_shotgun_push_sync_list(corpse_info.u_key)
 				else
-					local unit_pos = unit:position()
-					local unit_rot = unit:rotation()
+					self:_sync_shotgun_pushed_body(unit)
 
-					managers.network:session():send_to_peers_synched("sync_fall_position", unit, unit_pos, unit_rot)
+					local active_actions_1 = unit:movement()._active_actions[1]
 
-					self:_remove_corpse_to_shotgun_push_sync_list(unit)
+					if active_actions_1 and active_actions_1:type() == "hurt" and active_actions_1._ragdoll_freeze_clbk_id then
+						corpse_info.sync_t = t + 0.5
+					else
+						local unit_pos = unit:position()
+						local unit_rot = unit:rotation()
+
+						managers.network:session():send_to_peers_synched("sync_fall_position", unit, unit_pos, unit_rot)
+
+						self:_remove_corpse_from_shotgun_push_sync_list(corpse_info.u_key)
+					end
 				end
 			end
 		end
@@ -86,16 +90,18 @@ function GamePlayCentralManager:update(t, dt)
 end
 
 function GamePlayCentralManager:_add_corpse_to_shotgun_push_sync_list(unit)
+	local u_key = unit:key()
 	self._corpses_to_sync = self._corpses_to_sync or {}
 
-	self._corpses_to_sync[unit:key()] = {
+	self._corpses_to_sync[u_key] = {
 		unit = unit,
-		sync_t = TimerManager:game():time() + 0.5
+		sync_t = TimerManager:game():time() + 0.5,
+		u_key = u_key
 	}
 end
 
-function GamePlayCentralManager:_remove_corpse_to_shotgun_push_sync_list(unit)
-	self._corpses_to_sync[unit:key()] = nil
+function GamePlayCentralManager:_remove_corpse_from_shotgun_push_sync_list(u_key)
+	self._corpses_to_sync[u_key] = nil
 
 	if table.size(self._corpses_to_sync) == 0 then
 		self._corpses_to_sync = nil
