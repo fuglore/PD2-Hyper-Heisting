@@ -741,7 +741,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					federales = {
 						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
 						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
 					},
 					shared = {
 						Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
@@ -780,7 +780,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					federales = {
 						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
 						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
 					},
 					shared = {
 						Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
@@ -819,7 +819,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					federales = {
 						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
 						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
 					},
 					shared = {
 						Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
@@ -858,7 +858,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					federales = {
 						Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
 						Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
-						Idstring("units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03")
+						Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
 					},
 					shared = {
 						Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),

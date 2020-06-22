@@ -131,6 +131,12 @@
     <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/policia_heavy_df"/>    
     <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/helmets_swat_df"/>
 
+	<!-- policia mp5 punk-->
+	<unit path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03_husk" load="true"/>
+	<unit_mat path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03" />
+	<material_config path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03_contour" />
+
     <!--federales n/h heavy shotgunner-->	
     <unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_r870/ene_swat_heavy_policia_federale_r870" load="true"/>
     <unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_r870/ene_swat_heavy_policia_federale_r870_husk" load="true"/>		
