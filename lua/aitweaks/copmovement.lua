@@ -1125,7 +1125,7 @@ function CopMovement:sync_action_spooc_strike(pos, action_id)
 	end
 end
 
-function HuskCopMovement:sync_fall_position(pos, rot)
+function CopMovement:sync_fall_position(pos, rot)
 	if self._nr_synced then
 		self._nr_synced = self._nr_synced + 1
 	else
