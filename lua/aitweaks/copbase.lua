@@ -110,6 +110,9 @@ function CopBase:default_weapon_name()
 	
 	local hoxout_sub =unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4") or unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4_husk") 
 		
+	local hoxhud = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_2/npc_old_hoxton_prisonsuit_2") or unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_2/npc_old_hoxton_prisonsuit_2_husk")
+	local wolfhud = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_1/npc_old_hoxton_prisonsuit_1") or unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_1/npc_old_hoxton_prisonsuit_1_husk")
+		
 	--groups of units to modify
 	local mosconi_punks = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870") or unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870_husk") 
 	or unit_name == Idstring("units/payday2/characters/ene_security_3/ene_security_3") or unit_name == Idstring("units/payday2/characters/ene_security_3/ene_security_3_husk")
@@ -188,7 +191,7 @@ function CopBase:default_weapon_name()
 	or unit_name == Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1")
 	or unit_name == Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1_husk")	
 	or unit_name == Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45")	
-	or unit_name == Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45_husk")		
+	or unit_name == Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45_husk")
 	
 	local professor_miller = unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45") or unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45_husk")
 	local vagrant = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45") or unit_name == Idstring ("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45_husk")
@@ -230,6 +233,11 @@ function CopBase:default_weapon_name()
 		
 	elseif r870_guard then
 		return reinfeld
+
+	elseif hoxhud then
+		return ksp
+	elseif wolfhud then
+		return suppressed_bernetti
 
 	elseif mosconi_punks then
 		return sawn_off_mosconi
