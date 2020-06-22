@@ -8183,6 +8183,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.gangster_ninja = deep_clone(self.fbi)	
 	self.gangster_ninja.HEALTH_INIT = 20 --slightly more health. probably not necessary but screw you.
 	self.gangster_ninja.tags = nil
+        self.gangster_ninja.calls_in = false
 	self.gangster_ninja.no_retreat = true
 	self.gangster_ninja.surrender = nil	
 	self.gangster_ninja.access = "gangster"	
