@@ -135,6 +135,11 @@ function CopBase:default_weapon_name()
 	
 	local zombie_taser = unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1") or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1_husk")
 	
+	local butcher_fuck = unit_name == Idstring("units/pd2_dlc_wwh/characters/ene_male_crew_1/ene_male_crew_1") or unit_name == Idstring("units/pd2_dlc_wwh/characters/ene_male_crew_1/ene_male_crew_1_husk")
+	local butcher_shit = unit_name == Idstring("units/pd2_dlc_wwh/characters/ene_male_crew_2/ene_male_crew_2") or unit_name == Idstring("units/pd2_dlc_wwh/characters/ene_male_crew_2/ene_male_crew_2_husk")
+	local butcher_ass = unit_name == Idstring("units/pd2_dlc_wwh/characters/ene_female_crew/ene_female_crew") or unit_name == Idstring("units/pd2_dlc_wwh/characters/ene_female_crew/ene_female_crew_husk")
+	local butcher_cunt = unit_name == Idstring("units/pd2_dlc_wwh/characters/ene_captain/ene_captain") or unit_name == Idstring("units/pd2_dlc_wwh/characters/ene_captain/ene_captain_husk")
+	
 	local missing_r870_husk_case = unit_name == Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870_husk")
 	
 	local bex_swat = unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale") or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_husk")
@@ -237,6 +242,15 @@ function CopBase:default_weapon_name()
 	elseif hoxhud then
 		return ksp
 	elseif wolfhud then
+		return suppressed_bernetti
+
+	elseif butcher_fuck then
+		return jackal
+	elseif butcher_shit then 
+		return m1014
+	elseif butcher_ass then
+		return suppressed_compact5
+	elseif butcher_cunt then
 		return suppressed_bernetti
 
 	elseif mosconi_punks then
