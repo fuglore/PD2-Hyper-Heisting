@@ -1786,10 +1786,10 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 				cover = cover_entry
 			}
 		else
-			local max_dist = nil
+			local max_dist = 600 --shot in the daaark~~
 
 			if objective.called then
-				max_dist = 600
+				max_dist = 1000
 			end
 
 			local to_pos = CopLogicTravel._get_pos_on_wall(dest_area.pos, max_dist)
