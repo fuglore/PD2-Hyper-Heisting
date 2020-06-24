@@ -611,7 +611,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 
 	if difficulty_index < 4 then
 		self.unit_categories.sniper_ass = { --babe it's 4 pm, time for your brain flattening!
-			special_type = "sniper",
+			special_type = "sniper",  --yes honey...
 			unit_types = {
 				america = {
 					Idstring("units/payday2/characters/ene_sniper_1/ene_sniper_1")
@@ -708,7 +708,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				shared = {
 					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
-					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper")					
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper")					
 				}
 			},
 			access = access_type_all
@@ -3527,7 +3527,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 						tactics = self._tactics.swat_shotgun_rush_civil
 					},
 					{
-						freq = 1,
+						freq = 0.75,
 						rank = 1,
 						amount_min = 0,												
 						amount_max = 1,						
@@ -3568,7 +3568,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 						tactics = self._tactics.swat_shotgun_rush_civil
 					},
 					{
-						freq = 1,
+						freq = 0.75,
 						rank = 1,
 						amount_min = 0,												
 						amount_max = 1,						
@@ -4178,7 +4178,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.tank_rush --Basically your worst nightmare.
 				},
 				{
-					freq = 1,
+					freq = 0.75,
 					rank = 1,
 					amount_min = 1,					
 					amount_max = 2,										
@@ -4211,7 +4211,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank_civil
 				},
 				{
-					freq = 1,
+					freq = 0.25,
 					rank = 1,
 					unit = "sniper_ass",
 					amount_min = 0,					
@@ -4252,7 +4252,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank_civil
 				},
 				{
-					freq = 1,
+					freq = 0.5,
 					rank = 1,
 					amount_min = 0,					
 					amount_max = 1,										
@@ -4293,7 +4293,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank_civil
 				},
 				{
-					freq = 1,
+					freq = 0.5,
 					rank = 1,
 					amount_min = 0,					
 					amount_max = 1,															
@@ -4340,7 +4340,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank_civil
 				},
 				{
-					freq = 1,
+					freq = 0.5,
 					rank = 1,
 					amount_min = 0,					
 					amount_max = 1,
@@ -4387,7 +4387,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle_complex --oh no they're dumb
 				},
 				{
-					freq = 1,
+					freq = 0.75,
 					rank = 1,
 					amount_min = 0,					
 					amount_max = 2,					
@@ -4434,10 +4434,10 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle_flank_complex --they're coordinated
 				},
 				{
-					freq = 1,
+					freq = 0.75,
 					rank = 1,
 					amount_min = 1,					
-					amount_max = 3,										
+					amount_max = 2,										
 					unit = "sniper_ass",
 					tactics = self._tactics.sniper_flank
 				}																				
@@ -4489,10 +4489,10 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.tank_rush --Basically your worst nightmare.
 				},
 				{
-					freq = 1,
+					freq = 0.75,
 					rank = 1,
-					amount_min = 2,					
-					amount_max = 3,															
+					amount_min = 1,					
+					amount_max = 2,															
 					unit = "sniper_ass",
 					tactics = self._tactics.sniper_flank
 				}																				
@@ -6551,7 +6551,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.spoocaggressiveelite
 				},
 				{
-					freq = 0.75,
+					freq = 0.65,
 					rank = 1,
 					unit = "sniper_ass",
 					amount_max = 1,
@@ -6580,7 +6580,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.spooc
 				},
 				{
-					freq = 0.75,
+					freq = 0.65,
 					rank = 1,
 					amount_max = 1,																			
 					unit = "sniper_ass",
@@ -6602,7 +6602,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.spooc
 				},
 				{
-					freq = 0.75,
+					freq = 0.65,
 					rank = 1,
 					amount_max = 1,															
 					unit = "sniper_ass",
@@ -6630,7 +6630,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.spoocaggressive --these spoocs go hard instead of their normal approach, and use flashes, essentially randomly a pinch group
 				},
 				{
-					freq = 0.75,
+					freq = 0.65,
 					rank = 1,
 					amount_max = 1,										
 					unit = "sniper_ass",
@@ -6658,7 +6658,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.spoocaggressive --these spoocs go hard instead of their normal approach, and use flashes, essentially randomly a pinch group
 				},
 				{
-					freq = 0.75,
+					freq = 0.65,
 					rank = 1,
 					amount_max = 2,					
 					unit = "sniper_ass",
@@ -6692,7 +6692,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.spooccreep --pretty much jerks, they'll hide from sight once aimed at, will otherwise attempt to rush you
 				},
 				{
-					freq = 0.75,
+					freq = 0.65,
 					rank = 1,
 					amount_max = 2,
 					unit = "sniper_ass",
@@ -7021,8 +7021,8 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		self.besiege.assault.force_balance_mul = {
 			0.5,
 			0.75,
-			1.125,
-			1.125
+			1.4,
+			1.4
 		}
 		self.besiege.assault.force_pool_balance_mul = {
 			0.5,

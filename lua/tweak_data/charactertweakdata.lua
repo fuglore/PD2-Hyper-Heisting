@@ -870,56 +870,56 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 220
 				},
 				hos = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
+					strafe = 308,
+					fwd = 308,
+					bwd = 308
 				},
 				cbt = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
+					strafe = 308,
+					fwd = 308,
+					bwd = 308
 				}
 			},
 			run = {
 				hos = {
-					strafe = 562,
-					fwd = 562,
-					bwd = 562
+					strafe = 630,
+					fwd = 630,
+					bwd = 630
 				},
 				cbt = {
-					strafe = 562,
-					fwd = 562,
-					bwd = 562
+					strafe = 630,
+					fwd = 630,
+					bwd = 630
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 262,
-					fwd = 262,
-					bwd = 262
+					strafe = 294,
+					fwd = 294,
+					bwd = 294
 				},
 				cbt = {
-					strafe = 262,
-					fwd = 262,
-					bwd = 262
+					strafe = 294,
+					fwd = 294,
+					bwd = 294
 				}
 			},
 			run = {
 				hos = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
+					strafe = 490,
+					fwd = 490,
+					bwd = 490
 				},
 				cbt = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
+					strafe = 490,
+					fwd = 490,
+					bwd = 490
 				}
 			}
 		}
-	}	
+	}
 	--preset for dozers
 	presets.move_speed.slow_consistency = {
 		stand = {
@@ -7719,7 +7719,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		"special"
 	}
 	self.tank_hw.move_speed = presets.move_speed.slow_consistency --lol stop
-	self.tank_hw.HEALTH_INIT = 40 --1600 on top difficulty, encourage teamfire against these guys since they're gonna be on the halloween maps
+	self.tank_hw.HEALTH_INIT = 80 --3200 on top difficulty, encourage teamfire against these guys since they're gonna be on the halloween maps
 	self.tank_hw.headshot_dmg_mul = 1
 	self.tank_hw.ignore_headshot = true
 	self.tank_hw.damage.explosion_damage_mul = 8 --explosives can eliminate them very easily
@@ -8109,8 +8109,8 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	}
 	self.swat.weapon = presets.weapon.simple
 	self.swat.detection = presets.detection.enemymook
-	self.swat.HEALTH_INIT = 4
-	self.swat.headshot_dmg_mul = 12
+	self.swat.HEALTH_INIT = 8
+	self.swat.headshot_dmg_mul = 6
 	self.swat.move_speed = presets.move_speed.simple_consistency
 	self.swat.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.swat.suppression = presets.suppression.hard_agg
@@ -8186,6 +8186,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
         self.gangster_ninja.calls_in = false
 	self.gangster_ninja.no_retreat = true
 	self.gangster_ninja.surrender = nil	
+	self.gangster_ninja.ecm_vulnerability = 0 --why would gangsters have headsets lol
 	self.gangster_ninja.access = "gangster"	
 	local job = Global.level_data and Global.level_data.level_id
 	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
@@ -8219,7 +8220,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.weapon = presets.weapon.simple
 	self.heavy_swat.detection = presets.detection.enemymook
 	self.heavy_swat.HEALTH_INIT = 20
-	self.heavy_swat.headshot_dmg_mul = 6
+	self.heavy_swat.headshot_dmg_mul = 4
 	self.heavy_swat.damage.explosion_damage_mul = 1
 	self.heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
@@ -8250,8 +8251,8 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	}
 	self.fbi_swat.weapon = presets.weapon.civil
 	self.fbi_swat.detection = presets.detection.enemymook
-	self.fbi_swat.HEALTH_INIT = 4
-	self.fbi_swat.headshot_dmg_mul = 12
+	self.fbi_swat.HEALTH_INIT = 8
+	self.fbi_swat.headshot_dmg_mul = 6
 	self.fbi_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_swat.suppression = presets.suppression.hard_def
 	self.fbi_swat.surrender = presets.surrender.easy
@@ -8292,7 +8293,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.weapon = presets.weapon.civil
 	self.fbi_heavy_swat.detection = presets.detection.enemymook
 	self.fbi_heavy_swat.HEALTH_INIT = 20
-	self.fbi_heavy_swat.headshot_dmg_mul = 6
+	self.fbi_heavy_swat.headshot_dmg_mul = 4
 	self.fbi_heavy_swat.damage.explosion_damage_mul = 1
 	self.fbi_heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
@@ -8318,8 +8319,8 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	}
 	self.city_swat.weapon = presets.weapon.civil
 	self.city_swat.detection = presets.detection.enemymook
-	self.city_swat.HEALTH_INIT = 4
-	self.city_swat.headshot_dmg_mul = 12	
+	self.city_swat.HEALTH_INIT = 8
+	self.city_swat.headshot_dmg_mul = 6	
 	self.city_swat.move_speed = presets.move_speed.simple_consistency
 	self.city_swat.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.city_swat.suppression = presets.suppression.hard_def
@@ -8396,6 +8397,7 @@ Hooks:PostHook(CharacterTweakData, "_init_gangster", "hhpost_gangster", function
 	local job = Global.level_data and Global.level_data.level_id
 	self.gangster.HEALTH_INIT = 6
 	self.gangster.headshot_dmg_mul = 12
+	self.gangster.ecm_vulnerability = 0
 	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
 		self.gangster.speech_prefix_p1 = "rt"
 		self.gangster.speech_prefix_p2 = nil
@@ -8423,12 +8425,31 @@ Hooks:PostHook(CharacterTweakData, "_init_gangster", "hhpost_gangster", function
 	}
 end)
 
+Hooks:PostHook(CharacterTweakData, "_init_mobster", "hhpost_mobster", function(self, presets)
+	local job = Global.level_data and Global.level_data.level_id
+	self.mobster.HEALTH_INIT = 6
+	self.mobster.headshot_dmg_mul = 12
+	self.mobster.ecm_vulnerability = 0
+	self.mobster.speech_prefix_p1 = "rt"
+	self.mobster.speech_prefix_p2 = nil
+	self.mobster.speech_prefix_count = 2
+	self.mobster.chatter = {
+		aggressive = true,
+		retreat = true,
+		contact = true,
+		go_go = true,
+		suppress = true,
+		enemyidlepanic = true
+	}
+end)
+
 Hooks:PostHook(CharacterTweakData, "_init_biker", "hhpost_biker", function(self, presets)
 	self.biker.HEALTH_INIT = 6
 	self.biker.headshot_dmg_mul = 12
 	self.biker.speech_prefix_p1 = "bik"
 	self.biker.speech_prefix_p2 = nil
 	self.biker.speech_prefix_count = 2	
+	self.biker.ecm_vulnerability = 0
 	self.biker.chatter = {
 		aggressive = true,
 		retreat = true,
@@ -8451,6 +8472,7 @@ Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", functi
 	self.bolivian.speech_prefix_p1 = "lt"
 	self.bolivian.speech_prefix_p2 = nil
 	self.bolivian.speech_prefix_count = 2
+	self.bolivian.ecm_vulnerability = 0
 	self.bolivian.chatter = {
 		aggressive = true,
 		retreat = true,
@@ -8464,6 +8486,7 @@ Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", functi
 	self.bolivian_indoors.speech_prefix_p1 = "lt"
 	self.bolivian_indoors.speech_prefix_p2 = nil
 	self.bolivian_indoors.speech_prefix_count = 2
+	self.bolivian_indoors.ecm_vulnerability = 0
 	self.bolivian_indoors.chatter = {
 		aggressive = true,
 		retreat = true,
