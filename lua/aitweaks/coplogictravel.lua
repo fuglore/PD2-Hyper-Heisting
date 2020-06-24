@@ -1604,3 +1604,34 @@ function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 
 	data.unit:brain():search_for_path(my_data.advance_path_search_id, to_pos, prio, nil, nav_segs)
 end
+
+function CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
+	local objective = data.objective
+
+	if objective.type ~= "follow" or data.unit:movement():chk_action_forbidden("walk") or data.unit:anim_data().act_idle then
+		return
+	end
+
+	if not my_data.coarse_path_index then
+		debug_pause_unit(data.unit, "[CopLogicTravel._chk_stop_for_follow_unit]", data.unit, inspect(data), inspect(my_data))
+
+		return
+	end
+
+	local follow_unit_nav_seg = data.objective.follow_unit:movement():nav_tracker():nav_segment()
+	
+	if not follow_unit_nav_seg or not my_data.coarse_path or not my_data.coarse_path_index then 
+		log("FUCKINGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
+		return
+	end
+
+	if follow_unit_nav_seg ~= my_data.coarse_path[my_data.coarse_path_index + 1][1] or my_data.coarse_path_index ~= #my_data.coarse_path - 1 then
+		local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
+
+		if follow_unit_nav_seg == my_nav_seg then
+			objective.in_place = true
+
+			data.logic.on_new_objective(data)
+		end
+	end
+end
