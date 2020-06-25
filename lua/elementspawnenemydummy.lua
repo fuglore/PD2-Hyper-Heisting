@@ -171,7 +171,6 @@
 			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
 			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
 			["units/payday2/characters/ene_medic_r870/ene_medic_r870"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870",						
-			["units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"] = "units/pd2_dlc_drm/characters/ene_sniper_heavy/ene_sniper_heavy",
 			["units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",
 			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",
 			["units/payday2/characters/ene_spook_1/ene_spook_1"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",															
