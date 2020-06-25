@@ -166,8 +166,6 @@
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper"
 		}
 	local enemy_annoying = {
-			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_drm/characters/ene_sniper_heavy/ene_sniper_heavy",
-			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_drm/characters/ene_sniper_heavy/ene_sniper_heavy",
 			["units/payday2/characters/ene_tazer_1/ene_tazer_1"] = "units/pd2_dlc_drm/characters/ene_taser_heavy/ene_taser_heavy",						
 			["units/payday2/characters/ene_medic_m4/ene_medic_m4"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",						
 			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
