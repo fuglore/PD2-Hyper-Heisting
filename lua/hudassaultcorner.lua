@@ -24,7 +24,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 			assaultline = "hud_assault_assault_mexcross"
 		elseif level == "red 2" then
 			versusline = "hud_assault_assault_blma"
-			versusline = "hud_assault_faction_federales"			
+			assaultline = "hud_assault_faction_federales"			
 		elseif faction == "murkywater" then
 			if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" then
 				versusline = "hud_assault_faction_mexcross"
