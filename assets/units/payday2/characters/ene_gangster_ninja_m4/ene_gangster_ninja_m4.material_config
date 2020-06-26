@@ -1,0 +1,14 @@
+<materials version="3" group="npc_big_chungus">
+	
+	<material name="mtr_head" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+        <bump_normal_texture file="units/payday2/characters/shared_textures/janitor_2_head_nm"/>
+        <diffuse_texture file="units/payday2/characters/shared_textures/janitor_2_head_df"/>
+    </material>
+
+    <material name="mtr_body" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+        <bump_normal_texture file="units/pd2_dlc_friend/characters/ene_security_manager/ene_security_manager_nm"/>
+        <diffuse_texture file="units/payday2/characters/ene_gangster_ninja_m4/body_df"/>
+    </material>
+
+    <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
+</materials>
