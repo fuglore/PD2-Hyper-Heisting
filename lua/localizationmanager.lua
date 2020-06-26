@@ -198,7 +198,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_deck15_9_desc"] = "Dealing damage will grant you armor - This can only occur once every ##3## seconds. Heavier armors are granted more armor.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a PAYDAY is increased by ##10%.##",
 			
 			--Infiltrator/Sociopath Shit--
-			["menu_deck8_7_desc"] = "Your movement speed is increased by ##20%##. Your second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
+			["menu_deck8_7_desc"] = "Your movement speed is increased by ##20%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
 			
 			["menu_deck8_1_desc"] = "Your movement speed is further increased by ##10%##.",
 			
@@ -206,9 +206,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 
 			["menu_deck9_1"] = "No Talk",
 
-			["menu_deck9_1_desc"] = "Your movement speed is increased by ##20%##. Your second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
+			["menu_deck9_1_desc"] = "Your movement speed is increased by ##20%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
  
-			["menu_deck9_5_desc"] ="Killing an enemy with a melee weapon regenerates ##10%## health. This cannot occur more than once every ##1## second. Your movement speed is further increased by ##10%##.",
+			["menu_deck9_5_desc"] ="Killing an enemy with a melee weapon regenerates ##10%## health. \n\nThis cannot occur more than once every ##1## second. \n\nYour movement speed is further increased by ##10%##.",
  
 			--Stoic--
 			["menu_deck19_1_desc"] = "Unlocks and equips the Stoic Hip Flask.\n\nDamage taken is now reduced by ##66%##. The remaining damage will be applied directly.\n\nThe ##66%## reduced damage will be applied over-time (##12## seconds) instead.\n\nYou can use the throwable key to activate the Stoic Hip Flask and immediately negate any pending damage. The flask has a ##15## second cooldown but time remaining will be lessened by 1 second per enemy killed.",
@@ -245,6 +245,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_prison_wife_beta"] = "Jackpot",
 			["menu_prison_wife_beta_desc"] = "BASIC: ##$basic##\nYou regenerate ##5## armor for each successful headshot. This effect cannot occur more than once every ##2## seconds.\n\nACE: ##$pro##\nUpon killing an enemy with a headshot, you gain the ability to resist damage that would otherwise down you. This is lost after taking lethal damage, and can only be activated every ##5## seconds.\n\n ##Let's rock, baby!##",
+			
 			-- weapon stuff below	
 			["bm_wp_g3_b_short"] = "Short Barrel",
 			["bm_wp_g3_b_sniper"] = "Long Barrel",

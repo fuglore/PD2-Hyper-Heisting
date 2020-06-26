@@ -1660,7 +1660,9 @@ function CopLogicTravel.upd_advance(data)
 			--    my_data.coarse_path = nil
 			--end
 			
-			CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
+			if not data.is_converted then
+				CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
+			end
 
 			if my_data ~= data.internal_data then
 				return
