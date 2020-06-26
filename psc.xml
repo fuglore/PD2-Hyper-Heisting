@@ -169,9 +169,6 @@
 	<model path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss" />	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"/>	
 	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_df" />	
-	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_body_nm" />
-	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_df" />	
-	<texture path="units/pd2_mod_psc/characters/ene_murky_punk_moss/science_head_nm" />
 
 	<!--C45 Murky Punk-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45" load="true"/>
