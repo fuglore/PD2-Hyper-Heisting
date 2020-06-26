@@ -48,6 +48,7 @@ function PlayerTweakData:_set_hard()
 end
 
 function PlayerTweakData:_set_overkill()
+	self.damage.automatic_respawn_time = 240
 	self.damage.DOWNED_TIME_DEC = 10
 	self.damage.DOWNED_TIME_MIN = 5
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
@@ -68,6 +69,7 @@ function PlayerTweakData:_set_overkill()
 end
 
 function PlayerTweakData:_set_overkill_145()
+	self.damage.automatic_respawn_time = 240
 	self.damage.DOWNED_TIME_DEC = 15
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
@@ -89,6 +91,7 @@ function PlayerTweakData:_set_overkill_145()
 end
 
 function PlayerTweakData:_set_easy_wish()
+	self.damage.automatic_respawn_time = 240
 	self.damage.DOWNED_TIME_DEC = 20
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.BLEED_OT_TIME = 10
@@ -116,6 +119,7 @@ function PlayerTweakData:_set_easy_wish()
 end
 
 function PlayerTweakData:_set_overkill_290()
+	self.damage.automatic_respawn_time = 360
 	self.damage.DOWNED_TIME_DEC = 20
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.BLEED_OT_TIME = 10
@@ -143,6 +147,7 @@ function PlayerTweakData:_set_overkill_290()
 end
 
 function PlayerTweakData:_set_sm_wish()
+	self.damage.automatic_respawn_time = 360
 	self.damage.DOWNED_TIME_DEC = 20
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.BLEED_OT_TIME = 10

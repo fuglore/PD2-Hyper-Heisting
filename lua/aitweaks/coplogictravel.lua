@@ -796,7 +796,7 @@ function CopLogicTravel.queued_update(data)
 		end	
 	end
 	
-	-- data.logic._update_haste(data, data.internal_data)
+	data.logic._update_haste(data, data.internal_data)
 	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
       
     CopLogicTravel.queue_update(data, data.internal_data, delay)
