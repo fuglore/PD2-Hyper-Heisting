@@ -10132,7 +10132,8 @@ function CharacterTweakData:character_map()
 		path = "units/payday2/characters/",
 		list = {
 			"ene_fbi_swat_3",
-			"ene_swat_3"
+			"ene_swat_3",
+			"ene_gangster_ninja_m4"
 		}
 	}
 	char_map.bexhh = {

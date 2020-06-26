@@ -21,7 +21,7 @@
 	<continent path="levels/narratives/elephant/born/world/world" force="true" unload="true"/><!--fixes cars clipping into ground-->		
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
-	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> <!--Now, give them hell.-->
+	<!-- <mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> --> <!--Now, give them hell.-->
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 		
 	<!--enemy bullet impact fixes-->	
@@ -195,7 +195,7 @@
 	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"/>	
 
 	<df_nm path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_head_atlas" />
-	<!-- <texture path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_head_atlas_il" load="true"/> -->
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/head_il" load="true"/>
 	<!-- <texture path="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/sniper_joe_body_il" load="true"/> -->
 	<unit_mat path="units/pd2_dlc_gitgud/characters/ene_acc_snipercap/ene_acc_snipercap" load="true"/>
 	
@@ -944,6 +944,18 @@
 	<object path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5" />
 	<model path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5" />	
 	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"/>
+	
+	<!--gangster ninja m4-->
+	<unit path="units/payday2/characters/ene_gangster_ninja_m4/ene_gangster_ninja_m4" force="true"/>
+	<unit path="units/payday2/characters/ene_gangster_ninja_m4/ene_gangster_ninja_m4_husk" force="true"/>
+	<object path="units/payday2/characters/ene_gangster_ninja_m4/ene_gangster_ninja_m4"/>
+	<model path="units/payday2/characters/ene_gangster_ninja_m4/ene_gangster_ninja_m4"/>
+	<material_config path="units/payday2/characters/ene_gangster_ninja_m4/ene_gangster_ninja_m4"/>
+	<material_config path="units/payday2/characters/ene_gangster_ninja_m4/ene_gangster_ninja_m4_contour"/>
+	<cooked_physics path="units/payday2/characters/ene_gangster_ninja_m4/ene_gangster_ninja_m4"/>
+	
+	<texture path="units/payday2/characters/ene_gangster_ninja_m4/body_df"/>
+	<!-- <df_nm path="units/payday2/characters/ene_gangster_ninja_m4/head"/> -->
 	
 	<!--Textures-->	
     <df_nm path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_head" />    	
