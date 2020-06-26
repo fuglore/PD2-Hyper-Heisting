@@ -166,16 +166,13 @@
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper"
 		}
 	local enemy_annoying = {
-			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper",
-			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper",
 			["units/payday2/characters/ene_tazer_1/ene_tazer_1"] = "units/pd2_dlc_drm/characters/ene_taser_heavy/ene_taser_heavy",						
 			["units/payday2/characters/ene_medic_m4/ene_medic_m4"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",						
 			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
 			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
 			["units/payday2/characters/ene_medic_r870/ene_medic_r870"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870",						
-			["units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"] = "units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper",
-			["units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"] = "units/pd2_dlc_drm/characters/ene_fbi_heavy_sniper/ene_fbi_heavy_sniper",
-			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",
+			["units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",
+			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",
 			["units/payday2/characters/ene_spook_1/ene_spook_1"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",															
 			["units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",															
 			["units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870"															

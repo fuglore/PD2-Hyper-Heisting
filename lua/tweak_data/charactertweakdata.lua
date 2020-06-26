@@ -10168,7 +10168,7 @@ function CharacterTweakData:character_map()
 			"ene_murky_heavy_ump",
 			"ene_fbi_heavy_ump",
 			"ene_bulldozer_sniper",
-			"ene_fbi_heavy_sniper",
+			"ene_sniper_heavy",
 			"ene_spook_heavy",
 			"ene_taser_heavy",
 			"ene_shield_heavy",
