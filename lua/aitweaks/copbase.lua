@@ -93,6 +93,8 @@ function CopBase:default_weapon_name()
 	local give_m4 = unit_name == Idstring("units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2") 
 	or unit_name == Idstring("units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2")
 	or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale")
+	or unit_name == Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
+	or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1")
 	
 	local hoxout_boss = unit_name == Idstring("units/payday2/characters/ene_fbi_boss_1/ene_fbi_boss_1")
 
@@ -119,6 +121,7 @@ function CopBase:default_weapon_name()
 	
 	local mp5_punks = unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
 	or unit_name == Idstring("units/payday2/characters/ene_security_6/ene_security_6") 
+	or unit_name == Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
 	
 	local bronco_punks = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
 	or unit_name == Idstring("units/payday2/characters/ene_security_1/ene_security_1") 

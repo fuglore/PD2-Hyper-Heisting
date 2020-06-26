@@ -97,10 +97,6 @@
 	<texture path="units/pd2_dlc_mad/weapons/wpn_npc_akmsu/akmsu_nm" force="true"/>	
 	<!--jarey's reaper weapons END-->
 	
-	<!--Light SWAT Rifle-->	
-	<unit path="units/payday2/characters/ene_swat_1/ene_swat_1" load="true" force="true"/>
-	<unit path="units/payday2/characters/ene_swat_1/ene_swat_1_husk" load="true" force="true"/>
-	
 	<!--Light SWAT SMG-->	
 	<unit path="units/payday2/characters/ene_swat_3/ene_swat_3" load="true"/>
 	<unit path="units/payday2/characters/ene_swat_3/ene_swat_3_husk" load="true"/>	
@@ -142,17 +138,10 @@
     <cooked_physics path="units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm" />
 	
 	<texture path="units/pd2_mod_epictroll/characters/ene_trolliam_calhoun/ene_trolliam_calhoun_df" />	
-	
-	<!--Heavy SWAT R870 fix-->
-	<unit path="units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870_husk" load="true" force="true"/>
 
 	<!--25 8 TWELVE GAUGE PUNK WEIGHT-->	
 	<unit path="units/payday2/characters/ene_cop_3/ene_cop_3" load="true" force="true"/>
 	<unit path="units/payday2/characters/ene_cop_3/ene_cop_3_husk" load="true" force="true"/>
-	
-	<!--Punk MP5-->	
-	<unit path="units/payday2/characters/ene_cop_4/ene_cop_4" load="true" force="true"/>
-	<unit path="units/payday2/characters/ene_cop_4/ene_cop_4_husk" load="true" force="true"/>
 
 	<!--Light SWAT MP5	
 	<unit path="units/payday2/characters/ene_cop_5/ene_cop_5" load="true"/>
@@ -163,7 +152,11 @@
 	<model path="units/payday2/characters/ene_cop_5/ene_cop_5" />	
 	<cooked_physics path="units/payday2/characters/ene_cop_5/ene_cop_5"/>	
 
-	<texture path="units/payday2/characters/shared_textures/police_df" force="true"/>-->	
+	<texture path="units/payday2/characters/shared_textures/police_df" force="true"/>
+	
+	this man is dead. dead forever. he's never coming back. have a nice day. :)
+	
+	-->	
 
 
 	<!--gensec shield-->
@@ -804,27 +797,6 @@
 	<object path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" force="true" />
 	<model path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" force="true" />	
 	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" force="true"/>	
-
-	<!--Heavy Sombiez-->
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1" load="true" force="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1_husk" load="true" force="true"/>
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1" force="true"/>	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1_contour" force="true"/>		
-	<object path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1" force="true" />
-	<model path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1" force="true" />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1" force="true"/>	
-	
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870" load="true" force="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870_husk" load="true" force="true"/>
-	
-	<!--Light SWAT Zombie Rifle-->
-	<unit path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1" load="true" force="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1_husk" load="true" force="true"/>
-	<material_config path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1" force="true"/>	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1_contour" force="true"/>		
-	<object path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1" force="true" />
-	<model path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1" force="true" />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1" force="true"/>	
 
 	<!--Zombie FBI Heavy Shield-->
 	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" load="true" />
