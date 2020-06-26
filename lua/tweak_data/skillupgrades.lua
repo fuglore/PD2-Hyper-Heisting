@@ -97,10 +97,10 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			5
 		}
 		self.values.player.perkdeck_movespeed_mult = {
+			1.15,
 			1.2,
-			1.3,
-			1.4,
-			1.5
+			1.25,
+			1.3
 		}		
 		
 		self.values.temporary.overkill_damage_multiplier = {{1.35, 8}}

@@ -121,6 +121,7 @@
 		["loading_gameplay_15"] = "The ZEALs have extremely good fashion sense, look out for their colors in a crowd to tell what weapons they're using!",
 		["loading_gameplay_37"] = "Higher damage rifles and shotguns can take out tougher enemies like Tasers and Bulldozers with less shots, but are weak at crowd control, try to make up for that with another weapon's capabilities!",
 		["loading_gameplay_46"] = "Snipers slowly get more accurate as you spend time in their line of fire, try to kill them before that happens!",
+		["loading_gameplay_56"] = "During infinite assaults, players can still get out of custody by simply waiting!",
 		["loading_gameplay_73"] = "Not killing enough cops fast enough is a surefire way to guarantee you'll be unable to complete objectives.",
 		["loading_gameplay_96"] = "Captain Winters does not show up in Hyper Heisting! Well, he does! But not really! But kinda! Yeah!",
 		["loading_gameplay_97"] = "If regular Captain Winters shows up in any way, for any reason, please post a comment on the MWS page! That's not supposed to happen!",
@@ -198,17 +199,17 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_deck15_9_desc"] = "Dealing damage will grant you armor - This can only occur once every ##3## seconds. Heavier armors are granted more armor.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a PAYDAY is increased by ##10%.##",
 			
 			--Infiltrator/Sociopath Shit--
-			["menu_deck8_7_desc"] = "Your movement speed is increased by ##20%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
+			["menu_deck8_7_desc"] = "Your movement speed is increased by ##15%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
 			
-			["menu_deck8_1_desc"] = "Your movement speed is further increased by ##10%##.",
+			["menu_deck8_1_desc"] = "Your movement speed is further increased by ##5%##.",
 			
-			["menu_deck8_3_desc"] = "Your movement speed is further increased by ##10%##.",
+			["menu_deck8_3_desc"] = "Your movement speed is further increased by ##5%##.",
 
 			["menu_deck9_1"] = "No Talk",
 
-			["menu_deck9_1_desc"] = "Your movement speed is increased by ##20%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
+			["menu_deck9_1_desc"] = "Your movement speed is increased by ##15%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
  
-			["menu_deck9_5_desc"] ="Killing an enemy with a melee weapon regenerates ##10%## health. \n\nThis cannot occur more than once every ##1## second. \n\nYour movement speed is further increased by ##10%##.",
+			["menu_deck9_5_desc"] ="Killing an enemy with a melee weapon regenerates ##10%## health. \n\nThis cannot occur more than once every ##1## second. \n\nYour movement speed is further increased by ##5%##.",
  
 			--Stoic--
 			["menu_deck19_1_desc"] = "Unlocks and equips the Stoic Hip Flask.\n\nDamage taken is now reduced by ##66%##. The remaining damage will be applied directly.\n\nThe ##66%## reduced damage will be applied over-time (##12## seconds) instead.\n\nYou can use the throwable key to activate the Stoic Hip Flask and immediately negate any pending damage. The flask has a ##15## second cooldown but time remaining will be lessened by 1 second per enemy killed.",

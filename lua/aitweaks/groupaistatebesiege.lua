@@ -1372,7 +1372,7 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 					local smoke_pos_chance = math.random()
 					local nav_seg_id = u_data.tracker:nav_segment()
 					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
-					if u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "assault_area" and smoke_pos_chance < 0.5 or u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "retire" and smoke_pos_chance < 0.5 then
+					if u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "assault_area" or u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "retire" then
 						detonate_pos = mvector3.copy(u_data.group.objective.area.pos)
 					else
 						for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
