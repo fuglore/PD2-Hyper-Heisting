@@ -97,6 +97,7 @@
 		
 		<post :script_path="copdamage.lua" :hook_id="cop/copdamage"/>
 		<post :script_path="copbrain.lua" :hook_id="cop/copbrain"/>
+		<post :script_path="huskcopbrain.lua" :hook_id="cop/huskcopbrain"/>
 		<post :script_path="copbase.lua" :hook_id="cop/copbase"/>
 		<post :script_path="copsound.lua" :hook_id="cop/copsound"/>
 		<post :script_path="copmovement.lua" :hook_id="cop/copmovement"/>
