@@ -65,6 +65,165 @@ function CopBrain:post_init()
 	old_init(self)
 end
 
+CopBrain._NET_EVENTS = {
+	stopped_seeing_client_peaceful = 11,
+	detected_client_peaceful_verified = 10,
+	detected_client_peaceful = 9,
+	client_no_longer_verified = 8,
+	detected_suspected_client = 7,
+	stopped_suspecting_client = 6,
+	suspecting_client_verified = 5,
+	suspecting_client = 4,
+	detected_client = 3,
+	stopped_seeing_client = 2,
+	seeing_client = 1
+}
+
+function CopBrain:sync_net_event(event_id, peer)
+	local peer_id = peer:id()
+	local peer_unit = managers.criminals:character_unit_by_peer_id(peer_id)
+
+	if not peer_unit then
+		return
+	end
+
+	if event_id == self._NET_EVENTS.seeing_client then
+		managers.groupai:state():on_criminal_suspicion_progress(peer_unit, self._unit, 1, peer_id)
+	elseif event_id == self._NET_EVENTS.stopped_seeing_client then
+		managers.groupai:state():on_criminal_suspicion_progress(peer_unit, self._unit, false, peer_id)
+	elseif event_id == self._NET_EVENTS.detected_client then
+		managers.groupai:state():on_criminal_suspicion_progress(peer_unit, self._unit, true, peer_id)
+
+		self._unit:movement():set_cool(false, managers.groupai:state().analyse_giveaway(self._unit:base()._tweak_table, peer_unit))
+
+		local att_obj_data = CopLogicBase.identify_attention_obj_instant(self._logic_data, peer_unit:key())
+
+		if att_obj_data and att_obj_data.criminal_record then
+			managers.groupai:state():criminal_spotted(peer_unit)
+		end
+	elseif event_id == self._NET_EVENTS.detected_client_peaceful or event_id == self._NET_EVENTS.detected_client_peaceful_verified then
+		local t = self._logic_data.t
+		local att_u_key = peer_unit:key()
+		local att_obj_data = self._logic_data.detected_attention_objects[att_u_key]
+
+		if att_obj_data then
+			if not att_obj_data.client_peaceful_detection then
+				mvector3.set(att_obj_data.verified_pos, att_obj_data.m_head_pos)
+
+				att_obj_data.verified_dis = mvector3.distance(self._unit:movement():m_head_pos(), att_obj_data.m_head_pos)
+
+				if not att_obj_data.identified then
+					att_obj_data.identified = true
+					att_obj_data.identified_t = t
+					att_obj_data.notice_progress = nil
+					att_obj_data.prev_notice_chk_t = nil
+				elseif att_obj_data.uncover_progress then
+					att_obj_data.uncover_progress = nil
+				end
+			end
+		else
+			local attention_info = managers.groupai:state():get_AI_attention_objects_by_filter(self._logic_data.SO_access_str)[att_u_key]
+
+			if attention_info then
+				local settings = attention_info.handler:get_attention(self._logic_data.SO_access, nil, nil, self._logic_data.team)
+
+				if settings then
+					att_obj_data = CopLogicBase._create_detected_attention_object_data(t, self._unit, att_u_key, attention_info, settings)
+					att_obj_data.identified = true
+					att_obj_data.identified_t = t
+					att_obj_data.notice_progress = nil
+					att_obj_data.prev_notice_chk_t = nil
+
+					self._logic_data.detected_attention_objects[att_u_key] = att_obj_data
+				end
+			end
+		end
+
+		if att_obj_data then
+			att_obj_data.client_peaceful_detection = true
+
+			if event_id == self._NET_EVENTS.detected_client_peaceful_verified then
+				att_obj_data.verified = true
+			end
+		end
+	elseif event_id == self._NET_EVENTS.suspecting_client or event_id == self._NET_EVENTS.suspecting_client_verified then
+		local t = self._logic_data.t
+		local att_u_key = peer_unit:key()
+		local att_obj_data = self._logic_data.detected_attention_objects[att_u_key]
+
+		if att_obj_data then
+			if not att_obj_data.client_casing_suspicion then
+				mvector3.set(att_obj_data.verified_pos, att_obj_data.m_head_pos)
+
+				att_obj_data.verified_dis = mvector3.distance(self._unit:movement():m_head_pos(), att_obj_data.m_head_pos)
+
+				if not att_obj_data.identified then
+					att_obj_data.identified = true
+					att_obj_data.identified_t = t
+					att_obj_data.notice_progress = nil
+					att_obj_data.prev_notice_chk_t = nil
+				elseif att_obj_data.uncover_progress then
+					att_obj_data.uncover_progress = nil
+				end
+			end
+		else
+			local attention_info = managers.groupai:state():get_AI_attention_objects_by_filter(self._logic_data.SO_access_str)[att_u_key]
+
+			if attention_info then
+				local settings = attention_info.handler:get_attention(self._logic_data.SO_access, nil, nil, self._logic_data.team)
+
+				if settings then
+					att_obj_data = CopLogicBase._create_detected_attention_object_data(t, self._unit, att_u_key, attention_info, settings)
+					att_obj_data.identified = true
+					att_obj_data.identified_t = t
+					att_obj_data.notice_progress = nil
+					att_obj_data.prev_notice_chk_t = nil
+
+					self._logic_data.detected_attention_objects[att_u_key] = att_obj_data
+				end
+			end
+		end
+
+		if att_obj_data then
+			if not att_obj_data.client_casing_suspicion then
+				att_obj_data.client_casing_suspicion = true
+
+				managers.groupai:state():on_criminal_suspicion_progress(peer_unit, self._unit, 1, peer_id)
+			end
+
+			if event_id == self._NET_EVENTS.suspecting_client_verified then
+				att_obj_data.verified = true
+			end
+		end
+	elseif event_id == self._NET_EVENTS.client_no_longer_verified then
+		local att_obj_data = self._logic_data.detected_attention_objects[peer_unit:key()]
+
+		if att_obj_data then
+			att_obj_data.verified = nil
+		end
+	elseif event_id == self._NET_EVENTS.stopped_suspecting_client or event_id == self._NET_EVENTS.stopped_seeing_client_peaceful then
+		if event_id == self._NET_EVENTS.stopped_suspecting_client then
+			managers.groupai:state():on_criminal_suspicion_progress(peer_unit, self._unit, false, peer_id)
+		end
+
+		local att_obj_data = self._logic_data.detected_attention_objects[peer_unit:key()]
+
+		if att_obj_data then
+			att_obj_data.handler:remove_listener("detect_" .. tostring(self._logic_data.key))
+
+			self._logic_data.detected_attention_objects[peer_unit:key()] = nil
+		end
+	elseif event_id == self._NET_EVENTS.detected_suspected_client then
+		managers.groupai:state():on_criminal_suspicion_progress(peer_unit, self._unit, true, peer_id)
+
+		local att_obj_data = self._logic_data.detected_attention_objects[peer_unit:key()]
+
+		if att_obj_data then
+			att_obj_data.client_casing_suspicion = nil
+			att_obj_data.client_casing_detected = true
+		end
+	end
+end
 
 function CopBrain:on_suppressed(state)
     self._logic_data.is_suppressed = state or nil
