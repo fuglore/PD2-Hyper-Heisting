@@ -685,9 +685,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 200,
+					fwd = 200,
+					bwd = 200
 				},
 				hos = {
 					strafe = 220,
@@ -745,9 +745,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 200,
+					fwd = 200,
+					bwd = 200
 				},
 				hos = {
 					strafe = 253,
@@ -800,74 +800,74 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	--20% faster
+	--30% faster
 	presets.move_speed.complex_consistency = {
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 200,
+					fwd = 200,
+					bwd = 200
 				},
 				hos = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
+					strafe = 286,
+					fwd = 286,
+					bwd = 286
 				},
 				cbt = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
+					strafe = 286,
+					fwd = 286,
+					bwd = 286
 				}
 			},
 			run = {
 				hos = {
-					strafe = 540,
-					fwd = 540,
-					bwd = 540
+					strafe = 585,
+					fwd = 585,
+					bwd = 585
 				},
 				cbt = {
-					strafe = 540,
-					fwd = 540,
-					bwd = 540
+					strafe = 585,
+					fwd = 585,
+					bwd = 585
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 252,
-					fwd = 252,
-					bwd = 252
+					strafe = 273,
+					fwd = 273,
+					bwd = 273
 				},
 				cbt = {
-					strafe = 252,
-					fwd = 252,
-					bwd = 252
+					strafe = 273,
+					fwd = 273,
+					bwd = 273
 				}
 			},
 			run = {
 				hos = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
+					strafe = 455,
+					fwd = 455,
+					bwd = 455
 				},
 				cbt = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
+					strafe = 455,
+					fwd = 455,
+					bwd = 455
 				}
 			}
 		}
 	}
-	--25% faster, climax
+	--40% faster, climax
 	presets.move_speed.anarchy_consistency = {
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 200,
+					fwd = 200,
+					bwd = 200
 				},
 				hos = {
 					strafe = 308,
@@ -8109,7 +8109,7 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	}
 	self.swat.weapon = presets.weapon.simple
 	self.swat.detection = presets.detection.enemymook
-	self.swat.HEALTH_INIT = 8
+	self.swat.HEALTH_INIT = 10
 	self.swat.headshot_dmg_mul = 6
 	self.swat.move_speed = presets.move_speed.simple_consistency
 	self.swat.damage.hurt_severity = presets.hurt_severities.hordemook
@@ -8251,7 +8251,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	}
 	self.fbi_swat.weapon = presets.weapon.civil
 	self.fbi_swat.detection = presets.detection.enemymook
-	self.fbi_swat.HEALTH_INIT = 8
+	self.fbi_swat.HEALTH_INIT = 10
 	self.fbi_swat.headshot_dmg_mul = 6
 	self.fbi_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_swat.suppression = presets.suppression.hard_def
@@ -8319,7 +8319,7 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	}
 	self.city_swat.weapon = presets.weapon.civil
 	self.city_swat.detection = presets.detection.enemymook
-	self.city_swat.HEALTH_INIT = 8
+	self.city_swat.HEALTH_INIT = 10
 	self.city_swat.headshot_dmg_mul = 6	
 	self.city_swat.move_speed = presets.move_speed.simple_consistency
 	self.city_swat.damage.hurt_severity = presets.hurt_severities.hordemook
@@ -8389,8 +8389,15 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.armored_sniper.dodge = presets.dodge.heavy
 	self.armored_sniper.move_speed = presets.move_speed.simple_consistency
 	self.armored_sniper.damage.hurt_severity = presets.hurt_severities.heavyhordemook
-	
 	table.insert(self._enemy_list, "armored_sniper")
+	
+	self.assault_sniper = deep_clone(self.sniper)
+	self.assault_sniper.HEALTH_INIT = 20
+	self.assault_sniper.headshot_dmg_mul = 6
+	self.assault_sniper.dodge = presets.dodge.athletic
+	self.assault_sniper.damage.fire_damage_mul = 2
+	table.insert(self._enemy_list, "assault_sniper")
+	
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_gangster", "hhpost_gangster", function(self, presets)

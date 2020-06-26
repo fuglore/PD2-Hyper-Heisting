@@ -24,17 +24,16 @@ local mrot_y = mrotation.y
 local mrot_z = mrotation.z
 local table_insert = table.insert
 
---[[function CopLogicTravel.enter(data, new_logic_name, enter_params)
+function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	CopLogicBase.enter(data, new_logic_name, enter_params)
 	data.unit:brain():cancel_all_pathing_searches()
-	
+
 	local old_internal_data = data.internal_data
 	local my_data = {
 		unit = data.unit
 	}
-	data.internal_data = my_data
 	local is_cool = data.unit:movement():cool()
-	
+
 	if is_cool then
 		my_data.detection = data.char_tweak.detection.ntl
 	else
@@ -46,7 +45,7 @@ local table_insert = table.insert
 		my_data.firing = old_internal_data.firing
 		my_data.shooting = old_internal_data.shooting
 		my_data.attention_unit = old_internal_data.attention_unit
-	
+
 		if old_internal_data.nearest_cover then
 			my_data.nearest_cover = old_internal_data.nearest_cover
 
@@ -63,14 +62,8 @@ local table_insert = table.insert
 	if data.char_tweak.announce_incomming then
 		my_data.announce_t = data.t + 2
 	end
-	
-	local prefix = data.unit:sound():chk_voice_prefix() or "empty"
-	local is_radio_cop = prefix == "l1d_" or prefix == "l2d_" or prefix == "l3d_" or prefix == "l4d_" or prefix == "l5d_"
-	
-	if prefix ~= "empty" and is_radio_cop then
-		my_data.radio_voice = true
-	end
-	
+
+	data.internal_data = my_data
 	local key_str = tostring(data.key)
 	my_data.upd_task_key = "CopLogicTravel.queued_update" .. key_str
 
@@ -79,7 +72,7 @@ local table_insert = table.insert
 	my_data.cover_update_task_key = "CopLogicTravel._update_cover" .. key_str
 
 	if my_data.nearest_cover or my_data.best_cover then
-		CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t)
+		CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 1)
 	end
 
 	my_data.advance_path_search_id = "CopLogicTravel_detailed" .. tostring(data.key)
@@ -101,7 +94,7 @@ local table_insert = table.insert
 			}
 
 			for _, point in ipairs(path_data.points) do
-				table_insert(path, mvec3_copy(point.position))
+				table.insert(path, mvec3_copy(point.position))
 			end
 
 			my_data.advance_path = path
@@ -119,9 +112,7 @@ local table_insert = table.insert
 				}
 			}
 			my_data.path_is_precise = true
-			my_data.path_ahead = true
 		elseif path_style == "coarse" then
-			my_data.path_ahead = true
 			local nav_manager = managers.navigation
 			local f_get_nav_seg = nav_manager.get_nav_seg_from_pos
 			local start_seg = data.unit:movement():nav_tracker():nav_segment()
@@ -135,7 +126,7 @@ local table_insert = table.insert
 				local pos = mvec3_copy(point.position)
 				local nav_seg = f_get_nav_seg(nav_manager, pos)
 
-				table_insert(path, {
+				table.insert(path, {
 					nav_seg,
 					pos
 				})
@@ -144,11 +135,34 @@ local table_insert = table.insert
 			my_data.coarse_path = path
 			my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, path)
 		elseif path_style == "coarse_complete" then
-			my_data.path_safely = nil
-			my_data.path_ahead = true
-			my_data.coarse_path_index = 1
-			my_data.coarse_path = deep_clone(objective.path_data)
-			my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, my_data.coarse_path)
+			if not data.is_converted then
+				my_data.coarse_path_index = 1
+				my_data.coarse_path = deep_clone(objective.path_data)
+				my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, my_data.coarse_path)
+			else
+				my_data.coarse_path = nil
+				local nav_manager = managers.navigation
+				local f_get_nav_seg = nav_manager.get_nav_seg_from_pos
+				local start_seg = data.unit:movement():nav_tracker():nav_segment()
+				local path = {
+					{
+						start_seg
+					}
+				}
+
+				for _, point in ipairs(path_data.points) do
+					local pos = mvec3_copy(point.position)
+					local nav_seg = f_get_nav_seg(nav_manager, pos)
+
+					table.insert(path, {
+						nav_seg,
+						pos
+					})
+				end
+
+				my_data.coarse_path = path
+				my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, path)
+			end			
 		end
 	end
 
@@ -180,7 +194,8 @@ local table_insert = table.insert
 	my_data.path_ahead = data.objective.path_ahead or data.team.id == tweak_data.levels:get_default_team_ID("player")
 
 	data.unit:brain():set_update_enabled_state(false)
-end--]]
+end
+
 
 function CopLogicTravel._upd_enemy_detection(data)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
@@ -607,12 +622,13 @@ function CopLogicTravel.queued_update(data)
 	
 	--Snipers should stop if they have an aggressive reaction to a visible object or player
 	if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-		if not data.tactics or not data.tactics.sniper or data.tactics.sniper and not data.attention_obj.verified then
+		if not data.tactics or not data.tactics.sniper or data.tactics.sniper and not data.attention_obj.verified or data.tactics.sniper and data.attention_obj.dis > 4000 then
 			CopLogicTravel.upd_advance(data)
 		end
 	else
 		CopLogicTravel.upd_advance(data)
 	end
+	
 	if data.internal_data ~= my_data then
 		return
 	end
@@ -679,11 +695,11 @@ function CopLogicTravel.queued_update(data)
 		
 	local cant_say_clear = not data.attention_obj or AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and clear_t_chk and not data.is_converted
 		
-	if not cant_say_clear then
+	if not data.unit:base():has_tag("special") and not cant_say_clear then
 		if data.unit:movement():cool() and data.char_tweak.chatter and data.char_tweak.chatter.clear_whisper then
 			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
 		elseif not data.unit:movement():cool() then
-			if not data.unit:base():has_tag("special") and not managers.groupai:state():chk_assault_active_atm() then
+			if not managers.groupai:state():chk_assault_active_atm() then
 				if data.char_tweak.chatter and data.char_tweak.chatter.controlpanic then
 					local clearchk = math_random(0, 90)
 					local say_clear = 30
@@ -701,15 +717,17 @@ function CopLogicTravel.queued_update(data)
 				elseif data.char_tweak.chatter and data.char_tweak.chatter.clear then
 					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
 				end
-			else
-				if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
-					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
-				elseif data.unit:base()._tweak_table == "shield" then
-					--fuck off
-				elseif data.unit:base()._tweak_table == "akuma" then
-					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "lotusapproach" )
-				end
 			end
+		end
+	end
+	
+	if data.unit:base():has_tag("special") and not cant_say_clear then
+		if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
+			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
+		elseif data.unit:base()._tweak_table == "shield" then
+			--fuck off
+		elseif data.unit:base()._tweak_table == "akuma" then
+			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "lotusapproach" )
 		end
 	end
 		
@@ -866,6 +884,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		"spooc_heavy",
 		"tank_ftsu",
 		"tank_mini",
+		"assault_sniper",
 		"tank",
 		"tank_medic"
 	}
@@ -1624,7 +1643,7 @@ function CopLogicTravel.upd_advance(data)
 		local action_desc = {
 			body_part = 1,
 			type = "warp",
-			position = mvector3.copy(objective.pos),
+			position = mvec3_copy(objective.pos),
 			rotation = objective.rot
 		}
 
@@ -1637,9 +1656,9 @@ function CopLogicTravel.upd_advance(data)
 				CopLogicTravel._try_anounce(data, my_data)
 			end
             
-			if data.is_converted then
-			    my_data.coarse_path = nil
-			end
+			--if data.is_converted then
+			--    my_data.coarse_path = nil
+			--end
 			
 			CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 

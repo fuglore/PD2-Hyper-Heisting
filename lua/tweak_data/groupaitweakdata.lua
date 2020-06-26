@@ -6977,7 +6977,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	end
 
 	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "pines" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
-		if difficulty_index <= 7 then
+		if difficulty_index < 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
 				20,
@@ -7004,7 +7004,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				4
 			}
 		end
-	elseif difficulty_index <= 7 then
+	elseif difficulty_index < 7 then
 		self.besiege.assault.force_balance_mul = {
 			0.4,
 			0.5,
@@ -7637,146 +7637,146 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	if difficulty_index <= 2 then
 		self.besiege.reenforce.groups = {
 			punks_A = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			tac_swat_shotgun_flank = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			punks_B = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			tac_swat_rifle_flank = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			}
 		}
 	elseif difficulty_index == 3 then
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			punks_C = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			tac_swat_rifle = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			punks_B = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			}
 		}
 	elseif difficulty_index == 4 then
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_shotgun_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			tac_swat_rifle = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_rifle_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			recon_squad_B = {
-				7.5,
-				7.5,
-				7.5
+				0, --7.5
+				0,
+				0
 			},
 			punks_B = {
-				7.5,
-				7.5,
-				7.5
+				0, --7.5
+				0,
+				0
 			}
 		}
 	elseif difficulty_index == 5 then
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_shotgun_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			tac_swat_rifle = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_rifle_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
-			punks_A = {
-				7.5,
-				7.5,
-				7.5
+			recon_squad_B = {
+				0, --7.5
+				0,
+				0
 			},
 			punks_B = {
-				7.5,
-				7.5,
-				7.5
+				0, --7.5
+				0,
+				0
 			}
 		}
 	else
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_shotgun_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			tac_swat_rifle = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_rifle_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			recon_squad_B = {
-				7.5,
-				7.5,
-				7.5
+				0, --7.5
+				0,
+				0
 			},
-			punks_C = {
-				7.5,
-				7.5,
-				7.5
+			punks_B = {
+				0, --7.5
+				0,
+				0
 			}
 		}
 	end

@@ -28,6 +28,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._special_unit_types['tank_mini'] = true
 	self._special_unit_types['sniper'] = true
 	self._special_unit_types['armored_sniper'] = true
+	self._special_unit_types['assault_sniper'] = true
 	self._special_unit_types['tank_hw'] = true
 	self._special_unit_types['tank_medic'] = true
 	self._special_unit_types['tank_ftsu'] = true
@@ -63,7 +64,8 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._special_unit_types = self._special_unit_types or {}
 	self._special_unit_types['tank_mini'] = true
 	self._special_unit_types['sniper'] = true	
-	self._special_unit_types['armored_sniper'] = true	
+	self._special_unit_types['armored_sniper'] = true
+	self._special_unit_types['assault_sniper'] = true	
 	self._special_unit_types['tank_hw'] = true
 	self._special_unit_types['tank_medic'] = true
 	self._special_unit_types['tank_ftsu'] = true
