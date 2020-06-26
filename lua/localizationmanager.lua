@@ -246,6 +246,12 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_prison_wife_beta"] = "Jackpot",
 			["menu_prison_wife_beta_desc"] = "BASIC: ##$basic##\nYou regenerate ##5## armor for each successful headshot. This effect cannot occur more than once every ##2## seconds.\n\nACE: ##$pro##\nUpon killing an enemy with a headshot, you gain the ability to resist damage that would otherwise down you. This is lost after taking lethal damage, and can only be activated every ##5## seconds.\n\n ##Let's rock, baby!##",
 			
+			["menu_wolverine_beta"] = "Unstoppable",
+			["menu_wolverine_beta_desc"] = "BASIC: ##$basic##\nThe less health you have, the more power you gain.\n\nWhen under 100% Health, deal up to ##500%## more melee and saw damage.\n\nWhen under ##50%## Health, gain a ##50%## reload speed reduction for all weapons.\n\nACE: ##$pro##\nWhen at ##50%## Health or below, the effects of being suppressed by special enemies are less effective and your interaction speed with Medic Bags and First Aid Kits is increased by ##75%##.",
+			
+			["menu_frenzy"] = "Something To Prove",
+			["menu_frenzy_desc"] = "BASIC: ##$basic##\nYou start with ##50%## of your Health and cannot heal above that.\n\n##ALL DAMAGE DEALT## is increased by ##25%##.\n\nACE: ##$pro##\n##You lose 1 down.##\n\nYour movement speed is increased by ##25%##.\n\n##ALL DAMAGE DEALT## is further increased by ##25%##.",
+			
 			-- weapon stuff below	
 			["bm_wp_g3_b_short"] = "Short Barrel",
 			["bm_wp_g3_b_sniper"] = "Long Barrel",

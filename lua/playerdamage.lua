@@ -21,6 +21,13 @@ Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	end
 
 	self._lives_init = managers.modifiers:modify_value("PlayerDamage:GetMaximumLives", self._lives_init)
+	
+	if managers.player:has_category_upgrade("player", "criticalmode") then
+		if self._lives_init ~= 1 then
+			self._lives_init = self._lives_init - 1
+		end
+	end
+	
 	self._unit = unit
 	self._max_health_reduction = managers.player:upgrade_value("player", "max_health_reduction", 1)
 	self._healing_reduction = managers.player:upgrade_value("player", "healing_reduction", 1)
@@ -572,6 +579,11 @@ function PlayerDamage:build_suppression(amount)
 
 	amount = amount * tweak_data.player.suppression.receive_mul
 	data.value = math.min(tweak_data.player.suppression.max_value, (data.value or 0) + amount * tweak_data.player.suppression.receive_mul)
+	
+	if managers.player:has_category_upgrade("player", "strong_spirit") and self:health_ratio() <= 0.5 then
+		amount = amount * 0.5
+	end
+	
 	self._last_received_sup = amount
 	self._next_allowed_sup_t = managers.player:player_timer():time() + self._dmg_interval
 	if not data.decay_start_t then
@@ -629,3 +641,197 @@ Hooks:PostHook(PlayerDamage, "_regenerate_armor", "hh_regenarmor", function(self
 		self:_begin_akuma_snddedampen()
 	end
 end)
+
+function PlayerDamage:update(unit, t, dt)
+	if _G.IS_VR and self._heartbeat_t and t < self._heartbeat_t then
+		local intensity_mul = 1 - (t - self._heartbeat_start_t) / (self._heartbeat_t - self._heartbeat_start_t)
+		local controller = self._unit:base():controller():get_controller("vr")
+
+		for i = 0, 1, 1 do
+			local intensity = get_heartbeat_value(t)
+			intensity = intensity * (1 - math.clamp(self:health_ratio() / 0.3, 0, 1))
+			intensity = intensity * intensity_mul
+
+			controller:trigger_haptic_pulse(i, 0, intensity * 900)
+		end
+	end
+
+	self:_check_update_max_health()
+	self:_check_update_max_armor()
+	self:_update_can_take_dmg_timer(dt)
+	self:_update_regen_on_the_side(dt)
+	
+	if managers.player:has_category_upgrade("player", "melee_damage_health_ratio_multiplier") and self:health_ratio() <= 0.5 then
+		if not self._unit:movement():next_reload_speed_multiplier() or self._unit:movement():next_reload_speed_multiplier() > 0.5 then
+			self._unit:movement():set_next_reload_speed_multiplier(0.5)
+		end
+	end
+
+	if not self._armor_stored_health_max_set then
+		self._armor_stored_health_max_set = true
+
+		self:update_armor_stored_health()
+	end
+
+	if managers.player:has_activate_temporary_upgrade("temporary", "chico_injector") then
+		self._chico_injector_active = true
+		local total_time = managers.player:upgrade_value("temporary", "chico_injector")[2]
+		local current_time = managers.player:get_activate_temporary_expire_time("temporary", "chico_injector") - t
+
+		managers.hud:set_player_ability_radial({
+			current = current_time,
+			total = total_time
+		})
+	elseif self._chico_injector_active then
+		managers.hud:set_player_ability_radial({
+			current = 0,
+			total = 1
+		})
+
+		self._chico_injector_active = nil
+	end
+
+	local is_berserker_active = managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier")
+
+	if self._check_berserker_done then
+		if is_berserker_active then
+			if self._unit:movement():tased() then
+				self._tased_during_berserker = true
+			else
+				self._tased_during_berserker = false
+			end
+		end
+
+		if not is_berserker_active then
+			if self._unit:movement():tased() then
+				self._bleed_out_blocked_by_tased = true
+			else
+				self._bleed_out_blocked_by_tased = false
+				self._check_berserker_done = nil
+
+				managers.hud:set_teammate_condition(HUDManager.PLAYER_PANEL, "mugshot_normal", "")
+				managers.hud:set_player_custom_radial({
+					current = 0,
+					total = self:_max_health(),
+					revives = Application:digest_value(self._revives, false)
+				})
+				self:force_into_bleedout()
+
+				if not self._bleed_out then
+					self._disable_next_swansong = true
+				end
+			end
+		else
+			local expire_time = managers.player:get_activate_temporary_expire_time("temporary", "berserker_damage_multiplier")
+			local total_time = managers.player:upgrade_value("temporary", "berserker_damage_multiplier")
+			total_time = total_time and total_time[2] or 0
+			local delta = 0
+			local max_health = self:_max_health()
+
+			if total_time ~= 0 then
+				delta = math.clamp((expire_time - Application:time()) / total_time, 0, 1)
+			end
+
+			managers.hud:set_player_custom_radial({
+				current = delta * max_health,
+				total = max_health,
+				revives = Application:digest_value(self._revives, false)
+			})
+			managers.network:session():send_to_peers("sync_swansong_timer", self._unit, delta * max_health, max_health, Application:digest_value(self._revives, false), managers.network:session():local_peer():id())
+		end
+	end
+
+	if self._bleed_out_blocked_by_zipline and not self._unit:movement():zipline_unit() then
+		self:force_into_bleedout(true)
+
+		self._bleed_out_blocked_by_zipline = nil
+	end
+
+	if self._bleed_out_blocked_by_movement_state and not self._unit:movement():current_state():bleed_out_blocked() then
+		self:force_into_bleedout()
+
+		self._bleed_out_blocked_by_movement_state = nil
+	end
+
+	if self._bleed_out_blocked_by_tased and not self._tased_during_berserker and not self._unit:movement():tased() then
+		self:force_into_bleedout()
+
+		self._bleed_out_blocked_by_tased = nil
+	end
+
+	if self._current_state then
+		self:_current_state(t, dt)
+	end
+
+	self:_update_armor_hud(t, dt)
+
+	if self._tinnitus_data then
+		self._tinnitus_data.intensity = (self._tinnitus_data.end_t - t) / self._tinnitus_data.duration
+
+		if self._tinnitus_data.intensity <= 0 then
+			self:_stop_tinnitus()
+		else
+			SoundDevice:set_rtpc("downed_state_progression", math.max(self._downed_progression or 0, self._tinnitus_data.intensity * 100))
+		end
+	end
+
+	if self._concussion_data then
+		self._concussion_data.intensity = (self._concussion_data.end_t - t) / self._concussion_data.duration
+
+		if self._concussion_data.intensity <= 0 then
+			self:_stop_concussion()
+		else
+			SoundDevice:set_rtpc("concussion_effect", self._concussion_data.intensity * 100)
+		end
+	end
+
+	if not self._downed_timer and self._downed_progression then
+		self._downed_progression = math.max(0, self._downed_progression - dt * 50)
+
+		if not _G.IS_VR then
+			managers.environment_controller:set_downed_value(self._downed_progression)
+		end
+
+		SoundDevice:set_rtpc("downed_state_progression", self._downed_progression)
+
+		if self._downed_progression == 0 then
+			self._unit:sound():play("critical_state_heart_stop")
+
+			self._downed_progression = nil
+		end
+	end
+
+	if self._auto_revive_timer then
+		if not managers.platform:presence() == "Playing" or not self._bleed_out or self._dead or self:incapacitated() or self:arrested() or self._check_berserker_done then
+			self._auto_revive_timer = nil
+		else
+			self._auto_revive_timer = self._auto_revive_timer - dt
+
+			if self._auto_revive_timer <= 0 then
+				self:revive(true)
+				self._unit:sound_source():post_event("nine_lives_skill")
+
+				self._auto_revive_timer = nil
+			end
+		end
+	end
+
+	if self._revive_miss then
+		self._revive_miss = self._revive_miss - dt
+
+		if self._revive_miss <= 0 then
+			self._revive_miss = nil
+		end
+	end
+
+	self:_upd_suppression(t, dt)
+
+	if not self._dead and not self._bleed_out and not self._check_berserker_done then
+		self:_upd_health_regen(t, dt)
+	end
+
+	if not self:is_downed() then
+		self:_update_delayed_damage(t, dt)
+	end
+end
+

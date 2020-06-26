@@ -183,7 +183,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
-		end
+	end
 		
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then		
 		--fuck you you piece of shit i'm not doing all this shit to make you function properly you fuck i hate your guts i hate you i hate you FUCK YOU
@@ -248,6 +248,9 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				category = "player"
 			}
 		}
+		self.values.player.jackpot_safety = {
+			true
+		}
 		self.definitions.player_jackpot_safety = {
 			name_id = "menu_jackpot_safety",
 			category = "feature",
@@ -256,14 +259,62 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				upgrade = "jackpot_safety",
 				category = "player"
 			}
-		}		
-		self.values.player.jackpot_safety = {
+		}
+		
+		--Something To Prove
+		
+		self.values.player.max_health_reduction = {
+			0.5
+		}
+		self.values.player.flexmode = {
 			true
 		}
+		self.values.player.criticalmode = {
+			true
+		}
+		self.definitions.player_flexmode = {
+			name_id = "menu_flexmode",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "flexmode",
+				category = "player"
+			}
+		}
+		self.definitions.player_criticalmode = {
+			name_id = "menu_criticalmode",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "criticalmode",
+				category = "player"
+			}
+		}
+		
+		--Unstoppable tier 1
+		self.values.player.melee_damage_health_ratio_multiplier = {
+			5
+		}
+		self.player_damage_health_ratio_threshold = 0.99
+		
+		--Unstoppable tier 2
+		self.values.player.strong_spirit = {
+			true
+		}
+		self.definitions.player_strong_spirit = {
+			name_id = "menu_strong_spirit",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "strong_spirit",
+				category = "player"
+			}
+		}
+		
 		self.weapon_movement_penalty.lmg = 0.8
 		self.weapon_movement_penalty.minigun = 0.6
 		
-			self.definitions.player_damage_dampener_outnumbered_strong = { --Infiltrator/Sociopath movement speed buff stuff
+		self.definitions.player_damage_dampener_outnumbered_strong = { --Infiltrator/Sociopath movement speed buff stuff
 			name_id = "menu_player_infilpath_1",
 			category = "feature",
 			upgrade = {

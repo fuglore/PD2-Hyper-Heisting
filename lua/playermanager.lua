@@ -20,6 +20,12 @@ function PlayerManager:speak(message, arg1, arg2)
 	end
 end
 
+function PlayerManager:get_health_ratio_easy()
+	local player_unit = self:player_unit()
+	local damage_ext = player_unit:character_damage()
+	return damage_ext:health_ratio()
+end
+
 function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	local player_unit = self:player_unit()
 

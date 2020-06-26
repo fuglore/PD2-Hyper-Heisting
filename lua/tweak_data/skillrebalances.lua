@@ -41,6 +41,49 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 				11
 			}
 		}
+		
+		self.skills.wolverine = {
+			{
+				upgrades = {
+					"player_melee_damage_health_ratio_multiplier"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_strong_spirit"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_wolverine_beta",
+			desc_id = "menu_wolverine_beta_desc",
+			icon_xy = {
+				2,
+				2
+			}
+		}
+		
+		self.skills.frenzy = {
+			{
+				upgrades = {
+					"player_max_health_reduction_1",
+					"player_flexmode"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_criticalmode"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_frenzy",
+			desc_id = "menu_frenzy_desc",
+			icon_xy = {
+				11,
+				8
+			}
+		}
 
 	end
 end)
