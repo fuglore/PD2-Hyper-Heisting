@@ -662,8 +662,8 @@ function PlayerDamage:update(unit, t, dt)
 	self:_update_regen_on_the_side(dt)
 	
 	if managers.player:has_category_upgrade("player", "melee_damage_health_ratio_multiplier") and self:health_ratio() <= 0.5 then
-		if not self._unit:movement():next_reload_speed_multiplier() or self._unit:movement():next_reload_speed_multiplier() > 0.5 then
-			self._unit:movement():set_next_reload_speed_multiplier(0.5)
+		if not self._unit:movement():next_reload_speed_multiplier() or self._unit:movement():next_reload_speed_multiplier() < 1.5 then
+			self._unit:movement():set_next_reload_speed_multiplier(1.5)
 		end
 	end
 
