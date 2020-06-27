@@ -334,8 +334,10 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 				data.tase_delay_t = TimerManager:game():time() + 45
 			end
 		end
-
-		managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
+		
+		if my_data.tasing then
+			managers.groupai:state():on_tase_end(my_data.tasing.target_u_key)
+		end
 
 		my_data.tasing = nil
 		
