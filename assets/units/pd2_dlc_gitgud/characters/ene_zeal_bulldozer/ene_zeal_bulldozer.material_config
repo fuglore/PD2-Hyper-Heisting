@@ -2,7 +2,7 @@
     <material name="mtr_bulldozer" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM:SKINNED_3WEIGHTS" version="2">
         <bump_normal_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/bulldozer_nm"/>
         <diffuse_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/bulldozer_df"/>
-		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_il"/>
+		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_skull_il"/>
 		<variable type="scalar" name="il_bloom" value="10"/>
         <variable type="scalar" name="il_multiplier" value="neonsign"/>
 	</material>
