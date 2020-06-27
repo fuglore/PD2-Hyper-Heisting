@@ -1722,12 +1722,12 @@ function CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 
 	local follow_unit_nav_seg = data.objective.follow_unit:movement():nav_tracker():nav_segment()
 	
-	if not follow_unit_nav_seg or not my_data.coarse_path or not my_data.coarse_path_index or not my_data.coarse_path[my_data.coarse_path_index + 1][1] then 
+	if not follow_unit_nav_seg or not my_data.coarse_path or not my_data.coarse_path_index or not my_data.coarse_path[my_data.coarse_path_index + 1] or not my_data.coarse_path[my_data.coarse_path_index + 1][1] then 
 		--log("FUCKINGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 		return
 	end
 
-	if follow_unit_nav_seg ~= my_data.coarse_path[my_data.coarse_path_index + 1][1] or my_data.coarse_path_index ~= #my_data.coarse_path - 1 then
+	if my_data.coarse_path[my_data.coarse_path_index + 1] and follow_unit_nav_seg ~= my_data.coarse_path[my_data.coarse_path_index + 1][1] or my_data.coarse_path_index ~= #my_data.coarse_path - 1 then
 		local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
 
 		if follow_unit_nav_seg == my_nav_seg then
