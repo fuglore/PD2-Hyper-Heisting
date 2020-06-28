@@ -50,9 +50,17 @@
 	<object path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"/>
 	<model path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"/>	
 	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"/>	
-
+	
+	<!--HH Murky Medic Shotgunner-->
 	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870" load="true"/>
 	<unit path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"/>
+	<material_config path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870_contour"/>	
+	<object path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"/>
+	<model path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"/>	
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"/>
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/material_body_df" />	
+	<texture path="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/material_head_df" />	
 		
 	<!--Murky Light Shotgunner-->
 	<unit path="units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870" load="true"/>
@@ -119,6 +127,8 @@
 	<object path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>
 	<model path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"/>	
+	<texture path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/murky_glass_df" />	
+	<texture path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/murky_glass_op" />	
 
 	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_rifle_helmet/ene_acc_rifle_helmet" load="true"/>
 
@@ -293,6 +303,7 @@
 	
 	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_murkywater_hat/ene_acc_murkywater_hat" load="true"/>
 	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_murkywater_medic_helmet/ene_acc_murkywater_medic_helmet" load="true"/>
+	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_murkywater_medic_helmet_r870/ene_acc_murkywater_medic_helmet_r870" load="true"/>
 	<unit_mat path="units/pd2_dlc_bph/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" load="true"/>
 
 	<!--Vanilla Murky Dozers (i hate you ugly pricks FUCK you stupid dumbasses!!!)-->

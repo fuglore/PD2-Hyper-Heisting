@@ -34,9 +34,9 @@
         <diffuse_texture 		file="units/pd2_mod_psc/characters/shared_textures/shotgun_hood_df"/>
     </material>
     <material render_template="opacity:CUBE_ENVIRONMENT_MAPPING:CUBE_FRESNEL:DIFFUSE_TEXTURE" decal_material="glass_breakable" name="mtr_heavy_helmet_lod_2" version="2">
-        <variable value="2 1 0.6" type="vector3" name="fresnel_settings"/>
-        <opacity_texture file="units/payday2/glass/glass_clear_small_op"/>
-        <diffuse_texture file="units/payday2/glass/glass_clear_small_df"/>
+        <variable value="0 1 0" type="vector3" name="fresnel_settings"/>
+        <opacity_texture file="units/pd2_mod_psc/characters/ene_murky_heavy_scar/murky_glass_op"/>
+        <diffuse_texture file="units/pd2_mod_psc/characters/ene_murky_heavy_scar/murky_glass_df"/>
         <reflection_texture type="cubemap" global_texture="current_global_texture"/>
     </material>
 

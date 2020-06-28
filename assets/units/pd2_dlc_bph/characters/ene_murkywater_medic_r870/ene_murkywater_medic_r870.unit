@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <unit type="being" slot="12">
 	<anim_state_machine name="anims/units/enemies/cop/cop_machine" />
-	<object file="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic" />
+	<object file="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870" />
 
 	<dependencies>
 		<depends_on effect="effects/payday2/particles/impacts/blood/blood_impact_katana" />
 		<depends_on effect="effects/payday2/particles/character/taser_thread" />
 		<depends_on bnk="soundbanks/regular_vox" />
 		<depends_on bnk="soundbanks/regular_sfx" />
-		<depends_on unit="units/pd2_dlc_bph/characters/ene_acc_murkywater_medic_helmet/ene_acc_murkywater_medic_helmet" />
+		<depends_on unit="units/pd2_dlc_bph/characters/ene_acc_murkywater_medic_helmet_r870/ene_acc_murkywater_medic_helmet_r870" />
 	</dependencies>
 
 	<extensions>
@@ -25,7 +25,7 @@
 			<var name="_head_body_name" value="head" />
 			<var name="_head_gear_object" value="g_helmet_lod" />
 			<var name="_nr_head_gear_objects" value="2" />
-			<var name="_head_gear" value="units/pd2_dlc_bph/characters/ene_acc_murkywater_medic_helmet/ene_acc_murkywater_medic_helmet" />
+			<var name="_head_gear" value="units/pd2_dlc_bph/characters/ene_acc_murkywater_medic_helmet_r870/ene_acc_murkywater_medic_helmet_r870" />
 			<var name="_head_gear_decal_mesh" value="dm_helmet" />
 		</extension>
 		<extension name="movement" class="CopMovement" >
@@ -43,7 +43,7 @@
 		<extension name="sound" class="CopSound" />
 	</extensions>
 
-	<network sync="spawn" remote_unit="units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic_husk"/>
+	<network sync="spawn" remote_unit="units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870_husk"/>
 
 	<sounds>
 		<default_soundsource source="Hips"/>

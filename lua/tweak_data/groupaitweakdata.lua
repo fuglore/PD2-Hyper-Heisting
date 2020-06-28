@@ -2598,7 +2598,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			special_type = "medic",
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4")
+					Idstring("units/payday2/characters/ene_medic_m4_hh/ene_medic_m4_hh")
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_ak47_ass")
