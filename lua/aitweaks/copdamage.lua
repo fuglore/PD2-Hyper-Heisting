@@ -1,5 +1,6 @@
 local mvec_1 = Vector3()
 local mvec_2 = Vector3()
+local table_size = table.size
 
 function CopDamage:is_immune_to_shield_knockback()
 	if self._immune_to_knockback then
@@ -2920,19 +2921,11 @@ function CopDamage:sync_damage_tase(attacker_unit, damage_percent, variant, deat
 end
 
 function CopDamage:_check_special_death_conditions(variant, body, attacker_unit, weapon_unit)
-	if not attacker_unit then
+	if not attacker_unit or not alive(attacker_unit) or not attacker_unit:base() then
 		return
 	end
 
-	if not alive(attacker_unit) then
-		return
-	end
-
-	if not attacker_unit:base() then
-		return
-	end
-
-	local special_deaths = self._char_tweak.special_deaths --special deaths set in charactertweakdata
+	local special_deaths = self._char_tweak.special_deaths
 
 	if not special_deaths or not special_deaths[variant] then
 		return
@@ -2944,57 +2937,80 @@ function CopDamage:_check_special_death_conditions(variant, body, attacker_unit,
 		return
 	end
 
-	if not managers.groupai:state():all_criminals()[attacker_unit:key()] then --is not a heister
-		return
+	local required_character = body_data.character_name
+
+	if required_character then
+		local attacker_name = managers.criminals:character_name_by_unit(attacker_unit) or attacker_unit:base()._tweak_table or "error_no_name"
+
+		if type(required_character) == "string" then
+			if required_character ~= attacker_name then
+				return
+			end
+		elseif type(required_character) == "table" and table_size(required_character) > 0 and not table_contains(required_character, attacker_name) then
+			return
+		end
 	end
-
-	local attacker_name = managers.criminals:character_name_by_unit(attacker_unit)
-
-	if not body_data.character_name or body_data.character_name ~= attacker_name then
-		return
-	end
-
-	local can_comment = Network:is_server() and managers.groupai:state():is_unit_team_AI(attacker_unit) or attacker_unit == managers.player:player_unit()
 
 	if variant == "melee" then
-		if body_data.melee_weapon_id and weapon_unit then
-			if body_data.melee_weapon_id == weapon_unit then
-				if self._unit:damage():has_sequence(body_data.sequence) then
-					if body_data.sound_effect then
-						self._unit:sound():play(body_data.sound_effect, nil, nil)
+		local required_melee = body_data.melee_weapon_id
+		local melee_id = weapon_unit or "error_no_melee"
+
+		if required_melee then
+			if type(required_melee) == "string" then
+				if required_melee ~= melee_id then
+					return
+				end
+			elseif type(required_melee) == "table" and table_size(required_character) > 0 and not table_contains(required_melee, melee_id) then
+				return
+			end
+		end
+	elseif variant == "bullet" then
+		local required_weapon = body_data.weapon_id
+
+		if required_weapon then
+			if not alive(weapon_unit) then
+				return
+			else
+				local weapon_id = nil
+				local factory_id = weapon_unit:base()._factory_id
+
+				if factory_id then
+					if weapon_unit:base():is_npc() then --uses newnpcraycastweaponbase (normally means bots and player husks)
+						factory_id = utf8.sub(factory_id, 1, -5) --remove part of the factory id to be able to properly check it with a player variant
 					end
 
-					self._unit:damage():run_sequence_simple(body_data.sequence)
+					weapon_id = managers.weapon_factory:get_weapon_id_by_factory_id(factory_id)
+				elseif weapon_unit:base().get_name_id then --needs testing
+					weapon_id = weapon_unit:base():get_name_id()
+					weapon_id = utf8.sub(weapon_id, 1, -4)
+				end
 
-					if body_data.special_comment and can_comment then --local players or bots sync the voiceline, no need to do this for husks
-						return body_data.special_comment
+				if not weapon_id then
+					weapon_id = "error_no_id"
+				end
+
+				if type(required_weapon) == "string" then
+					if required_weapon ~= weapon_id then
+						return
 					end
+				elseif type(required_weapon) == "table" and table_size(required_character) > 0 and not table_contains(required_weapon, weapon_id) then
+					return
 				end
 			end
 		end
-	else
-		if body_data.weapon_id and alive(weapon_unit) then
-			local factory_id = weapon_unit:base()._factory_id --factory id, aka its unit id
+	end
 
-			if not factory_id then
-				return
-			end
+	if body_data.sound_effect then
+		self._unit:sound():play(body_data.sound_effect, nil, nil)
+	end
 
-			if weapon_unit:base():is_npc() then --uses newnpcraycastweaponbase (so, bots and player husks)
-				factory_id = utf8.sub(factory_id, 1, -5) --removes the _npc part (or third_unit, forgot which one but it's what it does) from the name to see if it coincides below
-			end
+	if body_data.sequence and self._unit:damage():has_sequence(body_data.sequence) then
+		self._unit:damage():run_sequence_simple(body_data.sequence)
+	end
 
-			local weapon_id = managers.weapon_factory:get_weapon_id_by_factory_id(factory_id) --actual weapon id used in many files
-
-			if body_data.weapon_id == weapon_id then
-				if self._unit:damage():has_sequence(body_data.sequence) then
-					self._unit:damage():run_sequence_simple(body_data.sequence)
-				end
-
-				if body_data.special_comment and can_comment then --local players or bots sync the voiceline, no need to do this for husks
-					return body_data.special_comment
-				end
-			end
+	if body_data.special_comment then --local players or bots sync the voiceline, no need to do this for husks
+		if attacker_unit == managers.player:player_unit() or Network:is_server() and managers.groupai:state():is_unit_team_AI(attacker_unit) then
+			return body_data.special_comment
 		end
 	end
 end
