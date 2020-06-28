@@ -438,6 +438,8 @@
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/ene_zeal_city_shotgun_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/helmets_shotgun_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_il" load="true" />
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_green_il" load="true" />
+	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_red_il" load="true" />
 	<texture path="units/pd2_dlc_gitgud/characters/shared_textures/bulldozer_skull_il" load="true" />
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/armored_punk_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/glasses_df" />
@@ -520,10 +522,12 @@
 
 	<df_nm path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire" />
 
-	<!--CRIME SPREE MOTHAFUCKERS-->	
+	<!--ZEAL/CRIME SPREE BULLDOZER MOTHAFUCKAS-->	
 	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic" force="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic_df" force="true"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun" force="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_df" force="true"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_il" load="true"/>
 	
 	<!--crime spree smg heavies-->	
 	<unit path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" load="true"/>

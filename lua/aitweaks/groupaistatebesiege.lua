@@ -1034,11 +1034,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 			local coarse_path = managers.navigation:search_coarse(search_params)
 
 			if coarse_path then
-				local clean_path = self:_merge_coarse_path_by_area(coarse_path)
-				
-				if clean_path then
-					coarse_path = clean_path
-				end
+				self:_merge_coarse_path_by_area(coarse_path)
 				
 				local grp_objective = {
 					scan = true,
@@ -1052,7 +1048,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 				}
 
 				self:_set_objective_to_enemy_group(group, grp_objective)
-				table.remove(coarse_path)
+				--table.remove(coarse_path)
 			end
 		end
 
@@ -1601,7 +1597,7 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 
 			if coarse_path then
 				self:_merge_coarse_path_by_area(coarse_path)
-				table.remove(coarse_path)
+				--table.remove(coarse_path)
 
 				local grp_objective = {
 					scan = true,
@@ -1718,6 +1714,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					local coarse_path = managers.navigation:search_coarse(search_params)
 
 					if coarse_path then
+						self:_merge_coarse_path_by_area(coarse_path)
 						local grp_objective = {
 							distance = 800,
 							type = "assault_area",
@@ -1773,6 +1770,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 						}
 						local coarse_path = managers.navigation:search_coarse(search_params)
 						if coarse_path then
+							self:_merge_coarse_path_by_area(coarse_path)
 							local grp_objective = {
 								type = "assault_area",
 								tactic = "hunter",
@@ -1828,12 +1826,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 			
-			if phase_is_anticipation and current_objective.open_fire and has_criminals_close or self._feddensityhigh or self._activeassaultbreak then
+			if phase_is_anticipation and has_criminals_close or self._feddensityhigh or self._activeassaultbreak then
 				pull_back = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
 				approach = true
 			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
-				open_fire = true
+				--open_fire = true
+				push = true
 				self:_voice_open_fire_start(group)
 			elseif charge and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak then
 				push = true
@@ -1899,9 +1898,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 									alternate_assault_path = managers.navigation:search_coarse(search_params)
 
 									if alternate_assault_path then
-										local clean_path = self:_merge_coarse_path_by_area(alternate_assault_path)
-										
-										alternate_assault_path = clean_path
+										self:_merge_coarse_path_by_area(alternate_assault_path)
 										
 										alternate_assault_area = search_area
 										alternate_assault_area_from = current_objective.area
@@ -1925,9 +1922,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							assault_path = managers.navigation:search_coarse(search_params)
 
 							if assault_path then
-								local clean_path = self:_merge_coarse_path_by_area(assault_path)
+								self:_merge_coarse_path_by_area(assault_path)
 								
-								assault_path = clean_path
 								assault_area = search_area
 								
 								if not assault_area_uno then

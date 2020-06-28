@@ -190,7 +190,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 
 	my_data.attitude = data.objective.attitude or "avoid"
 	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range
-	my_data.path_safely = data.team.foes[tweak_data.levels:get_default_team_ID("player")]
+	my_data.path_safely = my_data.attitude == "avoid" or nil
 	my_data.path_ahead = data.objective.path_ahead or data.team.id == tweak_data.levels:get_default_team_ID("player")
 
 	data.unit:brain():set_update_enabled_state(false)
@@ -511,6 +511,7 @@ function CopLogicTravel._upd_pathing(data, my_data)
 			my_data.processing_advance_path = nil
 
 			if path ~= "failed" then
+				managers.groupai:state():_merge_coarse_path_by_area(path)
 				my_data.advance_path = path
 			else
 				data.path_fail_t = data.t
@@ -527,6 +528,7 @@ function CopLogicTravel._upd_pathing(data, my_data)
 			my_data.processing_coarse_path = nil
 
 			if path ~= "failed" then
+				managers.groupai:state():_merge_coarse_path_by_area(path)
 				my_data.coarse_path = path
 				my_data.coarse_path_index = 1
 			elseif my_data.path_safely then
@@ -549,7 +551,7 @@ function CopLogicTravel._upd_pathing(data, my_data)
 				my_data.cover_path = path
 			else
 				print(data.unit, "[CopLogicAttack._process_pathing_results] cover path failed", data.unit)
-				CopLogicAttack._set_engage_cover(data, my_data, nil)
+				--CopLogicAttack._set_engage_cover(data, my_data, nil)
 				--log("hmm")
 
 				my_data.cover_path_failed_t = TimerManager:game():time()
@@ -832,26 +834,6 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	end
 
 	return true
-end
-
-function CopLogicTravel._set_engage_cover(data, my_data, cover_data)
-	local engage_cover = my_data.engage_cover
-
-	if engage_cover then
-		managers.navigation:release_cover(engage_cover[1])
-		CopLogicAttack._cancel_cover_pathing(data, my_data)
-	end
-
-	if cover_data then
-		managers.navigation:reserve_cover(cover_data[1], data.pos_rsrv_id)
-
-		my_data.engage_cover = cover_data
-
-		--my_data.cover_enter_t = data.t
-	else
-		my_data.engage_cover = nil
-		my_data.flank_cover = nil
-	end
 end
 
 function CopLogicTravel.action_complete_clbk(data, action)
