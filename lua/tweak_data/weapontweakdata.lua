@@ -725,7 +725,7 @@ function WeaponTweakData:_set_sm_wish()
 	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	self.bayou_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	
-	self:_set_characters_weapon_preset(15, 6, 20, 25) --setting enemy weapon spread
+	self:_set_characters_weapon_preset(15, 6, 15, 25) --setting enemy weapon spread
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 40 --They'll lock your armor regen down after breaking it for a little while, but can't pierce your armor anymore.

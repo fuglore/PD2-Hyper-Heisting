@@ -2768,7 +2768,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0.35,
 			0.35
 		},
-		focus_delay = 5,
+		focus_delay = 0,
 		focus_dis = 200,
 		spread = 20,
 		miss_dis = 40,
@@ -2787,8 +2787,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4,
 				r = 100,
 				acc = {
-					0.65,
-					0.85
+					1,
+					1
 				},
 				recoil = {
 					0.4,
@@ -2805,8 +2805,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4,
 				r = 500,
 				acc = { --lessened accuracy, firerate keeps it scary
-					0,
-					0.2
+					1,
+					1
 				},
 				recoil = {
 					0.4,
@@ -2823,8 +2823,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4, --accuracy and recoil drop begins
 				r = 1000,
 				acc = {
-					0,
-					0.05
+					1,
+					1
 				},
 				recoil = {
 					0.6,
@@ -2841,8 +2841,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --falloff begins
 				r = 2000,
 				acc = {
-					0,
-					0.05
+					1,
+					1
 				},
 				recoil = {
 					0.8,
@@ -2859,8 +2859,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0.5, --lower end of the falloff scale, drop the damage, but recoil and acc still remains the same to keep it suppressing players
 				r = 3000,
 				acc = {
-					0,
-					0.05
+					1,
+					1
 				},
 				recoil = {
 					0.8,
@@ -2877,8 +2877,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0, --range limit reach, gun stops working, higher recoil than rifles to compensate for the full auto
 				r = 4000,
 				acc = {
-					0,
-					0.01
+					1,
+					1
 				},
 				recoil = {
 					2,
@@ -3872,7 +3872,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0.5,
 			0.5
 		},
-		focus_delay = 1.4, --higher than rifles at this preset, (well, not in this one particular, possibly but, still.) to show it as a suppressing bullet hose at longer ranges, makes the minigun feel comparably close-range oriented while the lmg reaches a tiny bit longer to make the difference. ('course, though, what matters is always technique)
+		focus_delay = 0,
 		focus_dis = 200,
 		spread = 40,
 		miss_dis = 1,
@@ -3891,8 +3891,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --60, keeps the gun scarier than rifles.
 				r = 100,
 				acc = {
-					0,
-					0.05
+					1,
+					1
 				},
 				recoil = {
 					1.7,
@@ -3909,8 +3909,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 500,
 				acc = { --lessened accuracy, firerate keeps it scary
-					0,
-					0.05
+					1,
+					1
 				},
 				recoil = {
 					1.7,
@@ -3927,8 +3927,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					0,
-					0.01
+					1,
+					1
 				},
 				recoil = {
 					1.7,
@@ -3945,8 +3945,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 1, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
 				r = 2000,
 				acc = {
-					0,
-					0.01
+					1,
+					1
 				},
 				recoil = {
 					1.7,
@@ -3963,8 +3963,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 1,
 				r = 3000,
 				acc = {
-					0,
-					0.01
+					1,
+					1
 				},
 				recoil = {
 					1.7,
@@ -4995,7 +4995,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0.35,
 			0.35
 		},
-		focus_delay = 1.05, --higher than rifles at this preset to show it as a suppressing bullet hose at longer ranges
+		focus_delay = 0, --higher than rifles at this preset to show it as a suppressing bullet hose at longer ranges
 		focus_dis = 200,
 		spread = 20,
 		miss_dis = 5,
@@ -5014,8 +5014,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --60, keeps the gun scarier than rifles.
 				r = 100,
 				acc = {
-					0,
-					0.1
+					1,
+					1
 				},
 				recoil = {
 					1.4,
@@ -5032,8 +5032,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 500,
 				acc = { --lessened accuracy, firerate keeps it scary
-					0,
-					0.1
+					1,
+					1
 				},
 				recoil = {
 					1.4,
@@ -5050,8 +5050,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					0,
-					0.02
+					1,
+					1
 				},
 				recoil = {
 					1.4,
@@ -5068,8 +5068,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
 				r = 2000,
 				acc = {
-					0,
-					0.02
+					1,
+					1
 				},
 				recoil = {
 					1.4,
@@ -5086,8 +5086,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --increased slightly from complex, 20 to 40
 				r = 3000,
 				acc = {
-					0,
-					0.01
+					1,
+					1
 				},
 				recoil = {
 					1.4,
@@ -6119,7 +6119,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0.35,
 			0.35
 		},
-		focus_delay = 0.7, --higher than rifles, set to 3.
+		focus_delay = 0, --higher than rifles, set to 3.
 		focus_dis = 100,
 		spread = 20,
 		miss_dis = 10,
@@ -6138,8 +6138,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --60, keeps the gun scarier than rifles.
 				r = 100,
 				acc = {
-					0,
-					0.1
+					1,
+					1
 				},
 				recoil = {
 					0.8,
@@ -6156,8 +6156,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 500,
 				acc = { --lessened accuracy, firerate keeps it scary
-					0,
-					0.1
+					1,
+					1
 				},
 				recoil = {
 					0.8,
@@ -6174,8 +6174,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					0,
-					0.02
+					1,
+					1
 				},
 				recoil = {
 					0.8,
@@ -6192,8 +6192,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
 				r = 2000,
 				acc = {
-					0,
-					0.02
+					1,
+					1
 				},
 				recoil = {
 					0.8,
@@ -6210,8 +6210,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --increased slightly from complex, 20 to 40
 				r = 3000,
 				acc = {
-					0,
-					0.01
+					1,
+					1
 				},
 				recoil = {
 					0.8,
@@ -9465,7 +9465,7 @@ function CharacterTweakData:_set_easy_wish()
 		if faction == "federales" then
 			self.fbi.speech_prefix_p1 = "m"
 		end				
-		if faction == "america" then
+		if faction == "america" or faction == "shared" then
 			self.fbi_heavy_swat.speech_prefix_p2 = "d"
 			self.fbi_heavy_swat.speech_prefix_count = 5
 		end
@@ -9661,7 +9661,7 @@ function CharacterTweakData:_set_overkill_290()
 	--MFR has radio static in this difficulty.
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
-		if faction == "america" then
+		if faction == "america" or faction == "shared" then
 			self.fbi_heavy_swat.speech_prefix_p2 = "d"
 			self.fbi_heavy_swat.speech_prefix_count = 5
 		end
@@ -9942,7 +9942,7 @@ function CharacterTweakData:_set_sm_wish()
 	--SWAT Speech prefixes to get some voice variety from ZEALs 'n Gensecs.
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
-		if faction == "america" then
+		if faction == "america" or faction == "shared" then
 			self.swat.speech_prefix_p2 = "d"
 			self.swat.speech_prefix_count = 5	
 			self.heavy_swat.speech_prefix_p2 = "d"
@@ -10005,8 +10005,8 @@ function CharacterTweakData:_set_sm_wish()
 	self.shield.damage.explosion_damage_mul = 0.25
 	self.heavy_swat.damage.explosion_damage_mul = 0.7
 	self.fbi_heavy_swat.damage.explosion_damage_mul = 0.7
-	self.tank.damage.explosion_damage_mul = 1
-	self.tank_medic.damage.explosion_damage_mul = 1
+	self.tank.damage.explosion_damage_mul = 0.7
+	self.tank_medic.damage.explosion_damage_mul = 0.7
 	self.tank_mini.damage.explosion_damage_mul = 0.7
 	--heavy swat health clamping for guaranteed two-shot-to-kill ratios
 	self.heavy_swat.DAMAGE_CLAMP_BULLET = 79

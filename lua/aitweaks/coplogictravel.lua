@@ -511,7 +511,6 @@ function CopLogicTravel._upd_pathing(data, my_data)
 			my_data.processing_advance_path = nil
 
 			if path ~= "failed" then
-				managers.groupai:state():_merge_coarse_path_by_area(path)
 				my_data.advance_path = path
 			else
 				data.path_fail_t = data.t
@@ -528,7 +527,6 @@ function CopLogicTravel._upd_pathing(data, my_data)
 			my_data.processing_coarse_path = nil
 
 			if path ~= "failed" then
-				managers.groupai:state():_merge_coarse_path_by_area(path)
 				my_data.coarse_path = path
 				my_data.coarse_path_index = 1
 			elseif my_data.path_safely then
@@ -695,9 +693,9 @@ function CopLogicTravel.queued_update(data)
 		
 	local clear_t_chk = not data.attention_obj or not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t > math_random(2.5, 5)	
 		
-	local cant_say_clear = not data.attention_obj or AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and clear_t_chk and not data.is_converted
+	local cant_say_clear = not data.attention_obj or AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and clear_t_chk
 		
-	if not data.unit:base():has_tag("special") and not cant_say_clear then
+	if not data.unit:base():has_tag("special") and not cant_say_clear and not data.is_converted then
 		if data.unit:movement():cool() and data.char_tweak.chatter and data.char_tweak.chatter.clear_whisper then
 			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
 		elseif not data.unit:movement():cool() then
@@ -1093,7 +1091,6 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 	end
 end
-
 
 function CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, speed, end_rot, no_strafe, pose, end_pose)
 	if not data.unit:movement():chk_action_forbidden("walk") and not my_data.turning or data.unit:anim_data().act_idle then
