@@ -302,8 +302,27 @@ end
 function TaserLogicAttack.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()
-
-	if action_type == "walk" then
+	
+	if action_type == "healed" then
+		TaserLogicAttack._cancel_cover_pathing(data, my_data)
+		TaserLogicAttack._cancel_charge(data, my_data)
+	
+		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+			TaserLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			TaserLogicAttack._upd_combat_movement(data)
+		end
+	elseif action_type == "heal" then
+		TaserLogicAttack._cancel_cover_pathing(data, my_data)
+		TaserLogicAttack._cancel_charge(data, my_data)
+	
+		if not data.unit:character_damage():dead() and action:expired() then
+			--log("hey this actually works!")
+			TaserLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			TaserLogicAttack._upd_combat_movement(data)
+		end
+	elseif action_type == "walk" then
 		my_data.advancing = nil
 		my_data.flank_cover = nil
 		TaserLogicAttack._cancel_cover_pathing(data, my_data)
@@ -344,6 +363,7 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 		if action:expired() and not my_data.tasing then
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
+			TaserLogicAttack._upd_combat_movement(data)
 		end
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
@@ -351,6 +371,7 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 			TaserLogicAttack._cancel_tase_attempt(data, my_data)
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
+		end
 	elseif action_type == "turn" then
 		my_data.turning = nil
 	elseif action_type == "act" then
@@ -387,8 +408,7 @@ function TaserLogicAttack.action_complete_clbk(data, action)
 			TaserLogicAttack._upd_aim(data, my_data)
 			data.logic._upd_stance_and_pose(data, data.internal_data)
 		end
-	 end
-  end
+	end
 end
 
 function TaserLogicAttack._chk_play_charge_weapon_sound(data, my_data, focus_enemy)

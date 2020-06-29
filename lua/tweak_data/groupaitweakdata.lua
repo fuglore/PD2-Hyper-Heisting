@@ -3525,15 +3525,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 						rank = 1,
 						unit = "punk_group",
 						tactics = self._tactics.swat_shotgun_rush_civil
-					},
-					{
-						freq = 0.75,
-						rank = 1,
-						amount_min = 0,												
-						amount_max = 1,						
-						unit = "sniper_ass",
-						tactics = self._tactics.sniper_direct
-					}								
+					}
 				}
 			}
 		else
@@ -3566,15 +3558,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 						rank = 1,
 						unit = "punk_group",
 						tactics = self._tactics.swat_shotgun_rush_civil
-					},
-					{
-						freq = 0.75,
-						rank = 1,
-						amount_min = 0,												
-						amount_max = 1,						
-						unit = "sniper_ass",
-						tactics = self._tactics.sniper_direct
-					}													
+					}
 				}
 			}
 		end
@@ -4176,14 +4160,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush --Basically your worst nightmare.
-				},
-				{
-					freq = 0.75,
-					rank = 1,
-					amount_min = 1,					
-					amount_max = 2,										
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}
 			}
 		}
@@ -4209,15 +4185,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "CS_heavy_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				},
-				{
-					freq = 0.25,
-					rank = 1,
-					unit = "sniper_ass",
-					amount_min = 0,					
-					amount_max = 1,										
-					tactics = self._tactics.sniper_flank
-				}				
+				}
 			}
 		}
 	elseif difficulty_index == 3 then
@@ -4250,14 +4218,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 2,
 					unit = "medic_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				},
-				{
-					freq = 0.5,
-					rank = 1,
-					amount_min = 0,					
-					amount_max = 1,										
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}								
 			}
 		}
@@ -4291,15 +4251,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 2,
 					unit = "medic_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				},
-				{
-					freq = 0.5,
-					rank = 1,
-					amount_min = 0,					
-					amount_max = 1,															
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
-				}												
+				}
 			}
 		}
 	elseif difficulty_index == 5 then
@@ -4338,14 +4290,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 2,
 					unit = "medic_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				},
-				{
-					freq = 0.5,
-					rank = 1,
-					amount_min = 0,					
-					amount_max = 1,
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}																
 			}
 		}
@@ -4385,14 +4329,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
 					tactics = self._tactics.swat_rifle_complex --oh no they're dumb
-				},
-				{
-					freq = 0.75,
-					rank = 1,
-					amount_min = 0,					
-					amount_max = 2,					
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}																				
 			}
 		}
@@ -4432,14 +4368,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
 					tactics = self._tactics.swat_rifle_flank_complex --they're coordinated
-				},
-				{
-					freq = 0.75,
-					rank = 1,
-					amount_min = 1,					
-					amount_max = 2,										
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}																				
 			}
 		}
@@ -4487,14 +4415,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 3,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush --Basically your worst nightmare.
-				},
-				{
-					freq = 0.75,
-					rank = 1,
-					amount_min = 1,					
-					amount_max = 2,															
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}																				
 			}
 		}
@@ -6551,13 +6471,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.spoocaggressiveelite
 				},
 				{
-					freq = 0.65,
-					rank = 1,
-					unit = "sniper_ass",
-					amount_max = 1,
-					tactics = self._tactics.sniper_flank
-				},
-				{
 					freq = 1.25,
 					rank = 1,
 					unit = "spooc",
@@ -6578,13 +6491,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooc
-				},
-				{
-					freq = 0.65,
-					rank = 1,
-					amount_max = 1,																			
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}				
 			}
 		}
@@ -6628,13 +6534,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spoocaggressive --these spoocs go hard instead of their normal approach, and use flashes, essentially randomly a pinch group
-				},
-				{
-					freq = 0.65,
-					rank = 1,
-					amount_max = 1,										
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}												
 			}
 		}
@@ -6656,13 +6555,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spoocaggressive --these spoocs go hard instead of their normal approach, and use flashes, essentially randomly a pinch group
-				},
-				{
-					freq = 0.65,
-					rank = 1,
-					amount_max = 2,					
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}												
 			}
 		}
@@ -6690,13 +6582,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooccreep --pretty much jerks, they'll hide from sight once aimed at, will otherwise attempt to rush you
-				},
-				{
-					freq = 0.65,
-					rank = 1,
-					amount_max = 2,
-					unit = "sniper_ass",
-					tactics = self._tactics.sniper_flank
 				}												
 			}
 		}

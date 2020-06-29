@@ -727,7 +727,7 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		local t = TimerManager:game():time()
 
 		if diff_index == 8 then
-			self._ext_damage._invulnerability_t = t + 6
+			self._ext_damage._invulnerability_t = t + 4
 
 			if self._unit:contour() then
 				self._unit:contour():add("medic_heal_complex")

@@ -7,6 +7,28 @@ local t_find_value = table.find_value
 local tmp_vec1 = Vector3()
 local world_g = World
 
+function EnemyManager:get_nearby_medic(unit)
+    if self:is_civilian(unit) then
+        return nil
+    end
+
+    local t = Application:time()
+    local enemies = world_g:find_units_quick(unit, "sphere", unit:position(), tweak_data.medic.radius, managers.slot:get_mask("enemies"))
+
+    for _, enemy in ipairs(enemies) do
+        if enemy:base():has_tag("medic") and enemy:character_damage()._heal_cooldown_t then
+            local cooldown = tweak_data.medic.cooldown
+            cooldown = managers.modifiers:modify_value("MedicDamage:CooldownTime", cooldown)
+
+            if t >= enemy:character_damage()._heal_cooldown_t + cooldown then
+                return enemy
+            end
+        end
+    end
+
+    return nil
+end
+
 function EnemyManager:_update_queued_tasks(t, dt)
 	local i_asap_task, asap_task_t = nil
 

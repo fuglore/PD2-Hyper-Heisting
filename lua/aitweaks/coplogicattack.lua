@@ -1192,6 +1192,76 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 	end
 end
 
+function CopLogicAttack.action_complete_clbk(data, action)
+	local my_data = data.internal_data
+	local action_type = action:type()
+	
+	if action_type == "healed" then
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+	
+		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+	elseif action_type == "heal" then
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+	
+		if not data.unit:character_damage():dead() and action:expired() then
+			--log("hey this actually works!")
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+	elseif action_type == "walk" then
+		my_data.advancing = nil
+
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+		CopLogicAttack._cancel_charge(data, my_data)
+
+		if my_data.surprised then
+			my_data.surprised = false
+		elseif my_data.moving_to_cover then
+			if action:expired() then
+				my_data.in_cover = my_data.moving_to_cover
+				my_data.cover_enter_t = data.t
+			end
+
+			my_data.moving_to_cover = nil
+		elseif my_data.walking_to_cover_shoot_pos then
+			my_data.walking_to_cover_shoot_pos = nil
+			my_data.at_cover_shoot_pos = true
+		end
+	elseif action_type == "shoot" then
+		my_data.shooting = nil
+	elseif action_type == "turn" then
+		my_data.turning = nil
+	elseif action_type == "hurt" then
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+
+		if data.important and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
+			data.logic._upd_aim(data, my_data)
+		end
+	elseif action_type == "dodge" then
+		local timeout = action:timeout()
+
+		if timeout then
+			data.dodge_timeout_t = TimerManager:game():time() + math.lerp(timeout[1], timeout[2], math.random())
+		end
+
+		CopLogicAttack._cancel_cover_pathing(data, my_data)
+
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+			data.logic._upd_stance_and_pose(data, data.internal_data)
+			CopLogicAttack._upd_combat_movement(data)
+		end
+	end
+end
+
+
 --[[function CopLogicAttack.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()

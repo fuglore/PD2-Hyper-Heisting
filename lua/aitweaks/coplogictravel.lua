@@ -878,15 +878,11 @@ function CopLogicTravel.action_complete_clbk(data, action)
 	local engage_range = nil
 	
 	if my_data.weapon_range and my_data.weapon_range.close then
-			engage_range = my_data.weapon_range.close
-		else
-			engage_range = 1500
-		end
+		engage_range = my_data.weapon_range.close
+	else
+		engage_range = 1500
+	end
 	
-	
-	--if is_mook then
-		--log("AHAHAHAHAH FUCK YEAH IS_MOOK")
-	--end
 	if action_type == "healed" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
 		CopLogicAttack._cancel_charge(data, my_data)
@@ -894,8 +890,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			CopLogicAttack._upd_aim(data, my_data)
 			--data.logic._upd_stance_and_pose(data, data.internal_data)
-			
-			-- CopLogicTravel._upd_combat_movement(data)
+			CopLogicTravel._upd_combat_movement(data)
 		end
 	elseif action_type == "heal" then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
@@ -904,7 +899,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		if not data.unit:character_damage():dead() and action:expired() then
 			CopLogicAttack._upd_aim(data, my_data)
 			--data.logic._upd_stance_and_pose(data, data.internal_data)
-			-- CopLogicTravel._upd_combat_movement(data)
+			CopLogicTravel._upd_combat_movement(data)
 		end
 	elseif action_type == "walk" then
 		if action:expired() and my_data.coarse_path and not my_data.starting_advance_action and my_data.coarse_path_index and not my_data.has_old_action and my_data.advancing then
