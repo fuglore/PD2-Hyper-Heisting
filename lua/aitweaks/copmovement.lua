@@ -719,15 +719,127 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		return
 	end
 
-	if damage_info.variant == "bullet" or damage_info.variant == "explosion" or damage_info.variant == "fire" or damage_info.variant == "poison" or damage_info.variant == "graze" then
-		hurt_type = managers.modifiers:modify_value("CopMovement:HurtType", hurt_type)
+	if hurt_type == "healed" then
+		self._ext_damage._health = self._ext_damage._HEALTH_INIT
+		self._ext_damage._health_ratio = 1
 
-		if not hurt_type then
+		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		local t = TimerManager:game():time()
+
+		if diff_index == 8 then
+			self._ext_damage._invulnerability_t = t + 6
+
+			if self._unit:contour() then
+				self._unit:contour():add("medic_heal_complex")
+				self._unit:contour():flash("medic_heal_complex", 0.15)
+			end
+		else
+			self._ext_damage._invulnerability_t = t + 2
+
+			if self._unit:contour() then
+				self._unit:contour():add("medic_heal")
+				self._unit:contour():flash("medic_heal", 0.2)
+			end
+		end
+
+		if Network:is_server() then
+			managers.modifiers:run_func("OnEnemyHealed", nil, self._unit)
+		end
+
+		if damage_info.is_synced or self._tweak_data.ignore_medic_revive_animation then
 			return
+		end
+
+		local action_data = {
+			body_part = 1,
+			type = "healed",
+			client_interrupt = Network:is_client(),
+			allow_network = true
+		}
+
+		self:action_request(action_data)
+
+		return
+	elseif hurt_type == "death" and damage_info.is_synced then
+		if self._queued_actions then
+			self._queued_actions = {}
+		end
+
+		if self._rope then
+			self._rope:base():retract()
+
+			self._rope = nil
+			self._rope_death = true
+
+			if self._unit:sound().anim_clbk_play_sound then
+				self._unit:sound():anim_clbk_play_sound(self._unit, "repel_end")
+			end
+		end
+
+		if Network:is_server() then
+			self:set_attention()
+		else
+			self:synch_attention()
+		end
+
+		local attack_dir = damage_info.col_ray and damage_info.col_ray.ray or damage_info.attack_dir
+		local hit_pos = damage_info.col_ray and damage_info.col_ray.position or damage_info.pos
+		local body_part = 1
+		local blocks = {
+			act = -1,
+			aim = -1,
+			action = -1,
+			tase = -1,
+			walk = -1,
+			light_hurt = -1
+		}
+
+		local tweak = self._tweak_data
+		local death_type = "normal"
+
+		if tweak.damage.death_severity then
+			if tweak.damage.death_severity < damage_info.damage / self._ext_damage._HEALTH_INIT then
+				death_type = "heavy"
+			end
+		end
+
+		local action_data = {
+			type = "hurt",
+			block_type = hurt_type,
+			hurt_type = hurt_type,
+			variant = damage_info.variant,
+			direction_vec = attack_dir,
+			hit_pos = hit_pos,
+			body_part = body_part,
+			blocks = blocks,
+			client_interrupt = Network:is_client(),
+			attacker_unit = damage_info.attacker_unit,
+			death_type = death_type,
+			ignite_character = damage_info.ignite_character,
+			start_dot_damage_roll = damage_info.start_dot_damage_roll,
+			is_fire_dot_damage = damage_info.is_fire_dot_damage,
+			fire_dot_data = damage_info.fire_dot_data,
+			allow_network = false
+		}
+
+		self:action_request(action_data)
+
+		return
+	elseif damage_info.is_synced or damage_info.variant == "bleeding" and not Network:is_server() then
+		return
+	end
+
+	if hurt_type ~= "death" then
+		if damage_info.variant == "bullet" or damage_info.variant == "explosion" or damage_info.variant == "fire" or damage_info.variant == "poison" or damage_info.variant == "dot" or damage_info.variant == "graze" then
+			hurt_type = managers.modifiers:modify_value("CopMovement:HurtType", hurt_type)
+
+			if not hurt_type then
+				return
+			end
 		end
 	end
 
-	if damage_info.variant == "stun" and self._anim_global == "shield" then
+	if self._anim_global == "shield" and damage_info.variant == "stun" and hurt_type ~= "death" then
 		hurt_type = "expl_hurt"
 		damage_info.result = {
 			variant = damage_info.variant,
@@ -756,17 +868,6 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 	end
 
 	if Network:is_server() and self:chk_action_forbidden(block_type) then
-		--[[if hurt_type == "death" then
-			debug_pause_unit(self._unit, "[CopMovement:damage_clbk] Death action skipped!!!", self._unit)
-			Application:draw_cylinder(self._m_pos, self._m_pos + math.UP * 5000, 30, 1, 0, 0)
-
-			for body_part, action in ipairs(self._active_actions) do
-				if action then
-					print(body_part, action:type(), inspect(action._blocks))
-				end
-			end
-		end]]
-
 		return
 	end
 
@@ -809,38 +910,23 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			blocks.bleedout = -1
 			blocks.hurt = -1
 			blocks.heavy_hurt = -1
-			blocks.stagger = -1
-			blocks.knock_down = -1
-			blocks.counter_tased = -1
 			blocks.hurt_sick = -1
-			blocks.expl_hurt = -1
-			blocks.fire_hurt = -1
-			blocks.taser_tased = -1
-			blocks.poison_hurt = -1
-			blocks.shield_knock = -1
-			blocks.concussion = -1
-		elseif hurt_type == "shield_knock" or hurt_type == "concussion" or hurt_type == "counter_tased" then
-			blocks.hurt = -1
-			blocks.heavy_hurt = -1
-			blocks.stagger = -1
-			blocks.knock_down = -1
-			blocks.counter_tased = -1
-			blocks.hurt_sick = -1
-			blocks.expl_hurt = -1
-			blocks.fire_hurt = -1
-			blocks.taser_tased = -1
-			blocks.poison_hurt = -1
-			blocks.shield_knock = -1
 			blocks.concussion = -1
 		end
 	end
 
 	local client_interrupt = nil
 
-	if damage_info.variant == "tase" then
+	if damage_info.variant == "tase" and hurt_type ~= "death" then
 		block_type = "bleedout"
-	else
+	elseif hurt_type == "expl_hurt" or hurt_type == "fire_hurt" or hurt_type == "poison_hurt" or hurt_type == "taser_tased" then
+		block_type = "heavy_hurt"
+
 		if Network:is_client() then
+			client_interrupt = true
+		end
+	else
+		if hurt_type ~= "bleedout" and hurt_type ~= "fatal" and Network:is_client() then
 			client_interrupt = true
 		end
 
@@ -848,51 +934,32 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 	end
 
 	local tweak = self._tweak_data
-	local action_data = nil
+	local death_type = "normal"
 
-	if hurt_type == "healed" then
-		if self._unit:contour() then
-			self._unit:contour():add("medic_heal")
-			self._unit:contour():flash("medic_heal", 0.2)
+	if tweak.damage.death_severity then
+		if tweak.damage.death_severity < damage_info.damage / self._ext_damage._HEALTH_INIT then
+			death_type = "heavy"
 		end
-
-		if tweak.ignore_medic_revive_animation then
-			return
-		end
-
-		action_data = {
-			body_part = 1,
-			type = "healed",
-			client_interrupt = client_interrupt
-		}
-	else
-		local death_type = "normal"
-
-		if tweak.damage.death_severity then
-			if tweak.damage.death_severity < damage_info.damage / tweak.HEALTH_INIT then
-				death_type = "heavy"
-			end
-		end
-
-		action_data = {
-			type = "hurt",
-			block_type = block_type,
-			hurt_type = hurt_type,
-			variant = damage_info.variant,
-			direction_vec = attack_dir,
-			hit_pos = hit_pos,
-			body_part = body_part,
-			blocks = blocks,
-			client_interrupt = client_interrupt,
-			attacker_unit = damage_info.attacker_unit,
-			death_type = death_type,
-			ignite_character = damage_info.ignite_character,
-			start_dot_damage_roll = damage_info.start_dot_damage_roll,
-			is_fire_dot_damage = damage_info.is_fire_dot_damage,
-			fire_dot_data = damage_info.fire_dot_data,
-			is_synced = damage_info.is_synced
-		}
 	end
+
+	local action_data = {
+		type = "hurt",
+		block_type = block_type,
+		hurt_type = hurt_type,
+		variant = damage_info.variant,
+		direction_vec = attack_dir,
+		hit_pos = hit_pos,
+		body_part = body_part,
+		blocks = blocks,
+		client_interrupt = client_interrupt,
+		attacker_unit = damage_info.attacker_unit,
+		death_type = death_type,
+		ignite_character = damage_info.ignite_character,
+		start_dot_damage_roll = damage_info.start_dot_damage_roll,
+		is_fire_dot_damage = damage_info.is_fire_dot_damage,
+		fire_dot_data = damage_info.fire_dot_data,
+		allow_network = true
+	}
 
 	if Network:is_server() or not self:chk_action_forbidden(action_data) then
 		self:action_request(action_data)
