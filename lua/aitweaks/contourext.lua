@@ -147,6 +147,12 @@ ContourExt._types = {
 		fadeout = 2,
 		color = tweak_data.contour.character.heal_color
 	},
+	medic_heal_shin_low = {
+		priority = 1,
+		material_swap_required = true,
+		fadeout = 1,
+		color = tweak_data.contour.character.heal_color
+	},
 	medic_heal_complex = {
 		priority = 1,
 		material_swap_required = true,

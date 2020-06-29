@@ -12,7 +12,7 @@
 			["units/payday2/characters/ene_cop_2/ene_cop_2"] = "units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2",
 			["units/payday2/characters/ene_cop_3/ene_cop_3"] = "units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3",
 			["units/payday2/characters/ene_cop_4/ene_cop_4"] = "units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4"			
-		}		
+		}	
 	
 	local sm_wish = {
 			["units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"] = "units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1",	
@@ -152,7 +152,8 @@
 			["units/payday2/characters/ene_city_swat_3/ene_city_swat_3"] = "units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3",									
 			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/payday2/characters/ene_shield_1/ene_shield_1",
 			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/payday2/characters/ene_shield_1/ene_shield_1",
-			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
+			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2",
+			["units/pd2_mcmansion/characters/ene_hoxton_breakout_guard_2/ene_hoxton_breakout_guard_2"] = "units/payday2/characters/ene_city_swat_3/ene_city_swat_3"
 		}
 	local sniper = {
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/payday2/characters/ene_sniper_1/ene_sniper_1"
@@ -181,65 +182,72 @@
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
 		}		
 		
-	function ElementSpawnEnemyDummy:init(...)
-		ElementSpawnEnemyDummy.super.init(self, ...)
-		local ai_type = tweak_data.levels:get_ai_group_type()
-		local difficulty = Global.game_settings and Global.game_settings.difficulty or "normal"
-		local difficulty_index = tweak_data:difficulty_to_index(difficulty)
-		local job = Global.level_data and Global.level_data.level_id
+function ElementSpawnEnemyDummy:init(...)
+	ElementSpawnEnemyDummy.super.init(self, ...)
+	local ai_type = tweak_data.levels:get_ai_group_type()
+	local difficulty = Global.game_settings and Global.game_settings.difficulty or "normal"
+	local difficulty_index = tweak_data:difficulty_to_index(difficulty)
+	local job = Global.level_data and Global.level_data.level_id
 		
-		if ai_type == "america" and job ~= "firestarter_2" then
-			if difficulty_index == 8 then --GenSec over FBI
-				if sm_wish[self._values.enemy] then
-					self._values.enemy = sm_wish[self._values.enemy]
-				end
-				self._values.enemy = sm_wish[self._values.enemy] or self._values.enemy
-			elseif difficulty_index >= 6 then
-				if overkill_290_and_easywish[self._values.enemy] then
-					self._values.enemy = overkill_290_and_easywish[self._values.enemy]
-				end
-				self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
+	if ai_type == "america" then
+		if difficulty_index == 8 then --GenSec over FBI
+			if sm_wish[self._values.enemy] then
+				self._values.enemy = sm_wish[self._values.enemy]
 			end
+			
+			self._values.enemy = sm_wish[self._values.enemy] or self._values.enemy
+		elseif difficulty_index >= 6 then
+			if overkill_290_and_easywish[self._values.enemy] then
+				self._values.enemy = overkill_290_and_easywish[self._values.enemy]
+			end
+			
+			self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 		end
-		--originally for snipers only but fuck you
-		if Global.game_settings and Global.game_settings.heavymutator == true then
-			if enemy_annoying[self._values.enemy] then
-				self._values.enemy = enemy_annoying[self._values.enemy]
-			end
-			self._values.enemy = enemy_annoying[self._values.enemy] or self._values.enemy
-		else
+	end
+	--originally for snipers only but fuck you
+	if Global.game_settings and Global.game_settings.heavymutator == true then
+		if enemy_annoying[self._values.enemy] then
+			self._values.enemy = enemy_annoying[self._values.enemy]
+		end
+		
+		self._values.enemy = enemy_annoying[self._values.enemy] or self._values.enemy
+	else
 		--SWART Sniper					
 		if difficulty_index <= 3 then
 			if sniper[self._values.enemy] then
 				self._values.enemy = sniper[self._values.enemy]
 			end
+				
 			self._values.enemy = sniper[self._values.enemy] or self._values.enemy
-		--Eff Bee Eye Snipar			
+			--Eff Bee Eye Snipar			
 		elseif difficulty_index <= 5 then
 			if sniper_fed[self._values.enemy] then
 				self._values.enemy = sniper_fed[self._values.enemy]
 			end
+				
 			self._values.enemy = sniper_fed[self._values.enemy] or self._values.enemy
-		--BONESAW IS READY, COME ON MY FACE BROTHER
+			--BONESAW IS READY, COME ON MY FACE BROTHER
 		elseif difficulty_index <= 7 then
 			if sniper_cumsec[self._values.enemy] then
 				self._values.enemy = sniper_cumsec[self._values.enemy]
 			end
+				
 			self._values.enemy = sniper_cumsec[self._values.enemy] or self._values.enemy			
-		--Sulu Carkdownz? Replasement Snipar? Real?
+			--Sulu Carkdownz? Replasement Snipar? Real?
 		elseif difficulty_index == 8 then
 			if sniper_zulu_crackdown_XD[self._values.enemy] then
 				self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
 			end
+			
 			self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy	
-			end
 		end
 		
-		--NYPD Cops Spawn Overwrite
+	--NYPD Cops Spawn Overwrite
 		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "flat_hh" or job == "dinner" or job == "rant_nmh_hh" then  
 			 if nypd_beatpricks[self._values.enemy] then
 				self._values.enemy = nypd_beatpricks[self._values.enemy]
 			 end
+			 
 			 self._values.enemy = nypd_beatpricks[self._values.enemy] or self._values.enemy
 		end
 
@@ -248,25 +256,29 @@
 			 if lapd_beatpricks[self._values.enemy] then
 				self._values.enemy = lapd_beatpricks[self._values.enemy]
 			 end
+			 
 			 self._values.enemy = lapd_beatpricks[self._values.enemy] or self._values.enemy
 		end		
-	
+		
 
 		if ai_type == "shared" then
 			if difficulty_index == 8 and job ~= "dinner" then
 				if murkywetew_highdiff[self._values.enemy] then
 					self._values.enemy = murkywetew_highdiff[self._values.enemy]
 				end
+				
 				self._values.enemy = murkywetew_highdiff[self._values.enemy] or self._values.enemy
 			elseif job == "dinner" and difficulty_index == 8 then
 				if sm_wish[self._values.enemy] then
 					self._values.enemy = sm_wish[self._values.enemy]
 				end
+				
 				self._values.enemy = sm_wish[self._values.enemy] or self._values.enemy			
 			elseif difficulty_index >= 6 then
 				if overkill_290_and_easywish[self._values.enemy] then
 					self._values.enemy = overkill_290_and_easywish[self._values.enemy]
 				end
+				
 				self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 			end
 		end		
@@ -276,18 +288,29 @@
 				if murkywetew_highdiff[self._values.enemy] then
 					self._values.enemy = murkywetew_highdiff[self._values.enemy]
 				end
+				
 				self._values.enemy = murkywetew_highdiff[self._values.enemy] or self._values.enemy
 			elseif difficulty_index >= 2 then
 				if murkywetew[self._values.enemy] then
 					self._values.enemy = murkywetew[self._values.enemy]
 				end
+				
 				self._values.enemy = murkywetew[self._values.enemy] or self._values.enemy
 			end
 		end
-											
-		self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
-		self._values.enemy = nil
-		self._units = {}
-		self._events = {}
-		self:_finalize_values()
 	end
+	
+	if job == "firestarter_1" or "firestarter_2" or "alex_3" or "hox_2" or "hox_3" then  --FBI-related heists
+		if overkill_290_and_easywish[self._values.enemy] then
+			self._values.enemy = overkill_290_and_easywish[self._values.enemy]
+		end
+		
+		self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
+	end
+											
+	self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
+	self._values.enemy = nil
+	self._units = {}
+	self._events = {}
+	self:_finalize_values()
+end

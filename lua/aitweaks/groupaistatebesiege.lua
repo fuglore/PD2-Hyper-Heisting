@@ -1365,14 +1365,13 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 			shooter_u_data = u_data
 			if u_data.tactics_map and u_data.tactics_map.smoke_grenade then
 				if not detonate_pos or math.random() < 0.5 then
-					local smoke_pos_chance = math.random()
 					local nav_seg_id = u_data.tracker:nav_segment()
 					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
 					if u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "assault_area" or u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "retire" then
 						detonate_pos = mvector3.copy(u_data.group.objective.area.pos)
 					else
 						for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
-							if task_data.target_areas[1].nav_segs[neighbour_nav_seg_id] then
+							if self._current_target_area and self._current_target_area.nav_segs[neighbour_nav_seg_id] then
 								local random_door_id = door_list[math.random(#door_list)]
 
 								if type(random_door_id) == "number" then
@@ -1396,6 +1395,8 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 					if shooter_u_data.char_tweak.chatter.smoke and not shooter_u_data.unit:sound():speaking(self._t) then
 						u_data.unit:sound():say("d01", true)	
 					end
+					
+					u_data.unit:movement():play_redirect("throw_grenade")
 
 					return true
 				end
@@ -1416,14 +1417,13 @@ function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, deto
 			shooter_u_data = u_data
 			if u_data.tactics_map and u_data.tactics_map.flash_grenade then
 				if not detonate_pos then
-					local flash_pos_chance = math.random()
 					local nav_seg_id = u_data.tracker:nav_segment()
 					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
-					if u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "assault_area" and flash_pos_chance < 0.5 then
+					if u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "assault_area" then
 						detonate_pos = mvector3.copy(u_data.group.objective.area.pos)
 					else
 						for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
-							if task_data.target_areas[1].nav_segs[neighbour_nav_seg_id] then
+							if self._current_target_area and self._current_target_area.nav_segs[neighbour_nav_seg_id] then
 								local random_door_id = door_list[math.random(#door_list)]
 
 								if type(random_door_id) == "number" then
@@ -1448,6 +1448,8 @@ function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, deto
 					if shooter_u_data.char_tweak.chatter.flash_grenade and not shooter_u_data.unit:sound():speaking(self._t) then
 						u_data.unit:sound():say("d02", true)	
 					end
+					
+					u_data.unit:movement():play_redirect("throw_grenade")
 
 					return true
 				end
