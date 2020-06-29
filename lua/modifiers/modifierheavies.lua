@@ -9,6 +9,7 @@ ModifierHeavies.unit_swaps = {
 	["units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",
 	
 	["units/payday2/characters/ene_medic_m4/ene_medic_m4"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",
+	["units/payday2/characters/ene_medic_m4_hh/ene_medic_m4_hh"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",
 	["units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",
 		
 	["units/payday2/characters/ene_medic_r870/ene_medic_r870"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870",
