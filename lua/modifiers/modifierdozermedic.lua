@@ -12,4 +12,6 @@ function ModifierDozerMedic:init(data)
 	table.insert(unit_types.america, unit_name)
 	table.insert(unit_types.murkywater, unit_name)
 	table.insert(unit_types.shared, unit_name)
+	table.insert(unit_types.federales, unit_name)
+
 end
