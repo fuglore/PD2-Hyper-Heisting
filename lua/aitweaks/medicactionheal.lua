@@ -8,21 +8,23 @@ function MedicActionHeal:init(action_desc, common_data)
 	self._machine = common_data.machine
 	self._attention = common_data.attention
 	self._action_desc = action_desc
-
 	self._done = false
 
-	self._ext_movement:play_redirect("heal")
-	self._unit:sound():say("heal")
+	if self._ext_movement:play_redirect("heal") then
+		self._unit:sound():say("heal")
 
-	self:check_achievements()
-
-	return true
+		return true
+	end
 end
 
 function MedicActionHeal:update(t)
 	if not self._unit:anim_data().healing then
 		self._done = true
 		self._expired = true
+	end
+
+	if self._ext_anim.base_need_upd then
+		self._ext_movement:upd_m_head_pos()
 	end
 end
 
