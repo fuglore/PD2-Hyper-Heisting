@@ -618,8 +618,10 @@
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_acc_medic_heavy/ene_acc_medic_heavy"/>
 	
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_df"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_medic_heavy_r870/heavy_medic_df"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_nm"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_head_df"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_medic_heavy_r870/heavy_medic_head_df"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_head_nm"/>
 
 	<unit path="units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870" load="true"/>
