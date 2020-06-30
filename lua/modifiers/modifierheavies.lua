@@ -18,7 +18,7 @@ ModifierHeavies.unit_swaps = {
 	["units/payday2/characters/ene_tazer_1/ene_tazer_1"] = "units/pd2_dlc_drm/characters/ene_taser_heavy/ene_taser_heavy",
 	["units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"] = "units/pd2_dlc_drm/characters/ene_taser_heavy/ene_taser_heavy",
 	
-	["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_drm/characters/ene_fbi_sniper_heavy/ene_sniper_heavy",
+	["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_drm/characters/ene_sniper_heavy/ene_sniper_heavy",
 	["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_drm/characters/ene_sniper_heavy/ene_sniper_heavy",
 	["units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"] = "units/pd2_dlc_drm/characters/ene_sniper_heavy/ene_sniper_heavy",
 	
