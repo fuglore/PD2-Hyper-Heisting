@@ -181,6 +181,7 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 		police_radio = "radio", -- doesnt work :<
 		clk_x02a_any_3p = "death"
 	}
+	
 	local line_to_check = line_array[sound_name]
 	if self._unit:base():char_tweak()["custom_voicework"] then
 		if line_to_check then
@@ -347,18 +348,6 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 				full_sound = "l2n_x01a_any_3p"
 			elseif sound_name == "x01a_any_3p" then
 				full_sound = "l2n_x02a_any_3p"
-			end
-		end
-
-		if faction == "classic" then --crackdown-only
-			if self._prefix == "l1d_" or self._prefix == "l2d_" or self._prefix == "l3d_" or self._prefix == "l4d_" or self._prefix == "l5d_" then
-				if sound_name == "x02a_any_3p" then
-					full_sound = "shd_x02a_any_3p_01"
-				end
-
-				if sound_name == "x01a_any_3p" then
-					full_sound = "bdz_x01a_any_3p"
-				end
 			end
 		end
 

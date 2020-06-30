@@ -95,8 +95,7 @@ function GroupAIStateBase:update(t, dt)
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
 	--self:_draw_current_logics()
-	GroupAIStateBase._nr_important_cops = self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul) * 0.25
-	self._nr_important_cops = self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul) * 0.25
+	self._nr_important_cops = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul)) * 0.25
 	
 	if self._draw_drama then
 		self:_debug_draw_drama(t)
@@ -118,7 +117,7 @@ function GroupAIStateBase:_check_drama_low_p()
 end
 
 function GroupAIStateBase:_check_assault_panic_chatter()
-	if self._t and self._last_killed_cop_t and self._t - self._last_killed_cop_t < math.random(1, 3.5) then
+	if self._t and self._last_killed_cop_t and self._t - self._last_killed_cop_t < math.random(0.15, 0.5) then
 		return true
 	end
 	
