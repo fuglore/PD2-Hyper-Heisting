@@ -100,10 +100,6 @@
 	<texture path="units/pd2_dlc_mad/weapons/wpn_npc_akmsu/akmsu_nm" force="true"/>	
 	<!--jarey's reaper weapons END-->
 	
-	<!--MEDIC M4 ACCESSORY -->
-	<unit_mat path="units/payday2/characters/ene_acc_medic_m4_helmet/ene_acc_medic_m4_helmet" load="true"/>	
-	<cooked_physics path="units/payday2/characters/ene_acc_medic_m4_helmet/ene_acc_medic_m4_helmet"/>
-	
 	<!--MEDIC M4 -->
 	<unit path="units/payday2/characters/ene_medic_m4_hh/ene_medic_m4_hh" load="true"/>
 	<unit path="units/payday2/characters/ene_medic_m4_hh/ene_medic_m4_hh_husk" load="true"/>	
