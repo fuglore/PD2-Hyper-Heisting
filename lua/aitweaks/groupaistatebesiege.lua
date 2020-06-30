@@ -411,10 +411,10 @@ function GroupAIStateBesiege:_upd_assault_areas(current_area)
 		local nr_police = table.size(area.police.units)
 		local nr_criminals = table.size(area.criminal.units)
 
-		if assault_candidates and self._criminals then
+		if assault_candidates and self._player_criminals then
 			for criminal_key, _ in pairs(area.criminal.units) do
-				if criminal_key and self._criminals[criminal_key] then
-					if not self._criminals[criminal_key].is_deployable then
+				if criminal_key and self._player_criminals[criminal_key] then
+					if not self._player_criminals[criminal_key].is_deployable then
 						table.insert(assault_candidates, area)
 
 						break
@@ -562,7 +562,7 @@ function GroupAIStateBesiege:_begin_new_tasks()
 
 		if assault_candidates then
 			for criminal_key, _ in pairs(area.criminal.units) do
-				if self._criminals and self._criminals[criminal_key] and not self._criminals[criminal_key].is_deployable then
+				if self._player_criminals and self._player_criminals[criminal_key] and not self._player_criminals[criminal_key].is_deployable then
 					table.insert(assault_candidates, area)
 
 					break
@@ -641,6 +641,18 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.9 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
 	else
 		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
+	end
+	
+	local nr_players = 0
+	
+	for u_key, u_data in pairs(self:all_player_criminals()) do
+		if not u_data.status then
+			nr_players = nr_players + 1
+		end
+	end
+	
+	if assault_task.force and nr_players > 4 then
+		assault_task.force = assault_task.force * 1.25
 	end
 	
 	assault_task.use_smoke = true

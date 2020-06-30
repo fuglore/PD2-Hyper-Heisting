@@ -1,6 +1,4 @@
 -- Andole's dozer spawncap fix
-GroupAIStateBase._nr_important_cops = 6969
-
 local origfunc3 = GroupAIStateBase._init_misc_data
 function GroupAIStateBase:_init_misc_data(...)
 	origfunc3(self, ...)
@@ -97,6 +95,8 @@ function GroupAIStateBase:update(t, dt)
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
 	--self:_draw_current_logics()
+	GroupAIStateBase._nr_important_cops = self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul) * 0.25
+	self._nr_important_cops = self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul) * 0.25
 	
 	if self._draw_drama then
 		self:_debug_draw_drama(t)

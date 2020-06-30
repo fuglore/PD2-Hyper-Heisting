@@ -129,6 +129,8 @@ function ActionSpooc:init(action_desc, common_data)
 			elseif self._target_unit:base().is_local_player then
 				self._is_local = true
 			end
+		else
+			return
 		end
 	end
 
