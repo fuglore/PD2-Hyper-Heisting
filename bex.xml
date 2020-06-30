@@ -134,7 +134,10 @@
 	<!-- policia mp5 punk-->
 	<unit path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03" load="true"/>
 	<unit path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03_husk" load="true"/>
-	<unit_mat path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03" />
+	<object path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03" />
+	<model path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03" />	
+	<cooked_physics path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03"/>	
+	<material_config path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03"/>
 	<material_config path="units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03_contour" />
 
     <!--federales n/h heavy shotgunner-->	
