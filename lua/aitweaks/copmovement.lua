@@ -762,7 +762,11 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			managers.modifiers:run_func("OnEnemyHealed", nil, self._unit)
 		end
 
-		if damage_info.is_synced or self._tweak_data.ignore_medic_revive_animation then
+		if Global.game_settings.one_down then
+			self._unit:sound():say("x01a_any_3p")
+
+			return
+		elseif damage_info.is_synced or self._tweak_data.ignore_medic_revive_animation then
 			return
 		end
 
