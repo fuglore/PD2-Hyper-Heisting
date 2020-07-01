@@ -270,6 +270,13 @@ function UnitNetworkHandler:sync_medic_heal(unit, sender)
 
 		if unit:anim_data() and unit:anim_data().act then
 			unit:sound():say("heal")
+		elseif Global.game_settings.one_down then
+			local redir_res = unit:movement():play_redirect("cmd_get_up")
+
+			if redir_res then
+				unit:sound():say("heal")
+				unit:anim_state_machine():set_speed(redir_res, 0.5)
+			end
 		else
 			local action_data = {
 				body_part = 1,
