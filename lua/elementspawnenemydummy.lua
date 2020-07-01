@@ -306,6 +306,10 @@ function ElementSpawnEnemyDummy:init(...)
 		
 		self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 	end
+	
+	--if self._values.enemy then
+		--log(self._values.enemy)
+	--end
 											
 	self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
 	self._values.enemy = nil

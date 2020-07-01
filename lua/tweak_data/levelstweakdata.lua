@@ -46,6 +46,7 @@ function LevelsTweakData:init()
 	
 	-- Federales heists
 	self.bex.package = {"packages/hhbex", "packages/job_bex"}
+	self.pex.package = {"packages/hhbex", "packages/job_pex"}
 	self.skm_bex.package = {"packages/hhbex", "packages/dlcs/skm/job_bex_skm"}
 	
 	--fix missing ganster vo, ty rino
