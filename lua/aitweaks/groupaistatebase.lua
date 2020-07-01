@@ -94,8 +94,10 @@ function GroupAIStateBase:update(t, dt)
 
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
-	--self:_draw_current_logics()
-	self._nr_important_cops = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul)) * 0.25
+	--self:_draw_current_logics
+	if Network:is_server() then
+		self._nr_important_cops = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul)) * 0.25
+	end
 	
 	if self._draw_drama then
 		self:_debug_draw_drama(t)
