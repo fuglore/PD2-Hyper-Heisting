@@ -9,17 +9,12 @@ function MedicActionHeal:init(action_desc, common_data)
 	self._attention = common_data.attention
 	self._action_desc = action_desc
 	self._done = false
-	
-	if not Global.game_settings.one_down then
-		self._ext_movement:play_redirect("heal")
+
+	if self._ext_movement:play_redirect("heal") then
 		self._unit:sound():say("heal")
-	else
-		local redir_res = self._ext_movement:play_redirect("cmd_get_up")
-		self._machine:set_speed(redir_res, 0.5)
-		self._unit:sound():say("heal")
+
+		return true
 	end
-	
-	return true
 end
 
 function MedicActionHeal:update(t)
