@@ -44,16 +44,18 @@ function ActionSpooc:init(action_desc, common_data)
 	self._machine = common_data.machine
 	self._unit = common_data.unit
 
-	if not common_data.ext_anim.stand or common_data.ext_anim.crouch then
-		common_data.ext_movement:play_redirect("stand")
-	end
-
 	if not common_data.ext_anim.pose then
 		common_data.ext_movement:play_redirect("idle")
 
 		if not common_data.ext_anim.pose and not common_data.ext_movement:play_state("std/stand/still/idle/look") then
 			return
 		end
+	end
+
+	local stand = common_data.ext_movement:play_redirect("stand")
+
+	if not stand then
+		return
 	end
 
 	self._action_desc = action_desc
@@ -129,8 +131,6 @@ function ActionSpooc:init(action_desc, common_data)
 			elseif self._target_unit:base().is_local_player then
 				self._is_local = true
 			end
-		else
-			return
 		end
 	end
 
@@ -139,7 +139,7 @@ function ActionSpooc:init(action_desc, common_data)
 	end
 
 	if self._is_server then
-		common_data.ext_network:send("action_spooc_start", self._target_unit:movement():m_pos(), action_desc.flying_strike, self._action_id)
+		common_data.ext_network:send("action_spooc_start", mvec3_copy(self._target_unit:movement():m_pos()), action_desc.flying_strike, self._action_id)
 	else
 		local host_stop_pos = common_data.ext_movement:m_host_stop_pos()
 
@@ -165,22 +165,20 @@ function ActionSpooc:init(action_desc, common_data)
 			self._last_sent_pos = action_desc.last_sent_pos
 
 			if self:_chk_target_invalid() then
-				common_data.ext_network:send_to_host("action_spooc_stop", common_data.ext_movement:m_pos(), 1, self._action_id)
+				self:_send_client_stop()
 				self:_wait()
 			else
 				if action_desc.flying_strike then
 					if ActionSpooc.chk_can_start_flying_strike(common_data.unit, self._target_unit) then
 						self:_set_updator("_upd_flying_strike_first_frame")
 					else
-						common_data.ext_network:send_to_host("action_spooc_stop", common_data.ext_movement:m_pos(), 1, self._action_id)
+						self:_send_client_stop()
 						self:_wait()
 					end
+				elseif self._nav_path[self._nav_index + 1] then
+					self:_start_sprint()
 				else
-					if self._nav_path[self._nav_index + 1] then
-						self:_start_sprint()
-					else
-						self:_wait()
-					end
+					self:_wait()
 				end
 			end
 		else
@@ -206,13 +204,13 @@ function ActionSpooc:init(action_desc, common_data)
 				self._last_sent_pos = mvec3_copy(common_data.pos)
 			end
 
-			common_data.ext_network:send_to_host("action_spooc_stop", common_data.ext_movement:m_pos(), 1, self._action_id)
+			self:_send_client_stop()
 			self:_wait()
 		elseif action_desc.flying_strike then
 			if self._is_server or ActionSpooc.chk_can_start_flying_strike(common_data.unit, self._target_unit) then
 				self:_set_updator("_upd_flying_strike_first_frame")
 			else
-				common_data.ext_network:send_to_host("action_spooc_stop", common_data.ext_movement:m_pos(), 1, self._action_id)
+				self:_send_client_stop()
 				self:_wait()
 			end
 		else
@@ -229,18 +227,14 @@ function ActionSpooc:init(action_desc, common_data)
 
 			self:_start_sprint()
 		end
+	elseif self._is_server then
+		self:_wait()
+	elseif action_desc.strike then
+		self:_start_sprint()
+	elseif action_desc.flying_strike and #self._nav_path > 1 then
+		self:_set_updator("_upd_flying_strike_first_frame")
 	else
-		if self._is_server then
-			self:_wait()
-		else
-			if action_desc.strike then
-				self:_start_sprint()
-			elseif action_desc.flying_strike and #self._nav_path > 1 then
-				self:_set_updator("_upd_flying_strike_first_frame")
-			else
-				self:_wait()
-			end
-		end
+		self:_wait()
 	end
 
 	local detect_sound = tweak_data:difficulty_to_index(Global.game_settings.difficulty) < 8 and self:get_sound_event("detect")
@@ -294,6 +288,18 @@ function ActionSpooc:init(action_desc, common_data)
 	return true
 end
 
+function ActionSpooc:_send_client_stop()
+	local stop_nav_index = nil
+
+	if self._host_stop_pos_inserted then
+		stop_nav_index = math_clamp(self._nav_index - self._host_stop_pos_inserted, 1, 256)
+	else
+		stop_nav_index = math_clamp(self._nav_index, 1, 256)
+	end
+
+	managers.network:session():send_to_peer_synched(managers.network:session():peer(1), "action_spooc_stop", self._unit, mvec3_copy(self._common_data.pos), stop_nav_index, self._action_id)
+end
+
 function ActionSpooc:on_exit()
 	if self._unit:character_damage():dead() then
 		local detect_stop_sound = self:get_sound_event("detect_stop")
@@ -337,14 +343,14 @@ function ActionSpooc:on_exit()
 		local stop_nav_index = nil
 
 		if self._host_stop_pos_inserted then
-			stop_nav_index = math_min(256, self._nav_index - self._host_stop_pos_inserted)
+			stop_nav_index = math_clamp(self._nav_index - self._host_stop_pos_inserted, 1, 256)
 		else
-			stop_nav_index = math_min(256, self._nav_index)
+			stop_nav_index = math_clamp(self._nav_index, 1, 256)
 		end
 
-		self._ext_network:send("action_spooc_stop", mvec3_copy(self._ext_movement:m_pos()), stop_nav_index, self._action_id)
+		self._ext_network:send("action_spooc_stop", mvec3_copy(self._common_data.pos), stop_nav_index, self._action_id)
 	else
-		self._ext_movement:set_m_host_stop_pos(self._ext_movement:m_pos())
+		self._ext_movement:set_m_host_stop_pos(self._common_data.pos)
 	end
 
 	if alive(self._target_unit) and self._target_unit:base().is_local_player then
@@ -447,7 +453,7 @@ function ActionSpooc:_upd_strike_first_frame(t)
 		if self._is_server then
 			self:_expire()
 		else
-			self._ext_network:send_to_host("action_spooc_stop", self._ext_movement:m_pos(), 1, self._action_id)
+			self:_send_client_stop()
 			self:_wait()
 		end
 
@@ -468,7 +474,7 @@ function ActionSpooc:_upd_strike_first_frame(t)
 		if self._is_server then
 			self:_expire()
 		else
-			self._ext_network:send_to_host("action_spooc_stop", self._ext_movement:m_pos(), 1, self._action_id)
+			self:_send_client_stop()
 			self:_wait()
 		end
 
@@ -480,17 +486,6 @@ function ActionSpooc:_upd_strike_first_frame(t)
 		self._ext_network:send("action_spooc_strike", mvec3_copy(self._common_data.pos), self._action_id)
 
 		self._nav_path[self._nav_index + 1] = mvec3_copy(self._common_data.pos)
-
-		--[[if self._target_unit:base().is_local_player then
-			local enemy_vec = mvec3_copy(self._common_data.pos)
-
-			mvec3_sub(enemy_vec, self._target_unit:movement():m_pos())
-			mvec3_set_z(enemy_vec, 0)
-			mvec3_norm(enemy_vec)
-			self._target_unit:camera():camera_unit():base():clbk_aim_assist({
-				ray = enemy_vec
-			})
-		end]]
 	end
 
 	self._last_vel_z = 0
@@ -552,7 +547,7 @@ function ActionSpooc:_upd_sprint(t)
 			if self._is_server then
 				self:_expire()
 			else
-				self._ext_network:send_to_host("action_spooc_stop", self._ext_movement:m_pos(), 1, self._action_id)
+				self:_send_client_stop()
 				self:_wait()
 			end
 
@@ -711,7 +706,7 @@ function ActionSpooc:_upd_start_anim(t)
 			if self._is_server then
 				self:_expire()
 			else
-				self._ext_network:send_to_host("action_spooc_stop", self._ext_movement:m_pos(), 1, self._action_id)
+				self:_send_client_stop()
 				self:_wait()
 			end
 
@@ -870,13 +865,13 @@ function ActionSpooc:save(save_data)
 	save_data.flying_strike = self._is_flying_strike
 	save_data.stroke_t = self._stroke_t and true
 	save_data.blocks = {
+		idle = -1,
 		act = -1,
 		turn = -1,
 		walk = -1
 	}
 
 	if self._is_flying_strike then
-		save_data.blocks.idle = -1
 		save_data.blocks.light_hurt = -1
 		save_data.blocks.heavy_hurt = -1
 		save_data.blocks.fire_hurt = -1
@@ -990,7 +985,7 @@ function ActionSpooc:_nav_chk(t, dt)
 		self._nav_index = self._nav_index + 1
 
 		table_insert(self._nav_path, self._nav_index, mvec3_copy(cur_pos))
-		self:_send_nav_point(cur_pos)
+		self:_send_nav_point(mvec3_copy(cur_pos))
 	end
 
 	self._last_pos = mvec3_copy(new_pos)
@@ -1074,7 +1069,7 @@ function ActionSpooc:_upd_striking(t)
 			if self._is_server then
 				self:_expire()
 			else
-				self._ext_network:send_to_host("action_spooc_stop", self._ext_movement:m_pos(), 1, self._action_id)
+				self:_send_client_stop()
 			end
 
 			return
@@ -1264,7 +1259,7 @@ function ActionSpooc:anim_act_clbk(anim_act)
 			if self._is_server then
 				self:_expire()
 			else
-				self._ext_network:send_to_host("action_spooc_stop", self._ext_movement:m_pos(), 1, self._action_id)
+				self:_send_client_stop()
 				self:_wait()
 			end
 		end
@@ -1284,7 +1279,7 @@ function ActionSpooc:anim_act_clbk(anim_act)
 			if self._is_server then
 				self:_expire()
 			else
-				self._ext_network:send_to_host("action_spooc_stop", self._ext_movement:m_pos(), 1, self._action_id)
+				self:_send_client_stop()
 				self:_wait()
 			end
 		end
@@ -1399,7 +1394,7 @@ function ActionSpooc:anim_act_clbk(anim_act)
 	if spooc_res then
 		if spooc_res == "countered" then
 			if not self._is_server then
-				self._ext_network:send_to_host("action_spooc_stop", self._ext_movement:m_pos(), 1, self._action_id)
+				self:_send_client_stop()
 			end
 
 			self._blocks = {}
@@ -1554,17 +1549,28 @@ function ActionSpooc.chk_can_start_flying_strike(unit, target_unit)
 end
 
 function ActionSpooc:_upd_flying_strike_first_frame(t)
+	if self._is_local and self:_chk_target_invalid() then
+		if self._is_server then
+			self:_expire()
+		else
+			self:_send_client_stop()
+			self:_wait()
+		end
+
+		return
+	end
+
 	local target_pos = nil
 
 	if self._is_local then
 		target_pos = self._target_unit:movement():m_pos()
 
-		self:_send_nav_point(target_pos)
+		self:_send_nav_point(mvec3_copy(target_pos))
 	else
 		target_pos = self._nav_path[#self._nav_path]
 	end
 
-	local my_pos = self._ext_movement:m_pos()
+	local my_pos = self._common_data.pos
 	local target_vec = self._tmp_vec1
 
 	mvec3_set(target_vec, target_pos)
@@ -1576,7 +1582,7 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 	if self._action_desc.start_anim_time then
 		redir_result = self._ext_movement:play_redirect("spooc_flying_strike", self._action_desc.start_anim_time)
 
-		self._ext_movement:set_position(self._ext_movement:m_pos():with_z(self._action_desc.flying_pos_z))
+		self._ext_movement:set_position(self._common_data.pos:with_z(self._action_desc.flying_pos_z))
 	else
 		redir_result = self._ext_movement:play_redirect("spooc_flying_strike")
 	end
@@ -1605,17 +1611,6 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 	end
 
 	self._machine:set_speed(redir_result, speed_mul)
-
-	--[[if alive(self._target_unit) and self._target_unit:base().is_local_player then
-		local enemy_vec = mvec3_copy(self._common_data.pos)
-
-		mvec3_sub(enemy_vec, self._target_unit:movement():m_pos())
-		mvec3_set_z(enemy_vec, 0)
-		mvec3_norm(enemy_vec)
-		self._target_unit:camera():camera_unit():base():clbk_aim_assist({
-			ray = enemy_vec
-		})
-	end]]
 
 	self:_set_updator("_upd_flying_strike")
 end
