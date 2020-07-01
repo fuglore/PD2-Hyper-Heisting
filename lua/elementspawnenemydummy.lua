@@ -32,8 +32,7 @@
 			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/payday2/characters/ene_city_shield/ene_city_shield",
 			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/payday2/characters/ene_city_shield/ene_city_shield",
 			["units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"] = "units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36",
-			["units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870"] = "units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870",
-			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
+			["units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870"] = "units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"
 		}
 	local murkywetew_highdiff = {
 			["units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"] = "units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2",	
@@ -126,7 +125,7 @@
 			["units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic"] = "units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1",												
 			["units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun"] = "units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1",
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper",
-			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"	,
+			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper",
 			--go to hell ugly pricks!!!!! You're all fucking DEAD you ugly pricks!!! DEAD!!!!!!
 			["units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",	
 			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",									
@@ -151,8 +150,7 @@
 			["units/payday2/characters/ene_city_swat_2/ene_city_swat_2"] = "units/payday2/characters/ene_fbi_swat_2/ene_fbi_swat_2",		
 			["units/payday2/characters/ene_city_swat_3/ene_city_swat_3"] = "units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3",									
 			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/payday2/characters/ene_shield_1/ene_shield_1",
-			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/payday2/characters/ene_shield_1/ene_shield_1",
-			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
+			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/payday2/characters/ene_shield_1/ene_shield_1"
 		}
 	local sniper = {
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/payday2/characters/ene_sniper_1/ene_sniper_1"
@@ -299,7 +297,7 @@ function ElementSpawnEnemyDummy:init(...)
 		end
 	end
 	
-	if job == "firestarter_1" or "firestarter_2" or "alex_3" or "hox_2" or "hox_3" then  --FBI-related heists
+	if job == "firestarter_1" or job == "firestarter_2" or job == "alex_3" or job == "hox_2" or job == "hox_3" then  --FBI-related heists
 		if overkill_290_and_easywish[self._values.enemy] then
 			self._values.enemy = overkill_290_and_easywish[self._values.enemy]
 		end
