@@ -10,7 +10,7 @@ function CopActionHealed:init(action_desc, common_data)
 	self._action_desc = action_desc
 	self._healed = false
 
-	if not Global.game_settings.one_down and self._ext_movement:play_redirect("use_syringe") then
+	if self._ext_movement:play_redirect("use_syringe") then
 		self._ext_movement:spawn_wanted_items()
 		self._unit:sound():say("hr01")
 
