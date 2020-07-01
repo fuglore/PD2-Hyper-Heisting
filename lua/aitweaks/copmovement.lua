@@ -441,20 +441,20 @@ function CopMovement:_upd_stance(t)
 end
 
 function CopMovement:anim_clbk_enemy_spawn_melee_item()
-    if alive(self._melee_item_unit) then
-        return
-    end
+	if alive(self._melee_item_unit) then
+		return
+	end
 
-    local melee_weapon = self._unit:base().melee_weapon and self._unit:base():melee_weapon()
-    local unit_name = melee_weapon and melee_weapon ~= "weapon" and tweak_data.weapon.npc_melee[melee_weapon] and tweak_data.weapon.npc_melee[melee_weapon].unit_name or nil
+	local melee_weapon = self._unit:base().melee_weapon and self._unit:base():melee_weapon()
+	local unit_name = melee_weapon and melee_weapon ~= "weapon" and tweak_data.weapon.npc_melee[melee_weapon] and tweak_data.weapon.npc_melee[melee_weapon].unit_name or nil
 
-    if unit_name then
-        local align_obj_l_name = CopMovement._gadgets.aligns.hand_l
-        local align_obj_l = self._unit:get_object(align_obj_l_name)
+	if unit_name then
+		local align_obj_l_name = CopMovement._gadgets.aligns.hand_l
+		local align_obj_l = self._unit:get_object(align_obj_l_name)
 
-        self._melee_item_unit = World:spawn_unit(unit_name, align_obj_l:position(), align_obj_l:rotation())
-        self._unit:link(align_obj_l:name(), self._melee_item_unit, self._melee_item_unit:orientation_object():name())
-    end
+		self._melee_item_unit = World:spawn_unit(unit_name, align_obj_l:position(), align_obj_l:rotation())
+		self._unit:link(align_obj_l:name(), self._melee_item_unit, self._melee_item_unit:orientation_object():name())
+	end
 end
 
 function CopMovement:on_suppressed(state)
@@ -742,21 +742,19 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 					self._unit:contour():flash("medic_heal_complex", 0.15)
 				end
 			end
+		elseif Global.game_settings.one_down then
+			self._ext_damage._invulnerability_t = t + 1
+
+			if self._unit:contour() then
+				self._unit:contour():add("medic_heal_shin_low")
+				self._unit:contour():flash("medic_heal_shin_low", 0.2)
+			end
 		else
-			if Global.game_settings.one_down then
-				self._ext_damage._invulnerability_t = t + 1
+			self._ext_damage._invulnerability_t = t + 2
 
-				if self._unit:contour() then
-					self._unit:contour():add("medic_heal_shin_low")
-					self._unit:contour():flash("medic_heal_shin_low", 0.2)
-				end
-			else
-				self._ext_damage._invulnerability_t = t + 2
-
-				if self._unit:contour() then
-					self._unit:contour():add("medic_heal")
-					self._unit:contour():flash("medic_heal", 0.2)
-				end
+			if self._unit:contour() then
+				self._unit:contour():add("medic_heal")
+				self._unit:contour():flash("medic_heal", 0.2)
 			end
 		end
 
@@ -985,15 +983,10 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 end
 
 function CopMovement:synch_attention(attention)
-	if attention and self._unit:character_damage():dead() then
-		--debug_pause_unit(self._unit, "[CopMovement:synch_attention] dead AI", self._unit, inspect(attention))
-	end
-
 	self:_remove_attention_destroy_listener(self._attention)
 	self:_add_attention_destroy_listener(attention)
 
 	if attention and attention.unit and not attention.destroy_listener_key then
-		--debug_pause_unit(attention.unit, "[CopMovement:synch_attention] problematic attention unit", attention.unit)
 		self:synch_attention(nil)
 
 		return
@@ -1010,101 +1003,13 @@ function CopMovement:synch_attention(attention)
 	end
 end
 
-function CopMovement:drop_held_items()
-	self._spawneditems = {}
-
-	if not self._droppable_gadgets then
-		return
-	end
-
-	for _, drop_item_unit in ipairs(self._droppable_gadgets) do
-		local wanted_item_key = drop_item_unit:key()
-
-		if alive(drop_item_unit) then
-			for align_place, item_list in pairs(self._equipped_gadgets) do
-				if wanted_item_key then
-					for i_item, item_unit in ipairs(item_list) do
-						if item_unit:key() == wanted_item_key then
-							table.remove(item_list, i_item)
-
-							wanted_item_key = nil
-
-							break
-						end
-					end
-				else
-					break
-				end
-			end
-
-			drop_item_unit:unlink()
-			drop_item_unit:set_slot(0)
-		else
-			for align_place, item_list in pairs(self._equipped_gadgets) do
-				if wanted_item_key then
-					for i_item, item_unit in ipairs(item_list) do
-						if not alive(item_unit) then
-							table.remove(item_list, i_item)
-						end
-					end
-				end
-			end
-		end
-	end
-
-	self._droppable_gadgets = nil
-end
-
+local _equip_item_original = CopMovement._equip_item
 function CopMovement:_equip_item(item_type, align_place, droppable)
 	if item_type == "needle" then
 		align_place = "hand_l"
 	end
 
-	local align_name = self._gadgets.aligns[align_place]
-
-	if not align_name then
-		--print("[CopMovement:anim_clbk_equip_item] non existent align place:", align_place)
-
-		return
-	end
-
-	local align_obj = self._unit:get_object(align_name)
-	local available_items = self._gadgets[item_type]
-
-	if not available_items then
-		--print("[CopMovement:anim_clbk_equip_item] non existent item_type:", item_type)
-
-		return
-	end
-
-	local item_name = available_items[math.random(available_items)]
-
-	if self._spawneditems[item_type] ~= nil then
-		return
-	end
-
-	self._spawneditems[item_type] = true
-
-	if item_type == "needle" then
-		align_place = "hand_l"
-	end
-
-	--print("[CopMovement]Spawning: " .. item_type)
-
-	local item_unit = World:spawn_unit(item_name, align_obj:position(), align_obj:rotation())
-
-	self._unit:link(align_name, item_unit, item_unit:orientation_object():name())
-
-	self._equipped_gadgets = self._equipped_gadgets or {}
-	self._equipped_gadgets[align_place] = self._equipped_gadgets[align_place] or {}
-
-	table.insert(self._equipped_gadgets[align_place], item_unit)
-
-	if droppable then
-		self._droppable_gadgets = self._droppable_gadgets or {}
-
-		table.insert(self._droppable_gadgets, item_unit)
-	end
+	_equip_item_original(self, item_type, align_place, droppable)
 end
 
 function CopMovement:_get_latest_tase_action()
@@ -1180,7 +1085,15 @@ function CopMovement:sync_action_spooc_stop(pos, nav_index, action_id)
 		end
 
 		spooc_action.path_index = math.max(1, math.min(spooc_action.path_index, #nav_path - 1))
+
+		if not spooc_action.flying_strike and spooc_action.blocks then
+			spooc_action.blocks.idle = nil
+		end
 	elseif spooc_action then
+		if not spooc_action:is_flying_strike() and spooc_action._blocks then
+			spooc_action._blocks.idle = nil
+		end
+
 		if Network:is_server() then
 			self:action_request({
 				sync = true,
