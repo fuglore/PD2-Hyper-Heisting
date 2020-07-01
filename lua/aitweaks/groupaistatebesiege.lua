@@ -153,6 +153,17 @@ function GroupAIStateBesiege:update(t, dt)
 			--log("noresettime")
 		--end
 		
+		if self._task_data and self._task_data.assault and self._task_data.assault.phase ~= "anticipation" then
+			if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
+				self:get_assault_hud_state()
+			
+				if managers.hud._hud_assault_corner._assault_state ~= self._current_assault_state then
+					managers.hud._hud_assault_corner:set_color_state(self._current_assault_state)
+					--managers.hud._hud_assault_corner:start_assault(self._assault_number)
+				end
+			end
+		end
+		
 		self._feddensity_active_t = 5 + self._downcountleniency
 			
 		if self._downleniency and self._max_fedfuck_t_add then

@@ -10,6 +10,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
 	self._last_killed_cop_t = 0
+	self._current_assault_state = "normal"
 	local drama_tweak = tweak_data.drama
 	self._drama_data = {
 		amount = 0,
@@ -47,6 +48,7 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
 	self._last_killed_cop_t = 0
+	self._current_assault_state = "normal"
 	local drama_tweak = tweak_data.drama
 	self._drama_data = {
 		amount = 0,
@@ -87,6 +89,45 @@ function GroupAIStateBase:chk_guard_delay_deduction()
 	else
 		return self._guard_delay_deduction * 1
 	end
+end
+
+function GroupAIStateBase:get_assault_hud_state()
+	local nr_players = 0
+	local nr_players_alive = 0
+
+	for u_key, u_data in pairs(self:all_player_criminals()) do
+		nr_players = nr_players + 1
+		if not u_data.status then
+			nr_players_alive = nr_players_alive + 1
+		end
+	end
+	
+	local nr_ai = 0
+	local nr_ai_alive = 0
+
+	for u_key, u_data in pairs(self:all_AI_criminals()) do
+		nr_ai = nr_ai + 1
+		if not u_data.status then
+			nr_ai_alive = nr_ai_alive + 1
+		end
+	end
+	
+	local nr_people = nr_players + nr_ai
+	local nr_people_alive = nr_players_alive + nr_ai_alive
+	
+	if nr_people_alive < nr_people then
+		local danger = nr_people - 2
+		local lastcrimstanding = nr_people_alive <= 1
+		
+		if lastcrimstanding then
+			self._current_assault_state = "lastcrimstanding"
+		elseif nr_people_alive <= danger then
+			self._current_assault_state = "danger"
+		else
+			self._current_assault_state = "normal"
+		end
+	end
+	
 end
 
 function GroupAIStateBase:update(t, dt)
