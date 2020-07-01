@@ -8674,7 +8674,7 @@ function CharacterTweakData:_set_normal()
 	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
-	self:_set_characters_weapon_preset("simple")
+	self:_set_characters_weapon_preset("civil")
 
 	self.flashbang_multiplier = 1
 	self.concussion_multiplier = 1
@@ -8832,7 +8832,7 @@ function CharacterTweakData:_set_hard()
 	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
-	self:_set_characters_weapon_preset("simple")
+	self:_set_characters_weapon_preset("civil")
 
 	
 	self.flashbang_multiplier = 1
