@@ -41,14 +41,23 @@ function MedicDamage:heal_unit(unit, override_cooldown)
 	self._heal_cooldown_t = t
 
 	if not self._unit:character_damage():dead() then
-		local action_data = {
-			body_part = 1,
-			type = "heal",
-			client_interrupt = Network:is_client()
-		}
+		if Global.game_settings.one_down then
+			local redir_res = self._unit:movement():play_redirect("cmd_get_up")
 
-		self._unit:movement():action_request(action_data)
-		
+			if redir_res then
+				self._unit:sound():say("heal")
+				self._unit:anim_state_machine():set_speed(redir_res, 0.5)
+			end
+		else
+			local action_data = {
+				body_part = 1,
+				type = "heal",
+				client_interrupt = Network:is_client()
+			}
+
+			self._unit:movement():action_request(action_data)
+		end
+
 		if self._unit:base():char_tweak()["custom_voicework"] then
 			local voicelines = _G.voiceline_framework.BufferedSounds[self._unit:base():char_tweak().custom_voicework]
 
