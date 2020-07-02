@@ -169,46 +169,5 @@
 	<texture path="levels/mods/skm_friend_hh/cube_lights/800139"/>
 	<texture path="levels/mods/skm_friend_hh/cube_lights/600025"/>
 	<texture path="levels/mods/skm_friend_hh/cubemaps/51"/>
-	<add path="units/payday2/vehicles/str_vehicle_swat_van_gensec/str_vehicle_swat_van_gensec" type="unit">
-		<unit path="units/payday2/vehicles/str_vehicle_swat_van_gensec/str_vehicle_swat_van_gensec" unload="true"/>
-		<object path="units/payday2/vehicles/str_vehicle_swat_van_gensec/str_vehicle_swat_van_gensec" unload="true"/>
-		<cooked_physics path="units/payday2/vehicles/str_vehicle_swat_van_gensec/str_vehicle_swat_van_gensec" unload="true"/>
-		<model path="units/payday2/vehicles/str_vehicle_swat_van_gensec/str_vehicle_swat_van_gensec" unload="true"/>
-		<material_config path="units/payday2/vehicles/str_vehicle_swat_van_gensec/str_vehicle_swat_van_gensec" unload="true"/>
-		<sequence_manager path="units/payday2/vehicles/str_vehicle_swat_van_gensec/str_vehicle_swat_van_gensec" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/flares/scene_flare_small_01" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/spotlight/scene_spotlight_01" unload="true"/>
-		<unit path="units/payday2/vehicles/gen_vehicle_turret/gen_vehicle_turret" unload="true"/>
-		<object path="units/payday2/vehicles/gen_vehicle_turret/gen_vehicle_turret" unload="true"/>
-		<cooked_physics path="units/payday2/vehicles/gen_vehicle_turret/gen_vehicle_turret" unload="true"/>
-		<model path="units/payday2/vehicles/gen_vehicle_turret/gen_vehicle_turret" unload="true"/>
-		<material_config path="units/payday2/vehicles/gen_vehicle_turret/gen_vehicle_turret" unload="true"/>
-		<sequence_manager path="units/payday2/vehicles/gen_vehicle_turret/gen_vehicle_turret" unload="true"/>
-		<unit path="units/payday2/vehicles/gen_vehicle_turret/spawn_turret_debris" unload="true"/>
-		<object path="units/payday2/vehicles/gen_vehicle_turret/spawn_turret_debris" unload="true"/>
-		<cooked_physics path="units/payday2/vehicles/gen_vehicle_turret/spawn_turret_debris" unload="true"/>
-		<model path="units/payday2/vehicles/gen_vehicle_turret/spawn_turret_debris" unload="true"/>
-		<unit path="units/payday2/vehicles/gen_vehicle_turret/spawn_shield_front" unload="true"/>
-		<object path="units/payday2/vehicles/gen_vehicle_turret/spawn_shield_front" unload="true"/>
-		<cooked_physics path="units/payday2/vehicles/gen_vehicle_turret/spawn_shield_front" unload="true"/>
-		<model path="units/payday2/vehicles/gen_vehicle_turret/spawn_shield_front" unload="true"/>
-		<effect load="true" path="effects/particles/weapons/flashlight/flashlight" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/explosions/sentry_aftersmoke" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/explosions/sentry_damage_smoke" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/explosions/sentry_damage_smoke_med" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/explosions/sentry_damage_smoke_large" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/explosions/sparks/sparks_loop" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/weapons/big_762_auto" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/weapons/parts/combo_light_all" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/weapons/parts/distance_halo_big" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/weapons/shells/shell_556_lmg" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/weapons/shells/shell_link" unload="true"/>
-		<effect load="true" path="effects/payday2/particles/explosions/sentry_explosion" unload="true"/>
-		<unit path="units/payday2/vehicles/gen_vehicle_turret/spawn_shield_upper" unload="true"/>
-		<object path="units/payday2/vehicles/gen_vehicle_turret/spawn_shield_upper" unload="true"/>
-		<cooked_physics path="units/payday2/vehicles/gen_vehicle_turret/spawn_shield_upper" unload="true"/>
-		<model path="units/payday2/vehicles/gen_vehicle_turret/spawn_shield_upper" unload="true"/>
-		<physic_effect path="physic_effects/push_sphere" unload="true"/>
-	</add>
 	<material_config path="units/pd2_dlc_chill/props/chl_prop_warehouse_pallet_pile/chl_prop_warehouse_pallet_pile" unload="true"/>
 </table>

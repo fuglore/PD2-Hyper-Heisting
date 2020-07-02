@@ -56,6 +56,7 @@
 			<value_node value="levels/narratives/butcher/friend/art_bo_cheng/art_bo_cheng"/>
 			<value_node value="levels/narratives/butcher/friend/art_house_exterior/art_house_exterior"/>
 			<value_node value="levels/narratives/continental/spa/world"/>
+			<value_node value="levels/instances/unique/mus_helicopter/world/world"/>
 			<value_node value="levels/instances/unique/brb/brb_sniper_spawns/world/world"/>
 		</packages>
 		<script_data_mods directory="scriptdata">
