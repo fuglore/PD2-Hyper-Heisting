@@ -154,12 +154,17 @@ function GroupAIStateBesiege:update(t, dt)
 		--end
 		
 		if self._task_data and self._task_data.assault and self._task_data.assault.phase ~= "anticipation" then
+			if managers.hud.needs_to_restart_assault_banner then
+				managers.hud._hud_assault_corner:_start_assault(managers.hud._hud_assault_corner:_get_assault_strings())
+				managers.hud.needs_to_restart_assault_banner = nil
+			end
+		
 			if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
 				self:get_assault_hud_state()
 			
-				if managers.hud._hud_assault_corner._assault_state ~= self._current_assault_state then
+				if managers.hud._hud_assault_corner.set_color_state and managers.hud._hud_assault_corner._assault_state ~= self._current_assault_state then
 					managers.hud._hud_assault_corner:set_color_state(self._current_assault_state)
-					--managers.hud._hud_assault_corner:start_assault(self._assault_number)
+					--managers.hud._hud_assault_corner:_start_assault(self._assault_number)
 				end
 			end
 		end

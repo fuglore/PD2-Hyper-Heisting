@@ -566,13 +566,53 @@ function CopLogicIdle._chk_relocate(data)
 			return true
 		end
 	elseif data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "assault_area" and data.objective.attitude == "engage" then
-		if data.objective.area and not data.objective.nav_seg or data.objective.nav_seg then
-			if data.objective.area and data.objective.area == my_area and not data.objective.nav_seg or data.objective.nav_seg == my_nav_seg then
-			
-				if current_assault_target_area_navsegs then -- this code is so awful i am fully convinced it is self-aware
-					--log("pog")
+		if data.objective.nav_seg and data.objective.nav_seg == my_nav_seg or data.objective.area and data.objective.area == my_area then
+			if current_assault_target_area_navsegs then -- this code is so awful i am fully convinced it is self-aware
+				--log("pog")
+				data.objective.in_place = nil
+				data.objective.nav_seg = next(current_assault_target_area_navsegs)
+				data.objective.path_data = {
+					{
+						data.objective.nav_seg
+					}
+				}
+				data.logic._exit(data.unit, "travel")
+						
+				return true
+			end
+				
+			local area = data.objective.area
+
+			if area and not next(area.criminal.units) then
+				local found_areas = {
+					[area] = true
+				}
+				local areas_to_search = {
+					area
+				}
+				local target_area = nil
+
+				while next(areas_to_search) do
+					local current_area = table.remove(areas_to_search)
+
+					if next(current_area.criminal.units) then
+						target_area = current_area
+
+						break
+					end
+
+					for _, n_area in pairs(current_area.neighbours) do
+						if not found_areas[n_area] then
+							found_areas[n_area] = true
+
+							table.insert(areas_to_search, n_area)
+						end
+					end
+				end
+
+				if target_area then
 					data.objective.in_place = nil
-					data.objective.nav_seg = next(current_assault_target_area_navsegs)
+					data.objective.nav_seg = next(target_area.nav_segs)
 					data.objective.path_data = {
 						{
 							data.objective.nav_seg
@@ -580,65 +620,15 @@ function CopLogicIdle._chk_relocate(data)
 					}
 
 					data.logic._exit(data.unit, "travel")
-						
+
 					return true
-				end
-				
-				local area = data.objective.area
-
-				if area and not next(area.criminal.units) then
-					local found_areas = {
-						[area] = true
-					}
-					local areas_to_search = {
-						area
-					}
-					local target_area = nil
-
-					while next(areas_to_search) do
-						local current_area = table.remove(areas_to_search)
-
-						if next(current_area.criminal.units) then
-							target_area = current_area
-
-							break
-						end
-
-						for _, n_area in pairs(current_area.neighbours) do
-							if not found_areas[n_area] then
-								found_areas[n_area] = true
-
-								table.insert(areas_to_search, n_area)
-							end
-						end
-					end
-
-					if target_area then
-						data.objective.in_place = nil
-						data.objective.nav_seg = next(target_area.nav_segs)
-						data.objective.path_data = {
-							{
-								data.objective.nav_seg
-							}
-						}
-
-						data.logic._exit(data.unit, "travel")
-
-						return true
-					end
 				end
 			end
 		end
-	elseif data.objective and data.objective.area or data.objective and data.objective.nav_seg then
-		if not CopLogicAttack.is_available_for_assignment(data, data.objective) or data.objective.area and data.objective.area == my_area and not data.objective.nav_seg or data.objective.nav_seg == my_nav_seg then
-			return
-		else
-			data.objective.in_place = nil
-			data.logic._exit(data.unit, "travel")
+	elseif data.objective and data.objective.nav_seg and data.objective.nav_seg == my_nav_seg or data.objective and data.objective.area and data.objective.area == my_area then
+		data.objective.in_place = nil
+		data.logic._exit(data.unit, "travel")
 			
-			return true
-		end
+		return true
 	end
-	
-	return
 end

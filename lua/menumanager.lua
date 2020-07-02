@@ -54,6 +54,9 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 	
 	MenuCallbackHandler.callback_shin_toggle_hhassault = function(self,item) --toggle
 		PD2THHSHIN:ChangeSetting("toggle_hhassault",item:value() == "on")
+		if managers.hud then
+			managers.hud.needs_to_restart_assault_banner = true
+		end
 	end
 	
 	MenuCallbackHandler.callback_shin_albanian_content_enable = function(self,item) --toggle

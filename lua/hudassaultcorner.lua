@@ -41,9 +41,6 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		self._vip_assault_color = Color(255, 255, 133, 225) / 255
 	end
 
-	if managers.skirmish:is_skirmish() then
-		self._assault_color = tweak_data.screen_colors.skirmish_color
-	end
 
 	self._assault_survived_color = Color(1, 0.12549019607843137, 0.9019607843137255, 0.12549019607843137)
 	self._current_assault_color = self._assault_color
