@@ -49,6 +49,7 @@ function CopBase:default_weapon_name()
 	local default_weapon_id = self._default_weapon_id
 	local weap_ids = tweak_data.character.weap_ids
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local faction = tweak_data.levels:get_ai_group_type()
 	
 	--available vanilla weapons, using their in-game names to avoid confusion since I'm planning to post this in the WIP thread regarding incorrect weapons in vanilla
 	local suppressed_bernetti = Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92")
@@ -165,6 +166,7 @@ function CopBase:default_weapon_name()
 	or unit_name == Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1")	
 	or unit_name == Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45")	
 	
+	local drbob = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic")
 	local professor_miller = unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45")
 	local vagrant = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45")
 	local crank_dat_soulja = unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45")
@@ -176,7 +178,9 @@ function CopBase:default_weapon_name()
 	elseif vagrant and diff_index >= 6 then 
 		return white_streak_akimbo
 	elseif secrit_servis then 
-		return kmtac		
+		return kmtac
+	elseif drbob and faction == "federales" then 
+		return compact5		
 	elseif gang_mackas then 
 		return mark10																			
 	elseif gang_aks then 
