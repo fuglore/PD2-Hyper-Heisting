@@ -2906,7 +2906,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 30,
 		RELOAD_SPEED = 0.9, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			1
@@ -3038,7 +3038,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 30,
 		RELOAD_SPEED = 0.9, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			1
@@ -3427,7 +3427,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 20,
 		RELOAD_SPEED = 1.25, --saiga only has 7 shots per clip which forces a reload animation once depleted, justifying the rather quick reload
 		melee_speed = 0.5,
-		melee_dmg = 2,
+		melee_dmg = 15,
 		melee_retry_delay = {
 			1,
 			2
@@ -3528,7 +3528,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 20,
 		RELOAD_SPEED = 1.5,
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			1
@@ -3646,7 +3646,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 50,
 		RELOAD_SPEED = 1.4, --faster reloads than shotguns
 		melee_speed = 0.5,
-		melee_dmg = 2,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			2
@@ -4011,7 +4011,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 30,
 		RELOAD_SPEED = 1,
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			1
@@ -4143,7 +4143,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 30,
 		RELOAD_SPEED = 1,
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			1
@@ -4275,7 +4275,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 5,
 		RELOAD_SPEED = 1.1,
 		melee_speed = 0.5,
-		melee_dmg = 10, --100 damage on melee, no joke
+		melee_dmg = 15, --100 damage on melee, no joke
 		melee_retry_delay = {
 			1,
 			1
@@ -4418,7 +4418,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 20,
 		RELOAD_SPEED = 1, --lowered reload speed greatly from civil, shit starts getting dangerous
 		melee_speed = 0.5,
-		melee_dmg = 10, --100 damage on melee, no joke, keep as is from civil and up
+		melee_dmg = 15, --100 damage on melee, no joke, keep as is from civil and up
 		melee_retry_delay = {
 			1,
 			1
@@ -4532,7 +4532,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 20,
 		RELOAD_SPEED = 1.25, --saiga no longer has 7 shots per clip, but the animation is still justified because this is "complex"
 		melee_speed = 0.5,
-		melee_dmg = 2,
+		melee_dmg = 20,
 		melee_retry_delay = {
 			1,
 			2
@@ -4651,7 +4651,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 20,
 		RELOAD_SPEED = 1.5,
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 15,
 		melee_retry_delay = {
 			1,
 			1
@@ -4769,7 +4769,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 50,
 		RELOAD_SPEED = 1.4, --FAST reload.
 		melee_speed = 0.5,
-		melee_dmg = 2,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			2
@@ -5001,7 +5001,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 5,
 		RELOAD_SPEED = 0.9, --decently long pause after burst
 		melee_speed = 0.5,
-		melee_dmg = 15,
+		melee_dmg = 20,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
@@ -5135,7 +5135,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 30,
 		RELOAD_SPEED = 1.4, --slight reduction from civil
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			1
@@ -5267,7 +5267,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 30,
 		RELOAD_SPEED = 1.4, --slight reduction from civil
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			1
@@ -5399,7 +5399,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 5, --experimental change, might make damage feel less forced with the reduced accuracy now
 		RELOAD_SPEED = 1.4, --DW style.
 		melee_speed = 0.5,
-		melee_dmg = 10, --100 damage on melee
+		melee_dmg = 15, --100 damage on melee
 		melee_retry_delay = {
 			1,
 			1
@@ -5542,7 +5542,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 20,
 		RELOAD_SPEED = 1.4, --HOW? ARE THEY JUST PILING ALL THE SHELLS ON THEIR HAND AND JUST SHOVING IT IN THERE LIKE CANDY INTO A BOWL???? either way, quite powerful
 		melee_speed = 0.5,
-		melee_dmg = 10, --100 damage on melee, no joke, keep as is from civil and up
+		melee_dmg = 15, --100 damage on melee, no joke, keep as is from civil and up
 		melee_retry_delay = {
 			1,
 			1
@@ -5656,7 +5656,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 20,
 		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
-		melee_dmg = 2,
+		melee_dmg = 23,
 		melee_retry_delay = {
 			1,
 			2
@@ -5775,7 +5775,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 20,
 		RELOAD_SPEED = 2, --whew.
 		melee_speed = 0.5,
-		melee_dmg = 5,
+		melee_dmg = 15,
 		melee_retry_delay = {
 			1,
 			1
@@ -5893,7 +5893,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 50,
 		RELOAD_SPEED = 1.8, --FAST reload.
 		melee_speed = 0.5,
-		melee_dmg = 2,
+		melee_dmg = 10,
 		melee_retry_delay = {
 			1,
 			2
@@ -6125,7 +6125,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 10,
 		RELOAD_SPEED = 1.15, --theres 200 ammo in the fucking thing, it'll take time to empty
 		melee_speed = 0.5,
-		melee_dmg = 15,
+		melee_dmg = 20,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
@@ -6258,7 +6258,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 10,
 		RELOAD_SPEED = 2.1, --Fast reloads.
 		melee_speed = 0.75,
-		melee_dmg = 5,
+		melee_dmg = 22,
 		melee_retry_delay = {
 			1,
 			1
@@ -6390,7 +6390,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 10,
 		RELOAD_SPEED = 2.1, --Fast reloads.
 		melee_speed = 0.75,
-		melee_dmg = 5,
+		melee_dmg = 22,
 		melee_retry_delay = {
 			1,
 			1
@@ -6522,7 +6522,7 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 10, --experimental change, might make damage feel less forced with the reduced accuracy now
 		RELOAD_SPEED = 1.8, --DW style.
 		melee_speed = 0.75,
-		melee_dmg = 10, --100 damage on melee
+		melee_dmg = 22, --100 damage on melee
 		melee_retry_delay = {
 			1,
 			1
