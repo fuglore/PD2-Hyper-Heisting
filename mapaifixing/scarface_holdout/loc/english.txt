@@ -1,0 +1,6 @@
+{
+	"heist_scarface_holdout_name" : "Scarface Mansion"
+	"heist_scarface_holdout_brief" : "We may have a juicy score on our hands while we're taking a well-deserved vacation in Miami. The Sosa cartel are trying to open up shop in the late and great Tony Montana's mansion... again. This time though, they're on the Miami PD's payroll, attempting to intercept the other cartels in the area. Even after Ernesto's assassination, they're still one of the strongest gangs in the state, so they're an important asset for the police. We're gonna exploit that, and hold one of those dirty druglords for ransom. I'm sure they'll pay big."
+	"heist_skm_friend_hh_name" : "Scarface Mansion"
+	"heist_skm_friend_hh_brief" : "We may have a juicy score on our hands while we're taking a well-deserved vacation in Miami. The Sosa cartel are trying to open up shop in the late and great Tony Montana's mansion... again. This time though, they're on the Miami PD's payroll, attempting to intercept the other cartels in the area. Even after Ernesto's assassination, they're still one of the strongest gangs in the state, so they're an important asset for the police. We're gonna exploit that, and hold one of those dirty druglords for ransom. I'm sure they'll pay big."
+}

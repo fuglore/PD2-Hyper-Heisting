@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<unit type="deprecated" slot="39">
+  <object file="units/payday2/vehicles/str_vehicle_swat_van_gensec/str_vehicle_swat_van_gensec" />
+  <network sync="spawn"/>
+  <dependencies>
+    	<depends_on effect="effects/payday2/particles/flares/scene_flare_small_01" />
+    	<depends_on effect="effects/payday2/particles/spotlight/scene_spotlight_01" />
+      <depends_on unit="units/payday2/vehicles/gen_vehicle_turret/gen_vehicle_turret" />
+  </dependencies>
+
+  <extensions>
+    <extension name="base" class="AnimatedVehicleBase">
+      <var name="_body_name" value="a_main_animation"/>
+    </extension>
+    <extension name="unit_data" class="ScriptUnitData" />
+    <extension name="damage" class="UnitDamage" />
+    <extension name="sync_unit_data" class="SyncUnitData" />
+  </extensions>
+   <sounds>
+  	<soundsource name="a_body_crash2" source="a_body_crash2" />
+  </sounds>
+</unit>
