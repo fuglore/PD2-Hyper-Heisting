@@ -760,6 +760,7 @@
 	<texture path="guis/textures/pd2/mission_briefing/assets/assets_risklevel_6_hh" force="false"/>
 	<!--<texture path="guis/dlcs/cee/textures/pd2/crime_spree/modifiers_atlas" force="true"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifiers_atlas_2" force="true"/>-->
+	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_magnetstorm" force="false"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_aggro" force="false"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_bouncer" force="false"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_zealot" force="false"/>

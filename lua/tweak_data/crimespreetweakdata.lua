@@ -275,16 +275,10 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			},
 			{
 				id = "magnetstorm",
-				icon = "cs_modifier_truelotusmaster",
+				icon = "cs_modifier_magnetstorm",
 				class = "ModifierMagnetstorm",
 				data = {}
-			},
-			{
-				id = "unison",
-				icon = "crime_spree_heavies",
-				class = "ModifierUnison",
-				data = {}
-			},
+			}
 		},
 		stealth = {
 			{
