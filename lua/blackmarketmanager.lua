@@ -1,6 +1,10 @@
 function BlackMarketManager:damage_multiplier(name, categories, silencer, detection_risk, current_state, blueprint)
 	local multiplier = 1
 	
+	if tweak_data.weapon[name] and tweak_data.weapon[name].ignore_damage_upgrades then
+		return multiplier
+	end
+	
 	if managers.player:has_category_upgrade("player", "flexmode") then
 		multiplier = multiplier - 0.25
 	end
@@ -9,10 +13,6 @@ function BlackMarketManager:damage_multiplier(name, categories, silencer, detect
 		multiplier = multiplier - 0.25
 	end
 	
-	if tweak_data.weapon[name] and tweak_data.weapon[name].ignore_damage_upgrades then
-		return multiplier
-	end
-
 	for _, category in ipairs(categories) do
 		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "damage_multiplier", 1)
 	end
