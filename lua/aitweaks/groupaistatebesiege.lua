@@ -63,7 +63,7 @@ end
 function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		local next_upd_t = 0.028888888888888888
-		local asap = true
+		local asap = nil
 		if next(self._spawning_groups) then
 			next_upd_t = 0.014444444444444444
 			asap = true
@@ -474,7 +474,7 @@ function GroupAIStateBesiege:_begin_new_tasks()
 	local recon_candidates, are_recon_candidates_safe = nil
 	local recon_data = task_data.recon
 
-	if recon_data.next_dispatch_t and recon_data.next_dispatch_t < t and not task_data.assault.active and not task_data.regroup.active then
+	if recon_data.next_dispatch_t and recon_data.next_dispatch_t < t then
 		recon_candidates = {}
 	end
 
@@ -601,8 +601,6 @@ function GroupAIStateBesiege:_begin_new_tasks()
 
 	if assault_candidates and #assault_candidates > 0 then
 		self:_begin_assault_task(assault_candidates)
-
-		recon_candidates = nil
 	end
 
 	if recon_candidates and #recon_candidates > 0 then
@@ -616,8 +614,6 @@ function GroupAIStateBesiege:_begin_new_tasks()
 		local reenforce_area = reenforce_candidates[lucky_i_candidate]
 
 		self:_begin_reenforce_task(reenforce_area)
-
-		recon_candidates = nil
 	end
 end
 	

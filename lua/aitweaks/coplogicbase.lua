@@ -1778,6 +1778,17 @@ function CopLogicBase.on_suppressed_state(data)
 	end
 end
 
+function CopLogicBase.on_intimidated(data, amount, aggressor_unit)
+	
+end
+
+function CopLogicBase.on_tied(data, aggressor_unit)
+	if data.objective and data.objective_failed_clbk then
+		data.objective_failed_clbk(data.unit, data.objective)
+	end
+end
+
+
 function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 	local qd_tasks = internal_data.queued_tasks
 
@@ -1800,6 +1811,9 @@ function CopLogicBase.death_clbk(data, damage_info)
 
 		data.weapon_laser_on = nil
 		managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.weapon_laser_off)
-
+	end
+	
+	if data.objective and data.objective_failed_clbk then
+		data.objective_failed_clbk(data.unit, data.objective)
 	end
 end

@@ -1,7 +1,6 @@
 ﻿<table directory="assets">	
 	<!--Base Game Asset Replacements-->
 	<material_config path="units/pd2_dlc_friend/nature/terrain/sfm_backdrop" force="true"/>
-	
 	<texture path="units/payday2/characters/shared_textures/spook_il" />
 	
 	<!--sniper helmet popping-->
