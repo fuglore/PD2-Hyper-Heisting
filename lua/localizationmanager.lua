@@ -271,9 +271,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["bm_w_x_p90"] = "Akimbo Kobus 90 AP Submachine Guns"			
 		})
 	end
+	
+end)
 
 Hooks:Add("LocalizationManagerPostInit", "HH_PoggersMoment", function(loc)
 	loc:load_localization_file(ModPath .. "loc/fuck.txt")
-end)
-	
 end)
