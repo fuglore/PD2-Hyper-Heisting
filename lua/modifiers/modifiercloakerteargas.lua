@@ -9,11 +9,11 @@ function ModifierCloakerTearGas:init(data)
 	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
 	
 	if Global.game_settings.incsmission or managers.skirmish and managers.skirmish:is_skirmish() then
-		if not Global.mutators.telespooc then
-			Global.mutators.telespooc = true
+		if not Global.game_settings.telespooc then
+			Global.game_settings.telespooc = true
 		end
 	else
-		Global.mutators.telespooc = nil
+		Global.game_settings.telespooc = nil
 	end
 end
 
@@ -24,11 +24,11 @@ function ModifierCloakerTearGas:OnEnemyDied(unit, damage_info)
 	
 	local gamemode_chk = game_state_machine:gamemode() 
 	if Global.game_settings.incsmission or managers.skirmish and managers.skirmish:is_skirmish() then
-		if not Global.mutators.telespooc then
-			Global.mutators.telespooc = true
+		if not Global.game_settings.telespooc then
+			Global.game_settings.telespooc = true
 		end
 	else
-		Global.mutators.telespooc = nil
+		Global.game_settings.telespooc = nil
 	end
 
 	if dont and unit:base()._tweak_table == "spooc" then
