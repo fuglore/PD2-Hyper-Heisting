@@ -189,7 +189,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	end
 
 	my_data.attitude = data.objective.attitude or "avoid"
-	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range]
+	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range
 	if not data.team then
 		data.unit:movement():set_team(managers.groupai:state()._teams["law1"])
 		if data.team then

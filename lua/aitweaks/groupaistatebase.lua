@@ -110,22 +110,23 @@ function GroupAIStateBase:get_assault_hud_state()
 		if not u_data.status then
 			nr_ai_alive = nr_ai_alive + 1
 		end
-	end
+	end	
 	
 	local nr_people = nr_players + nr_ai
 	local nr_people_alive = nr_players_alive + nr_ai_alive
 	
-	if nr_people_alive < nr_people then
-		local danger = nr_people - 2
-		local lastcrimstanding = nr_people_alive <= 1
+	if nr_people < 3 or nr_people_alive < nr_people then
+		local lastcrimstanding = nr_people_alive < 2
 		
 		if lastcrimstanding then
 			self._current_assault_state = "lastcrimstanding"
-		elseif nr_people_alive <= danger then
-			self._current_assault_state = "danger"
 		else
-			self._current_assault_state = "normal"
+			if nr_people_alive < 3 then
+				self._current_assault_state = "danger"
+			end
 		end
+	else
+		self._current_assault_state = "normal"
 	end
 	
 end

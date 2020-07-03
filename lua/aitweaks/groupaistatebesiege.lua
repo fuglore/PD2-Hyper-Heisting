@@ -153,7 +153,7 @@ function GroupAIStateBesiege:update(t, dt)
 			--log("noresettime")
 		--end
 		
-		if self._task_data and self._task_data.assault and self._task_data.assault.phase ~= "anticipation" then
+		if not self:whisper_mode() and self._task_data and self._task_data.assault and self._task_data.assault.phase ~= "anticipation" then
 			if managers.hud.needs_to_restart_assault_banner then
 				managers.hud._hud_assault_corner:_start_assault(managers.hud._hud_assault_corner:_get_assault_strings())
 				managers.hud.needs_to_restart_assault_banner = nil
