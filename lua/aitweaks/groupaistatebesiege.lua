@@ -133,6 +133,22 @@ end
 function GroupAIStateBesiege:update(t, dt)
 	GroupAIStateBesiege.super.update(self, t, dt)
 	
+	if managers.hud._hud_assault_corner._assault then
+		if managers.hud.needs_to_restart_assault_banner then
+			managers.hud._hud_assault_corner:_start_assault(managers.hud._hud_assault_corner:_get_assault_strings())
+			managers.hud.needs_to_restart_assault_banner = nil
+		end
+		
+		if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
+			self:get_assault_hud_state()
+			
+			if managers.hud._hud_assault_corner.set_color_state and managers.hud._hud_assault_corner._assault_state ~= self._current_assault_state then
+				managers.hud._hud_assault_corner:set_color_state(self._current_assault_state)
+				--managers.hud._hud_assault_corner:_start_assault(self._assault_number)
+			end
+		end
+	end
+	
 	if Network:is_server() then
 		self:_queue_police_upd_task()
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
@@ -152,22 +168,6 @@ function GroupAIStateBesiege:update(t, dt)
 		--if not self._feddensity_reset_t then
 			--log("noresettime")
 		--end
-		
-		if not self:whisper_mode() and self._task_data and self._task_data.assault and self._task_data.assault.phase ~= "anticipation" then
-			if managers.hud.needs_to_restart_assault_banner then
-				managers.hud._hud_assault_corner:_start_assault(managers.hud._hud_assault_corner:_get_assault_strings())
-				managers.hud.needs_to_restart_assault_banner = nil
-			end
-		
-			if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
-				self:get_assault_hud_state()
-			
-				if managers.hud._hud_assault_corner.set_color_state and managers.hud._hud_assault_corner._assault_state ~= self._current_assault_state then
-					managers.hud._hud_assault_corner:set_color_state(self._current_assault_state)
-					--managers.hud._hud_assault_corner:_start_assault(self._assault_number)
-				end
-			end
-		end
 		
 		self._feddensity_active_t = 5 + self._downcountleniency
 			
