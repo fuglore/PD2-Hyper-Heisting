@@ -8687,11 +8687,13 @@ function CharacterTweakData:_set_normal()
 			self.heavy_swat.speech_prefix_p1 = "r"
 			self.heavy_swat.speech_prefix_count = 4	
 			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_pager.speech_prefix_p1 = "r"
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
 		if faction == "federales" then
 			self.fbi.speech_prefix_p1 = "m"
+			self.fbi_pager.speech_prefix_p1 = "m"
 		end												
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
@@ -8846,11 +8848,13 @@ function CharacterTweakData:_set_hard()
 			self.heavy_swat.speech_prefix_p1 = "r"
 			self.heavy_swat.speech_prefix_count = 4	
 			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_pager.speech_prefix_p1 = "r"
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
 		if faction == "federales" then
 			self.fbi.speech_prefix_p1 = "m"
+			self.fbi_pager.speech_prefix_p1 = "m"
 		end										
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
@@ -9017,11 +9021,13 @@ function CharacterTweakData:_set_overkill()
 			self.heavy_swat.speech_prefix_p1 = "r"
 			self.heavy_swat.speech_prefix_count = 4	
 			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_pager.speech_prefix_p1 = "r"
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
 		if faction == "federales" then
 			self.fbi.speech_prefix_p1 = "m"
+			self.fbi_pager.speech_prefix_p1 = "m"
 		end								
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
@@ -9201,11 +9207,13 @@ function CharacterTweakData:_set_overkill_145()
 			self.heavy_swat.speech_prefix_p1 = "r"
 			self.heavy_swat.speech_prefix_count = 4	
 			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_pager.speech_prefix_p1 = "r"
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
 		if faction == "federales" then --should probably just add this to the init_region. don't feel like it tho so enjoy this lil band aid fix.
 			self.fbi.speech_prefix_p1 = "m"
+			self.fbi_pager.speech_prefix_p1 = "m"
 		end						
 		if faction == "zombie" then
 			self.swat.spawn_scream = "g90"
@@ -9464,6 +9472,7 @@ function CharacterTweakData:_set_easy_wish()
 		local faction = self.tweak_data.levels:get_ai_group_type()
 		if faction == "federales" then
 			self.fbi.speech_prefix_p1 = "m"
+			self.fbi_pager.speech_prefix_p1 = "m"
 		end				
 		if faction == "america" or faction == "shared" then
 			self.fbi_heavy_swat.speech_prefix_p2 = "d"
@@ -9475,6 +9484,7 @@ function CharacterTweakData:_set_easy_wish()
 			self.heavy_swat.speech_prefix_p1 = "r"
 			self.heavy_swat.speech_prefix_count = 4	
 			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_pager.speech_prefix_p1 = "r"
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
@@ -9667,6 +9677,7 @@ function CharacterTweakData:_set_overkill_290()
 		end
 		if faction == "federales" then
 			self.fbi.speech_prefix_p1 = "m"
+			self.fbi_pager.speech_prefix_p1 = "m"
 		end		
 		if faction == "russia" then
 			self.swat.speech_prefix_p1 = "r"
@@ -9674,6 +9685,7 @@ function CharacterTweakData:_set_overkill_290()
 			self.heavy_swat.speech_prefix_p1 = "r"
 			self.heavy_swat.speech_prefix_count = 4	
 			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_pager.speech_prefix_p1 = "r"
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 		end
@@ -9948,6 +9960,7 @@ function CharacterTweakData:_set_sm_wish()
 			self.heavy_swat.speech_prefix_p2 = "d"
 			self.heavy_swat.speech_prefix_count = 5	
 			self.fbi.speech_prefix_p2 = "n"
+			self.fbi_pager.speech_prefix_p2 = "n"
 			self.fbi_swat.speech_prefix_p2 = "n"
 			self.city_swat.speech_prefix_p2 = "n"
 		end
@@ -9957,6 +9970,7 @@ function CharacterTweakData:_set_sm_wish()
 			self.heavy_swat.speech_prefix_p1 = "m"
 			self.heavy_swat.speech_prefix_count = 4	
 			self.fbi.speech_prefix_p1 = "m"
+			self.fbi_pager.speech_prefix_p1 = "m"
 			self.fbi_swat.speech_prefix_p1 = "m"
 			self.city_swat.speech_prefix_p1 = "m"
 			self.shield.speech_prefix_p1 = "m"
@@ -9969,6 +9983,7 @@ function CharacterTweakData:_set_sm_wish()
 			self.heavy_swat.speech_prefix_p1 = "r"
 			self.heavy_swat.speech_prefix_count = 4	
 			self.fbi.speech_prefix_p1 = "r"
+			self.fbi_pager.speech_prefix_p1 = "r"
 			self.fbi_swat.speech_prefix_p1 = "r"
 			self.city_swat.speech_prefix_p1 = "r"
 			self.shield.speech_prefix_p1 = "r"
