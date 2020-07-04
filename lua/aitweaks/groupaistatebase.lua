@@ -107,7 +107,7 @@ function GroupAIStateBase:get_assault_hud_state()
 
 	for u_key, u_data in pairs(self:all_AI_criminals()) do
 		nr_ai = nr_ai + 1
-		if not u_data.status or u_data.status ~= "dead" and u_data.status ~= "disabled" then
+		if not u_data.status then
 			nr_ai_alive = nr_ai_alive + 1
 		end
 	end	
