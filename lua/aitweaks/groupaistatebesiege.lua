@@ -333,7 +333,7 @@ end
 function GroupAIStateBesiege:chk_assault_active_atm()
 	local assault_task = self._task_data.assault
 	
-	if assault_task and assault_task.phase == "build" or assault_task and assault_task.phase == "sustain" then
+	if assault_task and assault_task.phase == "build" or assault_task and assault_task.phase == "sustain" or assault_task and assault_task.phase == "fade" then
 		return true
 	end
 	
@@ -343,7 +343,7 @@ end
 function GroupAIStateBesiege:is_detection_persistent()
 	local assault_task = self._task_data.assault
 	
-	if assault_task and assault_task.phase == "build" or assault_task and assault_task.phase == "sustain" then
+	if assault_task and assault_task.phase == "build" or assault_task and assault_task.phase == "sustain" or assault_task and assault_task.phase == "fade" then
 		return true
 	end
 	
@@ -464,25 +464,26 @@ function GroupAIStateBesiege:_begin_new_tasks()
 	local all_nav_segs = nav_manager._nav_segments
 	local task_data = self._task_data
 	local t = self._t
+	
 	local reenforce_candidates = nil
 	local reenforce_data = task_data.reenforce
 
-	if reenforce_data.next_dispatch_t and reenforce_data.next_dispatch_t < t then
-		reenforce_candidates = {}
-	end
-
 	local recon_candidates, are_recon_candidates_safe = nil
 	local recon_data = task_data.recon
-
-	if recon_data.next_dispatch_t and recon_data.next_dispatch_t < t then
-		recon_candidates = {}
-	end
 
 	local assault_candidates = nil
 	local assault_data = task_data.assault
 
 	if not self:whisper_mode() and assault_data.next_dispatch_t and assault_data.next_dispatch_t < t and not task_data.regroup.active then
 		assault_candidates = {}
+	end
+	
+	if not self:whisper_mode() and not self:chk_assault_active_atm() and recon_data.next_dispatch_t and recon_data.next_dispatch_t < t then
+		recon_candidates = {}
+	end
+	
+	if reenforce_data.next_dispatch_t and reenforce_data.next_dispatch_t < t then
+		reenforce_candidates = {}
 	end
 
 	if not reenforce_candidates and not recon_candidates and not assault_candidates then

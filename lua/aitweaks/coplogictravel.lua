@@ -1638,11 +1638,22 @@ function CopLogicTravel._set_verified_paths(data, verified_paths)
 end
 
 function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
+	
 	if not CopLogicTravel.chk_group_ready_to_move(data, my_data) then
 		return
 	end
 
 	local to_pos = CopLogicTravel._get_exact_move_pos(data, my_data.coarse_path_index + 1)
+	
+	if data.objective.pos and my_data.coarse_path and my_data.coarse_path_index then
+		local cur_index = my_data.coarse_path_index
+		local total_nav_points = #my_data.coarse_path
+		
+		if cur_index == total_nav_points - 1 then
+			to_pos = data.objective.pos
+		end
+	end
+	
 	my_data.processing_advance_path = true
 	local prio = CopLogicTravel.get_pathing_prio(data)
 	local nav_segs = CopLogicTravel._get_allowed_travel_nav_segs(data, my_data, to_pos)
