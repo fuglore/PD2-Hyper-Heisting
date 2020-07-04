@@ -4,10 +4,10 @@
 		<add file="levels/skm_friend_hh/add.xml"/>
 		<assets/>
 		<include directory="levels/skm_friend_hh">
+			<file file="nav_manager_data.nav_data" type="binary"/>
 			<file file="world.world" type="binary"/>
 			<file file="continents.continents" type="binary"/>
 			<file file="mission.mission" type="binary"/>
-			<file file="nav_manager_data.nav_data" type="binary"/>
 			<file file="world_sounds.world_sounds" type="binary"/>
 			<file file="world_cameras.world_cameras" type="binary"/>
 			<file file="collision/collision.continent" type="binary"/>
