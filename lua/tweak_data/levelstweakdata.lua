@@ -40,6 +40,7 @@ function LevelsTweakData:init()
 	self.des.package = {"packages/murkyassets", "packages/job_des"}
 	self.bph.package = {"packages/murkyassets", "packages/dlcs/bph/job_bph"}	
 	self.vit.package = {"packages/murkyassets", "packages/dlcs/vit/job_vit"}
+	self.wwh.package = {"packages/murkyassets", "packages/lvl_wwh"}
 	self.mex.package = {"packages/murkyassets", "packages/job_mex"}
 	self.mex_cooking.package = {"packages/murkyassets", "packages/job_mex2"}
 	
@@ -84,10 +85,8 @@ function LevelsTweakData:get_ai_group_type()
 		local ai_group_type = level_data.ai_group_type
 		if ai_group_type and ai_group_type == "zombie" and Global.game_settings and Global.game_settings.incsmission then
 			return "america"
-		elseif ai_group_type and ai_group_type == "shared" and Global.game_settings and Global.game_settings.incsmission and job == "dinner" then
-			eturn "america"		
 		elseif ai_group_type and ai_group_type == "shared" and Global.game_settings and Global.game_settings.incsmission then
-			return "murkywater"					
+			return "murkywater"			
 		elseif ai_group_type then
 			--log("group type name is" .. ai_group_type .. "woo")
 			return ai_group_type

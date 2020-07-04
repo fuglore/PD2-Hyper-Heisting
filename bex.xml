@@ -107,19 +107,16 @@
 	
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_r870_medic_helmet/ene_acc_r870_medic_helmet" load="true"/>
 	
-	<!--tijuana office cops-->
-	<unit path="units/pd2_dlc_pex/characters/ene_male_office_cop_03/ene_male_office_cop_03" force="true" load="true"/>
-	<unit path="units/pd2_dlc_pex/characters/ene_male_office_cop_03/ene_male_office_cop_03_husk" force="true" load="true"/>
-	<object path="units/pd2_dlc_pex/characters/ene_male_office_cop_03/ene_male_office_cop_03"/>
-	
-	<unit path="units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04" force="true" load="true"/>
-	<unit path="units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04_husk" load="true"/>
-	<material_config path="units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04" force="true"/>
-	<material_config path="units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04_contour" force="true"/>
-	<object path="units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04" force="true"/>
-	<model path="units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04" force="true"/>
-	<cooked_physics path="units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04" force="true"/>
-
+	<!-- FEDERALES NINJA M4 -->
+	<unit path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4_contour"/>	
+	<object path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4" />
+	<model path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4" />	
+	<cooked_physics path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4"/>
+		
+	<texture path="units/pd2_dlc_bex/characters/ene_bex_ninja_m4/bex_ninja_df" />
 	
 	<!-- FEDERALES NINJA C45 -->
 	<unit path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45" load="true"/>
@@ -128,9 +125,7 @@
 	<material_config path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45_contour"/>	
 	<object path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45" />
 	<model path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45" />	
-	<cooked_physics path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"/>
-
-	<texture path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/bex_ninja_df" />	
+	<cooked_physics path="units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"/>	
 	
     <!--federales normal/hard heavy texture-->
     <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/policia_heavy_df"/>    

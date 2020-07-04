@@ -1508,7 +1508,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"),
-					Idstring("units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"),
+					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4"),
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
 				},
 				shared = {
@@ -1547,7 +1547,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"),
-					Idstring("units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"),
+					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4"),
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
 				},
 				shared = {
@@ -1581,7 +1581,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
 				},
 				federales = {
-					Idstring("units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"),
+					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_m4/ene_bex_ninja_m4"),
 					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45")
 				},
 				shared = {
