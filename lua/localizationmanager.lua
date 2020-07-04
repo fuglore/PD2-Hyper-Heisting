@@ -159,7 +159,7 @@
 		["loading_hh_13"] = "Heavy SWATs, Maximum Force Responders, and ZEAL Heavy SWATs gain protection from bullet-based and explosive-based instant kills on Death Sentence! But only from weapons and ammo types that can't shoot through walls!",
 		["loading_hh_14"] = "You can get to the Hyper Heisting Options through Mod Options in the Options menu!",
 		["loading_hh_15"] = "Getting hit by an enemy melee attack will temporarily stagger you, and cause you to be unable to attack for a few moments!",
-		["loading_hh_16"] = "Punks are overconfident fodder enemies wielding revolvers, double barreled shotguns, and submachine guns. They won’t hurt you much if you don’t let them!",
+		["loading_hh_16"] = "Punks are overconfident fodder enemies wielding revolvers, double barreled shotguns, and submachine guns. They will not hurt you much if you do not let them!",
 		["pattern_truthrunes_title"] = "Truth Runes",				
 		["menu_l_global_value_hyperheist"] = "This is a Hyper Heisting item!",
 		["menu_l_global_value_hyperheisting_desc"] = "This is a Hyper Heisting item!",		

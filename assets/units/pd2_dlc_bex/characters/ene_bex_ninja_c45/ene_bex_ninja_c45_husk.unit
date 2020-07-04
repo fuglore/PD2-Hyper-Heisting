@@ -6,7 +6,7 @@
 	<dependencies>
 		
 	</dependencies>
-	
+
 	<extensions>
 		<extension name="unit_data" class="ScriptUnitData" />
 		<extension name="base" class="HuskCopBase" >
