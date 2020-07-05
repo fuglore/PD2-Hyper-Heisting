@@ -401,7 +401,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	end
 	
 	if danger_chance <= 10 then
-		danger_line_to_use = "hud_assault_FG_danger" .. FG_chance
+		danger_line_to_use = "hud_assault_FG_danger" .. danger_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
 			danger_line_to_use = "hud_assault_dangermex"

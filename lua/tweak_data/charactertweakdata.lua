@@ -1624,6 +1624,50 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+	presets.hurt_severities.team_AI = {
+		tase = false,
+		bullet = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		explosion = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		melee = {
+			health_reference = 1,
+			zones = {
+				{
+					moderate = 1
+				}
+			}
+		},
+		fire = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		poison = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		}
+	}
+	
 	--special no_tase hurt severities based on specialenemy, possibly used on taser.
 	presets.hurt_severities.no_tase_special = deep_clone(presets.hurt_severities.specialenemy)
 	presets.hurt_severities.no_tase_special.tase = false
@@ -1641,6 +1685,30 @@ function CharacterTweakData:_presets(tweak_data)
 			tased_time = 5
 		}
 	}
+	
+	presets.gang_member_damage = {
+		HEALTH_INIT = 75,
+		REGENERATE_TIME = 2,
+		REGENERATE_TIME_AWAY = 0.2,
+		DOWNED_TIME = tweak_data.player.damage.DOWNED_TIME,
+		TASED_TIME = tweak_data.player.damage.TASED_TIME,
+		BLEED_OUT_HEALTH_INIT = tweak_data.player.damage.BLEED_OUT_HEALTH_INIT,
+		ARRESTED_TIME = tweak_data.player.damage.ARRESTED_TIME,
+		INCAPACITATED_TIME = tweak_data.player.damage.INCAPACITATED_TIME,
+		hurt_severity = deep_clone(presets.hurt_severities.team_AI)
+	}
+	presets.gang_member_damage.hurt_severity.bullet = {
+		health_reference = 1,
+		zones = {
+			{
+				none = 1
+			}
+		}
+	}
+	
+	presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
+	presets.gang_member_damage.respawn_time_penalty = 0
+	presets.gang_member_damage.base_respawn_time_penalty = 5
 		
 	--Custom sniper preset to make them work differently, they work as a mini turret of sorts, dealing big damage with good accuracy, standing in their line of fire isn't wise as they'll suppress the shit out of you and take off armor very quickly.
 	presets.weapon.rhythmsniper = deep_clone(presets.weapon.sniper)
