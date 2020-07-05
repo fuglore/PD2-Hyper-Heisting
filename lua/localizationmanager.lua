@@ -243,6 +243,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_juggernaut_beta"] = "Big Guy",
 			["menu_juggernaut_beta_desc"] = "BASIC: ##$basic##\nUnlocks the ability to wear the Improved Combined Tactical Vest. Your total armor value is increased by ##30%##. \n\nACE: ##$pro##\nYour total armor value is further increased by ##20%##.\n\n##For you.##",
 			
+			["bm_menu_skill_locked_level_7"] = "Requires the Big Guy skill",
+			
 			["menu_fast_fire_beta"] = "Spray & Pray",
 			["menu_fast_fire_beta_desc"] = "BASIC: ##$basic##\nYour ranged weapons can now pierce through enemy body armor. This does not apply to throwable weapons. \n\nACE: ##$pro##\nYour SMGs, LMGs and Assault Rifles gain ##15## more bullets in their magazines. This does not affect Lock n' Load aced.",
 			
