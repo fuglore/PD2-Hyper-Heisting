@@ -1,1 +1,1 @@
-ClientNetworkSession.JOIN_REQUEST_TIMEOUT = 999
+ClientNetworkSession.JOIN_REQUEST_TIMEOUT = 40
