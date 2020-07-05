@@ -41,12 +41,10 @@
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
-    <material name="mtr_glasses" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:GLOBAL_ENVIRONMENT_MAPPING:GLOSS_BLURS_CUBEMAP:GSMA_TEXTURE:NORMALMAP" unique="true" version="2" >
+	<material name="mtr_glasses" render_template="generic:DIFFUSE_TEXTURE:GLOBAL_ENVIRONMENT_MAPPING:GLOSS_BLURS_CUBEMAP:GSMA_TEXTURE:NORMALMAP:RL_COPS" version="2">
         <bump_normal_texture file="units/payday2/characters/shared_textures/police_nm" mip="1"/>
-	<material_texture 	file="units/payday2/characters/shared_textures/police_gsma"/>
+		<material_texture 	file="units/payday2/characters/shared_textures/police_gsma"/>
         <diffuse_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/pants_df"/>
-        <variable value="1 1 1" type="vector3" name="contour_color"/>
-        <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
     <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
