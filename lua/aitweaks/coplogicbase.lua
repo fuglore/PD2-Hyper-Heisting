@@ -1452,7 +1452,11 @@ function CopLogicBase._get_logic_state_from_reaction(data, reaction)
 	if reaction == nil and focus_enemy then
 		reaction = focus_enemy.reaction
 	end
-
+	
+	if not managers.groupai:state():whisper_mode() then
+		return "attack"
+	end
+	
 	if data.is_converted then
 		if not reaction or reaction <= REACT_SCARED then
 			return "idle"

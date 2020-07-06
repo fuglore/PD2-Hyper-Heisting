@@ -192,12 +192,26 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 end
 
 function CopLogicAttack._upd_aim(data, my_data)
+	
+	if my_data.spooc_attack then
+		if my_data.attention_unit ~= my_data.spooc_attack.target_u_data.u_key then
+			CopLogicBase._set_attention(data, my_data.spooc_attack.target_u_data)
+
+			my_data.attention_unit = my_data.spooc_attack.target_u_data.u_key
+		end
+		
+		return
+	end
+	
 	local shoot, aim, expected_pos = nil
 	local focus_enemy = data.attention_obj
 	local running = data.unit:movement()._active_actions[2] and data.unit:movement()._active_actions[2]:type() == "walk" and data.unit:movement()._active_actions[2]:haste() == "run"
+	local tase = focus_enemy and focus_enemy.reaction >= AIAttentionObject.REACT_SPECIAL_ATTACK
 
 	if focus_enemy then
-		if AIAttentionObject.REACT_AIM <= focus_enemy.reaction then
+		if tase and data.unit:base():has_tag("taser") then
+			shoot = true
+		elseif AIAttentionObject.REACT_AIM <= focus_enemy.reaction then
 			if focus_enemy.verified or focus_enemy.nearly_visible then
 				local firing_range = 500
 
@@ -360,6 +374,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 		
+		
 		if focus_enemy.is_person and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not data.unit:in_slot(16) and not data.is_converted and data.tactics and data.tactics.harass then
 			if focus_enemy.is_local_player then
 				local time_since_verify = data.attention_obj.verified_t and data.t - data.attention_obj.verified_t
@@ -398,6 +413,16 @@ function CopLogicAttack._upd_aim(data, my_data)
 			CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
 		end
 	end
+	
+	local is_moving = my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover or data.unit:anim_data().run or data.unit:anim_data().move
+	if tase and is_moving and not data.unit:movement():chk_action_forbidden("walk") then
+		local new_action = {
+			body_part = 2,
+			type = "idle"
+		}
+
+		data.unit:brain():action_request(new_action)
+	end
 
 	if aim or shoot then
 		if focus_enemy.verified or focus_enemy.nearly_visible then
@@ -420,8 +445,34 @@ function CopLogicAttack._upd_aim(data, my_data)
 				my_data.attention_unit = mvec3_cpy(look_pos)
 			end
 		end
+		
+		local nottasingortargetwrong = not my_data.tasing or my_data.tasing.target_u_data ~= focus_enemy
+		
+		if tase then
+			if nottasingortargetwrong and not data.unit:movement():chk_action_forbidden("walk") and not focus_enemy.unit:movement():zipline_unit() then
+				if my_data.attention_unit ~= focus_enemy.u_key then
+					CopLogicBase._set_attention(data, focus_enemy)
 
-		if not my_data.shooting and not my_data.spooc_attack and not data.unit:anim_data().reload and not data.unit:movement():chk_action_forbidden("action") then
+					my_data.attention_unit = focus_enemy.u_key
+				end
+
+				local tase_action = {
+					body_part = 3,
+					type = "tase"
+				}
+
+				if data.unit:brain():action_request(tase_action) then
+					my_data.tasing = {
+						target_u_data = focus_enemy,
+						target_u_key = focus_enemy.u_key,
+						start_t = data.t
+					}
+
+					TaserLogicAttack._cancel_charge(data, my_data)
+					managers.groupai:state():on_tase_start(data.key, focus_enemy.u_key)
+				end
+			end
+		elseif not my_data.shooting and not my_data.spooc_attack and not data.unit:anim_data().reload and not data.unit:movement():chk_action_forbidden("action") then
 			local shoot_action = {
 				body_part = 3,
 				type = "shoot"
@@ -432,7 +483,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 	else
-		if my_data.shooting and not data.unit:anim_data().reload then
+		if my_data.shooting and not data.unit:anim_data().reload or my_data.tasing then
 			local new_action = {
 				body_part = 3,
 				type = "idle"
