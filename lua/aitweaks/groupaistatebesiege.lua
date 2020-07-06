@@ -477,8 +477,8 @@ function GroupAIStateBesiege:_begin_new_tasks()
 	if not self:whisper_mode() and assault_data.next_dispatch_t and assault_data.next_dispatch_t < t and not task_data.regroup.active then
 		assault_candidates = {}
 	end
-	
-	if not self:whisper_mode() and not self:chk_assault_active_atm() and recon_data.next_dispatch_t and recon_data.next_dispatch_t < t then
+
+	if recon_data.next_dispatch_t and recon_data.next_dispatch_t < t and not task_data.assault.active and not task_data.regroup.active then
 		recon_candidates = {}
 	end
 	
@@ -711,6 +711,43 @@ function GroupAIStateBesiege:assault_phase_end_time()
 
 	return end_t
 end
+
+function GroupAIStateBesiege:set_wave_mode(flag)
+	local old_wave_mode = self._wave_mode
+	self._wave_mode = flag
+	self._hunt_mode = nil
+
+	if flag == "hunt" then
+		self._hunt_mode = true
+		self._wave_mode = "besiege"
+
+		managers.hud:start_assault(self._assault_number)
+		self:_set_rescue_state(true)
+		self:set_assault_mode(true)
+		managers.trade:set_trade_countdown(false)
+		self:_end_regroup_task()
+
+		if self._task_data.assault.active then
+			self._task_data.assault.phase = "sustain"
+			self._task_data.use_smoke = true
+			self._task_data.use_smoke_timer = 0
+		else
+			self._task_data.assault.next_dispatch_t = self._t
+		end
+	elseif flag == "besiege" then
+		if self._task_data.regroup.active then
+			self._task_data.assault.next_dispatch_t = self._task_data.regroup.end_t
+		elseif not self._task_data.assault.active then
+			self._task_data.assault.next_dispatch_t = self._t
+		end
+	elseif flag == "quiet" then
+		self._hunt_mode = nil
+	else
+		self._wave_mode = old_wave_mode
+
+		debug_pause("[GroupAIStateBesiege:set_wave_mode] flag", flag, " does not apply to the current Group AI state.")
+	end
+end
 		
 function GroupAIStateBesiege:_upd_assault_task()
 	
@@ -767,7 +804,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			managers.mission:call_global_event("start_assault")
 			managers.hud:start_assault(self._assault_number)
 			managers.groupai:dispatch_event("start_assault", self._assault_number)
-			self:_set_rescue_state(false)
+			self:_set_rescue_state(true)
 			
 			for group_id, group in pairs(self._groups) do
 				for u_key, u_data in pairs(group.units) do

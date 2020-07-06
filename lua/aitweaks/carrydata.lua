@@ -55,7 +55,7 @@ function CarryData:_chk_register_steal_SO()
 	elseif not self._register_steal_SO_clbk_id then
 		self._register_steal_SO_clbk_id = "CarryDataregisterSO" .. tostring(self._unit:key())
 
-		managers.enemy:add_delayed_clbk(self._register_steal_SO_clbk_id, callback(self, self, "clbk_register_steal_SO"), TimerManager:game():time() + 5)
+		managers.enemy:add_delayed_clbk(self._register_steal_SO_clbk_id, callback(self, self, "clbk_register_steal_SO"), TimerManager:game():time() + 2)
 
 		return
 	end

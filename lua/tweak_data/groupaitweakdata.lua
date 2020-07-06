@@ -2908,7 +2908,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		},
 		shield_wall = {
 			"hunter",
-			"deathguard",
 			"shield_cover", 
 			"shield",
 			"charge",

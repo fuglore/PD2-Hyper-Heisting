@@ -478,10 +478,22 @@ function CopLogicBase._update_haste(data, my_data)
 	--randomize enemy crouching to make enemies feel less easy to aim at, the fact they're always crouching all over the place always bugged me, plus, they shouldn't need to crouch so often when you're at long distances from them
 
 	if not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
-		if stand_chance ~= 1 and crouch_roll > stand_chance and can_crouch then
-			end_pose = "crouch"
-			pose = "crouch"
-			should_crouch = true
+		if not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+			if data.char_tweak.allowed_poses and data.char_tweak.allowed_poses.crouch then
+				end_pose = "crouch"
+				pose = "crouch"
+				should_crouch = true
+			elseif data.char_tweak.allowed_poses and data.char_tweak.allowed_poses.stand then
+				end_pose = "stand"
+				pose = "stand"
+			elseif stand_chance ~= 1 and crouch_roll > stand_chance and can_crouch then
+				end_pose = "crouch"
+				pose = "crouch"
+				should_crouch = true
+			else
+				end_pose = "stand"
+				pose = "stand"
+			end
 		end
 	end
 

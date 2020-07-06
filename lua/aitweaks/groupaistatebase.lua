@@ -161,7 +161,7 @@ function GroupAIStateBase:_check_drama_low_p()
 end
 
 function GroupAIStateBase:_check_assault_panic_chatter()
-	if self._t and self._last_killed_cop_t and self._t - self._last_killed_cop_t < math.random(0.15, 0.5) then
+	if self._t and self._last_killed_cop_t and self._t - self._last_killed_cop_t < math.random(0.15, 1.2) then
 		return true
 	end
 	
