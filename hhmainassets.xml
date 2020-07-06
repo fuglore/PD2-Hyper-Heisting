@@ -953,7 +953,9 @@
 	<!-- <df_nm path="units/payday2/characters/ene_gangster_ninja_m4/head"/> -->
 	
 	<!--Textures-->	
-    <df_nm path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_head" />    	
+    <texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_head_nm" />    	
+	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_head_df" />  
+	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_punk_df" />  
 	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_df" />
 	<texture path="units/pd2_mod_ftsu/characters/shared_textures/gensec_field_pis_df" />
 
