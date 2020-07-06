@@ -1822,7 +1822,7 @@ function CopLogicTravel.upd_advance(data)
 			CopLogicTravel._begin_coarse_pathing(data, my_data)
 		end
 	else
-		CopLogicBase._exit(data.unit, "attack")
+		CopLogicBase._exit(data.unit, "idle")
 
 		return
 	end
