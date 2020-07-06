@@ -50,6 +50,7 @@
   "ene_akan_hyper_fbininja_c45" : "Вася Велмон",
   "ene_akan_hyper_swat_akmsu_smg" : "Light Mercenary",
   "ene_gensec_punk_bronco" : "Punk",
+  "ene_policia_punk_bronco" : "Cop",
   "ene_gensec_punk_moss" : "Punk",
   "ene_gensec_punk_mp5" : "Punk",
   "ene_gensec_fbigod_c45" : "Quadruple J",

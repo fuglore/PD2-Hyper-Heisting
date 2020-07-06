@@ -177,6 +177,16 @@
 		}
 	local sniper_fed = {
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
+		}
+
+	local federales = {
+			["units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"] = "units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"
+		}
+
+	local federales_low_diff = {
+			["units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"] = "units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco",
+			["units/pd2_dlc_pex/characters/ene_male_office_cop_03/ene_male_office_cop_03"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_02/ene_male_office_cop_02",
+			["units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_02/ene_male_office_cop_02"
 		}		
 		
 function ElementSpawnEnemyDummy:init(...)
@@ -296,6 +306,23 @@ function ElementSpawnEnemyDummy:init(...)
 			end
 		end
 	end
+
+		if ai_type == "federales" then
+			if difficulty_index <= 6 then
+				if federales_low_diff[self._values.enemy] then
+					self._values.enemy = federales_low_diff[self._values.enemy]
+				end
+				
+				self._values.enemy = federales_low_diff[self._values.enemy] or self._values.enemy
+				else
+				if federales[self._values.enemy] then
+					self._values.enemy = federales[self._values.enemy]
+				end
+				
+				self._values.enemy = federales[self._values.enemy] or self._values.enemy
+			end
+		end
+
 	
 	if job == "firestarter_1" or job == "firestarter_2" or job == "alex_3" or job == "hox_2" or job == "hox_3" then  --FBI-related heists
 		if overkill_290_and_easywish[self._values.enemy] then
