@@ -6,7 +6,7 @@ local dialog_init = DialogManager.queue_dialog
 
 function DialogManager:queue_dialog(id, ...)
 
-	if id == "Play_loc_mex_18" or id == "Play_loc_mex_cook_01" then
+	if id == "Play_loc_mex_18" or id == "Play_loc_mex_cook_01" or id == "Play_loc_mex_63" then
 		managers.groupai:state()._in_mexico = true
 	end
 	
