@@ -4,15 +4,44 @@
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_body_df" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_heads_df" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale_helmets_df" force="true"/>
-	
+
+	<object path="units/pd2_dlc_bex/characters/ene_acc_policia_federale_helmet/ene_acc_policia_federale_helmet" force="true"/>
+	<model path="units/pd2_dlc_bex/characters/ene_acc_policia_federale_helmet/ene_acc_policia_federale_helmet" force="true"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_acc_policia_federale_helmet/ene_acc_policia_federale_helmet" force="true"/>
+		
 	<!--federales fbi heavy swat texture changes-->
+	<unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi_husk" force="true" load="true"/>			
 	<model path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
 	<object path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
 	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi" force="true"/>
 	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi_contour" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_body_df" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_policia_federale_heavy_helmet_df" force="true"/>
+	
+	<!--federales shield changes-->
+	<unit path="units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9" force="true" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9_husk" force="true" load="true"/>
+	<model path="units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9" force="true"/>
+	<object path="units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9" force="true"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9" force="true"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9_contour" force="true"/>
+	
+	<!-- federales SHIELD -->
+	<texture path="units/pd2_dlc_bex/characters/shared_textures/ene_acc_shield_lights_df" force="true" />
+	<material_config path="units/pd2_dlc_bex/characters/ene_acc_shield_lights/ene_acc_shield_lights" force="true"/>	
 
+	<!-- FEDERALES DS SHIELD-->
+	<unit path="units/pd2_dlc_bex/characters/ene_heavy_swat_shield_federale_ds/ene_heavy_swat_shield_federale_ds" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_heavy_swat_shield_federale_ds/ene_heavy_swat_shield_federale_ds_husk" load="true"/>
+	<model path="units/pd2_dlc_bex/characters/ene_heavy_swat_shield_federale_ds/ene_heavy_swat_shield_federale_ds" />
+	<object path="units/pd2_dlc_bex/characters/ene_heavy_swat_shield_federale_ds/ene_heavy_swat_shield_federale_ds" />
+	<material_config path="units/pd2_dlc_bex/characters/ene_heavy_swat_shield_federale_ds/ene_heavy_swat_shield_federale_ds" />
+	<material_config path="units/pd2_dlc_bex/characters/ene_heavy_swat_shield_federale_ds/ene_heavy_swat_shield_federale_ds_contour" />
+	
+	<!-- fix for fucked up heavy helmet acc uvs -->
+	<model path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_helmet/ene_swat_heavy_policia_federale_fbi_helmet" force="true"/>
+		
     <!--normal/hard federales heavy-->	
     <unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale" load="true" force="true"/>
     <unit path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale_husk" load="true" force="true" />		

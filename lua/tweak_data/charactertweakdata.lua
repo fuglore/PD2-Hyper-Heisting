@@ -10228,6 +10228,7 @@ function CharacterTweakData:character_map()
 			"ene_medic_federale_rifle_hh",
 			"ene_medic_federale_r870_hh",
 			"ene_swat_heavy_policia_federale_fbi_r870_hh",
+			"ene_heavy_swat_shield_federale_ds",
 			"ene_bex_ninja_m4",
 			"ene_bex_ninja_c45",
 			"ene_policia_03"			
