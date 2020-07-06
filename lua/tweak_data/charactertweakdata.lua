@@ -10231,6 +10231,7 @@ function CharacterTweakData:character_map()
 			"ene_heavy_swat_shield_federale_ds",
 			"ene_bex_ninja_m4",
 			"ene_bex_ninja_c45",
+		        "ene_policia_punk_bronco",
 			"ene_policia_03"			
 		}
 	}
