@@ -376,7 +376,7 @@ function CopLogicBase._update_haste(data, my_data)
 		return
 	end
 
-	local path = my_data.chase_path or my_data.charge_path or my_data.advance_path or my_data.cover_path or my_data.expected_pos_path or my_data.hunt_path or my_data.flank_path
+	local path = my_data.optimal_path or my_data.advance_path or my_data.cover_path
 
 	if not path then
 		return

@@ -162,6 +162,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.ak47_ass_npc.sounds.prefix = "ak74_npc"
 	self.ak47_ass_npc.muzzleflash = "effects/payday2/particles/weapons/762_auto"
 	self.mp5_tactical_npc = deep_clone(self.mp5_npc)
+	self.mp5_tactical_npc.muzzleflash = "effects/payday2/particles/weapons/9mm_auto_silence"
 	self.mp5_tactical_npc.has_suppressor = "suppressed_a"
 	self.mp5_tactical_npc.no_vis = true
 	self.ump_npc = deep_clone(self.mp5_npc)
@@ -172,6 +173,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.asval_smg_npc = deep_clone(self.mp5_npc)
 	self.asval_smg_npc.sounds.prefix = "akmsu_npc"
 	self.asval_smg_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
+	self.asval_smg_npc.muzzleflash = "effects/payday2/particles/weapons/9mm_auto_silence"
 	self.asval_smg_npc.no_vis = true
 	self.mac11_npc.sounds.prefix = "mac10_npc"
 	self.benelli_npc.sounds.prefix = "benelli_m4_npc"
@@ -188,7 +190,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	--punk mossberg
 	self.mossberg_npc.usage = "is_shotgun_mag"
 	self.mossberg_npc.hold = "rifle"
-	self.mossberg_npc.DAMAGE = 2
+	self.mossberg_npc.DAMAGE = 2.5
 	self.mossberg_npc.CLIP_AMMO_MAX = 2
 	
 	self.mini_npc.CLIP_AMMO_MAX = 100000 --new minigun dozer buff setup
