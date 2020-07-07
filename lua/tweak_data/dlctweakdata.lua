@@ -1,9 +1,8 @@
-Hooks:PostHook(dlctweakdata, "init", "dlctweakshit", function(self, tweak_data)		
+Hooks:PostHook(DLCTweakData, "init", "dlctweakshit", function(self, tweak_data)		
 		self.hyperheist = {
 			content = {},
 			free = true
 		}
-		self.hyperheist.content.loot_drops = {}
 		self.hyperheist.content.upgrades = {}	
 		self.hyperheist.content.loot_drops = {
 			{
