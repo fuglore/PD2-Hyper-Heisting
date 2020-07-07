@@ -207,6 +207,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_deck15_5_desc"] = "##50%## of your health is converted into ##75%## armor.",
 			["menu_deck15_7_desc"] = "##50%## of your health is converted into ##100%## armor.",
 			["menu_deck15_9_desc"] = "Dealing damage will grant you armor - This can only occur once every ##3## seconds. Heavier armors are granted more armor.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a PAYDAY is increased by ##10%.##",
+
+			--Even more Fire Power!--
+			["menu_more_fire_power_desc"] = "BASIC: ##$basic;##\nYou gain ##1## more shaped charge and ##4## more trip mines.\n\nACE: ##$pro;##\nYou gain ##4## more shaped charges and ##7## more trip mines.",
 			
 			--Infiltrator/Sociopath Shit--
 			["menu_deck8_7_desc"] = "Your movement speed is increased by ##15%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",

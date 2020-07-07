@@ -102,7 +102,10 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			1.25,
 			1.3
 		}		
-		
+		self.values.shape_charge.quantity = {
+			1,
+			5
+		}		
 		self.values.temporary.overkill_damage_multiplier = {{1.35, 8}}
 		self.values.pistol.damage_addend = {0.5, 1}
 		--[[
