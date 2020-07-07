@@ -673,8 +673,10 @@ function CopLogicTravel.queued_update(data)
 	if my_data.tasing then
 		action_taken = action_taken or CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
 		
-		CopLogicBase._report_detections(data.detected_attention_objects)
-		CopLogicTravel.queue_update(data, my_data)
+		if data.internal_data == my_data then
+			CopLogicBase._report_detections(data.detected_attention_objects)
+			CopLogicTravel.queue_update(data, my_data)
+		end
 
 		return
 	end
@@ -694,7 +696,9 @@ function CopLogicTravel.queued_update(data)
 	end
 
 	if my_data.spooc_attack then
-		CopLogicTravel.queue_update(data, data.internal_data, delay)
+		if data.internal_data == my_data then
+			CopLogicTravel.queue_update(data, data.internal_data, delay)
+		end
 
 		return
 	end
