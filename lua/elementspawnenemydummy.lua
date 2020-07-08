@@ -186,7 +186,7 @@
 	local federales_low_diff = {
 			["units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"] = "units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco",
 			["units/pd2_dlc_pex/characters/ene_male_office_cop_03/ene_male_office_cop_03"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_02/ene_male_office_cop_02",
-			["units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_02/ene_male_office_cop_02"
+			["units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_01/ene_male_office_cop_01"
 		}		
 		
 function ElementSpawnEnemyDummy:init(...)

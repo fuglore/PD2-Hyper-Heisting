@@ -8614,6 +8614,17 @@ Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(s
 	self.security.HEALTH_INIT = 6
 	self.security.headshot_dmg_mul = 16
 	self.security.chatter = presets.enemy_chatter.security
+	-- if i fucked something i'm going to kill
+	self.security_undominatable.HEALTH_INIT = 6
+	self.security_undominatable.headshot_dmg_mul = 16
+	self.security_undominatable.chatter = presets.enemy_chatter.security
+	self.mute_security_undominatable.HEALTH_INIT = 6
+	self.mute_security_undominatable.headshot_dmg_mul = 16
+	self.mute_security_undominatable.chatter = presets.enemy_chatter.security
+	-- why
+	self.security_mex.HEALTH_INIT = 6
+	self.security_mex.headshot_dmg_mul = 16
+	self.security_mex.chatter = presets.enemy_chatter.security	
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_mobster_boss", "hhpost_mboss", function(self, presets)
@@ -9516,6 +9527,12 @@ function CharacterTweakData:_set_easy_wish()
 	self.city_swat.no_arrest = true
 	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
+	self.security_mex.HEALTH_INIT = 16
+	self.security_mex.no_arrest = true	
+	self.security_undominatable.HEALTH_INIT = 16
+	self.security_undominatable.no_arrest = true		
+	self.mute_security_undominatable.HEALTH_INIT = 16
+	self.mute_security_undominatable.no_arrest = true	
 	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
@@ -9716,6 +9733,12 @@ function CharacterTweakData:_set_overkill_290()
 	self.city_swat.no_arrest = true
 	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
+	self.security_mex.HEALTH_INIT = 16
+	self.security_mex.no_arrest = true
+	self.security_undominatable.HEALTH_INIT = 16
+	self.security_undominatable.no_arrest = true			
+	self.mute_security_undominatable.HEALTH_INIT = 16
+	self.mute_security_undominatable.no_arrest = true		
 	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
@@ -9919,6 +9942,12 @@ function CharacterTweakData:_set_sm_wish()
 	self.city_swat.no_arrest = true
 	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
+	self.security_undominatable.HEALTH_INIT = 16
+	self.security_undominatable.no_arrest = true			
+	self.mute_security_undominatable.HEALTH_INIT = 16
+	self.mute_security_undominatable.no_arrest = true		
+	self.security_mex.HEALTH_INIT = 16
+	self.security_mex.no_arrest = true
 	self.cop.no_arrest = true
 	self.cop.HEALTH_INIT = 16
 	self.gensec.HEALTH_INIT = 16
@@ -10438,6 +10467,18 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	if self.security.headshot_dmg_mul then
 		self.security.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
 	end
+	
+	if self.security_mex.headshot_dmg_mul then
+		self.security_mex.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
+	end
+	
+	if self.mute_security_undominatable.headshot_dmg_mul then
+		self.mute_security_undominatable.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
+	end
+
+	if self.security_undominatable.headshot_dmg_mul then
+		self.security_undominatable.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
+	end	
 
 	if self.cop.headshot_dmg_mul then
 		self.cop.headshot_dmg_mul = self.cop.headshot_dmg_mul * hs_mul
