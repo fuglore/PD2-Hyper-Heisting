@@ -2771,6 +2771,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"groupany"
 		},
+		swat_rifle_civil_indenpendant = {
+			"ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"lonewolf",
+			"groupany"
+		},
 		swat_rifle_flank_civil = {
 			"flank",
 			"provide_coverfire",
@@ -2779,11 +2787,28 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"groupany"
 		},
+		swat_rifle_flank_civil_independant = {
+			"flank",
+			"provide_coverfire",
+			"ranged_fire",
+			"smoke_grenade",
+			"provide_support",
+			"lonewolf",
+			"groupany"
+		},
 		swat_rifle_complex = {
 			"elite_ranged_fire",
 			"provide_coverfire",
 			"flash_grenade",
 			"provide_support",
+			"groupany"
+		},
+		swat_rifle_complex_independant = {
+			"elite_ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"lonewolf",
 			"groupany"
 		},
 		swat_rifle_flank_complex = {
@@ -2795,12 +2820,50 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"groupany"
 		},
+		swat_rifle_flank_complex_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"elite_ranged_fire",
+			"smoke_grenade",
+			"provide_support",
+			"lonewolf",
+			"groupany"
+		},
 		swat_rifle = {
 			"elite_ranged_fire",
 			"provide_coverfire",
 			"flash_grenade",
 			"provide_support",
 			"harass",
+			"groupany"
+		},
+		swat_rifle_independant = {
+			"elite_ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"harass",
+			"lonewolf",
+			"groupany"
+		},
+		swat_rifle_flank = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"elite_ranged_fire",
+			"smoke_grenade",
+			"provide_support",
+			"groupany"
+		},
+		swat_rifle_flank_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"elite_ranged_fire",
+			"smoke_grenade",
+			"provide_support",
+			"lonewolf",
 			"groupany"
 		},
 		sniper_direct = {
@@ -2822,20 +2885,19 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"groupany",
 			"sniper"
 		},
-		swat_rifle_flank = {
-			"hunter",
-			"flank",
-			"provide_coverfire",
-			"elite_ranged_fire",
-			"smoke_grenade",
-			"provide_support",
-			"groupany"
-		},
 		swat_shotgun_rush_civil = {
 			"charge",
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
 			"provide_support",
+			"groupany"
+		},
+		swat_shotgun_rush_civil_independant = {
+			"charge",
+			"provide_coverfire",
+			"flash_grenade", --pushers use flashes
+			"provide_support",
+			"lonewolf",
 			"groupany"
 		},
 		swat_shotgun_rush_complex = {
@@ -2844,6 +2906,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
 			"provide_support",
+			"groupany"
+		},
+		swat_shotgun_rush_complex_independant = {
+			"deathguard",
+			"charge",
+			"provide_coverfire",
+			"flash_grenade", --pushers use flashes
+			"provide_support",
+			"lonewolf",
 			"groupany"
 		},
 		swat_shotgun_rush = {
@@ -2855,19 +2926,46 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"harass",
 			"groupany"
 		},
+		swat_shotgun_rush_independant = {
+			"deathguard",
+			"charge",
+			"provide_coverfire",
+			"flash_grenade", --pushers use flashes
+			"provide_support",
+			"harass",
+			"lonewolf",
+			"groupany"
+		},
 		swat_shotgun_flank_civil = {
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
 			"provide_support",
 			"groupany"
-		},		
+		},
+		swat_shotgun_flank_civil_independant = {
+			"flank",
+			"provide_coverfire",
+			"smoke_grenade", --flank uses smoke
+			"provide_support",
+			"groupany"
+		},
 		swat_shotgun_flank_complex = {
 			"hunter",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
 			"provide_support",
+			"groupany",
+			"hitnrun" --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
+		},
+		swat_shotgun_flank_complex_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"smoke_grenade", --flank uses smoke
+			"provide_support",
+			"lonewolf",
 			"groupany",
 			"hitnrun" --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
 		},
@@ -2879,7 +2977,17 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"hitnrun", --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
 			"groupany"
-		},	
+		},
+		swat_shotgun_flank_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"smoke_grenade", --flank uses smoke
+			"provide_support",
+			"lonewolf",
+			"hitnrun", --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
+			"groupany"
+		},
 		shield_wall_ranged = {
 			"shield",
 			"ranged_fire",
@@ -2922,6 +3030,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"smoke_grenade",
 			"murder"		 
 		},
+		tazer_flanking_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"smoke_grenade",
+			"murder"		 
+		},
 		tazer_charge = {
 			"deathguard",
 			"charge",
@@ -2937,16 +3052,27 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover", --if he spawns with a shield, he'll get covered so he can bust your fucking ass
 			"murder"
 		},
+		tank_rush_independant = {
+			"deathguard",
+			"charge",
+			"flash_grenade", --use flashes
+			"provide_coverfire",
+			"shield_cover", --if he spawns with a shield, he'll get covered so he can bust your fucking ass
+			"lonewolf",
+			"murder"
+		},
 		spooc = {
 			"shield_cover",
 			"flank",
 			"smoke_grenade",
+			"lonewolf",
 			"spooctargeting"			
 		},
 		spoocaggressive = {
 			"shield_cover",
 			"charge",
 			"flash_grenade",
+			"lonewolf",
 			"spooctargeting"
 		},
 		spoocelite = {
@@ -2954,6 +3080,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover",
 			"flank",
 			"smoke_grenade",
+			"lonewolf",
 			"harass"
 		},
 		spoocaggressiveelite = {
@@ -2961,6 +3088,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover",
 			"charge",
 			"flash_grenade",
+			"lonewolf",
 			"harass"		
 		},
 		spooccreep = {
@@ -2968,6 +3096,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover",
 			"charge",
 			"spoocavoidance",
+			"lonewolf",
 			"harass"
 		}
 	}
@@ -3849,7 +3978,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --Pinch.
+					tactics = self._tactics.tazer_flanking_independant --Pinch.
 				},
 				{
 					amount_min = 0,
@@ -4022,7 +4151,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil --forced pinch, no hit and run
+					tactics = self._tactics.swat_shotgun_flank_civil_independant --forced pinch, no hit and run
 				}
 			}
 		}
@@ -4063,7 +4192,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil --forced pinch, no hit and run
+					tactics = self._tactics.swat_shotgun_flank_civil_independant --forced pinch, no hit and run
 				}
 			}
 		}
@@ -4104,7 +4233,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --Pinch.
+					tactics = self._tactics.tazer_flanking_independant --Pinch.
 				},
 				{
 					amount_min = 0,
@@ -4112,7 +4241,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870", --They're just heavies.
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank_civil_independant
 				}
 			}
 		}
@@ -4145,7 +4274,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_R870",
-					tactics = self._tactics.swat_shotgun_flank
+					tactics = self._tactics.swat_shotgun_flank_independant
 				},
 				{
 					amount_min = 0,
@@ -4153,7 +4282,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_R870",
-					tactics = self._tactics.swat_shotgun_flank
+					tactics = self._tactics.swat_shotgun_flank_independant
 				},
 				{
 					amount_min = 0,
@@ -4161,7 +4290,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_tank",
-					tactics = self._tactics.tank_rush --Basically your worst nightmare.
+					tactics = self._tactics.tank_rush_independant --Basically your worst nightmare.
 				}
 			}
 		}
@@ -4275,7 +4404,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 1,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_shotgun_rush_civil --oh no they're dumb
+					tactics = self._tactics.swat_shotgun_rush_civil_independant --oh no they're dumb
 				},
 				{
 					amount_min = 2,
@@ -4308,7 +4437,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_rush_complex --these guys are dumb too but at least that means the heavy and medic can flank
+					tactics = self._tactics.swat_shotgun_rush_complex_independant --these guys are dumb too but at least that means the heavy and medic can flank
 				},
 				{
 					amount_min = 2,
@@ -4330,7 +4459,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 1,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_complex --oh no they're dumb
+					tactics = self._tactics.swat_rifle_complex_independant --oh no they're dumb
 				}																				
 			}
 		}
@@ -4355,7 +4484,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_R870",
-					tactics = self._tactics.swat_shotgun_rush_complex --flankers do hit and run while heavies and medic do a raw charge
+					tactics = self._tactics.swat_shotgun_rush_complex_independant --flankers do hit and run while heavies and medic do a raw charge
 				},
 				{
 					amount_min = 0,
@@ -4363,7 +4492,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_R870",
-					tactics = self._tactics.swat_shotgun_rush_complex
+					tactics = self._tactics.swat_shotgun_rush_complex_independant
 				},
 				{
 					freq = 1,
@@ -4386,13 +4515,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_G36",
-					tactics = self._tactics.swat_rifle
+					tactics = self._tactics.swat_rifle_independant
 				},
 				{
 					freq = 0.5,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5", 
-					tactics = self._tactics.swat_rifle
+					tactics = self._tactics.swat_rifle_independant
 				},
 				{
 					amount_min = 2,
@@ -4416,7 +4545,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_tank",
-					tactics = self._tactics.tank_rush --Basically your worst nightmare.
+					tactics = self._tactics.tank_rush_independant --Basically your worst nightmare.
 				}																				
 			}
 		}
@@ -4707,7 +4836,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_G36", 
-					tactics = self._tactics.swat_rifle
+					tactics = self._tactics.swat_rifle_independant
 				},
 				{
 					amount_min = 0,
@@ -4715,7 +4844,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_M4",
-					tactics = self._tactics.swat_rifle --others push while medic and heavies distract
+					tactics = self._tactics.swat_rifle_independant --others push while medic and heavies distract
 				},
 				{
 					amount_min = 0,
@@ -4723,7 +4852,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --asshole-brand taser
+					tactics = self._tactics.tazer_flanking_independant --asshole-brand taser
 				}
 			}
 		}
@@ -4870,7 +4999,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_complex --they're uncoordinated
+					tactics = self._tactics.swat_rifle_complex_independant --they're uncoordinated
 				},
 				{
 					amount_min = 1,
@@ -4964,7 +5093,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_G36", 
-					tactics = self._tactics.swat_rifle
+					tactics = self._tactics.swat_rifle_independant
 				},
 				{
 					amount_min = 0,
@@ -4972,7 +5101,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_M4",
-					tactics = self._tactics.swat_rifle --others push while medic and heavies distract
+					tactics = self._tactics.swat_rifle_independant --others push while medic and heavies distract
 				},
 				{
 					amount_min = 0,
@@ -5031,7 +5160,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank
+					tactics = self._tactics.swat_shotgun_flank_independant
 				}
 			}
 		}
@@ -5196,7 +5325,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_complex
+					tactics = self._tactics.swat_shotgun_flank_complex_independant
 				}
 			}
 		}
@@ -5245,7 +5374,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_complex
+					tactics = self._tactics.swat_shotgun_flank_complex_independant
 				}
 			}
 		}
@@ -5294,7 +5423,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank
+					tactics = self._tactics.swat_shotgun_flank_independant
 				}
 			}
 		}
@@ -5337,7 +5466,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --pinch boi
+					tactics = self._tactics.tazer_flanking_independant --pinch boi
 				},
 				{
 					amount_min = 0,
@@ -5345,7 +5474,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_heavy_G36",
-					tactics = self._tactics.swat_rifle --distant support
+					tactics = self._tactics.swat_rifle_independant --distant support
 				}
 			}
 		}
@@ -5428,7 +5557,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil --pinchy boi
+					tactics = self._tactics.swat_shotgun_flank_civil_independant --pinchy boi
 				}
 			}
 		}
@@ -5469,7 +5598,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_heavy_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil --pinchy boi
+					tactics = self._tactics.swat_shotgun_flank_civil_independant --pinchy boi
 				}
 			}
 		}
@@ -5510,7 +5639,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_heavy_R870",
-					tactics = self._tactics.swat_shotgun_flank_complex --pinchy boi
+					tactics = self._tactics.swat_shotgun_flank_complex_independant --pinchy boi
 				}
 			}
 		}
@@ -5551,7 +5680,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --pinch boi
+					tactics = self._tactics.tazer_flanking_independant --pinch boi
 				}
 			}
 		}
@@ -5592,7 +5721,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --pinch boi
+					tactics = self._tactics.tazer_flanking_independant --pinch boi
 				},
 				{
 					amount_min = 0,
@@ -5600,7 +5729,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_heavy_G36",
-					tactics = self._tactics.swat_rifle --distant support
+					tactics = self._tactics.swat_rifle_independant --distant support
 				}
 			}
 		}
@@ -5865,7 +5994,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				},
 				{
 					amount_min = 0,
@@ -5949,7 +6078,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				}
 			}
 		}
@@ -5972,7 +6101,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				},
 				{
 					amount_min = 0,
@@ -6009,7 +6138,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				},
 				{
 					amount_min = 0,
@@ -6048,7 +6177,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				},
 				{
 					amount_min = 0,
@@ -6089,7 +6218,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank_civil_independant
 				},
 				{
 					freq = 0.5,
@@ -6194,7 +6323,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 2,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank_civil_independant
 				},
 				{
 					amount_min = 0,
@@ -6225,7 +6354,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank_civil_independant
 				},
 				{
 					freq = 0.5,

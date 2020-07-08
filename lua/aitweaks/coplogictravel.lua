@@ -716,11 +716,10 @@ function CopLogicTravel._upd_combat_movement(data)
 		if not action_taken then
 			if my_data.pathing_to_optimal_pos then
 				-- Nothing
-				--log("im fucking
 			elseif my_data.walking_to_optimal_pos then
 				-- nothing
 			elseif my_data.optimal_path then
-				CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+				action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
 			elseif my_data.optimal_pos and focus_enemy.nav_tracker then
 				local to_pos = my_data.optimal_pos
 				my_data.optimal_pos = nil
@@ -796,30 +795,31 @@ function CopLogicTravel._upd_combat_movement(data)
 		if data.unit:base():has_tag("takedown") then
 			if my_data.pathing_to_optimal_pos then
 				-- Nothing
-				--log("im fucking
 			elseif my_data.walking_to_optimal_pos then
 				-- nothing
 			elseif my_data.optimal_path then
-				CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+				action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
 			elseif focus_enemy.unit then
 				my_data.pathing_to_optimal_pos = true
 				my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
 				data.brain:search_for_path_to_unit(my_data.optimal_path_search_id, focus_enemy.unit)
 			end
-		elseif data.tactics and data.tactics.charge or data.tactics and data.tactics.flank then
-			if my_data.pathing_to_optimal_pos then
-				-- Nothing
-				--log("im fucking")
-			elseif my_data.walking_to_optimal_pos then
-				-- nothing
-			elseif my_data.optimal_path then
-				--my_data.aggro_move_t = t + math.random(0, 1.25)
-				CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
-			elseif my_data.optimal_pos and focus_enemy.nav_tracker then
-				local to_pos = my_data.optimal_pos
-				my_data.pathing_to_optimal_pos = true
-				my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
-				data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
+		elseif data.tactics then
+			if data.tactics.charge or data.tactics.flank then 
+				if my_data.pathing_to_optimal_pos then
+					-- Nothing
+					--log("im fucking")
+				elseif my_data.walking_to_optimal_pos then
+					-- nothing
+				elseif my_data.optimal_path then
+					--my_data.aggro_move_t = t + math.random(0, 1.25)
+					action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+				elseif my_data.optimal_pos and focus_enemy.nav_tracker then
+					local to_pos = my_data.optimal_pos
+					my_data.pathing_to_optimal_pos = true
+					my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
+					data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
+				end
 			end
 		end
 	end
@@ -1081,6 +1081,20 @@ function CopLogicTravel.queued_update(data)
     local delay = CopLogicTravel._upd_enemy_detection(data)
 	
 	local focus_enemy = data.attention_obj
+	
+	if not data.is_converted and data.unit:base():has_tag("law") and data.tactics then
+		if objective and data.tactics.lonewolf then --currently trying to get rawed by 9 lonewolves at the burger king drive-in in front of 81 other cops
+			if objective.follow_unit then
+				if objective.follow_unit:brain() and objective.follow_unit:brain().objective and objective.follow_unit:brain():objective() ~= nil then
+					local new_objective = objective.follow_unit:brain():objective() --ignore following the "follow_unit", copy their objective and become standalone instead in order to execute pinches and flanking manuevers freely
+					--log("ay caramba!")
+					data.unit:brain():set_objective(new_objective, nil)
+					
+					return
+				end
+			end
+		end
+	end
 	
 	if my_data.tasing then
 		action_taken = action_taken or CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
@@ -1836,7 +1850,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local my_data = data.internal_data
 	local my_pos = data.m_pos
 	
-	if data.objective and data.objective.type == "follow" then
+	if data.objective and data.objective.type == "follow" and not data.tactics.lonewolf then
 		if data.tactics and data.tactics.shield_cover and data.attention_obj and data.attention_obj.nav_tracker and data.attention_obj.reaction and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 			local threat_nav_pos = data.attention_obj.nav_tracker:field_position()
 
@@ -1907,14 +1921,20 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			optimal_threat_dis = data.internal_data.weapon_range.far
 			allow_fwd = true
 		end
-
+		
 		near_pos = near_pos or search_area.pos
 		
-		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.is_person then
+		if my_data.optimal_pos then
+			near_pos = my_data.optimal_pos
+		end
+		
+		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.is_person and data.attention_obj.verified then
 			threat_pos = data.attention_obj.m_pos
 			threat_tracker = data.attention_obj.nav_tracker
 			threat_area = managers.groupai:state():get_area_from_nav_seg_id(threat_tracker:nav_segment())
 			--log("got an area!")
+		elseif my_data.expected_pos then
+			threat_pos = my_data.expected_pos
 		else
 			local all_criminals = managers.groupai:state():all_char_criminals()
 			local closest_crim_u_data, closest_crim_dis = nil
@@ -1941,7 +1961,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 				end
 			end
 		end
-		
+	end	
 		--[[if threat_pos and my_data.engage_mode then
 			local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math_random(0.5, 2)
 			
@@ -2073,54 +2093,18 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		end]]
 		
 		if not cover then
-			if data.tactics and data.tactics.flank and threat_area and threat_tracker then
-				local flank_pos = CopLogicAttack._find_flank_pos(data, data.internal_data, threat_tracker, 6000)
+			if my_data.optimal_pos then
 				
-				if flank_pos then
-					if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
-						cover = managers.navigation:find_cover_near_pos_1(flank_pos, threat_pos, 2000, optimal_threat_dis, allow_fwd)
-						if cover then
-							--log("flanking ranged fire")
-							return cover
-						end
-					else
-						cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, data.internal_data.weapon_range.far, flank_pos, threat_pos)
-					end
-				end
-				
-				if cover then
-					--log("ohworm")
-					return cover
-				end
-			end
-			
-			if data.tactics and data.tactics.charge and threat_area and threat_tracker then
-				local charge_pos = CopLogicTravel._get_pos_on_wall(threat_tracker:field_position(), optimal_threat_dis, 45, nil)
-				
-				if charge_pos then
-					cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, optimal_threat_dis, charge_pos, threat_pos)
-				end
-
-				if cover then
-					--log("ohworm")
-					return cover
-				else
-					cover = managers.navigation:find_cover_from_threat(threat_area.nav_segs, optimal_threat_dis, threat_pos, threat_pos)
-					
-					if cover then
-						--log("alt aggro charge")
-						return cover
-					end
-				end
-			end
 			
 			--log("notohworm")
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				cover = managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 2000, optimal_threat_dis, allow_fwd)
-				
-				if cover then
-					--log("ranged_fire")
-					return cover
+			if data.tactics then
+				if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
+					cover = managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 2000, optimal_threat_dis, allow_fwd)
+					
+					if cover then
+						--log("ranged_fire")
+						return cover
+					end
 				end
 			end
 			
