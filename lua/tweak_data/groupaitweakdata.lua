@@ -740,7 +740,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"),
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
 				},
 				shared = {
@@ -779,7 +779,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"),
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
 				},
 				shared = {
@@ -818,7 +818,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"),
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
 				},
 				shared = {
@@ -857,7 +857,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				federales = {
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
-					Idstring("units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"),
 					Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
 				},
 				shared = {
