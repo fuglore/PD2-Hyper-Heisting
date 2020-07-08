@@ -1,4 +1,4 @@
-﻿fd<table directory="assets">	
+﻿<table directory="assets">	
 	<!--Base Game Asset Replacements-->
 	<material_config path="units/pd2_dlc_friend/nature/terrain/sfm_backdrop" force="true"/>
 	<texture path="units/payday2/characters/shared_textures/spook_il" />
@@ -14,13 +14,13 @@
 
 	<mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, 
 	and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
-	<mission path="levels/narratives/classics/red2/world/world" force="true" unload="true"/> <!--Makes FWB Vault Guards Gensex ninjas, mp5=m4, c45=c45-->
+	<mission path="levels/narratives/classics/red2/world/world" force="true" unload="true"/> <!--Makes FWB Vault Guards Gensex ninjas-->
 	<mission path="levels/instances/unique/red/red_camera_room/world/world" force="true" unload="true"/> <!--FWB SECURITY ROOM INSTANCE, PUTS IN RED FUCKER AS GUARD-->
 	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>	
 	<continent path="levels/narratives/elephant/born/world/world" force="true" unload="true"/><!--fixes cars clipping into ground-->		
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
-	<!-- <mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> --> <!--Now, give them hell.-->
+	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> <!--Now, give them hell.-->
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 		
 	<!--enemy bullet impact fixes-->	
@@ -44,7 +44,20 @@
 	<object path="units/pd2_dlc_friend/characters/ene_bolivian_thug_outdoor_02/ene_bolivian_thug_outdoor_02" force="true" />	
 	<object path="units/pd2_dlc_friend/characters/ene_thug_indoor_01/ene_thug_indoor_01" force="true" />
 	<object path="units/pd2_dlc_friend/characters/ene_thug_indoor_02/ene_thug_indoor_02" force="true" />		
-	<object path="units/pd2_dlc_friend/characters/ene_drug_lord_boss_stealth/ene_drug_lord_boss_stealth" force="true" />		
+	<object path="units/pd2_dlc_friend/characters/ene_drug_lord_boss_stealth/ene_drug_lord_boss_stealth" force="true" />			
+
+	<!-- repers (replasements)-->
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass" force="true" />		
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870" force="true" />	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg" force="true" />	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg" force="true" />	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_swat_ak47_ass/ene_akan_cs_swat_ak47_ass" force="true" />		
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp" force="true" />
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_swat_r870/ene_akan_cs_swat_r870" force="true" />		
+	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_shield_sr2_smg/ene_akan_fbi_shield_sr2_smg" force="true" />	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass" force="true" />
+	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870" force="true" />	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_heavy_ak47_ass/ene_akan_cs_heavy_ak47_ass" force="true" />	
 	<!--enemy bullet impact fixes end-->	
 
 	<unit path="units/pd2_dlc_bph/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" load="true" force="true"/>
