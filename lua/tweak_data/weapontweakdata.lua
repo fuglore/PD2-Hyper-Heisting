@@ -6924,7 +6924,6 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}
 	}
 	end
-
-
-	--Developer's Note: The suffering I am feeling from adding all of these custom weapons is unimaginable
+end
+	
 end)

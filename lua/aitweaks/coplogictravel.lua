@@ -1082,15 +1082,17 @@ function CopLogicTravel.queued_update(data)
 	
 	local focus_enemy = data.attention_obj
 	
-	if not data.is_converted and data.unit:base():has_tag("law") and data.tactics then
-		if objective and data.tactics.lonewolf then --currently trying to get rawed by 9 lonewolves at the burger king drive-in in front of 81 other cops
-			if objective.follow_unit then
-				if objective.follow_unit:brain() and objective.follow_unit:brain().objective and objective.follow_unit:brain():objective() ~= nil then
-					local new_objective = objective.follow_unit:brain():objective() --ignore following the "follow_unit", copy their objective and become standalone instead in order to execute pinches and flanking manuevers freely
-					--log("ay caramba!")
-					data.unit:brain():set_objective(new_objective, nil)
-					
-					return
+	if not data.is_converted and data.unit:base():has_tag("law") and data.tactics or Global.game_settings.one_down and data.unit:base():has_tag("law") then
+		if objective then --currently trying to get rawed by 9 lonewolves at the burger king drive-in in front of 81 other cops
+			if Global.game_settings.one_down or data.tactics.lonewolf then
+				if objective.follow_unit then
+					if objective.follow_unit:brain() and objective.follow_unit:brain().objective and objective.follow_unit:brain():objective() ~= nil then
+						local new_objective = objective.follow_unit:brain():objective() --ignore following the "follow_unit", copy their objective and become standalone instead in order to execute pinches and flanking manuevers freely
+						--log("ay caramba!")
+						data.unit:brain():set_objective(new_objective, nil)
+						
+						return
+					end
 				end
 			end
 		end
