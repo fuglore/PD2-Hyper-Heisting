@@ -1,7 +1,11 @@
 <table name="flat_hh">
 	<level ai_group_type="america" brief_id="heist_flat_hl_briefing" briefing_dialog="Play_pln_flt_brf_01" cube="cube_apply_heist_bank" id="flat_hh" intro_event="Play_pln_flt_intro_01" max_bags="11" name_id="heist_flat_hl" outro_event="Play_pln_flt_50">
 		<add file="levels/flat_hh/add.xml"/>
-		<assets/>
+		<assets>
+			<asset name="ammo_bag"/>
+            <asset name="health_bag"/>
+            <asset name="grenade_crate"/>
+		</assets>
 		<include directory="levels/flat_hh">
 			<file file="world.world" type="binary"/>
 			<file file="continents.continents" type="binary"/>
