@@ -24,9 +24,6 @@ local mrot_y = mrotation.y
 local mrot_z = mrotation.z
 local table_insert = table.insert
 
-CopLogicTravel.on_detected_enemy_destroyed = CopLogicBase.on_detected_enemy_destroyed
-CopLogicTravel.on_criminal_neutralized = CopLogicBase.on_criminal_neutralized
-
 function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	CopLogicBase.enter(data, new_logic_name, enter_params)
 	data.unit:brain():cancel_all_pathing_searches()

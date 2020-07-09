@@ -543,8 +543,6 @@ end
 
 function CopLogicBase.should_duck_on_alert(data, alert_data)
 end
-
-
 	
 function CopLogicBase.chk_should_turn(data, my_data)
 	return not my_data.turning and not my_data.has_old_action and not data.unit:movement():chk_action_forbidden("walk") and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos and not my_data.surprised
@@ -1058,25 +1056,6 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	end
 
 	return delay
-end
-
-function CopLogicBase.on_criminal_neutralized(data, criminal_key)
-	local my_data = data.internal_data
-
-	if my_data.tasing and criminal_key == my_data.tasing.target_u_data.u_key then
-		if not my_data.tasing.target_u_data.unit:movement():tased() then
-			TaserLogicAttack._cancel_tase_attempt(data, my_data)
-		end
-	end
-end
-
-function CopLogicBase.on_detected_enemy_destroyed(data, enemy_unit)
-
-	local my_data = data.internal_data
-
-	if my_data.tasing and enemy_unit:key() == my_data.tasing.target_u_data.u_key then
-		TaserLogicAttack._cancel_tase_attempt(data, my_data)
-	end
 end
 
 function CopLogicBase._create_detected_attention_object_data(t, my_unit, u_key, attention_info, settings, forced, visible_data)
