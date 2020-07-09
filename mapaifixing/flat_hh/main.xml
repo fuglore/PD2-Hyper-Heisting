@@ -51,7 +51,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative brief_id="heist_flat_hl_briefing" briefing_event="pln_flt_cbf_01" contact="classic" icon="guis/dlcs/bro/textures/pd2/crimenet/panicroom" id="flat" jc="30" load_screen="guis/dlcs/pic/textures/loading/job_panicroom" name_id="heist_flat_hl" region="street">
+	<narrative brief_id="heist_flat_crimenet" briefing_event="pln_flt_cbf_01" contact="classic" icon="guis/dlcs/bro/textures/pd2/crimenet/panicroom" id="flat" jc="30" load_screen="guis/dlcs/pic/textures/loading/job_panicroom" name_id="heist_flat_hl" region="street">
 		<chain>
 			<table level_id="flat_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
