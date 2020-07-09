@@ -450,7 +450,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 				local reaction = CopLogicSniper._chk_reaction_to_attention_object(data, enemy_data, true)
 
 				if not focus_enemy_reaction or focus_enemy_reaction <= reaction then
-					local enemy_dir = tmp_vec1
+					local enemy_dir = Vector3()
 
 					mvector3.direction(enemy_dir, data.m_pos, enemy_data.m_pos)
 
@@ -593,7 +593,7 @@ function CopLogicTravel:_reserve_pos_step_clbk(data, test_pos)
 	return true
 end
 
-function CopLogicTravel._upd_combat_movement(data)
+function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	local my_data = data.internal_data
 	local t = data.t
 	local unit = data.unit
@@ -712,123 +712,127 @@ function CopLogicTravel._upd_combat_movement(data)
 		end
 	end
 	
-	if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
-		if not action_taken then
-			if my_data.pathing_to_optimal_pos then
-				-- Nothing
-			elseif my_data.walking_to_optimal_pos then
-				-- nothing
-			elseif my_data.optimal_path then
-				action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
-			elseif my_data.optimal_pos and focus_enemy.nav_tracker then
-				local to_pos = my_data.optimal_pos
-				my_data.optimal_pos = nil
-				local ray_params = {
-					trace = true,
-					tracker_from = unit:movement():nav_tracker(),
-					pos_to = to_pos
-				}
-				local ray_res = managers.navigation:raycast(ray_params)
-				to_pos = ray_params.trace[1]
-
-				if ray_res then
-					local vec = data.m_pos - to_pos
-
-					mvector3.normalize(vec)
-
-					local fwd = unit:movement():m_fwd()
-					local fwd_dot = fwd:dot(vec)
-
-					if fwd_dot > 0 then
-						local enemy_tracker = focus_enemy.nav_tracker
-
-						if enemy_tracker:lost() then
-							ray_params.tracker_from = nil
-							ray_params.pos_from = enemy_tracker:field_position()
-						else
-							ray_params.tracker_from = enemy_tracker
-						end
-
-						ray_res = managers.navigation:raycast(ray_params)
-						to_pos = ray_params.trace[1]
-					end
-				end
-
-				local fwd_bump = nil
-				to_pos, fwd_bump = ShieldLogicAttack.chk_wall_distance(data, my_data, to_pos)
-				local do_move = mvector3.distance_sq(to_pos, data.m_pos) > 10000 
-
-				if not do_move then
-					local to_pos_current, fwd_bump_current = ShieldLogicAttack.chk_wall_distance(data, my_data, data.m_pos)
-
-					if fwd_bump_current then
-						do_move = true
-					end
-				end
-
-				if do_move and not my_data.walking_to_optimal_pos then
-					my_data.pathing_to_optimal_pos = true
-					my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
-					local reservation = managers.navigation:reserve_pos(nil, nil, to_pos, callback(CopLogicTravel, CopLogicTravel, "_reserve_pos_step_clbk", {
-						unit_pos = data.m_pos
-					}), 70, data.pos_rsrv_id)
-
-					if reservation then
-						to_pos = reservation.position
-					else
-						reservation = {
-							radius = 60,
-							position = mvector3.copy(to_pos),
-							filter = data.pos_rsrv_id
-						}
-
-						managers.navigation:add_pos_reservation(reservation)
-					end
-
-					data.brain:set_pos_rsrv("path", reservation)
-					--log("shit")
-					data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
-				end
-			end
-		end
-	else
-		if data.unit:base():has_tag("takedown") then
-			if my_data.pathing_to_optimal_pos then
-				-- Nothing
-			elseif my_data.walking_to_optimal_pos then
-				-- nothing
-			elseif my_data.optimal_path then
-				action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
-			elseif focus_enemy.unit then
-				my_data.pathing_to_optimal_pos = true
-				my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
-				data.brain:search_for_path_to_unit(my_data.optimal_path_search_id, focus_enemy.unit)
-			end
-		elseif data.tactics then
-			if data.tactics.charge or data.tactics.flank then 
+	if not ignore_walks then
+		if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
+			if not action_taken then
 				if my_data.pathing_to_optimal_pos then
 					-- Nothing
-					--log("im fucking")
 				elseif my_data.walking_to_optimal_pos then
 					-- nothing
 				elseif my_data.optimal_path then
-					--my_data.aggro_move_t = t + math.random(0, 1.25)
 					action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
 				elseif my_data.optimal_pos and focus_enemy.nav_tracker then
 					local to_pos = my_data.optimal_pos
+					my_data.optimal_pos = nil
+					local ray_params = {
+						trace = true,
+						tracker_from = unit:movement():nav_tracker(),
+						pos_to = to_pos
+					}
+					local ray_res = managers.navigation:raycast(ray_params)
+					to_pos = ray_params.trace[1]
+
+					if ray_res then
+						local vec = data.m_pos - to_pos
+
+						mvector3.normalize(vec)
+
+						local fwd = unit:movement():m_fwd()
+						local fwd_dot = fwd:dot(vec)
+
+						if fwd_dot > 0 then
+							local enemy_tracker = focus_enemy.nav_tracker
+
+							if enemy_tracker:lost() then
+								ray_params.tracker_from = nil
+								ray_params.pos_from = enemy_tracker:field_position()
+							else
+								ray_params.tracker_from = enemy_tracker
+							end
+
+							ray_res = managers.navigation:raycast(ray_params)
+							to_pos = ray_params.trace[1]
+						end
+					end
+
+					local fwd_bump = nil
+					to_pos, fwd_bump = ShieldLogicAttack.chk_wall_distance(data, my_data, to_pos)
+					local do_move = mvector3.distance_sq(to_pos, data.m_pos) > 10000 
+
+					if not do_move then
+						local to_pos_current, fwd_bump_current = ShieldLogicAttack.chk_wall_distance(data, my_data, data.m_pos)
+
+						if fwd_bump_current then
+							do_move = true
+						end
+					end
+
+					if do_move and not my_data.walking_to_optimal_pos then
+						my_data.pathing_to_optimal_pos = true
+						my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
+						local reservation = managers.navigation:reserve_pos(nil, nil, to_pos, callback(CopLogicTravel, CopLogicTravel, "_reserve_pos_step_clbk", {
+							unit_pos = data.m_pos
+						}), 70, data.pos_rsrv_id)
+
+						if reservation then
+							to_pos = reservation.position
+						else
+							reservation = {
+								radius = 60,
+								position = mvector3.copy(to_pos),
+								filter = data.pos_rsrv_id
+							}
+
+							managers.navigation:add_pos_reservation(reservation)
+						end
+
+						data.brain:set_pos_rsrv("path", reservation)
+						--log("shit")
+						data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
+					end
+				end
+			end
+		else
+			if data.unit:base():has_tag("takedown") then
+				if my_data.pathing_to_optimal_pos then
+					-- Nothing
+				elseif my_data.walking_to_optimal_pos then
+					-- nothing
+				elseif my_data.optimal_path then
+					action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+				elseif focus_enemy.unit then
 					my_data.pathing_to_optimal_pos = true
 					my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
-					data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
+					data.brain:search_for_path_to_unit(my_data.optimal_path_search_id, focus_enemy.unit)
+				end
+			elseif data.tactics then
+				if data.tactics.charge or data.tactics.flank then 
+					if my_data.pathing_to_optimal_pos then
+						-- Nothing
+						--log("im fucking")
+					elseif my_data.walking_to_optimal_pos then
+						-- nothing
+					elseif my_data.optimal_path then
+						--my_data.aggro_move_t = t + math.random(0, 1.25)
+						action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+					elseif my_data.optimal_pos and focus_enemy.nav_tracker then
+						local to_pos = my_data.optimal_pos
+						my_data.pathing_to_optimal_pos = true
+						my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
+						data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
+					end
 				end
 			end
 		end
 	end
 				
 	
-	if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify then
-		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
-		if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
-			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
+	if not ignore_walks then
+		if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify then
+			action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
+			if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
+				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
+			end
 		end
 	end
 	
@@ -876,7 +880,7 @@ function CopLogicTravel._upd_combat_movement(data)
 	
 	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
 	
-	if not action_taken then
+	if not ignore_walks and not action_taken then
 
 		local move_t_chk = not my_data.move_t or my_data.move_t < data.t
 		local charge_failed_t_chk = not my_data.charge_path_failed_t or my_data.charge_path_failed_t and data.t - my_data.charge_path_failed_t > 6
@@ -1089,7 +1093,9 @@ function CopLogicTravel.queued_update(data)
 					if objective.follow_unit:brain() and objective.follow_unit:brain().objective and objective.follow_unit:brain():objective() ~= nil then
 						local new_objective = objective.follow_unit:brain():objective() --ignore following the "follow_unit", copy their objective and become standalone instead in order to execute pinches and flanking manuevers freely
 						--log("ay caramba!")
-						data.unit:brain():set_objective(new_objective, nil)
+						if new_objective.type ~= "surrender" then
+							data.unit:brain():set_objective(new_objective, nil)
+						end
 						
 						return
 					end
@@ -1424,7 +1430,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				
 				CopLogicAttack._upd_aim(data, my_data)
 				data.logic._upd_stance_and_pose(data, data.internal_data)
-				CopLogicTravel._upd_combat_movement(data)
+				CopLogicTravel._upd_combat_movement(data, true)
 			end
 		elseif my_data.walking_to_cover_shoot_pos then
 			if action:expired() then
@@ -1437,7 +1443,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				
 				CopLogicAttack._upd_aim(data, my_data)
 				data.logic._upd_stance_and_pose(data, data.internal_data)
-				CopLogicTravel._upd_combat_movement(data)
+				CopLogicTravel._upd_combat_movement(data, true)
 			end
 		elseif my_data.moving_to_cover then
 			if action:expired() then
@@ -1472,7 +1478,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				
 				CopLogicAttack._upd_aim(data, my_data)
 				data.logic._upd_stance_and_pose(data, data.internal_data)
-				CopLogicTravel._upd_combat_movement(data)
+				CopLogicTravel._upd_combat_movement(data, true)
 			else
 				managers.navigation:release_cover(my_data.moving_to_cover[1])
 
