@@ -207,6 +207,8 @@ function CopLogicAttack.update(data)
 		return
 	end
 	
+	local focus_enemy = data.attention_obj
+	
 	local action_taken = data.logic.action_taken(data, my_data)
 	
 	if not data.is_converted and data.unit:base():has_tag("law") and data.tactics or Global.game_settings.one_down and data.unit:base():has_tag("law") then
