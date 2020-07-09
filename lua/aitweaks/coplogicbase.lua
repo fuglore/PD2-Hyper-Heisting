@@ -414,22 +414,22 @@ function CopLogicBase._update_haste(data, my_data)
 	local pose = nil
 	local haste = nil
 
-	local focus_enemy = data.attention_obj
-	local enemy_has_height_difference = focus_enemy and REACT_COMBAT <= focus_enemy.reaction and focus_enemy.dis >= 1200 and focus_enemy.verified_t and data.t - focus_enemy.verified_t < 4 and math_abs(data.m_pos.z - focus_enemy.m_pos.z) > 250
+	--local focus_enemy = data.attention_obj
+	local enemy_has_height_difference = data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
 
 	if data.unit:movement():cool() and walk_action:haste() == "run" then
 		haste = "walk"
-	elseif focus_enemy then
-		local enemyseeninlast4secs = focus_enemy and focus_enemy.verified_t and data.t - focus_enemy.verified_t < 4
+	elseif data.attention_obj then
+		local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
 		local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
 		local height_difference_penalty = enemy_has_height_difference and 400 or 0
 
-		if focus_enemy.dis > 10000 and walk_action:haste() ~= "run" then
+		if data.attention_obj.dis > 10000 and walk_action:haste() ~= "run" then
 			haste = "run"
-		elseif walk_action:haste() ~= "run" and REACT_COMBAT <= focus_enemy.reaction and focus_enemy.dis > 800 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+		elseif walk_action:haste() ~= "run" and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 800 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
 			haste = "run"
 			my_data.has_reset_walk_cycle = nil
-		elseif data.tactics and not data.tactics.hitnrun and walk_action:haste() == "run" and REACT_COMBAT <= focus_enemy.reaction and focus_enemy.dis <= 800 + enemy_seen_range_bonus - height_difference_penalty then
+		elseif data.tactics and not data.tactics.hitnrun and walk_action:haste() == "run" and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 800 + enemy_seen_range_bonus - height_difference_penalty then
 			haste = "walk"
 			my_data.has_reset_walk_cycle = nil
 		elseif walk_action:haste() ~= "run" then
@@ -453,18 +453,18 @@ function CopLogicBase._update_haste(data, my_data)
 	local crouch_roll = math_random()
 	local stand_chance, should_crouch, pose, end_pose = nil
 
-	if focus_enemy and focus_enemy.dis > 10000 then
+	if data.attention_obj and data.attention_obj.dis > 10000 then
 		stand_chance = 1
 		pose = "stand"
 		end_pose = "stand"
-	elseif focus_enemy and REACT_COMBAT <= focus_enemy.reaction and focus_enemy.dis > 2000 then
+	elseif data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 2000 then
 		stand_chance = 0.75
 	elseif enemy_has_height_difference and can_crouch then
 		stand_chance = 0.25
 	else
-		local verified_chk = focus_enemy and focus_enemy.verified and focus_enemy.dis <= 1500 or focus_enemy.dis <= 1000
+		local verified_chk = data.attention_obj and data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj.dis <= 1000
 
-		if data.tactics and data.tactics.flank and haste == "walk" and REACT_COMBAT <= focus_enemy.reaction and verified_chk and CopLogicTravel._chk_close_to_criminal(data, my_data) then
+		if data.tactics and data.tactics.flank and haste == "walk" and verified_chk and REACT_COMBAT <= data.attention_obj.reaction and CopLogicTravel._chk_close_to_criminal(data, my_data) then
 			stand_chance = 0.25
 		elseif my_data.moving_to_cover and can_crouch then
 			stand_chance = 0.5
@@ -506,7 +506,7 @@ function CopLogicBase._update_haste(data, my_data)
 		CopLogicAttack["_chk_request_action_" .. pose](data)
 	end
 
-	if haste and focus_enemy and REACT_COMBAT <= focus_enemy.reaction then
+	if haste and data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
 		if not my_data.has_reset_walk_cycle then
 			local new_action = {
 				body_part = 2,
