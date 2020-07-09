@@ -598,7 +598,7 @@ function GroupAIStateBesiege:_begin_new_tasks()
 
 		if assault_candidates and area.criminal and area.criminal.units and self._criminals then
 			for criminal_key, _ in pairs(area.criminal.units) do
-				if not self._criminals[criminal_key].status and not self._criminals[criminal_key].is_deployable then
+				if criminal_key and self._criminals and not self._criminals[criminal_key].status and not self._criminals[criminal_key].is_deployable then
 					table.insert(assault_candidates, area)
 
 					break
