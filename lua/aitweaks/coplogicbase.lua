@@ -415,11 +415,20 @@ function CopLogicBase._update_haste(data, my_data)
 	local haste = nil
 
 	--local focus_enemy = data.attention_obj
-	local enemy_has_height_difference = data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
-
+	
+	
+	if Global.game_settings.one_down then
+		if walk_action:haste() == "walk" then
+			haste = "run"
+		else
+			return
+		end
+	end
+	
 	if data.unit:movement():cool() and walk_action:haste() == "run" then
 		haste = "walk"
 	elseif data.attention_obj then
+		local enemy_has_height_difference = data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
 		local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
 		local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
 		local height_difference_penalty = enemy_has_height_difference and 400 or 0
@@ -452,26 +461,28 @@ function CopLogicBase._update_haste(data, my_data)
 	local can_crouch = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
 	local crouch_roll = math_random()
 	local stand_chance, should_crouch, pose, end_pose = nil
-
-	if data.attention_obj and data.attention_obj.dis > 10000 then
-		stand_chance = 1
-		pose = "stand"
-		end_pose = "stand"
-	elseif data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 2000 then
-		stand_chance = 0.75
-	elseif enemy_has_height_difference and can_crouch then
-		stand_chance = 0.25
-	else
-		local verified_chk = data.attention_obj and data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj.dis <= 1000
-
-		if data.tactics and data.tactics.flank and haste == "walk" and verified_chk and REACT_COMBAT <= data.attention_obj.reaction and CopLogicTravel._chk_close_to_criminal(data, my_data) then
-			stand_chance = 0.25
-		elseif my_data.moving_to_cover and can_crouch then
-			stand_chance = 0.5
-		else
+	
+	if data.attention_obj then
+		if data.attention_obj.dis > 10000 then
 			stand_chance = 1
 			pose = "stand"
 			end_pose = "stand"
+		elseif REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 2000 then
+			stand_chance = 0.75
+		elseif enemy_has_height_difference and can_crouch then
+			stand_chance = 0.25
+		else
+			local verified_chk = nil
+
+			if data.tactics and data.tactics.flank and haste == "walk" and verified_chk and REACT_COMBAT <= data.attention_obj.reaction and CopLogicTravel._chk_close_to_criminal(data, my_data) then
+				stand_chance = 0.25
+			elseif my_data.moving_to_cover and can_crouch then
+				stand_chance = 0.5
+			else
+				stand_chance = 1
+				pose = "stand"
+				end_pose = "stand"
+			end
 		end
 	end
 
