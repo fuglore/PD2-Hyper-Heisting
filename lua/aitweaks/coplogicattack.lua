@@ -190,6 +190,26 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 	end
 end
 
+function CopLogicAttack.exit(data, new_logic_name, enter_params)
+	CopLogicBase.exit(data, new_logic_name, enter_params)
+
+	local my_data = data.internal_data
+
+	data.unit:brain():cancel_all_pathing_searches()
+	TaserLogicAttack._cancel_tase_attempt(data, my_data)
+	SpoocLogicAttack._cancel_spooc_attempt(data, my_data)
+	CopLogicBase.cancel_queued_tasks(my_data)
+	CopLogicBase.cancel_delayed_clbks(my_data)
+
+	if my_data.best_cover then
+		managers.navigation:release_cover(my_data.best_cover[1])
+	end
+
+	data.brain:rem_pos_rsrv("path")
+	data.unit:brain():set_update_enabled_state(true)
+end
+
+
 function CopLogicAttack.update(data)
 	local my_data = data.internal_data
 
