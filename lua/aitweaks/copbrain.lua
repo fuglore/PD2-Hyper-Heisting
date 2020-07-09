@@ -43,11 +43,11 @@ function CopBrain:post_init()
 	CopBrain._logic_variants.tank_mini.attack = CopLogicAttack
 	CopBrain._logic_variants.spooc_heavy = clone(security_variant)
 	CopBrain._logic_variants.spooc_heavy.idle = SpoocLogicIdle
+	CopBrain._logic_variants.spooc_heavy.attack = SpoocLogicAttack
 	-- CopBrain._logic_variants.spooc_heavy.travel = SpoocLogicTravel
 	CopBrain._logic_variants.spooc = clone(security_variant)
-	CopBrain._logic_variants.spooc.attack = CopLogicAttack
-	CopBrain._logic_variants.spooc.idle = SpoocLogicIdle
-	CopBrain._logic_variants.taser = clone(security_variant)	
+	CopBrain._logic_variants.spooc.attack = SpoocLogicAttack
+	CopBrain._logic_variants.spooc.idle = SpoocLogicIdle		
 	-- CopBrain._logic_variants.spooc.travel = SpoocLogicTravel
 	--CopBrain._logic_variants.taser.travel = TaserLogicTravel
 	CopBrain._logic_variants.fbi_xc45 = clone(security_variant)
