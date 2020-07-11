@@ -7611,6 +7611,7 @@ function CharacterTweakData:_presets(tweak_data)
 			cloakeravoidance = true --only used for russian cloaker
 		}
 	}
+	
 	return presets
 end
 

@@ -1581,7 +1581,6 @@ function CopLogicAttack._upd_combat_movement(data, ignore_walks)
 	end	
 end
 
-
 local temp_vec4 = Vector3()
 local temp_vec5 = Vector3()
 local temp_vec6 = Vector3()

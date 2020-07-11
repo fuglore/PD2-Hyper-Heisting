@@ -418,7 +418,7 @@ function CopLogicBase._update_haste(data, my_data)
 	
 	
 	if Global.game_settings.one_down then
-		if walk_action:haste() == "walk" then
+		if walk_action:haste() ~= "run" then
 			haste = "run"
 		else
 			return
