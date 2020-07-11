@@ -85,7 +85,7 @@ function LevelsTweakData:get_ai_group_type()
 		if ai_group_type and ai_group_type == "zombie" and Global.game_settings and Global.game_settings.incsmission then
 			return "america"
 		elseif ai_group_type and ai_group_type == "shared" and Global.game_settings and Global.game_settings.incsmission and job == "dinner" then
-			eturn "america"		
+			return "america"		
 		elseif ai_group_type and ai_group_type == "shared" and Global.game_settings and Global.game_settings.incsmission then
 			return "murkywater"					
 		elseif ai_group_type then
