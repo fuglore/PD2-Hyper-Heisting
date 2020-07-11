@@ -21,6 +21,10 @@ function MusicManager:jukebox_heist_specific()
     if managers.job:current_level_id() == "flat_hh" then
         return self:track_attachment("flat_hh") or "all"
     end
+
+    if managers.job:current_level_id() == "wwh_hh" then
+        return self:track_attachment("wwh_hh") or "all"
+    end	
 	
     if managers.job:current_level_id() == "rant_nmh_hh" then
         return self:track_attachment("rant_nmh_hh") or "all"
