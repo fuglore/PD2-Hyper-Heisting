@@ -28,6 +28,7 @@
 	<post :script_path="elementspawnenemygroup.lua" :hook_id="managers/mission/elementspawnenemygroup"/> <!-- Custom spawn group enabler -->
 	<post :script_path="elementspawnenemydummy.lua" :hook_id="managers/mission/elementspawnenemydummy"/> <!-- scripted spawns epicsauce -->
 	<post :script_path="modifiersmanager.lua" :hook_id="managers/modifiersmanager"/>	<!--offyerrocker's unit replacer, for bullshitting the nypd and lapd minifaction-->	
+	<post :script_path="musicmanager.lua" :hook_id="managers/musicmanager"/>
 	
 	<post :script_path="blackmarketmanager.lua" :hook_id="managers/blackmarketmanager"/>
 	
