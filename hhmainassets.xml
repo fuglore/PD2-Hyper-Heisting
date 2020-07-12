@@ -56,6 +56,9 @@
 	
 	<!--vanilla murky texture not shit:tm:-->
 	<texture path="units/payday2/characters/shared_textures/murkywater_df" force="true"/>
+	
+	<!-- lazily and horribly fixed his mipmaps lol -->
+	<texture path="units/payday2/characters/shared_textures/danial_df" force="true"/>
 		
 	<!--functional weapon sounds-->	
 	<unit path="units/payday2/weapons/wpn_npc_ump/wpn_npc_ump" load="true" force="true"/>
