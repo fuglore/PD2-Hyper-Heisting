@@ -2661,6 +2661,30 @@ function CopLogicTravel._set_verified_paths(data, verified_paths)
 	data.internal_data.charge_path = verified_paths.charge_path
 end
 
+function CopLogicTravel._begin_coarse_pathing(data, my_data)
+	local verify_clbk = nil
+
+	if my_data.path_safely then
+		verify_clbk = callback(CopLogicTravel, CopLogicTravel, "_investigate_coarse_path_verify_clbk")
+	end
+
+	local nav_seg = nil
+	
+	if not my_data.coarse_path_search_id then
+		my_data.coarse_path_search_id = "CopLogicTravel_coarse" .. tostring(data.key)
+	end
+
+	if data.objective.follow_unit then
+		nav_seg = data.objective.follow_unit:movement():nav_tracker():nav_segment()
+	else
+		nav_seg = data.objective.nav_seg
+	end
+
+	if data.unit:brain():search_for_coarse_path(my_data.coarse_path_search_id, nav_seg, verify_clbk) then
+		my_data.processing_coarse_path = true
+	end
+end
+
 function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 	if not CopLogicTravel.chk_group_ready_to_move(data, my_data) then
 		return

@@ -1624,6 +1624,7 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+	
 	presets.hurt_severities.team_AI = {
 		tase = false,
 		bullet = {
@@ -10399,6 +10400,8 @@ function CharacterTweakData:character_map()
 			"civ_male_scientist_01",
 			"civ_male_scientist_02",
 			"ene_akan_fbi_heavy_g36",
+			"ene_akan_fbi_heavy_g36_hh",
+			"ene_akan_fbi_heavy_r870_hh",
 			"ene_akan_fbi_shield_sr2_smg",
 			"ene_akan_fbi_spooc_asval_smg",
 			"ene_akan_fbi_swat_ak47_ass",
