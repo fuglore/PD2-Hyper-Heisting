@@ -8125,8 +8125,8 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	}
 	self.taser.weapon = presets.weapon.simple
 	self.taser.detection = presets.detection.enemymook
-	self.taser.HEALTH_INIT = 24 
-	self.taser.headshot_dmg_mul = 2
+	self.taser.HEALTH_INIT = 20 
+	self.taser.headshot_dmg_mul = 6
 	self.taser.damage.fire_damage_mul = 0.5
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.taser.move_speed = presets.move_speed.civil_consistency
@@ -10125,11 +10125,8 @@ function CharacterTweakData:_set_sm_wish()
 	--heavy swat health clamping for guaranteed two-shot-to-kill ratios
 	self.heavy_swat.DAMAGE_CLAMP_BULLET = 79
 	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 30
-	self.heavy_swat.DAMAGE_CLAMP_EXPLOSION = self.heavy_swat.DAMAGE_CLAMP_BULLET
 	self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET = 79
 	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 30
-	self.fbi_heavy_swat.DAMAGE_CLAMP_EXPLOSION = self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET
-	
 	
 	self.phalanx_minion.HEALTH_INIT = 300
 	self.phalanx_minion.DAMAGE_CLAMP_BULLET = 40
