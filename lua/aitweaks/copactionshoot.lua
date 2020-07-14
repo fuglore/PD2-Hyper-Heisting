@@ -41,6 +41,7 @@ function CopActionShoot:init(action_desc, common_data)
 
 	local weap_tweak = weapon_unit:base():weapon_tweak_data()
 	local weapon_usage_tweak = common_data.char_tweak.weapon[weap_tweak.usage]
+	self._doom_enemy = common_data.char_tweak.stop_firing_on_hurt
 	self._weapon_unit = weapon_unit
 	self._weapon_base = weapon_unit:base()
 	self._weap_tweak = weap_tweak
@@ -456,8 +457,15 @@ function CopActionShoot:update(t)
 
 		target_vec = self:_upd_ik(target_vec, fwd_dot, t)
 	end
+	
+	local shouldnt_shoot = nil
+	
+	if self._doom_enemy and ext_anim.upper_body_hurt then
+		shouldnt_shoot = true
+		log("doom")
+	end
 
-	if not ext_anim.reload and not ext_anim.equip and not ext_anim.melee then
+	if not ext_anim.reload and not ext_anim.equip and not ext_anim.melee and not shouldnt_shoot then
 		local can_melee = self._melee_weapon_data and self._common_data.allow_fire and target_vec and true or nil
 
 		if can_melee then
@@ -473,7 +481,7 @@ function CopActionShoot:update(t)
 		end
 		
 		local do_melee = self._melee_start_allowed_t and self._melee_start_allowed_t < t and can_melee and self:check_melee_start(t, self._attention, target_dis, autotarget, shoot_from_pos) and self:_chk_start_melee()
-
+		
 		if do_melee then
 			if self._autofiring then
 				self._weapon_base:stop_autofire()

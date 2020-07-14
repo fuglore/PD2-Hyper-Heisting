@@ -2123,7 +2123,7 @@ function CopDamage:sync_damage_fire(attacker_unit, damage_percent, start_dot_dan
 end
 
 function CopDamage:is_friendly_fire(unit)
-	if not unit or unit:base().is_grenade and not unit:base().is_cop_grenade then
+	if not unit or unit:base() and unit:base().is_grenade and not unit:base().is_cop_grenade then
 		return false
 	end
 

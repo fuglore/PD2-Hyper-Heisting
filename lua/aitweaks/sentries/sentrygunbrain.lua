@@ -22,7 +22,7 @@ function SentryGunBrain:_upd_detection(t)
 		return
 	end
 
-	--local delay = 1
+	local delay = 1
 	local my_SO_access_str = self._SO_access_str
 	local my_SO_access = self._SO_access
 	local my_tracker = self._unit:movement():nav_tracker()
@@ -36,7 +36,6 @@ function SentryGunBrain:_upd_detection(t)
 	local max_detection_range = self._tweak_data.DETECTION_RANGE
 	local all_attention_objects = managers.groupai:state():get_AI_attention_objects_by_filter(my_SO_access_str, my_team)
 
-	-- Lines 164-175
 	local function _distance_chk(handler, settings, attention_pos)
 		attention_pos = attention_pos or handler:get_detection_m_pos()
 		local dis_sq = mvec3_dist_sq(my_pos, attention_pos)
@@ -55,7 +54,6 @@ function SentryGunBrain:_upd_detection(t)
 		self._unit
 	}
 
-	-- Lines 180-208
 	local function _nearly_visible_chk(attention_info, detect_pos)
 		local near_pos = tmp_vec1
 

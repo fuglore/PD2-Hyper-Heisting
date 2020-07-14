@@ -99,6 +99,7 @@ function CopActionWalk:init(action_desc, common_data)
 
 		if common_data.unit:damage():has_sequence("turn_on_spook_lights") then
 			common_data.unit:damage():run_sequence_simple("turn_on_spook_lights")
+			managers.groupai:state():chk_say_enemy_chatter( self._unit, self._ext_movement:m_pos(), "cloakercontact" )
 		end
 	end
 
