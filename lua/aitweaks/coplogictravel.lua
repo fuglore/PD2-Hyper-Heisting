@@ -688,21 +688,23 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	local unit = data.unit
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
-	--log("dicks")
+	if not data.unit:base():has_tag("law") then
+		return
+	end
 	
 	if not data.attention_obj or not data.important then
-		if not data.cool and not my_data.advancing then
-			CopLogicTravel.upd_advance(data)
-		end
+		--if not data.cool and not my_data.advancing then
+		--	CopLogicTravel.upd_advance(data)
+		--end
 		
 		return
 	else
 		local definitely_not_reactions_chk = AIAttentionObject.REACT_COMBAT > data.attention_obj.reaction
 
 		if definitely_not_reactions_chk then
-			if not data.cool and not my_data.advancing then
-				CopLogicTravel.upd_advance(data)
-			end
+			--if not data.cool and not my_data.advancing then
+			--	CopLogicTravel.upd_advance(data)
+			--end
 			
 			return
 		end
@@ -2701,7 +2703,7 @@ function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 		end
 	end
 	
-	if not to_pos then
+	if not to_pos and my_data.coarse_path_index then
 		to_pos = CopLogicTravel._get_exact_move_pos(data, my_data.coarse_path_index + 1)
 	end
 	
