@@ -47,7 +47,18 @@
 	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh" />
 	<model path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh" />	
 	<cooked_physics path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh"/>
-
+	
+	<!--Medic Rifle-->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh_contour"/>	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh" />
+	<model path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh" />	
+	<cooked_physics path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_body_df" />
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_head_df" />
+	
 	<!--Light SWAT Akan SMG-->
 	<unit path="units/pd2_dlc_mad/characters/ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg" load="true"/>
 	<unit path="units/pd2_dlc_mad/characters/ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg_husk" load="true"/>	
@@ -94,11 +105,7 @@
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_swat_r870/ene_akan_cs_swat_r870" force="true" />		
 	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_shield_sr2_smg/ene_akan_fbi_shield_sr2_smg" force="true" />	
 	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass" force="true" />
-	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_heavy_ak47_ass/ene_akan_cs_heavy_ak47_ass" force="true" />
-
-	<!--Vanilla Texture Replacements-->
-	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/akan_light_df" force="true"/>
-	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/akan_heavy_df" force="true"/>	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_heavy_ak47_ass/ene_akan_cs_heavy_ak47_ass" force="true" />	
 	
 	<!--Jarey's New Akan Shield-->		
     <unit path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield/ene_acc_shield_akan" force="true" load="true"/>
@@ -159,6 +166,14 @@
 	<material_config path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" />
 	<object path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" />
     <sequence_manager path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" />
+	
+	
+	<!--Vanilla Texture Replacements-->
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/ene_soldier_akan_head_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/akan_light_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/akan_heavy_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_body_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_head_df" force="true"/>
 	
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/k63_nm" />
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/k63_shot_df" />

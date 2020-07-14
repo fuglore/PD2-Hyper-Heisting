@@ -10419,6 +10419,7 @@ function CharacterTweakData:character_map()
 			"ene_akan_cs_swat_sniper_svd_snp",
 			"ene_akan_cs_tazer_ak47_ass",
 			"ene_akan_medic_ak47_ass",
+			"ene_akan_medic_ak47_ass_hh",
 			"ene_akan_medic_r870",
 			"ene_akan_hyper_fbi_akmsu_smg",
 			"ene_akan_hyper_swat_akmsu_smg",
