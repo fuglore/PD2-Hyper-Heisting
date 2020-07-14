@@ -179,7 +179,7 @@ function CopBase:default_weapon_name()
 	elseif secrit_servis then 
 		return kmtac
 	elseif drbob and faction == "federales" then 
-		return compact5		
+		return car4		
 	elseif gang_mackas then 
 		return mark10																			
 	elseif gang_aks then 
