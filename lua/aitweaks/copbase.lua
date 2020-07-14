@@ -96,6 +96,7 @@ function CopBase:default_weapon_name()
 	or unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale")
 	or unit_name == Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
 	or unit_name == Idstring("units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1")
+	or unit_name == Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic")
 	
 	local hoxout_boss = unit_name == Idstring("units/payday2/characters/ene_fbi_boss_1/ene_fbi_boss_1")
 
@@ -178,7 +179,7 @@ function CopBase:default_weapon_name()
 	elseif secrit_servis then 
 		return kmtac
 	elseif drbob and faction == "federales" then 
-		return compact5		
+		return car4		
 	elseif gang_mackas then 
 		return mark10																			
 	elseif gang_aks then 
