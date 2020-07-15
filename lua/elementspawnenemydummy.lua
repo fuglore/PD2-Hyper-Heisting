@@ -188,7 +188,7 @@
 			["units/pd2_dlc_pex/characters/ene_male_office_cop_03/ene_male_office_cop_03"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_02/ene_male_office_cop_02",
 			["units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_01/ene_male_office_cop_01"
 		}		
-		
+
 function ElementSpawnEnemyDummy:init(...)
 	ElementSpawnEnemyDummy.super.init(self, ...)
 	local ai_type = tweak_data.levels:get_ai_group_type()
@@ -218,6 +218,14 @@ function ElementSpawnEnemyDummy:init(...)
 		end
 		
 		self._values.enemy = enemy_annoying[self._values.enemy] or self._values.enemy
+	end
+	--epic zeal sniper when things go wrong
+	if Global.game_settings and Global.game_settings.lmgmodifier == true then
+		if sniper_zulu_crackdown_XD[self._values.enemy] then
+			self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
+		end
+		
+		self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy
 	else
 		--SWART Sniper					
 		if difficulty_index <= 3 then
@@ -324,7 +332,7 @@ function ElementSpawnEnemyDummy:init(...)
 		end
 
 	
-	if job == "firestarter_1" or job == "firestarter_2" or job == "alex_3" or job == "hox_2" or job == "hox_3" then  --FBI-related heists
+	if job == "firestarter_1" or job == "firestarter_2" or job == "alex_3" or job == "hox_2" or job == "hox_3" or job == "watchdogs2" then  --FBI-related heists
 		if overkill_290_and_easywish[self._values.enemy] then
 			self._values.enemy = overkill_290_and_easywish[self._values.enemy]
 		end
