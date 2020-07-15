@@ -892,8 +892,8 @@
 	<material_config path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_sg/ene_gensec_fbiguard_sg_contour" />
 	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_sg/ene_gensec_fbiguard_sg" />
 
-	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_m4/ene_gensec_fbiguard_m4" load="true"/>
-	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_m4/ene_gensec_fbiguard_m4_husk" load="true"/>
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_mp5/ene_gensec_fbiguard_mp5" load="true"/>
+	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbiguard_mp5/ene_gensec_fbiguard_mp5_husk" load="true"/>
 	
 	<!--Gensec Sniper-->
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper" load="true"/>
