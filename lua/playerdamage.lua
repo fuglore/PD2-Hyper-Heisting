@@ -216,10 +216,10 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 			end
 		end
 		
-		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and Global.game_settings.one_down then
+		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
 			if tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_xc45" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_pager" then
 				if alive(player_unit) then
-					managers.player:set_player_state("arrested") --fbis can cuff players on shin mode
+					managers.player:set_player_state("arrested")
 				end
 			end	
 		end

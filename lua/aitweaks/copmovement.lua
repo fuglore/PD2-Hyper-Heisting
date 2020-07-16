@@ -461,7 +461,8 @@ function CopMovement:on_suppressed(state)
 	local suppression = self._suppression
 	local end_value = state and 1 or 0
 	local vis_state = self._ext_base:lod_stage()
-
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	
 	if vis_state and end_value ~= suppression.value then
 		local t = TimerManager:game():time()
 		local duration = 0.5 * math.abs(end_value - suppression.value)
@@ -495,11 +496,15 @@ function CopMovement:on_suppressed(state)
 
 					if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 						crumble_chance = 1000
+						
+						if is_shin_shootout then
+							crumble_chance = 0.25
+						end
 					end
 
 					if math.random() < crumble_chance then
 						if self._ext_anim.run and self._ext_anim.move_fwd then
-							if is_shin_shootout then
+							if math.random() < 0.5 then
 								local vec_from = temp_vec1
 								local vec_to = temp_vec2
 								local ray_params = {
@@ -627,7 +632,7 @@ function CopMovement:on_suppressed(state)
 					end
 				end
 
-				if try_something_else and is_shin_shootout and self._ext_anim.run and self._ext_anim.move_fwd and not self:chk_action_forbidden("act") then
+				if try_something_else and self._ext_anim.run and self._ext_anim.move_fwd and not self:chk_action_forbidden("act") and not is_shin_shootout then
 					local vec_from = temp_vec1
 					local vec_to = temp_vec2
 					local ray_params = {
@@ -671,13 +676,13 @@ function CopMovement:on_suppressed(state)
 					if self._ext_anim.idle then
 						if not self._active_actions[2] or self._active_actions[2]:type() == "idle" then
 							if not self:chk_action_forbidden("act") then
-								if is_shin_shootout then
+								if diff_index >= 7 then
 									if not self._ext_anim.crouch then
 										local action_desc = {
 											clamp_to_graph = true,
 											type = "act",
 											body_part = 2,
-											variant = "suppressed_reaction", --they do an unique crouching animation instead of freezing on shin shootout.
+											variant = "suppressed_reaction", --they do an unique crouching animation instead of freezing.
 											blocks = {
 												walk = -1
 											}
@@ -690,7 +695,7 @@ function CopMovement:on_suppressed(state)
 										clamp_to_graph = true,
 										type = "act",
 										body_part = 1,
-										variant = "surprised", --they freeze in their spot and play the "surprised" animation when out of shin shootout.
+										variant = "surprised", --they freeze in their spot and play the "surprised" animation.
 										blocks = {
 											walk = -1,
 											action = -1

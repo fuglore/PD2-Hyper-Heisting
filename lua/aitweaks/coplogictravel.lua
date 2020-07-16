@@ -480,15 +480,15 @@ function CopLogicTravel._upd_enemy_detection(data)
 		CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
 		
 		if new_attention then
-			if old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
-				CopLogicAttack._cancel_charge(data, my_data)
+			if new_attention.nearly_visible or new_attention.verified then
+				if old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
+					CopLogicAttack._cancel_charge(data, my_data)
 
-				if not data.unit:movement():chk_action_forbidden("walk") then
-					ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
+					if not data.unit:movement():chk_action_forbidden("walk") then
+						ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
+					end
 				end
 			end
-		elseif old_att_obj and not data.unit:movement():chk_action_forbidden("walk") then
-			ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
 		end
 		
 		if new_attention and new_reaction then 
@@ -1224,7 +1224,7 @@ function CopLogicTravel.queued_update(data)
 		return
 	end
 	
-	if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+	if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 		SpoocLogicAttack._upd_spooc_attack(data, my_data)
 	end
 
@@ -2020,7 +2020,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 	if action_type == "act" then
 		if not data.unit:in_slot(managers.slot:get_mask("criminals")) then
 			if not data.unit:character_damage():dead() and action:expired() then
-				if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 					SpoocLogicAttack._upd_spooc_attack(data, my_data)
 				end
 				CopLogicAttack._upd_aim(data, my_data)
@@ -2033,7 +2033,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
 		if not data.unit:character_damage():dead() and action:expired() then
-			if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+			if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 				SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			end
 			CopLogicAttack._upd_aim(data, my_data)
@@ -2045,7 +2045,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_charge(data, my_data)
 	
 		if not data.unit:character_damage():dead() and action:expired() then
-			if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+			if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 				SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			end
 			CopLogicAttack._upd_aim(data, my_data)
@@ -2070,7 +2070,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				my_data.retreating = nil
 				my_data.surprised = nil
 				
-				if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 					SpoocLogicAttack._upd_spooc_attack(data, my_data)
 				end
 				
@@ -2082,7 +2082,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			if action:expired() then
 				my_data.combat_cover_movement = nil
 				
-				if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 					SpoocLogicAttack._upd_spooc_attack(data, my_data)
 				end
 				
@@ -2094,7 +2094,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			if action:expired() then
 				my_data.walking_to_optimal_pos = nil
 				
-				if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 					SpoocLogicAttack._upd_spooc_attack(data, my_data)
 				end
 				
@@ -2107,7 +2107,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				my_data.walking_to_cover_shoot_pos = nil
 				my_data.at_cover_shoot_pos = true
 				
-				if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 					SpoocLogicAttack._upd_spooc_attack(data, my_data)
 				end
 				
@@ -2142,7 +2142,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 				my_data.cover_leave_t = data.t
 				
-				if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 					SpoocLogicAttack._upd_spooc_attack(data, my_data)
 				end
 				
@@ -2224,7 +2224,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
 		if not data.unit:character_damage():dead() and action:expired() then
-			if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+			if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 				SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			end
 			CopLogicAttack._upd_aim(data, my_data)
@@ -2233,7 +2233,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 	elseif action_type == "turn" then
 		if not data.unit:character_damage():dead() and action:expired() then
-			if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+			if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 				SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			end
 			CopLogicAttack._upd_aim(data, my_data)
@@ -2268,7 +2268,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		
 		--Removed the requirement for being important here.
 		if not data.unit:character_damage():dead() and action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
-			if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+			if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 				SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			end
 			CopLogicAttack._upd_aim(data, my_data)
@@ -2307,7 +2307,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_charge(data, my_data)
 		
 		if not data.unit:character_damage():dead() and action:expired() then
-			if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "heavy_spooc" or data.unit:base()._tweak_table == "shadow_spooc" or data.unit:base()._tweak_table == "spooc_titan" then
+			if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 				SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			end
 			CopLogicAttack._upd_aim(data, my_data)
@@ -2382,12 +2382,8 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	else
 		local optimal_threat_dis, threat_pos = nil
 		
-		if data.unit:base()._tweak_table == "spooc" or data.unit:base()._tweak_table == "taser" then --make sure these two boys are getting appropriate ranges
-			if diff_index <= 5 and data.unit:base()._tweak_table == "spooc" and not Global.game_settings.use_intense_AI then
-				optimal_threat_dis = 900
-			else
-				optimal_threat_dis = 1400
-			end
+		if data.unit:base():has_tag("takedown") then --make sure these two boys are getting appropriate ranges
+			optimal_threat_dis = 1500
 		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" then --charge is an aggressive tactic, so i want it actually being aggressive as possible
 			if data.attention_obj then
 				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
@@ -2459,158 +2455,35 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			end
 		end
 	end	
-		--[[if threat_pos and my_data.engage_mode then
-			local enemyseeninlast2secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < math_random(0.5, 2)
-			
-			if want_to_take_cover then
-				if not enemyseeninlast2secs then
-					min_dis = 30
-					max_dis = data.attention_obj.dis
-				else
-					min_dis = math_max(data.attention_obj.dis * 1.2, data.attention_obj.dis + 200)
-								
-					if min_dis > data.attention_obj.dis + 1000 then
-						min_dis = data.attention_obj.dis + 500
-					end
-								
-					max_dis = math_min(min_dis + 500, data.attention_obj.dis + 1000)
-								
-					if min_dis > max_dis then
-						min_dis = min_dis - max_dis
-					end
-				end
-			end
-				
-			local my_vec = my_pos - threat_pos
-			
-			if flank_cover then
-				mvec3_rot_with(my_vec, Rotation(flank_cover.angle))
-			end
-			
-			
-			local optimal_dis = my_vec:length()
-			local not_ranged_fire_group_chk = not data.tactics or not data.tactics.ranged_fire and not data.tactics.elite_ranged_fire
-
-			if want_to_take_cover and enemyseeninlast2secs then
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					if optimal_dis < my_data.weapon_range.optimal then
-						optimal_dis = optimal_dis
-
-						mvec3_set_l(my_vec, optimal_dis)
-					else
-						optimal_dis = my_data.weapon_range.optimal
-
-						mvec3_set_l(my_vec, optimal_dis)
-					end
-				else
-					if optimal_dis < my_data.weapon_range.close then
-						optimal_dis = optimal_dis
-
-						mvec3_set_l(my_vec, optimal_dis)
-					else
-						optimal_dis = my_data.weapon_range.close
-
-						mvec3_set_l(my_vec, optimal_dis)
-					end
-				end
-								
-				if not_ranged_fire_group_chk then
-					max_dis = math_max(optimal_dis + 200, my_data.weapon_range.far * 0.5)
-				else							
-					max_dis = math_max(optimal_dis + 200, my_data.weapon_range.far)
-				end
-								
-			elseif not_ranged_fire_group_chk and optimal_dis > my_data.weapon_range.close or not enemyseeninlast2secs then
-				optimal_dis = my_data.weapon_range.close
-
-				mvec3_set_l(my_vec, optimal_dis)
-
-				max_dis = my_data.weapon_range.optimal
-			elseif optimal_dis > my_data.weapon_range.optimal then
-				optimal_dis = my_data.weapon_range.optimal
-
-				mvec3_set_l(my_vec, optimal_dis)
-
-				max_dis = my_data.weapon_range.far
-			end
-			
-			local my_side_pos = threat_pos + my_vec
-
-			mvec3_set_l(my_vec, max_dis)
-
-			local furthest_side_pos = threat_pos + my_vec
-
-			if flank_cover then
-				local angle = flank_cover.angle
-				local sign = flank_cover.sign
-
-				if math_sign(angle) ~= sign then
-					angle = -angle + flank_cover.step * sign
-
-					if math_abs(angle) > 90 then
-						flank_cover.failed = true
-					else
-						flank_cover.angle = angle
-					end
-				else
-					flank_cover.angle = -angle
-				end
-			end
-			
-			local search_nav_seg = threat_area.nav_segs or search_area.nav_segs
-			local search_from_pos = data.m_pos
-			local cone_dir = nil
-
-			if data.attention_obj.is_husk_player then
-				cone_dir = data.attention_obj.unit:movement():detect_look_dir()
-			else
-				cone_dir = tmp_vec_cone_dir
-
-				if data.attention_obj.is_local_player then
-					mrot_y(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
-				else
-					mrot_z(data.attention_obj.unit:movement():m_head_rot(), cone_dir)
-				end
-			end
-
-			local cone_base = cone_top + cone_dir * 400
-			local cone_angle = nil
-
-			if flank_cover and not flank_cover.failed then
-				cone_angle = flank_cover.angle
-			else
-				cone_angle = math_lerp(90, 60, math_min(1, optimal_dis / 3000))
-			end
-
-			cover = managers.navigation:find_cover_from_threat_2(search_nav_seg, optimal_threat_dis, near_pos, threat_pos, search_from_pos, max_dis, cone_base, cone_angle, data.pos_rsrv_id)
-			
-			if cover then
-				return cover
-			end
-		end]]
 		
-		if not cover then
-			if my_data.optimal_pos then
-				
+	if not cover then
+		if my_data.optimal_pos then
+			--log("this is pog")
+			near_pos = my_data.optimal_pos
+		end
 			
 			--log("notohworm")
-			if data.tactics then
-				if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
-					cover = managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 2000, optimal_threat_dis, allow_fwd)
+		if data.tactics then
+			if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
+				cover = managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 2000, optimal_threat_dis, allow_fwd)
 					
-					if cover then
-						--log("ranged_fire")
-						return cover
-					end
+				if cover then
+					--if near_pos == my_data.optimal_pos then
+						--log("pog1")
+					--end
+					return cover
 				end
 			end
+		end
 			
 			
-			cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
+		cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
 			
-			if cover then
-				--log("eh")
-			end
+		if cover then
+			--if near_pos == my_data.optimal_pos then
+			--	log("pog2")
+			--end
+			return cover
 		end
 	end
 

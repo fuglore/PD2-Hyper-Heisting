@@ -1233,7 +1233,7 @@ end
 
 function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	local my_data = data.internal_data
-	attention = attention or data.attention_obj
+	--attention = attention or data.attention_obj
 
 	if not objective or objective.is_default then
 		return true, false

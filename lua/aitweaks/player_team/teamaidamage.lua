@@ -29,14 +29,10 @@ function TeamAIDamage:damage_tase(attack_data)
 	local diff_index = Global.game_settings and tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local tase_down_time = nil
 	
-	if diff_index <= 3 then
+	if diff_index <= 7 then
 		tase_down_time = 5
-	elseif diff_index == 4 or diff_index == 5 then
-		tase_down_time = 4
-	elseif diff_index == 6 or diff_index == 7 then
-		tase_down_time = 3.5
 	else
-		tase_down_time = 3
+		tase_down_time = 4
 	end
 	
 	if tase_down_time and Global.mutators and Global.mutators.tase_t_reduction then

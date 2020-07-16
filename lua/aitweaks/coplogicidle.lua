@@ -569,7 +569,7 @@ function CopLogicIdle._chk_relocate(data)
 		
 		local current_assault_target_area_navsegs = managers.groupai:state()._current_target_area and managers.groupai:state()._current_target_area.nav_segs or nil
 		
-		if managers.groupai:state():chk_assault_active_atm() and not recon_group then
+		if managers.groupai:state():chk_assault_active_atm() and not recon_group or Global.game_settings.one_down then
 			if current_assault_target_area_navsegs then -- this code is so awful i am fully convinced it is self-aware
 				--log("pog")
 				data.objective.in_place = nil

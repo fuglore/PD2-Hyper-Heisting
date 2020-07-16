@@ -78,12 +78,6 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
-				id = "shin",
-				icon = "cs_modifier_shoryu",
-				class = "ModifierShin",
-				data = {}
-			},
-			{
 				id = "heavies",
 				icon = "crime_spree_heavies",
 				class = "ModifierHeavies",
@@ -228,27 +222,10 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				data = {}
 			},
 			{
-				id = "assault_extender",
-				icon = "crime_spree_assault_extender",
-				class = "ModifierAssaultExtender",
-				data = {
-					duration = {
-						50,
-						"add"
-					},
-					spawn_pool = {
-						50,
-						"add"
-					},
-					deduction = {
-						4,
-						"add"
-					},
-					max_hostages = {
-						8,
-						"none"
-					}
-				}
+				id = "shin",
+				icon = "cs_modifier_shoryu",
+				class = "ModifierShin",
+				data = {}
 			},
 			{
 				id = "bouncer_nades",

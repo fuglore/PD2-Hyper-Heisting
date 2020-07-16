@@ -6333,8 +6333,8 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 4000, --cant walk and shoot past this range
-			far = 6000, --40m cut off range.
+			optimal = 3000, --cant walk and shoot past this range
+			far = 4000, --40m cut off range.
 			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
@@ -6465,8 +6465,8 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 4000, --cant walk and shoot past this range
-			far = 6000, --40m cut off range.
+			optimal = 3000, --cant walk and shoot past this range
+			far = 4000, --40m cut off range.
 			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
@@ -6617,7 +6617,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 100,
 				acc = { 
 					0,
-					0.3
+					0.8
 				},
 				recoil = { --increased recoil a tiiiiny bit to make sure it doesn't get too ballistic
 					0.2,
@@ -6635,7 +6635,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 500,
 				acc = {
 					0,
-					0.3
+					0.8
 				},
 				recoil = {
 					0.2,
@@ -6653,7 +6653,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 1000,
 				acc = { 
 					0,
-					0.3
+					0.8
 				},
 				recoil = {
 					0.1,
@@ -6671,7 +6671,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = { 
 					0,
-					0.25
+					0.6
 				},
 				recoil = { 
 					0.25,
@@ -6689,7 +6689,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 3000,
 				acc = {
 					0,
-					0.2 --acc drops
+					0.4 --acc drops
 				},
 				recoil = {
 					0.25,
