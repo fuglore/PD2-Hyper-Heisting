@@ -8240,7 +8240,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.chatter = presets.enemy_chatter.swat
 	self.fbi.steal_loot = true
 	self.fbi_pager = deep_clone(self.fbi)
-	self.fbi.access = "security"	
+	self.fbi_pager.access = "security"	
 	self.fbi_pager.has_alarm_pager = true
 	table.insert(self._enemy_list, "fbi_pager")
 	self.fbi_xc45 = deep_clone(self.fbi)
@@ -10261,7 +10261,7 @@ function CharacterTweakData:character_map()
 			"ene_heavy_swat_shield_federale_ds",
 			"ene_bex_ninja_m4",
 			"ene_bex_ninja_c45",
-		        "ene_policia_punk_bronco",
+			"ene_policia_punk_bronco",
 			"ene_policia_03"			
 		}
 	}
