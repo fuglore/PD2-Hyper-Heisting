@@ -8240,6 +8240,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.chatter = presets.enemy_chatter.swat
 	self.fbi.steal_loot = true
 	self.fbi_pager = deep_clone(self.fbi)
+	self.fbi.access = "security"	
 	self.fbi_pager.has_alarm_pager = true
 	table.insert(self._enemy_list, "fbi_pager")
 	self.fbi_xc45 = deep_clone(self.fbi)
@@ -8253,7 +8254,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.gangster_ninja = deep_clone(self.fbi)	
 	self.gangster_ninja.HEALTH_INIT = 20 --slightly more health. probably not necessary but screw you.
 	self.gangster_ninja.tags = nil
-        self.gangster_ninja.calls_in = false
+    self.gangster_ninja.calls_in = false
 	self.gangster_ninja.no_retreat = true
 	self.gangster_ninja.surrender = nil	
 	self.gangster_ninja.ecm_vulnerability = 0 --why would gangsters have headsets lol
@@ -8592,6 +8593,7 @@ end)
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
 	self.cop.HEALTH_INIT = 15
 	self.cop.headshot_dmg_mul = 16
+	self.cop.access = "security"	
 	self.cop.damage.hurt_severity = presets.hurt_severities.hordepunk
 	self.cop_moss = deep_clone(self.cop)
 	if self.tweak_data and self.tweak_data.levels then
