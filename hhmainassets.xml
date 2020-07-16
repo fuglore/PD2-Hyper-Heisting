@@ -22,6 +22,7 @@
 	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
 	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> <!--Now, give them hell.-->
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
+	<mission path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> <!--Makes Shadow Raid Murky.-->
 		
 	<!--enemy bullet impact fixes-->	
 	<object path="units/pd2_dlc_flat/characters/npc_chavez/npc_chavez" force="true" />

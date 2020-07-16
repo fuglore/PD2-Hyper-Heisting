@@ -42,6 +42,7 @@ function LevelsTweakData:init()
 	self.vit.package = {"packages/murkyassets", "packages/dlcs/vit/job_vit"}
 	self.mex.package = {"packages/murkyassets", "packages/job_mex"}
 	self.mex_cooking.package = {"packages/murkyassets", "packages/job_mex2"}
+	self.kosugi.package = {"packages/murkyassets", "packages/kosugi"}
 	
 	-- Federales heists
 	self.bex.package = {"packages/hhbex", "packages/job_bex"}
