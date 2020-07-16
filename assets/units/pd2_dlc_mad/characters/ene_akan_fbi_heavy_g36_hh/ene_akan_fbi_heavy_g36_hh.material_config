@@ -26,6 +26,13 @@
 		<bump_normal_texture 	file="units/pd2_dlc_mad/characters/shared_textures/k63_nm" mip="1"/>
 		<diffuse_texture 		file="units/pd2_dlc_mad/characters/shared_textures/k63_rifle_df" mip="1"/>
 	</material>
-
+	
+    <material render_template="opacity:CUBE_ENVIRONMENT_MAPPING:CUBE_FRESNEL:DIFFUSE_TEXTURE" decal_material="glass_breakable" name="mtr_visor" version="2">
+        <variable value="0.5 1 0.5" type="vector3" name="fresnel_settings"/>
+        <opacity_texture file="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/dark_glass_op"/>
+        <diffuse_texture file="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/tank_glass_df"/>
+        <reflection_texture type="texture" file="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/glass_reflection"/>
+    </material>
+	
     <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
 </materials>
