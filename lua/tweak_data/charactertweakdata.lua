@@ -8240,7 +8240,13 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.chatter = presets.enemy_chatter.swat
 	self.fbi.steal_loot = true
 	self.fbi_pager = deep_clone(self.fbi)
-	self.fbi_pager.access = "security"	
+	local level = Global.level_data and Global.level_data.level_id
+	if level == "kosugi" then
+		-- log("wow")
+		self.fbi_pager.access = "security"
+	else
+		self.fbi_pager.access = "fbi"	
+	end				
 	self.fbi_pager.has_alarm_pager = true
 	table.insert(self._enemy_list, "fbi_pager")
 	self.fbi_xc45 = deep_clone(self.fbi)
@@ -8302,7 +8308,13 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.speech_prefix_p2 = "n"
 	self.heavy_swat.speech_prefix_count = 4
 	self.heavy_swat.melee_weapon = "fists"
-	self.heavy_swat.access = "swat"
+	local level = Global.level_data and Global.level_data.level_id
+	if level == "kosugi" then
+		-- log("damn daniel")
+		self.heavy_swat.access = "security"
+	else
+		self.heavy_swat.access = "swat"	
+	end				
 	self.heavy_swat.dodge = presets.dodge.heavy
 	self.heavy_swat.no_arrest = true
 	self.heavy_swat.no_retreat = nil
@@ -8331,13 +8343,21 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.speech_prefix_p1 = self._prefix_data_p1.swat()
 	self.fbi_swat.speech_prefix_p2 = "n"
 	self.fbi_swat.speech_prefix_count = 4
-	self.fbi_swat.access = "swat"
 	self.fbi_swat.dodge = presets.dodge.athletic
 	self.fbi_swat.no_arrest = true
 	self.fbi_swat.no_retreat = nil
 	self.fbi_swat.chatter = presets.enemy_chatter.swat
 	self.fbi_swat.melee_weapon = "knife_1"
 	self.fbi_swat.steal_loot = true
+
+	local level = Global.level_data and Global.level_data.level_id
+	if level == "kosugi" then
+		-- log("damn daniel")
+		self.fbi_swat.access = "security"
+	else
+		-- log("wew")
+		self.fbi_swat.access = "swat"	
+	end
 	
 	table.insert(self._enemy_list, "fbi_swat")
 	
@@ -8373,6 +8393,13 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.speech_prefix_p1 = self._prefix_data_p1.heavy_swat()
 	self.fbi_heavy_swat.speech_prefix_p2 = "n"
 	self.fbi_heavy_swat.speech_prefix_count = 4
+	local level = Global.level_data and Global.level_data.level_id	
+	if level == "kosugi" then
+		-- log("damn daniel")
+		self.fbi_heavy_swat.access = "security"
+	else
+		self.fbi_heavy_swat.access = "swat"	
+	end				
 	self.fbi_heavy_swat.access = "swat"
 	self.fbi_heavy_swat.dodge = presets.dodge.heavy
 	self.fbi_heavy_swat.no_arrest = true
