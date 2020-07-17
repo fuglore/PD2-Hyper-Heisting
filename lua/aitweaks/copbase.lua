@@ -102,12 +102,11 @@ function CopBase:default_weapon_name()
 
 	local hoxout_dual = unit_name == Idstring("units/payday2/characters/ene_fbi_female_4/ene_fbi_female_4")
 	
-	local hoxout_sub =unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4")
+	local hoxout_sub = unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4")
 		
 	local hoxhud = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_2/npc_old_hoxton_prisonsuit_2")
 	
 	local give_beretta = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_1/npc_old_hoxton_prisonsuit_1")
-	or unit_name == Idstring("units/payday2/characters/ene_cop_1/ene_cop_1")
 	
 	--groups of units to modify
 	local mosconi_punks = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870") 

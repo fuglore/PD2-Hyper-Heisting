@@ -12,8 +12,8 @@ function MusicManager:jukebox_heist_specific()
         Global.music_manager.track_attachment.wwh_hh = "track_54"
     end
 	
-    if not Global.music_manager.track_attachment.rant_nmh_hh then
-        Global.music_manager.track_attachment.rant_nmh_hh = "track_63"
+    if not Global.music_manager.track_attachment.nmh_hyper then
+        Global.music_manager.track_attachment.nmh_hyper = "track_63"
     end
     
     local job_data = Global.job_manager.current_job
@@ -26,8 +26,8 @@ function MusicManager:jukebox_heist_specific()
         return self:track_attachment("wwh_hh") or "all"
     end	
 	
-    if managers.job:current_level_id() == "rant_nmh_hh" then
-        return self:track_attachment("rant_nmh_hh") or "all"
+    if managers.job:current_level_id() == "nmh_hyper" then
+        return self:track_attachment("nmh_hyper") or "all"
     end
 
 	local job_data = Global.job_manager.current_job
