@@ -872,6 +872,9 @@
 	<model path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4" />	
 	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4"/>	
 
+	<unit_mat path="units/pd2_mod_ftsu/characters/ene_acc_gensec_beret/ene_acc_gensec_beret" load="true"/>
+	<cooked_physics path="units/pd2_mod_ftsu/characters/ene_acc_gensec_beret/ene_acc_gensec_beret"/>	
+	
 	<!--Gensec Ninja C45-->
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45" load="true"/>
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45_husk" load="true"/>
