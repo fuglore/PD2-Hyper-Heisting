@@ -28,10 +28,7 @@ function ModifierHeavySniper:init(data)
 	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.murkywater, Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"))
 	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.federales, Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"))
 	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.federales, Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"))
-	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"))
-	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"))	
-	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"))	
-	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper"))		
+		
 end
 
 function ModifierHeavySniper:modify_value(id, value)

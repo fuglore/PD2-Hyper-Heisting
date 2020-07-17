@@ -145,8 +145,10 @@ function CopActionReload:init(action_desc, common_data)
 end
 
 function CopActionReload:update(t)
-	if self._execute_storm_t and not self._executed_storm and not self._converted_chk and self._ext_anim.reload and self._execute_storm_t < t then
-		self:execute_magnet_storm(t)
+	if Global.game_settings.incsmission then
+		if self._execute_storm_t and not self._executed_storm and not self._converted_chk and self._ext_anim.reload and self._execute_storm_t < t then
+			self:execute_magnet_storm(t)
+		end
 	end
 
 	if self._is_looped then

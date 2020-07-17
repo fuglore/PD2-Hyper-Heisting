@@ -2559,14 +2559,6 @@ function CopLogicTravel.upd_advance(data)
 		if my_data ~= data.internal_data then
 			return
 		end
-	elseif my_data.cover_leave_t then
-		if not my_data.turning and not unit:movement():chk_action_forbidden("walk") and not data.unit:anim_data().reload then
-			if my_data.cover_leave_t < t then
-				my_data.cover_leave_t = nil
-			elseif data.attention_obj and AIAttentionObject.REACT_SCARED <= data.attention_obj.reaction and (not my_data.best_cover or not my_data.best_cover[4]) and not unit:anim_data().crouch and (not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch) then
-				CopLogicAttack._chk_request_action_crouch(data)
-			end
-		end
 	elseif objective and (objective.nav_seg or objective.type == "follow") then
 		if my_data.coarse_path then
 			if my_data.coarse_path_index == #my_data.coarse_path then
