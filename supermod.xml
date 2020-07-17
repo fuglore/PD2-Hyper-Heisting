@@ -2,5 +2,5 @@
 <mod name="PD2THHSHIN" global_key="PD2THHSHIN">
 	<:include src="hooks.xml" />
 	<:include src="hooks2.xml" />
-	<tweak definition="damagesyncing.xml" />
+	<tweak definition="tweaks.xml" />
 </mod>

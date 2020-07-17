@@ -1,4 +1,5 @@
 {
     "menu_jukebox_insertcredit" : "Welcome to Hyper Heisting",
-    "menu_jukebox_screen_insertcredit" : "Welcome to Hyper Heisting"
+    "menu_jukebox_screen_insertcredit" : "Welcome to Hyper Heisting",
+	"menu_color_rvsb" : "Red VS Blue"
 }

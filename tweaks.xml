@@ -12,6 +12,7 @@
             <attr name="max" value="8"/>
         </target>
     </tweak>
+	
     <!--damage_melee-->
     <tweak name="settings/network" extension="network_settings">
         <search>
@@ -24,6 +25,7 @@
             <attr name="max" value="12"/>
         </target>
     </tweak>
+	
     <!--damage_simple-->
     <tweak name="settings/network" extension="network_settings">
         <search>
@@ -36,6 +38,7 @@
             <attr name="max" value="8"/>
         </target>
     </tweak>
+	
     <!--damage_tase-->
     <tweak name="settings/network" extension="network_settings">
         <search>
@@ -48,6 +51,7 @@
             <attr name="max" value="4"/>
         </target>
     </tweak>
+	
 	<!--damage_explosion_stun-->
 	<tweak name="settings/network" extension="network_settings">
         <search>
@@ -60,6 +64,7 @@
             <attr name="min" value="0"/>
         </target>
     </tweak>
+	
 	<!--damage_explosion_fire-->
 	<tweak name="settings/network" extension="network_settings">
         <search>
@@ -72,6 +77,7 @@
             <attr name="min" value="0"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -82,6 +88,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -92,6 +99,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -102,6 +110,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -112,6 +121,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -122,6 +132,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -132,6 +143,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -142,6 +154,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -152,6 +165,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -162,6 +176,7 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
 	<tweak name="settings/network" extension="network_settings">
         <search>
             <network/>
@@ -172,4 +187,42 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+
+	<!--colour grading-->
+	<tweak version="2" name="core/shaders/post_processor" extension="post_processor">
+		<search>
+			<?xml version="1.0" encoding="utf-8" ?>
+			<post_processor/>
+		</search>
+
+		<target mode="attach">
+			
+			<effect name="color_rvsb">
+				<combiner src_respect_viewport="false" dst_respect_viewport="false" diffuse_texture="low_target_6" dst="lut_target" render_template="post_color_grading_prepare" material="cg_rvsb" scriptable="lut_settings"/>
+				<combiner diffuse_texture="bb" self_illumination_texture="lut_target" dst="back_buffer" render_template="post_color_grading" material="cg_rvsb" scriptable="lut_settings"/>
+			</effect>
+
+		</target>
+	</tweak>
+
+	<tweak version="2" name="core/shaders/post_processor" extension="post_processor">
+		<search>
+			<?xml version="1.0" encoding="utf-8" ?>
+			<post_processor/>
+			<materials/>
+		</search>
+
+		<target mode="attach">
+			
+			<material name="cg_rvsb">
+				<variable name="LUT_settings_a" type="vector3" value="0 0 0"/>
+				<variable name="LUT_settings_b" type="vector3" value="0 0 0"/>
+				<variable name="contrast" type="scalar" value="0"/>
+				<reflection_texture file="core/textures/cg_he"/>
+				<filter_color_texture file="core/textures/cg_rvsb"/>
+			</material>
+		
+		</target>
+	</tweak>
+	
 </tweaks>
