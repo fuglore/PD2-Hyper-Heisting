@@ -970,85 +970,6 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 			end
 		end
 	end
-	
-	--added some extra stuff here to make sure other enemy groups get in on the fight, also added a new system so that once a flanking position is acquired for flanking teams, they'll charge, in order for flanking to actually happen instead of them just standing around in the flank cover
-	
-	if not ignore_walks and not action_taken then
-
-		local move_t_chk = not my_data.move_t or my_data.move_t < data.t
-		local charge_failed_t_chk = not my_data.charge_path_failed_t or my_data.charge_path_failed_t and data.t - my_data.charge_path_failed_t > 6
-		local flank_charge_t_chk = not my_data.next_allowed_flank_charge_t or my_data.next_allowed_flank_charge_t and my_data.next_allowed_flank_charge_t < data.t
-		local ranged_fire_group = data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire
-		local testing_move_t = true
-		
-		if my_data.walking_to_cover_shoot_pos then
-			-- nothing
-		elseif my_data.at_cover_shoot_pos then
-			if my_data.stay_out_time and my_data.stay_out_time < t or not focus_enemy.verified then
-				my_data.stay_out_time = nil
-				my_data.peek_cooldown_t = nil
-			end
-		elseif not my_data.peek_cooldown_t or my_data.peek_cooldown_t < t then 
-						
-			if in_cover then
-				if my_data.cover_test_step <= 2 then
-					local height = nil
-					
-					local low_ray, high_ray = nil
-					local threat_pos = nil
-					
-					if data.attention_obj.verified_pos then
-						threat_pos = data.attention_obj.verified_pos
-					elseif data.attention_obj.is_person then
-						threat_pos = data.attention_obj.m_head_pos
-					else
-						threat_pos = data.attention_obj.m_pos
-					end
-					
-					low_ray, high_ray = CopLogicAttack._chk_covered(data, data.m_pos, threat_pos, data.visibility_slotmask)
-					
-					if low_ray then
-						height = 80
-					else
-						height = 150
-					end
-
-					local my_tracker = unit:movement():nav_tracker()
-					local shoot_from_pos = CopLogicTravel._peek_for_pos_sideways(data, my_data, my_tracker, focus_enemy.m_pos, height)
-
-					if shoot_from_pos then
-						local path = {
-							my_tracker:position(),
-							shoot_from_pos
-						}
-						--ranged fire cops signal the start of their movement and positioning
-						if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-							if not data.unit:in_slot(16) and not data.is_converted then
-								if data.group and data.group.leader_key == data.key and data.char_tweak.chatter and data.char_tweak.chatter.ready then
-									managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "ready")
-								end
-							end
-						end
-						action_taken = CopLogicTravel._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, math_random() < 0.8 and "run" or "walk")
-					else
-						my_data.cover_test_step = my_data.cover_test_step + 1
-					end
-				end 
-			elseif my_data.at_cover_shoot_pos then
-				--ranged fire cops also signal the END of their movement and positioning
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					if not data.unit:in_slot(16) and not data.is_converted and data.char_tweak.chatter and data.char_tweak.chatter.ready then
-						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "inpos")
-					end
-				end
-				if my_data.stay_out_time and my_data.stay_out_time < t then
-					my_data.peek_cooldown_t = t + 2
-				end				
-			else
-				my_data.peek_cooldown_t = t + 2
-			end
-		end
-	end	
 end
 
 function CopLogicTravel.is_advancing(data)
@@ -1759,6 +1680,8 @@ function CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, s
 			if my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
 				CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
 			end
+			
+			return true
 		end
 	end
 end
@@ -1780,9 +1703,7 @@ function CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data, e
 		if my_data.walking_to_optimal_pos then
 			data.brain:rem_pos_rsrv("path")
 
-			--if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.follow_me and mvector3.distance(new_action_data.nav_path[#new_action_data.nav_path], data.m_pos) > 800 and not data.unit:sound():speaking(data.t) then
-			--	managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "follow_me")
-			--end
+			return true
 		end
 	end
 end
