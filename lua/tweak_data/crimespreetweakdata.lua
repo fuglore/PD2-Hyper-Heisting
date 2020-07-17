@@ -901,6 +901,34 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				id = "jolly",
 				icon = "csm_aftershock",
 				level = tweak_data.narrative.stages.jolly
+			},
+			{
+				stage_id = "watchdogs_2_n",
+				add = 10,
+				id = "watchdogs_2_n",
+				icon = "csm_watchdogs_2_n",
+				level = tweak_data.narrative.stages.watchdogs_2_n
+			},
+			{
+				stage_id = "four_stores",
+				add = 5,
+				id = "four_stores",
+				icon = "csm_four_stores",
+				level = tweak_data.narrative.stages.four_stores
+			},
+			{
+				stage_id = "shoutout_raid",
+				add = 12,
+				id = "shoutout_raid",
+				icon = "csm_shoutout_raid",
+				level = tweak_data.narrative.stages.shoutout_raid
+			},
+			{
+				stage_id = "nmh_hyper",
+				add = 20,
+				id = "nmh_hyper",
+				icon = "csm_nmh",
+				level = tweak_data.narrative.stages.nmh
 			}
 		}
 	}
