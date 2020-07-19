@@ -43,7 +43,7 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/shitfaceenvironment.custom_xml", "custom_xml", "environments/pd2_friend/pd2_friend", "environment")
 	end
 	
-	if diff_index == 8 and sex == "wwh" then
+	if diff_index == 8 and sex == "wwh_hh" then
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/albaniandeal.custom_xml", "custom_xml", "environments/pd2_wwh/pd2_wwh", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/albaniandeal_indoor.custom_xml", "custom_xml", "environments/pd2_wwh/pd2_wwh_train", "environment")
 	end
