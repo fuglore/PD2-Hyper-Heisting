@@ -3102,7 +3102,127 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 	}
 	self.enemy_spawn_groups = {}
 	
-	if difficulty_index <= 3 then
+	if Global.game_settings and Global.game_settings.use_intense_AI  then
+		self.enemy_spawn_groups.recon_squad_A = {
+			amount = {
+				2,
+				4
+			},
+			spawn = {
+				{
+					freq = 1.25,
+					amount_min = 1,
+					amount_max = 3,
+					rank = 2,
+					unit = "punk_group",
+					tactics = self._tactics.swat_rifle_flank
+				},
+				{
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "CS_swat_SMG",
+					tactics = self._tactics.swat_rifle_flank
+				}
+			}
+		}
+		self.enemy_spawn_groups.recon_squad_B = {
+			amount = {
+				3,
+				3
+			},
+			spawn = {
+				{
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "CS_swat_SMG",
+					tactics = self._tactics.swat_rifle_flank
+				},
+				{
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_LHmix",
+					tactics = self._tactics.swat_rifle_flank
+				},
+			}
+		}
+		self.enemy_spawn_groups.recon_squad_C = {
+			amount = {
+				5,
+				5
+			},
+			spawn = {
+				{
+					freq = 0.5,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					freq = 1,
+					amount_min = 1,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall_charge
+				},
+				{
+					freq = 0.5,
+					amount_max = 2,
+					rank = 2,
+					unit = "CS_swat_SMG",
+					tactics = self._tactics.shield_support_charge
+				},
+				{
+					freq = 0.5,
+					amount_max = 2,
+					rank = 2,
+					unit = "punk_group",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+			}
+		}
+		self.enemy_spawn_groups.recon_squad_D = {
+			amount = {
+				4,
+				5
+			},
+			spawn = {
+				{
+					freq = 1,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_heavy_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					freq = 1.25,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					freq = 1.25,
+					amount_min = 1,
+					amount_max = 3,
+					rank = 2,
+					unit = "CS_swat_SMG",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					freq = 1.5,
+					amount_max = 2,
+					rank = 2,
+					unit = "punk_group",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+			}
+		}
+	elseif difficulty_index <= 3 then
 		self.enemy_spawn_groups.recon_squad_A = {
 			amount = {
 				2,
@@ -3562,7 +3682,134 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if difficulty_index <= 3 then
+	if Global.game_settings and Global.game_settings.use_intense_AI  then
+		self.enemy_spawn_groups.punks_A = {
+			amount = {
+				3,
+				5
+			},
+			spawn = {
+				{
+					freq = 1.5,
+					amount_min = 2,
+					amount_max = 2,
+					rank = 2,
+					unit = "punk_group",
+					tactics = self._tactics.swat_rifle_complex
+				},
+				{
+					freq = 0.75,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_M4",
+					tactics = self._tactics.shield_support_ranged
+				},
+				{
+					freq = 0.75,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_M4",
+					tactics = self._tactics.shield_support_ranged
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall_ranged
+				}
+			}
+		}
+		self.enemy_spawn_groups.punks_B = {
+			amount = {
+				4,
+				5
+			},
+			spawn = {
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.swat_shotgun_rush_complex
+				},
+				{
+					amount_min = 1,
+					freq = 2,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_swat_M4",
+					tactics = self._tactics.swat_rifle_complex
+				},
+				{
+					freq = 2.25,
+					amount_min = 2,
+					amount_max = 3,
+					rank = 1,
+					unit = "punk_group",
+					tactics = self._tactics.swat_shotgun_rush_complex
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 3,
+					unit = "medic_M4",
+					tactics = self._tactics.swat_rifle_complex
+				}
+			}
+		}
+		self.enemy_spawn_groups.punks_C = {
+			amount = {
+				3,
+				5
+			},
+			spawn = {
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_LHmix",
+					tactics = self._tactics.swat_rifle_complex
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "CS_tazer",
+					tactics = self._tactics.tazer_charge
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_tank",
+					tactics = self._tactics.tank_rush
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_R870",
+					tactics = self._tactics.swat_shotgun_rush_complex
+				},
+				{
+					freq = 1,
+					amount_min = 2,
+					amount_max = 2,
+					rank = 1,
+					unit = "punk_group",
+					tactics = self._tactics.swat_shotgun_rush_civil
+				}
+			}
+		}
+	elseif difficulty_index <= 3 then
 		self.enemy_spawn_groups.punks_A = {
 			amount = {
 				2,
@@ -6902,7 +7149,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		fade_duration = 30
 	}
 	
-	if difficulty_index == 7 or difficulty_index == 8 then
+	if difficulty_index == 7 or difficulty_index == 8 or Global.game_settings and Global.game_settings.use_intense_AI then
 		self.besiege.assault.sustain_duration_min = {
 			360,
 			360,
@@ -6915,7 +7162,13 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 	
-	if difficulty_index <= 2 then
+	if Global.game_settings and Global.game_settings.use_intense_AI  then
+		self.besiege.assault.delay = {
+			30,
+			30,
+			30
+		}	
+	elseif difficulty_index <= 2 then
 		self.besiege.assault.delay = {
 			40,
 			40,
@@ -6947,7 +7200,13 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if difficulty_index <= 5 then
+	if Global.game_settings and Global.game_settings.use_intense_AI  then
+		self.besiege.assault.hostage_hesitation_delay = {
+			20,
+			20,
+			20	
+		}
+	elseif difficulty_index <= 5 then
 		self.besiege.assault.hostage_hesitation_delay = {
 			20,
 			20,
@@ -6986,7 +7245,20 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	end
 
 	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "pines" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
-		if difficulty_index < 7 then
+		if Global.game_settings and Global.game_settings.use_intense_AI then
+			self.besiege.assault.force_balance_mul = {
+				20,
+				24,
+				32,
+				32
+			}
+			self.besiege.assault.force_pool_balance_mul = {
+				1,
+				2,
+				4,
+				4
+			}
+		elseif difficulty_index < 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
 				20,
@@ -7013,6 +7285,19 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				4
 			}
 		end
+	elseif Global.game_settings and Global.game_settings.use_intense_AI then
+		self.besiege.assault.force_balance_mul = {
+			0.5,
+			0.75,
+			1.4,
+			1.4
+		}
+		self.besiege.assault.force_pool_balance_mul = {
+			0.5,
+			0.75,
+			1,
+			1
+		}
 	elseif difficulty_index < 7 then
 		self.besiege.assault.force_balance_mul = {
 			0.4,
@@ -7040,8 +7325,81 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			1
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings and Global.game_settings.use_intense_AI then
+		self.besiege.assault.groups = {
+			tac_swat_shotgun_rush = {
+				13.05,
+				13.05,
+				13.05
+			},
+			tac_swat_shotgun_flank = {
+				13.05,
+				13.05,
+				13.05
+			},
+			tac_swat_rifle = {
+				13.1,
+				13.1,
+				13.1
+			},
+			tac_swat_rifle_flank = {
+				13.15,
+				13.15,
+				13.15
+			},
+			punks_A = {
+				5.25,
+				5.25,
+				5.25
+			},
+			punks_B = {
+				5.25,
+				5.25,
+				5.25
+			},
+			punks_C = {
+				5.25,
+				5.25,
+				5.25
+			},
+			tac_shield_wall_ranged = {
+				3,
+				3,
+				3
+			},
+			tac_shield_wall_charge = {
+				3,
+				3,
+				3
+			},
+			tac_shield_wall = {
+				3,
+				3,
+				3
+			},
+			tac_tazer_flanking = {
+				4.95,
+				4.95,
+				4.95
+			},
+			tac_tazer_charge = {
+				4.95,
+				4.95,
+				4.95
+			},
+			FBI_spoocs = {
+				6.5,
+				6.5,
+				6.5
+			},
+			tac_bull_rush = {
+				6.50,
+				6.50,
+				6.50
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
 				11,
@@ -7642,8 +8000,41 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		5,
 		5
 	}
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings and Global.game_settings.use_intense_AI then
+		self.besiege.reenforce.groups = {
+			tac_swat_shotgun_rush = {
+				0, --22.5
+				0,
+				0
+			},
+			tac_swat_shotgun_flank = {
+				0, --20
+				0,
+				0
+			},
+			tac_swat_rifle = {
+				0, --22.5
+				0,
+				0
+			},
+			tac_swat_rifle_flank = {
+				0, --20
+				0,
+				0
+			},
+			recon_squad_B = {
+				0, --7.5
+				0,
+				0
+			},
+			punks_B = {
+				0, --7.5
+				0,
+				0
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.besiege.reenforce.groups = {
 			punks_A = {
 				0,--25
@@ -7798,7 +8189,13 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	self.besiege.recon.interval_variation = 10
 	
 	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
-		if difficulty_index <= 7 then
+		if Global.game_settings and Global.game_settings.use_intense_AI then
+			self.besiege.recon.force = {
+				0.5,
+				0.5,
+				0.5
+			}
+		elseif difficulty_index <= 7 then
 			self.besiege.recon.force = {
 				0.5,
 				0.5,
@@ -7811,6 +8208,12 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				0.5
 			}
 		end
+	elseif Global.game_settings and Global.game_settings.use_intense_AI then
+		self.besiege.recon.force = {
+			6,
+			6,
+			6
+		}
 	elseif difficulty_index < 6 then
 		self.besiege.recon.force = {
 			4,
@@ -7824,8 +8227,31 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			6
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if Global.game_settings and Global.game_settings.use_intense_AI then
+		self.besiege.recon.groups = {
+			recon_squad_B = {
+				25,
+				25,
+				25
+			},
+			recon_squad_C = {
+				25,
+				25,
+				25
+			},
+			recon_squad_D = {
+				25,
+				25,
+				25
+			},
+			recon_squad_A = {
+				25,
+				25,
+				25
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.besiege.recon.groups = {
 			tac_swat_shotgun_flank = {
 				30,

@@ -1302,7 +1302,7 @@ function CopLogicAttack._upd_combat_movement(data, ignore_walks)
 	
 	if not my_data.cover_test_step then
 		my_data.cover_test_step = 1
-	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
+	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
 		if my_data.cover_test_step ~= 1 and cover_test_step_chk then
 			my_data.cover_test_step = 1
 			--not many tactics need to be this aggressive, but hitnrun and murder are specifically for bulldozer and units which will want to get up to enemies' faces, and as such, require these.
@@ -1318,7 +1318,7 @@ function CopLogicAttack._upd_combat_movement(data, ignore_walks)
 	if my_data.stay_out_time and not my_data.at_cover_shoot_pos or my_data.stay_out_time and action_taken then
 		my_data.stay_out_time = nil
 	elseif my_data.attitude == "engage" and not my_data.stay_out_time and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
-		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
+		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
 			my_data.stay_out_time = t - 1
 			--log("interesting")
 		else

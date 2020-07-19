@@ -731,7 +731,7 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 		local t = TimerManager:game():time()
 
-		if diff_index == 8 then
+		if diff_index == 8 or Global.game_settings.use_intense_AI then
 			self._ext_damage._invulnerability_t = t + 4
 
 			if self._unit:contour() then
@@ -751,22 +751,11 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			managers.modifiers:run_func("OnEnemyHealed", nil, self._unit)
 		end
 
-		if Global.game_settings.one_down then
-			self._unit:sound():say("x01a_any_3p")
-
-			return
-		elseif damage_info.is_synced or self._tweak_data.ignore_medic_revive_animation then
+		self._unit:sound():say("x01a_any_3p")
+			
+		if damage_info.is_synced or self._tweak_data.ignore_medic_revive_animation then
 			return
 		end
-
-		local action_data = {
-			body_part = 1,
-			type = "healed",
-			client_interrupt = Network:is_client(),
-			allow_network = true
-		}
-
-		self:action_request(action_data)
 
 		return
 	elseif hurt_type == "death" and damage_info.is_synced then

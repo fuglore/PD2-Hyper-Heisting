@@ -1005,7 +1005,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	end
 	
-	if self._task_data.assault.target_areas and primary_target_area and task_data.phase ~= "fade" and task_data.phase ~= "anticipation"  and not self._activeassaultbreak and not self._feddensityhigh then
+	if task_data.phase ~= "fade" and task_data.phase ~= "anticipation"  then
 		if task_data.use_smoke_timer < t then
 			task_data.use_smoke = true
 		end
@@ -1062,7 +1062,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 end
 
-function GroupAIStateBesiege:is_smoke_grenade_active()
+function GroupAIStateBesiege:is_smoke_grenade_active() --this functions differently, check for if use_smoke IS a thing instead
 	if not self._task_data.assault.use_smoke then
 		return
 	end
@@ -1475,7 +1475,7 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 					self:detonate_smoke_grenade(detonate_pos, shooter_pos, duration, false)
 
 					task_data.use_smoke_timer = self._t + math.lerp(tweak_data.group_ai.smoke_and_flash_grenade_timeout[1], tweak_data.group_ai.smoke_and_flash_grenade_timeout[2], math.random())
-					task_data.use_smoke = false
+					task_data.use_smoke = nil
 
 					if shooter_u_data.char_tweak.chatter.smoke and not shooter_u_data.unit:sound():speaking(self._t) then
 						u_data.unit:sound():say("d01", true)	
@@ -1490,6 +1490,28 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 	end
 	
 	return nil
+end
+
+function GroupAIStateBesiege:apply_grenade_cooldown(flash)
+
+	if not self._task_data.assault then
+		return
+	end
+	
+	local task_data = self._task_data.assault
+	local duration = tweak_data.group_ai.smoke_grenade_lifetime
+	local cooldown = math.lerp(tweak_data.group_ai.smoke_and_flash_grenade_timeout[1], tweak_data.group_ai.smoke_and_flash_grenade_timeout[2], math.random())
+	
+	if flash then
+		duration = 4
+		cooldown = cooldown * 0.5
+	end
+
+	cooldown = cooldown + duration
+	
+	task_data.use_smoke_timer = self._t + cooldown
+	task_data.use_smoke = nil
+	
 end
 
 function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, detonate_pos)
@@ -1719,15 +1741,6 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 
 			group.objective.moving_in = true
 			group.objective.moved_in = true
-
-			if next(current_objective.target_area.criminal.units) then
-				self:_chk_group_use_smoke_grenade(group, {
-					use_smoke = true,
-					target_areas = {
-						grp_objective.area
-					}
-				})
-			end
 		end
 	end
 end
@@ -2087,21 +2100,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local used_grenade = nil
 
 			if push then
-
-				if not used_grenade or used_grenade == nil then
-					used_grenade = self:_chk_group_use_smoke_grenade(group, self._task_data.assault, nil)
-				end
-				
-				if not used_grenade or used_grenade == nil then
-					used_grenade = self:_chk_group_use_flash_grenade(group, self._task_data.assault, nil)
-				end
-				
-				if not used_grenade then
-					--log("group doesnt have tactic for this")
-				elseif used_grenade then
-					--log("cool")
-				end
-
 				self:_voice_move_in_start(group)
 			end
 

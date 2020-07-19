@@ -766,7 +766,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	
 	if not my_data.cover_test_step then
 		my_data.cover_test_step = 1
-	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
+	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
 		if my_data.cover_test_step ~= 1 and cover_test_step_chk then
 			my_data.cover_test_step = 1
 			--not many tactics need to be this aggressive, but hitnrun and murder are specifically for bulldozer and units which will want to get up to enemies' faces, and as such, require these.
@@ -782,7 +782,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	if my_data.stay_out_time and not my_data.at_cover_shoot_pos or my_data.stay_out_time and action_taken then
 		my_data.stay_out_time = nil
 	elseif my_data.attitude == "engage" and not my_data.stay_out_time and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
-		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.aggroAI then
+		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
 			my_data.stay_out_time = t - 1
 			--log("interesting")
 		else
@@ -808,6 +808,8 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 		end
 	end
 	
+	local do_something_else = true
+	
 	if not ignore_walks then
 		if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 			if not action_taken then
@@ -817,6 +819,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 					-- nothing
 				elseif my_data.optimal_path then
 					action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+					do_something_else = nil
 				elseif my_data.optimal_pos and focus_enemy.nav_tracker then
 					local to_pos = my_data.optimal_pos
 					my_data.optimal_pos = nil
@@ -889,13 +892,14 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 				end
 			end
 		else
-			if data.unit:base():has_tag("takedown") then
+			if data.unit:base():has_tag("takedown") or Global.game_settings.one_down then
 				if my_data.pathing_to_optimal_pos then
 					-- Nothing
 				elseif my_data.walking_to_optimal_pos then
 					-- nothing
 				elseif my_data.optimal_path then
 					action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+					do_something_else = nil
 				elseif focus_enemy.unit then
 					my_data.pathing_to_optimal_pos = true
 					my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
@@ -910,6 +914,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 				elseif my_data.optimal_path then
 					--my_data.aggro_move_t = t + math.random(0, 1.25)
 					action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+					do_something_else = nil
 				elseif my_data.optimal_pos and focus_enemy.nav_tracker then
 					local to_pos = my_data.optimal_pos
 					my_data.pathing_to_optimal_pos = true
@@ -919,19 +924,29 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 			end
 		end
 	end
+	
+	if not do_something_else then
+		return true
+	end
 				
 	if not ignore_walks then
 		if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify then
-			action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
+			action_taken = CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
+			do_something_else = nil
 			if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
 			end
 		end
 	end
 	
+	if not do_something_else then
+		return true
+	end
+	
 	if not action_taken and not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and CopLogicAttack._can_move(data) and data.attention_obj.verified and not spoocavoidancemovementqualify then
 		if data.is_suppressed and data.t - data.unit:character_damage():last_suppression_t() < 0.7 then
 			action_taken = CopLogicBase.chk_start_action_dodge(data, "scared")
+			do_something_else = nil
 			if data.char_tweak.chatter and data.char_tweak.chatter.dodge then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
 			end
@@ -961,6 +976,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 
 			if dodge and focus_enemy.aimed_at then
 				action_taken = CopLogicBase.chk_start_action_dodge(data, "preemptive")
+				do_something_else = nil
 				if data.char_tweak.chatter and data.char_tweak.chatter.dodge then
 					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
 				end
@@ -1157,9 +1173,15 @@ function CopLogicTravel.queued_update(data)
 		return
 	end
 	
-	if data.unit:base():has_tag("law") and my_data.has_advanced_once and data.important then
+	if data.unit:base():has_tag("law") and my_data.has_advanced_once then
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-			CopLogicTravel._upd_combat_movement(data)
+			if data.important or data.unit:base():has_tag("special") then
+				CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
+				CopLogicTravel._upd_combat_movement(data)
+				if managers.groupai:state():is_smoke_grenade_active() then
+					CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
+				end
+			end
 		end
 	end
 	
@@ -1675,6 +1697,33 @@ function CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, s
 		if my_data.advancing then
 			data.brain:rem_pos_rsrv("path")
 			
+			if data.tactics then
+				if data.objective.pos and my_data.coarse_path and my_data.coarse_path_index then
+					local cur_index = my_data.coarse_path_index
+					local total_nav_points = #my_data.coarse_path
+					
+					if cur_index == total_nav_points - 1 then
+						local flash = nil
+						if data.tactics.smoke_grenade or data.tactics.flash_grenade then
+							if data.tactics.smoke_grenade and data.tactics.flash_grenade then
+								local flashchance = math.random()
+								
+								if flashchance < 0.5 then
+									flash = true
+								end
+							else
+								if data.tactics.flash_grenade then
+									flash = true
+								end
+							end
+							
+							CopLogicBase.do_grenade(data, data.objective.pos + math.UP * 5, flash)
+						end
+					end
+				end
+			end
+			
+			
 			local notdelayclbksornotdlclbks_chk = not my_data.delayed_clbks or not my_data.delayed_clbks[my_data.cover_update_task_key]
 			my_data.has_advanced_once = true
 			if my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
@@ -1835,7 +1884,29 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	end
 end
 
-function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, engage, assault_break)
+function CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
+	local my_tracker = data.unit:movement():nav_tracker()
+	local reservation = {
+		radius = 30,
+		position = data.m_pos,
+		filter = data.pos_rsrv_id
+	}
+
+	if not managers.navigation:is_pos_free(reservation) then
+		local to_pos = CopLogicTravel._get_pos_on_wall(data.m_pos, 500)
+
+		if to_pos then
+			local path = {
+				my_tracker:position(),
+				to_pos
+			}
+
+			CopLogicTravel._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
+		end
+	end
+end
+
+function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, engage, assault_break)
 
 	local pantsdownchk = nil
 	
@@ -1918,6 +1989,24 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 					
 				if my_data.retreating then
 					my_data.surprised = true
+					
+					local flash = nil
+					
+					if data.tactics.smoke_grenade or data.tactics.flash_grenade then
+						if data.tactics.smoke_grenade and data.tactics.flash_grenade then
+							local flashchance = math.random()
+								
+							if flashchance < 0.5 then
+								flash = true
+							end
+						else
+							if data.tactics.flash_grenade then
+								flash = true
+							end
+						end
+							
+						CopLogicBase.do_grenade(data, data.m_pos + math.UP * 5, flash, true)
+					end
 
 					return true
 				end
@@ -2501,6 +2590,8 @@ function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 		to_pos = CopLogicTravel._get_exact_move_pos(data, my_data.coarse_path_index + 1)
 	end
 	
+	my_data.advance_pos = to_pos
+	
 	my_data.processing_advance_path = true
 	local prio = CopLogicTravel.get_pathing_prio(data)
 	local nav_segs = CopLogicTravel._get_allowed_travel_nav_segs(data, my_data, to_pos)
@@ -2548,6 +2639,8 @@ function CopLogicTravel.upd_advance(data)
 			end
 		end
 	elseif my_data.advance_path then
+		
+		
 		CopLogicTravel._chk_begin_advance(data, my_data)
 
 		if my_data.advancing and my_data.path_ahead then
