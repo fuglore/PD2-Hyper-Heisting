@@ -125,12 +125,12 @@ function CopLogicBase.do_grenade(data, pos, flash, drop)
 	return true
 end
 
-function CopLogicBase.do_smart_grenade(data, my_data)
-	if not data.attention_obj then
-		--log("No focus_enemy! Fuck!?")
+function CopLogicBase.do_smart_grenade(data, my_data, focus_enemy)
+	
+	if not focus_enemy then
 		return
 	end
-
+	
 	if data.is_converted then
 		--log("Converted enemy.")
 		return
@@ -173,8 +173,6 @@ function CopLogicBase.do_smart_grenade(data, my_data)
 			flash = true
 		end
 	end
-
-	local focus_enemy = data.attention_obj
 
 	if data.objective then
 		local attitude = data.objective.attitude or "avoid"

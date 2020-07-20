@@ -9849,7 +9849,7 @@ end
 --DS setup, the 3rd Strike is what counts. (3RD STR)
 
 function CharacterTweakData:_set_sm_wish()
-	self:_multiply_all_hp(4, 1)
+	self:_multiply_all_hp(5, 0.75)
 	self:_set_characters_crumble_chance(0.25, 0.15, 0.6)
 	
 	self.tank.HEALTH_INIT = 1400
