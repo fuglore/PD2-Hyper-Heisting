@@ -47,13 +47,8 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	local my_data = {
 		unit = data.unit
 	}
-	data.internal_data = my_data
-	my_data.detection = data.char_tweak.detection.combat
 	
-	--if Global.game_settings.thethreekings then
-	--	log("oh worm")
-	--end
-	--New times are coming, ngl.
+	my_data.detection = data.char_tweak.detection.combat
 	
 	if old_internal_data then
 		my_data.turning = old_internal_data.turning
@@ -63,6 +58,8 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 
 		CopLogicAttack._set_best_cover(data, my_data, old_internal_data.best_cover)
 	end
+	
+	data.internal_data = my_data
 	
 	if prefix ~= "empty" and is_radio_cop then
 		my_data.radio_voice = true

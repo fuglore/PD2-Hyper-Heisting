@@ -1178,7 +1178,7 @@ function CopLogicTravel.queued_update(data)
 			if data.important or data.unit:base():has_tag("special") then
 				--CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
 				CopLogicTravel._upd_combat_movement(data)
-				if managers.groupai:state():is_smoke_grenade_active() then
+				if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
 					CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
 				end
 			end

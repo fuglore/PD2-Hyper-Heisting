@@ -125,7 +125,6 @@ function CopLogicBase.do_grenade(data, pos, flash, drop)
 	return true
 end
 
-
 function CopLogicBase.do_smart_grenade(data, my_data, focus_enemy)
 
 	if not focus_enemy then
