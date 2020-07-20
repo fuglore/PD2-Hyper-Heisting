@@ -197,7 +197,7 @@ function ElementSpawnEnemyDummy:init(...)
 	local job = Global.level_data and Global.level_data.level_id
 		
 	if ai_type == "america" then
-		if difficulty_index == 8 then --GenSec over FBI
+		if difficulty_index == 8 and not job == "wwh" then --GenSec over FBI, doesn't apply to alaskan deal
 			if sm_wish[self._values.enemy] then
 				self._values.enemy = sm_wish[self._values.enemy]
 			end
