@@ -108,8 +108,8 @@ function CopLogicBase.do_grenade(data, pos, flash, drop)
 	else
 		managers.groupai:state():detonate_smoke_grenade(pos, data.unit:movement():m_head_pos(), duration, flash)
 		managers.groupai:state():apply_grenade_cooldown(flash)
-		
-		if data.char_tweak.chatter and data.char_tweak.chatter.smoke then
+
+		if not drop and data.char_tweak.chatter and data.char_tweak.chatter.smoke then
 			data.unit:sound():say("d01", true)	
 		end
 	end
@@ -125,9 +125,16 @@ function CopLogicBase.do_grenade(data, pos, flash, drop)
 	return true
 end
 
+
 function CopLogicBase.do_smart_grenade(data, my_data, focus_enemy)
-	
+
 	if not focus_enemy then
+		--log("No focus_enemy sent! Fuck!?")
+		return
+	end
+	
+	if not data.tactics or data.unit:base().has_tag and not data.unit:base():has_tag("law") then
+		--log("Invalid enemy.")
 		return
 	end
 	
@@ -135,124 +142,136 @@ function CopLogicBase.do_smart_grenade(data, my_data, focus_enemy)
 		--log("Converted enemy.")
 		return
 	end
-
-	if not data.objective then
-		--log("Unit has no objective.")
-		return
-	end
-
-	if not data.unit:base().has_tag or not data.unit:base():has_tag("law") then
-		--log("Unit isn't a cop.")
-		return
-	end
-
-	if not data.tactics or not data.tactics.smoke_grenade or not data.tactics.flash_grenade then
-		--log("Invalid enemy.")
-		return
-	end
-
+	
 	if not managers.groupai:state():is_smoke_grenade_active() then --this function would be better named "are grenades allowed"
-		return --move this to the top after making sure you're not calling this function for invalid units in the first place
+		return
 	end
-
-	--local t = data.t
-	--local enemy_visible = focus_enemy.verified
-	--local enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < 2
+	
+	local t = data.t
+	local enemy_visible = focus_enemy.verified
+	local enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < 2
 	--local enemy_visible_softer = focus_enemy.verified_t and t - focus_enemy.verified_t < 15
-
+	
 	local flash = nil
-
+	
 	if data.tactics.smoke_grenade or data.tactics.flash_grenade then
 		if data.tactics.smoke_grenade and data.tactics.flash_grenade then
 			local flashchance = math.random()
-
+									
 			if flashchance < 0.5 then
 				flash = true
 			end
-		elseif data.tactics.flash_grenade then
-			flash = true
+		else
+			if data.tactics.flash_grenade then
+				flash = true
+			end
 		end
+	else
+		return
 	end
-
+	
+	local do_something_else = true
+	
 	if data.objective then
 		local attitude = data.objective.attitude or "avoid"
-
+		
 		if data.tactics.flank then
 			if attitude == "avoid" and not flash then
 				if focus_enemy.verified and focus_enemy.aimed_at and focus_enemy.dis < 2000 then
 					if my_data.walking_to_optimal_pos and my_data.optimal_pos then
 						if CopLogicBase.do_grenade(data, my_data.optimal_pos + math.UP * 5, flash, nil) then
 							log("reason1")
-							return true
+							do_something_else = nil
 						end
 					elseif my_data.advancing and my_data.advance_pos then
 						if CopLogicBase.do_grenade(data, my_data.advance_pos + math.UP * 5, flash, nil) then
 							log("reason2")
-							return true
+							do_something_else = nil
 						end
 					end
 				end
-			elseif my_data.optimal_pos and my_data.walking_to_optimal_pos and mvec3_dis(my_data.optimal_pos, focus_enemy.m_pos) < 600 then
-				if flash then
-					if CopLogicBase.do_grenade(data, my_data.optimal_pos + math.UP * 10, flash, nil) then
-						log("reason3")
-						return true
+			else
+				if my_data.optimal_pos and my_data.walking_to_optimal_pos and mvec3_dis(my_data.optimal_pos, focus_enemy.m_pos) < 600 then
+					if flash then
+						if CopLogicBase.do_grenade(data, my_data.optimal_pos + math.UP * 10, flash, nil) then
+							log("reason3")
+							do_something_else = nil
+						end
+					else
+						if CopLogicBase.do_grenade(data, my_data.optimal_pos + math.UP * 5, flash, nil) then
+							log("reason4")
+							do_something_else = nil
+						end
 					end
-				elseif CopLogicBase.do_grenade(data, my_data.optimal_pos + math.UP * 5, flash, nil) then
-					log("reason4")
-					return true
 				end
 			end
 		end
-
+		
+		if not do_something_else then
+			return true
+		end
+		
 		if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
 			if not flash then
 				if my_data.firing and focus_enemy.verified then
 					if data.is_suppressed or focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 2 then
 						if CopLogicBase.do_grenade(data, focus_enemy.m_pos + math.UP * 5, flash, nil) then
 							log("reason5")
-							return true
+							do_something_else = nil
 						end
 					end
 				end
-			elseif data.tactics.elite_ranged_fire and focus_enemy.verified and focus_enemy.dis < 2000 then
-				if focus_enemy.is_person then
-					local area = managers.groupai:state():get_area_from_nav_seg_id(focus_enemy.nav_tracker:nav_segment())
-
-					if area and area.pos and CopLogicBase.do_grenade(data, area.pos + math.UP * 10, flash, nil) then
-						log("reason6")
-						return true
+			else
+				if data.tactics.elite_ranged_fire and focus_enemy.verified and focus_enemy.dis < 2000 then
+					if focus_enemy.is_person then
+						local area = managers.groupai:state():get_area_from_nav_seg_id(focus_enemy.nav_tracker:nav_segment())
+						if CopLogicBase.do_grenade(data, area.pos + math.UP * 10, flash, nil) then
+							log("reason6")
+							do_something_else = nil
+						end
 					end
 				end
 			end
 		end
-
+					
+		if not do_something_else then
+			return true
+		end
+						
 		if focus_enemy.dis < 1500 and CopLogicTravel._chk_close_to_criminal(data, my_data) then
 			local pos_to_use = nil
-
+					
 			if my_data.advance_pos and mvec3_dis(my_data.advance_pos, focus_enemy.m_pos) < 600 then
 				pos_to_use = my_data.advance_pos
 			elseif my_data.optimal_pos and mvec3_dis(my_data.optimal_pos, focus_enemy.m_pos) < 600 then
 				pos_to_use = my_data.optimal_pos
 			end
-
+					
 			if pos_to_use then
 				if flash then
 					if CopLogicBase.do_grenade(data, pos_to_use + math.UP * 10, flash, nil) then
 						log("reason7")
-						return true
+						do_something_else = nil
 					end
-				elseif CopLogicBase.do_grenade(data, pos_to_use + math.UP * 5, flash, nil) then
-					log("reason8")
-					return true
+				else
+					if CopLogicBase.do_grenade(data, pos_to_use + math.UP * 5, flash, nil) then
+						log("reason8")
+						do_something_else = nil
+					end
 				end
 			end
 		end
 	end
-
-	--log("Couldn't find suitable reason.")
-	return
-end
+	
+	if not do_something_else then
+		--log("found appropriate grenade throwing thingy!")
+		return true
+	else
+		--log("couldnt find suitable reason")
+		return
+	end
+	
+end 
 
 function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 	local old_att_obj = data.attention_obj
