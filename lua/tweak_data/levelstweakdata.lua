@@ -45,9 +45,9 @@ function LevelsTweakData:init()
 	self.kosugi.package = {"packages/murkyassets", "packages/kosugi"}
 	
 	-- Federales heists
-	self.bex.package = {"packages/hhbex", "packages/job_bex"}
-	self.pex.package = {"packages/hhbex", "packages/job_pex"}
-	self.skm_bex.package = {"packages/hhbex", "packages/dlcs/skm/job_bex_skm"}
+	self.bex.package = {"packages/mexicoassets", "packages/job_bex"}
+	self.pex.package = {"packages/mexicoassets", "packages/job_pex"}
+	self.skm_bex.package = {"packages/mexicoassets", "packages/dlcs/skm/job_bex_skm"}
 	
 	--fix missing ganster vo, ty rino
 	self.short2_stage1.package = {"packages/job_short2_stage1", "levels/narratives/dentist/mia/stage2/world_sounds"}

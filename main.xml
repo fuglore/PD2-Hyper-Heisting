@@ -13,5 +13,5 @@
 	<Package id="packages/hhalbaniancontent" file="albanianchontent.xml" use_clbk="self:LoadAlbAssets"/>
 	<Package id="packages/akanassets" file="hhnewreapers.xml" use_clbk="self:DebugLoadAssets"/>	
 	<Package id="packages/murkyassets" file="psc.xml" use_clbk="self:DebugLoadAssets"/>
-	<Package id="packages/hhbex" file="bex.xml" use_clbk="self:DebugLoadAssets"/>	
+	<Package id="packages/mexicoassets" file="bex.xml" use_clbk="self:DebugLoadAssets"/>	
 </table>
