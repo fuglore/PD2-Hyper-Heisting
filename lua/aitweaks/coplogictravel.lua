@@ -1176,7 +1176,7 @@ function CopLogicTravel.queued_update(data)
 	if data.unit:base():has_tag("law") and my_data.has_advanced_once then
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 			if data.important or data.unit:base():has_tag("special") then
-				CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
+				--CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
 				CopLogicTravel._upd_combat_movement(data)
 				if managers.groupai:state():is_smoke_grenade_active() then
 					CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
@@ -2392,44 +2392,14 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	else
 		local optimal_threat_dis, threat_pos = nil
 		
-		if data.unit:base():has_tag("takedown") then --make sure these two boys are getting appropriate ranges
-			optimal_threat_dis = 1500
-		elseif data.tactics and data.tactics.charge and data.objective.attitude == "engage" then --charge is an aggressive tactic, so i want it actually being aggressive as possible
-			if data.attention_obj then
-				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
-					optimal_threat_dis = 120
-				else
-					optimal_threat_dis = data.internal_data.weapon_range.close * 0.5
-				end
-			else
-				optimal_threat_dis = 120
-			end
-		elseif data.objective.attitude == "engage" and data.tactics and not data.tactics.charge then --everything else is not required to find it.
-			if data.attention_obj then
-				if not data.attention_obj.verified_t or data.attention_obj.verified_t - data.t < 2 then
-					optimal_threat_dis = 120
-					allow_fwd = true
-				else
-					if diff_index <= 5 and not Global.game_settings.use_intense_AI then
-						optimal_threat_dis = data.internal_data.weapon_range.optimal
-					else
-						optimal_threat_dis = data.internal_data.weapon_range.close
-					end
-				end
-			else
-				optimal_threat_dis = 120
-				allow_fwd = true
-			end
-		else
-			optimal_threat_dis = data.internal_data.weapon_range.far
-			allow_fwd = true
-		end
-		
-		near_pos = near_pos or search_area.pos
+		optimal_threat_dis = 100
+		allow_fwd = true
 		
 		if my_data.optimal_pos then
 			near_pos = my_data.optimal_pos
 		end
+		
+		near_pos = near_pos or search_area.pos
 		
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.is_person and data.attention_obj.verified then
 			threat_pos = data.attention_obj.m_pos
@@ -2468,31 +2438,12 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		
 	if not cover then
 		if my_data.optimal_pos then
-			--log("this is pog")
 			near_pos = my_data.optimal_pos
-		end
-			
-			--log("notohworm")
-		if data.tactics then
-			if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
-				cover = managers.navigation:find_cover_near_pos_1(near_pos, threat_pos, 2000, optimal_threat_dis, allow_fwd)
-					
-				if cover then
-					--if near_pos == my_data.optimal_pos then
-						--log("pog1")
-					--end
-					return cover
-				end
-			end
-		end
-			
+		end		
 			
 		cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
 			
 		if cover then
-			--if near_pos == my_data.optimal_pos then
-			--	log("pog2")
-			--end
 			return cover
 		end
 	end

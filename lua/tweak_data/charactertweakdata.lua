@@ -1714,10 +1714,10 @@ function CharacterTweakData:_presets(tweak_data)
 	--Custom sniper preset to make them work differently, they work as a mini turret of sorts, dealing big damage with good accuracy, standing in their line of fire isn't wise as they'll suppress the shit out of you and take off armor very quickly.
 	presets.weapon.rhythmsniper = deep_clone(presets.weapon.sniper)
 	presets.weapon.rhythmsniper.is_rifle.autofire_rounds = nil	
-	presets.weapon.rhythmsniper.is_rifle.focus_delay = 5  
+	presets.weapon.rhythmsniper.is_rifle.focus_delay = 2  
 	presets.weapon.rhythmsniper.is_rifle.aim_delay = {
-		0.8,
-		0.8
+		0.3,
+		0.3
 	}
 	presets.weapon.rhythmsniper.is_rifle.FALLOFF = {
 		{
@@ -9998,7 +9998,7 @@ function CharacterTweakData:_set_sm_wish()
 	self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--sniper setup
-	self.sniper.weapon.is_rifle.focus_delay = 3
+	self.sniper.weapon.is_rifle.focus_delay = 1.5
 	self.sniper.weapon.is_rifle.aim_delay = {0.64, 0.64}
 	self.sniper.weapon.is_rifle.FALLOFF = {
 		{
