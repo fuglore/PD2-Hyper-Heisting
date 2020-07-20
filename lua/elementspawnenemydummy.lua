@@ -258,7 +258,7 @@ function ElementSpawnEnemyDummy:init(...)
 		end
 		
 	--NYPD Cops Spawn Overwrite
-		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "flat_hh" or job == "dinner" or job == "nmh_hyper" then  
+		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "flat_hh" or job == "dinner" or job == "no_mercy_hypered" then  
 			 if nypd_beatpricks[self._values.enemy] then
 				self._values.enemy = nypd_beatpricks[self._values.enemy]
 			 end

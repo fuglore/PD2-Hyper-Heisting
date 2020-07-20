@@ -71,7 +71,6 @@
 	<!--functional weapon sounds-->	
 	<unit path="units/payday2/weapons/wpn_npc_ump/wpn_npc_ump" load="true" force="true"/>
 	<unit path="units/payday2/weapons/wpn_npc_c45/wpn_npc_c45" load="true" force="true"/>
-	<unit path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/wpn_npc_sawnoff_shotgun" load="true" force="true"/>
 	<unit path="units/payday2/weapons/wpn_npc_c45/wpn_npc_x_c45" load="true" force="true"/>
 
 	<!--jarey's reaper weapons-->

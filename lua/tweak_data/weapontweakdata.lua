@@ -190,7 +190,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	--punk mossberg
 	self.mossberg_npc.usage = "is_shotgun_mag"
 	self.mossberg_npc.hold = "rifle"
-	self.mossberg_npc.sounds.prefix = "huntsman_npc"
 	self.mossberg_npc.DAMAGE = 2.5
 	self.mossberg_npc.CLIP_AMMO_MAX = 2
 	
