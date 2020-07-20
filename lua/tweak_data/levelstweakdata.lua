@@ -27,7 +27,7 @@ function LevelsTweakData:init()
 		federales = federales
 	}
     self.chill_combat.group_ai_state = "besiege"
-	self.mad.package = {"packages/hhnewreapers", "packages/lvl_mad"}	
+	self.mad.package = {"packages/akanassets", "packages/lvl_mad"}	
 	
 	-- Murkywater Heists
 	self.shoutout_raid.package = {"packages/murkyassets", "packages/vlad_shout"}
