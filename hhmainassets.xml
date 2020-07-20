@@ -5,6 +5,22 @@
 	<!--Base Game Asset Replacements-->
 	<material_config path="units/pd2_dlc_friend/nature/terrain/sfm_backdrop" force="true"/>
 	<texture path="units/payday2/characters/shared_textures/spook_il" />
+
+	<!-- Gensec Security: Beret Poppin' -->
+	<unit path="units/pd2_dlc1/characters/ene_security_gensec_1/ene_security_gensec_1" load="true" force="true" />
+	<unit path="units/pd2_dlc1/characters/ene_security_gensec_1/ene_security_gensec_1_husk" load="true" force="true" />	
+	<object path="units/pd2_dlc1/characters/ene_security_gensec_1/ene_security_gensec_1" force="true" />	
+	<model path="units/pd2_dlc1/characters/ene_security_gensec_1/ene_security_gensec_1" force="true" />	
+	<material_config path="units/pd2_dlc1/characters/ene_security_gensec_1/ene_security_gensec_1" force="true" />	
+	<material_config path="units/pd2_dlc1/characters/ene_security_gensec_1/ene_security_gensec_1_contour" force="true" />	
+
+	<unit path="units/pd2_dlc1/characters/ene_security_gensec_2/ene_security_gensec_2" load="true" force="true" />
+	<unit path="units/pd2_dlc1/characters/ene_security_gensec_2/ene_security_gensec_2_husk" load="true" force="true" />	
+	<object path="units/pd2_dlc1/characters/ene_security_gensec_2/ene_security_gensec_2" force="true" />	
+	<model path="units/pd2_dlc1/characters/ene_security_gensec_2/ene_security_gensec_2" force="true" />	
+	
+	<unit_mat path="units/pd2_dlc1/characters/ene_acc_gensec_beret_but_red/ene_acc_gensec_beret_but_red" load="true"/>
+	<cooked_physics path="units/pd2_dlc1/characters/ene_acc_gensec_beret_but_red/ene_acc_gensec_beret_but_red"/>	
 	
 	<!--sniper helmet popping-->
 	<unit_mat path="units/payday2/characters/ene_acc_sniper_cap/ene_acc_sniper_cap" load="true"/>
