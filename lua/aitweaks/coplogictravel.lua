@@ -1118,13 +1118,14 @@ function CopLogicTravel.queued_update(data)
 	local objective = data.objective or nil
     data.t = TimerManager:game():time()
     my_data.close_to_criminal = nil
+	my_data.objective_outdated = nil
     local delay = CopLogicTravel._upd_enemy_detection(data)
 	
 	local focus_enemy = data.attention_obj
 	
-	if not data.is_converted and data.unit:base():has_tag("law") and data.tactics or Global.game_settings.one_down and data.unit:base():has_tag("law") then
+	if not data.is_converted and data.unit:base():has_tag("law") then
 		if objective then --currently trying to get rawed by 9 lonewolves at the burger king drive-in in front of 81 other cops
-			if Global.game_settings.one_down or data.tactics.lonewolf then
+			if Global.game_settings.one_down or data.tactics and data.tactics.lonewolf then
 				if objective.follow_unit then
 					if objective.follow_unit:brain() and objective.follow_unit:brain().objective and objective.follow_unit:brain():objective() ~= nil then
 						local new_objective = objective.follow_unit:brain():objective() --ignore following the "follow_unit", copy their objective and become standalone instead in order to execute pinches and flanking manuevers freely
@@ -1137,8 +1138,22 @@ function CopLogicTravel.queued_update(data)
 					end
 				end
 			end
+			
+			if objective.type == "defend_area" and objective.grp_objective and objective.grp_objective.type ~= "retire" or objective.type == "hunt" then
+				if CopLogicIdle._chk_relocate(data) then
+					my_data.objective_outdated = true
+					--log("fuck you")
+				else
+					my_data.objective_outdated = nil
+					--log("nani")
+				end
+			end
 		end
 	end
+	
+	if data.internal_data ~= my_data then
+    	return
+    end
 	
 	if my_data.tasing then
 		action_taken = action_taken or CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
@@ -1376,6 +1391,17 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	if not my_objective.grp_objective then
 		return true
 	end
+	
+	if not my_objective.area then
+	
+		if my_objective.pos then
+			return true
+		else
+			return
+		end
+	end
+	
+	
 
 	local my_dis = mvector3.distance_sq(my_objective.area.pos, data.m_pos)
 
@@ -1388,7 +1414,11 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	for u_key, u_data in pairs(data.group.units) do
 		if u_key ~= data.key then
 			local his_objective = u_data.unit:brain():objective()
-
+			
+			if his_objective and not his_objective.area then
+				return true
+			end
+			
 			if his_objective and his_objective.grp_objective == my_objective.grp_objective and not his_objective.in_place then
 				local his_dis = mvector3.distance_sq(his_objective.area.pos, u_data.m_pos)
 
@@ -1970,12 +2000,7 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 					--log("hitnrun or eliteranged just backed up properly")
 				--end
 					
-				if data.tactics and data.tactics.elite_ranged_fire then
-					if not data.unit:in_slot(16) and data.char_tweak.chatter.dodge then
-						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
-					end
-				end
-
+				
 				local new_action_data = {
 					variant = "run",
 					body_part = 2,
@@ -1992,20 +2017,28 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 					
 					local flash = nil
 					
-					if data.tactics.smoke_grenade or data.tactics.flash_grenade then
-						if data.tactics.smoke_grenade and data.tactics.flash_grenade then
-							local flashchance = math.random()
+					if data.tactics then
+						if data.tactics.smoke_grenade or data.tactics.flash_grenade then
+							if data.tactics.smoke_grenade and data.tactics.flash_grenade then
+								local flashchance = math.random()
+									
+								if flashchance < 0.5 then
+									flash = true
+								end
+							else
+								if data.tactics.flash_grenade then
+									flash = true
+								end
+							end
 								
-							if flashchance < 0.5 then
-								flash = true
-							end
-						else
-							if data.tactics.flash_grenade then
-								flash = true
-							end
+							CopLogicBase.do_grenade(data, data.m_pos + math.UP * 5, flash, true)
 						end
-							
-						CopLogicBase.do_grenade(data, data.m_pos + math.UP * 5, flash, true)
+					end
+					
+					if data.tactics and data.tactics.elite_ranged_fire then
+						if not data.unit:in_slot(16) and data.char_tweak.chatter.dodge then
+							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
+						end
 					end
 
 					return true
@@ -2035,7 +2068,11 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				end
 				CopLogicAttack._upd_aim(data, my_data)
 				data.logic._upd_stance_and_pose(data, data.internal_data)
-				CopLogicTravel._upd_combat_movement(data)
+				if my_data.has_advanced_once then
+					CopLogicTravel._upd_combat_movement(data)
+				else
+					CopLogicTravel.upd_advance(data)
+				end
 			end
 		end
 	elseif action_type == "healed" then
@@ -2518,13 +2555,14 @@ function CopLogicTravel._begin_coarse_pathing(data, my_data)
 
 	if data.unit:brain():search_for_coarse_path(my_data.coarse_path_search_id, nav_seg, verify_clbk) then
 		my_data.processing_coarse_path = true
+		--my_data.objective_outdated = nil
 	end
 end
 
 function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
-	if not CopLogicTravel.chk_group_ready_to_move(data, my_data) then
-		return
-	end
+	--if not CopLogicTravel.chk_group_ready_to_move(data, my_data) then
+	--	return
+	--end
 
 	local to_pos = nil
 	
@@ -2589,9 +2627,7 @@ function CopLogicTravel.upd_advance(data)
 				return
 			end
 		end
-	elseif my_data.advance_path then
-		
-		
+	elseif my_data.advance_path and not my_data.objective_outdated then
 		CopLogicTravel._chk_begin_advance(data, my_data)
 
 		if my_data.advancing and my_data.path_ahead then
@@ -2605,7 +2641,17 @@ function CopLogicTravel.upd_advance(data)
 		end
 	elseif objective and (objective.nav_seg or objective.type == "follow") then
 		if my_data.coarse_path then
-			if my_data.coarse_path_index == #my_data.coarse_path then
+			if my_data.objective_outdated and not my_data.advancing then
+				my_data.coarse_path = nil
+				my_data.advance_path = nil
+				my_data.coarse_path_index = nil
+				
+				CopLogicTravel._begin_coarse_pathing(data, my_data)
+				
+				if my_data ~= data.internal_data then
+					return
+				end
+			elseif my_data.coarse_path_index == #my_data.coarse_path then
 				CopLogicTravel._on_destination_reached(data)
 				
 				return
