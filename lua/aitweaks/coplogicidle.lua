@@ -684,7 +684,7 @@ function CopLogicIdle._chk_relocate(data)
 						return true
 					else
 						if current_assault_target_area then
-							if current_assault_target_area.criminal and current_assault_target_area.criminal.units and next(current_assault_target_area.criminal.units) or next(current_assault_target_area.loot) or next(current_assault_target_area.hostages) then
+							if current_assault_target_area.criminal and current_assault_target_area.criminal.units and next(current_assault_target_area.criminal.units) or current_assault_target_area.loot and next(current_assault_target_area.loot) or current_assault_target_area.hostages and next(current_assault_target_area.hostages) then
 								data.objective.bagjob = current_assault_target_area.loot or nil
 								data.objective.hostagejob = current_assault_target_area.hostages or nil
 								data.objective.in_place = nil
