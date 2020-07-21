@@ -125,9 +125,9 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 		end
 	end
 
-	--[[if my_data ~= data.internal_data then
+	if my_data ~= data.internal_data then
 		return
-	end]]
+	end
 
 	if data.objective then
 		if data.objective.action_duration or data.objective.action_timeout_t and data.t < data.objective.action_timeout_t then
