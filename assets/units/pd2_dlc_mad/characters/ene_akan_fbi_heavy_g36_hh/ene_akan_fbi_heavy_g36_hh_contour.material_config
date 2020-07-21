@@ -39,11 +39,12 @@
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
-    <material render_template="opacity:CUBE_ENVIRONMENT_MAPPING:CUBE_FRESNEL:DIFFUSE_TEXTURE" decal_material="glass_breakable" name="mtr_visor" version="2">
+	<material name="mtr_visor" decal_material="glass_breakable"  render_template="opacity:CUBE_ENVIRONMENT_MAPPING:CUBE_FRESNEL:DIFFUSE_TEXTURE:OPACITY_FADE:TAKE_FOG" version="2">
         <variable value="0.5 1 0.5" type="vector3" name="fresnel_settings"/>
         <opacity_texture file="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/dark_glass_op"/>
         <diffuse_texture file="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/tank_glass_df"/>
         <reflection_texture type="texture" file="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/glass_reflection"/>
+        <variable value="10 4000 0" type="vector3" name="opacity_fade"/>                
     </material>
 	
     <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
