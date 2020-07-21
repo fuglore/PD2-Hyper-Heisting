@@ -9849,7 +9849,7 @@ end
 --DS setup, the 3rd Strike is what counts. (3RD STR)
 
 function CharacterTweakData:_set_sm_wish()
-	self:_multiply_all_hp(5, 0.75)
+	self:_multiply_all_hp(5, 1)
 	self:_set_characters_crumble_chance(0.25, 0.15, 0.6)
 	
 	self.tank.HEALTH_INIT = 1400
@@ -10147,8 +10147,8 @@ function CharacterTweakData:_set_sm_wish()
 	self.spooc.dodge = self.presets.dodge.ninja_complex
 	--Explosive resist for certain enemies.
 	self.shield.damage.explosion_damage_mul = 0.25
-	self.heavy_swat.damage.explosion_damage_mul = 0.7
-	self.fbi_heavy_swat.damage.explosion_damage_mul = 0.7
+	self.heavy_swat.damage.explosion_damage_mul = 0.5
+	self.fbi_heavy_swat.damage.explosion_damage_mul = 0.5
 	self.tank.damage.explosion_damage_mul = 0.7
 	self.tank_medic.damage.explosion_damage_mul = 0.7
 	self.tank_mini.damage.explosion_damage_mul = 0.7

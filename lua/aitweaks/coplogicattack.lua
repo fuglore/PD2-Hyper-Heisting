@@ -507,7 +507,7 @@ function CopLogicAttack._upd_combat_movement(data)
 					end
 				elseif not my_data.walking_to_cover_shoot_pos then
 					if my_data.at_cover_shoot_pos then
-						if my_data.stay_out_time < t then
+						if my_data.stay_out_time and my_data.stay_out_time < t then
 							move_to_cover = true
 						end
 					else
