@@ -1216,6 +1216,15 @@ function CopLogicTravel.queued_update(data)
 	if data.internal_data ~= my_data then
 		return
 	end
+	
+	if data.important then
+		data.logic._update_haste(data, data.internal_data)
+		data.logic._upd_stance_and_pose(data, data.internal_data, objective)
+	end
+	
+	if data.internal_data ~= my_data then
+		return
+	end
 	    
     if not delay then
     	debug_pause_unit(data.unit, "crap!!!", inspect(data))	
@@ -1378,9 +1387,6 @@ function CopLogicTravel.queued_update(data)
 			
 		end	
 	end
-	
-	data.logic._update_haste(data, data.internal_data)
-	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
       
     CopLogicTravel.queue_update(data, data.internal_data, delay)
 end

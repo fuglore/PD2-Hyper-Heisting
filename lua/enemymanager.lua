@@ -17,12 +17,12 @@ function EnemyManager:get_nearby_medic(unit)
 	
 	
     for _, enemy in ipairs(enemies) do
-		local obstructed = unit:raycast("ray", unit:movement():m_head_pos(), enemy:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 5, "report")
-        if enemy:base():has_tag("medic") and enemy:character_damage()._heal_cooldown_t and not obstructed then
+		
+        if enemy:base():has_tag("medic") and enemy:character_damage()._heal_cooldown_t then
             local cooldown = tweak_data.medic.cooldown
             cooldown = managers.modifiers:modify_value("MedicDamage:CooldownTime", cooldown)
 
-            if t >= enemy:character_damage()._heal_cooldown_t + cooldown then
+            if t >= enemy:character_damage()._heal_cooldown_t + cooldown and not unit:raycast("ray", unit:movement():m_head_pos(), enemy:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "sphere_cast_radius", 5, "report") then
                 return enemy
             end
         end

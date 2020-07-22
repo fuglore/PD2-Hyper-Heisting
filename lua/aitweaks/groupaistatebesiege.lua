@@ -10,7 +10,8 @@ function GroupAIStateBesiege:init(group_ai_state)
 	if Network:is_server() and managers.navigation:is_data_ready() then
 		self:_queue_police_upd_task()
 	end
-
+	
+	--self:set_debug_draw_state(true)
 	self._tweak_data = tweak_data.group_ai[group_ai_state]
 	self._spawn_group_timers = {}
 	self._graph_distance_cache = {}
@@ -27,6 +28,291 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._activeassaultbreak = nil
 	self._activeassaultnextbreak_t = nil
 	self._stopassaultbreak_t = nil
+end
+
+function GroupAIStateBesiege:_draw_enemy_activity(t)
+	local draw_data = self._AI_draw_data
+	local brush_area = draw_data.brush_area
+	local area_normal = -math.UP
+	local logic_name_texts = draw_data.logic_name_texts
+	local group_id_texts = draw_data.group_id_texts
+	local panel = draw_data.panel
+	local camera = managers.viewport:get_current_camera()
+
+	if not camera then
+		return
+	end
+
+	local ws = draw_data.workspace
+	local mid_pos1 = Vector3()
+	local mid_pos2 = Vector3()
+	local focus_enemy_pen = draw_data.pen_focus_enemy
+	local focus_player_brush = draw_data.brush_focus_player
+	local suppr_period = 0.4
+	local suppr_t = t % suppr_period
+
+	if suppr_t > suppr_period * 0.5 then
+		suppr_t = suppr_period - suppr_t
+	end
+
+	draw_data.brush_suppressed:set_color(Color(math.lerp(0.2, 0.5, suppr_t), 0.85, 0.9, 0.2))
+
+	for area_id, area in pairs(self._area_data) do
+		if table.size(area.police.units) > 0 then
+			brush_area:half_sphere(area.pos, 22, area_normal)
+		end
+	end
+
+	local function _f_draw_logic_name(u_key, l_data, draw_color)
+		local logic_name_text = logic_name_texts[u_key]
+		local text_str = l_data.name
+
+		if l_data.objective then
+			text_str = text_str .. ":" .. l_data.objective.type
+		end
+
+		if not l_data.group and l_data.team then
+			text_str = l_data.team.id .. ":" .. text_str
+		end
+
+		if l_data.spawned_in_phase then
+			text_str = text_str .. ":" .. l_data.spawned_in_phase
+		end
+
+		local anim_machine = l_data.unit:anim_state_machine()
+
+		if anim_machine then
+			local base_seg_state = anim_machine:segment_state(Idstring("base"))
+
+			if base_seg_state and base_seg_state.s then
+				text_str = text_str .. ":animation( " .. base_seg_state:s() .. " )"
+			end
+		end
+
+		if l_data.unit:movement()._active_actions then
+			if l_data.unit:movement()._active_actions[1] then
+				text_str = text_str .. ":action[1]( " .. l_data.unit:movement()._active_actions[1]:type() .. " )"
+			end
+
+			if l_data.unit:movement()._active_actions[2] then
+				text_str = text_str .. ":action[2]( " .. l_data.unit:movement()._active_actions[2]:type() .. " )"
+			end
+
+			if l_data.unit:movement()._active_actions[3] then
+				text_str = text_str .. ":action[3]( " .. l_data.unit:movement()._active_actions[3]:type() .. " )"
+			end
+
+			if l_data.unit:movement()._active_actions[4] then
+				text_str = text_str .. ":action[4]( " .. l_data.unit:movement()._active_actions[4]:type() .. " )"
+			end
+		end
+
+		if logic_name_text then
+			logic_name_text:set_text(text_str)
+		else
+			logic_name_text = panel:text({
+				name = "text",
+				font_size = 20,
+				layer = 1,
+				text = text_str,
+				font = tweak_data.hud.medium_font,
+				color = draw_color
+			})
+			logic_name_texts[u_key] = logic_name_text
+		end
+
+		local my_head_pos = mid_pos1
+
+		mvector3.set(my_head_pos, l_data.unit:movement():m_head_pos())
+		mvector3.set_z(my_head_pos, my_head_pos.z + 30)
+
+		local my_head_pos_screen = camera:world_to_screen(my_head_pos)
+
+		if my_head_pos_screen.z > 0 then
+			local screen_x = (my_head_pos_screen.x + 1) * 0.5 * RenderSettings.resolution.x
+			local screen_y = (my_head_pos_screen.y + 1) * 0.5 * RenderSettings.resolution.y
+
+			logic_name_text:set_x(screen_x)
+			logic_name_text:set_y(screen_y)
+
+			if not logic_name_text:visible() then
+				logic_name_text:show()
+			end
+		elseif logic_name_text:visible() then
+			logic_name_text:hide()
+		end
+	end
+
+	local function _f_draw_obj_pos(unit)
+		local brush = nil
+		local objective = unit:brain():objective()
+		local objective_type = objective and objective.type
+
+		if objective_type == "guard" then
+			brush = draw_data.brush_guard
+		elseif objective_type == "defend_area" then
+			brush = draw_data.brush_defend
+		elseif objective_type == "free" or objective_type == "follow" or objective_type == "surrender" then
+			brush = draw_data.brush_free
+		elseif objective_type == "act" then
+			brush = draw_data.brush_act
+		else
+			brush = draw_data.brush_misc
+		end
+
+		local obj_pos = nil
+
+		if objective then
+			if objective.pos then
+				obj_pos = objective.pos
+			elseif objective.follow_unit then
+				obj_pos = objective.follow_unit:movement():m_head_pos()
+
+				if objective.follow_unit:base().is_local_player then
+					obj_pos = obj_pos + math.UP * -30
+				end
+			elseif objective.nav_seg then
+				obj_pos = managers.navigation._nav_segments[objective.nav_seg].pos
+			elseif objective.area then
+				obj_pos = objective.area.pos
+			end
+		end
+
+		if obj_pos then
+			local u_pos = unit:movement():m_com()
+
+			brush:cylinder(u_pos, obj_pos, 4, 3)
+			brush:sphere(u_pos, 24)
+		end
+
+		if unit:brain()._logic_data.is_suppressed then
+			mvector3.set(mid_pos1, unit:movement():m_pos())
+			mvector3.set_z(mid_pos1, mid_pos1.z + 220)
+			draw_data.brush_suppressed:cylinder(unit:movement():m_pos(), mid_pos1, 35)
+		end
+	end
+
+	local group_center = Vector3()
+
+	for group_id, group in pairs(self._groups) do
+		local nr_units = 0
+
+		for u_key, u_data in pairs(group.units) do
+			nr_units = nr_units + 1
+
+			mvector3.add(group_center, u_data.unit:movement():m_com())
+		end
+
+		if nr_units > 0 then
+			mvector3.divide(group_center, nr_units)
+
+			local gui_text = group_id_texts[group_id]
+			local group_pos_screen = camera:world_to_screen(group_center)
+
+			if group_pos_screen.z > 0 then
+				if not gui_text then
+					gui_text = panel:text({
+						name = "text",
+						font_size = 24,
+						layer = 2,
+						text = group.team.id .. ":" .. group_id .. ":" .. group.objective.type,
+						font = tweak_data.hud.medium_font,
+						color = draw_data.group_id_color
+					})
+					group_id_texts[group_id] = gui_text
+				end
+
+				local screen_x = (group_pos_screen.x + 1) * 0.5 * RenderSettings.resolution.x
+				local screen_y = (group_pos_screen.y + 1) * 0.5 * RenderSettings.resolution.y
+
+				gui_text:set_x(screen_x)
+				gui_text:set_y(screen_y)
+
+				if not gui_text:visible() then
+					gui_text:show()
+				end
+			elseif gui_text and gui_text:visible() then
+				gui_text:hide()
+			end
+
+			for u_key, u_data in pairs(group.units) do
+				draw_data.pen_group:line(group_center, u_data.unit:movement():m_com())
+			end
+		end
+
+		mvector3.set_zero(group_center)
+	end
+
+	local function _f_draw_attention_on_player(l_data)
+		if l_data.attention_obj then
+			local my_head_pos = l_data.unit:movement():m_head_pos()
+			local e_pos = l_data.attention_obj.m_head_pos
+			local dis = mvector3.distance(my_head_pos, e_pos)
+
+			mvector3.step(mid_pos2, my_head_pos, e_pos, 300)
+			mvector3.lerp(mid_pos1, my_head_pos, mid_pos2, t % 0.5)
+			mvector3.step(mid_pos2, mid_pos1, e_pos, 50)
+			focus_enemy_pen:line(mid_pos1, mid_pos2)
+
+			if l_data.attention_obj.unit:base() and l_data.attention_obj.unit:base().is_local_player then
+				focus_player_brush:sphere(my_head_pos, 20)
+			end
+		end
+	end
+
+	local groups = {
+		{
+			group = self._police,
+			color = Color(1, 1, 0, 0)
+		},
+		{
+			group = managers.enemy:all_civilians(),
+			color = Color(1, 0.75, 0.75, 0.75)
+		},
+		{
+			group = self._ai_criminals,
+			color = Color(1, 0, 1, 0)
+		}
+	}
+
+	for _, group_data in ipairs(groups) do
+		for u_key, u_data in pairs(group_data.group) do
+			_f_draw_obj_pos(u_data.unit)
+
+			if camera then
+				local l_data = u_data.unit:brain()._logic_data
+
+				_f_draw_logic_name(u_key, l_data, group_data.color)
+				_f_draw_attention_on_player(l_data)
+			end
+		end
+	end
+
+	for u_key, gui_text in pairs(logic_name_texts) do
+		local keep = nil
+
+		for _, group_data in ipairs(groups) do
+			if group_data.group[u_key] then
+				keep = true
+
+				break
+			end
+		end
+
+		if not keep then
+			panel:remove(gui_text)
+
+			logic_name_texts[u_key] = nil
+		end
+	end
+
+	for group_id, gui_text in pairs(group_id_texts) do
+		if not self._groups[group_id] then
+			panel:remove(gui_text)
+
+			group_id_texts[group_id] = nil
+		end
+	end
 end
 
 function GroupAIStateBesiege:_upd_police_activity()

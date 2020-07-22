@@ -7202,9 +7202,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 
 	if Global.game_settings and Global.game_settings.use_intense_AI  then
 		self.besiege.assault.hostage_hesitation_delay = {
-			20,
-			20,
-			20	
+			15,
+			15,
+			15	
 		}
 	elseif difficulty_index <= 5 then
 		self.besiege.assault.hostage_hesitation_delay = {
@@ -7227,9 +7227,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			1
 		}
 		self.besiege.assault.force_pool = {
-			64,
-			64,
-			64
+			128,
+			128,
+			128
 		}
 	else
 		self.besiege.assault.force = {

@@ -1090,6 +1090,10 @@ function CopLogicAttack._update_cover(data)
 					if data.objective and data.objective.type == "defend_area" then
 						search_nav_seg = data.objective.area and data.objective.area.nav_segs or data.objective.nav_seg
 					end
+					
+					if my_data.optimal_pos then
+						my_side_pos = my_data.optimal_pos
+					end
 
 					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, nil, cone_angle, nil, search_nav_seg, nil, data.pos_rsrv_id)
 
