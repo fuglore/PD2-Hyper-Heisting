@@ -196,7 +196,7 @@ function ElementSpawnEnemyDummy:init(...)
 	local difficulty_index = tweak_data:difficulty_to_index(difficulty)
 	local job = Global.level_data and Global.level_data.level_id
 	local skirmish = managers.skirmish:is_skirmish()
-	local wave = managers.skirmish:wave_number()
+	local wave = managers.skirmish:current_wave_number()
 	
 	if ai_type == "america" then
 		if difficulty_index == 8 and not job == "wwh" then --GenSec over FBI, doesn't apply to alaskan deal
