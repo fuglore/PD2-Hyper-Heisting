@@ -220,13 +220,6 @@ function ElementSpawnEnemyDummy:init(...)
 			self._values.enemy = enemy_annoying[self._values.enemy]
 		end
 		self._values.enemy = enemy_annoying[self._values.enemy] or self._values.enemy
-	--epic zeal sniper when things go wrong
-	elseif skirmish and wave and wave ~= nil and wave >= 3 then
-		if sniper_zulu_crackdown_XD[self._values.enemy] then
-			self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
-		end
-		-- log("awesome! replace fellas with zeal snipers!")		
-		self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy
 	else
 		--SWART Sniper					
 		if difficulty_index <= 3 then
