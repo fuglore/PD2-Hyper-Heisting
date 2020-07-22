@@ -195,7 +195,9 @@ function ElementSpawnEnemyDummy:init(...)
 	local difficulty = Global.game_settings and Global.game_settings.difficulty or "normal"
 	local difficulty_index = tweak_data:difficulty_to_index(difficulty)
 	local job = Global.level_data and Global.level_data.level_id
-		
+	local skirmish = managers.skirmish:is_skirmish()
+	local wave = managers.skirmish:wave_number()
+	
 	if ai_type == "america" then
 		if difficulty_index == 8 and not job == "wwh" then --GenSec over FBI, doesn't apply to alaskan deal
 			if sm_wish[self._values.enemy] then
@@ -211,20 +213,19 @@ function ElementSpawnEnemyDummy:init(...)
 			self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 		end
 	end
+	
 	--originally for snipers only but fuck you
-	if Global.game_settings and Global.game_settings.heavymutator == true then
+	if Global.game_settings and Global.game_settings.heavymutator then
 		if enemy_annoying[self._values.enemy] then
 			self._values.enemy = enemy_annoying[self._values.enemy]
 		end
-		
 		self._values.enemy = enemy_annoying[self._values.enemy] or self._values.enemy
-	end
 	--epic zeal sniper when things go wrong
-	if Global.game_settings and Global.game_settings.lmgmodifier == true then
+	elseif skirmish and wave and wave ~= nil and wave >= 3 then
 		if sniper_zulu_crackdown_XD[self._values.enemy] then
 			self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
 		end
-		
+		-- log("awesome! replace fellas with zeal snipers!")		
 		self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy
 	else
 		--SWART Sniper					
@@ -236,6 +237,7 @@ function ElementSpawnEnemyDummy:init(...)
 			self._values.enemy = sniper[self._values.enemy] or self._values.enemy
 			--Eff Bee Eye Snipar			
 		elseif difficulty_index <= 5 then
+			-- log("snipers replaced with fbi!")				
 			if sniper_fed[self._values.enemy] then
 				self._values.enemy = sniper_fed[self._values.enemy]
 			end
