@@ -350,6 +350,15 @@
 	<object path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>
 	<sequence_manager path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	
 	<model path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	
-	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>				
+	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	
+
+	<!--crime spree murky smg heavy-->
+	<unit path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" load="true"/>
+	<unit path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump_contour"/>	
+	<object path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" />
+	<model path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" />	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"/>
 	
 </table>

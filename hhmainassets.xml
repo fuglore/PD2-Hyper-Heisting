@@ -556,15 +556,7 @@
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_df" force="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_il" load="true"/>
 	
-	<!--crime spree smg heavies-->	
-	<unit path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" load="true"/>
-	<unit path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump_husk" load="true"/>	
-	<material_config path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"/>
-	<material_config path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump_contour"/>	
-	<object path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" />
-	<model path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" />	
-	<cooked_physics path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"/>
-
+	<!--crime spree smg heavy-->
 	<unit path="units/pd2_dlc_drm/characters/ene_fbi_heavy_ump/ene_fbi_heavy_ump" load="true"/>
 	<unit path="units/pd2_dlc_drm/characters/ene_fbi_heavy_ump/ene_fbi_heavy_ump_husk" load="true"/>	
 	<material_config path="units/pd2_dlc_drm/characters/ene_fbi_heavy_ump/ene_fbi_heavy_ump"/>
