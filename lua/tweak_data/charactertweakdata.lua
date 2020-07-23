@@ -7760,6 +7760,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.allowed_poses = {
 		stand = true
 	}
+	self.tank.cannot_throw_grenades = true
 	self.tank.crouch_move = false
 	self.tank.no_run_start = true
 	self.tank.no_run_stop = true
@@ -8043,6 +8044,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.allowed_poses = {
 		crouch = true
 	}
+	self.shield.cannot_throw_grenades = true
 	self.shield.always_face_enemy = true
 	self.shield.move_speed = presets.move_speed.shield_sim
 	self.shield.no_run_start = true
@@ -8080,6 +8082,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.akuma.move_speed = presets.move_speed.lightning_constant
 	self.akuma.speech_prefix_p1 = nil
 	self.akuma.speech_prefix_p2 = nil
+	self.akuma.cannot_throw_grenades = nil
 	self.akuma.chatter = presets.enemy_chatter.akuma
 	self.akuma.custom_voicework = "akuma"
 	self.akuma.no_fumbling = true
@@ -8496,7 +8499,7 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.sniper.chatter = presets.enemy_chatter.no_chatter
 	self.sniper.steal_loot = nil
 	self.sniper.rescue_hostages = false
-	self.sniper.die_sound_event = "mga_death_scream"
+	self.sniper.die_sound_event = "shd_x02a_any_3p_01"
 	self.sniper.spawn_sound_event = "mga_deploy_snipers"			
 	table.insert(self._enemy_list, "sniper")
 	

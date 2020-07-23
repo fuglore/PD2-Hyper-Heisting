@@ -88,6 +88,7 @@
 		["hud_assault_FG_danger8"] = "!!! IF THEY TRY TO KILL YOU, KILL THEM HARDER !!!",
 		["hud_assault_FG_danger9"] = "!!! FAILURE IS IN THE MIND !!!",
 		["hud_assault_FG_danger10"] = "!!! HOW QUICKLY THE TIDE TURNS !!!",
+		["hud_assault_FG_danger11"] = "!!! MY SNAILS LOVE TO FUCK !!!",
 		["hud_assault_cover"] = "STAY IN COVER",
 		["hud_assault_cover_blma"] = "stya cover she set u up godamn bitch",		
 		["hud_assault_coverhvh"] = "DON'T STOP MOVING",

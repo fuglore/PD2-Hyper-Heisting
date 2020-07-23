@@ -90,7 +90,7 @@ function CopLogicBase.on_importance(data)
 end
 
 function CopLogicBase.do_grenade(data, pos, flash, drop)
-	if not managers.groupai:state():is_smoke_grenade_active() or data.unit:base().has_tag and not data.unit:base():has_tag("law") then --if you're not calling this function from somewhere outside do_smart_grenade, remove this entire check
+	if not managers.groupai:state():is_smoke_grenade_active() or data.unit:base().has_tag and not data.unit:base():has_tag("law") or data.char_tweak.cannot_throw_grenades then --if you're not calling this function from somewhere outside do_smart_grenade, remove this entire check
 		return
 	end
 
@@ -113,8 +113,8 @@ function CopLogicBase.do_grenade(data, pos, flash, drop)
 			data.unit:sound():say("d01", true)	
 		end
 	end
-
-	if not drop and not data.unit:movement():chk_action_forbidden("action") then
+	
+	if not drop and not data.unit:movement():chk_action_forbidden("action") and not data.char_tweak.no_grenade_anim then
 		local redir_name = "throw_grenade"
 
 		if data.unit:movement():play_redirect(redir_name) then
@@ -132,7 +132,7 @@ function CopLogicBase.do_smart_grenade(data, my_data, focus_enemy)
 		return
 	end
 	
-	if not data.tactics or data.unit:base().has_tag and not data.unit:base():has_tag("law") then
+	if not data.tactics or data.unit:base().has_tag and not data.unit:base():has_tag("law") or data.char_tweak.cannot_throw_grenades then
 		--log("Invalid enemy.")
 		return
 	end

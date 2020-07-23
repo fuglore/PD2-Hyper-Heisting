@@ -714,99 +714,6 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 
 	local action_taken = data.logic.action_taken(data, my_data)
 	local focus_enemy = data.attention_obj
-	local in_cover = my_data.in_cover
-	local best_cover = my_data.best_cover
-	local nearest_cover = my_data.nearest_cover
-	local enemy_visible = focus_enemy and focus_enemy.verified
-	local enemy_visible_soft = nil
-	
-	if Global.game_settings.one_down then
-		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(0.3, 1.05)
-		else
-			enemy_visible_soft = focus_enemy and focus_enemy.verified
-		end
-	else
-		if diff_index <= 5 then
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(3.1, 3.8)
-			else
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(1.05, 1.4)
-			end
-		else
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(2, 3)
-			else
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(0.35, 1.05)
-			end
-		end
-	end
-	
-	local enemy_visible_mild_soft = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 2
-	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4
-	local antipassivecheck = focus_enemy and focus_enemy.verified or my_data.shooting
-	local flank_cover_charge_qualify = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t > 2 or focus_enemy and focus_enemy.verified
-		
-	local alert_soft = data.is_suppressed
-	
-	--hitnrun: approach enemies, back away once the enemy is visible, creating a variating degree of aggressiveness
-	--eliterangedfire: open fire at enemies from longer distances, back away if the enemy gets too close for comfort
-	--spoocavoidance: attempt to approach enemies, if aimed at/seen, retreat away into cover and disengage until ready to try again
-	local hitnrunmovementqualify = data.tactics and data.tactics.hitnrun and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1000 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) < 200
-	local spoocavoidancemovementqualify = data.tactics and data.tactics.spoocavoidance and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 2000 and focus_enemy.aimed_at
-	local eliterangedfiremovementqualify = data.tactics and data.tactics.elite_ranged_fire and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1500
-	
-	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
-	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
-	
-	
-	local want_to_take_cover = my_data.want_to_take_cover
-	local move_to_cover, want_flank_cover = nil
-	local cover_test_step_chk = action_taken or want_to_take_cover or not in_cover --optimizations, yay
-	
-	if not my_data.cover_test_step then
-		my_data.cover_test_step = 1
-	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
-		if my_data.cover_test_step ~= 1 and cover_test_step_chk then
-			my_data.cover_test_step = 1
-			--not many tactics need to be this aggressive, but hitnrun and murder are specifically for bulldozer and units which will want to get up to enemies' faces, and as such, require these.
-		end
-	else
-		if my_data.cover_test_step ~= 1 and not enemy_visible_softer and cover_test_step_chk then
-			my_data.cover_test_step = 1
-		end
-	end
-	
-	local ranged_fire_sot_bonus = 0.5
-	
-	if my_data.stay_out_time and not my_data.at_cover_shoot_pos or my_data.stay_out_time and action_taken then
-		my_data.stay_out_time = nil
-	elseif my_data.attitude == "engage" and not my_data.stay_out_time and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
-		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
-			my_data.stay_out_time = t - 1
-			--log("interesting")
-		else
-			if diff_index <= 5 then
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 1 + ranged_fire_sot_bonus
-				else
-					my_data.stay_out_time = t + 1
-				end
-			elseif diff_index == 6 then
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 0.5 + ranged_fire_sot_bonus
-				else
-					my_data.stay_out_time = t + 0.5
-				end
-			else
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 0.5
-				else
-					my_data.stay_out_time = t - 1
-				end
-			end
-		end
-	end
 	
 	local do_something_else = true
 	
@@ -927,6 +834,100 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	
 	if not do_something_else then
 		return true
+	end
+	
+	local in_cover = my_data.in_cover
+	local best_cover = my_data.best_cover
+	local nearest_cover = my_data.nearest_cover
+	local enemy_visible = focus_enemy and focus_enemy.verified
+	local enemy_visible_soft = nil
+	
+	if Global.game_settings.one_down then
+		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(0.3, 1.05)
+		else
+			enemy_visible_soft = focus_enemy and focus_enemy.verified
+		end
+	else
+		if diff_index <= 5 then
+			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(3.1, 3.8)
+			else
+				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(1.05, 1.4)
+			end
+		else
+			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(2, 3)
+			else
+				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(0.35, 1.05)
+			end
+		end
+	end
+	
+	local enemy_visible_mild_soft = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 2
+	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4
+	local antipassivecheck = focus_enemy and focus_enemy.verified or my_data.shooting
+	local flank_cover_charge_qualify = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t > 2 or focus_enemy and focus_enemy.verified
+		
+	local alert_soft = data.is_suppressed
+	
+	--hitnrun: approach enemies, back away once the enemy is visible, creating a variating degree of aggressiveness
+	--eliterangedfire: open fire at enemies from longer distances, back away if the enemy gets too close for comfort
+	--spoocavoidance: attempt to approach enemies, if aimed at/seen, retreat away into cover and disengage until ready to try again
+	local hitnrunmovementqualify = data.tactics and data.tactics.hitnrun and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1000 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) < 200
+	local spoocavoidancemovementqualify = data.tactics and data.tactics.spoocavoidance and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 2000 and focus_enemy.aimed_at
+	local eliterangedfiremovementqualify = data.tactics and data.tactics.elite_ranged_fire and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1500
+	
+	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
+	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
+	
+	
+	local want_to_take_cover = my_data.want_to_take_cover
+	local move_to_cover, want_flank_cover = nil
+	local cover_test_step_chk = action_taken or want_to_take_cover or not in_cover --optimizations, yay
+	
+	if not my_data.cover_test_step then
+		my_data.cover_test_step = 1
+	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
+		if my_data.cover_test_step ~= 1 and cover_test_step_chk then
+			my_data.cover_test_step = 1
+			--not many tactics need to be this aggressive, but hitnrun and murder are specifically for bulldozer and units which will want to get up to enemies' faces, and as such, require these.
+		end
+	else
+		if my_data.cover_test_step ~= 1 and not enemy_visible_softer and cover_test_step_chk then
+			my_data.cover_test_step = 1
+		end
+	end
+	
+	local ranged_fire_sot_bonus = 0.5
+	
+	if my_data.stay_out_time and not my_data.at_cover_shoot_pos or my_data.stay_out_time and action_taken then
+		my_data.stay_out_time = nil
+	elseif my_data.attitude == "engage" and not my_data.stay_out_time and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
+		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
+			my_data.stay_out_time = t - 1
+			--log("interesting")
+		else
+			if diff_index <= 5 then
+				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+					my_data.stay_out_time = t + 1 + ranged_fire_sot_bonus
+				else
+					my_data.stay_out_time = t + 1
+				end
+			elseif diff_index == 6 then
+				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+					my_data.stay_out_time = t + 0.5 + ranged_fire_sot_bonus
+				else
+					my_data.stay_out_time = t + 0.5
+				end
+			else
+				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
+					my_data.stay_out_time = t + 0.5
+				else
+					my_data.stay_out_time = t - 1
+				end
+			end
+		end
 	end
 				
 	if not ignore_walks then
@@ -1709,7 +1710,11 @@ end
 function CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, speed, end_rot, no_strafe, pose, end_pose)
 	if not data.unit:movement():chk_action_forbidden("walk") and not my_data.turning or data.unit:anim_data().act_idle then
 		CopLogicAttack._correct_path_start_pos(data, my_data.advance_path)
-
+		
+		if data.cool then
+			no_strafe = true
+		end
+		
 		local path = my_data.advance_path
 		local new_action_data = {
 			type = "walk",
@@ -2396,8 +2401,9 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local allow_fwd = nil
 	local my_data = data.internal_data
 	local my_pos = data.m_pos
+	local shouldnt_use_follow_stuff = data.tactics and data.tactics.lonewolf
 	
-	if data.objective and data.objective.type == "follow" and not data.tactics.lonewolf then
+	if data.objective and data.objective.type == "follow" and not shouldnt_use_follow_stuff then
 		if data.tactics and data.tactics.shield_cover and data.attention_obj and data.attention_obj.nav_tracker and data.attention_obj.reaction and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 			local threat_nav_pos = data.attention_obj.nav_tracker:field_position()
 
@@ -2589,6 +2595,117 @@ function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 	local nav_segs = CopLogicTravel._get_allowed_travel_nav_segs(data, my_data, to_pos)
 
 	data.unit:brain():search_for_path(my_data.advance_path_search_id, to_pos, prio, nil, nav_segs)
+end
+
+function CopLogicTravel._get_exact_move_pos(data, nav_index)
+	local my_data = data.internal_data
+	local objective = data.objective
+	local to_pos = nil
+	local coarse_path = my_data.coarse_path
+	local total_nav_points = #coarse_path
+	local reservation, wants_reservation = nil
+
+	if total_nav_points <= nav_index then
+		local new_occupation = data.logic._determine_destination_occupation(data, objective)
+
+		if new_occupation then
+			if new_occupation.type == "guard" then
+				local guard_door = new_occupation.door
+				local guard_pos = CopLogicTravel._get_pos_accross_door(guard_door, objective.nav_seg)
+
+				if guard_pos then
+					reservation = CopLogicTravel._reserve_pos_along_vec(guard_door.center, guard_pos)
+
+					if reservation then
+						local guard_object = {
+							type = "door",
+							door = guard_door,
+							from_seg = new_occupation.from_seg
+						}
+						objective.guard_obj = guard_object
+						to_pos = reservation.pos
+					end
+				end
+			elseif new_occupation.type == "defend" then
+				if new_occupation.cover then
+					to_pos = new_occupation.cover[1][1]
+
+					if data.char_tweak.wall_fwd_offset then
+						to_pos = CopLogicTravel.apply_wall_offset_to_cover(data, my_data, new_occupation.cover[1], data.char_tweak.wall_fwd_offset)
+					end
+
+					local new_cover = new_occupation.cover
+
+					managers.navigation:reserve_cover(new_cover[1], data.pos_rsrv_id)
+
+					my_data.moving_to_cover = new_cover
+				elseif new_occupation.pos then
+					to_pos = new_occupation.pos
+				end
+
+				wants_reservation = true
+			elseif new_occupation.type == "act" then
+				to_pos = new_occupation.pos
+				wants_reservation = true
+			elseif new_occupation.type == "revive" then
+				to_pos = new_occupation.pos
+				objective.rot = new_occupation.rot
+				wants_reservation = true
+			else
+				to_pos = new_occupation.pos
+				wants_reservation = true
+			end
+		end
+
+		if not to_pos then
+			to_pos = managers.navigation:find_random_position_in_segment(objective.nav_seg)
+			to_pos = CopLogicTravel._get_pos_on_wall(to_pos)
+			wants_reservation = true
+		end
+	else
+		local nav_seg = coarse_path[nav_index][1]
+		local area = managers.groupai:state():get_area_from_nav_seg_id(nav_seg)
+		if data.cool then
+			cover = managers.navigation:find_cover_in_nav_seg_1(area.nav_segs)
+		else
+			cover = CopLogicTravel._find_cover(data, nav_seg, nil)
+		end
+
+		if my_data.moving_to_cover then
+			managers.navigation:release_cover(my_data.moving_to_cover[1])
+
+			my_data.moving_to_cover = nil
+		end
+
+		if cover then
+			managers.navigation:reserve_cover(cover, data.pos_rsrv_id)
+
+			my_data.moving_to_cover = {
+				cover
+			}
+			to_pos = cover[1]
+			wants_reservation = true
+		else
+			local orig_pos = managers.navigation:find_random_position_in_segment(nav_seg)
+			local wall_pos = CopLogicTravel._get_pos_on_wall(orig_pos)
+			
+			if mvector3.not_equal(orig_pos, wall_pos) then
+				to_pos = wall_pos
+				wants_reservation = true
+			else
+				to_pos = coarse_path[nav_index][2]
+			end
+		end
+	end
+
+	if not reservation and wants_reservation then
+		data.brain:add_pos_rsrv("path", {
+			radius = 60,
+			position = mvector3.copy(to_pos)
+		})
+	end
+
+	return to_pos
 end
 
 function CopLogicTravel.upd_advance(data)
