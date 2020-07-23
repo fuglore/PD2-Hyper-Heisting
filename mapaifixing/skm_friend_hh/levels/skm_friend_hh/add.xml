@@ -168,6 +168,6 @@
 	<texture path="levels/mods/skm_friend_hh/cube_lights/800154"/>
 	<texture path="levels/mods/skm_friend_hh/cube_lights/800139"/>
 	<texture path="levels/mods/skm_friend_hh/cube_lights/600025"/>
-	
+
 	<material_config path="units/pd2_dlc_chill/props/chl_prop_warehouse_pallet_pile/chl_prop_warehouse_pallet_pile" unload="true"/>
 </table>

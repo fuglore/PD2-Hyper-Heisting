@@ -3,10 +3,10 @@
 		<add file="levels/skm_friend_hh/add.xml"/>
 		<assets/>
 		<include directory="levels/skm_friend_hh">
-			<file file="nav_manager_data.nav_data" type="binary"/>
 			<file file="world.world" type="binary"/>
 			<file file="continents.continents" type="binary"/>
 			<file file="mission.mission" type="binary"/>
+			<file file="nav_manager_data.nav_data" type="binary"/>
 			<file file="world_sounds.world_sounds" type="binary"/>
 			<file file="world_cameras.world_cameras" type="binary"/>
 			<file file="collision/collision.continent" type="binary"/>
@@ -28,6 +28,7 @@
 			<file file="art_house_exterior/art_house_exterior.continent" type="binary"/>
 			<file file="art_house_exterior/art_house_exterior.mission" type="binary"/>
 			<file file="cover_data.cover_data" type="binary"/>
+			<file file="environments/scarfacenight.environment" type="custom_xml"/>
 		</include>
 		<outro_event>
 			<value_node value="Play_loc_skm_end_win"/>
