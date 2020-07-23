@@ -1,4 +1,0 @@
-{
-	"heist_skm_mus_hh_name" : "The Diamond",
-	"heist_skm_mus_name" : "The Diamond"
-}

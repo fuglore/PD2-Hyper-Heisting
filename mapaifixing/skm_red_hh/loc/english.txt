@@ -1,4 +1,0 @@
-{
-	"heist_skm_red_hh_name" : "First World Bank",
-	"heist_skm_red2_name" : "First World Bank"
-}
