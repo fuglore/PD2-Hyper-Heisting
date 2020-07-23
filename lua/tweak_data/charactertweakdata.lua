@@ -6829,8 +6829,8 @@ function CharacterTweakData:_presets(tweak_data)
 					1
 				},
 				recoil = {
-					1,
-					1
+					0.3,
+					0.3
 				},
 				mode = {
 					0,
@@ -6847,8 +6847,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					1.1,
-					1.35
+					0.3,
+					0.3
 				},
 				mode = {
 					0,
@@ -6865,8 +6865,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.5
 				},
 				recoil = {
-					1.5,
-					1.75
+					0.3,
+					0.8
 				},
 				mode = {
 					0,
@@ -6883,8 +6883,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.25
 				},
 				recoil = {
-					1.5,
-					2
+					0.4,
+					0.8
 				},
 				mode = {
 					0,
@@ -6969,7 +6969,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5,
+				dmg_mul = 10,
 				r = 4000,
 				acc = {
 					0,
@@ -6987,7 +6987,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5,
+				dmg_mul = 10,
 				r = 6000,
 				acc = {
 					0,
