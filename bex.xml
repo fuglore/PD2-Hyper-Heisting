@@ -18,6 +18,10 @@
 	<material_config path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi_contour" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_body_df" force="true"/>
 	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_policia_federale_heavy_helmet_df" force="true"/>
+
+	<object path="units/pd2_dlc_bex/characters/ene_bex_security_01/ene_bex_security_01" force="true"/>
+	<object path="units/pd2_dlc_bex/characters/ene_bex_security_02/ene_bex_security_02" force="true"/>
+	<object path="units/pd2_dlc_bex/characters/ene_bex_security_03/ene_bex_security_03" force="true"/>
 	
 	<!--federales shield changes-->
 	<unit path="units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9" force="true" load="true"/>
