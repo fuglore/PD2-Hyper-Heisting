@@ -3244,7 +3244,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
-		tase_distance = 1500, --include tase parameters so that tasers can scale with difficulties better, since doing it the other way would keep reload speed, autofire rounds and other parameters unchanged
+		tase_distance = 1000, 
 		aim_delay_tase = {
 			0,
 			0
@@ -3261,13 +3261,13 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5, --damage mostly maintains the layout from simple, but rather, focuses on removing falloff, damage increases with presets, begin in complex, instead, focus on using this one to measure changes in weapontweakdata
+				dmg_mul = 5,
 				r = 100,
 				acc = { 
 					0,
 					0.2
 				},
-				recoil = { --super low recoil at this range
+				recoil = {
 					0.2,
 					0.2
 				},
@@ -3279,15 +3279,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5,
-				r = 500,
-				acc = {
+				dmg_mul = 4,
+				r = 400,
+				acc = { 
 					0,
 					0.2
 				},
 				recoil = {
 					0.2,
-					0.2
+					0.2 
 				},
 				mode = {
 					0,
@@ -3297,15 +3297,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --damage, recoil and acc falloff begins, still quite good, 30 damage.
-				r = 1000,
-				acc = { --accuracy increased slightly from simple for this range, not a main feature, just a tiny little boost
+				dmg_mul = 3,
+				r = 800,
+				acc = { 
 					0,
 					0.1
 				},
-				recoil = {
-					0.2,
-					0.2
+				recoil = { 
+					0.25,
+					0.3 --slightly decreased from civil, from 0.35 to 0.3
 				},
 				mode = {
 					0,
@@ -3315,15 +3315,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --damage maintains 20.
-				r = 2000,
-				acc = { 
+				dmg_mul = 2,
+				r = 1500,
+				acc = {
 					0,
 					0.05
 				},
-				recoil = { --no top recoil increase, just lower half
-					0.2,
-					0.2
+				recoil = {
+					0.25,
+					0.35
 				},
 				mode = {
 					0,
@@ -3333,15 +3333,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --20 damage, but low acc, with the recoil still being fine, maintains suppressive fire feel when there are multiple enemies.
+				dmg_mul = 1,
 				r = 3000,
 				acc = {
 					0,
 					0.025
 				},
 				recoil = {
-					0.2,
-					0.2
+					0.25,
+					0.35
 				},
 				mode = {
 					0,
@@ -3351,7 +3351,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, --instructions unclear, gun stopped working at the 40m range
+				dmg_mul = 0,
 				r = 4000,
 				acc = {
 					0,
@@ -3397,47 +3397,65 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2,
 				r = 100,
 				acc = {
-					0.2,
-					0.9
-				},
-				recoil = { --dramatically lowered recoil from simple
-					1,
-					1.15
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 2, --100 damage, intent is to encourage players to take out shotgunners first
-				r = 500,
-				acc = {
-					0.2, --increased from simple, should resolve a few consistency issues
-					0.9
-				},
-				recoil = {
-					1,
-					1.15
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1.5, --75 damage.
-				r = 1000,
-				acc = { --accuracy increased from simple
 					0,
 					0.75
 				},
 				recoil = {
-					1.35,
+					1,
+					1.15
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 2, 
+				r = 600,
+				acc = { 
+					0,
+					0.6
+				},
+				recoil = {
+					1.15,
+					1.25
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 1000,
+				acc = {
+					0,
+					0.3
+				},
+				recoil = {
+					1.2,
+					1.4
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 1, 
+				r = 1500,
+				acc = {
+					0,
+					0.1
+				},
+				recoil = {
+					1.6,
 					1.6
 				},
 				mode = {
@@ -3448,29 +3466,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, --50 damage, lower end of the falloff scale. 
+				dmg_mul = 0,
 				r = 2000,
 				acc = {
 					0,
-					0.35
-				},
-				recoil = {
-					1.5,
-					2
-				},
-				mode = {
-					1,
-					0,
-					0,
 					0
-				}
-			},
-			{
-				dmg_mul = 0.2, --10, no longer a threat due to low accuracy and high recoil
-				r = 3000,
-				acc = {
-					0,
-					0.01
 				},
 				recoil = {
 					2,
@@ -4349,7 +4349,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
-		tase_distance = 1500, --include tase parameters so that tasers can scale with difficulties better, since doing it the other way would keep reload speed, autofire rounds and other parameters unchanged
+		tase_distance = 1000,
 		aim_delay_tase = {
 			0,
 			0
@@ -4366,13 +4366,13 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5.5, --damage mostly maintains the layout from simple, but rather, focuses on removing falloff, damage increases with presets, begin in complex, instead, focus on using this one to measure changes in weapontweakdata
+				dmg_mul = 5,
 				r = 100,
 				acc = { 
 					0,
-					0.25
+					0.2
 				},
-				recoil = { 
+				recoil = {
 					0.2,
 					0.2
 				},
@@ -4384,15 +4384,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5,
-				r = 500,
-				acc = {
-					0, 
-					0.25
+				dmg_mul = 4.5,
+				r = 400,
+				acc = { 
+					0,
+					0.2
 				},
 				recoil = {
 					0.2,
-					0.2
+					0.2 
 				},
 				mode = {
 					0,
@@ -4402,26 +4402,8 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5,
-				r = 1000,
-				acc = { --accuracy slightly higher than civil
-					0,
-					0.15
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3, --damage maintains 30, rather than dropping to 20, hazardous, you're encouraged to not peek too much
-				r = 2000,
+				dmg_mul = 4,
+				r = 800,
 				acc = { 
 					0,
 					0.1
@@ -4438,8 +4420,8 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --30 damage, acc and recoil unchanged from civil
-				r = 3000,
+				dmg_mul = 3,
+				r = 1500,
 				acc = {
 					0,
 					0.05
@@ -4456,7 +4438,25 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, --help my gun is jammed call 911
+				dmg_mul = 1,
+				r = 3000,
+				acc = {
+					0,
+					0.025
+				},
+				recoil = {
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0,
 				r = 4000,
 				acc = {
 					0,
@@ -4502,8 +4502,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 100,
 				acc = {
-					0.2,
-					0.9
+					0.1,
+					0.8
 				},
 				recoil = { --slightly lowered recoil from civil, lower end has more variance
 					0.8,
@@ -4517,15 +4517,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --150 damage, pop your ICTV in two rather than 3, its fair enough with the recoil
-				r = 500,
+				dmg_mul = 3,
+				r = 600,
 				acc = {
-					0.2, --increased from simple, should resolve a few consistency issues
-					0.9
+					0,
+					0.6
 				},
 				recoil = {
-					0.8,
-					1
+					1,
+					1.2
 				},
 				mode = {
 					1,
@@ -4535,14 +4535,14 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --100 damage at 10m, kinda scary.
+				dmg_mul = 2,
 				r = 1000,
-				acc = { --unchanged, they're too powerful for higher accuracy at this point, changing this would have negative effects
+				acc = {
 					0,
-					0.75
+					0.4
 				},
-				recoil = { --reduced massively from civil
-					1.15,
+				recoil = {
+					1.2,
 					1.4
 				},
 				mode = {
@@ -4553,15 +4553,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, --50 damage, lower end of the falloff scale for shotgunners, should remain mostly unchanged acc and damage-wise as increasing their range has negative effects on gameplay and causes too many "who just destroyed all my armor in one shot" situations 
-				r = 2000,
+				dmg_mul = 2, 
+				r = 1500,
 				acc = {
 					0,
-					0.4
+					0.2
 				},
-				recoil = { --recoil is ok though
-					1.2,
-					1.8
+				recoil = {
+					1.4,
+					1.5
 				},
 				mode = {
 					1,
@@ -4571,7 +4571,25 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, --10, no longer a threat due to low accuracy and high recoil
+				dmg_mul = 1, 
+				r = 2000,
+				acc = {
+					0,
+					0.175
+				},
+				recoil = { --recoil is ok though, said the slut who is designing this mess
+					1.5,
+					1.5
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 0,
 				r = 3000,
 				acc = {
 					0,
@@ -5473,7 +5491,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
-		tase_distance = 1500, --include tase parameters so that tasers can scale with difficulties better, since doing it the other way would keep reload speed, autofire rounds and other parameters unchanged
+		tase_distance = 1000,
 		aim_delay_tase = {
 			0,
 			0
@@ -5508,26 +5526,8 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 6,
-				r = 500,
-				acc = {
-					0, --increased from simple to create consistency at close ranges in regards to danger
-					0.4
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
 				dmg_mul = 5.5, --light damage, recoil and acc falloff begins, really good still, powerful, even
-				r = 1000,
+				r = 400,
 				acc = { 
 					0,
 					0.2
@@ -5545,7 +5545,7 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 4, --light falloff, just enough to count 5 hits on ICTV armor
-				r = 2000,
+				r = 800,
 				acc = { 
 					0,
 					0.1
@@ -5563,7 +5563,7 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 3, --drop damage by 10, player survivability should be a bit higher now at 6 hits
-				r = 3000,
+				r = 1500,
 				acc = {
 					0,
 					0.05 --acc drops
@@ -5641,26 +5641,8 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --150 damage, pop your ICTV in two shots
-				r = 500,
-				acc = {
-					0.2,
-					1
-				},
-				recoil = {
-					0.8,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
 				dmg_mul = 3, --150 damage remains, yes, yes, y e s.
-				r = 1000,
+				r = 600,
 				acc = { --unchanged, they're too powerful for higher accuracy at this point, changing this would have negative effects
 					0,
 					0.75
@@ -5678,10 +5660,46 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 2, --100 damage, lower end of the falloff scale for shotgunners, should remain mostly unchanged acc and damage-wise as increasing their range has negative effects on gameplay and causes too many "who just destroyed all my armor in one shot" situations 
-				r = 2000,
+				r = 1000,
 				acc = {
 					0,
 					0.5
+				},
+				recoil = {
+					1.1,
+					1.3
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 2, 
+				r = 1500,
+				acc = {
+					0,
+					0.25
+				},
+				recoil = {
+					1.1,
+					1.3
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 1, 
+				r = 2000,
+				acc = {
+					0,
+					0.175
 				},
 				recoil = { --recoil is ok though, said the slut who is designing this mess
 					1.1,

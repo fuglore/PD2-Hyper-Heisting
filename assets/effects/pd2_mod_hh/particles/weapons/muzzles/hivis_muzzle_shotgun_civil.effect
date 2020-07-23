@@ -283,7 +283,7 @@
                 <opacity_keys loop="false">
                     <key t="0.016" v="0"/>
                     <key t="0.105" v="255"/>
-                    <key t="0.85" v="0"/>
+                    <key t="0.95" v="0"/>
                 </opacity_keys>
             </billboard>
         </visualizerstack>

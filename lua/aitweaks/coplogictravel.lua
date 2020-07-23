@@ -1399,15 +1399,12 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	end
 	
 	if not my_objective.area then
-	
 		if my_objective.pos then
 			return true
 		else
 			return
 		end
 	end
-	
-	
 
 	local my_dis = mvector3.distance_sq(my_objective.area.pos, data.m_pos)
 

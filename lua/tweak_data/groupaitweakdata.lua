@@ -7233,9 +7233,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	else
 		self.besiege.assault.force = {
-			64,
-			64,
-			64
+			1,
+			1,
+			1
 		}
 		self.besiege.assault.force_pool = {
 			256,
@@ -7287,10 +7287,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		end
 	elseif Global.game_settings and Global.game_settings.use_intense_AI then
 		self.besiege.assault.force_balance_mul = {
-			0.5,
-			0.75,
-			1.4,
-			1.4
+			32,
+			48,
+			72,
+			72
 		}
 		self.besiege.assault.force_pool_balance_mul = {
 			0.5,
@@ -7300,10 +7300,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	elseif difficulty_index < 7 then
 		self.besiege.assault.force_balance_mul = {
-			0.4,
-			0.5,
-			1,
-			1
+			16,
+			24,
+			64,
+			64
 		}
 		self.besiege.assault.force_pool_balance_mul = {
 			0.35,
@@ -7313,10 +7313,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	else
 		self.besiege.assault.force_balance_mul = {
-			0.5,
-			0.75,
-			1.4,
-			1.4
+			32,
+			48,
+			72,
+			72
 		}
 		self.besiege.assault.force_pool_balance_mul = {
 			0.5,
