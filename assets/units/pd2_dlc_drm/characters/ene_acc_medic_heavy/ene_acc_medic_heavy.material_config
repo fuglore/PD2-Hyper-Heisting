@@ -5,8 +5,8 @@
 	</material>
 
 	<material name="mtr_ene_acc_swat_medic_helmet_lod1" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS" version="2">
-        <bump_normal_texture 	file="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_head_nm" mips="3"/>
-        <diffuse_texture 	file="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_head_df" mips="3"/>
+        <bump_normal_texture 	file="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_head_nm" mip="3"/>
+        <diffuse_texture 	file="units/pd2_dlc_drm/characters/ene_medic_heavy_m4/heavy_medic_head_df" mip="3"/>
 	</material>
 	
 </materials>
