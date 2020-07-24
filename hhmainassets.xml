@@ -313,6 +313,9 @@
 	<object path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/ene_zeal_swat_shield_hh" />
 	<model path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/ene_zeal_swat_shield_hh" />	
 	<cooked_physics path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/ene_zeal_swat_shield_hh"/>	
+	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield/ene_zeal_swat_shield" load="true"/>
+	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield/ene_zeal_swat_shield_husk" load="true"/>	
 
 	<!--ZEAL SWAT Light AR-->	
 	<unit path="units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1" load="true"/>
