@@ -237,7 +237,7 @@ function ActionSpooc:init(action_desc, common_data)
 		self:_wait()
 	end
 
-	local detect_sound = tweak_data:difficulty_to_index(Global.game_settings.difficulty) < 8 and self:get_sound_event("detect")
+	local detect_sound = self:get_sound_event("detect")
 
 	if detect_sound and not Global.game_settings.telespooc then
 		common_data.unit:sound():play(detect_sound)

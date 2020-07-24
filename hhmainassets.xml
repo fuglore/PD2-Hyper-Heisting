@@ -2,6 +2,12 @@
 	<!--New CGs-->
 	<dds path="core/textures/cg_rvsb"/>
 	
+	 <scene path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
+	<material_config path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
+	<model path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />	
+	<texture path="core/environments/skies/sky_danger_moonlight/danger_moon_df" />
+	<texture path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight_df" />
+	
 	<!--Base Game Asset Replacements-->
 	<material_config path="units/pd2_dlc_friend/nature/terrain/sfm_backdrop" force="true"/>
 	<texture path="units/payday2/characters/shared_textures/spook_il" />

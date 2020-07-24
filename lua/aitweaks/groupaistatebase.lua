@@ -62,6 +62,8 @@ function GroupAIStateBase:on_simulation_started(...)
 		dis_mul = drama_tweak.max_dis_mul
 	}
 	self._special_unit_types = self._special_unit_types or {}
+	self._special_unit_types['fbi'] = true
+	self._special_unit_types['fbi_xc45'] = true
 	self._special_unit_types['tank_mini'] = true
 	self._special_unit_types['sniper'] = true	
 	self._special_unit_types['armored_sniper'] = true

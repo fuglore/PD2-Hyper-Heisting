@@ -548,7 +548,7 @@ end
 local fixed = false
 local origfunc2 = GroupAIStateBesiege._get_special_unit_type_count
 function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
-	if special_type == 'tank_mini' and special_type == 'tank_medic' and special_type == 'tank_ftsu' and special_type == 'spooc_heavy' and special_type == 'phalanx_minion' and special_type == 'tank_hw' and special_type == 'akuma' then
+	if special_type == 'tank_mini' and special_type == 'tank_medic' and special_type == 'tank_ftsu' and special_type == 'spooc_heavy' and special_type == 'phalanx_minion' and special_type == 'tank_hw' and special_type == 'akuma' and special_type == 'fbi' and special_type == 'ninja' and special_type == 'fbi_xc45' then
 		fixed = true
 	end
 	
@@ -572,6 +572,12 @@ function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 		res3 = res3 + (origfunc2(self, 'phalanx_minion', ...) or 0)
 		res3 = res3 + (origfunc2(self, 'akuma', ...) or 0)
 		return res3
+	end
+	
+	if not fixed and special_type == 'ninja' then
+		local res4 = origfunc2(self, 'ninja', ...) or 0
+		res4 = res4 + (origfunc2(self, 'fbi', ...) or 0)
+		res4 = res4 + (origfunc2(self, 'fbi_xc45', ...) or 0)
 	end
 	
 	return origfunc2(self, special_type, ...)
@@ -1302,8 +1308,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local enemy_count = self:_count_police_force("assault")
 	local nr_wanted = task_data.force - self:_count_police_force("assault")
 	local anticipation_count = task_data.force * 0.25
-
-	nr_wanted = task_data.force - self:_count_police_force("assault")
 
 	if self._task_data.assault.target_areas and primary_target_area and nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh or self._task_data.assault.target_areas and primary_target_area and self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil

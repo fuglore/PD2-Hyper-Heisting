@@ -474,16 +474,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
-			taser = 3,
+			taser = 1,
 			tank = 1,
 			sniper = 3,
-			spooc = 3
+			spooc = 1,
+			ninja = 4
 		}
 	elseif difficulty_index <= 2 then
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
 			shield = 4,
 			medic = 0,
-			taser = 2,
+			taser = 1,
 			tank = 0,
 			sniper = 3,			
 			spooc = 0
@@ -492,7 +493,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = { --hard escalates this, enables medics to keep tasers alive, adds a rare occasional dozer
 			shield = 4,
 			medic = 3,
-			taser = 2,
+			taser = 1,
 			tank = 1,
 			sniper = 3,			
 			spooc = 0
@@ -501,55 +502,61 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = { --very hard enables satan himself to come visit you, increases max medics and shields
 			shield = 6,
 			medic = 4,
-			taser = 2,
+			taser = 1,
 			tank = 1,
 			sniper = 3,			
-			spooc = 1
+			spooc = 1,
+			ninja = 1
 		}
 	elseif difficulty_index == 5 then
 		self.special_unit_spawn_limits = { --overkill enables two spoocs, adds another taser, escalate the game meaningfully every difficulty by increasing complexity
 			shield = 6,
 			medic = 4,
-			taser = 3,
+			taser = 1,
 			sniper = 3,						
 			tank = 1,
-			spooc = 2
+			spooc = 1,
+			ninja = 2
 		}
 	elseif difficulty_index == 6 then
 		self.special_unit_spawn_limits = { --begin coordinated spawngroups to heighten gameplay complexity, start pushing the boundaries, no big special limit change here outside of the cloakers, medics and shields, its fine though
 			shield = 8,
 			medic = 6,
-			taser = 3,
+			taser = 1,
 			tank = 1,
 			sniper = 3,						
-			spooc = 3
+			spooc = 1,
+			ninja = 3
 		}
 	elseif difficulty_index == 7 then
 		self.special_unit_spawn_limits = { --setting medic limit to six allows for survivability within common enemy spawngroups since special enemies are now paired commonly with medics to keep them alive consistently
 			shield = 8,
 			medic = 6,
-			taser = 3,
+			taser = 1,
 			sniper = 3,						
 			tank = 1,
-			spooc = 3
+			spooc = 1,
+			ninja = 3
 		}
 	elseif difficulty_index == 8 then
 		self.special_unit_spawn_limits = { --game reaches boiling point, 2 dozers, 4-5 tasers, 8-10 medics, 3-4 cloakers and 8-10 shields.
 			shield = 8,
 			medic = 8,
-			taser = 3,
+			taser = 1,
 			tank = 1,
 			sniper = 3,						
-			spooc = 3
+			spooc = 1,
+			ninja = 3
 		}
 	else
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
-			taser = 3,
+			taser = 1,
 			tank = 1,
 			sniper = 3,						
-			spooc = 3
+			spooc = 1,
+			ninja = 3
 		}
 	end
 
@@ -1485,6 +1492,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 	
 	if difficulty_index < 6 then
 		self.unit_categories.FBI_suit_M4_MP5 = {
+			special_type = "ninja",
 			unit_types = {
 				america = {
 					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
@@ -1524,6 +1532,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	elseif difficulty_index == 6 or difficulty_index == 7 then
 		self.unit_categories.FBI_suit_M4_MP5 = {
+			special_type = "ninja",
 			unit_types = {
 				america = {
 					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"),
@@ -1563,6 +1572,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	else
 		self.unit_categories.FBI_suit_M4_MP5 = {
+			special_type = "ninja",
 			unit_types = {
 				america = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4"),
@@ -4510,7 +4520,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle
 				},
 				{
-					freq = 0.5,
+					freq = 0.75,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5", 
 					tactics = self._tactics.swat_rifle
@@ -4582,7 +4592,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank_civil
 				},
 				{
-					amount_min = 2,
+					amount_min = 2,	
 					freq = 1,
 					amount_max = 2,
 					rank = 3,
@@ -4648,7 +4658,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank_civil
 				},
 				{
-					freq = 1,
+					freq = 0.75,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
 					tactics = self._tactics.swat_shotgun_rush_civil_independant --oh no they're dumb
@@ -4703,7 +4713,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank
 				},
 				{
-					freq = 1,
+					freq = 0.5,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
 					tactics = self._tactics.swat_rifle_complex_independant --oh no they're dumb
@@ -4742,7 +4752,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_rush_complex_independant
 				},
 				{
-					freq = 1,
+					freq = 0.5,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
 					tactics = self._tactics.swat_rifle_flank_complex --they're coordinated
@@ -4765,7 +4775,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle_independant
 				},
 				{
-					freq = 0.5,
+					freq = 0.75,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5", 
 					tactics = self._tactics.swat_rifle_independant
@@ -6555,18 +6565,19 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.tac_tazer_charge = {
 			amount = {
 				1,
-				4
+				3
 			},
 			spawn = {
 				{
 					amount_min = 1,
 					freq = 1,
-					amount_max = 2,
+					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_charge
 				},
 				{
+					amount_max = 2,
 					freq = 0.5,
 					rank = 2,
 					unit = "FBI_suit_M4_MP5",
@@ -6591,13 +6602,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.shield_support_charge
 				},
 				{
+					amount_max = 2,
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
@@ -6832,8 +6844,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 	if Global.game_settings and Global.game_settings.use_intense_AI then
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
-				2, --guaranteed two on DS
-				3 
+				1,
+				1 
 			},
 			spawn = {
 				{
@@ -6876,11 +6888,11 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				1,
-				2
+				1
 			},
 			spawn = {
 				{
-					freq = 1.5,
+					freq = 1,
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooc
@@ -6891,7 +6903,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				1,
-				2
+				1
 			},
 			spawn = {
 				{
@@ -6912,7 +6924,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				1,
-				3 --fucking power rangers insta-down squad bullshit
+				1
 			},
 			spawn = {
 				{
@@ -6932,8 +6944,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 	else
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
-				2, --guaranteed two on DS
-				3 
+				1, 
+				1
 			},
 			spawn = {
 				{
@@ -7247,10 +7259,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "pines" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
 		if Global.game_settings and Global.game_settings.use_intense_AI then
 			self.besiege.assault.force_balance_mul = {
-				20,
-				24,
 				32,
-				32
+				40,
+				48,
+				48
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
@@ -7261,9 +7273,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		elseif difficulty_index < 7 then
 			self.besiege.assault.force_balance_mul = {
 				16,
-				20,
 				24,
-				24
+				32,
+				32
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
@@ -7273,10 +7285,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			}
 		else
 			self.besiege.assault.force_balance_mul = {
-				20,
-				24,
 				32,
-				32
+				40,
+				48,
+				48
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,

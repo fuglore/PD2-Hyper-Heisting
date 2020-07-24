@@ -2498,27 +2498,36 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 end
 
 function CopLogicTravel.get_pathing_prio(data)
-	local prio = nil
-	local objective = data.objective
-	local focus_enemy = data.attention_obj
-	
-	if objective then
-		prio = 4
-		
-		if (objective.follow_unit or objective.type == "phalanx") then
-			prio = prio + 1
-			
-			if focus_enemy and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and focus_enemy.dis < 4000 then
-				prio = prio + 2
-			end
-		end
-		
-		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
-			prio = prio + 2
-		end	
-	end
+    local prio = nil
+    local objective = data.objective
 
-	return prio
+    if objective then
+        prio = 0 --once I added this here, it changed everything
+
+        if objective.type == "phalanx" then
+            prio = 4
+        elseif objective.follow_unit then
+            if objective.follow_unit:base().is_local_player or objective.follow_unit:base().is_husk_player or managers.groupai:state():is_unit_team_AI(objective.follow_unit) then
+                prio = 4
+            end
+        end
+    end
+
+    if data.is_converted or data.unit:in_slot(16) then ----check, maybe 0 does give some form of priority for other enemies to path faster?
+        if not prio then
+            prio = 0
+        end
+
+        prio = prio + 2
+    elseif data.team.id == tweak_data.levels:get_default_team_ID("player") then
+        if not prio then
+            prio = 0
+        end
+
+        prio = prio + 1
+    end
+
+    return prio
 end
 
 function CopLogicTravel._get_all_paths(data)
