@@ -6,14 +6,14 @@
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
     <material render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" name="mtr_bulldozer_lod">
-        <bump_normal_texture file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/material_nm" mips="3"/>
-        <diffuse_texture file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/material_v4_df" mips="3"/>
+        <bump_normal_texture file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/material_nm" mip="3"/>
+        <diffuse_texture file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/material_v4_df" mip="3"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 <!--     <material render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" name="mtr_bulldozer_lod_2">
-        <bump_normal_texture file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/material_nm" mips="4"/>
-        <diffuse_texture file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/material_v4_df" mips="4"/>
+        <bump_normal_texture file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/material_nm" mip="4"/>
+        <diffuse_texture file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/material_v4_df" mip="4"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material> -->
