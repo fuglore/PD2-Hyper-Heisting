@@ -57,7 +57,7 @@
   "ene_policia" : "Policía",
   "ene_policia_punk_bronco" : "Policía",
   "ene_gensec_punk_moss" : "GenSec Security",
-  "ene_gensec_punk_bronco"" : "GenSec Security",
+  "ene_gensec_punk_bronco" : "GenSec Security",
   "ene_gensec_punk_mp5" : "GenSec Security",
   "ene_gensec_fbigod_c45" : "Quadruple J",
   "ene_gensec_fbigod_m4" : "Jerry J. Jen'Sekh",
