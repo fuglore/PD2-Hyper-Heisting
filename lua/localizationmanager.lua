@@ -36,7 +36,7 @@
 		["hud_assault_FG_cover34"] = "WHITE VANS SPOTTED",
 		["hud_assault_FG_cover35"] = "NO SWAMP SHARKS INCLUDED",
 		["hud_assault_FG_cover36"] = "OH MY GOD WE'RE DOOOOOMED",
-		["hud_assault_FG_cover37"] = "VERY DANGEROUS", --a mystery.....
+		["hud_assault_FG_cover37"] = "VERY DANGEROUS", --a need for speed reference :)
 		["hud_assault_FG_cover38"] = "RANDOM CHIMP EVENT",
 		["hud_assault_FG_cover39"] = "ENEMY COUNT; A LOT",
 		["hud_assault_FG_cover40"] = "HI?",
@@ -72,7 +72,7 @@
 		["hud_assault_faction_ftsu"] = "VS. GENSEC TASKFORCE",
 		["hud_assault_faction_zeal"] = "VS. ZEAL LEGION",
 		["hud_assault_faction_psc"] = "VS. MURKY BATTALION",
-		["hud_assault_faction_mad"] = "VS. AKAN'S MERCENARIES",
+		["hud_assault_faction_mad"] = "VS. TRIANGLE TROOPS",
 		["hud_assault_faction_hvh"] = "YOU HAVE STARTLED THE HORDE",
 		["hud_assault_faction_generic"] = "VS. EVERYONE",
 		["hud_assault_faction_mexcross"] = "VS. BATALLÓN MURKY",
