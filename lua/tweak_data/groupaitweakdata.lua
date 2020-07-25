@@ -6241,8 +6241,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_flanking
@@ -6385,8 +6385,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_flanking
@@ -6424,8 +6424,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_flanking
@@ -6465,8 +6465,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.shield_support_charge
@@ -6651,7 +6651,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				{
 					amount_min = 1,
 					freq = 1,
-					amount_max = 2,
+					amount_max = 1,
 					rank = 2,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush
@@ -6760,7 +6760,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				{
 					amount_min = 1,
 					freq = 1,
-					amount_max = 2,
+					amount_max = 1,
 					rank = 3,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush
@@ -6785,7 +6785,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				{
 					amount_min = 1,
 					freq = 1,
-					amount_max = 2,
+					amount_max = 1,
 					rank = 2,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush
@@ -7259,10 +7259,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "pines" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
 		if Global.game_settings and Global.game_settings.use_intense_AI then
 			self.besiege.assault.force_balance_mul = {
+				16,
+				24,
 				32,
-				40,
-				48,
-				48
+				32
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
@@ -7285,10 +7285,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			}
 		else
 			self.besiege.assault.force_balance_mul = {
+				16,
+				24,
 				32,
-				40,
-				48,
-				48
+				32
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,

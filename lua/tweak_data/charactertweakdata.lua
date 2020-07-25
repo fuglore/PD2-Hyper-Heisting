@@ -800,7 +800,7 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	--30% faster
+	--20% faster
 	presets.move_speed.complex_consistency = {
 		stand = {
 			walk = {
@@ -810,57 +810,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 200
 				},
 				hos = {
-					strafe = 286,
-					fwd = 286,
-					bwd = 286
+					strafe = 264,
+					fwd = 264,
+					bwd = 264
 				},
 				cbt = {
-					strafe = 286,
-					fwd = 286,
-					bwd = 286
+					strafe = 264,
+					fwd = 264,
+					bwd = 264
 				}
 			},
 			run = {
 				hos = {
-					strafe = 585,
-					fwd = 585,
-					bwd = 585
+					strafe = 540,
+					fwd = 540,
+					bwd = 540
 				},
 				cbt = {
-					strafe = 585,
-					fwd = 585,
-					bwd = 585
+					strafe = 540,
+					fwd = 540,
+					bwd = 540
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 273,
-					fwd = 273,
-					bwd = 273
+					strafe = 252,
+					fwd = 252,
+					bwd = 252
 				},
 				cbt = {
-					strafe = 273,
-					fwd = 273,
-					bwd = 273
+					strafe = 252,
+					fwd = 252,
+					bwd = 252
 				}
 			},
 			run = {
 				hos = {
-					strafe = 455,
-					fwd = 455,
-					bwd = 455
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				},
 				cbt = {
-					strafe = 455,
-					fwd = 455,
-					bwd = 455
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				}
 			}
 		}
 	}
-	--40% faster, climax
+	--25% faster, climax
 	presets.move_speed.anarchy_consistency = {
 		stand = {
 			walk = {
@@ -870,52 +870,52 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 200
 				},
 				hos = {
-					strafe = 308,
-					fwd = 308,
-					bwd = 308
+					strafe = 275,
+					fwd = 275,
+					bwd = 275
 				},
 				cbt = {
-					strafe = 308,
-					fwd = 308,
-					bwd = 308
+					strafe = 275,
+					fwd = 275,
+					bwd = 275
 				}
 			},
 			run = {
 				hos = {
-					strafe = 630,
-					fwd = 630,
-					bwd = 630
+					strafe = 562,
+					fwd = 562,
+					bwd = 562
 				},
 				cbt = {
-					strafe = 630,
-					fwd = 630,
-					bwd = 630
+					strafe = 562,
+					fwd = 562,
+					bwd = 562
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 294,
-					fwd = 294,
-					bwd = 294
+					strafe = 262,
+					fwd = 262,
+					bwd = 262
 				},
 				cbt = {
-					strafe = 294,
-					fwd = 294,
-					bwd = 294
+					strafe = 262,
+					fwd = 262,
+					bwd = 262
 				}
 			},
 			run = {
 				hos = {
-					strafe = 490,
-					fwd = 490,
-					bwd = 490
+					strafe = 437,
+					fwd = 437,
+					bwd = 437
 				},
 				cbt = {
-					strafe = 490,
-					fwd = 490,
-					bwd = 490
+					strafe = 437,
+					fwd = 437,
+					bwd = 437
 				}
 			}
 		}
@@ -9870,7 +9870,7 @@ end
 --DS setup, the 3rd Strike is what counts. (3RD STR)
 
 function CharacterTweakData:_set_sm_wish()
-	self:_multiply_all_hp(5, 1)
+	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.25, 0.15, 0.6)
 	
 	self.tank.HEALTH_INIT = 1400

@@ -187,6 +187,17 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 		
 	end
+	
+	self.values.player.passive_health_multiplier = {
+		1.05,
+		1.1,
+		1.2,
+		1.4
+	}
+	
+	self.values.player.passive_health_regen = {
+		0.005
+	}
 		
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then		
 		--fuck you you piece of shit i'm not doing all this shit to make you function properly you fuck i hate your guts i hate you i hate you FUCK YOU
