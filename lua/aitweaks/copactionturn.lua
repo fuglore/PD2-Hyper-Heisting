@@ -37,8 +37,10 @@ function CopActionTurn:_upd_wait_full_blend(t)
 					speed = speed + copturnspdadd
 				end
 			end
-
-			if speed ~= 1 then
+			
+			if self._machine:get_global("shield") == 1 then
+				self._machine:set_speed(redir_res, 0.5)
+			elseif speed ~= 1 then
 				self._machine:set_speed_soft(redir_res, speed, 0.9)
 			end
 

@@ -800,7 +800,7 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	--30% faster
+	--20% faster
 	presets.move_speed.complex_consistency = {
 		stand = {
 			walk = {
@@ -810,57 +810,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 200
 				},
 				hos = {
-					strafe = 286,
-					fwd = 286,
-					bwd = 286
+					strafe = 264,
+					fwd = 264,
+					bwd = 264
 				},
 				cbt = {
-					strafe = 286,
-					fwd = 286,
-					bwd = 286
+					strafe = 264,
+					fwd = 264,
+					bwd = 264
 				}
 			},
 			run = {
 				hos = {
-					strafe = 585,
-					fwd = 585,
-					bwd = 585
+					strafe = 540,
+					fwd = 540,
+					bwd = 540
 				},
 				cbt = {
-					strafe = 585,
-					fwd = 585,
-					bwd = 585
+					strafe = 540,
+					fwd = 540,
+					bwd = 540
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 273,
-					fwd = 273,
-					bwd = 273
+					strafe = 252,
+					fwd = 252,
+					bwd = 252
 				},
 				cbt = {
-					strafe = 273,
-					fwd = 273,
-					bwd = 273
+					strafe = 252,
+					fwd = 252,
+					bwd = 252
 				}
 			},
 			run = {
 				hos = {
-					strafe = 455,
-					fwd = 455,
-					bwd = 455
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				},
 				cbt = {
-					strafe = 455,
-					fwd = 455,
-					bwd = 455
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				}
 			}
 		}
 	}
-	--40% faster, climax
+	--25% faster, climax
 	presets.move_speed.anarchy_consistency = {
 		stand = {
 			walk = {
@@ -870,52 +870,52 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 200
 				},
 				hos = {
-					strafe = 308,
-					fwd = 308,
-					bwd = 308
+					strafe = 275,
+					fwd = 275,
+					bwd = 275
 				},
 				cbt = {
-					strafe = 308,
-					fwd = 308,
-					bwd = 308
+					strafe = 275,
+					fwd = 275,
+					bwd = 275
 				}
 			},
 			run = {
 				hos = {
-					strafe = 630,
-					fwd = 630,
-					bwd = 630
+					strafe = 562,
+					fwd = 562,
+					bwd = 562
 				},
 				cbt = {
-					strafe = 630,
-					fwd = 630,
-					bwd = 630
+					strafe = 562,
+					fwd = 562,
+					bwd = 562
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 294,
-					fwd = 294,
-					bwd = 294
+					strafe = 262,
+					fwd = 262,
+					bwd = 262
 				},
 				cbt = {
-					strafe = 294,
-					fwd = 294,
-					bwd = 294
+					strafe = 262,
+					fwd = 262,
+					bwd = 262
 				}
 			},
 			run = {
 				hos = {
-					strafe = 490,
-					fwd = 490,
-					bwd = 490
+					strafe = 437,
+					fwd = 437,
+					bwd = 437
 				},
 				cbt = {
-					strafe = 490,
-					fwd = 490,
-					bwd = 490
+					strafe = 437,
+					fwd = 437,
+					bwd = 437
 				}
 			}
 		}
@@ -9870,7 +9870,7 @@ end
 --DS setup, the 3rd Strike is what counts. (3RD STR)
 
 function CharacterTweakData:_set_sm_wish()
-	self:_multiply_all_hp(5, 1)
+	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.25, 0.15, 0.6)
 	
 	self.tank.HEALTH_INIT = 1400
@@ -10188,6 +10188,489 @@ function CharacterTweakData:_set_sm_wish()
 	self.flashbang_multiplier = 2.25
 	self.concussion_multiplier = 1
 end
+
+--Bot weapons, here we go
+function CharacterTweakData:_init_russian(presets)
+	self.russian = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.russian.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_amcar_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92")
+	}
+	self.russian.detection = presets.detection.gang_member
+	self.russian.move_speed = presets.move_speed.very_fast
+	self.russian.crouch_move = false
+	self.russian.speech_prefix = "rb2"
+	self.russian.weapon_voice = "1"
+	self.russian.access = "teamAI1"
+	self.russian.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_german(presets)
+	self.german = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.german.weapon.weapons_of_choice = {
+		primary = "wpn_fps_shot_r870_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	}
+	self.german.detection = presets.detection.gang_member
+	self.german.move_speed = presets.move_speed.very_fast
+	self.german.crouch_move = false
+	self.german.speech_prefix = "rb2"
+	self.german.weapon_voice = "2"
+	self.german.access = "teamAI1"
+	self.german.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_spanish(presets)
+	self.spanish = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.spanish.weapon.weapons_of_choice = {
+		primary = "wpn_fps_lmg_m249_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.spanish.detection = presets.detection.gang_member
+	self.spanish.move_speed = presets.move_speed.very_fast
+	self.spanish.crouch_move = false
+	self.spanish.speech_prefix = "rb2"
+	self.spanish.weapon_voice = "3"
+	self.spanish.access = "teamAI1"
+	self.spanish.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_american(presets)
+	self.american = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.american.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_m4_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92")
+	}
+	self.american.detection = presets.detection.gang_member
+	self.american.move_speed = presets.move_speed.very_fast
+	self.american.crouch_move = false
+	self.american.speech_prefix = "rb2"
+	self.american.weapon_voice = "3"
+	self.american.access = "teamAI1"
+	self.american.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_jowi(presets)
+	self.jowi = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.jowi.weapon.weapons_of_choice = {
+		primary = "wpn_fps_snp_tti_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92")
+	}
+	self.jowi.detection = presets.detection.gang_member
+	self.jowi.move_speed = presets.move_speed.very_fast
+	self.jowi.crouch_move = false
+	self.jowi.speech_prefix = "rb2"
+	self.jowi.weapon_voice = "3"
+	self.jowi.access = "teamAI1"
+	self.jowi.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_old_hoxton(presets)
+	self.old_hoxton = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.old_hoxton.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_m14_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.old_hoxton.detection = presets.detection.gang_member
+	self.old_hoxton.move_speed = presets.move_speed.very_fast
+	self.old_hoxton.crouch_move = false
+	self.old_hoxton.speech_prefix = "rb2"
+	self.old_hoxton.weapon_voice = "3"
+	self.old_hoxton.access = "teamAI1"
+	self.old_hoxton.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_clover(presets)
+	self.female_1 = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.female_1.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_l85a2_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.female_1.detection = presets.detection.gang_member
+	self.female_1.move_speed = presets.move_speed.very_fast
+	self.female_1.crouch_move = false
+	self.female_1.speech_prefix = "rb7"
+	self.female_1.weapon_voice = "3"
+	self.female_1.access = "teamAI1"
+	self.female_1.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_dragan(presets)
+	self.dragan = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.dragan.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_vhs_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	}
+	self.dragan.detection = presets.detection.gang_member
+	self.dragan.move_speed = presets.move_speed.very_fast
+	self.dragan.crouch_move = false
+	self.dragan.speech_prefix = "rb8"
+	self.dragan.weapon_voice = "3"
+	self.dragan.access = "teamAI1"
+	self.dragan.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_jacket(presets)
+	self.jacket = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.jacket.weapon.weapons_of_choice = {
+		primary = "wpn_fps_smg_cobray_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	}
+	self.jacket.detection = presets.detection.gang_member
+	self.jacket.move_speed = presets.move_speed.very_fast
+	self.jacket.crouch_move = false
+	self.jacket.speech_prefix = "rb9"
+	self.jacket.weapon_voice = "3"
+	self.jacket.access = "teamAI1"
+	self.jacket.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_bonnie(presets)
+	self.bonnie = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.bonnie.weapon.weapons_of_choice = {
+		primary = "wpn_fps_shot_b682_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.bonnie.detection = presets.detection.gang_member
+	self.bonnie.move_speed = presets.move_speed.very_fast
+	self.bonnie.crouch_move = false
+	self.bonnie.speech_prefix = "rb10"
+	self.bonnie.weapon_voice = "3"
+	self.bonnie.access = "teamAI1"
+	self.bonnie.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_sokol(presets)
+	self.sokol = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.sokol.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_asval_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.sokol.detection = presets.detection.gang_member
+	self.sokol.move_speed = presets.move_speed.very_fast
+	self.sokol.crouch_move = false
+	self.sokol.speech_prefix = "rb11"
+	self.sokol.weapon_voice = "3"
+	self.sokol.access = "teamAI1"
+	self.sokol.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_dragon(presets)
+	self.dragon = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.dragon.weapon.weapons_of_choice = {
+		primary = "wpn_fps_smg_baka_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.dragon.detection = presets.detection.gang_member
+	self.dragon.move_speed = presets.move_speed.very_fast
+	self.dragon.crouch_move = false
+	self.dragon.speech_prefix = "rb12"
+	self.dragon.weapon_voice = "3"
+	self.dragon.access = "teamAI1"
+	self.dragon.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_bodhi(presets)
+	self.bodhi = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.bodhi.weapon.weapons_of_choice = {
+		primary = "wpn_fps_snp_model70_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	}
+	self.bodhi.detection = presets.detection.gang_member
+	self.bodhi.move_speed = presets.move_speed.very_fast
+	self.bodhi.crouch_move = false
+	self.bodhi.speech_prefix = "rb13"
+	self.bodhi.weapon_voice = "3"
+	self.bodhi.access = "teamAI1"
+	self.bodhi.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_jimmy(presets)
+	self.jimmy = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.jimmy.weapon.weapons_of_choice = {
+		primary = "wpn_fps_smg_sr2_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
+	}
+	self.jimmy.detection = presets.detection.gang_member
+	self.jimmy.move_speed = presets.move_speed.very_fast
+	self.jimmy.crouch_move = false
+	self.jimmy.speech_prefix = "rb14"
+	self.jimmy.weapon_voice = "3"
+	self.jimmy.access = "teamAI1"
+	self.jimmy.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_sydney(presets)
+	self.sydney = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.sydney.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_tecci_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.sydney.detection = presets.detection.gang_member
+	self.sydney.move_speed = presets.move_speed.very_fast
+	self.sydney.crouch_move = false
+	self.sydney.speech_prefix = "rb15"
+	self.sydney.weapon_voice = "3"
+	self.sydney.access = "teamAI1"
+	self.sydney.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_wild(presets)
+	self.wild = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.wild.weapon.weapons_of_choice = {
+		primary = "wpn_fps_sho_boot_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.wild.detection = presets.detection.gang_member
+	self.wild.move_speed = presets.move_speed.very_fast
+	self.wild.crouch_move = false
+	self.wild.speech_prefix = "rb16"
+	self.wild.weapon_voice = "3"
+	self.wild.access = "teamAI1"
+	self.wild.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_chico(presets)
+	self.chico = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.chico.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_contraband_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.chico.detection = presets.detection.gang_member
+	self.chico.move_speed = presets.move_speed.very_fast
+	self.chico.crouch_move = false
+	self.chico.speech_prefix = "rb17"
+	self.chico.weapon_voice = "3"
+	self.chico.access = "teamAI1"
+	self.chico.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_max(presets)
+	self.max = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.max.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_akm_gold_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.max.detection = presets.detection.gang_member
+	self.max.move_speed = presets.move_speed.very_fast
+	self.max.crouch_move = false
+	self.max.speech_prefix = "rb18"
+	self.max.weapon_voice = "3"
+	self.max.access = "teamAI1"
+	self.max.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_joy(presets)
+	self.joy = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.joy.weapon.weapons_of_choice = {
+		primary = "wpn_fps_smg_shepheard_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.joy.detection = presets.detection.gang_member
+	self.joy.move_speed = presets.move_speed.very_fast
+	self.joy.crouch_move = false
+	self.joy.speech_prefix = "rb19"
+	self.joy.weapon_voice = "3"
+	self.joy.access = "teamAI1"
+	self.joy.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_myh(presets)
+	self.myh = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.myh.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_ching_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.myh.detection = presets.detection.gang_member
+	self.myh.move_speed = presets.move_speed.very_fast
+	self.myh.crouch_move = false
+	self.myh.speech_prefix = "rb22"
+	self.myh.weapon_voice = "3"
+	self.myh.access = "teamAI1"
+	self.myh.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+
+function CharacterTweakData:_init_ecp(presets)
+	self.ecp_female = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.ecp_female.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_famas_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.ecp_female.detection = presets.detection.gang_member
+	self.ecp_female.move_speed = presets.move_speed.very_fast
+	self.ecp_female.crouch_move = false
+	self.ecp_female.speech_prefix = "rb21"
+	self.ecp_female.weapon_voice = "3"
+	self.ecp_female.access = "teamAI1"
+	self.ecp_female.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+	self.ecp_male = {
+		damage = presets.gang_member_damage,
+		weapon = deep_clone(presets.weapon.gang_member)
+	}
+	self.ecp_male.weapon.weapons_of_choice = {
+		primary = "wpn_fps_ass_scar_npc",
+		secondary = Idstring("units/payday2/weapons/wpn_npc_mac11/wpn_npc_mac11")
+	}
+	self.ecp_male.detection = presets.detection.gang_member
+	self.ecp_male.move_speed = presets.move_speed.very_fast
+	self.ecp_male.crouch_move = false
+	self.ecp_male.speech_prefix = "rb20"
+	self.ecp_male.weapon_voice = "3"
+	self.ecp_male.access = "teamAI1"
+	self.ecp_male.arrest = {
+		timeout = 240,
+		aggression_timeout = 6,
+		arrest_timeout = 240
+	}
+end
+--End Perferred Bot Weapons
 
 function CharacterTweakData:_create_table_structure() --vanilla table
 	self.weap_ids = {

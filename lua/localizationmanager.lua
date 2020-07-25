@@ -261,7 +261,29 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_expert_handling_desc"] = "BASIC: ##$basic##\nEach successful pistol hit gives you a ##10%## increased accuracy bonus for ##10## seconds and can stack ##4## times.  \n\nACE: ##$pro##\nYou reload all pistols ##25%## faster.",
 			
+			["menu_deck2_1_desc"] = "You gain ##5%## more health.",
+			
+			["menu_deck2_3_desc"] = "You are ##15%## more likely to be targeted by enemies when you are close to your crew members.\n\nYou gain ##5%## more health.",
+			
+			["menu_deck2_5_desc"] = "You gain ##10%## more health.",
+			
 			["menu_deck2_7_desc"] = "On killing an enemy, you have a chance to spread panic amongst enemies within a ##12m## radius of the victim. Panic will make enemies go into short bursts of uncontrollable fear.",
+			
+			["menu_deck2_9_desc"] = "You gain an additional ##20%## more health.\n\nYou regenerate #0.5%## of your health every ##5## seconds.",
+			
+			["menu_deck10_3_desc"] = "When you pick up ammo, you trigger an ammo pickup for ##50%## of normal pickup to other players in your team.\n\nCannot occur more than once every ##5## seconds.\n\nYou gain ##10%## more health.",
+
+			["menu_deck10_5_desc"] = "When you get healed from picking up ammo packs, your teammates also get healed for ##50%## of the amount.\n\nYou gain ##10%## more health.",
+			
+			["menu_deck11_3_desc"] = "Damaging an enemy now heals ##2## life points every ##0.3## seconds for ##3## seconds.\n\nYou gain ##10%## more health.",
+			
+			["menu_deck11_7_desc"] = "Damaging an enemy now heals ##4## life points every ##0.3## seconds for ##3## seconds.\n\nYou gain ##10%## more health.",
+			
+			["menu_deck13_3_desc"] = "Increases the amount of health stored from kills by ##4##.\n\nYou gain ##5%## more health.",
+			
+			["menu_deck13_5_desc"] = "Increases the maximum health that can be stored by ##50%##.\n\nYou gain ##5%## more health.\n\nYour chance to dodge is increased by ##10%##.",
+			
+			["menu_deck13_7_desc"] = "Increases the amount of health stored from kills by ##4##.\n\nYou gain ##5%## more health.",
 			
 			["menu_prison_wife_beta"] = "Jackpot",
 			["menu_prison_wife_beta_desc"] = "BASIC: ##$basic##\nYou regenerate ##5## armor for each successful headshot. This effect cannot occur more than once every ##2## seconds.\n\nACE: ##$pro##\nUpon killing an enemy with a headshot, you gain the ability to resist damage that would otherwise down you. This is lost after taking lethal damage, and can only be activated every ##5## seconds.\n\n ##Let's rock, baby!##",
