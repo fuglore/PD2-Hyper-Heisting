@@ -19,8 +19,6 @@
 		<extension name="anim_data" class="PlayerAnimationData" />
 		<extension name="character_damage" class="CopDamage">
 			<var name="_head_body_name" value="head" />
-			<var name="_head_gear_object" value="g_hat" />
-			<var name="_head_gear" value="units/pd2_mod_psc/characters/acc_murky_fbigod_fixed_beret/acc_murky_fbigod_fixed_beret" />
 		</extension>
 		<extension name="movement" class="CopMovement" >
 			<var name="_footwear" value="hardsole" />
