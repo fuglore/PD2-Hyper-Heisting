@@ -1215,7 +1215,7 @@ function CharacterTweakData:_presets(tweak_data)
 		0,
 		0
 	}
-	presets.detection.enemymook.ntl.dis_max = 2000
+	presets.detection.enemymook.ntl.dis_max = 1500
 	presets.detection.enemymook.ntl.angle_max = 55
 	presets.detection.enemymook.ntl.delay = {
 		0.7,
