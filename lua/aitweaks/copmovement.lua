@@ -114,11 +114,7 @@ function CopMovement:post_init()
 	self._unit:kill_mover()
 	self._unit:set_driving("script")
 	
-	if diff_index == 8 then
-		self._unit:unit_data().has_alarm_pager = self._tweak_data.has_alarm_pager
-	else
-		self._unit:unit_data().has_alarm_pager = nil
-	end
+	self._unit:unit_data().has_alarm_pager = nil
 	
 	local event_list = {
 		"bleedout",
