@@ -557,6 +557,13 @@
 	<sequence_manager path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"/>
 
 	<df_nm path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire" />
+	
+	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" load="true"/>
+	<object path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />
+	<model path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/glowstick_df" />
+	<texture path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/glowstick_il" />
 
 	<!--ZEAL/CRIME SPREE BULLDOZER MOTHAFUCKAS-->	
 	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic" force="true"/>

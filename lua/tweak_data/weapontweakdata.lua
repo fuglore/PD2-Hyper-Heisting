@@ -783,6 +783,41 @@ function WeaponTweakData:_set_sm_wish()
 	self.crate_turret_module.CLIP_SIZE = 800
 end
 
+--glowstick
+function WeaponTweakData:_init_data_npc_melee()
+	self.npc_melee = {
+		baton = {}
+	}
+	self.npc_melee.baton.unit_name = Idstring("units/payday2/characters/ene_acc_baton/ene_acc_baton")
+	self.npc_melee.baton.damage = 10
+	self.npc_melee.baton.animation_param = "melee_baton"
+	self.npc_melee.baton.player_blood_effect = true
+	self.npc_melee.knife_1 = {
+		unit_name = Idstring("units/payday2/characters/ene_acc_knife_1/ene_acc_knife_1"),
+		damage = 15,
+		animation_param = "melee_knife",
+		player_blood_effect = true
+	}
+	self.npc_melee.glowstick = {
+		unit_name = Idstring("units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick"),
+		damage = 15,
+		animation_param = "melee_knife",
+		player_blood_effect = true
+	}
+	self.npc_melee.fists = {
+		unit_name = nil,
+		damage = 8,
+		animation_param = "melee_fist",
+		player_blood_effect = true
+	}
+	self.npc_melee.helloween = {
+		unit_name = Idstring("units/pd2_halloween/weapons/wpn_mel_titan_hammer/wpn_mel_titan_hammer"),
+		damage = 10,
+		animation_param = "melee_fireaxe",
+		player_blood_effect = true
+	}
+end
+
 --OVERHAUL STUFF
 
 Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)

@@ -16,6 +16,7 @@
 			<var name="can_be_marked" value="true" />
 			<var name="_tweak_table" value="taser" />
 			<var name="_default_weapon_id" value="m4_yellow" />
+			<var name="_melee_weapon_table" value="glowstick" />
 		</extension>
 		<extension name="inventory" class="HuskCopInventory" />
 		<extension name="brain" class="HuskCopBrain" />
