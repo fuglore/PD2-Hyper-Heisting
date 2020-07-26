@@ -43,7 +43,7 @@
   "ene_fbi_swat_hvh" : "Zombie FBI SWAT",    
   "ene_fbi_heavy_hvh_1" : "Zombie FBI Heavy SWAT",
   "ene_cop_hvh" : "Zombie Cop",
-  "ene_male_office_cop" : "Policía Muncipal", 
+  "ene_male_office_cop" : "Policía", 
   "ene_male_office_cop_03" : "Eustáquio",   
   "ene_male_office_cop_04" : "Cesar", 
   "ene_bex_ninja_c45" : "Jerónimo",  
