@@ -20,7 +20,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._feddensityhighfrequency = 1
 	self._downleniency = 1
 	self._enemies_killed_sustain = 0
-	self._enemies_killed_sustain_guaranteed_break = 50
+	self._enemies_killed_sustain_guaranteed_break = 100
 	self._downcountleniency = 0
 	self._feddensity_active_t = nil
 	self._next_allowed_hunter_upd_t = nil
@@ -438,7 +438,7 @@ function GroupAIStateBesiege:update(t, dt)
 	if Network:is_server() then
 		self:_queue_police_upd_task()
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-		local testing = true
+		local fliptheswitch = Global.game_settings and Global.game_settings.one_down
 		
 		if self._downcountleniency > 5 then
 			self._downcountleniency = 5
@@ -449,65 +449,30 @@ function GroupAIStateBesiege:update(t, dt)
 		local activedrama = self._drama_data.amount >= tweak_data.drama.consistentcombat
 		local highdrama = self._drama_data.amount == tweak_data.drama.peak
 		
-		self._max_fedfuck_t_add = 3 * self._feddensityhighfrequency
-		
-		--if not self._feddensity_reset_t then
-			--log("noresettime")
-		--end
-		
-		self._feddensity_active_t = 5 + self._downcountleniency
-			
-		if self._downleniency and self._max_fedfuck_t_add then
-			self._max_fedfuck_t_add = math.floor(self._max_fedfuck_t_add * self._downleniency)
-		end
-		
-		if not self._max_fedfuck_t and activedrama and not self._feddensityhigh then
-			--log("tick tock")
-			self._max_fedfuck_t = self._t + self._max_fedfuck_t_add
-		end
-		
-		if not activedrama and self._max_fedfuck_t then
-			--log("beepbeepbeep")
-			self._max_fedfuck_t = nil
-		end
-		
-		if not self._feddensityhigh and not testing then
-			if activedrama and self._max_fedfuck_t and self._max_fedfuck_t < self._t or highdrama then
-				self._feddensityhigh = true
-				self._max_fedfuck_t = nil
-				self:chk_random_drama_comment()
-				self._feddensity_reset_t = self._t + self._feddensity_active_t
-				self._feddensityhighfrequency = self._feddensityhighfrequency + 0.5
-				--log("feddensityhigh active")
-			end
-		end
-		
-		if self._feddensityhigh and self._feddensity_reset_t and self._feddensity_reset_t < self._t or self._feddensityhigh and not self._task_data.assault.active then
-			self._feddensityhigh = nil
-			self._feddensity_reset_t = nil
-			self._max_fedfuck_t = nil
-			self._rolled_dramatalk_chance = nil
-			--log("resetting feddensity")
-		end
-		
 		local level = Global.level_data and Global.level_data.level_id
 		
-		if testing or level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "pbr" then
+		--or level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper"
+		
+		if fliptheswitch then
 			--Nothing
 		else
 			if self._task_data.assault and self._task_data.assault.phase == "build" or self._task_data.assault and self._task_data.assault.phase == "sustain" then
 				if not self._activeassaultbreak then
 					if not self._activeassaultnextbreak_t then
 						--log("assaultstartedbreakset")
-						self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
-						if diff_index >= 6 or Global.game_settings.aggroAI then
-							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20)
+						if managers.skirmish:is_skirmish() then
+							self._activeassaultnextbreak_t = self._t + math.random(30, 60)
+						else
+							self._activeassaultnextbreak_t = self._t + math.random(60, 120)
+						end
+						if diff_index > 6 or Global.game_settings.use_intense_AI then
+							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
 							--log("breaksetforDW")
 						end
 					end
 				end
 				
-				if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t or self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
+				if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
 					self._activeassaultbreak = true
 					if managers.skirmish:is_skirmish() then
 						self._stopassaultbreak_t = self._t + 5
@@ -516,16 +481,20 @@ function GroupAIStateBesiege:update(t, dt)
 					end
 					
 					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
-					self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 50
+					self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 100
 					log("assaultbreakon")
 				end
 				
 				if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
 					self._stopassaultbreak_t = nil
 					self._activeassaultbreak = nil
-					self._activeassaultnextbreak_t = self._t + math.random(20, 40) 
-					if diff_index >= 6 or Global.game_settings.aggroAI then
-						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(10, 20) 
+					if managers.skirmish:is_skirmish() then
+						self._activeassaultnextbreak_t = self._t + math.random(30, 60)
+					else
+						self._activeassaultnextbreak_t = self._t + math.random(60, 120)
+					end
+					if diff_index > 6 or Global.game_settings.aggroAI then
+						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
 					end
 					log("assaultbreakreset")
 				end
@@ -2068,7 +2037,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 
 		for i_tactic, tactic_name in ipairs(group_leader_u_data.tactics) do
-			if tactic_name == "deathguard" and not phase_is_anticipation then
+			if tactic_name == "deathguard" and not phase_is_anticipation and not group.is_chasing then
 				if current_objective.tactic == tactic_name then
 					for u_key, u_data in pairs(self._char_criminals) do
 						if u_data.status and current_objective.follow_unit == u_data.unit then
@@ -2124,61 +2093,59 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					end
 				end
 			elseif tactic_name == "hunter" and not phase_is_anticipation and can_update_hunter then
-					if current_objective.tactic == tactic_name then
-						for u_key, u_data in pairs(self._char_criminals) do
-							if u_data.unit then
-								local players_nearby = managers.player:_chk_fellow_crimin_proximity(u_data.unit)
-								local crim_nav_seg = u_data.tracker:nav_segment()
-								if players_nearby and players_nearby <= 0 then
-									if current_objective.area.nav_segs[crim_nav_seg] then
-										--return
-									end
-								end
-							end
-						end
-					end
-					local closest_crim_u_data, closest_crim_dis_sq = nil
-					local crim_dis_sq_chk = not closest_crim_dis_sq or closest_crim_dis_sq > closest_u_dis_sq
+				if current_objective.tactic == tactic_name and not group.is_chasing  then
 					for u_key, u_data in pairs(self._char_criminals) do
 						if u_data.unit then
 							local players_nearby = managers.player:_chk_fellow_crimin_proximity(u_data.unit)
-							local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(u_data.m_pos, group.units)
+							local crim_nav_seg = u_data.tracker:nav_segment()
 							if players_nearby and players_nearby <= 0 then
-								if closest_u_dis_sq and crim_dis_sq_chk then
-									closest_crim_u_data = u_data
-									closest_crim_dis_sq = closest_u_dis_sq
+								if current_objective.area.nav_segs[crim_nav_seg] then
+									--return
 								end
 							end
 						end
 					end
-					if closest_crim_u_data then
-						local search_params = {
-							from_tracker = group_leader_u_data.unit:movement():nav_tracker(),
-							to_tracker = closest_crim_u_data.tracker,
-							id = "GroupAI_deathguard",
-							access_pos = self._get_group_acces_mask(group)
-						}
-						local coarse_path = managers.navigation:search_coarse(search_params)
-						if coarse_path then
-							self:_merge_coarse_path_by_area(coarse_path)
-							local grp_objective = {
-								type = "assault_area",
-								tactic = "hunter",
-								distance = 9999,
-								follow_unit = closest_crim_u_data.unit,
-								area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
-								coarse_path = coarse_path,
-								attitude = "engage",
-								moving_in = true
-							}
-							group.is_chasing = true
-							self:_set_objective_to_enemy_group(group, grp_objective)
-							return
+				end
+				local closest_crim_u_data, closest_crim_dis_sq = nil
+				local crim_dis_sq_chk = not closest_crim_dis_sq or closest_crim_dis_sq > closest_u_dis_sq
+				for u_key, u_data in pairs(self._char_criminals) do
+					if u_data.unit then
+						local players_nearby = managers.player:_chk_fellow_crimin_proximity(u_data.unit)
+						local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(u_data.m_pos, group.units)
+						if players_nearby and players_nearby <= 0 then
+							if closest_u_dis_sq and crim_dis_sq_chk then
+								closest_crim_u_data = u_data
+								closest_crim_dis_sq = closest_u_dis_sq
+							end
 						end
 					end
-					self._next_allowed_hunter_upd_t = self._t + 1.5
-			elseif tactic_name == "charge" and not current_objective.moving_out and not self._activeassaultbreak and not current_objective.charge and not self._feddensityhigh and not tactics_map.obstacle then
-				charge = true
+				end
+				if closest_crim_u_data then
+					local search_params = {
+						from_tracker = group_leader_u_data.unit:movement():nav_tracker(),
+						to_tracker = closest_crim_u_data.tracker,
+						id = "GroupAI_deathguard",
+						access_pos = self._get_group_acces_mask(group)
+					}
+					local coarse_path = managers.navigation:search_coarse(search_params)
+					if coarse_path then
+						self:_merge_coarse_path_by_area(coarse_path)
+						local grp_objective = {
+							type = "assault_area",
+							tactic = "hunter",
+							distance = 9999,
+							follow_unit = closest_crim_u_data.unit,
+							area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
+							coarse_path = coarse_path,
+							attitude = "engage",
+							moving_in = true
+						}
+						group.is_chasing = true
+						self:_set_objective_to_enemy_group(group, grp_objective)
+						return
+					end
+				end
+				self._next_allowed_hunter_upd_t = self._t + 1.5
 			end
 		end
 	end
@@ -2216,9 +2183,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 			
-			if phase_is_anticipation and has_criminals_close or self._feddensityhigh or self._activeassaultbreak then
-				pull_back = true
-			elseif not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
+			if not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
 				approach = true
 			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				--open_fire = true
@@ -2404,7 +2369,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				open_fire = push or nil,
 				pushed = push or nil,
 				charge = charge,
-				interrupt_dis = charge and 0 or nil
+				interrupt_dis = 200
 			}
 			group.is_chasing = group.is_chasing or push
 

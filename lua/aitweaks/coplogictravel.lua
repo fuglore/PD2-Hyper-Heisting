@@ -1390,6 +1390,8 @@ function CopLogicTravel.queued_update(data)
 	end
       
     CopLogicTravel.queue_update(data, data.internal_data, delay)
+	
+	data.unit:brain():set_update_enabled_state(false)
 end
 
 function CopLogicTravel.chk_group_ready_to_move(data, my_data)
