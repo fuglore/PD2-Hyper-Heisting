@@ -54,8 +54,12 @@ function MedicDamage:heal_unit(unit, override_cooldown)
 				type = "heal",
 				client_interrupt = Network:is_client()
 			}
-
+			
 			self._unit:movement():action_request(action_data)
+		end
+		
+		if self._unit:contour() then
+			self._unit:contour():add("mark_enemy")
 		end
 
 		if self._unit:base():char_tweak()["custom_voicework"] then

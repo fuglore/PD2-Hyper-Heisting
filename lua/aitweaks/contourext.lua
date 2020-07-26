@@ -71,7 +71,7 @@ ContourExt._types = {
 		color = tweak_data.contour.character.friendly_color
 	},
 	mark_enemy = {
-		fadeout = 4.5,
+		fadeout = 8,
 		priority = 5,
 		material_swap_required = true,
 		fadeout_silent = 13.5,

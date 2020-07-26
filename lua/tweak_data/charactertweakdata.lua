@@ -8642,7 +8642,7 @@ end)
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
 	self.cop.HEALTH_INIT = 15
 	self.cop.headshot_dmg_mul = 16
-	self.cop.access = "security"	
+	self.cop.access = "swat"	
 	self.cop.damage.hurt_severity = presets.hurt_severities.hordepunk
 	self.cop_moss = deep_clone(self.cop)
 	if self.tweak_data and self.tweak_data.levels then

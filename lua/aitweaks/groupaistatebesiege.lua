@@ -13,6 +13,12 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	--self:set_debug_draw_state(true)
 	self._tweak_data = tweak_data.group_ai[group_ai_state]
+	
+	local level = Global.level_data and Global.level_data.level_id
+		
+	local small_map = level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des"
+	self._small_map = small_map or nil
+	
 	self._spawn_group_timers = {}
 	self._graph_distance_cache = {}
 	self._had_hostages = nil
@@ -20,7 +26,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._feddensityhighfrequency = 1
 	self._downleniency = 1
 	self._enemies_killed_sustain = 0
-	self._enemies_killed_sustain_guaranteed_break = 100
+	self._enemies_killed_sustain_guaranteed_break = nil
 	self._downcountleniency = 0
 	self._feddensity_active_t = nil
 	self._next_allowed_hunter_upd_t = nil
@@ -451,7 +457,15 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		local level = Global.level_data and Global.level_data.level_id
 		
-		--or level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper"
+		local small_map = level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des"
+		
+		if not self._enemies_killed_sustain_guaranteed_break then
+			if small_map then
+				self._enemies_killed_sustain_guaranteed_break = 100
+			else
+				self._enemies_killed_sustain_guaranteed_break = 200
+			end
+		end
 		
 		if fliptheswitch then
 			--Nothing
@@ -460,19 +474,22 @@ function GroupAIStateBesiege:update(t, dt)
 				if not self._activeassaultbreak then
 					if not self._activeassaultnextbreak_t then
 						--log("assaultstartedbreakset")
-						if managers.skirmish:is_skirmish() then
+						if managers.skirmish:is_skirmish() or small_map then
 							self._activeassaultnextbreak_t = self._t + math.random(30, 60)
 						else
 							self._activeassaultnextbreak_t = self._t + math.random(60, 120)
 						end
-						if diff_index > 6 or Global.game_settings.use_intense_AI then
-							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
-							--log("breaksetforDW")
+						
+						if small_map then
+							if diff_index > 6 or Global.game_settings.use_intense_AI then
+								self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
+								--log("breaksetforDW")
+							end
 						end
 					end
 				end
 				
-				if self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
+				if self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
 					self._activeassaultbreak = true
 					if managers.skirmish:is_skirmish() then
 						self._stopassaultbreak_t = self._t + 5
@@ -482,20 +499,34 @@ function GroupAIStateBesiege:update(t, dt)
 					
 					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
 					self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 100
+					if not self._said_heat_bonus_dialog then
+						self:play_heat_bonus_dialog()
+						for group_id, group in pairs(self._groups) do
+							for u_key, u_data in pairs(group.units) do
+								u_data.unit:sound():say("g90", true)
+							end
+						end
+					end
 					log("assaultbreakon")
 				end
 				
 				if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
 					self._stopassaultbreak_t = nil
 					self._activeassaultbreak = nil
-					if managers.skirmish:is_skirmish() then
+					if managers.skirmish:is_skirmish() or small_map then
 						self._activeassaultnextbreak_t = self._t + math.random(30, 60)
 					else
 						self._activeassaultnextbreak_t = self._t + math.random(60, 120)
 					end
-					if diff_index > 6 or Global.game_settings.aggroAI then
-						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
+						
+					if small_map then
+						if diff_index > 6 or Global.game_settings.use_intense_AI then
+							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
+							--log("breaksetforDW")
+						end
 					end
+					
+					self._said_heat_bonus_dialog = nil
 					log("assaultbreakreset")
 				end
 			else
@@ -618,6 +649,18 @@ function GroupAIStateBesiege:get_hostage_count_for_chatter()
 	end
 	
 	return 0
+end
+
+function GroupAIStateBesiege:chk_heat_bonus_retreat()
+	local assault_task = self._task_data.assault
+	
+	if assault_task and assault_task.phase == "build" or assault_task and assault_task.phase == "sustain" then
+		if self._activeassaultbreak then
+			return true
+		end
+	end
+	
+	return	
 end
 
 function GroupAIStateBesiege:_upd_assault_areas(current_area)
@@ -2632,9 +2675,13 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 						if spawn_task.ai_task then
 							spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
 							spawned_unit:brain()._logic_data.spawned_in_phase = spawn_task.ai_task.phase
+						end	
+						
+						if self._small_map then
+							sp_data.delay_t = self._t + math.random(7.5, 15)
+						else
+							sp_data.delay_t = self._t + math.random(5, 10)
 						end
-
-						sp_data.delay_t = self._t + sp_data.interval
 
 						if sp_data.amount then
 							sp_data.amount = sp_data.amount - 1

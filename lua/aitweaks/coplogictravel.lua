@@ -715,7 +715,25 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	local action_taken = data.logic.action_taken(data, my_data)
 	local focus_enemy = data.attention_obj
 	
+	if not managers.groupai:state():chk_heat_bonus_retreat() then
+		my_data.assault_break_retreat_complete = nil
+	end
+	
 	local do_something_else = true
+	
+	if not ignore_walks then
+		if not my_data.assault_break_retreat_complete and not action_taken and managers.groupai:state():chk_heat_bonus_retreat() then
+			action_taken = CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, nil, true)
+			do_something_else = nil
+			if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
+				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
+			end
+		end
+	end
+	
+	if not do_something_else then
+		return true
+	end
 	
 	if not ignore_walks then
 		if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
@@ -1207,8 +1225,10 @@ function CopLogicTravel.queued_update(data)
 	
 	--Snipers should stop if they have an aggressive reaction to a visible object or player
 	if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-		if not data.tactics or not data.tactics.sniper or data.tactics.sniper and not data.attention_obj.verified or data.tactics.sniper and data.attention_obj.dis > 4000 then
-			CopLogicTravel.upd_advance(data)
+		if not managers.groupai:state():chk_heat_bonus_retreat() then
+			if not data.tactics or not data.tactics.sniper or data.tactics.sniper and not data.attention_obj.verified or data.tactics.sniper and data.attention_obj.dis > 4000 then
+				CopLogicTravel.upd_advance(data)
+			end
 		end
 	else
 		CopLogicTravel.upd_advance(data)
@@ -1969,90 +1989,92 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 	
 	if can_perform_walking_action then
 	--what the fuck is my code rn tbh
-		if focus_enemy and focus_enemy.nav_tracker and focus_enemy.verified and focus_enemy.dis < 250 and CopLogicAttack._can_move(data) or data.tactics and data.tactics.elite_ranged_fire and focus_enemy and focus_enemy.nav_tracker and focus_enemy.verified and focus_enemy.verified_dis <= 1500 and CopLogicAttack._can_move(data) or data.tactics and data.tactics.hitnrun and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1000 and CopLogicAttack._can_move(data) or data.tactics and data.tactics.spoocavoidance and focus_enemy.verified and focus_enemy.aimed_at or data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified then
 			
-			local from_pos = mvector3.copy(data.m_pos)
-			local threat_tracker = focus_enemy.nav_tracker
-			local threat_head_pos = focus_enemy.m_head_pos
-			local max_walk_dis = nil
-			local vis_required = nil
+		local from_pos = mvector3.copy(data.m_pos)
+		local threat_tracker = focus_enemy.nav_tracker
+		local threat_head_pos = focus_enemy.m_head_pos
+		local max_walk_dis = nil
+		local vis_required = nil
 			
-			if assault_break then 	
-				max_walk_dis = 5000
-				vis_required = nil
-			elseif data.tactics and data.tactics.hitnrun then
-				max_walk_dis = 800
-			elseif data.tactics and data.tactics.elite_ranged_fire then
-				max_walk_dis = 2000
-				vis_required = true
-			elseif data.tactics and data.tactics.spoocavoidance then
-				max_walk_dis = 1500
-			elseif data.tactics and data.tactics.reloadingretreat then
-				max_walk_dis = 1500
-			else
-				max_walk_dis = 400
-			end
+		if assault_break then 	
+			max_walk_dis = 5000
+			vis_required = nil
+		elseif data.tactics and data.tactics.elite_ranged_fire then
+			max_walk_dis = 2000
+			vis_required = true
+		elseif data.tactics and data.tactics.spoocavoidance then
+			max_walk_dis = 1500
+		elseif data.tactics and data.tactics.reloadingretreat then
+			max_walk_dis = 1500
+		elseif data.tactics and data.tactics.hitnrun then
+			max_walk_dis = 800
+		else
+			max_walk_dis = 400
+		end
 				
-			local retreat_to = CopLogicAttack._find_retreat_position(from_pos, focus_enemy.m_pos, threat_head_pos, threat_tracker, max_walk_dis, vis_required)
+		local retreat_to = CopLogicAttack._find_retreat_position(from_pos, focus_enemy.m_pos, threat_head_pos, threat_tracker, max_walk_dis, vis_required)
 
-			if retreat_to then
-				CopLogicAttack._cancel_cover_pathing(data, my_data)
+		if retreat_to then
+			CopLogicAttack._cancel_cover_pathing(data, my_data)
 				
-				if data.unit:anim_data().move or data.unit:anim_data().run then
-					local new_action = {
-						body_part = 2,
-						type = "idle"
-					}
-					data.unit:brain():action_request(new_action)
-				end
+			if data.unit:anim_data().move or data.unit:anim_data().run then
+				local new_action = {
+					body_part = 2,
+					type = "idle"
+				}
+				data.unit:brain():action_request(new_action)
+			end
 					
 				--if data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.elite_ranged_fire then
 					--log("hitnrun or eliteranged just backed up properly")
 				--end
 					
 				
-				local new_action_data = {
-					variant = "run",
-					body_part = 2,
-					type = "walk",
-					nav_path = {
-						from_pos,
-						retreat_to
-					}
+			local new_action_data = {
+				variant = "run",
+				body_part = 2,
+				type = "walk",
+				nav_path = {
+					from_pos,
+					retreat_to
 				}
-				my_data.retreating = data.unit:brain():action_request(new_action_data)
+			}
+			my_data.retreating = data.unit:brain():action_request(new_action_data)
 					
-				if my_data.retreating then
-					my_data.surprised = true
-					
-					local flash = nil
-					
-					if data.tactics then
-						if data.tactics.smoke_grenade or data.tactics.flash_grenade then
-							if data.tactics.smoke_grenade and data.tactics.flash_grenade then
-								local flashchance = math.random()
-									
-								if flashchance < 0.5 then
-									flash = true
-								end
-							else
-								if data.tactics.flash_grenade then
-									flash = true
-								end
-							end
-								
-							CopLogicBase.do_grenade(data, data.m_pos + math.UP * 5, flash, true)
-						end
-					end
-					
-					if data.tactics and data.tactics.elite_ranged_fire then
-						if not data.unit:in_slot(16) and data.char_tweak.chatter.dodge then
-							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
-						end
-					end
-
-					return true
+			if my_data.retreating then
+				my_data.surprised = true
+				
+				if assault_break then
+					my_data.assault_break_retreat_complete = true
 				end
+				
+				local flash = nil
+					
+				if data.tactics then
+					if data.tactics.smoke_grenade or data.tactics.flash_grenade then
+						if data.tactics.smoke_grenade and data.tactics.flash_grenade then
+							local flashchance = math.random()
+								
+							if flashchance < 0.5 then
+								flash = true
+							end
+						else
+							if data.tactics.flash_grenade then
+								flash = true
+							end
+						end
+								
+						CopLogicBase.do_grenade(data, data.m_pos + math.UP * 5, flash, true)
+					end
+				end
+					
+				if data.tactics and data.tactics.elite_ranged_fire then
+					if not data.unit:in_slot(16) and data.char_tweak.chatter.dodge then
+						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
+					end
+				end
+
+				return true
 			end
 		end
 	end

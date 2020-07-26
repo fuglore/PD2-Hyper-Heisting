@@ -242,6 +242,17 @@ function CopLogicAttack._upd_combat_movement(data)
 		--log("how often is this happening")
 		return
 	end
+	
+	if not managers.groupai:state():chk_heat_bonus_retreat() then
+		my_data.assault_break_retreat_complete = nil
+	end
+	
+	if not my_data.assault_break_retreat_complete and not action_taken and managers.groupai:state():chk_heat_bonus_retreat() then
+		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil, true)
+		if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
+			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
+		end
+	end
 
 	if data.important and focus_enemy.verified and not my_data.turning and CopLogicAttack._can_move(data) and not unit:movement():chk_action_forbidden("walk") then
 		if not my_data.in_cover or not my_data.in_cover[4] then
@@ -560,7 +571,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	action_taken = action_taken or CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 end
 
-function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, vis_required)
+function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, vis_required, assault_break)
 	if focus_enemy and focus_enemy.nav_tracker and focus_enemy.verified and focus_enemy.dis < 250 and CopLogicAttack._can_move(data) then
 		local from_pos = mvec3_cpy(data.m_pos)
 		local threat_tracker = focus_enemy.nav_tracker
@@ -636,6 +647,10 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 
 			if my_data.advancing then
 				my_data.surprised = true
+				
+				if assault_break then
+					my_data.assault_break_retreat_complete = true
+				end
 				
 				local flash = nil
 					

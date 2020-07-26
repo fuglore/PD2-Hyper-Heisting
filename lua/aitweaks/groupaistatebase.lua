@@ -210,6 +210,14 @@ function GroupAIStateBase:chk_random_drama_comment()
 	self._rolled_dramatalk_chance = true
 end
 
+function GroupAIStateBase:play_heat_bonus_dialog()
+	if managers and managers.dialog._narrator_prefix and managers.dialog._narrator_prefix == "Play_ban_" then
+		managers.dialog:queue_narrator_dialog_raw("play_pln_gen_lkgo_01", nil)
+	end
+	
+	self._said_heat_bonus_dialog = true
+end
+
 function GroupAIStateBase:criminal_spotted(unit)
 	local u_key = unit:key()
 	local u_sighting = self._criminals[u_key]
