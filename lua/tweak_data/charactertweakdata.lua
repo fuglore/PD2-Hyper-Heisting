@@ -3244,7 +3244,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
-		tase_distance = 1000, 
+		tase_distance = 1500, 
 		aim_delay_tase = {
 			0,
 			0
@@ -4349,7 +4349,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
-		tase_distance = 1000,
+		tase_distance = 1500,
 		aim_delay_tase = {
 			0,
 			0
@@ -5491,7 +5491,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
-		tase_distance = 1000,
+		tase_distance = 1500,
 		aim_delay_tase = {
 			0,
 			0
@@ -8147,7 +8147,7 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.weapon = presets.weapon.simple
 	self.taser.detection = presets.detection.enemymook
 	self.taser.HEALTH_INIT = 20 
-	self.taser.headshot_dmg_mul = 2
+	self.taser.headshot_dmg_mul = 4
 	self.taser.damage.fire_damage_mul = 0.5
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.taser.move_speed = presets.move_speed.civil_consistency
