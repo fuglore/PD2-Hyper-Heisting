@@ -142,7 +142,9 @@ function GroupAIStateBase:update(t, dt)
 	self:_claculate_drama_value()
 	-- self:_draw_current_logics()
 	if Network:is_server() then
-		self._nr_important_cops = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul)) * 0.25
+		local new_value = self._police_force * 0.15 * table.size(self:all_player_criminals())
+
+		self._nr_important_cops = new_value
 	end
 	
 	if self._draw_drama then

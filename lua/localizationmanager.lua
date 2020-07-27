@@ -269,7 +269,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_deck2_7_desc"] = "On killing an enemy, you have a chance to spread panic amongst enemies within a ##12m## radius of the victim. Panic will make enemies go into short bursts of uncontrollable fear.",
 			
-			["menu_deck2_9_desc"] = "You gain an additional ##20%## more health.\n\nYou regenerate #0.5%## of your health every ##5## seconds.",
+			["menu_deck2_9_desc"] = "You gain an additional ##20%## more health.\n\nYou regenerate ##0.5%## of your health every ##5## seconds.",
 			
 			["menu_deck10_3_desc"] = "When you pick up ammo, you trigger an ammo pickup for ##50%## of normal pickup to other players in your team.\n\nCannot occur more than once every ##5## seconds.\n\nYou gain ##10%## more health.",
 
