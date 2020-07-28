@@ -327,12 +327,14 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local cover_line_to_use = "hud_assault_cover"
 	local danger_line_to_use = "hud_assault_danger"
 	local FG_chance = math.random(1, 261)
-	local danger_chance = math.random(1, 111)
+	local danger_chance = math.random(1, 114)
+	local heat_chance = math.random(1, 112)
 	local versusline = "hud_assault_faction_swat"
 	
 	local faction = tweak_data.levels:get_ai_group_type()
 	
 	local assaultline = "hud_assault_assault"
+	local heatbonus_line_to_use = "hud_heat_common"
 	
 	if faction then
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)				
@@ -400,12 +402,16 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if danger_chance <= 11 then
+	if danger_chance <= 14 then
 		danger_line_to_use = "hud_assault_FG_danger" .. danger_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
 			danger_line_to_use = "hud_assault_dangermex"
 		end
+	end
+	
+	if heat_chance <= 12 then
+		heatbonus_line_to_use = "hud_heat_" .. heat_chance
 	end
 	
 	if self._assault_mode == "normal" then
@@ -429,41 +435,82 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 				ids_risk,
 				"hud_assault_end_line",
 			}
-		elseif managers.job:current_difficulty_stars() > 0 then
-			local ids_risk = Idstring("risk")
-			return {
-				assaultline,
-				"hud_assault_end_line",
-				cover_line_to_use,
-				"hud_assault_end_line",
-				versusline,
-				"hud_assault_end_line",
-				ids_risk,
-				"hud_assault_end_line",
-				assaultline,
-				"hud_assault_end_line",
-				cover_line_to_use,
-				"hud_assault_end_line",
-				versusline,
-				"hud_assault_end_line",
-				ids_risk,
-				"hud_assault_end_line",
-			}
-		else
-			return {
-				assaultline,
-				"hud_assault_end_line",
-				cover_line_to_use,
-				"hud_assault_end_line",
-				versusline,
-				"hud_assault_end_line",
-				assaultline,
-				"hud_assault_end_line",
-				cover_line_to_use,
-				"hud_assault_end_line",
-				versusline,
-				"hud_assault_end_line",
-			}
+		else		
+			if managers.job:current_difficulty_stars() > 0 then
+				local ids_risk = Idstring("risk")
+				
+				if self._assault_state == "heat" then
+					return {
+						"hud_assault_heat",
+						"hud_assault_end_line",
+						heatbonus_line_to_use,
+						"hud_assault_end_line",
+						"hud_heat_gameplay",
+						"hud_assault_end_line",
+						ids_risk,
+						"hud_assault_end_line",
+						"hud_assault_heat",
+						"hud_assault_end_line",
+						heatbonus_line_to_use,
+						"hud_assault_end_line",
+						"hud_heat_gameplay",
+						"hud_assault_end_line",
+						ids_risk,
+						"hud_assault_end_line",
+					}
+				else
+					return {
+						assaultline,
+						"hud_assault_end_line",
+						cover_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						ids_risk,
+						"hud_assault_end_line",
+						assaultline,
+						"hud_assault_end_line",
+						cover_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						ids_risk,
+						"hud_assault_end_line",
+					}
+				end
+			else
+				if self._assault_state == "heat" then
+					return {
+						"hud_assault_heat",
+						"hud_assault_end_line",
+						heatbonus_line_to_use,
+						"hud_assault_end_line",
+						"hud_heat_gameplay",
+						"hud_assault_end_line",
+						assaultline,
+						"hud_assault_end_line",
+						heatbonus_line_to_use,
+						"hud_assault_end_line",
+						"hud_heat_gameplay",
+						"hud_assault_end_line",
+					}
+				else
+					return {
+						assaultline,
+						"hud_assault_end_line",
+						cover_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						assaultline,
+						"hud_assault_end_line",
+						cover_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+					}
+				end
+			end
 		end
 	end
 
@@ -515,6 +562,12 @@ function HUDAssaultCorner:set_color_state(state)
 		self._assault_state = "lastcrimstanding"
 		if self._current_assault_color ~= self._clutch_color then
 			self:_update_assault_hud_color(self._clutch_color)
+			self:_start_assault(self:_get_assault_strings())
+		end
+	elseif state == "heat" then
+		self._assault_state = "heat"
+		if self._current_assault_color ~= self._assault_survived_color then
+			self:_update_assault_hud_color(self._assault_survived_color)
 			self:_start_assault(self:_get_assault_strings())
 		end
 	else

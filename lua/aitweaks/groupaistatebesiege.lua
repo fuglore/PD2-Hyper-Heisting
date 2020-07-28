@@ -424,6 +424,7 @@ end
 
 function GroupAIStateBesiege:update(t, dt)
 	GroupAIStateBesiege.super.update(self, t, dt)
+	self:get_assault_hud_state()
 	
 	if managers.hud._hud_assault_corner._assault then
 		if managers.hud.needs_to_restart_assault_banner then
@@ -431,9 +432,7 @@ function GroupAIStateBesiege:update(t, dt)
 			managers.hud.needs_to_restart_assault_banner = nil
 		end
 		
-		if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
-			self:get_assault_hud_state()
-			
+		if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then			
 			if managers.hud._hud_assault_corner.set_color_state and managers.hud._hud_assault_corner._assault_state ~= self._current_assault_state then
 				managers.hud._hud_assault_corner:set_color_state(self._current_assault_state)
 				--managers.hud._hud_assault_corner:_start_assault(self._assault_number)
@@ -461,6 +460,7 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		if not self._enemies_killed_sustain_guaranteed_break then
 			if small_map then
+				--log("fuck")
 				self._enemies_killed_sustain_guaranteed_break = 100
 			else
 				self._enemies_killed_sustain_guaranteed_break = 200
@@ -480,7 +480,7 @@ function GroupAIStateBesiege:update(t, dt)
 							self._activeassaultnextbreak_t = self._t + math.random(60, 120)
 						end
 						
-						if small_map then
+						if not small_map then
 							if diff_index > 6 or Global.game_settings.use_intense_AI then
 								self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
 								--log("breaksetforDW")
@@ -489,16 +489,21 @@ function GroupAIStateBesiege:update(t, dt)
 					end
 				end
 				
-				if self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
+				if not self._activeassaultbreak and self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
 					self._activeassaultbreak = true
 					if managers.skirmish:is_skirmish() then
 						self._stopassaultbreak_t = self._t + 5
 					else
-						self._stopassaultbreak_t = self._t + math.random(5, 10)
+						self._stopassaultbreak_t = self._t + 10
 					end
 					
 					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
-					self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 100
+					if small_map then
+						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 100
+					else
+						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 200
+					end
+					
 					if not self._said_heat_bonus_dialog then
 						self:play_heat_bonus_dialog()
 						for group_id, group in pairs(self._groups) do
@@ -507,7 +512,8 @@ function GroupAIStateBesiege:update(t, dt)
 							end
 						end
 					end
-					log("assaultbreakon")
+					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					--log("assaultbreakon")
 				end
 				
 				if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
@@ -519,7 +525,7 @@ function GroupAIStateBesiege:update(t, dt)
 						self._activeassaultnextbreak_t = self._t + math.random(60, 120)
 					end
 						
-					if small_map then
+					if not small_map then
 						if diff_index > 6 or Global.game_settings.use_intense_AI then
 							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
 							--log("breaksetforDW")
@@ -527,7 +533,8 @@ function GroupAIStateBesiege:update(t, dt)
 					end
 					
 					self._said_heat_bonus_dialog = nil
-					log("assaultbreakreset")
+					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					--log("assaultbreakreset")
 				end
 			else
 				self._stopassaultbreak_t = nil
@@ -548,7 +555,8 @@ end
 local fixed = false
 local origfunc2 = GroupAIStateBesiege._get_special_unit_type_count
 function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
-	if special_type == 'tank_mini' and special_type == 'tank_medic' and special_type == 'tank_ftsu' and special_type == 'spooc_heavy' and special_type == 'phalanx_minion' and special_type == 'tank_hw' and special_type == 'akuma' and special_type == 'fbi' and special_type == 'ninja' and special_type == 'fbi_xc45' then
+	if special_type == 'tank_mini' or special_type == 'tank_medic' or special_type == 'tank_ftsu' or special_type == 'spooc_heavy' or special_type == 'phalanx_minion' or special_type == 'tank_hw' or special_type == 'akuma' or special_type == 'fbi' or special_type == 'ninja' or special_type == 'fbi_xc45' then
+		--log("based")
 		fixed = true
 	end
 	
@@ -2389,9 +2397,9 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	
 		if assault_area and assault_path then
-			local assault_area = push and assault_area or found_areas[assault_area] == current_objective.area and objective_area or current_objective.area
-
-			if #assault_path > 4 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
+			local assault_area = assault_area 
+			
+			if #assault_path > 2 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
 				table.remove(assault_path)
 			end
 
@@ -2678,9 +2686,9 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 						end	
 						
 						if self._small_map then
-							sp_data.delay_t = self._t + math.random(7.5, 15)
-						else
 							sp_data.delay_t = self._t + math.random(5, 10)
+						else
+							sp_data.delay_t = self._t + math.random(7.5, 15)
 						end
 
 						if sp_data.amount then

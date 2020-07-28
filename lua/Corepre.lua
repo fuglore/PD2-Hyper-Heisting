@@ -141,4 +141,18 @@ end
 if not _G.voiceline_framework then
 	blt.xaudio.setup()
 	_G.voiceline_framework = VoicelineFramework:new()
-end 
+end
+
+Hooks:Add("NetworkReceivedData", "shin_receive_network_data", function(sender, message, data)
+    if message == "shin_sync_hud_assault_color" then 
+        if sender == 1 then
+            if data == "true" then 
+                managers.groupai:state()._activeassaultbreak = true
+				 managers.groupai:state():play_heat_bonus_dialog()
+            elseif data == "nil" then 
+               managers.groupai:state()._activeassaultbreak = nil
+			   managers.groupai:state()._said_heat_bonus_dialog = nil
+            end
+        end
+    end
+end) 

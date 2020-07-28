@@ -130,7 +130,11 @@ function GroupAIStateBase:get_assault_hud_state()
 			end
 		end
 	else
-		self._current_assault_state = "normal"
+		if self._activeassaultbreak then
+			self._current_assault_state = "heat"
+		else
+			self._current_assault_state = "normal"
+		end
 	end
 	
 end
