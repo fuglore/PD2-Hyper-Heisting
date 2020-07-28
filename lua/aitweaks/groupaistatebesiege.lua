@@ -483,7 +483,7 @@ function GroupAIStateBesiege:update(t, dt)
 						if not small_map then
 							if diff_index > 6 or Global.game_settings.use_intense_AI then
 								self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
-								--log("breaksetforDW")
+								log("breaksetforDW")
 							end
 						end
 					end
@@ -534,7 +534,7 @@ function GroupAIStateBesiege:update(t, dt)
 					
 					self._said_heat_bonus_dialog = nil
 					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
-					--log("assaultbreakreset")
+					log("assaultbreakreset")
 				end
 			else
 				self._stopassaultbreak_t = nil
@@ -2614,6 +2614,10 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
 			return
 		end
+		
+		if self._activeassaultbreak then
+			return
+		end
 
 		local hopeless = true
 		local current_unit_type = tweak_data.levels:get_ai_group_type()
@@ -2684,12 +2688,6 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 							spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
 							spawned_unit:brain()._logic_data.spawned_in_phase = spawn_task.ai_task.phase
 						end	
-						
-						if self._small_map then
-							sp_data.delay_t = self._t + math.random(5, 10)
-						else
-							sp_data.delay_t = self._t + math.random(7.5, 15)
-						end
 
 						if sp_data.amount then
 							sp_data.amount = sp_data.amount - 1
@@ -2748,6 +2746,17 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 	if complete then
 		spawn_task.group.has_spawned = true
+		
+		for _, sp_data in ipairs(spawn_points) do
+			if sp_data.mission_element:enabled() then
+				if self._small_map then
+					sp_data.delay_t = self._t + math.random(5, 10)
+				else
+					sp_data.delay_t = self._t + math.random(2.5, 5)
+				end
+			end
+		end
+		
 		self:_voice_groupentry(spawn_task.group)
 		table.remove(self._spawning_groups, use_last and #self._spawning_groups or 1)
 

@@ -2021,6 +2021,11 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 			[id] = true
 		}
 	end
+	
+	if data.unit:base():has_tag("takedown") or data.important or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+		asap = true
+		exec_t = data.t
+	end
 
 	managers.enemy:queue_task(id, func, data, exec_t, callback(CopLogicBase, CopLogicBase, "on_queued_task", internal_data), asap)
 end

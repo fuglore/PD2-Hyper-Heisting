@@ -4,8 +4,8 @@ local origin_charmap = CharacterTweakData.character_map
 
 function CharacterTweakData:init(tweak_data)
 	local presets = self:_presets(tweak_data)
-	self._speech_prefix_p2 = "n"
 	origin_init(self, tweak_data)
+	self._speech_prefix_p2 = "n"
 end
 
 function CharacterTweakData:_init_region_shared()
@@ -18,7 +18,6 @@ end
 
 function CharacterTweakData:_presets(tweak_data)
 	local presets = origin_presets(self, tweak_data)
-	
 	
 	--replace existing suppression presets with lighter and consistent ones to accomodate for lack of immediate enemy suppression
 	presets.suppression = {

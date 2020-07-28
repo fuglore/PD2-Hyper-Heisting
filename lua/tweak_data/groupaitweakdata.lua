@@ -542,7 +542,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = { --game reaches boiling point, 2 dozers, 4-5 tasers, 8-10 medics, 3-4 cloakers and 8-10 shields.
 			shield = 8,
 			medic = 8,
-			taser = 2,
+			taser = 1,
 			tank = 1,
 			sniper = 3,						
 			spooc = 2,
@@ -552,7 +552,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
-			taser = 2,
+			taser = 1,
 			tank = 1,
 			sniper = 3,						
 			spooc = 2,
