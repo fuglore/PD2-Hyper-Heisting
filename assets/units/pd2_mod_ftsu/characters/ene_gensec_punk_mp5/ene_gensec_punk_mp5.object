@@ -220,9 +220,9 @@
 			</lod_object>
 
 			<lod_object name="lod_hat">
-				<object name="g_hat_lod1" 		enabled="true"  max_distance="3000"  max_draw_lod="0" cpy_material_vars="contour_color, contour_opacity">
+					<object name="g_hat_lod1" 		enabled="true"  max_distance="3000"  max_draw_lod="0" cpy_material_vars="contour_color, contour_opacity">
 				</object>
-				<object name="g_hat_lod2" 		enabled="true" lod="1" >
+					<object name="g_hat_lod2" 		enabled="true" lod="1" >
 				</object>
 			</lod_object>
 			<object name="s_body" enabled="true" shadow_caster="true"/>
