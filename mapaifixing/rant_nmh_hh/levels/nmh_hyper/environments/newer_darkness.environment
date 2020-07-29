@@ -12,7 +12,7 @@
 			<param key="sun_ray_color_scale" value="0"/>
 			<param key="global_world_overlay_texture" value=""/>
 			<param key="sun_ray_color" value="0 0 0"/>
-			<param key="global_texture" value="units/pd2_dlc_dah/environments/cubemaps/cubemap_white_highlight_blurry"/>
+			<param key="global_texture" value="units/pd2_dlc_dah/environments/cubemaps/cubemap_white_highlight"/>
 		</others>
 		<post_effect>
 			<deferred>
