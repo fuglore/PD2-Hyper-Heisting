@@ -511,7 +511,7 @@ function GroupAIStateBesiege:update(t, dt)
 					--log("assaultbreakon")
 				end
 				
-				if not self._stopassaultbreak_t and self._stopassaultbreak_t < t then
+				if self._stopassaultbreak_t and self._stopassaultbreak_t < t then
 					self._stopassaultbreak_t = nil
 					self._activeassaultbreak = nil
 					if managers.skirmish:is_skirmish() or small_map then
