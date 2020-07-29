@@ -190,12 +190,18 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	--punk mossberg
 	self.mossberg_npc.usage = "is_shotgun_mag"
 	self.mossberg_npc.hold = "rifle"
-	self.mossberg_npc.sounds.prefix = "remington_npc"	
+	self.mossberg_npc.sounds.prefix = "remington_npc"
 	self.mossberg_npc.DAMAGE = 2.5
 	self.mossberg_npc.CLIP_AMMO_MAX = 2
 	
 	self.mini_npc.CLIP_AMMO_MAX = 100000 --new minigun dozer buff setup
 	self.mini_npc.NR_CLIPS_MAX = 1
+
+	-- Bot Weapon Changes
+	self.sr2_crew.use_data.selection_index = 2
+	self.cobray_crew.use_data.selection_index = 2
+	self.baka_crew.use_data.selection_index = 2
+	self.shepheard_crew.use_data.selection_index = 2
 	
 	--high vis trails for high damage/important enemy weapons
 	self.m14_sniper_npc.hivis = true
