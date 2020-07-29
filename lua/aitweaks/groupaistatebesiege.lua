@@ -474,9 +474,9 @@ function GroupAIStateBesiege:update(t, dt)
 					if not self._activeassaultnextbreak_t then
 						--log("assaultstartedbreakset")
 						if managers.skirmish:is_skirmish() or small_map then
-							self._activeassaultnextbreak_t = self._t + math.random(30, 60)
+							self._activeassaultnextbreak_t = t + math.random(30, 60)
 						else
-							self._activeassaultnextbreak_t = self._t + math.random(60, 120)
+							self._activeassaultnextbreak_t = t + math.random(60, 120)
 						end
 						
 						if not small_map then
@@ -488,13 +488,9 @@ function GroupAIStateBesiege:update(t, dt)
 					end
 				end
 				
-				if not self._activeassaultbreak and self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
-					self._activeassaultbreak = true
-					if managers.skirmish:is_skirmish() then
-						self._stopassaultbreak_t = self._t + 5
-					else
-						self._stopassaultbreak_t = self._t + 10
-					end
+				if not self._activeassaultbreak and self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
+					
+					self._stopassaultbreak_t = t + 10
 					
 					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
 					if small_map then
@@ -515,13 +511,13 @@ function GroupAIStateBesiege:update(t, dt)
 					--log("assaultbreakon")
 				end
 				
-				if not self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+				if not self._stopassaultbreak_t and self._stopassaultbreak_t < t then
 					self._stopassaultbreak_t = nil
 					self._activeassaultbreak = nil
 					if managers.skirmish:is_skirmish() or small_map then
-						self._activeassaultnextbreak_t = self._t + math.random(30, 60)
+						self._activeassaultnextbreak_t = t + math.random(30, 60)
 					else
-						self._activeassaultnextbreak_t = self._t + math.random(60, 120)
+						self._activeassaultnextbreak_t = t + math.random(60, 120)
 					end
 						
 					if not small_map then
