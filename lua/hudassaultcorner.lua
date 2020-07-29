@@ -416,25 +416,42 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	
 	if self._assault_mode == "normal" then
 		if self._assault_state == "danger" or self._assault_state == "lastcrimstanding" then
-			local ids_risk = Idstring("risk")
-			return {
-				assaultline,
-				"hud_assault_end_line",
-				danger_line_to_use,
-				"hud_assault_end_line",
-				versusline,
-				"hud_assault_end_line",
-				ids_risk,
-				"hud_assault_end_line",
-				assaultline,
-				"hud_assault_end_line",
-				danger_line_to_use,
-				"hud_assault_end_line",
-				versusline,
-				"hud_assault_end_line",
-				ids_risk,
-				"hud_assault_end_line",
-			}
+			if managers.job:current_difficulty_stars() > 0 then
+				return {
+					assaultline,
+					"hud_assault_end_line",
+					danger_line_to_use,
+					"hud_assault_end_line",
+					versusline,
+					"hud_assault_end_line",
+					assaultline,
+					"hud_assault_end_line",
+					danger_line_to_use,
+					"hud_assault_end_line",
+					versusline,
+					"hud_assault_end_line",
+				}
+			else
+				local ids_risk = Idstring("risk")
+				return {
+					assaultline,
+					"hud_assault_end_line",
+					danger_line_to_use,
+					"hud_assault_end_line",
+					versusline,
+					"hud_assault_end_line",
+					ids_risk,
+					"hud_assault_end_line",
+					assaultline,
+					"hud_assault_end_line",
+					danger_line_to_use,
+					"hud_assault_end_line",
+					versusline,
+					"hud_assault_end_line",
+					ids_risk,
+					"hud_assault_end_line",
+				}
+			end
 		else		
 			if managers.job:current_difficulty_stars() > 0 then
 				local ids_risk = Idstring("risk")

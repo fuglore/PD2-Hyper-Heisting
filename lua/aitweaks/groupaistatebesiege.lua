@@ -435,7 +435,6 @@ function GroupAIStateBesiege:update(t, dt)
 		if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then			
 			if managers.hud._hud_assault_corner.set_color_state and managers.hud._hud_assault_corner._assault_state ~= self._current_assault_state then
 				managers.hud._hud_assault_corner:set_color_state(self._current_assault_state)
-				--managers.hud._hud_assault_corner:_start_assault(self._assault_number)
 			end
 		end
 	end
@@ -516,7 +515,7 @@ function GroupAIStateBesiege:update(t, dt)
 					--log("assaultbreakon")
 				end
 				
-				if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+				if not self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
 					self._stopassaultbreak_t = nil
 					self._activeassaultbreak = nil
 					if managers.skirmish:is_skirmish() or small_map then
@@ -538,7 +537,10 @@ function GroupAIStateBesiege:update(t, dt)
 				end
 			else
 				self._stopassaultbreak_t = nil
-				self._activeassaultbreak = nil
+				if self._activeassaultbreak then
+					self._activeassaultbreak = nil
+					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+				end
 				self._activeassaultnextbreak_t = nil
 			end
 		end
