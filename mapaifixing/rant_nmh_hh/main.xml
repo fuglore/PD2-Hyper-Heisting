@@ -1,8 +1,5 @@
-<Localization default="english.txt" directory="loc">
-	<loc file="english.txt" language="english"/>
-</Localization>
 <table name="no_mercy_hypered">
-	<level ai_group_type="america" brief_id="heist_nmh_briefing" briefing_dialog="Play_pln_nmh_brf" cube="cube_apply_heist_bank" failure_event="Play_pln_nmh_end_fail" ghost_bonus="0.1" id="nmh_hyper" intro_event="Play_pln_nmh_intro" load_screen="guis/dlcs/nmh/textures/loading/job_nmh_df" max_bags="0" narrator="bain" outro_event="Play_pln_nmh_end_win">
+	<level ai_group_type="america" brief_id="heist_nmh_briefing" briefing_dialog="Play_pln_nmh_brf" cube="cube_apply_heist_bank" failure_event="Play_pln_nmh_end_fail" ghost_bonus="0.1" id="nmh_hyper" intro_event="Play_pln_nmh_intro" load_screen="guis/dlcs/nmh/textures/loading/job_nmh_df" max_bags="0" name_id="heist_nmh_hl" narrator="bain" outro_event="Play_pln_nmh_end_win">
 		<add file="levels/nmh_hyper/add.xml"/>
 		<assets>
 			<asset name="ammo_bag"/>
@@ -51,6 +48,9 @@
 			</mod>
 		</script_data_mods>
 	</level>
+	<Localization default="english.txt" directory="loc">
+		<loc file="english.txt" language="english"/>
+	</Localization>
 	<narrative brief_id="heist_nmh_crimenet" briefing_event="Play_rb1_nmh_cbf_01" contact="classic" hide_from_crimenet="false" icon="guis/dlcs/nmh/textures/pd2/crimenet/nmh" id="nmh" jc="30" name_id="heist_nmh_hl" region="street">
 		<chain>
 			<table level_id="nmh_hyper" type="d" type_id="heist_type_assault"/>
