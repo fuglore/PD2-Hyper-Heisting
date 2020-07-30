@@ -1,6 +1,4 @@
-local plastic_init = AssetsTweakData.init
-function AssetsTweakData:init(tweak_data)
-	plastic_init(self, tweak_data)
+Hooks:PostHook(AssetsTweakData, "init", "fuckpeniscock", function(self, tweak_data)
 	self.no_mercy_c4 = {}
 	self.no_mercy_c4.name_id = "menu_asset_no_mercy_c4"
 	self.no_mercy_c4.texture = "guis/dlcs/dlc1/textures/pd2/mission_briefing/assets/train_03"
@@ -12,4 +10,4 @@ function AssetsTweakData:init(tweak_data)
 	self.no_mercy_c4.stages = {
 			"nmh_hyper",
 		}
-end
+end)
