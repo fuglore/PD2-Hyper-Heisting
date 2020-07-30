@@ -136,6 +136,19 @@
 	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/stomach/stomach"/>
 	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/throat/throat"/>
 	
+	<!--akan mini dozer-->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini_husk" load="true"/>
+	<object path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini"/>
+	<model path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini_contour"/>
+	<sequence_manager path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/maska_df"/>
+
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/debris/debris"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/debris/plate/plate"/>
+	
 	<!--K63 helmets for rifle and shotgunner heavies -->
 	<unit path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_rifle/ene_acc_helmet_k63_rifle" force="false" load="true"/>
 	<model path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_rifle/ene_acc_helmet_k63_rifle" force="false" />
