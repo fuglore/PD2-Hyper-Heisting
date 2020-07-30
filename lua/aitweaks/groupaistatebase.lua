@@ -144,7 +144,7 @@ function GroupAIStateBase:update(t, dt)
 
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
-	-- self:_draw_current_logics()
+	--self:_draw_current_logics()
 	if Network:is_server() then
 		local new_value = self._police_force * 0.15 * table.size(self:all_player_criminals())
 

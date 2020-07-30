@@ -830,6 +830,30 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 		return true
 	end
 	
+	--hitnrun: approach enemies, back away once the enemy is visible, creating a variating degree of aggressiveness
+	--eliterangedfire: open fire at enemies from longer distances, back away if the enemy gets too close for comfort
+	--spoocavoidance: attempt to approach enemies, if aimed at/seen, retreat away into cover and disengage until ready to try again
+	local hitnrunmovementqualify = data.tactics and data.tactics.hitnrun and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 500 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) < 200
+	local spoocavoidancemovementqualify = data.tactics and data.tactics.spoocavoidance and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 2000 and focus_enemy.aimed_at
+	local eliterangedfiremovementqualify = data.tactics and data.tactics.elite_ranged_fire and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 700
+	
+	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
+	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
+	
+	if not ignore_walks then
+		if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify then
+			action_taken = CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
+			do_something_else = nil
+			if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
+				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
+			end
+		end
+	end
+	
+	if not do_something_else then
+		return true
+	end
+	
 	if not ignore_walks then
 		local path_fail_t_chk = data.important and 0.5 or 2
 		if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - t > path_fail_t_chk then
@@ -997,16 +1021,6 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 		
 	local alert_soft = data.is_suppressed
 	
-	--hitnrun: approach enemies, back away once the enemy is visible, creating a variating degree of aggressiveness
-	--eliterangedfire: open fire at enemies from longer distances, back away if the enemy gets too close for comfort
-	--spoocavoidance: attempt to approach enemies, if aimed at/seen, retreat away into cover and disengage until ready to try again
-	local hitnrunmovementqualify = data.tactics and data.tactics.hitnrun and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1000 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) < 200
-	local spoocavoidancemovementqualify = data.tactics and data.tactics.spoocavoidance and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 2000 and focus_enemy.aimed_at
-	local eliterangedfiremovementqualify = data.tactics and data.tactics.elite_ranged_fire and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 1500
-	
-	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
-	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
-	
 	
 	local want_to_take_cover = my_data.want_to_take_cover
 	local move_to_cover, want_flank_cover = nil
@@ -1054,20 +1068,6 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 				end
 			end
 		end
-	end
-				
-	if not ignore_walks then
-		if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify then
-			action_taken = CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
-			do_something_else = nil
-			if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
-				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "cloakeravoidance")
-			end
-		end
-	end
-	
-	if not do_something_else then
-		return true
 	end
 	
 	if not action_taken and not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and CopLogicAttack._can_move(data) and data.attention_obj.verified and not spoocavoidancemovementqualify then
@@ -1258,7 +1258,9 @@ function CopLogicTravel.queued_update(data)
 						local new_objective = objective.follow_unit:brain():objective() --ignore following the "follow_unit", copy their objective and become standalone instead in order to execute pinches and flanking manuevers freely
 						--log("ay caramba!")
 						if new_objective.type == "defend_area" and new_objective.grp_objective and new_objective.grp_objective.type ~= "retire" or new_objective.type == "hunt" then
+							--local old_objective = objective
 							data.unit:brain():set_objective(new_objective, nil)
+							CopLogicIdle.on_new_objective(data, nil)
 							
 							return
 						end
@@ -1666,7 +1668,7 @@ function CopLogicTravel._chk_request_action_walk_to_cover(data, my_data)
 			haste = "run"
 		end
 		
-		local crouch_roll = math.random(0.01, 1)
+		local crouch_roll = math.random()
 		local stand_chance = nil
 		local end_pose = nil
 		local enemy_visible15m_or_10m_chk = data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj.dis <= 1000
@@ -1803,7 +1805,7 @@ function CopLogicTravel._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 			haste = "run"
 		end
 		
-		local crouch_roll = math.random(0.01, 1)
+		local crouch_roll = math.random()
 		local stand_chance = nil
 		local end_pose = nil
 		

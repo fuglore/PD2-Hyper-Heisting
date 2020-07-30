@@ -474,14 +474,14 @@ function GroupAIStateBesiege:update(t, dt)
 					if not self._activeassaultnextbreak_t then
 						--log("assaultstartedbreakset")
 						if managers.skirmish:is_skirmish() or small_map then
-							self._activeassaultnextbreak_t = self._t + math.random(30, 60)
+							self._activeassaultnextbreak_t = self._t + math.lerp(30, 60, math.random())
 						else
-							self._activeassaultnextbreak_t = self._t + math.random(60, 120)
+							self._activeassaultnextbreak_t = self._t + math.lerp(60, 120, math.random())
 						end
 						
 						if not small_map then
 							if diff_index > 6 or Global.game_settings.use_intense_AI then
-								self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
+								self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.lerp(30, 60, math.random())
 								--log("breaksetforDW")
 							end
 						end
@@ -490,9 +490,9 @@ function GroupAIStateBesiege:update(t, dt)
 				
 				if not self._activeassaultbreak and self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
 					
-					self._stopassaultbreak_t = self._t + 10
+					self._stopassaultbreak_t = self._t + 20
 					self._activeassaultbreak = true
-					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
+					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
 					if small_map then
 						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 100
 					else
@@ -515,14 +515,14 @@ function GroupAIStateBesiege:update(t, dt)
 					self._stopassaultbreak_t = nil
 					self._activeassaultbreak = nil
 					if managers.skirmish:is_skirmish() or small_map then
-						self._activeassaultnextbreak_t = self._t + math.random(30, 60)
+						self._activeassaultnextbreak_t = self._t + math.lerp(30, 60, math.random())
 					else
-						self._activeassaultnextbreak_t = self._t + math.random(60, 120)
+						self._activeassaultnextbreak_t = self._t + math.lerp(60, 120, math.random())
 					end
 						
 					if not small_map then
 						if diff_index > 6 or Global.game_settings.use_intense_AI then
-							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.random(30, 60)
+							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.lerp(30, 60, math.random())
 							--log("breaksetforDW")
 						end
 					end
@@ -1577,7 +1577,7 @@ function GroupAIStateBesiege:_voice_groupentry(group)
 	local group_leader_u_key, group_leader_u_data = self._determine_group_leader(group.units)
 	if group_leader_u_data and group_leader_u_data.tactics and group_leader_u_data.char_tweak.chatter.entry then
 		for i_tactic, tactic_name in ipairs(group_leader_u_data.tactics) do
-			local randomgroupcallout = math.random(1, 100) 
+			local randomgroupcallout = math.lerp(1, 100, math.random())
 			if tactic_name == "groupcs1" then
 				self:chk_say_enemy_chatter(group_leader_u_data.unit, group_leader_u_data.m_pos, "csalpha")
 			elseif tactic_name == "groupcs2" then
@@ -2202,7 +2202,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	local objective_area = nil
 
 	if obstructed_area then
-		if phase_is_anticipation then
+		if phase_is_anticipation or self._activeassaultbreak then
 			pull_back = true
 		elseif current_objective.moving_out then
 			if not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
@@ -2231,8 +2231,9 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					break
 				end
 			end
-			
-			if not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
+			if self._activeassaultbreak then
+				pull_back = true
+			elseif not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
 				approach = true
 			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				--open_fire = true
@@ -2378,17 +2379,16 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				--log("couldn't find assault path for" .. group .. "in groupaistatebesiege!!!")
 			end
 		else
-			local path_and_area_to_choose = math.random(1, 4)
-			if 	path_and_area_to_choose == 1 then 
+			if math.random() < 0.25 then 
 				assault_area = assault_area_uno
 				assault_path = assault_path_uno
-			elseif path_and_area_to_choose == 2 then
+			elseif math.random() < 0.25 then
 				assault_area = assault_area_dos
 				assault_path = assault_path_dos
-			elseif path_and_area_to_choose == 3 then
+			elseif math.random() < 0.25 then
 				assault_area = assault_area_tres
 				assault_path = assault_path_tres
-			elseif path_and_area_to_choose == 4 then
+			else
 				assault_area = assault_area_quatro
 				assault_path = assault_path_quatro
 			end
@@ -2682,7 +2682,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 						nr_units_spawned = nr_units_spawned + 1
 						
-						sp_data.delay_t = self._t + math.random(5, 10)
+						sp_data.delay_t = self._t + math.lerp(2.5, 7.5, math.random())
 
 						if spawn_task.ai_task then
 							spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
@@ -2753,4 +2753,140 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 			self._groups[spawn_task.group.id] = nil
 		end
 	end
+end
+
+local function make_dis_id(from, to)
+	local f = from < to and from or to
+	local t = to < from and from or to
+
+	return tostring(f) .. "-" .. tostring(t)
+end
+
+local function spawn_group_id(spawn_group)
+	return spawn_group.mission_element:id()
+end
+
+function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_groups, target_pos, max_dis, verify_clbk)
+	local all_areas = self._area_data
+	local mvec3_dis = mvector3.distance_sq
+	max_dis = max_dis and max_dis * max_dis
+	local t = self._t
+	local valid_spawn_groups = {}
+	local valid_spawn_group_distances = {}
+	local total_dis = 0
+	target_pos = target_pos or target_area.pos
+	local to_search_areas = {
+		target_area
+	}
+	local found_areas = {
+		[target_area.id] = true
+	}
+
+	repeat
+		local search_area = table.remove(to_search_areas, 1)
+		local spawn_groups = search_area.spawn_groups
+
+		if spawn_groups then
+			for _, spawn_group in ipairs(spawn_groups) do
+				if spawn_group.delay_t <= t and (not verify_clbk or verify_clbk(spawn_group)) then
+					local dis_id = make_dis_id(spawn_group.nav_seg, target_area.pos_nav_seg)
+
+					if not self._graph_distance_cache[dis_id] then
+						local coarse_params = {
+							access_pos = "swat",
+							from_seg = spawn_group.nav_seg,
+							to_seg = target_area.pos_nav_seg,
+							id = dis_id
+						}
+						local path = managers.navigation:search_coarse(coarse_params)
+
+						if path and #path >= 2 then
+							local dis = 0
+							local current = spawn_group.pos
+
+							for i = 2, #path do
+								local nxt = path[i][2]
+
+								if current and nxt then
+									dis = dis + mvector3.distance(current, nxt)
+								end
+
+								current = nxt
+							end
+
+							self._graph_distance_cache[dis_id] = dis
+						end
+					end
+
+					if self._graph_distance_cache[dis_id] then
+						local my_dis = self._graph_distance_cache[dis_id]
+
+						if not max_dis or my_dis < max_dis then
+							total_dis = total_dis + my_dis
+						end
+						
+						valid_spawn_groups[spawn_group_id(spawn_group)] = spawn_group
+						valid_spawn_group_distances[spawn_group_id(spawn_group)] = my_dis
+					end
+				end
+			end
+		end
+
+		for other_area_id, other_area in pairs(all_areas) do
+			if not found_areas[other_area_id] and other_area.neighbours[search_area.id] then
+				table.insert(to_search_areas, other_area)
+
+				found_areas[other_area_id] = true
+			end
+		end
+	until #to_search_areas == 0
+
+	local time = TimerManager:game():time()
+	local timer_can_spawn = false
+
+	for id in pairs(valid_spawn_groups) do
+		if not self._spawn_group_timers[id] or self._spawn_group_timers[id] <= time then
+			timer_can_spawn = true
+
+			break
+		end
+	end
+
+	if not timer_can_spawn then
+		self._spawn_group_timers = {}
+	end
+
+	for id in pairs(valid_spawn_groups) do
+		if self._spawn_group_timers[id] and time < self._spawn_group_timers[id] then
+			valid_spawn_groups[id] = nil
+			valid_spawn_group_distances[id] = nil
+		end
+	end
+
+	if total_dis == 0 then
+		total_dis = 1
+	end
+
+	local total_weight = 0
+	local candidate_groups = {}
+	self._debug_weights = {}
+	local dis_limit = 8000
+
+	for i, dis in pairs(valid_spawn_group_distances) do
+		local my_wgt = math.lerp(1, 0.2, math.min(1, dis / dis_limit)) * 5
+		local my_spawn_group = valid_spawn_groups[i]
+		local my_group_types = my_spawn_group.mission_element:spawn_groups()
+		my_spawn_group.distance = dis
+		total_weight = total_weight + self:_choose_best_groups(candidate_groups, my_spawn_group, my_group_types, allowed_groups, my_wgt)
+	end
+
+	if total_weight == 0 then
+		return
+	end
+
+	for _, group in ipairs(candidate_groups) do
+		table.insert(self._debug_weights, clone(group))
+	end
+
+	return self:_choose_best_group(candidate_groups, total_weight)
 end

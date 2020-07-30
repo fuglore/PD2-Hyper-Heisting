@@ -47,15 +47,19 @@ function TaserLogicAttack.queued_update(data)
 
 		return
 	elseif not data.attention_obj then
-		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0)
-		CopLogicBase._report_detections(data.detected_attention_objects)
+		if data.internal_data == my_data then
+			CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0)
+			CopLogicBase._report_detections(data.detected_attention_objects)
+		end
 
 		return
 	end
 
 	if my_data.has_old_action then
-		TaserLogicAttack._upd_stop_old_action(data, my_data)
-		CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0)
+		if data.internal_data == my_data then
+			TaserLogicAttack._upd_stop_old_action(data, my_data)
+			CopLogicBase.queue_task(my_data, my_data.update_task_key, TaserLogicAttack.queued_update, data, data.t + 0)
+		end
 
 		return
 	end

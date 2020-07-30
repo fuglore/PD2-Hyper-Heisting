@@ -403,7 +403,7 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 				if data.unit:anim_data().stand then
 					if not my_data.next_allowed_stance_t or my_data.next_allowed_stance_t < data.t then
 						if CopLogicAttack._chk_request_action_crouch(data) then
-							my_data.next_allowed_stance_t = data.t + math.random(1.5, 7)
+							my_data.next_allowed_stance_t = data.t + math.lerp(1.5, 7, math.random())
 							agg_pose = true
 						end
 					end
@@ -412,14 +412,14 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 				if data.unit:anim_data().stand then
 					if not my_data.next_allowed_stance_t or my_data.next_allowed_stance_t < data.t then
 						if CopLogicAttack._chk_request_action_crouch(data) then
-							my_data.next_allowed_stance_t = data.t + math.random(1.5, 7)
+							my_data.next_allowed_stance_t = data.t + math.lerp(1.5, 7, math.random())
 							agg_pose = true
 						end
 					end
 				elseif data.unit:anim_data().crouch then
 					if not my_data.next_allowed_stance_t or my_data.next_allowed_stance_t < data.t then
 						if CopLogicAttack._chk_request_action_stand(data) then
-							my_data.next_allowed_stance_t = data.t + math.random(1.5, 7)
+							my_data.next_allowed_stance_t = data.t + math.lerp(1.5, 7, math.random())
 							agg_pose = true
 						end
 					end
@@ -430,14 +430,14 @@ function CopLogicBase._upd_stance_and_pose(data, my_data, objective)
 				if data.unit:anim_data().stand then
 					if not my_data.next_allowed_stance_t or my_data.next_allowed_stance_t < data.t then
 						if CopLogicAttack._chk_request_action_crouch(data) then
-							my_data.next_allowed_stance_t = data.t + math.random(1.5, 7)
+							my_data.next_allowed_stance_t = data.t + math.lerp(1.5, 7, math.random())
 							agg_pose = true
 						end
 					end
 				elseif data.unit:anim_data().crouch then
 					if not my_data.next_allowed_stance_t or my_data.next_allowed_stance_t < data.t then
 						if CopLogicAttack._chk_request_action_stand(data) then
-							my_data.next_allowed_stance_t = data.t + math.random(1.5, 7)
+							my_data.next_allowed_stance_t = data.t + math.lerp(1.5, 7, math.random())
 							agg_pose = true
 						end
 					end
