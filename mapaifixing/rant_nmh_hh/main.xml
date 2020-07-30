@@ -44,6 +44,7 @@
 			<value_node value="levels/narratives/classics/nmh/editor_only/editor_only"/>
 			<value_node value="levels/narratives/classics/nmh/env/env"/>
 			<value_node value="levels/narratives/continental/fish/basement/basement"/>
+			<value_node value="packages/murkyassets"/>
 		</packages>
 		<script_data_mods directory="scriptdata">
 			<mod replacement="objectives.objective" replacement_type="custom_xml" target_ext="objective" target_path="gamedata/objectives">
