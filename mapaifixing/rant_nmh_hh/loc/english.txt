@@ -1,5 +1,5 @@
 {	
-	"heist_nmh_name":"No Mercy (Flashback)"
+	"heist_nmh_name":"No Mercy"
 	"heist_nmh_brief": "Bain only has a couple more days. Those Kataru motherfuckers saw fit to shoot him full of virus. Same fucking stuff we stole from Mercy Hospital few years ago. Who ever we got it for, they sold it to Murkywater and now it's killing him. Knew from the start it was a bad job. Bain did too, but he wanted the Cagliostro manuscript. That fucking book. Should have told him to fuck off, but he said we really needed it for something, and to be honest, we'd never be where we are without it."
 
 	"heist_nmh_hyper_name":"Mercy Hospital",
