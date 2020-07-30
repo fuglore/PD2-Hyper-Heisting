@@ -491,7 +491,7 @@ function GroupAIStateBesiege:update(t, dt)
 				if not self._activeassaultbreak and self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
 					
 					self._stopassaultbreak_t = t + 10
-					
+					self._activeassaultbreak = true
 					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 10
 					if small_map then
 						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 100
