@@ -1,5 +1,5 @@
 <table name="no_mercy_hypered">
-	<level ai_group_type="america" brief_id="heist_nmh_briefing" briefing_dialog="Play_pln_nmh_brf" cube="cube_apply_heist_bank" failure_event="Play_pln_nmh_end_fail" ghost_bonus="0.1" id="nmh_hyper" intro_event="Play_pln_nmh_intro" load_screen="guis/dlcs/nmh/textures/loading/job_nmh_df" max_bags="0" name_id="heist_nmh_hl" narrator="bain" outro_event="Play_pln_nmh_end_win">
+	<level ai_group_type="america" brief_id="heist_nmh_briefing" briefing_dialog="Play_pln_nmh_brf" cube="cube_apply_heist_bank" failure_event="Play_pln_nmh_end_fail" ghost_bonus="0.1" id="nmh_hyper" intro_event="Play_pln_nmh_intro" load_screen="guis/dlcs/nmh/textures/loading/job_nmh_df" max_bags="0" name_id="heist_nmh_hyper_name" narrator="bain" outro_event="Play_pln_nmh_end_win">
 		<add file="levels/nmh_hyper/add.xml"/>
 		<assets>
 			<asset name="ammo_bag"/>
