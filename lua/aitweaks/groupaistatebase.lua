@@ -483,6 +483,9 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 			self:_voice_friend_dead(e_data.group)
 			self._last_killed_cop_t = self._t
 		end
+			if self._task_data and self._task_data.assault and self._task_data.assault.phase == "sustain" and self._task_data.assault.active then
+			self._enemies_killed_sustain = self._enemies_killed_sustain + 1
+		end
 	end
 	
 	if dead and managers.groupai:state():whisper_mode() then
@@ -490,9 +493,6 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		self._guard_delay_deduction = self._guard_delay_deduction + 0.2
 	end
 	
-	if dead and self._task_data and self._task_data.assault and self._task_data.assault.phase == "sustain" and self._task_data.assault.active then
-		self._enemies_killed_sustain = self._enemies_killed_sustain + 1
-	end
 end
 
 function GroupAIStateBase:detonate_world_smoke_grenade(id)
