@@ -212,7 +212,8 @@
 			["units/payday2/characters/ene_tazer_1/ene_tazer_1"] = "units/pd2_dlc_drm/characters/ene_taser_heavy/ene_taser_heavy",						
 			["units/payday2/characters/ene_medic_m4/ene_medic_m4"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_m4/ene_medic_heavy_m4",						
 			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
-			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",						
+			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",
+			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2",			
 			["units/payday2/characters/ene_medic_r870/ene_medic_r870"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870",						
 			["units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"] = "units/pd2_dlc_drm/characters/ene_shield_heavy/ene_shield_heavy",
 			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_dlc_drm/characters/ene_spook_heavy/ene_spook_heavy",
@@ -244,11 +245,17 @@ function ElementSpawnEnemyDummy:init(...)
 	if ai_type == "america" then
 		if difficulty_index == 8 and job == "wwh_hh" or difficulty_index == 8 and job == "dah" or difficulty_index == 8 and job == "glace" then
 				-- log("wario land 4 my greatest achievement")
-				if sm_wish_intense[self._values.enemy] then
-					self._values.enemy = sm_wish_intense[self._values.enemy]
-				end
+			if sm_wish_intense[self._values.enemy] then
+				self._values.enemy = sm_wish_intense[self._values.enemy]
+			end
 				
-				self._values.enemy = sm_wish_intense[self._values.enemy] or self._values.enemy		
+			self._values.enemy = sm_wish_intense[self._values.enemy] or self._values.enemy	
+		elseif Global.game_settings and Global.game_settings.heavymutator then
+			if enemy_annoying[self._values.enemy] then
+				self._values.enemy = enemy_annoying[self._values.enemy]
+			end
+			
+			self._values.enemy = enemy_annoying[self._values.enemy] or self._values.enemy
 		else
 			if difficulty_index == 8 then --GenSec over FBI
 				-- log("redpilled")
@@ -262,49 +269,39 @@ function ElementSpawnEnemyDummy:init(...)
 					self._values.enemy = overkill_290_and_easywish[self._values.enemy]
 				end
 				
-				self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
+				self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy				
 			end
+			if difficulty_index <= 3 then
+				if sniper[self._values.enemy] then
+					self._values.enemy = sniper[self._values.enemy]
+				end
+					
+				self._values.enemy = sniper[self._values.enemy] or self._values.enemy
+				--Eff Bee Eye Snipar			
+			elseif difficulty_index <= 5 then
+				-- log("snipers replaced with fbi!")				
+				if sniper_fed[self._values.enemy] then
+					self._values.enemy = sniper_fed[self._values.enemy]
+				end
+					
+				self._values.enemy = sniper_fed[self._values.enemy] or self._values.enemy
+				--BONESAW IS READY, COME ON MY FACE BROTHER
+			elseif difficulty_index <= 7 then
+				if sniper_cumsec[self._values.enemy] then
+					self._values.enemy = sniper_cumsec[self._values.enemy]
+				end
+					
+				self._values.enemy = sniper_cumsec[self._values.enemy] or self._values.enemy			
+				--Sulu Carkdownz? Replasement Snipar? Real?
+			elseif difficulty_index == 8 then
+				if sniper_zulu_crackdown_XD[self._values.enemy] then
+					self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
+				end
+				
+				self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy	
 		end
 	end
 	
-	--originally for snipers only but fuck you
-	if Global.game_settings and Global.game_settings.heavymutator then
-		if enemy_annoying[self._values.enemy] then
-			self._values.enemy = enemy_annoying[self._values.enemy]
-		end
-		self._values.enemy = enemy_annoying[self._values.enemy] or self._values.enemy
-	else
-		--SWART Sniper					
-		if difficulty_index <= 3 then
-			if sniper[self._values.enemy] then
-				self._values.enemy = sniper[self._values.enemy]
-			end
-				
-			self._values.enemy = sniper[self._values.enemy] or self._values.enemy
-			--Eff Bee Eye Snipar			
-		elseif difficulty_index <= 5 then
-			-- log("snipers replaced with fbi!")				
-			if sniper_fed[self._values.enemy] then
-				self._values.enemy = sniper_fed[self._values.enemy]
-			end
-				
-			self._values.enemy = sniper_fed[self._values.enemy] or self._values.enemy
-			--BONESAW IS READY, COME ON MY FACE BROTHER
-		elseif difficulty_index <= 7 then
-			if sniper_cumsec[self._values.enemy] then
-				self._values.enemy = sniper_cumsec[self._values.enemy]
-			end
-				
-			self._values.enemy = sniper_cumsec[self._values.enemy] or self._values.enemy			
-			--Sulu Carkdownz? Replasement Snipar? Real?
-		elseif difficulty_index == 8 then
-			if sniper_zulu_crackdown_XD[self._values.enemy] then
-				self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy]
-			end
-			
-			self._values.enemy = sniper_zulu_crackdown_XD[self._values.enemy] or self._values.enemy	
-		end
-		
 	--NYPD Cops Spawn Overwrite
 		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "flat_hh" or job == "dinner" or job == "nmh_hyper" then  
 			 if nypd_beatpricks[self._values.enemy] then

@@ -62,6 +62,7 @@
 		["hud_assault_FG_cover60"] = "FIGHT ON",
 		["hud_assault_FG_cover61"] = "STUPID COPS, I'M FUCKIN' BALLIN",
 		["hud_assault_FG_cover62"] = "DID HE JUST WALK UP SLOWLY AND CUFF HIM?",
+		["hud_assault_FG_cover63"] = "#verifyvenuz",
 		["hud_assault_faction_federales"] = "VS. LOS FEDERALES",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_sharedswat"] = "VS. SWAT TEAM & MURKYWATER BATTALION",		
