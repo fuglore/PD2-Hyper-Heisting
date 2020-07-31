@@ -200,7 +200,107 @@ Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	self:clear_delayed_damage()
 end)
 
-Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, attack_data)
+function PlayerDamage:damage_melee(attack_data)
+	if not self:_chk_can_take_dmg() then
+		return
+	end
+
+	local pm = managers.player
+	local can_counter_strike = pm:has_category_upgrade("player", "counter_strike_melee")
+
+	if can_counter_strike and self._unit:movement():current_state().in_melee and self._unit:movement():current_state():in_melee() then
+		if attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:base() then
+			local is_dozer = attack_data.attacker_unit:base().has_tag and attack_data.attacker_unit:base():has_tag("tank")
+
+			--prevent the player from countering Dozers or other players through FF, for obvious reasons
+			if not attack_data.attacker_unit:base().is_husk_player and not is_dozer then
+				self._unit:movement():current_state():discharge_melee()
+
+				return "countered"
+			end
+		end
+	end
+
+	local damage_info = {
+		result = {
+			variant = "melee",
+			type = "hurt"
+		},
+		attacker_unit = attack_data.attacker_unit
+	}
+
+	if self:is_friendly_fire(attack_data.attacker_unit) then
+		return
+	elseif self._god_mode then
+		if attack_data.damage > 0 then
+			self:_send_damage_drama(attack_data, attack_data.damage)
+		end
+
+		self:_call_listeners(damage_info)
+
+		return
+	elseif self._invulnerable or self._mission_damage_blockers.invulnerable then
+		self:_call_listeners(damage_info)
+
+		return
+	elseif self:incapacitated() then
+		return
+	elseif self._unit:movement():current_state().immortal then
+		return
+	elseif not attack_data.is_cloaker_kick and self:_chk_dmg_too_soon(attack_data.damage) then
+		return
+	end
+	
+	self:_hit_direction(attack_data.attacker_unit:position())
+
+	self._last_received_dmg = attack_data.damage
+	self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
+	
+	local allow_melee_dodge = true --manual toggle, to be later replaced with a Rogue melee dodge perk check
+	
+	if allow_melee_dodge and not attack_data.is_cloaker_kick and pm:current_state() ~= "bleed_out" and pm:current_state() ~= "bipod" and pm:current_state() ~= "tased" then --self._bleed_out and current_state() ~= "bleed_out" aren't the same thing
+		local dodge_roll = math.random()
+		local dodge_value = tweak_data.player.damage.DODGE_INIT or 0
+		local armor_dodge_chance = pm:body_armor_value("dodge")
+		local skill_dodge_chance = pm:skill_dodge_chance(self._unit:movement():running(), self._unit:movement():crouching(), self._unit:movement():zipline_unit())
+		dodge_value = dodge_value + armor_dodge_chance + skill_dodge_chance
+
+		if self._temporary_dodge_t and TimerManager:game():time() < self._temporary_dodge_t then
+			dodge_value = dodge_value + self._temporary_dodge
+		end
+
+		local smoke_dodge = 0
+
+		for _, smoke_screen in ipairs(pm._smoke_screen_effects or {}) do
+			if smoke_screen:is_in_smoke(self._unit) then
+				smoke_dodge = tweak_data.projectiles.smoke_screen_grenade.dodge_chance
+
+				break
+			end
+		end
+
+		dodge_value = 1 - (1 - dodge_value) * (1 - smoke_dodge)
+
+		if dodge_roll < dodge_value then
+			--do a push to simulate the dodge + small camera shake + show an indicator (no hit sounds or a blood effect)
+			self._unit:movement():push(attack_data.push_vel)
+			self._unit:camera():play_shaker("melee_hit", 0.2)
+			pm:send_message(Message.OnPlayerDodge)
+
+			return
+		end
+	end
+
+	local dmg_mul = pm:damage_reduction_skill_multiplier("melee") --the vanilla function has this line, but it also uses bullet damage reduction skills due to it redirecting to damage_bullet to get results
+	attack_data.damage = attack_data.damage * dmg_mul
+	attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data) --apply damage resistances before checking for bleedout and other things
+
+	local damage_absorption = pm:damage_absorption()
+
+	if damage_absorption > 0 then
+		attack_data.damage = math.max(0, attack_data.damage - damage_absorption)
+	end
+	
 	local player_unit = managers.player:player_unit()
 	local cur_state = self._unit:movement():current_state_name()
 	if attack_data then
@@ -212,7 +312,11 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and dmg_is_allowed then
 			-- log("balls")				
 			if alive(player_unit) and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi" and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_xc45" and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_pager" then
-				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), 0.4)
+				local melee_stun_t = 0.4
+				if attack_data.is_cloaker_kick then
+					melee_stun_t = 1
+				end
+				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), melee_stun_t)
 			end
 		end
 		
@@ -224,8 +328,58 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 			end	
 		end
 	end
-	
---[[	local go_through_armor = false --manual toggle
+
+	if attack_data.tase_player then
+		if pm:current_state() == "standard" or pm:current_state() == "carry" or pm:current_state() == "bipod" then
+			if pm:current_state() == "bipod" then
+				self._unit:movement()._current_state:exit(nil, "tased")
+			end
+
+			self._unit:movement():on_non_lethal_electrocution()
+			pm:set_player_state("tased")
+
+			--no pushing and camera shaking for melee tase attacks
+		end
+	else
+		if pm:current_state() == "bipod" then
+			self._unit:movement()._current_state:exit(nil, "standard")
+			pm:set_player_state("standard")
+		end
+
+		local vars = {
+			"melee_hit",
+			"melee_hit_var2"
+		}
+		
+		
+			
+		self._unit:camera():play_shaker(vars[math.random(#vars)], attack_data.is_cloaker_kick and 1 or 0.5)
+
+		--no pushing when in bleedout, looks silly in third-person
+		if pm:current_state() ~= "bleed_out" then
+			self._unit:movement():push(attack_data.push_vel)
+		end
+	end
+
+	if self._bleed_out then
+		self:_bleed_out_damage(attack_data)
+
+		--bleed_out = always taking health damage, so use the appropiate sound and cause a blood effect if the weapon isn't tase capable
+		local hit_sound = "hit_body"
+
+		--unless damage is completely negated
+		if attack_data.damage == 0 then
+			hit_sound = "hit_gen"
+		end
+
+		self:play_melee_hit_sound_and_effects(attack_data, hit_sound, not attack_data.tase_player)
+
+		return
+	end
+
+	self:_check_chico_heal(attack_data)
+
+	local go_through_armor = false --manual toggle
 	local health_subtracted = nil
 	local armor_broken = false
 
@@ -255,23 +409,7 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 
 		health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
 	end
-	
-	if self._bleed_out then
-		self:_bleed_out_damage(attack_data)
 
-		--bleed_out = always taking health damage, so use the appropiate sound and cause a blood effect if the weapon isn't tase capable
-		local hit_sound = "hit_body"
-
-		--unless damage is completely negated
-		if attack_data.damage == 0 then
-			hit_sound = "hit_gen"
-		end
-
-		self:play_melee_hit_sound_and_effects(attack_data, hit_sound, not attack_data.tase_player)
-
-		return
-	end	
-	
 	local hit_sound_type = "hit_gen"
 	local blood_effect = false
 
@@ -280,10 +418,38 @@ Hooks:PostHook(PlayerDamage, "damage_melee", "hhpost_dmgmelee", function(self, a
 		blood_effect = not attack_data.tase_player
 	end
 
-	self:play_melee_hit_sound_and_effects(attack_data, hit_sound_type, blood_effect)--]]
-end)
+	self:play_melee_hit_sound_and_effects(attack_data, hit_sound_type, blood_effect)
 
---[[local mvec1 = Vector3()
+	if not self._bleed_out then
+		if health_subtracted > 0 then
+			self:_send_damage_drama(attack_data, health_subtracted)
+		end
+	else
+		local attacker = attack_data.attacker_unit
+
+		if attacker:character_damage() and attacker:character_damage().dead and not attacker:character_damage():dead() then
+			if attacker:base().has_tag then
+				if attacker:base():has_tag("tank") then
+					self._kill_taunt_clbk_id = "kill_taunt" .. tostring(self._unit:key())
+					managers.enemy:add_delayed_clbk(self._kill_taunt_clbk_id, callback(self, self, "clbk_kill_taunt", attack_data), TimerManager:game():time() + 0.5)
+				elseif attacker:base():has_tag("taser") then
+					self._kill_taunt_clbk_id = "kill_taunt" .. tostring(self._unit:key())
+					managers.enemy:add_delayed_clbk(self._kill_taunt_clbk_id, callback(self, self, "clbk_kill_taunt_tase", attack_data), TimerManager:game():time() + 0.5)
+				elseif attacker:base():has_tag("law") and not attacker:base():has_tag("special") then
+					self._kill_taunt_clbk_id = "kill_taunt" .. tostring(self._unit:key())
+					managers.enemy:add_delayed_clbk(self._kill_taunt_clbk_id, callback(self, self, "clbk_kill_taunt_common", attack_data), TimerManager:game():time() + 0.5)
+				end
+			end
+		end
+	end
+
+	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
+	self:_call_listeners(damage_info)
+
+	return
+end
+
+local mvec1 = Vector3()
 
 function PlayerDamage:play_melee_hit_sound_and_effects(attack_data, sound_type, play_blood_effect)
 	if play_blood_effect then
@@ -353,7 +519,196 @@ function PlayerDamage:play_melee_hit_sound_and_effects(attack_data, sound_type, 
 			end
 		end
 	end
-end--]]
+end
+
+function PlayerDamage:damage_fire(attack_data)
+	if not self:_chk_can_take_dmg() or self:incapacitated() then
+		return
+	end
+
+	local attack_pos = attack_data.position or attack_data.col_ray.position or attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:position()
+	local distance = mvector3.distance(attack_pos, self._unit:position())
+
+	if not attack_data.range then
+		attack_data.range = distance
+	end
+
+	if attack_data.range < distance then
+		return
+	elseif self:is_friendly_fire(attack_data.attacker_unit) then
+		return
+	end
+
+	local damage_info = {
+		result = {
+			variant = "fire",
+			type = "hurt"
+		}
+	}
+
+	local damage = attack_data.damage or 1
+	attack_data.damage = damage
+
+	if self._god_mode or self._invulnerable or self._mission_damage_blockers.invulnerable then
+		self:_call_listeners(damage_info)
+
+		return
+	elseif self._unit:movement():current_state().immortal then
+		return
+	elseif self:_chk_dmg_too_soon(attack_data.damage) then
+		return
+	end
+
+	if attack_data.attacker_unit and alive(attack_data.attacker_unit) then
+		self:_hit_direction(attack_data.attacker_unit:position())
+	end
+
+	local pm = managers.player
+
+	self._last_received_dmg = attack_data.damage
+	self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
+
+	local dmg_mul = pm:damage_reduction_skill_multiplier("fire")
+	attack_data.damage = attack_data.damage * dmg_mul
+	attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data)
+
+	local damage_absorption = pm:damage_absorption()
+
+	if damage_absorption > 0 then
+		attack_data.damage = math.max(0, attack_data.damage - damage_absorption)
+	end
+
+	if self._bleed_out then
+		if attack_data.damage == 0 then
+			self._unit:sound():play("player_hit")
+		else
+			self._unit:sound():play("player_hit_permadamage")
+		end
+
+		self:_bleed_out_damage(attack_data)
+
+		return
+	else
+		if self:get_real_armor() > 0 or attack_data.damage == 0 then
+			self._unit:sound():play("player_hit")
+		else
+			self._unit:sound():play("player_hit_permadamage")
+		end
+	end
+
+	self:_check_chico_heal(attack_data)
+
+	local armor_reduction_multiplier = 0
+
+	if self:get_real_armor() <= 0 then
+		armor_reduction_multiplier = 1
+	end
+
+	local health_subtracted = self:_calc_armor_damage(attack_data)
+
+	attack_data.damage = attack_data.damage * armor_reduction_multiplier
+	health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+
+	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
+	self:_call_listeners(damage_info)
+end
+
+function PlayerDamage:damage_explosion(attack_data)
+	if not self:_chk_can_take_dmg() or self:incapacitated() then
+		return
+	end
+
+	local attack_pos = attack_data.position or attack_data.col_ray.position or attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:position()
+	local distance = mvector3.distance(attack_pos, self._unit:position())
+
+	if not attack_data.range then
+		attack_data.range = distance
+	end
+
+	if attack_data.range < distance then
+		return
+	elseif self:is_friendly_fire(attack_data.attacker_unit) then
+		return
+	end
+
+	local damage_info = {
+		result = {
+			variant = "explosion",
+			type = "hurt"
+		}
+	}
+
+	if self._god_mode or self._invulnerable or self._mission_damage_blockers.invulnerable then
+		self:_call_listeners(damage_info)
+
+		return
+	elseif self._unit:movement():current_state().immortal then
+		return
+	end
+
+	local pm = managers.player
+	local damage = attack_data.damage or 1
+	attack_data.damage = damage
+	attack_data.damage = attack_data.damage * (1 - distance / attack_data.range)
+
+	local dmg_mul = pm:damage_reduction_skill_multiplier("explosion")
+	attack_data.damage = attack_data.damage * dmg_mul
+	attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data)
+	attack_data.damage = managers.modifiers:modify_value("PlayerDamage:OnTakeExplosionDamage", attack_data.damage)
+
+	local damage_absorption = pm:damage_absorption()
+
+	if damage_absorption > 0 then
+		attack_data.damage = math.max(0, attack_data.damage - damage_absorption)
+	end
+
+	if attack_data.attacker_unit and alive(attack_data.attacker_unit) then
+		self:_hit_direction(attack_data.attacker_unit:position())
+	end
+
+	if self._bleed_out then
+		if attack_data.damage == 0 then
+			self._unit:sound():play("player_hit")
+		else
+			self._unit:sound():play("player_hit_permadamage")
+		end
+
+		self:_bleed_out_damage(attack_data)
+
+		return
+	else
+		if self:get_real_armor() > 0 or attack_data.damage == 0 then
+			self._unit:sound():play("player_hit")
+		else
+			self._unit:sound():play("player_hit_permadamage")
+		end
+
+		local allow_explosive_pushes = true
+
+		--enjoy your rocket/grenade/trip mine jumps
+		if allow_explosive_pushes and attack_data.damage ~= 0 then
+			local push_vec = Vector3()
+			mvector3.direction(push_vec, attack_pos, self._unit:movement():m_head_pos())
+
+			local final_damage = attack_data.damage
+			local max_damage = 60 --RPG player damage, aka maximum explosive damage that the player can normally take
+			local dmg_lerp_value = math.clamp(final_damage, 1, max_damage) / max_damage
+			local push_force = math.lerp(300, 1000, dmg_lerp_value)
+
+			self._unit:movement():push(push_vec * push_force)
+		end
+	end
+
+	self:_check_chico_heal(attack_data)
+
+	local health_subtracted = self:_calc_armor_damage(attack_data)
+
+	attack_data.damage = attack_data.damage - health_subtracted
+	health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+
+	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
+	self:_call_listeners(damage_info)
+end
 
 function PlayerDamage:clbk_kill_taunt(attack_data) -- just a nice little detail
 	if attack_data.attacker_unit and attack_data.attacker_unit:alive() then
@@ -368,6 +723,39 @@ function PlayerDamage:clbk_kill_taunt(attack_data) -- just a nice little detail
 			attack_data.attacker_unit:sound():say("i03")
 		else
 			--nothing
+		end
+	end
+end
+
+function PlayerDamage:damage_tase(attack_data)
+	if self._god_mode then
+		return
+	end
+
+	local cur_state = self._unit:movement():current_state_name()
+
+	if cur_state ~= "tased" and cur_state ~= "fatal" then
+		self:on_tased(false)
+
+		self._tase_data = attack_data
+
+		managers.player:set_player_state("tased")
+
+		local damage_info = {
+			result = {
+				variant = "tase",
+				type = "hurt"
+			}
+		}
+
+		self:_call_listeners(damage_info)
+
+		if attack_data.attacker_unit and attack_data.attacker_unit:alive() and attack_data.attacker_unit:base()._tweak_table == "taser" then
+			attack_data.attacker_unit:sound():say("post_tasing_taunt")
+
+			if managers.blackmarket:equipped_mask().mask_id == tweak_data.achievement.its_alive_its_alive.mask then
+				managers.achievment:award_progress(tweak_data.achievement.its_alive_its_alive.stat)
+			end
 		end
 	end
 end
@@ -415,7 +803,49 @@ function PlayerDamage:_chk_dmg_too_soon(damage, ...)
 	end
 end
 
-Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self, attack_data)
+function PlayerDamage:damage_bullet(attack_data)
+	if not self:_chk_can_take_dmg() then
+		return
+	end
+
+	local damage_info = {
+		result = {
+			variant = "bullet",
+			type = "hurt"
+		},
+		attacker_unit = attack_data.attacker_unit
+	}
+
+	if self:is_friendly_fire(attack_data.attacker_unit) then
+		return
+	elseif self._god_mode then
+		if attack_data.damage > 0 then
+			self:_send_damage_drama(attack_data, attack_data.damage)
+		end
+
+		self:_call_listeners(damage_info)
+
+		return
+	elseif self._invulnerable or self._mission_damage_blockers.invulnerable then
+		self:_call_listeners(damage_info)
+
+		return
+	elseif self:incapacitated() then
+		return
+	elseif self._unit:movement():current_state().immortal then
+		return
+	elseif not attack_data.is_taser_shock and self._revive_miss and math.random() < self._revive_miss then
+		self:play_whizby(attack_data.col_ray.position)
+
+		return
+	elseif not attack_data.is_taser_shock and not attack_data.ignore_suppression and not self:is_suppressed() then
+		self:play_whizby(attack_data.col_ray.position)
+
+		return
+	elseif not attack_data.is_taser_shock and self:_chk_dmg_too_soon(attack_data.damage) then
+		return
+	end
+	
 	local armor_damage = self:_max_armor() > 0 and self:get_real_armor() < self:_max_armor()
 	local cur_state = self._unit:movement():current_state_name()
 	
@@ -433,6 +863,10 @@ Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self,
 				end
 			end
 		end
+	end
+	
+	if attack_data.is_taser_shock then
+		self:build_suppression(20)
 	end
 	
 	--local testing = true
@@ -464,17 +898,147 @@ Hooks:PostHook(PlayerDamage, "damage_bullet", "hhpost_dmgbullet", function(self,
 			self._unit:movement():push(push_vec * push_amount)
 		end
 	end
+
+	self:_hit_direction(attack_data.attacker_unit:position())
+
+	local pm = managers.player
 	
-	if not self:_chk_can_take_dmg() then
-		return
+	if not attack_data.is_taser_shock then
+		self._last_received_dmg = attack_data.damage
+		self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
+
+		local dodge_roll = math.random()
+		local dodge_value = tweak_data.player.damage.DODGE_INIT or 0
+		local armor_dodge_chance = pm:body_armor_value("dodge")
+		local skill_dodge_chance = pm:skill_dodge_chance(self._unit:movement():running(), self._unit:movement():crouching(), self._unit:movement():zipline_unit())
+		dodge_value = dodge_value + armor_dodge_chance + skill_dodge_chance
+
+		if self._temporary_dodge_t and TimerManager:game():time() < self._temporary_dodge_t then
+			dodge_value = dodge_value + self._temporary_dodge
+		end
+
+		local smoke_dodge = 0
+
+		for _, smoke_screen in ipairs(pm._smoke_screen_effects or {}) do
+			if smoke_screen:is_in_smoke(self._unit) then
+				smoke_dodge = tweak_data.projectiles.smoke_screen_grenade.dodge_chance
+
+				break
+			end
+		end
+
+		dodge_value = 1 - (1 - dodge_value) * (1 - smoke_dodge)
+
+		if dodge_roll < dodge_value then
+			self:play_whizby(attack_data.col_ray.position)
+			pm:send_message(Message.OnPlayerDodge)
+
+			return
+		end
+		
+		local dmg_mul = pm:damage_reduction_skill_multiplier("bullet")
+		attack_data.damage = attack_data.damage * dmg_mul
+		attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data)
+		attack_data.damage = managers.mutators:modify_value("PlayerDamage:TakeDamageBullet", attack_data.damage)
+		attack_data.damage = managers.modifiers:modify_value("PlayerDamage:TakeDamageBullet", attack_data.damage)
+
+		if _G.IS_VR then
+			local distance = mvector3.distance(self._unit:position(), attack_data.attacker_unit:position())
+
+			if tweak_data.vr.long_range_damage_reduction_distance[1] < distance then
+				local step = math.clamp(distance / tweak_data.vr.long_range_damage_reduction_distance[2], 0, 1)
+				local mul = 1 - math.step(tweak_data.vr.long_range_damage_reduction[1], tweak_data.vr.long_range_damage_reduction[2], step)
+				attack_data.damage = attack_data.damage * mul
+			end
+		end
+
+		local damage_absorption = pm:damage_absorption()
+
+		if damage_absorption > 0 then
+			attack_data.damage = math.max(0, attack_data.damage - damage_absorption)
+		end
 	end
 	
-	local armor_subtracted = self:_calc_armor_damage(attack_data)
-	if not self._bleed_out and armor_subtracted > 0 then
-		managers.groupai:state():criminal_hurt_drama_armor(self._unit, attacker)
+	if not attack_data.is_taser_shock then
+
+		local shake_armor_multiplier = pm:body_armor_value("damage_shake") * pm:upgrade_value("player", "damage_shake_multiplier", 1)
+		local gui_shake_number = tweak_data.gui.armor_damage_shake_base / shake_armor_multiplier
+		gui_shake_number = gui_shake_number + pm:upgrade_value("player", "damage_shake_addend", 0)
+		shake_armor_multiplier = tweak_data.gui.armor_damage_shake_base / gui_shake_number
+		local shake_multiplier = math.clamp(attack_data.damage, 0.2, 2) * shake_armor_multiplier
+		
+		self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+
+		if not _G.IS_VR then
+			managers.rumble:play("damage_bullet")
+		end
+
+		pm:check_damage_carry(attack_data)
+
+		if self._bleed_out then
+			if attack_data.damage == 0 then
+				self._unit:sound():play("player_hit")
+			else
+				self._unit:sound():play("player_hit_permadamage")
+			end
+
+			self:_bleed_out_damage(attack_data)
+
+			return
+		else
+			if self:get_real_armor() > 0 or attack_data.damage == 0 then
+				self._unit:sound():play("player_hit")
+			else
+				self._unit:sound():play("player_hit_permadamage")
+			end
+		end
+	else
+		self._unit:sound():play("player_hit_permadamage")
 	end
 
-end)
+	self:_check_chico_heal(attack_data)
+
+	local armor_reduction_multiplier = 0
+
+	if self:get_real_armor() <= 0 then
+		armor_reduction_multiplier = 1
+	end
+
+	local health_subtracted = self:_calc_armor_damage(attack_data)
+
+	if attack_data.armor_piercing then
+		attack_data.damage = attack_data.damage - health_subtracted
+	else
+		attack_data.damage = attack_data.damage * armor_reduction_multiplier
+	end
+
+	health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+
+	if not self._bleed_out then
+		if health_subtracted > 0 then
+			self:_send_damage_drama(attack_data, health_subtracted)
+		end
+	else
+		local attacker = attack_data.attacker_unit
+
+		if attacker:character_damage() and attacker:character_damage().dead and not attacker:character_damage():dead() then
+			if attacker:base().has_tag then
+				if attacker:base():has_tag("tank") then
+					attack_data.attacker_unit:sound():say("post_kill_taunt")
+				elseif attacker:base():has_tag("taser") then
+					attack_data.attacker_unit:sound():say("post_kill_taunt")
+				elseif attacker:base():has_tag("law") and not attacker:base():has_tag("special") then
+					attack_data.attacker_unit:sound():say("i03")
+				end
+			end
+		end
+	end
+
+	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
+	self:_call_listeners(damage_info)
+
+	return true
+end
 
 local _calc_armor_damage_original = PlayerDamage._calc_armor_damage
 function PlayerDamage:_calc_armor_damage(attack_data, ...)

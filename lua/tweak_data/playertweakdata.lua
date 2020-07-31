@@ -22,7 +22,7 @@ function PlayerTweakData:_set_normal()
 		max_value = 20,
 		autohit_chance_mul = 1
 	}
-	self.damage.TASED_TIME = 5
+	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 end
 
@@ -44,7 +44,7 @@ function PlayerTweakData:_set_hard()
 		max_value = 20,
 		autohit_chance_mul = 1
 	}
-	self.damage.TASED_TIME = 5
+	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 end
 
@@ -65,7 +65,7 @@ function PlayerTweakData:_set_overkill()
 		max_value = 20,
 		autohit_chance_mul = 1
 	}
-	self.damage.TASED_TIME = 5
+	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 end
 
@@ -87,7 +87,7 @@ function PlayerTweakData:_set_overkill_145()
 		max_value = 20,
 		autohit_chance_mul = 1
 	}
-	self.damage.TASED_TIME = 5
+	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 end
 
@@ -108,7 +108,7 @@ function PlayerTweakData:_set_easy_wish()
 		max_value = 20,
 		autohit_chance_mul = 1
 	}
-	self.damage.TASED_TIME = 5
+	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 	if Global.game_settings.single_player then
 		--Nothing.
@@ -136,7 +136,7 @@ function PlayerTweakData:_set_overkill_290()
 		max_value = 20,
 		autohit_chance_mul = 1
 	}
-	self.damage.TASED_TIME = 5
+	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 	if Global.game_settings.single_player then
 		--Nothing.
@@ -165,7 +165,7 @@ function PlayerTweakData:_set_sm_wish()
 		max_value = 20,
 		autohit_chance_mul = 1
 	}
-	self.damage.TASED_TIME = 4
+	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 	if Global.game_settings.single_player then
 		self.damage.LIVES_INIT = 3

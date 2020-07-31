@@ -86,3 +86,49 @@ function PlayerMovement:_calc_suspicion_ratio_and_sync(observer_unit, status, lo
 		end
 	end
 end
+
+function PlayerMovement:on_SPOOCed(enemy_unit)
+	if managers.player:has_category_upgrade("player", "counter_strike_spooc") and self._current_state.in_melee and self._current_state:in_melee() then
+		self._current_state:discharge_melee()
+
+		return "countered"
+	end
+
+	if self._unit:character_damage()._god_mode or self._unit:character_damage():get_mission_blocker("invulnerable") then
+		return
+	end
+	
+	local all_criminals = managers.groupai:state():all_char_criminals()
+	local last_man_standing = true
+	
+	for u_key, u_data in pairs(all_criminals) do
+		if not u_data.status and u_data.unit ~= self._unit then
+			last_man_standing = nil
+		end
+	end
+	
+	if last_man_standing then
+		local push_vec = Vector3()
+		local distance = mvector3.direction(push_vec, enemy_unit:movement():m_head_pos(), self._unit:movement():m_pos())
+		mvector3.normalize(push_vec)
+		mvector3.set_z(push_vec, 0)
+		local attack_data = {
+			attacker_unit = enemy_unit,
+			is_cloaker_kick = true,
+			melee_armor_piercing = true,
+			damage = 30,
+			push_vel = push_vec * 2000
+		}
+		self._unit:character_damage():damage_melee(attack_data)
+		
+		return
+	elseif self._current_state_name == "standard" or self._current_state_name == "carry" or self._current_state_name == "bleed_out" or self._current_state_name == "tased" or self._current_state_name == "bipod" then
+		local state = "incapacitated"
+		state = managers.modifiers:modify_value("PlayerMovement:OnSpooked", state)
+
+		managers.player:set_player_state(state)
+		managers.achievment:award(tweak_data.achievement.finally.award)
+
+		return true
+	end
+end
