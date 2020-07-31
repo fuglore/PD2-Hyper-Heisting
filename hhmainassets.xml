@@ -45,6 +45,7 @@
 	<continent path="levels/narratives/elephant/born/world/world" force="true" unload="true"/><!--fixes cars clipping into ground-->		
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
+	<mission path="levels/narratives/locke/vit/world/world" force="true" unload="true"/> 
 	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> <!--Now, give them hell.-->
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 	<mission path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> <!--Makes Shadow Raid Murky.-->
@@ -1089,7 +1090,6 @@
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp" force="true" />
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_swat_r870/ene_akan_cs_swat_r870" force="true" />		
 	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_shield_sr2_smg/ene_akan_fbi_shield_sr2_smg" force="true" />	
-	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass" force="true" />
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_heavy_ak47_ass/ene_akan_cs_heavy_ak47_ass" force="true" />	
 	
 	<!--Jarey's New Akan Shield-->		
