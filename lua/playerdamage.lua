@@ -818,6 +818,8 @@ function PlayerDamage:damage_bullet(attack_data)
 
 	if self:is_friendly_fire(attack_data.attacker_unit) then
 		return
+	elseif self._unit:movement():tased() and not attack_data.is_taser_shock then
+		return
 	elseif self._god_mode then
 		if attack_data.damage > 0 then
 			self:_send_damage_drama(attack_data, attack_data.damage)
