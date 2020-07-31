@@ -430,14 +430,11 @@ function PlayerDamage:damage_melee(attack_data)
 		if attacker:character_damage() and attacker:character_damage().dead and not attacker:character_damage():dead() then
 			if attacker:base().has_tag then
 				if attacker:base():has_tag("tank") then
-					self._kill_taunt_clbk_id = "kill_taunt" .. tostring(self._unit:key())
-					managers.enemy:add_delayed_clbk(self._kill_taunt_clbk_id, callback(self, self, "clbk_kill_taunt", attack_data), TimerManager:game():time() + 0.5)
+					attack_data.attacker_unit:sound():say("post_kill_taunt")
 				elseif attacker:base():has_tag("taser") then
-					self._kill_taunt_clbk_id = "kill_taunt" .. tostring(self._unit:key())
-					managers.enemy:add_delayed_clbk(self._kill_taunt_clbk_id, callback(self, self, "clbk_kill_taunt_tase", attack_data), TimerManager:game():time() + 0.5)
+					attack_data.attacker_unit:sound():say("post_kill_taunt")
 				elseif attacker:base():has_tag("law") and not attacker:base():has_tag("special") then
-					self._kill_taunt_clbk_id = "kill_taunt" .. tostring(self._unit:key())
-					managers.enemy:add_delayed_clbk(self._kill_taunt_clbk_id, callback(self, self, "clbk_kill_taunt_common", attack_data), TimerManager:game():time() + 0.5)
+					attack_data.attacker_unit:sound():say("i03")
 				end
 			end
 		end
@@ -689,11 +686,11 @@ function PlayerDamage:damage_explosion(attack_data)
 		if allow_explosive_pushes and attack_data.damage ~= 0 then
 			local push_vec = Vector3()
 			mvector3.direction(push_vec, attack_pos, self._unit:movement():m_head_pos())
-
 			local final_damage = attack_data.damage
 			local max_damage = 60 --RPG player damage, aka maximum explosive damage that the player can normally take
 			local dmg_lerp_value = math.clamp(final_damage, 1, max_damage) / max_damage
 			local push_force = math.lerp(300, 1000, dmg_lerp_value)
+			mvector3.set_z(push_vec, 0.25)
 
 			self._unit:movement():push(push_vec * push_force)
 		end

@@ -469,21 +469,19 @@ function GroupAIStateBesiege:update(t, dt)
 		if fliptheswitch then
 			--Nothing
 		else
-			if self._task_data.assault and self._task_data.assault.phase == "build" or self._task_data.assault and self._task_data.assault.phase == "sustain" then
+			if self._task_data.assault and self._task_data.assault.phase == "sustain" then
 				if not self._activeassaultbreak then
 					if not self._activeassaultnextbreak_t then
 						--log("assaultstartedbreakset")
-						if managers.skirmish:is_skirmish() or small_map then
-							self._activeassaultnextbreak_t = self._t + math.lerp(30, 60, math.random())
+						if small_map then
+							self._activeassaultnextbreak_t = self._t + 60
 						else
-							self._activeassaultnextbreak_t = self._t + math.lerp(60, 120, math.random())
+							self._activeassaultnextbreak_t = self._t + 120
 						end
-						
-						if not small_map then
-							if diff_index > 6 or Global.game_settings.use_intense_AI then
-								self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.lerp(30, 60, math.random())
-								--log("breaksetforDW")
-							end
+							
+						if diff_index > 6 or Global.game_settings.use_intense_AI then
+							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 60
+							--log("breaksetforDW")
 						end
 					end
 				end
@@ -492,7 +490,8 @@ function GroupAIStateBesiege:update(t, dt)
 					
 					self._stopassaultbreak_t = self._t + 20
 					self._activeassaultbreak = true
-					self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
+					--self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
+					
 					if small_map then
 						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 100
 					else
@@ -511,20 +510,19 @@ function GroupAIStateBesiege:update(t, dt)
 					--log("assaultbreakon")
 				end
 				
-				if self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+				if self._activeassaultbreak and self._current_assault_state == "heat" and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
 					self._stopassaultbreak_t = nil
 					self._activeassaultbreak = nil
-					if managers.skirmish:is_skirmish() or small_map then
-						self._activeassaultnextbreak_t = self._t + math.lerp(30, 60, math.random())
+					
+					if small_map then
+						self._activeassaultnextbreak_t = self._t + 60
 					else
-						self._activeassaultnextbreak_t = self._t + math.lerp(60, 120, math.random())
+						self._activeassaultnextbreak_t = self._t + 120
 					end
-						
-					if not small_map then
-						if diff_index > 6 or Global.game_settings.use_intense_AI then
-							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + math.lerp(30, 60, math.random())
-							--log("breaksetforDW")
-						end
+							
+					if diff_index > 6 or Global.game_settings.use_intense_AI then
+						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 60
+						--log("breaksetforDW")
 					end
 					
 					self._said_heat_bonus_dialog = nil
