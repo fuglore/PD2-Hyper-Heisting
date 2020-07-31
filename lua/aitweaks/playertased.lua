@@ -156,7 +156,7 @@ function PlayerTased:_check_action_primary_attack(t, input)
 					if fire_mode == "single" and input.btn_primary_attack_press then
 						weap_base:dryfire()
 					end
-				elseif not self._num_shocks and weap_base.can_refire_while_tased and not weap_base:can_refire_while_tased() or self._num_shocks > 1 and weap_base.can_refire_while_tased and not weap_base:can_refire_while_tased() then
+				elseif not self._num_shocks and weap_base.can_refire_while_tased and not weap_base:can_refire_while_tased() or self._num_shocks and self._num_shocks > 1 and weap_base.can_refire_while_tased and not weap_base:can_refire_while_tased() then
 					-- Nothing
 				elseif self._running then
 					self:_interupt_action_running(t)
