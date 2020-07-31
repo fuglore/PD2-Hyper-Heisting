@@ -329,7 +329,3 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 	end
 	
 end)
-
-Hooks:Add("LocalizationManagerPostInit", "HH_PoggersMoment", function(loc)
-	loc:load_localization_file(ModPath .. "loc/fuck.txt")
-end)
