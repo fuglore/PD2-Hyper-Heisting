@@ -841,22 +841,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.m1928.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_m1928.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -872,22 +872,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.x_schakal.AMMO_PICKUP = {2, 5}
 	self.x_schakal.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -906,22 +906,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.erma.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_erma.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -935,22 +935,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.sr2.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_sr2.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -963,22 +963,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.olympic.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_olympic.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1014,22 +1014,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.x_sterling.AMMO_MAX = 50
 	self.x_sterling.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1058,22 +1058,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}}
 	self.x_baka.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1103,22 +1103,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}
 	self.x_m45.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1138,22 +1138,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.x_coal.AMMO_PICKUP = {1.5, 7}
 	self.x_m45.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1183,22 +1183,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.x_scorpion.AMMO_MAX = 200
 	self.x_scorpion.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1228,25 +1228,24 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}}
 	self.x_mp9.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
-
 	-- Jacket's Piece
 	self.cobray.stats.spread = 15
 	self.cobray.AMMO_MAX = 120
@@ -1258,22 +1257,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.cobray.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_cobray.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1286,22 +1285,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.polymer.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_polymer.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1325,22 +1324,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.p90.kick.steelsight = self.akm.kick.steelsight
 	self.x_p90.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1369,22 +1368,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}}
 	self.x_tec9.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1408,22 +1407,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.x_shepheard.AMMO_PICKUP = {1.5, 7}
 	self.x_shepheard.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1452,22 +1451,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}}
 	self.x_uzi.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1487,22 +1486,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.new_mp5.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_mp5.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1514,22 +1513,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.mac10.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_mac10.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1541,22 +1540,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	self.mp7.kick.steelsight = self.new_m4.kick.steelsight
 	self.x_mp7.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1586,22 +1585,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}
 	self.x_akmsu.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -1634,22 +1633,22 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}
 	self.x_hajk.kick = {
 	standing = {
-			1.3,
-			2.5,
-			-0.2,
-			0.5
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	steelsight = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	},
 	crouching = {
-			0.7,
-			1.6,
-			-0.1,
-			0.2
+			1.0,
+			2.1,
+			-0.6,
+			0.6
 	}
 	}
 
@@ -4280,7 +4279,7 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	end
 
 	--TOZ66
-	if self.toz66 then 
+	if self.toz66 and self.x_toz66 then 
 	self.toz66.stats.damage = 200
 	self.toz66.stats_modifiers = {damage = 2}
 	self.toz66.fire_mode_data.fire_rate = 0.075
@@ -4661,7 +4660,7 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	end
 
 	--Jackhammer
-	if self.jackhammer then 
+	if self.jackhammer and self.x_jackhammer then 
 	self.jackhammer.AMMO_MAX = 50
 	self.x_jackhammer.AMMO_MAX = 50
 	self.x_jackhammer.stats.damage = 130
@@ -6900,7 +6899,7 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	end
 
 	--  czevo
-	if self.czevo then 
+	if self.czevo and self.x_czevo then 
 	self.czevo.AMMO_MAX = 120
 	self.x_czevo.AMMO_MAX = 150
 	self.czevo.kick = {
@@ -6974,6 +6973,9 @@ Hooks:PostHook( WeaponTweakData, "init", "hh_overhaul_init", function(self)
 	}
 	}
 	end
+
+
+	--Developer's Note: The suffering I am feeling from adding all of these custom weapons is unimaginable
 end
 	
 end)
