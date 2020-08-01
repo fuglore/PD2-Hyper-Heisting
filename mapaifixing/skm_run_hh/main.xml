@@ -1,12 +1,12 @@
 <table name="skm_run_hh">
-	<level ai_group_type="america" brief_id="heist_skm_run_briefing" name_id="heist_skm_run_h1" briefing_dialog="Play_loc_skm_brf" cube="cube_apply_heist_bank" group_ai_state="skirmish" id="skm_run_hh" intro_event="Play_loc_skm_intro" music="heist" narrator="locke" wave_count="9">
+	<level ai_group_type="america" brief_id="heist_skm_run_briefing" briefing_dialog="Play_loc_skm_brf" cube="cube_apply_heist_bank" group_ai_state="skirmish" id="skm_run_hh" intro_event="Play_loc_skm_intro" music="heist" name_id="heist_skm_run_h1" narrator="locke" wave_count="9">
 		<add file="levels/skm_run_hh/add.xml"/>
 		<assets/>
 		<include directory="levels/skm_run_hh">
+			<file file="nav_manager_data.nav_data" type="binary"/>
 			<file file="world.world" type="binary"/>
 			<file file="continents.continents" type="binary"/>
 			<file file="mission.mission" type="binary"/>
-			<file file="nav_manager_data.nav_data" type="binary"/>
 			<file file="world_sounds.world_sounds" type="binary"/>
 			<file file="world_cameras.world_cameras" type="binary"/>
 			<file file="collision/collision.continent" type="binary"/>
@@ -47,7 +47,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative briefing_event="pln_fwb_cbf_01" name_id="heist_skm_run_h1" contact="skirmish" debrief_event="pln_fwb_34" icon="guis/dlcs/bro/textures/pd2/crimenet/heat_street" id="skm_run" jc="60" max_mission_xp="135900" min_mission_xp="8000" region="street">
+	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" debrief_event="pln_fwb_34" icon="guis/dlcs/bro/textures/pd2/crimenet/heat_street" id="skm_run" jc="60" max_mission_xp="135900" min_mission_xp="8000" name_id="heist_skm_run_h1" region="street">
 		<chain>
 			<table level_id="skm_run_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
