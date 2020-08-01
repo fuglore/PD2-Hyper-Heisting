@@ -432,7 +432,7 @@ function PlayerDamage:damage_melee(attack_data)
 				if attacker:base():has_tag("tank") then
 					attack_data.attacker_unit:sound():say("post_kill_taunt")
 				elseif attacker:base():has_tag("taser") then
-					attack_data.attacker_unit:sound():say("post_kill_taunt")
+					attack_data.attacker_unit:sound():say("post_tasing_taunt")
 				elseif attacker:base():has_tag("law") and not attacker:base():has_tag("special") then
 					attack_data.attacker_unit:sound():say("i03")
 				end
@@ -1025,7 +1025,7 @@ function PlayerDamage:damage_bullet(attack_data)
 				if attacker:base():has_tag("tank") then
 					attack_data.attacker_unit:sound():say("post_kill_taunt")
 				elseif attacker:base():has_tag("taser") then
-					attack_data.attacker_unit:sound():say("post_kill_taunt")
+					attack_data.attacker_unit:sound():say("post_tasing_taunt")
 				elseif attacker:base():has_tag("law") and not attacker:base():has_tag("special") then
 					attack_data.attacker_unit:sound():say("i03")
 				end
@@ -1064,8 +1064,9 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	local health_subtracted = 0
 	local death_prevented = nil
 	health_subtracted = self:get_real_health()
+	local revive_reasons = self._phoenix_down_t or self._jackpot_token
 	
-	if self._jackpot_token and self:get_real_health() - attack_data.damage <= 0 then
+	if revive_reasons and self:get_real_health() - attack_data.damage <= 0 then
 		death_prevented = true
 	else
 		self:change_health(-attack_data.damage)
@@ -1094,7 +1095,10 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	self:_set_health_effect()
 	managers.statistics:health_subtracted(health_subtracted)
 	
-	if self._jackpot_token and death_prevented then
+	if self._phoenix_down_t and death_prevented then
+		self._unit:sound():play("pickup_fak_skill")
+		return 0
+	elseif self._jackpot_token and death_prevented then
 		self._jackpot_token = nil
 		self._unit:sound():play("pickup_fak_skill")
 		--log("Jackpot just saved you!")
@@ -1378,6 +1382,15 @@ function PlayerDamage:update(unit, t, dt)
 			end
 		end
 	end
+	
+	if self._start_phoenix_down_t then
+		self._phoenix_down_t = t + 1.5
+		self._start_phoenix_down_t = nil
+	end
+	
+	if self._phoenix_down_t and self._phoenix_down_t < t then
+		self._phoenix_down_t = nil
+	end
 
 	if self._revive_miss then
 		self._revive_miss = self._revive_miss - dt
@@ -1398,3 +1411,65 @@ function PlayerDamage:update(unit, t, dt)
 	end
 end
 
+function PlayerDamage:revive(silent)
+	if Application:digest_value(self._revives, false) == 0 then
+		self._revive_health_multiplier = nil
+
+		return
+	end
+
+	local arrested = self:arrested()
+
+	managers.player:set_player_state("standard")
+
+	if not silent then
+		PlayerStandard.say_line(self, "s05x_sin")
+	end
+
+	self._bleed_out = false
+	self._incapacitated = nil
+	self._downed_timer = nil
+	self._downed_start_time = nil
+
+	if not arrested then
+		self:set_health(self:_max_health() * tweak_data.player.damage.REVIVE_HEALTH_STEPS[self._revive_health_i] * (self._revive_health_multiplier or 1) * managers.player:upgrade_value("player", "revived_health_regain", 1))
+		self:set_armor(self:_max_armor())
+
+		self._revive_health_i = math.min(#tweak_data.player.damage.REVIVE_HEALTH_STEPS, self._revive_health_i + 1)
+		self._revive_miss = 2
+	end
+
+	self:_regenerate_armor()
+	managers.hud:set_player_health({
+		current = self:get_real_health(),
+		total = self:_max_health(),
+		revives = Application:digest_value(self._revives, false)
+	})
+	self:_send_set_health()
+	self:_set_health_effect()
+	managers.hud:pd_stop_progress()
+
+	self._revive_health_multiplier = nil
+
+	self._listener_holder:call("on_revive")
+	
+	if not self._phoenix_down_t and managers.player:has_category_upgrade("player", "phoenix_down") then
+		self._start_phoenix_down_t = true
+	end
+
+	if managers.player:has_inactivate_temporary_upgrade("temporary", "revived_damage_resist") then
+		managers.player:activate_temporary_upgrade("temporary", "revived_damage_resist")
+	end
+
+	if managers.player:has_inactivate_temporary_upgrade("temporary", "increased_movement_speed") then
+		managers.player:activate_temporary_upgrade("temporary", "increased_movement_speed")
+	end
+
+	if managers.player:has_inactivate_temporary_upgrade("temporary", "swap_weapon_faster") then
+		managers.player:activate_temporary_upgrade("temporary", "swap_weapon_faster")
+	end
+
+	if managers.player:has_inactivate_temporary_upgrade("temporary", "reload_weapon_faster") then
+		managers.player:activate_temporary_upgrade("temporary", "reload_weapon_faster")
+	end
+end

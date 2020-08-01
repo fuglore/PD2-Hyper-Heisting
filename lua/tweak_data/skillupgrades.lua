@@ -275,6 +275,19 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
+		self.values.player.phoenix_down = {
+			true
+		}
+		self.definitions.player_phoenix_down = {
+			name_id = "menu_phoenix_down",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "phoenix_down",
+				category = "player"
+			}
+		}
+		
 		--Something To Prove
 		
 		self.values.player.max_health_reduction = {

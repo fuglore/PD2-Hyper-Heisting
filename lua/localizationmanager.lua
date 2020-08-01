@@ -279,6 +279,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["bm_menu_skill_locked_level_7"] = "Requires the Big Guy skill",
 			
+			["menu_pistol_beta_messiah"] = "Ressurection",
+			["menu_pistol_beta_messiah_desc"] = "BASIC: ##$basic##\nWhile in bleedout, you can revive yourself if you kill an enemy.  This can only happen every ##120## seconds.\n\nACE: ##$pro##\nYou are now protected from otherwise lethal damage for ##1.5## seconds after being revived.\n\n##The mark of my divinity shall scar thy DNA.##",
+			
 			["menu_fast_fire_beta"] = "Spray & Pray",
 			["menu_fast_fire_beta_desc"] = "BASIC: ##$basic##\nYour ranged weapons can now pierce through enemy body armor. This does not apply to throwable weapons. \n\nACE: ##$pro##\nYour SMGs, LMGs and Assault Rifles gain ##15## more bullets in their magazines. This does not affect Lock n' Load aced.",
 			

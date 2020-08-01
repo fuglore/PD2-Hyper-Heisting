@@ -84,6 +84,27 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 				8
 			}
 		}
+		
+		self.skills.messiah = {
+			{
+				upgrades = {
+					"player_messiah_revive_from_bleed_out_1"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_phoenix_down"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_pistol_beta_messiah",
+			desc_id = "menu_pistol_beta_messiah_desc",
+			icon_xy = {
+				2,
+				9
+			}
+		}
 
 	end
 end)
