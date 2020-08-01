@@ -165,27 +165,35 @@ function CopBase:default_weapon_name()
 	or unit_name == Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1")	
 	or unit_name == Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45")	
 	
-	local drbob = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic")
+	local drbob = unit_name == Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_medic_policia_federale/ene_swat_dozer_medic_policia_federale")
 	local professor_miller = unit_name == Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45")
 	local vagrant = unit_name == Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45")
 	local crank_dat_soulja = unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45")
 	
 	if highdiff_c45_units and diff_index >= 6 then 
 		return crosskill_chimano_akimbo
+		
 	elseif professor_miller and diff_index >= 6 then 
 		return crosskill_45_akimbo
+		
 	elseif vagrant and diff_index >= 6 then 
 		return white_streak_akimbo
+		
 	elseif secrit_servis then 
 		return kmtac
-	elseif drbob and faction == "federales" then 
+		
+	elseif drbob then 
 		return car4		
+		
 	elseif gang_mackas then 
-		return mark10																			
+		return mark10	
+		
 	elseif gang_aks then 
-		return ak762										
+		return ak762		
+		
 	elseif crank_dat_soulja then 
 		return kmtac_akimbo		
+		
 	elseif zombie_taser then
 		return yellow_car4
 
