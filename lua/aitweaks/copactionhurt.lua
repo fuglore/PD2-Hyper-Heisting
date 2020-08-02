@@ -2124,8 +2124,12 @@ function CopActionHurt:chk_block(action_type, t)
 		return false
 	elseif action_type == "turn" or CopActionAct.chk_block(self, action_type, t) then
 		return true
-	elseif action_type ~= "bleedout" and action_type ~= "fatal" and self._variant ~= "tase" and not self._ext_anim.hurt_exit then
-		return true
+	elseif action_type ~= "bleedout" and action_type ~= "fatal" and self._variant ~= "tase" then
+		if action_type == "hurt" or action_type == "heavy_hurt" or action_type == "expl_hurt" or action_type == "poison_hurt" or action_type == "fire_hurt" then
+			return false
+		elseif not self._ext_anim.hurt_exit then
+			return true
+		end
 	end
 end
 

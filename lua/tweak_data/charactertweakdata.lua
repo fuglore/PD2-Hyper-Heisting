@@ -1243,6 +1243,7 @@ function CharacterTweakData:_presets(tweak_data)
 	--satisfying staggering behavior, burying full auto rounds into enemies faces eventually makes them fall over and squirm, anything that deals immediate large damage staggers enemies consistently. 
 	--melee becomes gratifying, rewarding and ridiculously fun using explodes
 	presets.hurt_severities.hordemook = {
+		doom_light = true,
 		bullet = {
 			health_reference = "current",
 			zones = {
@@ -1625,50 +1626,6 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	
-	presets.hurt_severities.team_AI = {
-		tase = false,
-		bullet = {
-			health_reference = 1,
-			zones = {
-				{
-					none = 1
-				}
-			}
-		},
-		explosion = {
-			health_reference = 1,
-			zones = {
-				{
-					none = 1
-				}
-			}
-		},
-		melee = {
-			health_reference = 1,
-			zones = {
-				{
-					moderate = 1
-				}
-			}
-		},
-		fire = {
-			health_reference = 1,
-			zones = {
-				{
-					none = 1
-				}
-			}
-		},
-		poison = {
-			health_reference = 1,
-			zones = {
-				{
-					none = 1
-				}
-			}
-		}
-	}
-	
 	--special no_tase hurt severities based on specialenemy, possibly used on taser.
 	presets.hurt_severities.no_tase_special = deep_clone(presets.hurt_severities.specialenemy)
 	presets.hurt_severities.no_tase_special.tase = false
@@ -1686,30 +1643,6 @@ function CharacterTweakData:_presets(tweak_data)
 			tased_time = 5
 		}
 	}
-	
-	presets.gang_member_damage = {
-		HEALTH_INIT = 75,
-		REGENERATE_TIME = 2,
-		REGENERATE_TIME_AWAY = 0.2,
-		DOWNED_TIME = tweak_data.player.damage.DOWNED_TIME,
-		TASED_TIME = tweak_data.player.damage.TASED_TIME,
-		BLEED_OUT_HEALTH_INIT = tweak_data.player.damage.BLEED_OUT_HEALTH_INIT,
-		ARRESTED_TIME = tweak_data.player.damage.ARRESTED_TIME,
-		INCAPACITATED_TIME = tweak_data.player.damage.INCAPACITATED_TIME,
-		hurt_severity = deep_clone(presets.hurt_severities.team_AI)
-	}
-	presets.gang_member_damage.hurt_severity.bullet = {
-		health_reference = 1,
-		zones = {
-			{
-				none = 1
-			}
-		}
-	}
-	
-	presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
-	presets.gang_member_damage.respawn_time_penalty = 0
-	presets.gang_member_damage.base_respawn_time_penalty = 5
 		
 	--Custom sniper preset to make them work differently, they work as a mini turret of sorts, dealing big damage with good accuracy, standing in their line of fire isn't wise as they'll suppress the shit out of you and take off armor very quickly.
 	presets.weapon.rhythmsniper = deep_clone(presets.weapon.sniper)
@@ -7750,7 +7683,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.weapon = deep_clone(presets.weapon.civil)
 	self.tank.detection = presets.detection.enemymook
 	self.tank.HEALTH_INIT = 300
-	self.tank.headshot_dmg_mul = 4
+	self.tank.headshot_dmg_mul = 18
 	self.tank.damage.explosion_damage_mul = 1 --lowered from base, was 1.1 now just 1, dunno why they thought it was a good idea to make explosives more powerful against him.
 	self.tank.damage.fire_damage_mul = 2
 	self.tank.move_speed = presets.move_speed.slow_consistency
@@ -7762,6 +7695,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	}
 	self.tank.cannot_throw_grenades = true
 	self.tank.crouch_move = false
+	self.tank.shooting_death = false
 	self.tank.no_run_start = true
 	self.tank.no_run_stop = true
 	self.tank.no_retreat = nil
@@ -7790,6 +7724,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		damage_mul = self.tank.headshot_dmg_mul * 1
 	}
 	self.tank.die_sound_event = "bdz_x02a_any_3p"
+	self.tank.damage.doom_hurt_type = "doomzer"
 	self.tank.damage.hurt_severity = presets.hurt_severities.no_hurts
 	self.tank.chatter = presets.enemy_chatter.bulldozer
 	self.tank.announce_incomming = "incomming_tank"
@@ -7902,6 +7837,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.move_speed = presets.move_speed.lightning_constant
 	self.spooc.no_retreat = nil
 	self.spooc.no_arrest = true
+	self.spooc.damage.doom_hurt_type = "doom"
 	self.spooc.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.spooc.surrender_break_time = {
 		4,
@@ -7981,6 +7917,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	self.shadow_spooc.no_arrest = true
 	self.shadow_spooc.no_fumbling = true
 	self.shadow_spooc.no_suppression_reaction = true
+	self.shadow_spooc.damage.doom_hurt_type = "doom"
 	self.shadow_spooc.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.shadow_spooc.surrender_break_time = {
 		4,
@@ -8104,6 +8041,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.detection = presets.detection.enemymook
 	self.medic.HEALTH_INIT = 18 --health lowered slightly to keep medics less tanky, tanky medics create unsolvable situations and aren't too fun.
 	self.medic.headshot_dmg_mul = 6
+	self.medic.damage.doom_hurt_type = "doom"
 	self.medic.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.medic.damage.no_suppression_crouch = true
 	self.medic.suppression = presets.suppression.stalwart_nil
@@ -8146,8 +8084,9 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	}
 	self.taser.weapon = presets.weapon.simple
 	self.taser.detection = presets.detection.enemymook
-	self.taser.HEALTH_INIT = 20 
-	self.taser.headshot_dmg_mul = 4
+	self.taser.HEALTH_INIT = 25
+	self.taser.headshot_dmg_mul = 2
+	self.taser.damage.doom_hurt_type = "doom"
 	self.taser.damage.fire_damage_mul = 0.5
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.taser.move_speed = presets.move_speed.civil_consistency
@@ -8203,6 +8142,7 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.HEALTH_INIT = 10
 	self.swat.headshot_dmg_mul = 6
 	self.swat.move_speed = presets.move_speed.simple_consistency
+	self.swat.damage.doom_hurt_type = "light"
 	self.swat.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.swat.suppression = presets.suppression.hard_agg
 	self.swat.surrender = presets.surrender.easy
@@ -8240,6 +8180,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.damage.no_suppression_crouch = true
 	self.fbi.suppression = presets.suppression.stalwart_nil
 	self.fbi.surrender = presets.surrender.hard
+	self.fbi.damage.doom_hurt_type = "doom"
 	self.fbi.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.fbi.ecm_vulnerability = 1
 	self.fbi.ecm_hurts = {
@@ -8321,6 +8262,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.HEALTH_INIT = 20
 	self.heavy_swat.headshot_dmg_mul = 4
 	self.heavy_swat.damage.explosion_damage_mul = 1
+	self.heavy_swat.damage.doom_hurt_type = "heavy"
 	self.heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
 	self.heavy_swat.suppression = presets.suppression.hard_agg
@@ -8361,6 +8303,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_swat.suppression = presets.suppression.hard_def
 	self.fbi_swat.surrender = presets.surrender.easy
+	self.fbi_swat.damage.doom_hurt_type = "light"
 	self.fbi_swat.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.fbi_swat.speech_prefix_p1 = self._prefix_data_p1.swat()
 	self.fbi_swat.speech_prefix_p2 = "n"
@@ -8392,6 +8335,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.armored_swat.HEALTH_INIT = 200
 	self.armored_swat.headshot_dmg_mul = 12
 	self.armored_swat.move_speed = presets.move_speed.civil_consistency
+	self.armored_swat.damage.doom_hurt_type = "doom"
 	self.armored_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
 	self.armored_swat.surrender = presets.surrender.hard
 	table.insert(self._enemy_list, "armored_swat")
@@ -8409,6 +8353,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.headshot_dmg_mul = 4
 	self.fbi_heavy_swat.damage.explosion_damage_mul = 1
 	self.fbi_heavy_swat.move_speed = presets.move_speed.simple_consistency
+	self.fbi_heavy_swat.damage.doom_hurt_type = "heavy"
 	self.fbi_heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
 	self.fbi_heavy_swat.suppression = presets.suppression.hard_agg
 	self.fbi_heavy_swat.surrender = presets.surrender.easy

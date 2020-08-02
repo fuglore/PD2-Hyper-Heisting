@@ -365,7 +365,8 @@ function CopActionTase:update(t)
 		elseif self._discharging_on_husk then
 			if not self._attention.unit:movement():tased() then
 				self._discharging_on_husk = nil
-
+				self._unit:character_damage()._tasing = nil
+				
 				if self._is_server then
 					self._expired = true
 				else
@@ -397,6 +398,8 @@ function CopActionTase:update(t)
 					self._discharging = nil
 					self.update = self._upd_empty
 				end
+				
+				self._unit:character_damage()._tasing = nil
 			end
 		elseif target_vec and self._common_data.allow_fire then
 			if not self._played_sound_this_once then
@@ -437,7 +440,8 @@ function CopActionTase:update(t)
 							local attack_data = {
 								attacker_unit = self._unit
 							}
-
+							
+							self._unit:character_damage()._tasing = true
 							self._tasing_local_unit:character_damage():damage_tase(attack_data)
 							CopDamage._notify_listeners("on_criminal_tased", self._unit, self._tasing_local_unit)
 
@@ -535,5 +539,65 @@ function CopActionTase:_upd_ik_r_arm(target_vec, fwd_dot, t)
 		end
 
 		return nil
+	end
+end
+
+function CopActionTase:on_exit()
+	if self._tase_effect then
+		World:effect_manager():fade_kill(self._tase_effect)
+	end
+
+	if self._discharging then
+		self._tasing_local_unit:movement():on_tase_ended()
+	end
+
+	if Network:is_server() then
+		self._ext_movement:set_stance_by_code(2)
+	end
+
+	if self._modifier_on then
+		self._machine:allow_modifier(self._modifier_name)
+	end
+	
+	self._unit:character_damage()._tasing = nil
+
+	if Network:is_server() then
+		self._unit:network():send("action_tase_event", 2)
+
+		if self._expired then
+			self._ext_movement:action_request({
+				body_part = 3,
+				type = "idle"
+			})
+		end
+	end
+
+	if self._tasered_sound then
+		self._tasered_sound:stop()
+		self._unit:sound():play("tasered_3rd_stop", nil)
+	end
+
+	if self._tasing_local_unit and self._tasing_player then
+		self._attention.unit:movement():on_targetted_for_attack(false, self._unit)
+	end
+
+	if self._malfunction_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._malfunction_clbk_id)
+
+		self._malfunction_clbk_id = nil
+	end
+end
+
+function CopActionTase:on_destroy()
+	if self._tase_effect then
+		World:effect_manager():fade_kill(self._tase_effect)
+	end
+	
+	self._unit:character_damage()._tasing = nil
+
+	if self._malfunction_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._malfunction_clbk_id)
+
+		self._malfunction_clbk_id = nil
 	end
 end

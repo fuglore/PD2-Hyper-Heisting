@@ -29,6 +29,205 @@ function CopDamage:kill_punk_visual_effect()
 	end
 end
 
+function CopDamage:get_damage_type(damage_percent, category, attack_data)
+	local hurt_table = self._char_tweak.damage.hurt_severity[category or "bullet"]
+	local dmg = damage_percent / self._HEALTH_GRANULARITY
+	
+	if self._tasing then
+		if math.random() < 0.1 then
+			--log("broke free!")
+			--return "hurt"
+		end
+	end
+	
+	if attack_data and self._char_tweak.damage.doom_hurt_type or self._char_tweak.damage.hurt_severity.doom_light then
+		local result = self:determine_doom_hurt_type(attack_data)
+		
+		return result
+	end
+	
+	if hurt_table.health_reference == "full" then
+		-- Nothing
+	elseif hurt_table.health_reference == "current" then
+		dmg = math.min(1, self._HEALTH_INIT * dmg / self._health)
+	else
+		dmg = math.min(1, self._HEALTH_INIT * dmg / hurt_table.health_reference)
+	end
+
+	local zone = nil
+
+	for i_zone, test_zone in ipairs(hurt_table.zones) do
+		if i_zone == #hurt_table.zones or dmg < test_zone.health_limit then
+			zone = test_zone
+
+			break
+		end
+	end
+
+	local rand_nr = math.random()
+	local total_w = 0
+
+	for sev_name, hurt_type in pairs(self._hurt_severities) do
+		local weight = zone[sev_name]
+
+		if weight and weight > 0 then
+			total_w = total_w + weight
+
+			if rand_nr <= total_w then
+				return hurt_type or "dmg_rcv"
+			end
+		end
+	end
+
+	return "dmg_rcv"
+end
+
+function CopDamage:determine_doom_hurt_type(damage_info)
+	local dmg_chk = not self._dead and self._health > 0
+	
+	local doomzer = self._char_tweak.damage.doom_hurt_type == "doomzer" or nil
+	local light = self._char_tweak.damage.doom_hurt_type == "light" or nil
+	local light2 = self._char_tweak.damage.hurt_severity and self._char_tweak.damage.hurt_severity.doom_light or nil
+	local heavy = self._char_tweak.damage.doom_hurt_type == "heavy" or nil
+	
+	local t = TimerManager:game():time()
+	
+	if dmg_chk and damage_info and damage_info.damage and damage_info.damage > 0.01 then
+		local hurt_level_add = 0.5
+		local time_mult = 1
+		local damage = damage_info.damage
+		local hurtlevel_mult = 1
+		
+		if doomzer then
+			hurtlevel_mult = 5
+		elseif heavy then
+			hurtlevel_mult = 0.5
+			time_mult = time_mult + 0.5
+		elseif light or light2 then
+			hurtlevel_mult = 0.25
+			time_mult = time_mult + 1
+		end
+		
+		if damage_info.variant == "melee" then
+			hurtlevel_mult = hurtlevel_mult - 0.1
+		end
+		
+		if self._hurt_level then
+			local mult_add = self._hurt_level * 0.1
+			time_mult = time_mult + mult_add
+		end
+			
+		local time_to_chk = 0.2 * time_mult	
+		
+		if damage > 30 then
+			time_to_chk = 2 * time_mult
+			hurt_level_add = 8
+		elseif damage > 20 then
+			time_to_chk = 1.35 * time_mult
+			hurt_level_add = 6
+		elseif damage > 8 then
+			time_to_chk = 1 * time_mult
+			hurt_level_add = 2
+		elseif damage > 4 then
+			time_to_chk = 0.4 * time_mult
+			hurt_level_add = 1
+		end
+		
+		if not self._last_received_damage_t or self._last_received_damage_t and self._last_received_damage_t + time_to_chk > t then
+			self._last_received_damage_t = t
+			--log("hurt time was " .. t .. ".")
+			--log("checked time was " .. self._last_received_damage_t + time_to_chk .. ".")
+			if self._hurt_level then
+				self._hurt_level = self._hurt_level + hurt_level_add
+				--log("hurt level is " .. self._hurt_level .. ".")
+			else
+				self._hurt_level = hurt_level_add
+				--log("hurt level is " .. self._hurt_level .. ".")
+			end
+		else
+			local hurt_remove = hurt_level_add * 0.5
+			self._last_received_damage_t = t
+			--log("hurt time was " .. t .. ".")
+			--log("checked time was " .. self._last_received_damage_t + time_to_chk .. ".")
+			local checked_t = self._last_received_damage_t + time_to_chk
+			if t - checked_t <= 0 then
+				self._hurt_level = 0
+				--log("reset!")
+			elseif self._hurt_level and self._hurt_level > 0 then 
+				self._hurt_level = math.max(0, self._hurt_level - hurt_remove)
+				--log("hurt level is " .. self._hurt_level .. ".")
+			else
+				self._hurt_level = 0 + hurt_level_add
+				--log("hurt level is " .. self._hurt_level .. ".")
+			end
+		end
+	
+		if self._hurt_level then
+			if doomzer and self._hurt_level <= 16 * hurtlevel_mult then
+				return "dmg_rcv"
+			elseif damage_info.variant == "fire" or damage_info.is_fire_dot_damage then
+				if doomzer then
+					return "dmg_rcv"
+				else
+					if self._hurt_level >= 16 * hurtlevel_mult then
+						return "fire_hurt"
+					else
+						return "dmg_rcv"
+					end
+				end
+			elseif damage_info.variant == "poison" then
+				if doomzer then
+					return "dmg_rcv"
+				else
+					if self._hurt_level >= 16 * hurtlevel_mult then
+						return "dmg_rcv"
+					else
+						return "poison_hurt"
+					end
+				end
+			elseif damage_info.variant == "explosion" then
+				if doomzer then
+					if self._hurt_level >= 16 * hurtlevel_mult then
+						return "light_hurt"
+					else
+						return "dmg_rcv"
+					end
+				else
+					if self._hurt_level >= 16 * hurtlevel_mult then
+						return "expl_hurt"
+					else
+						return "heavy_hurt"
+					end
+				end
+			elseif self._hurt_level >= 32 * hurtlevel_mult then
+				if doomzer then
+					self._hurt_level = 0
+				end
+				
+				return "expl_hurt"
+			elseif self._hurt_level >= 24 * hurtlevel_mult then
+				if doomzer then
+					return "light_hurt"
+				else
+					return "expl_hurt"
+				end
+			elseif self._hurt_level >= 16 * hurtlevel_mult then
+				if doomzer then
+					return "light_hurt"
+				else
+					return "heavy_hurt"
+				end
+			elseif self._hurt_level >= 8 * hurtlevel_mult then
+				return "hurt"
+			else
+				return "light_hurt"
+			end
+		end
+	end
+	
+	return "dmg_rcv"
+end
+
 function CopDamage:die(attack_data)
 	if self._immortal then
 		debug_pause("Immortal character died!")
@@ -293,27 +492,117 @@ function CopDamage:_on_damage_received(damage_info)
 	
 	local speech_allowed = not self._next_allowed_hurt_t or self._next_allowed_hurt_t and self._next_allowed_hurt_t < t	
 	
-	if damage_info.damage and damage_info.damage > 0.01 and self._health > damage_info.damage and dmg_chk and speech_allowed then
-		if not damage_info.result_type or damage_info.result_type ~= "healed" and damage_info.result_type ~= "death" then
-			if self._unit:base():has_tag("special") then
-				if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
-					if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
-						self._unit:sound():say("burnhurt", nil, nil, nil, nil)
-						self._next_allowed_burnhurt_t = t + 6
-						self._next_allowed_hurt_t = t + math.random(3, 6)
-					end
-				end
-			else
-				if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
-					if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
-						self._unit:sound():say("burnhurt", nil, nil, nil, nil)
-						self._next_allowed_burnhurt_t = t + 4
-						self._next_allowed_hurt_t = t + math.random(1, 4)
+	if dmg_chk and damage_info.damage and damage_info.damage > 0.01 and self._health > damage_info.damage then
+		if speech_allowed then
+			if not damage_info.result_type or damage_info.result_type ~= "healed" and damage_info.result_type ~= "death" then
+				if self._unit:base():has_tag("takedown") and self._unit:base():has_tag("special") then
+					if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
+						if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
+							self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+							self._next_allowed_burnhurt_t = t + 3
+							self._next_allowed_hurt_t = t + math.random(1, 2)
+						end
+					else
+						self._next_allowed_hurt_t = t + math.random(2, 4)
+						if self._unit:base():has_tag("tank") then
+							--shut up. STOP PLAYING PDTH PAIN NOISES.
+						else
+							self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+						end
 					end
 				else
-					self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+					if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
+						if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
+							self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+							self._next_allowed_burnhurt_t = t + 1
+							self._next_allowed_hurt_t = t + math.random(1, 2)
+						end
+					else
+						if self._unit:base():has_tag("tank") then
+							--shut up. STOP PLAYING PDTH PAIN NOISES.
+						else
+							self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+						end
+					end
 				end
 			end
+		end
+		
+		if damage_info.is_synced then
+			local doomzer = self._char_tweak.damage.doom_hurt_type == "doomzer" or nil
+			local light = self._char_tweak.damage.doom_hurt_type == "light" or nil
+			local light2 = self._char_tweak.damage.hurt_severity and self._char_tweak.damage.hurt_severity.doom_light or nil
+			local heavy = self._char_tweak.damage.doom_hurt_type == "heavy" or nil
+			
+			local hurt_level_add = 0.5
+			local time_mult = 1
+			local damage = damage_info.damage
+			local hurtlevel_mult = 1
+			
+			if doomzer then
+				hurtlevel_mult = 5
+			elseif heavy then
+				hurtlevel_mult = 0.5
+				time_mult = time_mult + 0.5
+			elseif light or light2 then
+				hurtlevel_mult = 0.25
+				time_mult = time_mult + 1
+			end
+			
+			if damage_info.variant == "melee" then
+				hurtlevel_mult = hurtlevel_mult - 0.1
+			end
+			
+			if self._hurt_level then
+				local mult_add = self._hurt_level * 0.1
+				time_mult = time_mult + mult_add
+			end
+				
+			local time_to_chk = 0.2 * time_mult	
+			
+			if damage > 30 then
+				time_to_chk = 2 * time_mult
+				hurt_level_add = 8
+			elseif damage > 20 then
+				time_to_chk = 1.35 * time_mult
+				hurt_level_add = 6
+			elseif damage > 8 then
+				time_to_chk = 1 * time_mult
+				hurt_level_add = 2
+			elseif damage > 4 then
+				time_to_chk = 0.4 * time_mult
+				hurt_level_add = 1
+			end
+			
+			if not self._last_received_damage_t or self._last_received_damage_t and self._last_received_damage_t + time_to_chk > t then
+				self._last_received_damage_t = t
+				--log("hurt time was " .. t .. ".")
+				--log("checked time was " .. self._last_received_damage_t + time_to_chk .. ".")
+				if self._hurt_level then
+					self._hurt_level = self._hurt_level + hurt_level_add
+					--log("hurt level is " .. self._hurt_level .. ".")
+				else
+					self._hurt_level = hurt_level_add
+					--log("hurt level is " .. self._hurt_level .. ".")
+				end
+			else
+				local hurt_remove = hurt_level_add * 0.5
+				self._last_received_damage_t = t
+				--log("hurt time was " .. t .. ".")
+				--log("checked time was " .. self._last_received_damage_t + time_to_chk .. ".")
+				local checked_t = self._last_received_damage_t + time_to_chk
+				if t - checked_t <= 0 then
+					self._hurt_level = 0
+					--log("reset!")
+				elseif self._hurt_level and self._hurt_level > 0 then 
+					self._hurt_level = math.max(0, self._hurt_level - hurt_remove)
+					--log("hurt level is " .. self._hurt_level .. ".")
+				else
+					self._hurt_level = 0 + hurt_level_add
+					--log("hurt level is " .. self._hurt_level .. ".")
+				end
+			end
+			
 		end
 	end
 	
@@ -354,7 +643,7 @@ function CopDamage:clbk_suppression_decay()
 	end
 	
 	if Global.game_settings.one_down then --The effect is self-explanatory, but the reasons for it are in copactionshoot.
-		self._suppression_hardness_t = TimerManager:game():time() + 0.35
+		self._suppression_hardness_t = TimerManager:game():time()
 	else
 		self._suppression_hardness_t = TimerManager:game():time() + 30
 	end
@@ -504,7 +793,7 @@ function CopDamage:damage_melee(attack_data)
 		damage_effect_percent = math.ceil(damage_effect / self._HEALTH_INIT_PRECENT)
 		damage_effect_percent = math.clamp(damage_effect_percent, 1, self._HEALTH_GRANULARITY)
 
-		local result_type = self:get_damage_type(damage_effect_percent, "melee")
+		local result_type = self:get_damage_type(damage_effect_percent, "melee", attack_data)
 		local variant = attack_data.variant
 
 		if attack_data.shield_knock and self._char_tweak.damage.shield_knocked and not self._unit:base().is_phalanx and not self:is_immune_to_shield_knockback() then
@@ -516,7 +805,7 @@ function CopDamage:damage_melee(attack_data)
 		elseif attack_data.variant == "counter_spooc" and not self._unit:base():has_tag("tank") or attack_data.variant == "counter_spooc" and not self._unit:base():has_tag("boss") then
 			result_type = "expl_hurt"
 		else
-			result_type = self:get_damage_type(damage_effect_percent, "melee")
+			result_type = self:get_damage_type(damage_effect_percent, "melee", attack_data)
 		end
 
 		if result_type == "taser_tased" and not self._unit:base():has_tag("shield") then --shields get tased as usual, other enemies get tased similarly to bots
@@ -888,7 +1177,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 			damage = damage_percent * self._HEALTH_INIT_PRECENT
 			damage, damage_percent = self:_apply_min_health_limit(damage, damage_percent)
 
-			local result_type = not self._char_tweak.immune_to_knock_down and (attack_data.knock_down and "knock_down" or attack_data.stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent, "bullet")
+			local result_type = not self._char_tweak.immune_to_knock_down and (attack_data.knock_down and "knock_down" or attack_data.stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent, "bullet", attack_data)
 
 			local result = {
 				type = result_type,
@@ -1108,7 +1397,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		end
 	else
 		attack_data.damage = damage
-		local result_type = not self._char_tweak.immune_to_knock_down and (attack_data.knock_down and "knock_down" or attack_data.stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent, "bullet")
+		local result_type = not self._char_tweak.immune_to_knock_down and (attack_data.knock_down and "knock_down" or attack_data.stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent, "bullet", attack_data)
 		result = {
 			type = result_type,
 			variant = attack_data.variant
@@ -1247,6 +1536,29 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	return result
 end
 
+function CopDamage:roll_critical_hit(attack_data)
+	local damage = attack_data.damage
+
+	if not self:can_be_critical(attack_data) then
+		return false, damage
+	end
+
+	local critical_hits = self._char_tweak.critical_hits or {}
+	local critical_hit = false
+	local critical_value = (critical_hits.base_chance or 0) + managers.player:critical_hit_chance() * (critical_hits.player_chance_multiplier or 1)
+
+	if critical_value > 0 then
+		local critical_roll = math.rand(1)
+		critical_hit = critical_roll < critical_value
+	end
+
+	if critical_hit then
+		damage = damage * 1.5
+	end
+
+	return critical_hit, damage
+end
+
 function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit_offset_height, variant, death)
 	if self._dead then
 		return
@@ -1353,7 +1665,7 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 		elseif variant == 8 then
 			result_type = "dmg_rcv" --important, need to sync if there's no reaction
 		else
-			result_type = self:get_damage_type(damage_percent, "bullet") --to fall back in case other peers don't have the modified code
+			result_type = self:get_damage_type(damage_percent, "bullet", attack_data) --to fall back in case other peers don't have the modified code
 		end
 
 		if variant == 3 then
@@ -1459,7 +1771,7 @@ function CopDamage:damage_simple(attack_data)
 		local weapon_unit = attack_data.attacker_unit and attack_data.attacker_unit:inventory() and attack_data.attacker_unit:inventory():equipped_unit()
 		local knock_down = weapon_unit and weapon_unit:base()._knock_down and weapon_unit:base()._knock_down > 0 and math.random() < weapon_unit:base()._knock_down
 		local stagger = weapon_unit and weapon_unit:base()._stagger
-		local result_type = not self._char_tweak.immune_to_knock_down and (knock_down and "knock_down" or stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent)
+		local result_type = not self._char_tweak.immune_to_knock_down and (knock_down and "knock_down" or stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent, nil, attack_data)
 
 		result = {
 			type = result_type,
@@ -1623,7 +1935,7 @@ function CopDamage:sync_damage_simple(attacker_unit, damage_percent, i_attack_va
 		elseif i_result == 8 then
 			result_type = "dmg_rcv" --important, need to sync if there's no reaction
 		else
-			result_type = self:get_damage_type(damage_percent) --to fall back in case other peers don't have the modified code
+			result_type = self:get_damage_type(damage_percent, nil) --to fall back in case other peers don't have the modified code
 		end
 
 		if i_result == 3 then
@@ -1823,7 +2135,16 @@ function CopDamage:damage_fire(attack_data)
 		end
 	else
 		attack_data.damage = damage
-		local result_type = attack_data.variant == "stun" and "hurt_sick" or self:get_damage_type(damage_percent, "fire")
+		local result_type = nil
+		
+		if self._char_tweak.damage.doom_hurt_type then
+			result_type = self:determine_doom_hurt_type(attack_data, self._char_tweak.damage.doom_hurt_type == "doomzer" or nil)
+		elseif attack_data.variant == "stun" then
+			result_type = "hurt_sick"
+		else
+			result_type = self:get_damage_type(damage_percent, "fire", attack_data)
+		end
+		
 		result = {
 			type = result_type,
 			variant = attack_data.variant
@@ -1959,7 +2280,7 @@ function CopDamage:damage_fire(attack_data)
 		if attack_data.result.type == "fire_hurt" and not start_dot_dance_antimation then --prevent fire_hurt from micro-stunning enemies when the dance animation isn't proced
 			attack_data.result.type = "dmg_rcv"
 		end
-	else
+	else	
 		if attack_data.result.type == "fire_hurt" then --DoT never triggers an animation so it shouldn't constantly micro-stun enemies that are vulnerable to fire
 			attack_data.result.type = "dmg_rcv"
 		end
@@ -2217,7 +2538,7 @@ function CopDamage:damage_explosion(attack_data)
 		end
 	else
 		attack_data.damage = damage
-		local result_type = attack_data.variant == "stun" and "hurt_sick" or self:get_damage_type(damage_percent, "explosion")
+		local result_type = attack_data.variant == "stun" and "hurt_sick" or self:get_damage_type(damage_percent, "explosion", attack_data)
 		result = {
 			type = result_type,
 			variant = attack_data.variant
@@ -2388,7 +2709,7 @@ function CopDamage:sync_damage_explosion(attacker_unit, damage_percent, i_attack
 			elseif i_attack_variant == 7 then --note to fug: 8 is still available for use if some weird shit reaction needs to happen
 				result_type = "dmg_rcv"
 			else
-				result_type = self:get_damage_type(damage_percent, "explosion")
+				result_type = self:get_damage_type(damage_percent, "explosion", attack_data)
 			end
 		end
 
@@ -2552,7 +2873,7 @@ function CopDamage:damage_dot(attack_data)
 		end
 	else
 		attack_data.damage = damage
-		local result_type = attack_data.hurt_animation and self:get_damage_type(damage_percent, attack_data.variant) or "dmg_rcv"
+		local result_type = attack_data.hurt_animation and self:get_damage_type(damage_percent, attack_data.variant, attack_data) or "dmg_rcv"
 		result = {
 			type = result_type,
 			variant = attack_data.variant

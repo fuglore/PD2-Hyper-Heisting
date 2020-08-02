@@ -80,6 +80,10 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 
 	CopLogicIdle._chk_has_old_action(data, my_data)
 
+	if my_data.advancing then
+		my_data.old_action_advancing = true
+	end
+
 	local objective = data.objective
 	local path_data = objective.path_data
 
@@ -2275,7 +2279,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			CopLogicTravel._upd_combat_movement(data)
 		end
 	elseif action_type == "walk" then
-		if action:expired() and my_data.coarse_path and not my_data.starting_advance_action and my_data.coarse_path_index and not my_data.has_old_action and my_data.advancing then
+		if action:expired() and my_data.advancing and not my_data.old_action_advancing and not my_data.has_old_action and not my_data.starting_advance_action and my_data.coarse_path_index then
 			my_data.coarse_path_index = my_data.coarse_path_index + 1
 
 			if my_data.coarse_path_index > #my_data.coarse_path then
@@ -2286,6 +2290,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 
 		my_data.advancing = nil
+		my_data.old_action_advancing = nil
 		
 		if my_data.retreating then
 			my_data.retreating = nil
@@ -2606,7 +2611,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		optimal_threat_dis = 100
 		allow_fwd = true
 		
-		if my_data.optimal_pos then
+		if my_data.optimal_pos and not near_pos then
 			near_pos = my_data.optimal_pos
 		end
 		
@@ -2771,6 +2776,183 @@ function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 	data.unit:brain():search_for_path(my_data.advance_path_search_id, to_pos, prio, nil, nav_segs)
 end
 
+function CopLogicTravel._determine_destination_occupation(data, objective)
+	local occupation = nil
+
+	if objective.type == "defend_area" then
+		if objective.cover then
+			occupation = {
+				type = "defend",
+				seg = objective.nav_seg,
+				cover = objective.cover,
+				radius = objective.radius
+			}
+		elseif objective.pos then
+			occupation = {
+				type = "defend",
+				seg = objective.nav_seg,
+				pos = objective.pos,
+				radius = objective.radius
+			}
+		else
+			local near_pos = objective.follow_unit and objective.follow_unit:movement():nav_tracker():field_position()
+			local cover = CopLogicTravel._find_cover(data, objective.nav_seg, near_pos)
+
+			if cover then
+				local cover_entry = {
+					cover
+				}
+				occupation = {
+					type = "defend",
+					seg = objective.nav_seg,
+					cover = cover_entry,
+					radius = objective.radius
+				}
+			else
+				near_pos = CopLogicTravel._get_pos_on_wall(managers.navigation._nav_segments[objective.nav_seg].pos, 700)
+				occupation = {
+					type = "defend",
+					seg = objective.nav_seg,
+					pos = near_pos,
+					radius = objective.radius
+				}
+			end
+		end
+	elseif objective.type == "phalanx" then
+		local logic = data.unit:brain():get_logic_by_name(objective.type)
+
+		logic.register_in_group_ai(data.unit)
+
+		local phalanx_circle_pos = logic.calc_initial_phalanx_pos(data.m_pos, objective)
+		occupation = {
+			type = "defend",
+			seg = objective.nav_seg,
+			pos = phalanx_circle_pos,
+			radius = objective.radius
+		}
+	elseif objective.type == "act" then
+		occupation = {
+			type = "act",
+			seg = objective.nav_seg,
+			pos = objective.pos
+		}
+	elseif objective.type == "follow" then
+		local my_data = data.internal_data
+		local follow_tracker = objective.follow_unit:movement():nav_tracker()
+		local dest_nav_seg_id = my_data.coarse_path[#my_data.coarse_path][1]
+		local dest_area = managers.groupai:state():get_area_from_nav_seg_id(dest_nav_seg_id)
+		local follow_pos = follow_tracker:field_position()
+		local threat_pos = nil
+
+		if data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
+			threat_pos = data.attention_obj.nav_tracker:field_position()
+		end
+
+		local cover = CopLogicTravel._find_cover(data, dest_area.nav_segs, follow_pos)
+
+		if cover then
+			local cover_entry = {
+				cover
+			}
+			occupation = {
+				type = "defend",
+				cover = cover_entry
+			}
+		else
+			local max_dist = 1200
+
+			if objective.called then
+				max_dist = 600
+			end
+
+			local to_pos = CopLogicTravel._get_pos_on_wall(follow_pos, max_dist)
+			occupation = {
+				type = "defend",
+				pos = to_pos
+			}
+		end
+	elseif objective.type == "revive" then
+		local is_local_player = objective.follow_unit:base().is_local_player
+		local revive_u_mv = objective.follow_unit:movement()
+		local revive_u_tracker = revive_u_mv:nav_tracker()
+		local revive_u_rot = is_local_player and Rotation(0, 0, 0) or revive_u_mv:m_rot()
+		local revive_u_fwd = revive_u_rot:y()
+		local revive_u_right = revive_u_rot:x()
+		local revive_u_pos = revive_u_tracker:lost() and revive_u_tracker:field_position() or revive_u_mv:m_pos()
+		local ray_params = {
+			trace = true,
+			tracker_from = revive_u_tracker
+		}
+
+		if revive_u_tracker:lost() then
+			ray_params.pos_from = revive_u_pos
+		end
+
+		local stand_dis = nil
+
+		if is_local_player or objective.follow_unit:base().is_husk_player then
+			stand_dis = 120
+		else
+			stand_dis = 90
+			local mid_pos = mvector3.copy(revive_u_fwd)
+
+			mvector3.multiply(mid_pos, -20)
+			mvector3.add(mid_pos, revive_u_pos)
+
+			ray_params.pos_to = mid_pos
+			local ray_res = managers.navigation:raycast(ray_params)
+			revive_u_pos = ray_params.trace[1]
+		end
+
+		local rand_side_mul = math.random() > 0.5 and 1 or -1
+		local revive_pos = mvector3.copy(revive_u_right)
+
+		mvector3.multiply(revive_pos, rand_side_mul * stand_dis)
+		mvector3.add(revive_pos, revive_u_pos)
+
+		ray_params.pos_to = revive_pos
+		local ray_res = managers.navigation:raycast(ray_params)
+
+		if ray_res then
+			local opposite_pos = mvector3.copy(revive_u_right)
+
+			mvector3.multiply(opposite_pos, -rand_side_mul * stand_dis)
+			mvector3.add(opposite_pos, revive_u_pos)
+
+			ray_params.pos_to = opposite_pos
+			local old_trace = ray_params.trace[1]
+			local opposite_ray_res = managers.navigation:raycast(ray_params)
+
+			if opposite_ray_res then
+				if mvector3.distance(revive_pos, revive_u_pos) < mvector3.distance(ray_params.trace[1], revive_u_pos) then
+					revive_pos = ray_params.trace[1]
+				else
+					revive_pos = old_trace
+				end
+			else
+				revive_pos = ray_params.trace[1]
+			end
+		else
+			revive_pos = ray_params.trace[1]
+		end
+
+		local revive_rot = revive_u_pos - revive_pos
+		local revive_rot = Rotation(revive_rot, math.UP)
+		occupation = {
+			type = "revive",
+			pos = revive_pos,
+			rot = revive_rot
+		}
+	else
+		occupation = {
+			seg = objective.nav_seg,
+			pos = objective.pos
+		}
+	end
+
+	return occupation
+end
+
 function CopLogicTravel._get_exact_move_pos(data, nav_index)
 	local my_data = data.internal_data
 	local objective = data.objective
@@ -2904,20 +3086,16 @@ function CopLogicTravel.upd_advance(data)
 			my_data.has_advanced_once = true
 		end
 	elseif my_data.advancing then
-		if my_data.coarse_path then
-			if my_data.announce_t and my_data.announce_t < t then
-				CopLogicTravel._try_anounce(data, my_data)
+		if not my_data.old_action_advancing and my_data.coarse_path then
+			if data.announce_t and data.announce_t < data.t then
+				CopLogicTravel._try_anounce(data)
 			end
-            
-			--if data.is_converted then
-			--    my_data.coarse_path = nil
-			--end
-			
-			CopLogicTravel._chk_stop_for_follow_unit(data, my_data)		
 
-			if my_data ~= data.internal_data then
-				return
-			end
+			CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
+		end
+            
+		if my_data ~= data.internal_data then
+			return
 		end
 	elseif my_data.advance_path and not my_data.objective_outdated then
 		CopLogicTravel._chk_begin_advance(data, my_data)
