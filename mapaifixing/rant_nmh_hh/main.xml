@@ -10,7 +10,6 @@
 			<asset name="grenade_crate"/>
 		</assets>
 		<hooks>
-			<hook file="Hooks/assetstweakdata.lua" source_file="lib/tweak_data/assetstweakdata"/>
 		</hooks>
 		<include directory="levels/nmh_hyper">
 			<file file="world.world" type="binary"/>
