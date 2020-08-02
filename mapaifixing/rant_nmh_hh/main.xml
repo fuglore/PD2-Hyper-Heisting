@@ -9,8 +9,7 @@
 			<asset name="health_bag"/>
 			<asset name="grenade_crate"/>
 		</assets>
-		<hooks>
-		</hooks>
+		<hooks/>
 		<include directory="levels/nmh_hyper">
 			<file file="world.world" type="binary"/>
 			<file file="continents.continents" type="binary"/>
