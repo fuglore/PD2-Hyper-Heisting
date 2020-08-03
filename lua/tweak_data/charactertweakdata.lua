@@ -7682,9 +7682,9 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	}
 	self.tank.weapon = deep_clone(presets.weapon.civil)
 	self.tank.detection = presets.detection.enemymook
-	self.tank.HEALTH_INIT = 300
-	self.tank.headshot_dmg_mul = 18
-	self.tank.damage.explosion_damage_mul = 1 --lowered from base, was 1.1 now just 1, dunno why they thought it was a good idea to make explosives more powerful against him.
+	self.tank.HEALTH_INIT = 450
+	self.tank.headshot_dmg_mul = 64
+	self.tank.damage.explosion_damage_mul = 1.75 --nngh.
 	self.tank.damage.fire_damage_mul = 2
 	self.tank.move_speed = presets.move_speed.slow_consistency
 	self.tank.allowed_stances = {
@@ -7743,7 +7743,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		"special"
 	}
 	self.tank_hw.move_speed = presets.move_speed.slow_consistency --lol stop
-	self.tank_hw.HEALTH_INIT = 80 --3200 on top difficulty, encourage teamfire against these guys since they're gonna be on the halloween maps
+	self.tank_hw.HEALTH_INIT = 100 --3200 on top difficulty, encourage teamfire against these guys since they're gonna be on the halloween maps
 	self.tank_hw.headshot_dmg_mul = 1
 	self.tank_hw.ignore_headshot = true
 	self.tank_hw.damage.explosion_damage_mul = 8 --explosives can eliminate them very easily
@@ -8970,7 +8970,7 @@ function CharacterTweakData:_set_overkill()
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
-	self.tank_mini.HEALTH_INIT = 1800
+	self.tank_mini.HEALTH_INIT = 4000
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
 		{
 			dmg_mul = 2.2,
@@ -9154,7 +9154,7 @@ function CharacterTweakData:_set_overkill_145()
 	self:_multiply_all_hp(4, 1.5)
 	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
-	self.tank_mini.HEALTH_INIT = 1800
+	self.tank_mini.HEALTH_INIT = 4000
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
 		{
 			dmg_mul = 2.2,
@@ -9498,7 +9498,7 @@ function CharacterTweakData:_set_easy_wish()
 	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.3, 0.15, 0.75)
 	
-	self.tank_mini.HEALTH_INIT = 1800
+	self.tank_mini.HEALTH_INIT = 4000
 	self.hector_boss.HEALTH_INIT = 900
 	self.mobster_boss.HEALTH_INIT = 900
 	self.biker_boss.HEALTH_INIT = 900
@@ -9611,7 +9611,7 @@ function CharacterTweakData:_set_overkill_290()
 	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.3, 0.15, 0.75)
 	
-	self.tank_mini.HEALTH_INIT = 1800
+	self.tank_mini.HEALTH_INIT = 4000
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
 		{
 			dmg_mul = 3.14,
@@ -9818,9 +9818,9 @@ function CharacterTweakData:_set_sm_wish()
 	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.25, 0.15, 0.6)
 	
-	self.tank.HEALTH_INIT = 1400
-	self.tank_mini.HEALTH_INIT = 2100
-	self.tank_medic.HEALTH_INIT = 1400
+	self.tank.HEALTH_INIT = 2000
+	self.tank_mini.HEALTH_INIT = 4000
+	self.tank_medic.HEALTH_INIT = 2000
 	self.hector_boss.weapon.is_shotgun_mag.FALLOFF = {
 		{
 			dmg_mul = 3.14,

@@ -532,17 +532,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = { --setting medic limit to six allows for survivability within common enemy spawngroups since special enemies are now paired commonly with medics to keep them alive consistently
 			shield = 8,
 			medic = 6,
-			taser = 1,
+			taser = 2,
 			sniper = 3,						
 			tank = 1,
-			spooc = 1,
+			spooc = 2,
 			ninja = 3
 		}
 	elseif difficulty_index == 8 then
 		self.special_unit_spawn_limits = { --game reaches boiling point, 2 dozers, 4-5 tasers, 8-10 medics, 3-4 cloakers and 8-10 shields.
 			shield = 8,
 			medic = 8,
-			taser = 1,
+			taser = 2,
 			tank = 1,
 			sniper = 3,						
 			spooc = 2,
@@ -552,7 +552,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
-			taser = 1,
+			taser = 2,
 			tank = 1,
 			sniper = 3,						
 			spooc = 2,

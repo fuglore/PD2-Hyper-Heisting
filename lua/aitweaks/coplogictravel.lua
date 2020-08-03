@@ -2593,7 +2593,9 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		elseif data.objective.follow_unit:movement():nav_tracker() then
 			search_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 		else
-			search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
+			local dest_nav_seg_id = my_data.coarse_path[#my_data.coarse_path][1]
+			local dest_area = managers.groupai:state():get_area_from_nav_seg_id(dest_nav_seg_id)
+			search_area = dest_area
 		end
 	else
 		search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
