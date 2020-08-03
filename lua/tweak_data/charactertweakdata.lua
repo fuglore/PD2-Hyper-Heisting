@@ -6416,9 +6416,9 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
-			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			optimal = 2000, --cant walk and shoot past this range
+			far = 3000, --30m cut off range.
+			close = 1000 --10m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{

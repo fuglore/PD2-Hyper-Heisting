@@ -8,6 +8,7 @@ PD2THHSHIN.settings = {
 	enable_albanian_content = false,
 	toggle_helmet = false,
 	toggle_hhassault = false,
+	toggle_hhskulldiff = false,
 	first_launch = true
 }
 PD2THHSHIN.session_settings = {} --leave empty; generated on load
@@ -22,6 +23,10 @@ end
 
 function PD2THHSHIN:IsOverhaulEnabled()
 	return self:GetSessionSetting("toggle_overhaul_player")
+end
+
+function PD2THHSHIN:SkullDiffEnabled()
+	return self:GetSessionSetting("toggle_hhskulldiff")
 end
 
 function PD2THHSHIN:IsFlavorAssaultEnabled()

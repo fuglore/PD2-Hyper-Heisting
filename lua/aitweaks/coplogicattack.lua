@@ -2077,8 +2077,10 @@ end
 function CopLogicAttack.queue_update(data, my_data)
 	local delay = data.important and 0.35 or 1
 	
+	local focus_enemy = data.attention_obj
+	
 	if my_data.tasing then
-		action_taken = action_taken or CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
+		CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
 		
 		if data.internal_data == my_data then
 			CopLogicBase._report_detections(data.detected_attention_objects)

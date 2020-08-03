@@ -52,6 +52,10 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 		PD2THHSHIN:ChangeSetting("toggle_helmet",item:value() == "on")
 	end
 	
+	MenuCallbackHandler.callback_shin_toggle_hhskulldiff = function(self,item) --toggle
+		PD2THHSHIN:ChangeSetting("toggle_hhskulldiff",item:value() == "on")
+	end
+	
 	MenuCallbackHandler.callback_shin_toggle_hhassault = function(self,item) --toggle
 		PD2THHSHIN:ChangeSetting("toggle_hhassault",item:value() == "on")
 		if managers.hud then

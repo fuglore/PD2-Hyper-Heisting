@@ -30,6 +30,14 @@
 		},
 		{
 			"type" : "toggle",
+			"id" : "shin_toggle_hhskulldiff",
+			"title" : "shin_toggle_hhskulldiff_title",
+			"description" : "shin_toggle_hhskulldiff_desc",
+			"callback" : "callback_shin_toggle_hhskulldiff",
+			"value" : "toggle_hhskulldiff"
+		},
+		{
+			"type" : "toggle",
 			"id" : "shin_enable_albanian_content",
 			"title" : "shin_albanian_content_enable_title",
 			"description" : "shin_albanian_content_enable_desc",

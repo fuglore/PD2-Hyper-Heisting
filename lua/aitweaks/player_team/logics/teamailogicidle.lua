@@ -1,3 +1,7 @@
+local tmp_vec1 = Vector3()
+local tmp_vec2 = Vector3()
+local tmp_vec3 = Vector3()
+
 function TeamAILogicIdle.is_available_for_assignment(data, new_objective)
 	if data.internal_data.exiting then
 		return
@@ -197,4 +201,67 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 	end
 
 	return best_target, best_target_priority_slot, best_target_reaction
+end
+
+function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
+	local follow_unit = objective.follow_unit
+	local my_nav_seg_id = data.unit:movement():nav_tracker():nav_segment()
+	local my_areas = managers.groupai:state():get_areas_from_nav_seg_id(my_nav_seg_id)
+	local follow_unit_nav_seg_id = follow_unit:movement():nav_tracker():nav_segment()
+
+	--for _, area in ipairs(my_areas) do
+	--	if area.nav_segs[follow_unit_nav_seg_id] then
+	--		return
+	--	end
+	--end
+	
+	if my_nav_seg_id == follow_unit_nav_seg_id then
+		return
+	end
+
+	local is_my_area_dangerous, is_follow_unit_area_dangerous = nil
+
+	for _, area in ipairs(my_areas) do
+		if area.nav_segs[follow_unit_nav_seg_id] then
+			is_my_area_dangerous = true
+
+			break
+		end
+	end
+
+	local follow_unit_areas = managers.groupai:state():get_areas_from_nav_seg_id(follow_unit_nav_seg_id)
+
+	for _, area in ipairs(follow_unit_areas) do
+		if next(area.police.units) then
+			is_follow_unit_area_dangerous = true
+
+			break
+		end
+	end
+
+	if is_my_area_dangerous and not is_follow_unit_area_dangerous then
+		return true
+	end
+
+	local max_allowed_dis_xy = 160
+	local max_allowed_dis_z = 250
+
+	mvector3.set(tmp_vec1, follow_unit:movement():m_pos())
+	mvector3.subtract(tmp_vec1, data.m_pos)
+
+	local too_far = nil
+
+	if max_allowed_dis_z < math.abs(mvector3.z(tmp_vec1)) then
+		too_far = true
+	else
+		mvector3.set_z(tmp_vec1, 0)
+
+		if max_allowed_dis_xy < mvector3.length(tmp_vec1) then
+			too_far = true
+		end
+	end
+
+	if too_far then
+		return true
+	end
 end

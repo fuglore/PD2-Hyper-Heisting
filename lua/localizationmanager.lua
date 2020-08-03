@@ -134,7 +134,7 @@
 		["menu_risk_special"] = "The FBI wants you gone. A warm, summer day.",
 		["menu_risk_easy_wish"] = "GENSEC is out to get you! Getting hot in here!",
 		["menu_risk_elite"] = "New units rolling in! More heat around the corner!",
-		["menu_risk_sm_wish"] = "No escape from the inferno! FIGHT!",
+		["menu_risk_sm_wish"] = "There is no escaping the flames! FIGHT!",
 		["menu_cs_modifier_heavies"] = "All special enemies except Bulldozers now have body armor, adds a chance for an armored SMG heavy to spawn.",
 		["menu_cs_modifier_magnetstorm"] = "When enemies reload, they emit an electric burst after a short moment that tases players.",
 		["menu_cs_modifier_heavy_sniper"] = "Adds a chance for Sniperdozers to spawn.",
@@ -199,6 +199,8 @@
 		["shin_toggle_helmet_desc"] = "Enhances the force and power of flying helmets, and changes its calculations to give that feeling of extra oomph!",
 		["shin_toggle_hhassault_title"] = "Stylish Assault Corner!",
 		["shin_toggle_hhassault_desc"] = "Enhances the [POLICE ASSAULT IN PROGRESS] hud area by adding extra flavor! (Such as entirely unique assault text based on the faction you are fighting against!) NOTE: Requires restarting the heist if changed mid-game!",
+		["shin_toggle_hhskulldiff_title"] = "Extreme Difficulty Names!",
+		["shin_toggle_hhskulldiff_desc"] = "Changes the difficulty names to suit Hyper Heisting's style!",
 		["shin_albanian_content_enable_title"] = "enable albanian joke content",
 		["shin_enable_albanian_content_title"] = "enable albanian joke content",
 		["shin_albanian_content_enable_desc"] = "nable abanian përmbajtje (WARNING: You probably shouldn't enable this!)",		
@@ -228,8 +230,24 @@ if InFmenu then
 	end)
   end
 end
+
+if PD2THHSHIN and PD2THHSHIN:SkullDiffEnabled() then
+	Hooks:Add("LocalizationManagerPostInit", "HH_SKULLS", function(loc)
+		LocalizationManager:add_localized_strings({			
+			["menu_difficulty_normal"] = "SUPER SWEET",
+			["menu_difficulty_hard"] = "SWEET",
+			["menu_difficulty_very_hard"] = "MILD",
+			["menu_difficulty_overkill"] = "SPICY",
+			["menu_difficulty_easy_wish"] = "ULTRA SPICY",
+			["menu_difficulty_apocalypse"] = "BURNING HOT",
+			["menu_difficulty_sm_wish"] = "INFERNO"	
+		})
+	end)
+end
+
  
 Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
+	
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		LocalizationManager:add_localized_strings({
 			--Anarchist--

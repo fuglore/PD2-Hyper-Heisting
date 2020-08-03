@@ -2245,7 +2245,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	end
 
-	objective_area = objective_area or current_objective.area
+	objective_area = current_objective.area or objective_area
 
 	if open_fire then
 		local grp_objective = {

@@ -531,11 +531,11 @@ function CopLogicIdle._chk_relocate(data)
 		local advance_pos = follow_unit:brain() and follow_unit:brain():is_advancing()
 		local follow_unit_pos = advance_pos or follow_unit:movement():m_pos()
 
-		if data.objective.relocated_to and mvector3.equal(data.objective.relocated_to, follow_unit_pos) then
-			return
-		end
+		--if data.objective.relocated_to and mvector3.equal(data.objective.relocated_to, follow_unit_pos) then
+		--	return
+		--end
 
-		if data.objective.distance and data.objective.distance < mvector3.distance(data.m_pos, follow_unit_pos) then
+		if 240 < mvector3.distance(data.m_pos, follow_unit_pos) then
 			relocate = true
 		end
 
@@ -567,9 +567,7 @@ function CopLogicIdle._chk_relocate(data)
 		
 		local recon_group = data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area"
 		
-		local current_assault_target_area = managers.groupai:state()._current_target_area or nil
-		
-		local current_assault_target_area_navsegs = managers.groupai:state()._current_target_area and managers.groupai:state()._current_target_area.nav_segs or nil
+		local current_assault_target_area = managers.groupai:state()._task_data.assault.target_areas and managers.groupai:state()._task_data.assault.target_areas[math.random(#managers.groupai:state()._task_data.assault.target_areas)] or nil
 		
 		if managers.groupai:state():chk_assault_active_atm() and not recon_group or Global.game_settings.one_down then
 			local area = data.objective.area
@@ -580,7 +578,7 @@ function CopLogicIdle._chk_relocate(data)
 					--log("pog")
 					data.objective.in_place = nil
 					data.objective.area = current_assault_target_area
-					data.objective.nav_seg = next(current_assault_target_area_navsegs)
+					data.objective.nav_seg = next(current_assault_target_area.nav_segs)
 					data.objective.path_data = {
 						{
 							data.objective.nav_seg
@@ -689,7 +687,7 @@ function CopLogicIdle._chk_relocate(data)
 								data.objective.hostagejob = current_assault_target_area.hostages or nil
 								data.objective.in_place = nil
 								data.objective.area = target_area
-								data.objective.nav_seg = next(current_assault_target_area_navsegs)
+								data.objective.nav_seg = next(current_assault_target_area.nav_segs)
 								data.objective.path_data = {
 									{
 										data.objective.nav_seg
