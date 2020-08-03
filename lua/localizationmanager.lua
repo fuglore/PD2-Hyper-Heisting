@@ -239,7 +239,7 @@ if PD2THHSHIN and PD2THHSHIN:SkullDiffEnabled() then
 			["menu_difficulty_very_hard"] = "MILD",
 			["menu_difficulty_overkill"] = "SPICY",
 			["menu_difficulty_easy_wish"] = "ULTRA SPICY",
-			["menu_difficulty_apocalypse"] = "BURNING HOT",
+			["menu_difficulty_apocalypse"] = "SCORCHING HOT",
 			["menu_difficulty_sm_wish"] = "INFERNO"	
 		})
 	end)
