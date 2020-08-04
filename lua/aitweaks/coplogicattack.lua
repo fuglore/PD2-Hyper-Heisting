@@ -2084,7 +2084,7 @@ function CopLogicAttack.queue_update(data, my_data)
 		
 		if data.internal_data == my_data then
 			CopLogicBase._report_detections(data.detected_attention_objects)
-			CopLogicAttack.queue_update(data, my_data)
+			CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, true)
 		end
 
 		return
@@ -2094,7 +2094,7 @@ function CopLogicAttack.queue_update(data, my_data)
 		
 		if data.internal_data == my_data then
 			CopLogicBase._report_detections(data.detected_attention_objects)
-			CopLogicAttack.queue_update(data, my_data)
+			CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, true)
 		end
 
 		return
@@ -2106,7 +2106,7 @@ function CopLogicAttack.queue_update(data, my_data)
 
 	if my_data.spooc_attack then
 		if data.internal_data == my_data then
-			CopLogicAttack.queue_update(data, data.internal_data, delay)
+			CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, true)
 		end
 
 		return

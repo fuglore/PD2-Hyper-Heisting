@@ -115,8 +115,8 @@ function CopActionWalk:_init()
 	local action_desc = self._action_desc
 	local common_data = self._common_data
 
-	self._no_run_start = common_data.char_tweak.no_run_start
-	self._no_run_stop = common_data.char_tweak.no_run_stop
+	self._no_run_start = common_data.char_tweak.no_run_start or Global.game_settings.one_down
+	self._no_run_stop = common_data.char_tweak.no_run_stop or Global.game_settings.one_down
 
 	if self._sync then
 		if managers.groupai:state():all_AI_criminals()[common_data.unit:key()] then
