@@ -93,6 +93,8 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.blazter_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"
 	self.blazter_npc.r_trail = true
 	
+	self.m60_npc = deep_clone(self.m249_npc)
+	
 	self.ak47_ass_npc.DAMAGE = 1
 	self.mp5_npc.DAMAGE = 1
 	self.ump_npc.DAMAGE = 1

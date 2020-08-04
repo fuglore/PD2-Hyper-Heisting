@@ -10268,7 +10268,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"kmtac",		
 		"x_kmtac",
 		"trolliam_sidearm",
-		"degle"		
+		"degle",
+		"m60"
 		}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -10316,7 +10317,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac"),		
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac"),	
 		Idstring("units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm"),
-		Idstring("units/payday2/weapons/wpn_npc_degle/wpn_npc_degle")
+		Idstring("units/payday2/weapons/wpn_npc_degle/wpn_npc_degle"),
+		Idstring("units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60")
 	}
 end
 

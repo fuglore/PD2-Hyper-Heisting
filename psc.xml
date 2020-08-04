@@ -352,6 +352,17 @@
 	<model path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	
 	<cooked_physics path="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"/>	
 
+	<!--Jarey's cool m60-->
+	<unit path="units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60" load="true"/>
+	<material_config path="units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60"/>	
+	<object path="units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60" />
+	<model path="units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60" />	
+	<cooked_physics path="units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60"/>	
+	<sequence_manager path="units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60"/>
+	<texture path="units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60_df"/>
+	<texture path="units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60_nm"/>
+	<!--thank jarey for cool m60-->
+	
 	<!--crime spree murky smg heavy-->
 	<unit path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" load="true"/>
 	<unit path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump_husk" load="true"/>	
