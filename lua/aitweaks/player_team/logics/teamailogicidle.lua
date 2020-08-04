@@ -206,41 +206,10 @@ end
 function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 	local follow_unit = objective.follow_unit
 	local my_nav_seg_id = data.unit:movement():nav_tracker():nav_segment()
-	local my_areas = managers.groupai:state():get_areas_from_nav_seg_id(my_nav_seg_id)
 	local follow_unit_nav_seg_id = follow_unit:movement():nav_tracker():nav_segment()
-
-	--for _, area in ipairs(my_areas) do
-	--	if area.nav_segs[follow_unit_nav_seg_id] then
-	--		return
-	--	end
-	--end
 	
 	if my_nav_seg_id == follow_unit_nav_seg_id then
 		return
-	end
-
-	local is_my_area_dangerous, is_follow_unit_area_dangerous = nil
-
-	for _, area in ipairs(my_areas) do
-		if area.nav_segs[follow_unit_nav_seg_id] then
-			is_my_area_dangerous = true
-
-			break
-		end
-	end
-
-	local follow_unit_areas = managers.groupai:state():get_areas_from_nav_seg_id(follow_unit_nav_seg_id)
-
-	for _, area in ipairs(follow_unit_areas) do
-		if next(area.police.units) then
-			is_follow_unit_area_dangerous = true
-
-			break
-		end
-	end
-
-	if is_my_area_dangerous and not is_follow_unit_area_dangerous then
-		return true
 	end
 
 	local max_allowed_dis_xy = 160

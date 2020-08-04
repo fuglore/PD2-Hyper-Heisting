@@ -200,8 +200,8 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 			
 		end
 	end
-	my_data.path_safely = my_data.attitude == "avoid" or nil
-	my_data.path_ahead = data.objective.path_ahead or data.team.id == tweak_data.levels:get_default_team_ID("player")
+	my_data.path_safely = not data.cool and my_data.attitude == "avoid" or nil
+	my_data.path_ahead = data.cool or data.objective.path_ahead or data.team.id == tweak_data.levels:get_default_team_ID("player")
 
 	data.unit:brain():set_update_enabled_state(false)
 end
@@ -451,6 +451,12 @@ function CopLogicTravel._upd_enemy_detection(data)
 
 					my_data.optimal_pos = optimal_pos
 				end
+				
+				--if my_data.optimal_pos then
+				--	local draw_duration = 2
+				--	local lineshield = Draw:brush(Color.green:with_alpha(0.5), draw_duration)
+				--	lineshield:cylinder(data.m_pos, my_data.optimal_pos, 4)
+				--end
 
 				for key, enemy_data in pairs(enemies) do
 					local reaction = CopLogicSniper._chk_reaction_to_attention_object(data, enemy_data, true)
@@ -480,10 +486,6 @@ function CopLogicTravel._upd_enemy_detection(data)
 		end
 	end
 	
-	if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) and my_data.optimal_pos and focus_enemy then
-		mvector3.set_z(my_data.optimal_pos, focus_enemy.m_pos.z)
-	end
-	
 	if get_new_target then
 		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, detected_enemies, reaction_func)
 		local old_att_obj = data.attention_obj
@@ -509,10 +511,15 @@ function CopLogicTravel._upd_enemy_detection(data)
 					if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 						my_data.optimal_pos = CopLogicAttack._find_flank_pos(data, my_data, new_attention.nav_tracker)
 					elseif data.is_suppressed and new_attention.verified then
-						local retreat_pos = CopLogicAttack._find_retreat_position(data.m_pos, new_attention.m_pos, new_attention.m_head_pos, new_attention.nav_tracker, 2000, nil)
+						local retreat_pos = CopLogicAttack._find_retreat_position(data, data.m_pos, new_attention.m_pos, new_attention.m_head_pos, new_attention.nav_tracker, 2000, nil)
 						if retreat_pos then
 							my_data.optimal_pos = retreat_pos
 							--log("woo!")
+							--if my_data.optimal_pos then
+							--	local draw_duration = 2
+							--	local line1 = Draw:brush(Color.yellow:with_alpha(0.5), draw_duration)
+							--	line1:cylinder(data.m_pos, my_data.optimal_pos, 2)
+							--end
 						else
 							my_data.optimal_path_fail_t = data.t
 						end
@@ -537,6 +544,11 @@ function CopLogicTravel._upd_enemy_detection(data)
 						if shoot_from_pos then
 							my_data.optimal_pos = shoot_from_pos
 							--log("beeftime")
+							--if my_data.optimal_pos then
+							--	local draw_duration = 2
+							--	local line2 = Draw:brush(Color.red:with_alpha(0.5), draw_duration)
+							--	line2:cylinder(data.m_pos, my_data.optimal_pos, 2)
+							--end
 						elseif not data.unit:movement():chk_action_forbidden("walk") then
 							ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
 							my_data.cover_test_step = my_data.cover_test_step + 1
@@ -547,6 +559,11 @@ function CopLogicTravel._upd_enemy_detection(data)
 						
 						if flank_pos then
 							my_data.optimal_pos = flank_pos
+							--if my_data.optimal_pos then
+							--	local draw_duration = 2
+							--	local line3 = Draw:brush(Color.blue:with_alpha(0.5), draw_duration)
+							--	line3:cylinder(data.m_pos, my_data.optimal_pos, 2)
+							--end
 						else
 							my_data.optimal_path_fail_t = data.t
 						end
@@ -555,6 +572,11 @@ function CopLogicTravel._upd_enemy_detection(data)
 						
 						if charge_pos then
 							my_data.optimal_pos = charge_pos
+							--if my_data.optimal_pos then
+							--	local draw_duration = 2
+							--	local line4 = Draw:brush(Color.red:with_alpha(0.5), draw_duration)
+							--	line4:cylinder(data.m_pos, my_data.optimal_pos, 2)
+							--end
 						else
 							my_data.optimal_path_fail_t = data.t
 						end
@@ -562,6 +584,12 @@ function CopLogicTravel._upd_enemy_detection(data)
 				end
 			end
 		end
+	end
+	
+	local chosen_attention = focus_enemy or new_attention or nil
+	
+	if my_data.optimal_pos and chosen_attention then
+		mvector3.set_z(my_data.optimal_pos, chosen_attention.m_pos.z)
 	end
 	
 	local objective = data.objective
@@ -2001,9 +2029,15 @@ function CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data, e
 		}
 		my_data.optimal_path = nil
 		my_data.walking_to_optimal_pos = data.unit:brain():action_request(new_action_data)
-		my_data.optimal_pos = nil
-		
+						
 		if my_data.walking_to_optimal_pos then
+			--if my_data.optimal_pos then
+			--	local draw_duration = 2
+			--	local lineshield = Draw:brush(Color.white:with_alpha(1), draw_duration)
+			--	lineshield:cylinder(data.m_pos, my_data.optimal_pos, 10)
+			--end
+			
+			my_data.optimal_pos = nil
 			data.brain:rem_pos_rsrv("path")
 
 			return true
@@ -2206,7 +2240,7 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 			max_walk_dis = 400
 		end
 				
-		local retreat_to = CopLogicAttack._find_retreat_position(from_pos, focus_enemy.m_pos, threat_head_pos, threat_tracker, max_walk_dis, vis_required)
+		local retreat_to = CopLogicAttack._find_retreat_position(data, from_pos, focus_enemy.m_pos, threat_head_pos, threat_tracker, max_walk_dis, vis_required)
 
 		if retreat_to then
 			CopLogicAttack._cancel_cover_pathing(data, my_data)

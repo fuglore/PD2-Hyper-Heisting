@@ -540,15 +540,10 @@ function CopLogicIdle._chk_relocate(data)
 		end
 
 		if not relocate then
-			local ray_params = {
-				tracker_from = data.unit:movement():nav_tracker(),
-				pos_to = follow_unit_pos
-			}
-			local ray_res = managers.navigation:raycast(ray_params)
-
-			if ray_res then
+			if data.unit:raycast("ray", data.unit:movement():m_head_pos(), follow_unit:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
 				relocate = true
 			end
+			
 		end
 
 		if relocate then

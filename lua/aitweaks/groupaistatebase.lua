@@ -101,7 +101,7 @@ function GroupAIStateBase:get_assault_hud_state()
 
 	for u_key, u_data in pairs(self:all_player_criminals()) do
 		nr_players = nr_players + 1
-		if not u_data.status then
+		if not u_data.status or u_data.status and u_data.status == "electrified" then
 			nr_players_alive = nr_players_alive + 1
 		end
 	end
@@ -111,7 +111,7 @@ function GroupAIStateBase:get_assault_hud_state()
 
 	for u_key, u_data in pairs(self:all_AI_criminals()) do
 		nr_ai = nr_ai + 1
-		if not u_data.status then
+		if not u_data.status or u_data.status and u_data.status == "electrified" then
 			nr_ai_alive = nr_ai_alive + 1
 		end
 	end	

@@ -399,7 +399,7 @@ function ActionSpooc:_chk_target_invalid()
 	local record = managers.groupai:state():criminal_record(target_unit:key())
 
 	if record then
-		if record.status then
+		if record.status and record.status ~= "electrified" then
 			return true			
 		end
 	end

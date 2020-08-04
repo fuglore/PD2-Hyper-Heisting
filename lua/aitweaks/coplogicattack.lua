@@ -1528,7 +1528,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 				if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 					my_data.optimal_pos = CopLogicAttack._find_flank_pos(data, my_data, new_attention.nav_tracker)
 				elseif data.is_suppressed and new_attention.verified then
-					local retreat_pos = CopLogicAttack._find_retreat_position(data.m_pos, new_attention.m_pos, new_attention.m_head_pos, new_attention.nav_tracker, 2000, nil)
+					local retreat_pos = CopLogicAttack._find_retreat_position(data, data.m_pos, new_attention.m_pos, new_attention.m_head_pos, new_attention.nav_tracker, 2000, nil)
 					if retreat_pos then
 						my_data.optimal_pos = retreat_pos
 						--log("woo!")
@@ -1626,7 +1626,7 @@ end
 
 function CopLogicAttack._find_retreat_position(data, from_pos, threat_pos, threat_head_pos, threat_tracker, max_dist, vis_required, end_pose)
 	local nav_manager = managers.navigation
-	local nr_rays = 5
+	local nr_rays = 6
 	local ray_dis = max_dist or 1000
 	local step = 180 / nr_rays
 	local offset = math_random(step)
