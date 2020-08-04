@@ -1244,6 +1244,53 @@ function CopLogicTravel._chk_wants_to_take_cover(data, my_data)
 	end
 end
 
+function CopLogicTravel._on_destination_reached(data)
+	local objective = data.objective
+	objective.in_place = true
+
+	if objective.type == "free" then
+		if not objective.action_duration then
+			if objective.pos then
+				if mvector3.distance(data.objective.pos, data.m_pos) < 30 then
+					data.objective_complete_clbk(data.unit, objective)
+				else
+					data.objective_failed_clbk(data.unit, objective)
+				end
+			else
+				data.objective_complete_clbk(data.unit, objective)
+			end
+
+			return
+		end
+	elseif objective.type == "flee" then
+		data.unit:brain():set_active(false)
+		data.unit:base():set_slot(data.unit, 0)
+
+		return
+	elseif objective.type == "defend_area" then
+		if objective.grp_objective and objective.grp_objective.type == "retire" then
+			data.unit:brain():set_active(false)
+			data.unit:base():set_slot(data.unit, 0)
+
+			return
+		else	
+			if objective.pos then
+				if mvector3.distance(data.objective.pos, data.m_pos) < 40 then
+					data.objective_complete_clbk(data.unit, objective)
+				else
+					data.objective_failed_clbk(data.unit, objective)
+				end
+			else
+				data.objective_complete_clbk(data.unit, objective)
+			end
+			
+			managers.groupai:state():on_defend_travel_end(data.unit, objective)
+		end
+	end
+
+	data.logic.on_new_objective(data)
+end
+
 function CopLogicTravel.queued_update(data)
     local my_data = data.internal_data
 	local objective = data.objective or nil

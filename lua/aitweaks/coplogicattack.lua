@@ -643,10 +643,9 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 				pose = pose,
 				end_pose = end_pose
 			}
-			my_data.advancing = data.brain:action_request(new_action_data)
+			my_data.surprised = data.brain:action_request(new_action_data)
 
-			if my_data.advancing then
-				my_data.surprised = true
+			if my_data.surprised then
 				
 				if assault_break then
 					my_data.assault_break_retreat_complete = true
@@ -897,9 +896,9 @@ function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 		end_pose = end_pose
 	}
 	my_data.cover_path = nil
-	my_data.advancing = data.brain:action_request(new_action_data)
+	my_data.cover_movement = data.brain:action_request(new_action_data)
 
-	if my_data.advancing then
+	if my_data.cover_movement then
 		my_data.moving_to_cover = my_data.best_cover
 		my_data.at_cover_shoot_pos = nil
 		my_data.in_cover = nil
@@ -950,10 +949,9 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 		end_pose = end_pose
 	}
 	my_data.cover_path = nil
-	my_data.advancing = data.brain:action_request(new_action_data)
+	my_data.walking_to_cover_shoot_pos = data.brain:action_request(new_action_data)
 
-	if my_data.advancing then
-		my_data.walking_to_cover_shoot_pos = my_data.advancing
+	if my_data.walking_to_cover_shoot_pos then
 		my_data.at_cover_shoot_pos = nil
 		my_data.in_cover = nil
 
@@ -1707,9 +1705,9 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		CopLogicAttack._cancel_charge(data, my_data)
 		
 		if my_data.walking_to_optimal_pos then
-			if action:expired() then
-				my_data.walking_to_optimal_pos = nil
-				
+			my_data.walking_to_optimal_pos = nil
+			
+			if action:expired() then	
 				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
 					SpoocLogicAttack._upd_spooc_attack(data, my_data)
 				end
@@ -1719,7 +1717,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 				CopLogicAttack._upd_combat_movement(data, true)
 			end
 		elseif my_data.surprised then
-			my_data.surprised = false
+			my_data.surprised = nil
 			
 			if action:expired() then
 				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
@@ -1730,7 +1728,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 				data.logic._upd_stance_and_pose(data, my_data)
 				CopLogicAttack._upd_combat_movement(data, true)
 			end
-		elseif my_data.moving_to_cover then
+		elseif my_data.cover_movement then
 			if action:expired() then
 				my_data.in_cover = my_data.moving_to_cover
 				my_data.cover_enter_t = data.t
@@ -1743,11 +1741,12 @@ function CopLogicAttack.action_complete_clbk(data, action)
 				data.logic._upd_stance_and_pose(data, my_data)
 				CopLogicAttack._upd_combat_movement(data, true)
 			end
-
+			my_data.cover_movement = nil
 			my_data.moving_to_cover = nil
 		elseif my_data.walking_to_cover_shoot_pos then
+			my_data.walking_to_cover_shoot_pos = nil
+			
 			if action:expired() then
-				my_data.walking_to_cover_shoot_pos = nil
 				my_data.at_cover_shoot_pos = true
 				
 				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
