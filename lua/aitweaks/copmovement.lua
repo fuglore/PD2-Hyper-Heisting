@@ -27,16 +27,35 @@ local mvec3_sub = mvector3.subtract
 local mvec3_mul = mvector3.multiply
 local mvec3_norm = mvector3.normalize
 local mvec3_len = mvector3.length
-local mrot_set = mrotation.set_yaw_pitch_roll
+local mvec3_dir = mvector3.direction
+local mvec3_cpy = mvector3.copy
+local mvec3_dis = mvector3.distance
+local mvec3_dot = mvector3.dot
+
 local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 local temp_vec3 = Vector3()
+
+local mrot_set = mrotation.set_yaw_pitch_roll
+
 local stance_ctl_pts = {
 	0,
 	0.34,
 	0.67,
 	1
 }
+
+local math_abs = math.abs
+local math_min = math.min
+local math_max = math.max
+local math_random = math.random
+local math_UP = math.UP
+local math_lerp = math.lerp
+
+local table_insert = table.insert
+local table_remove = table.remove
+
+local left_hand_str = Idstring("LeftHandMiddle2")
 
 local old_init = CopMovement.init
 local action_variants = {
@@ -1119,5 +1138,117 @@ function CopMovement:sync_fall_position(pos, rot)
 
 			active_actions_1:_freeze_ragdoll()
 		end
+	end
+end
+
+function CopMovement:anim_clbk_reload_exit()
+	if self._ext_inventory:equipped_unit() then
+		self._ext_inventory:equipped_unit():base():on_reload()
+	end
+
+	--if the reload animation is exited/interrupted, make the weapon's magazine visible again + despawn the magazine on the unit's hand (if it's still attached there)
+	self:anim_clbk_hide_magazine_in_hand()
+end
+
+function CopMovement:anim_clbk_spawn_dropped_magazine()
+	if not self:allow_dropped_magazines() then
+		return
+	end
+
+	local equipped_weapon = self._unit:inventory():equipped_unit()
+
+	if alive(equipped_weapon) and not equipped_weapon:base()._assembly_complete then
+		return
+	end
+
+	local ref_unit = nil
+	local allow_throw = true
+
+	if not self._magazine_data then
+		local w_td_crew = self:_equipped_weapon_crew_tweak_data()
+
+		if not w_td_crew or not w_td_crew.pull_magazine_during_reload then
+			return
+		end
+
+		self:anim_clbk_show_magazine_in_hand()
+
+		if not self._magazine_data then --prevent the function from going any further if no data was defined with self:anim_clbk_show_magazine_in_hand()
+			return
+		elseif not alive(self._magazine_data.unit) then --prevent the function from going any further + delete the data if the magazine unit somehow didn't spawn
+			self._magazine_data = nil
+
+			return
+		end
+
+		local attach_bone = left_hand_str
+		local bone_hand = self._unit:get_object(attach_bone)
+
+		if bone_hand then
+			mvec3_set(temp_vec1, self._magazine_data.unit:position())
+			mvec3_sub(temp_vec1, self._magazine_data.unit:oobb():center())
+			mvec3_add(temp_vec1, bone_hand:position())
+			self._magazine_data.unit:set_position(temp_vec1)
+		end
+
+		ref_unit = self._magazine_data.part_unit
+		allow_throw = false
+	end
+
+	if self._magazine_data and alive(self._magazine_data.unit) then
+		ref_unit = ref_unit or self._magazine_data.unit
+
+		self._magazine_data.unit:set_visible(false)
+
+		local pos = ref_unit:position()
+		local rot = ref_unit:rotation()
+		local dropped_mag = self:_spawn_magazine_unit(self._magazine_data.id, self._magazine_data.name, pos, rot)
+
+		self:_set_unit_bullet_objects_visible(dropped_mag, self._magazine_data.bullets, false)
+
+		local mag_size = self._magazine_data.weapon_data.pull_magazine_during_reload
+
+		if type(mag_size) ~= "string" then
+			mag_size = "medium"
+		end
+
+		mvec3_set(temp_vec1, ref_unit:oobb():center())
+		mvec3_sub(temp_vec1, pos)
+		mvec3_set(temp_vec2, pos)
+		mvec3_add(temp_vec2, temp_vec1)
+
+		local dropped_col = World:spawn_unit(CopMovement.magazine_collisions[mag_size][1], temp_vec2, rot)
+
+		dropped_col:link(CopMovement.magazine_collisions[mag_size][2], dropped_mag)
+
+		if allow_throw then
+			if self._left_hand_direction then
+				local throw_force = 10
+
+				mvec3_set(temp_vec1, self._left_hand_direction)
+				mvec3_mul(temp_vec1, self._left_hand_velocity or 3)
+				mvec3_mul(temp_vec1, math_random(25, 45))
+				mvec3_mul(temp_vec1, -1)
+				dropped_col:push(throw_force, temp_vec1)
+			end
+		else
+			local throw_force = 10
+			local reload_speed_multiplier = 1
+			local w_td_crew = self:_equipped_weapon_crew_tweak_data()
+
+			if w_td_crew then --vanilla never sets this properly in this file
+				local weapon_usage_tweak = self._tweak_data.weapon[w_td_crew.usage]
+				reload_speed_multiplier = weapon_usage_tweak.RELOAD_SPEED or 1
+			end
+
+			local _t = reload_speed_multiplier - 1
+
+			mvec3_set(temp_vec1, equipped_weapon:rotation():z())
+			mvec3_mul(temp_vec1, math_lerp(math_random(65, 80), math_random(140, 160), _t))
+			mvec3_mul(temp_vec1, math_random() < 0.0005 and 10 or -1) --0.0005% chance to send the magazine flying upwards (it's normally like this, just pointing it out)
+			dropped_col:push(throw_force, temp_vec1)
+		end
+
+		managers.enemy:add_magazine(dropped_mag, dropped_col)
 	end
 end
