@@ -474,11 +474,11 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
-			taser = 1,
+			taser = 3,
 			tank = 1,
-			sniper = 3,
-			spooc = 1,
-			ninja = 4
+			sniper = 3,						
+			spooc = 3,
+			ninja = 3
 		}
 	elseif difficulty_index <= 2 then
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
@@ -542,20 +542,20 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = { --game reaches boiling point, 2 dozers, 4-5 tasers, 8-10 medics, 3-4 cloakers and 8-10 shields.
 			shield = 8,
 			medic = 8,
-			taser = 2,
+			taser = 3,
 			tank = 1,
 			sniper = 3,						
-			spooc = 2,
+			spooc = 3,
 			ninja = 3
 		}
 	else
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
-			taser = 2,
+			taser = 3,
 			tank = 1,
 			sniper = 3,						
-			spooc = 2,
+			spooc = 3,
 			ninja = 3
 		}
 	end

@@ -179,6 +179,44 @@ function CopLogicAttack.update(data)
 
 		return
 	end
+	
+	local focus_enemy = data.attention_obj
+	
+	if my_data.tasing then
+		CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
+		
+		if not my_data.update_queue_id then
+			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
+			CopLogicBase._report_detections(data.detected_attention_objects)
+			CopLogicAttack.queue_update(data, my_data)
+		end
+
+		return
+	end
+	
+	if my_data.spooc_attack then
+		
+		if not my_data.update_queue_id then
+			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
+			CopLogicBase._report_detections(data.detected_attention_objects)
+			CopLogicAttack.queue_update(data, my_data)
+		end
+
+		return
+	end
+	
+	if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
+		SpoocLogicAttack._upd_spooc_attack(data, my_data)
+	end
+
+	if my_data.spooc_attack then
+		if not my_data.update_queue_id then
+			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
+			CopLogicAttack.queue_update(data, my_data)
+		end
+
+		return
+	end
 
 	--if not data.attention_obj or data.attention_obj.reaction < REACT_COMBAT or data.attention_obj.verified_dis > 1500 then
 		if CopLogicIdle._chk_relocate(data) then
@@ -200,7 +238,7 @@ function CopLogicAttack.update(data)
 		end
 	end
 
-	if REACT_COMBAT <= data.attention_obj.reaction then
+	if REACT_COMBAT <= data.attention_obj.reaction and not my_data.spooc_attack and not my_data.tasing then
 		my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 
 		CopLogicAttack._update_cover(data)
@@ -2074,42 +2112,7 @@ function CopLogicAttack.on_new_objective(data, old_objective)
 end
 
 function CopLogicAttack.queue_update(data, my_data)
-	local delay = data.important and 0.35 or 1
-	
-	local focus_enemy = data.attention_obj
-	
-	if my_data.tasing then
-		CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
-		
-		if data.internal_data == my_data then
-			CopLogicBase._report_detections(data.detected_attention_objects)
-			CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, true)
-		end
-
-		return
-	end
-	
-	if my_data.spooc_attack then
-		
-		if data.internal_data == my_data then
-			CopLogicBase._report_detections(data.detected_attention_objects)
-			CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, true)
-		end
-
-		return
-	end
-	
-	if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
-		SpoocLogicAttack._upd_spooc_attack(data, my_data)
-	end
-
-	if my_data.spooc_attack then
-		if data.internal_data == my_data then
-			CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, true)
-		end
-
-		return
-	end
+	local delay = data.important and 0.35 or 1	
 	
 	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
 	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter

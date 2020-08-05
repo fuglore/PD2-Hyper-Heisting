@@ -10270,7 +10270,7 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"trolliam_sidearm",
 		"degle",
 		"m60"
-		}
+	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
 		Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45"),

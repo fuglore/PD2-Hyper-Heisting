@@ -83,3 +83,104 @@ function TeamAIDamage:damage_tase(attack_data)
 
 	return damage_info
 end
+
+function TeamAIDamage:damage_melee(attack_data)
+	if self._invulnerable or self._dead or self._fatal or self._arrested_timer then
+		return
+	end
+
+	if PlayerDamage.is_friendly_fire(self, attack_data.attacker_unit) then
+		return
+	end
+
+	local result = {
+		variant = "melee"
+	}
+	local damage_percent, health_subtracted = self:_apply_damage(attack_data, result)
+	local t = TimerManager:game():time()
+	self._next_allowed_dmg_t = t + self._dmg_interval
+	self._last_received_dmg_t = t
+
+	if health_subtracted > 0 then
+		self:_send_damage_drama(attack_data, health_subtracted)
+	end
+
+	if self._dead then
+		self:_unregister_unit()
+	end
+
+	self:_call_listeners(attack_data)
+	self:_send_melee_attack_result(attack_data)
+
+	return result
+end
+
+function TeamAIDamage:_send_melee_attack_result(attack_data, hit_offset_height)
+	local pos = attack_data.pos or attack_data.col_ray.position
+	hit_offset_height = hit_offset_height or math.clamp(pos.z - self._unit:movement():m_pos().z, 0, 300)
+	local attacker = attack_data.attacker_unit
+
+	if not attacker or attacker:id() == -1 then
+		attacker = self._unit
+	end
+
+	local result_index = self._RESULT_INDEX_TABLE[attack_data.result.type] or 0
+
+	self._unit:network():send("from_server_damage_melee", attacker, hit_offset_height, result_index)
+end
+
+function TeamAIDamage:_apply_damage(attack_data, result)
+	local damage = attack_data.damage
+	damage = math.clamp(damage, self._HEALTH_TOTAL_PERCENT, self._HEALTH_TOTAL)
+	local damage_percent = math.ceil(damage / self._HEALTH_TOTAL_PERCENT)
+	damage = damage_percent * self._HEALTH_TOTAL_PERCENT
+	attack_data.damage = damage
+	local dodged = self:inc_dodge_count(damage_percent / 2)
+	attack_data.pos = attack_data.pos or attack_data.col_ray.position
+	attack_data.result = result
+
+	if dodged or self._unit:anim_data().dodge then
+		attack_data.result.type = "none"
+
+		return 0, 0
+	end
+
+	local health_subtracted = nil
+
+	if self._bleed_out then
+		health_subtracted = self._bleed_out_health
+		self._bleed_out_health = self._bleed_out_health - damage
+
+		self:_check_fatal()
+
+		if self._fatal then
+			attack_data.result.type = "fatal"
+			self._health_ratio = 0
+		else
+			health_subtracted = damage
+			attack_data.result.type = "hurt"
+			self._health_ratio = self._bleed_out_health / self._HEALTH_BLEEDOUT_INIT
+		end
+	else
+		health_subtracted = self._health
+		self._health = self._health - damage
+
+		self:_check_bleed_out()
+
+		if self._bleed_out then
+			attack_data.result.type = "bleedout"
+			self._health_ratio = 1
+		else
+			health_subtracted = damage
+			attack_data.result.type = self:get_damage_type(damage_percent, "bullet") or "none"
+
+			self:_on_hurt()
+
+			self._health_ratio = self._health / self._HEALTH_INIT
+		end
+	end
+
+	managers.hud:set_mugshot_damage_taken(self._unit:unit_data().mugshot_id)
+
+	return damage_percent, health_subtracted
+end

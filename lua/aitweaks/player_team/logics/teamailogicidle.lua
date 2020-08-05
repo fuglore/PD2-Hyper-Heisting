@@ -107,16 +107,9 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 						has_special_in_sight = true
 						targeting_medic = true
 					elseif dangerous_special or been_marked then
-						if is_taser or is_cloaker then
+						if is_taser or is_cloaker or is_dozer then
 							target_priority_slot = 1
 							has_special_in_sight = true
-						elseif is_dozer then
-							if sevenmeters then
-								target_priority_slot = 1
-								has_special_in_sight = true
-							else
-								target_priority_slot = 3
-							end
 						else
 							target_priority_slot = 3
 						end

@@ -98,37 +98,18 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 		return
 	end
 	
-	local all_criminals = managers.groupai:state():all_char_criminals()
-	local last_man_standing = true
-	
-	for u_key, u_data in pairs(all_criminals) do
-		if not u_data.status and u_data.unit ~= self._unit then
-			last_man_standing = nil
-		end
-	end
-	
-	if last_man_standing then
-		local push_vec = Vector3()
-		local distance = mvector3.direction(push_vec, enemy_unit:movement():m_head_pos(), self._unit:movement():m_pos())
-		mvector3.normalize(push_vec)
-		mvector3.set_z(push_vec, 0)
-		local attack_data = {
-			attacker_unit = enemy_unit,
-			is_cloaker_kick = true,
-			melee_armor_piercing = true,
-			damage = 30,
-			push_vel = push_vec * 2000
-		}
-		self._unit:character_damage():damage_melee(attack_data)
+	local push_vec = Vector3()
+	local distance = mvector3.direction(push_vec, enemy_unit:movement():m_head_pos(), self._unit:movement():m_pos())
+	mvector3.normalize(push_vec)
+	mvector3.set_z(push_vec, 0.2)
+	local attack_data = {
+		attacker_unit = enemy_unit,
+		is_cloaker_kick = true,
+		melee_armor_piercing = true,
+		damage = 23.75,
+		push_vel = push_vec * 2000
+	}
+	self._unit:character_damage():damage_melee(attack_data)
 		
-		return
-	elseif self._current_state_name == "standard" or self._current_state_name == "carry" or self._current_state_name == "bleed_out" or self._current_state_name == "tased" or self._current_state_name == "bipod" then
-		local state = "incapacitated"
-		state = managers.modifiers:modify_value("PlayerMovement:OnSpooked", state)
-
-		managers.player:set_player_state(state)
-		managers.achievment:award(tweak_data.achievement.finally.award)
-
-		return true
-	end
+	return true
 end
