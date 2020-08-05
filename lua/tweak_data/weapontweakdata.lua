@@ -35,6 +35,8 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 	
 	self.m249_npc.spread = lmg_spread
 	self.m249_npc.fanpcwep = true
+	self.m60_npc.spread = lmg_spread
+	self.m249_npc.fanpcwep = true
 	self.rpk_lmg_npc.spread = lmg_spread
 	self.rpk_lmg_npc.fanpcwep = true
 	self.mini_npc.spread = mini_spread
@@ -92,8 +94,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.blazter_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_empty"
 	self.blazter_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"
 	self.blazter_npc.r_trail = true
-	
-	self.m60_npc = deep_clone(self.m249_npc)
 	
 	self.ak47_ass_npc.DAMAGE = 1
 	self.mp5_npc.DAMAGE = 1
@@ -188,6 +188,10 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.rpk_lmg_npc.sounds.prefix = "rpk_npc"
 	self.rpk_lmg_npc.usage = "is_lmg"
 	self.rpk_lmg_npc.auto.fire_rate = 0.08
+	self.m60_npc = deep_clone(self.m249_npc) --custom m60 for murkyboys
+	self.m60_npc.sounds.prefix = "m60_npc"
+	self.m60_npc.usage = "is_lmg"
+	self.m60_npc.hold = "rifle"
 	
 	--punk mossberg
 	self.mossberg_npc.usage = "is_shotgun_mag"
