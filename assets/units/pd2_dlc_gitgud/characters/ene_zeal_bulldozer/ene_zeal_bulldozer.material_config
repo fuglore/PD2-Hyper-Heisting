@@ -8,7 +8,7 @@
 	</material>
     <material name="mtr_bulldozer_head" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:RL_COPS:SKINNED_3WEIGHTS" version="2">
         <bump_normal_texture file="units/payday2/characters/shared_textures/bulldozer_nm"/>
-        <diffuse_texture file="units/payday2/characters/shared_textures/bulldozer_df"/>
+        <diffuse_texture file="units/payday2/characters/shared_textures/bulldozer_city_df"/>
     </material>
 
     <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
