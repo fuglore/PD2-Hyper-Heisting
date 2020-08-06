@@ -7721,9 +7721,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.deathguard = true
 	self.tank.melee_weapon = "fists"
 	self.tank.melee_weapon_dmg_multiplier = 2.5
-	self.tank.critical_hits = {
-		damage_mul = self.tank.headshot_dmg_mul * 1
-	}
+	self.tank.critical_hits = nil
 	self.tank.die_sound_event = "bdz_x02a_any_3p"
 	self.tank.damage.doom_hurt_type = "doomzer"
 	self.tank.damage.hurt_severity = presets.hurt_severities.no_hurts
