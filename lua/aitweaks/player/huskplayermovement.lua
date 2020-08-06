@@ -7,6 +7,7 @@ local mvec3_lerp = mvector3.lerp
 local mvec3_add = mvector3.add
 local mvec3_sub = mvector3.subtract
 local mvec3_mul = mvector3.multiply
+local math_lerp = math.lerp
 
 local math_random = math.random
 
