@@ -8,6 +8,8 @@ local mvec3_add = mvector3.add
 local mvec3_sub = mvector3.subtract
 local mvec3_mul = mvector3.multiply
 
+local math_random = math.random
+
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 
