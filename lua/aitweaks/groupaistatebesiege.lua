@@ -1297,18 +1297,16 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	local primary_target_area = nil
 	
-	if self._current_target_area then
-		primary_target_area = self._current_target_area
-	elseif self._task_data.assault.target_areas then
-		self._current_target_area = self._task_data.assault.target_areas[1]
+	if self._task_data.assault.target_areas then
+		self._current_target_area = self._task_data.assault.target_areas[math.random(#self._task_data.assault.target_areas)]
 		primary_target_area = self._current_target_area
 	end
 
-	if not primary_target_area or not self._current_target_area or self:is_area_safe_assault(primary_target_area) or self._force_assault_end_t then
+	if not primary_target_area or not self._current_target_area or self:is_area_safe_assault(primary_target_area) then
 		self._task_data.assault.target_areas = self:_upd_assault_areas()
 		
 		if self._task_data.assault.target_areas then
-			self._current_target_area = self._task_data.assault.target_areas[1]
+			self._current_target_area = self._task_data.assault.target_areas[math.random(#self._task_data.assault.target_areas)]
 			primary_target_area = self._current_target_area
 		end
 	end

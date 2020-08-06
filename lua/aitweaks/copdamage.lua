@@ -1551,9 +1551,23 @@ function CopDamage:roll_critical_hit(attack_data)
 		local critical_roll = math.rand(1)
 		critical_hit = critical_roll < critical_value
 	end
-
+	
+	--local testing = true
+	
+	if testing then
+		critical_hit = true
+	end
+	
+	local damage_multiplier = 1.5
+	
+	if managers.player:has_category_upgrade("player", "crit_damage_up") then
+		damage_multiplier = damage_multiplier + 1.5
+		--log("poggers")
+	end
+	
 	if critical_hit then
-		damage = damage * 1.5
+		damage = damage * damage_multiplier
+		--log("damage is " .. damage .. ".")
 	end
 
 	return critical_hit, damage

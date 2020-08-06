@@ -1,15 +1,15 @@
 <table>	
 	
 	<table search="unit/body;name=[['body_helmet_plate']]/endurance" mode="set_values">
-		<table damage="180" explosion="null"/>	
+		<table damage="130" explosion="null"/>	
 	</table>
 	
 	<table search="unit/body;name=[['body_helmet_glass']]" mode="replace">
 		<body name="'body_helmet_glass'">
-			<endurance damage="60">
+			<endurance damage="50">
 				<run_sequence name="'int_seq_helmet_glass_01'"/>
 			</endurance>
-			<endurance damage="120" >
+			<endurance damage="100" >
 				<run_sequence name="'int_seq_helmet_glass_02'"/>
 			</endurance>
 		</body>

@@ -105,6 +105,28 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 				9
 			}
 		}
+		
+		self.skills.backstab = {
+			{
+				upgrades = {
+					"player_detection_risk_add_crit_chance_1",
+					"player_detection_risk_add_crit_chance_2"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_crit_damage_up"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_backstab_beta",
+			desc_id = "menu_backstab_beta_desc",
+			icon_xy = {
+				0,
+				12
+			}
+		}
 
 	end
 end)

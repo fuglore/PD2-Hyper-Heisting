@@ -6698,7 +6698,7 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.gang_member.is_pistol.range = presets.weapon.normal.is_pistol.range
 	presets.weapon.gang_member.is_pistol.FALLOFF = {
 		{
-			dmg_mul = 6.4,
+			dmg_mul = 1,
 			r = 300,
 			acc = {
 				1,
@@ -6716,7 +6716,7 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		},
 		{
-			dmg_mul = 2.5,
+			dmg_mul = 1,
 			r = 10000,
 			acc = {
 				1,
@@ -6755,7 +6755,7 @@ function CharacterTweakData:_presets(tweak_data)
 		autofire_rounds = {45, 45},
 		FALLOFF = {
 			{
-				dmg_mul = 6.4,
+				dmg_mul = 4,
 				r = 300,
 				acc = {
 					1,
@@ -6773,7 +6773,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 6.4,
+				dmg_mul = 4,
 				r = 1000,
 				acc = {
 					0.9,
@@ -6791,7 +6791,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 6.4,
+				dmg_mul = 4,
 				r = 2000,
 				acc = {
 					0.5,
@@ -6809,7 +6809,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 6.4,
+				dmg_mul = 4,
 				r = 6000,
 				acc = {
 					0,
@@ -6848,7 +6848,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 10,
+				dmg_mul = 2.5,
 				r = 500,
 				acc = {
 					0,
@@ -6866,7 +6866,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 10,
+				dmg_mul = 2.5,
 				r = 1000,
 				acc = {
 					0,
@@ -6884,7 +6884,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 10,
+				dmg_mul = 2.5,
 				r = 2500,
 				acc = {
 					0,
@@ -6902,7 +6902,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 10,
+				dmg_mul = 2.5,
 				r = 4000,
 				acc = {
 					0,
@@ -6920,7 +6920,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 10,
+				dmg_mul = 2.5,
 				r = 6000,
 				acc = {
 					0,
@@ -6960,7 +6960,7 @@ function CharacterTweakData:_presets(tweak_data)
 		autofire_rounds = {100, 200},
 		FALLOFF = {
 			{
-				dmg_mul = 4,
+				dmg_mul = 8.4,
 				r = 100,
 				acc = {
 					1,
@@ -6978,7 +6978,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3,
+				dmg_mul = 8.4,
 				r = 1000,
 				acc = {
 					0.6,
@@ -6996,7 +6996,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2,
+				dmg_mul = 4.2,
 				r = 2000,
 				acc = {
 					0.3,
@@ -7160,7 +7160,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5,
+				dmg_mul = 4.2,
 				r = 100,
 				acc = {
 					1,
@@ -7178,7 +7178,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5,
+				dmg_mul = 4.2,
 				r = 500,
 				acc = {
 					1,
@@ -7196,7 +7196,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4,
+				dmg_mul = 3.8,
 				r = 1000,
 				acc = {
 					0.85,
@@ -7214,7 +7214,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1.5,
+				dmg_mul = 2,
 				r = 2000,
 				acc = {
 					0.75,
@@ -7716,6 +7716,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.speech_prefix_count = nil
 	self.tank.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance" --BULLDOZER, COMING THROUGH!!!
 	self.tank.priority_shout = "f30"
+	self.tank.silent_priority_shout = "f37"
 	self.tank.rescue_hostages = false
 	self.tank.deathguard = true
 	self.tank.melee_weapon = "fists"
@@ -8157,6 +8158,7 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.chatter = presets.enemy_chatter.swat
 	self.swat.melee_weapon_dmg_multiplier = 1
 	self.swat.steal_loot = true
+	self.swat.silent_priority_shout = "f37"
 
 	table.insert(self._enemy_list, "swat")
 end)
@@ -8284,6 +8286,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.no_retreat = nil
 	self.heavy_swat.chatter = presets.enemy_chatter.swat
 	self.heavy_swat.steal_loot = true
+	self.heavy_swat.silent_priority_shout = "f37"
 	self.heavy_swat_sniper = deep_clone(self.heavy_swat)
 	self.heavy_swat_sniper.weapon = presets.weapon.rhythmsniper --TODO: Custom assault sniper set up, that doesn't suck dick and make the game unfun.
 
@@ -8314,6 +8317,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.chatter = presets.enemy_chatter.swat
 	self.fbi_swat.melee_weapon = "knife_1"
 	self.fbi_swat.steal_loot = true
+	self.fbi_swat.silent_priority_shout = "f37"
 
 	local level = Global.level_data and Global.level_data.level_id
 	if level == "kosugi" then
@@ -8374,6 +8378,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.chatter = presets.enemy_chatter.swat
 	self.fbi_heavy_swat.melee_weapon = "knife_1"
 	self.fbi_heavy_swat.steal_loot = true
+	self.fbi_heavy_swat.silent_priority_shout = "f37"
 	
 end)
 
@@ -8393,6 +8398,7 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	self.city_swat.silent_priority_shout = "f37"
 	self.city_swat.speech_prefix_p1 = self._prefix_data_p1.heavy_swat()
 	self.city_swat.speech_prefix_p2 = "n"
+	self.city_swat.silent_priority_shout = "f37"
 	self.city_swat.speech_prefix_count = 4
 	self.city_swat.access = "swat"
 	self.city_swat.no_retreat = nil

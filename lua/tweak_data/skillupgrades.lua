@@ -288,6 +288,20 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
+		--Low Blow ACED
+		self.values.player.crit_damage_up = {
+			true
+		}
+		self.definitions.player_crit_damage_up = {
+			name_id = "menu_crit_damage_up",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "crit_damage_up",
+				category = "player"
+			}
+		}
+		
 		--Something To Prove
 		
 		self.values.player.max_health_reduction = {

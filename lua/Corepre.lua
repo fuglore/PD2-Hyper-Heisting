@@ -4,7 +4,7 @@ PD2THHSHIN._mod_path = ModPath
 PD2THHSHIN._options_path = ModPath .. "menu/options.txt"
 PD2THHSHIN._save_path = SavePath .. "shin_settings.txt"
 PD2THHSHIN.settings = {
-	toggle_overhaul_player = false,
+	toggle_overhaul_player = true,
 	enable_albanian_content = false,
 	toggle_helmet = false,
 	toggle_hhassault = false,
@@ -22,7 +22,7 @@ function PD2THHSHIN:ChangeSetting(setting_name,value,apply_immediately)
 end
 
 function PD2THHSHIN:IsOverhaulEnabled()
-	return self:GetSessionSetting("toggle_overhaul_player")
+	return true
 end
 
 function PD2THHSHIN:SkullDiffEnabled()
