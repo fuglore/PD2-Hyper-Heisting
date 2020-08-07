@@ -794,7 +794,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 		return
 	end
 	
-	if not data.attention_obj or not data.important then
+	if not data.attention_obj then
 		--if not data.cool and not my_data.advancing then
 		--	CopLogicTravel.upd_advance(data)
 		--end
@@ -843,12 +843,13 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	local hitnrunmovementqualify = data.tactics and data.tactics.hitnrun and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 500 and math_abs(data.m_pos.z - data.attention_obj.m_pos.z) < 200
 	local spoocavoidancemovementqualify = data.tactics and data.tactics.spoocavoidance and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 2000 and focus_enemy.aimed_at
 	local eliterangedfiremovementqualify = data.tactics and data.tactics.elite_ranged_fire and focus_enemy and focus_enemy.verified and focus_enemy.verified_dis <= 700
+	local freakoutovermissingpathingqualify = my_data.just_reset_info and focus_enemy and focus_enemy.verified
 	
 	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
 	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
 	
 	if not ignore_walks then
-		if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify then
+		if not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or not action_taken and freakoutovermissingpathingqualify then
 			action_taken = CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, nil, nil)
 			do_something_else = nil
 			if data.char_tweak.chatter and data.char_tweak.chatter.cloakeravoidance then
@@ -993,88 +994,8 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 		return true
 	end
 	
-	local in_cover = my_data.in_cover
-	local best_cover = my_data.best_cover
-	local nearest_cover = my_data.nearest_cover
-	local enemy_visible = focus_enemy and focus_enemy.verified
-	local enemy_visible_soft = nil
-	
-	if Global.game_settings.one_down then
-		if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-			enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(0.3, 1.05)
-		else
-			enemy_visible_soft = focus_enemy and focus_enemy.verified
-		end
-	else
-		if diff_index <= 5 then
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(3.1, 3.8)
-			else
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(1.05, 1.4)
-			end
-		else
-			if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(2, 3)
-			else
-				enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < math_random(0.35, 1.05)
-			end
-		end
-	end
-	
-	local enemy_visible_mild_soft = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 2
-	local enemy_visible_softer = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t < 4
-	local antipassivecheck = focus_enemy and focus_enemy.verified or my_data.shooting
-	local flank_cover_charge_qualify = focus_enemy and focus_enemy.verified_t and t - focus_enemy.verified_t > 2 or focus_enemy and focus_enemy.verified
-		
-	local alert_soft = data.is_suppressed
-	
-	
-	local want_to_take_cover = my_data.want_to_take_cover
-	local move_to_cover, want_flank_cover = nil
-	local cover_test_step_chk = action_taken or want_to_take_cover or not in_cover --optimizations, yay
-	
 	if not my_data.cover_test_step then
 		my_data.cover_test_step = 1
-	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.tunnel or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
-		if my_data.cover_test_step ~= 1 and cover_test_step_chk then
-			my_data.cover_test_step = 1
-			--not many tactics need to be this aggressive, but hitnrun and murder are specifically for bulldozer and units which will want to get up to enemies' faces, and as such, require these.
-		end
-	else
-		if my_data.cover_test_step ~= 1 and not enemy_visible_softer and cover_test_step_chk then
-			my_data.cover_test_step = 1
-		end
-	end
-	
-	local ranged_fire_sot_bonus = 0.5
-	
-	if my_data.stay_out_time and not my_data.at_cover_shoot_pos or my_data.stay_out_time and action_taken then
-		my_data.stay_out_time = nil
-	elseif my_data.attitude == "engage" and not my_data.stay_out_time and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
-		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.tunnel or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
-			my_data.stay_out_time = t - 1
-			--log("interesting")
-		else
-			if diff_index <= 5 then
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 1 + ranged_fire_sot_bonus
-				else
-					my_data.stay_out_time = t + 1
-				end
-			elseif diff_index == 6 then
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 0.5 + ranged_fire_sot_bonus
-				else
-					my_data.stay_out_time = t + 0.5
-				end
-			else
-				if data.tactics and data.tactics.ranged_fire or data.tactics and data.tactics.elite_ranged_fire then
-					my_data.stay_out_time = t + 0.5
-				else
-					my_data.stay_out_time = t - 1
-				end
-			end
-		end
 	end
 	
 	if not action_taken and not my_data.turning and not data.unit:movement():chk_action_forbidden("walk") and not my_data.has_old_action and CopLogicAttack._can_move(data) and data.attention_obj.verified and not spoocavoidancemovementqualify then
@@ -1371,6 +1292,8 @@ function CopLogicTravel.queued_update(data)
 		return
 	end
 	
+	local should_update_combat_movement = my_data.just_reset_info or nil
+	
 	if data.unit:base():has_tag("law") and my_data.has_advanced_once then
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 			if not objective or objective.type == "defend_area" and objective.grp_objective and objective.grp_objective.type ~= "retire" or objective.type == "hunt" then
@@ -1403,18 +1326,19 @@ function CopLogicTravel.queued_update(data)
 			
 			if data.important or data.unit:base():has_tag("special") then
 				--CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
-				
-				if not my_data.walking_to_optimal_pos and not my_data.pathing_to_optimal_pos then
-					CopLogicTravel._upd_combat_movement(data)
-				else
-					CopLogicTravel._upd_combat_movement(data, true)
-				end
+				should_update_combat_movement = nil
+				CopLogicTravel._upd_combat_movement(data)
 				
 				if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
 					CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
 				end
 			end
 		end
+	end
+
+	if should_update_combat_movement then
+		CopLogicTravel._upd_combat_movement(data)
+		my_data.just_reset_info = nil
 	end
 	
     if data.internal_data ~= my_data then
@@ -2170,13 +2094,30 @@ function CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
 end
 
 function CopLogicTravel.reset_travel_information(data, my_data)
-	my_data.desynced_from_pathing = nil
-	my_data.objective_outdated = nil
+	--local draw_duration = 1
+	--local new_brush = Draw:brush(Color.red:with_alpha(1), draw_duration)
+	--new_brush:sphere(data.unit:movement():m_head_pos(), 20)
 	my_data.coarse_path = nil
 	my_data.advance_path = nil
 	my_data.coarse_path_index = nil
 	
+	my_data.desynced_from_pathing = nil
+	my_data.objective_outdated = nil
+	
+	if my_data.coarse_path_search_id then
+		data.unit:brain():abort_detailed_pathing(my_data.coarse_path_search_id)
+	end
+	
+	if my_data.advance_path_search_id then
+		data.unit:brain():abort_detailed_pathing(my_data.advance_path_search_id)
+	end
+	
+	my_data.coarse_path_search_id = nil
+	my_data.processing_coarse_path = nil
+	
 	CopLogicTravel._begin_coarse_pathing(data, my_data)
+	
+	my_data.just_reset_info = true
 end
 
 function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, engage, assault_break)
@@ -2296,6 +2237,7 @@ end
 function CopLogicTravel.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()
+	data.t = TimerManager:game():time()
 	
 	local engage_range = nil
 	
@@ -2345,13 +2287,12 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			CopLogicTravel._upd_combat_movement(data)
 		end
 	elseif action_type == "walk" then
-		if action:expired() and my_data.advancing and not my_data.old_action_advancing and not my_data.has_old_action and not my_data.starting_advance_action and my_data.coarse_path_index then
+		if action:expired() and my_data.coarse_path and my_data.advancing and not my_data.old_action_advancing and not my_data.has_old_action and not my_data.starting_advance_action and my_data.coarse_path_index then
 			my_data.coarse_path_index = my_data.coarse_path_index + 1
 
 			if my_data.coarse_path_index > #my_data.coarse_path then
-				debug_pause_unit(data.unit, "[CopLogicTravel.action_complete_clbk] invalid coarse path index increment", data.unit, inspect(my_data.coarse_path), my_data.coarse_path_index)
-
-				my_data.coarse_path_index = my_data.coarse_path_index - 1
+				CopLogicTravel.reset_travel_information(data, my_data)
+				--log("bad!!!")
 			end
 		end
 
@@ -3169,6 +3110,8 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 
 	if total_nav_points <= nav_index then
 		local path_pos = coarse_path[nav_index][2] or nil
+		local nav_seg = coarse_path[nav_index][1] or nil
+			
 		local new_occupation = data.logic._determine_destination_occupation(data, objective, path_pos)
 
 		if new_occupation then
@@ -3288,9 +3231,7 @@ function CopLogicTravel.upd_advance(data)
 	if my_data.objective_outdated or my_data.desynced_from_pathing then
 		CopLogicTravel.reset_travel_information(data, my_data)
 				
-		if my_data ~= data.internal_data then
-			return
-		end
+		return
 	end
 	
 	if my_data.has_old_action then
