@@ -3319,10 +3319,10 @@ function CopLogicTravel.upd_advance(data)
 		if my_data ~= data.internal_data then
 			return
 		end
-	elseif my_data.advance_path and not my_data.objective_outdated then
+	elseif my_data.advance_path and not my_data.objective_outdated and not my_data.desynced_from_pathing then
 		CopLogicTravel._chk_begin_advance(data, my_data)
 
-		if my_data.advancing and my_data.path_ahead then
+		if my_data.coarse_path_index and my_data.advancing and my_data.path_ahead then
 			CopLogicTravel._check_start_path_ahead(data)
 		end
 	elseif my_data.processing_advance_path or my_data.processing_coarse_path then
