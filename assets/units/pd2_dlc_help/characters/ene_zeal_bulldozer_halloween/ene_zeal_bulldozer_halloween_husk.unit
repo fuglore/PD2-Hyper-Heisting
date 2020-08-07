@@ -22,7 +22,6 @@
 			<var name="can_be_marked" value="true" />
 			<var name="_tweak_table" value="tank_hw" />
 			<var name="_default_weapon_id" value="mini" />
-			<var name="_stats_name" value="tank_green" />
 			<var name="_melee_weapon_table" value="helloween" />
 		</extension>
 		<extension name="inventory" class="HuskCopInventory" />
