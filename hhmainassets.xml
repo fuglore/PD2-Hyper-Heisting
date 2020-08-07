@@ -90,7 +90,13 @@
 	
 	<!-- lazily and horribly fixed his mipmaps lol -->
 	<texture path="units/payday2/characters/shared_textures/danial_df" force="true"/>
-		
+	
+	<!--Fuck you. Here's your difficulty spike.-->
+	<unit path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween" load="true" force="true"/>
+	<unit path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween_husk" load="true" force="true"/>
+	<material_config path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween" load="true" force="true"/>
+	<material_config path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween_contour" load="true" force="true"/>
+	
 	<!--functional weapon sounds-->	
 	<unit path="units/payday2/weapons/wpn_npc_ump/wpn_npc_ump" load="true" force="true"/>
 	<unit path="units/payday2/weapons/wpn_npc_c45/wpn_npc_c45" load="true" force="true"/>
@@ -527,15 +533,6 @@
 	
 	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_df" />	
 	<texture path="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_il" />
-		
-	<unit path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" load="true"/>
-	<material_config path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>	
-	<object path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" />
-	<model path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" />	
-	<cooked_physics path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>	
-	<sequence_manager path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>
-
-	<texture path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou_df" />
 	
 	<unit path="units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill" load="true"/>
 	<material_config path="units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill"/>

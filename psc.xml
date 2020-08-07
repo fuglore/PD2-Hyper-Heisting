@@ -372,4 +372,14 @@
 	<model path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"/>
 	
+	<unit path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" load="true"/>
+	<material_config path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>	
+	<object path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" />
+	<model path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou" />	
+	<cooked_physics path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>	
+	<sequence_manager path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"/>
+
+	<texture path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou_df" />
+	<texture path="units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou_nm" />
+	
 </table>

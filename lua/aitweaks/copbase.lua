@@ -104,7 +104,7 @@ function CopBase:default_weapon_name()
 	
 	local hoxout_sub = unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4")
 		
-	local hoxhud = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_2/npc_old_hoxton_prisonsuit_2")
+	local give_m249 = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_2/npc_old_hoxton_prisonsuit_2")
 	
 	local give_beretta = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_1/npc_old_hoxton_prisonsuit_1")
 	
@@ -211,7 +211,7 @@ function CopBase:default_weapon_name()
 	elseif hoxout_dual then
 		return crosskill_chimano_akimbo
 
-	elseif hoxhud then
+	elseif give_m249 then
 		return ksp
 		
 	elseif give_beretta then
