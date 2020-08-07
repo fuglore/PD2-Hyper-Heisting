@@ -3031,21 +3031,21 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"charge",
 			"hitnrun", --they'll charge, barrage and back off
 			"provide_support",
-			"murder"
+			"tunnel"
 		},
 		tazer_flanking = {
 			"hunter",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade",
-			"murder"		 
+			"tunnel"		 
 		},
 		tazer_flanking_independant = {
 			"hunter",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade",
-			"murder"		 
+			"tunnel"		 
 		},
 		tazer_charge = {
 			"deathguard",
@@ -3060,7 +3060,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"flash_grenade", --use flashes
 			"provide_coverfire",
 			"shield_cover", --if he spawns with a shield, he'll get covered so he can bust your fucking ass
-			"murder"
+			"tunnel"
 		},
 		tank_rush_independant = {
 			"deathguard",
@@ -3069,7 +3069,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"shield_cover", --if he spawns with a shield, he'll get covered so he can bust your fucking ass
 			"lonewolf",
-			"murder"
+			"tunnel"
 		},
 		spooc = {
 			"shield_cover",

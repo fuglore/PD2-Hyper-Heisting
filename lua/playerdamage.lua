@@ -290,10 +290,12 @@ function PlayerDamage:damage_melee(attack_data)
 			return
 		end
 	end
-
-	local dmg_mul = pm:damage_reduction_skill_multiplier("melee") --the vanilla function has this line, but it also uses bullet damage reduction skills due to it redirecting to damage_bullet to get results
-	attack_data.damage = attack_data.damage * dmg_mul
-	attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data) --apply damage resistances before checking for bleedout and other things
+	
+	if not attack_data.is_cloaker_kick then
+		local dmg_mul = pm:damage_reduction_skill_multiplier("melee") --the vanilla function has this line, but it also uses bullet damage reduction skills due to it redirecting to damage_bullet to get results
+		attack_data.damage = attack_data.damage * dmg_mul
+		attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data) --apply damage resistances before checking for bleedout and other things
+	end
 
 	local damage_absorption = pm:damage_absorption()
 
@@ -383,7 +385,7 @@ function PlayerDamage:damage_melee(attack_data)
 	local health_subtracted = nil
 	local armor_broken = false
 
-	if go_through_armor then
+	if go_through_armor or attack_data.is_cloaker_kick then
 		health_subtracted = self:_calc_armor_damage(attack_data)
 
 		attack_data.damage = attack_data.damage - health_subtracted
@@ -446,7 +448,7 @@ function PlayerDamage:damage_melee(attack_data)
 	return
 end
 
-function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_state, is_cloaker_kick)
+function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_state, is_special_attack)
 	if self:get_real_health() == 0 and not self._check_berserker_done then
 		if self._unit:movement():zipline_unit() then
 			self._bleed_out_blocked_by_zipline = true
@@ -514,7 +516,7 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 			self._bleed_out = true
 			self._current_state = nil
 			
-			if is_cloaker_kick then
+			if is_special_attack then
 				managers.player:set_player_state("fatal")
 			else
 				managers.player:set_player_state("bleed_out")
@@ -1171,9 +1173,11 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	if self:get_real_health() == 0 and trigger_skills then
 		self:_chk_cheat_death()
 	end
-
+	
+	local incap_attack = attack_data.is_cloaker_kick or attack_data.is_taser_shock or nil
+	
 	self:_damage_screen()
-	self:_check_bleed_out(trigger_skills, nil, attack_data.is_cloaker_kick)
+	self:_check_bleed_out(trigger_skills, nil, incap_attack)
 	managers.hud:set_player_health({
 		current = self:get_real_health(),
 		total = self:_max_health(),

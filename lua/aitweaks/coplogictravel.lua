@@ -139,34 +139,9 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 			my_data.coarse_path = path
 			my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, path)
 		elseif path_style == "coarse_complete" then
-			if not data.is_converted then
-				my_data.coarse_path_index = 1
-				my_data.coarse_path = deep_clone(objective.path_data)
-				my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, my_data.coarse_path)
-			else
-				my_data.coarse_path = nil
-				local nav_manager = managers.navigation
-				local f_get_nav_seg = nav_manager.get_nav_seg_from_pos
-				local start_seg = data.unit:movement():nav_tracker():nav_segment()
-				local path = {
-					{
-						start_seg
-					}
-				}
-
-				for _, point in ipairs(path_data.points) do
-					local pos = mvec3_copy(point.position)
-					local nav_seg = f_get_nav_seg(nav_manager, pos)
-
-					table.insert(path, {
-						nav_seg,
-						pos
-					})
-				end
-
-				my_data.coarse_path = path
-				my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, path)
-			end			
+			my_data.coarse_path_index = 1
+			my_data.coarse_path = deep_clone(objective.path_data)
+			my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, my_data.coarse_path)		
 		end
 	end
 
@@ -200,7 +175,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 			
 		end
 	end
-	my_data.path_safely = not data.cool and my_data.attitude == "avoid" or nil
+	my_data.path_safely = not data.cool and my_data.attitude == "avoid"
 	my_data.path_ahead = data.cool or data.objective.path_ahead or data.team.id == tweak_data.levels:get_default_team_ID("player")
 
 	data.unit:brain():set_update_enabled_state(false)
@@ -1060,7 +1035,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	
 	if not my_data.cover_test_step then
 		my_data.cover_test_step = 1
-	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
+	elseif data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.tunnel or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
 		if my_data.cover_test_step ~= 1 and cover_test_step_chk then
 			my_data.cover_test_step = 1
 			--not many tactics need to be this aggressive, but hitnrun and murder are specifically for bulldozer and units which will want to get up to enemies' faces, and as such, require these.
@@ -1076,7 +1051,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	if my_data.stay_out_time and not my_data.at_cover_shoot_pos or my_data.stay_out_time and action_taken then
 		my_data.stay_out_time = nil
 	elseif my_data.attitude == "engage" and not my_data.stay_out_time and my_data.at_cover_shoot_pos and not action_taken and not want_to_take_cover then
-		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.murder or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
+		if Global.game_settings.one_down or managers.skirmish.is_skirmish() or data.tactics and data.tactics.hitnrun or data.tactics and data.tactics.tunnel or data.unit:base():has_tag("takedown") or Global.game_settings.use_intense_AI then
 			my_data.stay_out_time = t - 1
 			--log("interesting")
 		else
@@ -2194,6 +2169,16 @@ function CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
 	end
 end
 
+function CopLogicTravel.reset_travel_information(data, my_data)
+	my_data.desynced_from_pathing = nil
+	my_data.objective_outdated = nil
+	my_data.coarse_path = nil
+	my_data.advance_path = nil
+	my_data.coarse_path_index = nil
+	
+	CopLogicTravel._begin_coarse_pathing(data, my_data)
+end
+
 function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, engage, assault_break)
 
 	local pantsdownchk = nil
@@ -2494,6 +2479,23 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 			data.unit:brain():abort_detailed_pathing(my_data.advance_path_search_id)
 		end
+
+		if my_data.coarse_path then
+			local my_seg = data.unit:movement():nav_tracker():nav_segment()
+			local continue_pathing = nil
+			for _, fuckingtable in pairs(my_data.coarse_path) do
+					--log("the actual table check is working")
+				if fuckingtable[1] == my_seg then
+					--log("i got some jelly beans")
+					continue_pathing = true
+				end
+			end
+					
+			if not continue_pathing then
+				--log("you want some jelly beans")
+				my_data.desynced_from_pathing = true
+			end	
+		end
 	elseif action_type == "shoot" then		
 		my_data.shooting = nil
 	elseif action_type == "tase" then
@@ -2527,6 +2529,25 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 
 		my_data.spooc_attack = nil
+		
+		if action:complete() then
+			if my_data.coarse_path then
+				local my_seg = data.unit:movement():nav_tracker():nav_segment()
+				local continue_pathing = nil
+				for _, fuckingtable in pairs(my_data.coarse_path) do
+					--log("the actual table check is working")
+					if fuckingtable[1] == my_seg then
+						--log("this should be fine")
+						continue_pathing = true
+					end
+				end
+					
+				if not continue_pathing then
+					--log("you want some jelly beans")
+					my_data.desynced_from_pathing = true
+				end	
+			end
+		end
 	elseif action_type == "reload" then
 		--Removed the requirement for being important here.
 		if not data.unit:character_damage():dead() and action:expired() then
@@ -2582,6 +2603,23 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			CopLogicTravel._upd_combat_movement(data)
 		end
 		
+		if my_data.coarse_path then
+			local my_seg = data.unit:movement():nav_tracker():nav_segment()
+			local continue_pathing = nil
+			for _, fuckingtable in pairs(my_data.coarse_path) do
+				--log("the actual table check is working")
+				if fuckingtable[1] == my_seg then
+					--log("this should be fine")
+					continue_pathing = true
+				end
+			end
+					
+			if not continue_pathing then
+				--log("you want some jelly beans")
+				my_data.desynced_from_pathing = true
+			end	
+		end
+		
 		local objective = data.objective
 		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, nil)
 
@@ -2600,8 +2638,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 					CopLogicBase._exit(data.unit, wanted_state)
 				end
 			end
-		end
-		
+		end	
 	elseif action_type == "dodge" then
 		local timeout = action:timeout()
 
@@ -2621,6 +2658,23 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			CopLogicTravel._upd_combat_movement(data)
 		end
 		
+		if my_data.coarse_path then
+			local my_seg = data.unit:movement():nav_tracker():nav_segment()
+			local continue_pathing = nil
+			for _, fuckingtable in pairs(my_data.coarse_path) do
+				--log("the actual table check is working")
+				if fuckingtable[1] == my_seg then
+					--log("this should be fine")
+					continue_pathing = true
+				end
+			end
+					
+			if not continue_pathing then
+				--log("you want some jelly beans")
+				my_data.desynced_from_pathing = true
+			end	
+		end
+		
 		local objective = data.objective
 		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, nil)
 
@@ -2640,7 +2694,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				end
 			end
 		end
-	end
+	end	
 end
 
 function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
@@ -2692,7 +2746,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		optimal_threat_dis = 100
 		allow_fwd = true
 		
-		if my_data.optimal_pos then
+		if not near_pos and my_data.optimal_pos or data.is_suppressed and my_data.optimal_pos then
 			near_pos = my_data.optimal_pos
 		end
 		
@@ -2922,7 +2976,7 @@ function CopLogicTravel._find_follow_cover(data, nav_seg, near_pos, area)
 	return cover
 end
 
-function CopLogicTravel._determine_destination_occupation(data, objective)
+function CopLogicTravel._determine_destination_occupation(data, objective, path_pos)
 	local occupation = nil
 
 	if objective.type == "defend_area" then
@@ -2941,7 +2995,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 				radius = objective.radius
 			}
 		else
-			local near_pos = objective.follow_unit and objective.follow_unit:movement():nav_tracker():field_position()
+			local near_pos = objective.follow_unit and objective.follow_unit:movement():nav_tracker():field_position() or path_pos or nil
 			local cover = CopLogicTravel._find_cover(data, objective.nav_seg, near_pos)
 
 			if cover then
@@ -2955,7 +3009,13 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 					radius = objective.radius
 				}
 			else
-				near_pos = CopLogicTravel._get_pos_on_wall(managers.navigation._nav_segments[objective.nav_seg].pos, 700)
+				local pos = CopLogicTravel._get_pos_on_wall(managers.navigation._nav_segments[objective.nav_seg].pos)
+				
+				if path_pos then
+					pos = path_pos
+				end
+				
+				near_pos = CopLogicTravel._get_pos_on_wall(pos, 700)
 				occupation = {
 					type = "defend",
 					seg = objective.nav_seg,
@@ -3108,7 +3168,8 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 	local reservation, wants_reservation = nil
 
 	if total_nav_points <= nav_index then
-		local new_occupation = data.logic._determine_destination_occupation(data, objective)
+		local path_pos = coarse_path[nav_index][2] or nil
+		local new_occupation = data.logic._determine_destination_occupation(data, objective, path_pos)
 
 		if new_occupation then
 			if new_occupation.type == "guard" then
@@ -3131,10 +3192,10 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 			elseif new_occupation.type == "defend" then
 				if new_occupation.cover then
 					to_pos = new_occupation.cover[1][1]
+					
+					local offset = data.char_tweak.wall_fwd_offset or 60
 
-					if data.char_tweak.wall_fwd_offset then
-						to_pos = CopLogicTravel.apply_wall_offset_to_cover(data, my_data, new_occupation.cover[1], data.char_tweak.wall_fwd_offset)
-					end
+					to_pos = CopLogicTravel.apply_wall_offset_to_cover(data, my_data, new_occupation.cover[1], offset)
 
 					local new_cover = new_occupation.cover
 
@@ -3160,9 +3221,15 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 		end
 
 		if not to_pos then
-			to_pos = managers.navigation:find_random_position_in_segment(objective.nav_seg)
-			to_pos = CopLogicTravel._get_pos_on_wall(to_pos)
-			wants_reservation = true
+			local orig_pos = managers.navigation:find_random_position_in_segment(nav_seg)
+			local wall_pos = CopLogicTravel._get_pos_on_wall(orig_pos)
+			
+			if mvector3.not_equal(orig_pos, wall_pos) then
+				to_pos = wall_pos
+				wants_reservation = true
+			else
+				to_pos = path_pos
+			end
 		end
 	else
 		local nav_seg = coarse_path[nav_index][1]
@@ -3186,6 +3253,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 				cover
 			}
 			to_pos = cover[1]
+			
 			wants_reservation = true
 		else
 			local orig_pos = managers.navigation:find_random_position_in_segment(nav_seg)
@@ -3216,7 +3284,15 @@ function CopLogicTravel.upd_advance(data)
 	local objective = data.objective
 	local t = TimerManager:game():time()
 	data.t = t
-
+	
+	if my_data.objective_outdated or my_data.desynced_from_pathing then
+		CopLogicTravel.reset_travel_information(data, my_data)
+				
+		if my_data ~= data.internal_data then
+			return
+		end
+	end
+	
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
 	elseif my_data.warp_pos then
@@ -3257,17 +3333,7 @@ function CopLogicTravel.upd_advance(data)
 		end
 	elseif objective and (objective.nav_seg or objective.type == "follow") then
 		if my_data.coarse_path then
-			if my_data.objective_outdated and not my_data.advancing then
-				my_data.coarse_path = nil
-				my_data.advance_path = nil
-				my_data.coarse_path_index = nil
-				
-				CopLogicTravel._begin_coarse_pathing(data, my_data)
-				
-				if my_data ~= data.internal_data then
-					return
-				end
-			elseif my_data.coarse_path_index == #my_data.coarse_path then
+			if my_data.coarse_path_index == #my_data.coarse_path then
 				CopLogicTravel._on_destination_reached(data)
 				
 				return

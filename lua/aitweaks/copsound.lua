@@ -1,8 +1,80 @@
 function CopSound:init(unit)
 	self._unit = unit
 	self._speak_expire_t = 0
-	local char_tweak = tweak_data.character[unit:base()._tweak_table]
-	local speech_prefix2 = char_tweak.speech_prefix_p2
+	unit:base():post_init()
+	self._prefix = self:get_appropriate_unit_sound_prefix()
+end
+
+function CopSound:get_appropriate_unit_sound_prefix()
+	local char_tweak = tweak_data.character[self._unit:base()._tweak_table]
+	local speech_prefix1 = char_tweak.speech_prefix_p1 or ""
+	local speech_prefix2 = char_tweak.speech_prefix_p2 or ""
+	
+	local l1d_units = {
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3"),
+		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3_husk")
+	}	
+	
+	for _, name in ipairs(l1d_units) do
+		if self._unit:name() == name then
+			return "l1d_"
+		end
+	end
+
+	local l4n_units = {
+		Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"),
+		Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump_husk")
+	}	
+	
+	for _, name in ipairs(l4n_units) do
+		if self._unit:name() == name then
+			return "l4n_"
+		end
+	end
+	
+	local l1n_units = {
+		Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+		Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle_husk")
+	}	
+	
+	for _, name in ipairs(l1n_units) do
+		if self._unit:name() == name then
+			return "l1n_"
+		end
+	end	
+	
+	local l5d_units = {
+		Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"),
+		Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar_husk")
+	}	
+	
+	for _, name in ipairs(l5d_units) do
+		if self._unit:name() == name then
+			return "l5d_"
+		end
+	end	
+	
+	local l3n_units = {
+		Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"),
+		Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870_husk")
+	}	
+	
+	for _, name in ipairs(l3n_units) do
+		if self._unit:name() == name then
+			return "l3n_"
+		end
+	end		
+	
+	local l3d_units = {
+		Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
+		Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870_husk")
+	}	
+	
+	for _, name in ipairs(l3d_units) do
+		if self._unit:name() == name then
+			return "l3d_"
+		end
+	end	
 	
 	local low_diff_units = {
 		Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
@@ -21,72 +93,30 @@ function CopSound:init(unit)
 		Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870_husk")
 	}
 	
-	if self._unit:name() == low_diff_units then
-		speech_prefix2 = "n"
+	local nr_variations = char_tweak.speech_prefix_count or nil
+	
+	for _, name in ipairs(low_diff_units) do
+		if self._unit:name() == name then
+			nr_variations = 4
+			speech_prefix2 = "n"
+		end
 	end
 	
-	local nr_variations = char_tweak.speech_prefix_count
-	self._prefix = (char_tweak.speech_prefix_p1 or "") .. (nr_variations and tostring(math.random(nr_variations)) or "") .. (speech_prefix2 or "") .. "_"
+	local variation = ""
 	
-	local l1d_units = {
-		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3"),
-		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3_husk")
-	}	
-	
-	if self._unit:name() == l1d_units then
-		self._prefix = ("l1d") .. "_"
+	if nr_variations then
+		variation = tostring(math.random(nr_variations))
 	end
+	
+	local prefix = speech_prefix1 .. variation .. speech_prefix2 .. "_"
+	
+	--log("prefix is " .. tostring(prefix) .. "!")
+	
+	return prefix
+end
 
-	local l4n_units = {
-		Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"),
-		Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump_husk")
-	}	
-	
-	if self._unit:name() == l4n_units then
-		self._prefix = ("l4n") .. "_"
-	end	
-	
-	local l1n_units = {
-		Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-		Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle_husk")
-	}	
-	
-	if self._unit:name() == l1n_units then
-		self._prefix = ("l1n") .. "_"
-	end	
-	
-	local l5d_units = {
-		Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"),
-		Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar_husk")
-	}	
-	
-	if self._unit:name() == l5d_units then
-		self._prefix = ("l5d") .. "_"
-	end	
-	
-	local l3n_units = {
-		Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"),
-		Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870_husk")
-	}	
-	
-	if self._unit:name() == l3n_units then
-		self._prefix = ("l3n") .. "_"
-	end	
-	
-	local l3d_units = {
-		Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-		Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870_husk")
-	}	
-	
-	if self._unit:name() == l3d_units then
-		self._prefix = ("l3d") .. "_"
-	end	
-		
-	if self._unit:base():char_tweak().spawn_sound_event then
-		self._unit:sound():play(self._unit:base():char_tweak().spawn_sound_event, nil, nil)
-	end
-
-	unit:base():post_init()
+function CopSound:set_voice_prefix(index) -- this function can go punch a cactus
+	self._prefix = self:get_appropriate_unit_sound_prefix()
 end
 
 function CopSound:chk_voice_prefix()

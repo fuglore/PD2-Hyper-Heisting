@@ -267,9 +267,9 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					end
 				end
 				
-				if data.tactics and data.tactics.murder then
+				if data.tactics and data.tactics.tunnel then
 					if attention_data.acquire_t and human_chk and attention_data.verified and data.attention_obj and data.attention_obj.verified and AIAttentionObject.REACT_AIM <= data.attention_obj.reaction and AIAttentionObject.REACT_AIM <= reaction and data.attention_obj.u_key == u_key and human_att_obj_chk and free_status then
-						old_enemy_murder = true
+						old_enemy_tunnel = true
 					end
 				end
 				
@@ -281,7 +281,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 				local target_priority_slot = nil
 				
 				if visible then
-					local justmurder = data.tactics and data.tactics.murder
+					local justtunnel = data.tactics and data.tactics.tunnel
 					local justharass = data.tactics and data.tactics.harass
 					local aimed_at = CopLogicIdle.chk_am_i_aimed_at(data, attention_data, attention_data.aimed_at and 0.95 or 0.985)
 					attention_data.aimed_at = aimed_at
@@ -296,7 +296,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						target_priority_slot = 6
 					end
 					
-					if justmurder and human_chk and not human_current_target_chk then
+					if justtunnel and human_chk and not human_current_target_chk then
 						target_priority_slot = 1
 					end
 
@@ -308,39 +308,39 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						target_priority_slot = target_priority_slot - 1
 					end
 					
-					if old_enemy and not justmurder then
+					if old_enemy and not justtunnel then
 						target_priority_slot = target_priority_slot - 1
 					end
 					
-					if not justmurder and nr_enemies then
-						if nr_enemies > 4 then
+					if not justtunnel and nr_enemies then
+						if nr_enemies < 4 then
+							target_priority_slot = target_priority_slot - 1
+						elseif nr_enemies > 4 then
 							target_priority_slot = target_priority_slot + 1
 						elseif nr_enemies > 8 then
 							target_priority_slot = target_priority_slot + 2
 						elseif nr_enemies > 13 then
 							target_priority_slot = target_priority_slot + 3
-						elseif nr_enemies > 18 then
+						elseif nr_enemies > 17 then
 							target_priority_slot = target_priority_slot + 4
-						elseif nr_enemies < 4 then
-							target_priority_slot = target_priority_slot - 1
 						end
 					end
 					
-					if not free_status and not justmurder or pantsdownchk and not justharass then
+					if not free_status and not justtunnel or pantsdownchk and not justharass then
 						target_priority_slot = target_priority_slot + 4
 					end
 					
 					target_priority_slot = math.clamp(target_priority_slot, 1, 10)
 				else
 					target_priority_slot = 10
-					if not free_status and not justmurder or pantsdownchk and not justharass then
+					if not free_status and not justtunnel or pantsdownchk and not justharass then
 						target_priority_slot = target_priority_slot + 10
 					end
 				end
 				
 				if visible then
 					
-					if old_enemy_murder and data.tactics and data.tactics.murder then
+					if old_enemy_tunnel and data.tactics and data.tactics.tunnel then
 						target_priority_slot = 1
 					end
 					
@@ -348,13 +348,13 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						target_priority_slot = 1
 					end
 						
-					if assault_reaction and distance < 1500 then
+					if assault_reaction then
 						target_priority_slot = 1
 					end
 					
 				end
 
-				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.murder and not old_enemy_murder and not human_chk then
+				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.tunnel and not old_enemy_tunnel and not human_chk then
 					target_priority_slot = 20 + target_priority_slot + math.max(0, AIAttentionObject.REACT_COMBAT - reaction)
 				end
 
@@ -512,7 +512,9 @@ function CopLogicIdle._chk_relocate(data)
 			if TeamAILogicIdle._check_should_relocate(data, data.internal_data, data.objective) then
 				data.objective.in_place = nil
 
-				data.logic._exit(data.unit, "travel")
+				if data.name ~= "travel" then
+					data.logic._exit(data.unit, "travel")
+				end
 
 				return true
 			end
@@ -551,7 +553,9 @@ function CopLogicIdle._chk_relocate(data)
 			data.objective.nav_seg = follow_unit:movement():nav_tracker():nav_segment()
 			data.objective.relocated_to = mvector3.copy(follow_unit_pos)
 
-			data.logic._exit(data.unit, "travel")
+			if data.name ~= "travel" then
+				data.logic._exit(data.unit, "travel")
+			end
 
 			return true
 		end
@@ -579,7 +583,10 @@ function CopLogicIdle._chk_relocate(data)
 							data.objective.nav_seg
 						}
 					}
-					data.logic._exit(data.unit, "travel")
+					
+					if data.name ~= "travel" then
+						data.logic._exit(data.unit, "travel")
+					end
 					
 					--log("im going")
 						
@@ -622,7 +629,9 @@ function CopLogicIdle._chk_relocate(data)
 						}
 					}
 					
-					data.logic._exit(data.unit, "travel")
+					if data.name ~= "travel" then
+						data.logic._exit(data.unit, "travel")
+					end
 
 					return true
 				end
@@ -672,7 +681,9 @@ function CopLogicIdle._chk_relocate(data)
 							}
 						}
 
-						data.logic._exit(data.unit, "travel")
+						if data.name ~= "travel" then
+							data.logic._exit(data.unit, "travel")
+						end
 
 						return true
 					else
@@ -689,7 +700,9 @@ function CopLogicIdle._chk_relocate(data)
 									}
 								}
 								
-								data.logic._exit(data.unit, "travel")
+								if data.name ~= "travel" then
+									data.logic._exit(data.unit, "travel")
+								end
 											
 								return true
 							end
