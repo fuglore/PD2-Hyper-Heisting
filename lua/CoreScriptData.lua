@@ -60,7 +60,4 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/albaniandeal_indoor.custom_xml", "custom_xml", "environments/pd2_wwh/pd2_wwh_train", "environment")
 	end
 
-	if sex == "skm_watchdogs_stage2" then
-		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/purple_notrain.custom_xml", "custom_xml", "units/pd2_dlc_skm/environments/pd2_env_skm_watchdogs_2_exterior", "environment")
-	end	
 end)
