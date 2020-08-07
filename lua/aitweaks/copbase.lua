@@ -105,7 +105,6 @@ function CopBase:default_weapon_name()
 	local hoxout_sub = unit_name == Idstring("units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4")
 		
 	local give_m249 = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_2/npc_old_hoxton_prisonsuit_2")
-	or unit_name == Idstring("units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween")
 	
 	local give_beretta = unit_name == Idstring("units/payday2/characters/npc_old_hoxton_prisonsuit_1/npc_old_hoxton_prisonsuit_1")
 	
