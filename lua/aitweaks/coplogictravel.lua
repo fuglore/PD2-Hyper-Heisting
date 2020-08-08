@@ -175,8 +175,8 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 			
 		end
 	end
-	my_data.path_safely = not data.cool and my_data.attitude == "avoid"
-	my_data.path_ahead = data.cool or data.objective.path_ahead or data.team.id == tweak_data.levels:get_default_team_ID("player")
+	my_data.path_safely = data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area" or nil
+	my_data.path_ahead = data.cool or objective.path_ahead or data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player")
 
 	data.unit:brain():set_update_enabled_state(false)
 end
@@ -239,8 +239,10 @@ function CopLogicTravel._upd_enemy_detection(data)
 	
 	local reaction_func = nil
 	
-	if data.unit:base()._tweak_table == "taser" then
+	if data.unit:base():has_tag("taser") then
 		reaction_func = TaserLogicAttack._chk_reaction_to_attention_object
+	elseif data.unit:base():has_tag("spooc") then
+		reaction_func = SpoocLogicAttack.chk_reaction_to_attention_object
 	end
 	
 	local path_fail_t_chk = data.important and 0.5 or 2

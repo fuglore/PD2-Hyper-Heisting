@@ -69,6 +69,46 @@ function SpoocLogicAttack.queued_update(data)
 	CopLogicBase._report_detections(data.detected_attention_objects)
 end
 
+function SpoocLogicAttack._chk_reaction_to_attention_object(data, attention_data, stationary)
+	local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
+
+	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
+		return reaction
+	end
+	
+	local focus_enemy = attention_data
+
+	if focus_enemy and focus_enemy.nav_tracker and focus_enemy.is_person and AIAttentionObject.REACT_SHOOT <= focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") then
+		if focus_enemy.criminal_record then
+			if focus_enemy.criminal_record.status and focus_enemy.criminal_record.status ~= "electrified" then
+				return
+			end
+		end
+
+		if focus_enemy.unit:movement().zipline_unit and focus_enemy.unit:movement():zipline_unit() then
+			return AIAttentionObject.REACT_COMBAT
+		end
+
+		if focus_enemy.unit:movement().is_SPOOC_attack_allowed and not focus_enemy.unit:movement():is_SPOOC_attack_allowed() then
+			return AIAttentionObject.REACT_COMBAT
+		end
+
+		if focus_enemy.unit:movement().chk_action_forbidden and focus_enemy.unit:movement():chk_action_forbidden("hurt") then
+			return AIAttentionObject.REACT_COMBAT
+		end
+
+		if ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
+			return AIAttentionObject.REACT_SPECIAL_ATTACK
+		end
+		
+		if ActionSpooc.chk_can_start_flying_strike(data.unit, focus_enemy.unit) then
+			return AIAttentionObject.REACT_SPECIAL_ATTACK
+		end
+	end
+
+	return reaction
+end
+
 function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 
 	if not my_data then
@@ -87,7 +127,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 
 	if focus_enemy and focus_enemy.nav_tracker and focus_enemy.is_person and AIAttentionObject.REACT_SHOOT <= focus_enemy.reaction and not data.unit:movement():chk_action_forbidden("walk") then
 		if focus_enemy.criminal_record then
-			if focus_enemy.criminal_record.status then
+			if focus_enemy.criminal_record.status and focus_enemy.criminal_record.status ~= "electrified" then
 				return
 			end
 		end
@@ -104,7 +144,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			return true
 		end
 
-		if focus_enemy.verified and ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
+		if ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
 			
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)

@@ -152,6 +152,8 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 			return best_target, 1, AIAttentionObject.REACT_SHOOT
 		end
 	end
+	
+	local has_assault_reaction_target = nil
 
 	for u_key, attention_data in pairs(attention_objects) do
 		local att_unit = attention_data.unit
@@ -233,13 +235,14 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					distance = distance * weight_mul
 				end
 				
-				local near_threshold = data.internal_data.weapon_range.optimal
-				local too_close_threshold = data.internal_data.weapon_range.close
+				local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+				local near_threshold = data.internal_data.weapon_range and data.internal_data.weapon_range.optimal or 1500
+				local too_close_threshold = data.internal_data.weapon_range and data.internal_data.weapon_range.close or 250
 				local assault_reaction = reaction == AIAttentionObject.REACT_SPECIAL_ATTACK
 				local visible = attention_data.verified or attention_data.nearly_visible
 				local near = distance < near_threshold
 				local too_near = distance < too_close_threshold and math.abs(attention_data.m_pos.z - data.m_pos.z) < 250
-				local free_status = status == nil
+				local free_status = status == "electrified" or status == nil
 				local has_damaged = dmg_dt < 5
 				local reviving = nil
 				local focus_enemy = attention_data
@@ -315,18 +318,20 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					if not justtunnel and nr_enemies then
 						if nr_enemies < 4 then
 							target_priority_slot = target_priority_slot - 1
-						elseif nr_enemies > 4 then
-							target_priority_slot = target_priority_slot + 1
-						elseif nr_enemies > 8 then
-							target_priority_slot = target_priority_slot + 2
-						elseif nr_enemies > 13 then
-							target_priority_slot = target_priority_slot + 3
 						elseif nr_enemies > 17 then
 							target_priority_slot = target_priority_slot + 4
+						elseif nr_enemies > 13 then
+							target_priority_slot = target_priority_slot + 3
+						elseif nr_enemies > 8 then
+							target_priority_slot = target_priority_slot + 2
+						elseif nr_enemies > 4 then
+							target_priority_slot = target_priority_slot + 1
 						end
 					end
 					
-					if not free_status and not justtunnel or pantsdownchk and not justharass then
+					if diff_index > 5 and status and status == "electrified" then
+						target_priority_slot = target_priority_slot - 2
+					elseif not free_status and not justtunnel or pantsdownchk and not justharass then
 						target_priority_slot = target_priority_slot + 4
 					end
 					
@@ -349,12 +354,12 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 					end
 						
 					if assault_reaction then
-						target_priority_slot = 1
+						has_assault_reaction_target = true
 					end
 					
 				end
 
-				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.tunnel and not old_enemy_tunnel and not human_chk then
+				if AIAttentionObject.REACT_COMBAT > reaction or data.tactics and data.tactics.tunnel and not old_enemy_tunnel and not human_chk or not assault_reaction and has_assault_reaction_target then
 					target_priority_slot = 20 + target_priority_slot + math.max(0, AIAttentionObject.REACT_COMBAT - reaction)
 				end
 
@@ -386,7 +391,9 @@ end
 function CopLogicIdle.on_alert(data, alert_data)
 	local alert_type = alert_data[1]
 	local alert_unit = alert_data[5]
-
+	
+	data.t = TimerManager:game():time()
+	
 	if CopLogicBase._chk_alert_obstructed(data.unit:movement():m_head_pos(), alert_data) then
 		return
 	end
@@ -407,7 +414,7 @@ function CopLogicIdle.on_alert(data, alert_data)
 		end
 
 		if alert_type == "bullet" or alert_type == "aggression" or alert_type == "explosion" then
-			att_obj_data.alert_t = TimerManager:game():time()
+			att_obj_data.alert_t = data.t
 		end
 
 		local action_data = nil
@@ -445,12 +452,12 @@ end
 function CopLogicIdle.damage_clbk(data, damage_info)
 	local enemy = damage_info.attacker_unit
 	local enemy_data = nil
-
+	data.t = TimerManager:game():time()
 	if enemy and enemy:in_slot(data.enemy_slotmask) then
 		local my_data = data.internal_data
 		local enemy_key = enemy:key()
 		enemy_data = data.detected_attention_objects[enemy_key]
-		local t = TimerManager:game():time()
+		local t = data.t
 
 		if enemy_data then
 

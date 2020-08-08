@@ -1799,6 +1799,7 @@ function CopLogicBase._can_arrest(data)
 end
 
 function CopLogicBase.on_attention_obj_identified(data, attention_u_key, attention_info)
+	data.t = TimerManager:game():time()
 	if data.group then
 		for u_key, u_data in pairs(data.group.units) do
 			if u_key ~= data.key then
@@ -2006,6 +2007,7 @@ function CopLogicBase.on_intimidated(data, amount, aggressor_unit)
 end
 
 function CopLogicBase.on_tied(data, aggressor_unit)
+	data.t = TimerManager:game():time()
 	if data.objective and data.objective_failed_clbk then
 		data.objective_failed_clbk(data.unit, data.objective)
 	end

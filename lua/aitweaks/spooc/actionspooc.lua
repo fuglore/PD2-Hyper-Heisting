@@ -1485,7 +1485,7 @@ function ActionSpooc.chk_can_start_flying_strike(unit, target_unit)
 
 	local target_dis = mvec3_len(target_vec)
 
-	if target_dis > 600 then
+	if target_dis > 1000 then
 		return
 	end
 

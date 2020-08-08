@@ -910,6 +910,13 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				level = tweak_data.narrative.stages.watchdogs_2_n
 			},
 			{
+				stage_id = "election_day_3",
+				add = 8,
+				id = "election_day_3",
+				icon = "csm_election_day_3",
+				level = tweak_data.narrative.stages.election_day_3
+			},
+			{
 				stage_id = "four_stores",
 				add = 5,
 				id = "four_stores",
