@@ -237,32 +237,32 @@ function PlayerStandard:_check_action_jump(t, input)
 		if not action_forbidden then
 			if self._state_data.ducking then
 				self:_interupt_action_ducking(t)
-			else
-				if self._state_data.on_ladder then
-					self:_interupt_action_ladder(t)
-				end
-
-				local action_start_data = {}
-				local jump_vel_z = tweak_data.player.movement_state.standard.movement.jump_velocity.z
-				action_start_data.jump_vel_z = jump_vel_z
-
-				if self._move_dir then
-					local is_running = self._running and self._unit:movement():is_above_stamina_threshold() and t - self._start_running_t > 0.4
-					local jump_vel_xy = 250
-					
-					if math.abs(self._last_velocity_xy:length()) > jump_vel_xy then
-						jump_vel_xy = math.abs(self._last_velocity_xy:length())
-					end
-					
-					action_start_data.jump_vel_xy = jump_vel_xy
-
-					if is_running then
-						self._unit:movement():subtract_stamina(tweak_data.player.movement_state.stamina.JUMP_STAMINA_DRAIN)
-					end
-				end
-
-				new_action = self:_start_action_jump(t, action_start_data)
 			end
+				
+			if self._state_data.on_ladder then
+				self:_interupt_action_ladder(t)
+			end
+
+			local action_start_data = {}
+			local jump_vel_z = tweak_data.player.movement_state.standard.movement.jump_velocity.z
+			action_start_data.jump_vel_z = jump_vel_z
+
+			if self._move_dir then
+				local is_running = self._running and self._unit:movement():is_above_stamina_threshold() and t - self._start_running_t > 0.4
+				local jump_vel_xy = 250
+					
+				if math.abs(self._last_velocity_xy:length()) > jump_vel_xy then
+					jump_vel_xy = math.abs(self._last_velocity_xy:length())
+				end
+					
+				action_start_data.jump_vel_xy = jump_vel_xy
+
+				if is_running then
+					self._unit:movement():subtract_stamina(tweak_data.player.movement_state.stamina.JUMP_STAMINA_DRAIN)
+				end
+			end
+
+			new_action = self:_start_action_jump(t, action_start_data)
 		end
 	end
 
