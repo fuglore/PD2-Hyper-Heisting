@@ -97,7 +97,7 @@ function SpoocLogicAttack._chk_reaction_to_attention_object(data, attention_data
 			return AIAttentionObject.REACT_COMBAT
 		end
 
-		if ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
+		if focus_enemy.verified and ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
 			return AIAttentionObject.REACT_SPECIAL_ATTACK
 		end
 		
@@ -144,7 +144,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 			return true
 		end
 
-		if ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
+		if focus_enemy.verified and ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
 			
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)

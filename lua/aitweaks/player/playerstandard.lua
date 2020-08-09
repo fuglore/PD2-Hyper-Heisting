@@ -1,3 +1,11 @@
+local mvec3_dis_sq = mvector3.distance_sq
+local mvec3_set = mvector3.set
+local mvec3_set_z = mvector3.set_z
+local mvec3_sub = mvector3.subtract
+local mvec3_add = mvector3.add
+local mvec3_mul = mvector3.multiply
+local mvec3_norm = mvector3.normalize
+
 function PlayerStandard:on_melee_stun(t, timer)
 	self:_interupt_action_reload(t)
 	self:_interupt_action_steelsight(t)
@@ -218,6 +226,266 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 	return final_speed
 end
 
+function PlayerStandard:_check_action_jump(t, input)
+	local new_action = nil
+	local action_wanted = input.btn_jump_press
+
+	if action_wanted then
+		local action_forbidden = self._jump_t and t < self._jump_t + 0.55
+		action_forbidden = action_forbidden or self._unit:base():stats_screen_visible() or self._state_data.in_air or self:_interacting() or self:_on_zipline() or self:_does_deploying_limit_movement() or self:_is_using_bipod()
+
+		if not action_forbidden then
+			if self._state_data.ducking then
+				self:_interupt_action_ducking(t)
+			else
+				if self._state_data.on_ladder then
+					self:_interupt_action_ladder(t)
+				end
+
+				local action_start_data = {}
+				local jump_vel_z = tweak_data.player.movement_state.standard.movement.jump_velocity.z
+				action_start_data.jump_vel_z = jump_vel_z
+
+				if self._move_dir then
+					local is_running = self._running and self._unit:movement():is_above_stamina_threshold() and t - self._start_running_t > 0.4
+					local jump_vel_xy = 250
+					
+					if math.abs(self._last_velocity_xy:length()) > jump_vel_xy then
+						jump_vel_xy = math.abs(self._last_velocity_xy:length())
+					end
+					
+					action_start_data.jump_vel_xy = jump_vel_xy
+
+					if is_running then
+						self._unit:movement():subtract_stamina(tweak_data.player.movement_state.stamina.JUMP_STAMINA_DRAIN)
+					end
+				end
+
+				new_action = self:_start_action_jump(t, action_start_data)
+			end
+		end
+	end
+
+	return new_action
+end
+
+function PlayerStandard:_get_deceleration()
+	local speed_tweak = self._tweak_data.movement.speed
+	local movement_speed = speed_tweak.RUNNING_MAX
+	local speed_state = "run"
+
+
+	movement_speed = managers.modifiers:modify_value("PlayerStandard:GetMaxWalkSpeed", movement_speed, self._state_data, speed_tweak)
+	local morale_boost_bonus = self._ext_movement:morale_boost()
+	local multiplier = managers.player:movement_speed_multiplier(speed_state, speed_state and morale_boost_bonus and morale_boost_bonus.move_speed_bonus, nil, self._ext_damage:health_ratio())
+	multiplier = multiplier * (self._tweak_data.movement.multiplier[speed_state] or 1)
+	local apply_weapon_penalty = true
+
+	if self:_is_meleeing() then
+		local melee_entry = managers.blackmarket:equipped_melee_weapon()
+		apply_weapon_penalty = not tweak_data.blackmarket.melee_weapons[melee_entry].stats.remove_weapon_movement_penalty
+	end
+
+	if alive(self._equipped_unit) and apply_weapon_penalty then
+		multiplier = multiplier * self._equipped_unit:base():movement_penalty()
+	end
+
+	if managers.player:has_activate_temporary_upgrade("temporary", "increased_movement_speed") then
+		multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "increased_movement_speed", 1)
+	end
+	
+	if managers.player:has_category_upgrade("player", "criticalmode") then
+		multiplier = multiplier * 1.25
+	end
+	
+	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
+		multiplier = multiplier * managers.player:upgrade_value("player", "perkdeck_movespeed_mult", 1)
+	end
+	
+	local final_speed = movement_speed * multiplier
+	
+	final_speed = final_speed * 2
+	
+	--log("final_speed is" .. final_speed .. "!")
+	
+	return final_speed
+end
+
+local mvec_pos_new = Vector3()
+local mvec_achieved_walk_vel = Vector3()
+local mvec_move_dir_normalized = Vector3()
+
+function PlayerStandard:_update_movement(t, dt)
+	local anim_data = self._unit:anim_data()
+	local weapon_id = alive(self._equipped_unit) and self._equipped_unit:base() and self._equipped_unit:base():get_name_id()
+	local weapon_tweak_data = weapon_id and tweak_data.weapon[weapon_id]
+	local pos_new = nil
+	self._target_headbob = self._target_headbob or 0
+	self._headbob = self._headbob or 0
+	
+	local WALK_SPEED_MAX = self:_get_max_walk_speed(t)
+		
+	if self._running then
+		if self._last_velocity_xy and not mvector3.is_zero(self._last_velocity_xy) then
+			if math.abs(self._last_velocity_xy:length()) > WALK_SPEED_MAX then
+				WALK_SPEED_MAX = math.abs(self._last_velocity_xy:length())
+			end
+		end
+	elseif self._state_data.in_air then
+		if self._jump_vel_xy and not mvector3.is_zero(self._jump_vel_xy) then
+			if math.abs(self._jump_vel_xy:length()) > WALK_SPEED_MAX then
+				WALK_SPEED_MAX = math.abs(self._jump_vel_xy:length())
+			end
+		end
+	end
+	
+	local air_acceleration = 250
+		
+	if self._state_data.in_air then
+		if math.abs(self._last_velocity_xy:length()) > 250 then
+			air_acceleration = math.abs(self._last_velocity_xy:length())
+			WALK_SPEED_MAX = math.abs(self._last_velocity_xy:length())
+		else
+			WALK_SPEED_MAX = 250
+		end
+	end
+
+	if self._state_data.on_zipline and self._state_data.zipline_data.position then
+		local speed = mvector3.length(self._state_data.zipline_data.position - self._pos) / dt / 500
+		pos_new = mvec_pos_new
+
+		mvector3.set(pos_new, self._state_data.zipline_data.position)
+
+		if self._state_data.zipline_data.camera_shake then
+			self._ext_camera:shaker():set_parameter(self._state_data.zipline_data.camera_shake, "amplitude", speed)
+		end
+
+		if alive(self._state_data.zipline_data.zipline_unit) then
+			local dot = mvector3.dot(self._ext_camera:rotation():x(), self._state_data.zipline_data.zipline_unit:zipline():current_direction())
+
+			self._ext_camera:camera_unit():base():set_target_tilt(dot * 10 * speed)
+		end
+
+		self._target_headbob = 0
+	elseif self._move_dir then
+		local enter_moving = not self._moving
+		self._moving = true
+
+		if enter_moving then
+			self._last_sent_pos_t = t
+
+			self:_update_crosshair_offset()
+		end
+
+		mvector3.set(mvec_move_dir_normalized, self._move_dir)
+		mvector3.normalize(mvec_move_dir_normalized)
+
+		local wanted_walk_speed = WALK_SPEED_MAX * math.min(1, self._move_dir:length())
+		
+		local acceleration = self._state_data.in_air and air_acceleration or self._running and 3500 or 1800
+		local achieved_walk_vel = mvec_achieved_walk_vel
+		
+		if self._jump_vel_xy and self._state_data.in_air and mvector3.dot(self._jump_vel_xy, self._last_velocity_xy) > 0 then
+			local input_move_vec = wanted_walk_speed * self._move_dir
+			local jump_dir = mvector3.copy(self._last_velocity_xy)
+			local jump_vel = mvector3.normalize(jump_dir)
+			local fwd_dot = jump_dir:dot(input_move_vec)
+
+			if fwd_dot < jump_vel then
+				local sustain_dot = (input_move_vec:normalized() * jump_vel):dot(jump_dir)
+				local new_move_vec = input_move_vec + jump_dir * (sustain_dot - fwd_dot)
+
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, acceleration * dt)
+			else
+				mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed)
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, wanted_walk_speed * self._move_dir:normalized(), acceleration * dt)
+			end
+
+			local fwd_component = nil
+		else
+			mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed)
+			mvector3.step(achieved_walk_vel, self._last_velocity_xy, mvec_move_dir_normalized, acceleration * dt)
+		end
+
+		if mvector3.is_zero(self._last_velocity_xy) then
+			mvector3.set_length(achieved_walk_vel, math.max(achieved_walk_vel:length(), 100))
+		end
+
+		pos_new = mvec_pos_new
+
+		mvector3.set(pos_new, achieved_walk_vel)
+		mvector3.multiply(pos_new, dt)
+		mvector3.add(pos_new, self._pos)
+
+		self._target_headbob = self:_get_walk_headbob()
+		self._target_headbob = self._target_headbob * self._move_dir:length()
+
+		if weapon_tweak_data and weapon_tweak_data.headbob and weapon_tweak_data.headbob.multiplier then
+			self._target_headbob = self._target_headbob * weapon_tweak_data.headbob.multiplier
+		end
+	elseif not mvector3.is_zero(self._last_velocity_xy) then
+		local decceleration = self._state_data.in_air and air_acceleration * 2 or math.max(WALK_SPEED_MAX * 2, self:_get_deceleration())
+		
+		--log("decceleration is " .. decceleration .. "!")
+		
+		local achieved_walk_vel = math.step(self._last_velocity_xy, Vector3(), decceleration * dt)
+		pos_new = mvec_pos_new
+
+		mvector3.set(pos_new, achieved_walk_vel)
+		mvector3.multiply(pos_new, dt)
+		mvector3.add(pos_new, self._pos)
+
+		self._target_headbob = 0
+	elseif self._moving then
+		self._target_headbob = 0
+		self._moving = false
+
+		self:_update_crosshair_offset()
+	end
+
+	if self._headbob ~= self._target_headbob then
+		local ratio = 4
+
+		if weapon_tweak_data and weapon_tweak_data.headbob and weapon_tweak_data.headbob.speed_ratio then
+			ratio = weapon_tweak_data.headbob.speed_ratio
+		end
+
+		self._headbob = math.step(self._headbob, self._target_headbob, dt / ratio)
+
+		self._ext_camera:set_shaker_parameter("headbob", "amplitude", self._headbob)
+	end
+
+	local ground_z = self:_chk_floor_moving_pos()
+
+	if ground_z and not self._is_jumping then
+		if not pos_new then
+			pos_new = mvec_pos_new
+
+			mvector3.set(pos_new, self._pos)
+		end
+
+		mvector3.set_z(pos_new, ground_z)
+	end
+
+	if pos_new then
+		self._unit:movement():set_position(pos_new)
+		mvector3.set(self._last_velocity_xy, pos_new)
+		mvector3.subtract(self._last_velocity_xy, self._pos)
+
+		if not self._state_data.on_ladder and not self._state_data.on_zipline then
+			mvector3.set_z(self._last_velocity_xy, 0)
+		end
+
+		mvector3.divide(self._last_velocity_xy, dt)
+	else
+		mvector3.set_static(self._last_velocity_xy, 0, 0, 0)
+	end
+
+	local cur_pos = pos_new or self._pos
+
+	self:_update_network_jump(cur_pos, false)
+	self:_update_network_position(t, dt, cur_pos, pos_new)
+end
 
 function PlayerStandard:_play_interact_redirect(t)
 	if self._shooting or not self._equipped_unit:base():start_shooting_allowed() then

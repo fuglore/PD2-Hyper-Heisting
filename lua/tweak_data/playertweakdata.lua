@@ -1,6 +1,7 @@
 Hooks:PostHook(PlayerTweakData, "init", "hhplayertweakbullshit", function(self, tweak_data)
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		self.put_on_mask_time = 1
+		self.movement_state.standard.movement.jump_velocity.xy.walk = self.movement_state.standard.movement.speed.STANDARD_MAX
 	end
 end)
 
