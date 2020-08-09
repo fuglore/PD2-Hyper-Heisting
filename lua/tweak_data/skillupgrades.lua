@@ -1,5 +1,4 @@
 Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_data)
-	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		self.values.player.body_armor = {
 			armor = {
 				0,
@@ -186,8 +185,6 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
-	end
-	
 	self.values.player.passive_health_multiplier = {
 		1.05,
 		1.1,
@@ -199,7 +196,6 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		0.005
 	}
 		
-	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then		
 		--fuck you you piece of shit i'm not doing all this shit to make you function properly you fuck i hate your guts i hate you i hate you FUCK YOU
 		
 		--[[ note if anyone wants to actually fix this: this is supposed to stack with the perk deck speed bonus which is why i did this.
@@ -302,6 +298,33 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
+		--WAVE DASH BASIC
+		self.values.player.wavedash = {
+			true
+		}
+		self.definitions.player_wavedash = {
+			name_id = "menu_wavedash",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "wavedash",
+				category = "player"
+			}
+		}
+		
+		self.values.player.start_action_stam_drain_reduct = {
+			true
+		}
+		self.definitions.player_start_action_stam_drain_reduct = {
+			name_id = "menu_start_action_stam_drain_reduct",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "start_action_stam_drain_reduct",
+				category = "player"
+			}
+		}
+		
 		--Something To Prove
 		
 		self.values.player.max_health_reduction = {
@@ -391,6 +414,4 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				category = "player"
 			}
 		}
-		
-	end
 end)

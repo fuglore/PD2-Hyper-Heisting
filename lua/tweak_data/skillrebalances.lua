@@ -2,6 +2,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		table.insert(self.default_upgrades, "carry_movement_penalty_nullifier")		
 		table.insert(self.default_upgrades, "player_pick_lock_easy_speed_multiplier_1")
+		table.insert(self.default_upgrades, "player_can_free_run")
+		table.insert(self.default_upgrades, "player_run_and_reload")
 		
 		self.skills.second_chances[2].upgrades = {"player_pick_lock_easy_speed_multiplier_2", "player_pick_lock_hard"}
 		
@@ -103,6 +105,28 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			icon_xy = {
 				2,
 				9
+			}
+		}
+		
+		--nice name, "awareness", like, you can totally tell this fucking skilltree didnt go through 30 iterations
+		self.skills.awareness = {
+			{
+				upgrades = {
+					"player_wavedash"
+				},
+				cost = self.costs.default
+			},
+			{
+				upgrades = {
+					"start_action_stam_drain_reduct"
+				},
+				cost = self.costs.pro
+			},
+			name_id = "menu_awareness_beta",
+			desc_id = "menu_awareness_beta_desc",
+			icon_xy = {
+				10,
+				6
 			}
 		}
 		

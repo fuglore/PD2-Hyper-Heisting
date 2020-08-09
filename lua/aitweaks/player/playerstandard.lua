@@ -192,6 +192,12 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 	local multiplier = managers.player:movement_speed_multiplier(speed_state, speed_state and morale_boost_bonus and morale_boost_bonus.move_speed_bonus, nil, self._ext_damage:health_ratio())
 	multiplier = multiplier * (self._tweak_data.movement.multiplier[speed_state] or 1)
 	local apply_weapon_penalty = true
+	
+	if speed_state == "climb" then
+		multiplier = multiplier * 1.2
+	else
+		multiplier = 1.1
+	end
 
 	if self:_is_meleeing() then
 		local melee_entry = managers.blackmarket:equipped_melee_weapon()
@@ -210,13 +216,18 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 		multiplier = multiplier * 1.25
 	end
 	
+	if self._wave_dash_t and self._running then
+		multiplier = multiplier * 2
+	end
+	
 	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
 		multiplier = multiplier * managers.player:upgrade_value("player", "perkdeck_movespeed_mult", 1)
 	end
 	
 	local final_speed = movement_speed * multiplier
+	--log("speed is " .. final_speed .. "!")
 	self._cached_final_speed = self._cached_final_speed or 0
-
+	
 	if final_speed ~= self._cached_final_speed then
 		self._cached_final_speed = final_speed
 
@@ -258,7 +269,13 @@ function PlayerStandard:_check_action_jump(t, input)
 				action_start_data.jump_vel_xy = jump_vel_xy
 
 				if is_running then
-					self._unit:movement():subtract_stamina(tweak_data.player.movement_state.stamina.JUMP_STAMINA_DRAIN)
+					local stamina_subtraction = tweak_data.player.movement_state.stamina.JUMP_STAMINA_DRAIN
+					
+					if managers.player:has_category_upgrade("player", "start_action_stam_drain_reduct") then
+						stamina_subtraction = stamina_subtraction * 0.5
+					end
+					
+					self._unit:movement():subtract_stamina(stamina_subtraction)
 				end
 			end
 
@@ -274,12 +291,17 @@ function PlayerStandard:_get_deceleration()
 	local movement_speed = speed_tweak.RUNNING_MAX
 	local speed_state = "run"
 
-
 	movement_speed = managers.modifiers:modify_value("PlayerStandard:GetMaxWalkSpeed", movement_speed, self._state_data, speed_tweak)
 	local morale_boost_bonus = self._ext_movement:morale_boost()
 	local multiplier = managers.player:movement_speed_multiplier(speed_state, speed_state and morale_boost_bonus and morale_boost_bonus.move_speed_bonus, nil, self._ext_damage:health_ratio())
 	multiplier = multiplier * (self._tweak_data.movement.multiplier[speed_state] or 1)
 	local apply_weapon_penalty = true
+
+	if speed_state == "climb" then
+		multiplier = multiplier * 1.2
+	else
+		multiplier = 1.1
+	end
 
 	if self:_is_meleeing() then
 		local melee_entry = managers.blackmarket:equipped_melee_weapon()
@@ -298,6 +320,10 @@ function PlayerStandard:_get_deceleration()
 		multiplier = multiplier * 1.25
 	end
 	
+	if self._wave_dash_t and self._running then
+		multiplier = multiplier * 2
+	end
+	
 	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
 		multiplier = multiplier * managers.player:upgrade_value("player", "perkdeck_movespeed_mult", 1)
 	end
@@ -306,14 +332,57 @@ function PlayerStandard:_get_deceleration()
 	
 	final_speed = final_speed * 2
 	
-	--log("final_speed is" .. final_speed .. "!")
-	
 	return final_speed
 end
 
 local mvec_pos_new = Vector3()
 local mvec_achieved_walk_vel = Vector3()
 local mvec_move_dir_normalized = Vector3()
+
+function PlayerStandard:_check_action_duck(t, input)
+	if self:_is_using_bipod() then
+		return
+	end
+
+	if self._setting_hold_to_duck and input.btn_duck_release then
+		if self._state_data.ducking then
+			self:_end_action_ducking(t)
+		end
+	elseif input.btn_duck_press and not self._unit:base():stats_screen_visible() then
+		if not self._state_data.ducking then
+			if self._running then
+				self.is_sliding = true
+				if self._wave_dash_t then
+					self.is_wave_dash_slide = true
+				end
+			end
+			self:_start_action_ducking(t)
+		elseif self._state_data.ducking then
+			self:_end_action_ducking(t)
+		end
+	end
+end
+
+function PlayerStandard:_end_action_ducking(t, skip_can_stand_check)
+	if not skip_can_stand_check and not self:_can_stand() then
+		return
+	end
+
+	self._state_data.ducking = false
+	self.is_sliding = nil
+	self._slide_acceleration = nil
+	self.is_wave_dash_slide = nil
+	self.wave_slide_acceleration = nil
+	self:_stance_entered()
+	self:_update_crosshair_offset()
+
+	local velocity = self._unit:mover():velocity()
+
+	self._unit:kill_mover()
+	self:_activate_mover(PlayerStandard.MOVER_STAND, velocity)
+	self._ext_network:send("action_change_pose", 1, self._unit:position())
+	self:_upd_attention()
+end
 
 function PlayerStandard:_update_movement(t, dt)
 	local anim_data = self._unit:anim_data()
@@ -326,11 +395,7 @@ function PlayerStandard:_update_movement(t, dt)
 	local WALK_SPEED_MAX = self:_get_max_walk_speed(t)
 		
 	if self._running then
-		if self._last_velocity_xy and not mvector3.is_zero(self._last_velocity_xy) then
-			if math.abs(self._last_velocity_xy:length()) > WALK_SPEED_MAX then
-				WALK_SPEED_MAX = math.abs(self._last_velocity_xy:length())
-			end
-		end
+		
 	elseif self._state_data.in_air then
 		if self._jump_vel_xy and not mvector3.is_zero(self._jump_vel_xy) then
 			if math.abs(self._jump_vel_xy:length()) > WALK_SPEED_MAX then
@@ -347,6 +412,37 @@ function PlayerStandard:_update_movement(t, dt)
 			WALK_SPEED_MAX = math.abs(self._last_velocity_xy:length())
 		else
 			WALK_SPEED_MAX = 250
+		end
+	end
+	
+	local acceleration = self._running and 3500 or 1800
+	local decceleration = acceleration * 1.25
+	
+	if self._state_data.in_air then
+		acceleration = air_acceleration
+		decceleration = acceleration * 1.25
+	elseif self._state_data.ducking and self.is_sliding then
+		if math.abs(self._last_velocity_xy:length()) > WALK_SPEED_MAX then
+			if self.is_wave_dash_slide then
+				if not self.wave_slide_acceleration then
+					self.wave_slide_acceleration = math.abs(self._last_velocity_xy:length()) + WALK_SPEED_MAX
+				end
+				acceleration = self.wave_slide_acceleration * 0.75
+				decceleration = self.wave_slide_acceleration * 0.75
+				--log("wave")
+			else
+				if not self._slide_acceleration then
+					self._slide_acceleration = math.abs(self._last_velocity_xy:length()) + WALK_SPEED_MAX
+				end
+				acceleration = self._slide_acceleration * 0.5
+				decceleration = self._slide_acceleration * 0.5			
+				--log("wave'nt")
+			end
+		else
+			self.is_sliding = nil
+			self._slide_acceleration = nil
+			self.is_wave_dash_slide = nil
+			self.wave_slide_acceleration = nil
 		end
 	end
 
@@ -382,8 +478,21 @@ function PlayerStandard:_update_movement(t, dt)
 
 		local wanted_walk_speed = WALK_SPEED_MAX * math.min(1, self._move_dir:length())
 		
-		local acceleration = self._state_data.in_air and air_acceleration or self._running and 3500 or 1800
 		local achieved_walk_vel = mvec_achieved_walk_vel
+		
+		if self._running and self._wave_dash_t and not self.is_sliding then
+			acceleration = acceleration + wanted_walk_speed
+			decceleration = decceleration + wanted_walk_speed
+		end
+		
+		local lleration = acceleration
+		
+		if math.abs(self._last_velocity_xy:length()) > wanted_walk_speed then
+			--log("deccelerate!")
+			lleration = decceleration
+		end
+		
+		--log("lleration: " .. lleration .. "")
 		
 		if self._jump_vel_xy and self._state_data.in_air and mvector3.dot(self._jump_vel_xy, self._last_velocity_xy) > 0 then
 			local input_move_vec = wanted_walk_speed * self._move_dir
@@ -395,20 +504,24 @@ function PlayerStandard:_update_movement(t, dt)
 				local sustain_dot = (input_move_vec:normalized() * jump_vel):dot(jump_dir)
 				local new_move_vec = input_move_vec + jump_dir * (sustain_dot - fwd_dot)
 
-				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, acceleration * dt)
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, lleration * dt)
 			else
 				mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed)
-				mvector3.step(achieved_walk_vel, self._last_velocity_xy, wanted_walk_speed * self._move_dir:normalized(), acceleration * dt)
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, wanted_walk_speed * self._move_dir:normalized(), lleration * dt)
 			end
 
 			local fwd_component = nil
 		else
 			mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed)
-			mvector3.step(achieved_walk_vel, self._last_velocity_xy, mvec_move_dir_normalized, acceleration * dt)
+			mvector3.step(achieved_walk_vel, self._last_velocity_xy, mvec_move_dir_normalized, lleration * dt)
+		end
+		
+		if self.is_sliding then
+			--log("current speed is " .. math.abs(self._last_velocity_xy:length()) .. "!")
 		end
 
 		if mvector3.is_zero(self._last_velocity_xy) then
-			mvector3.set_length(achieved_walk_vel, math.max(achieved_walk_vel:length(), 100))
+			mvector3.set_length(achieved_walk_vel, math.max(achieved_walk_vel:length(), 1))
 		end
 
 		pos_new = mvec_pos_new
@@ -424,9 +537,10 @@ function PlayerStandard:_update_movement(t, dt)
 			self._target_headbob = self._target_headbob * weapon_tweak_data.headbob.multiplier
 		end
 	elseif not mvector3.is_zero(self._last_velocity_xy) then
-		local decceleration = self._state_data.in_air and air_acceleration * 2 or math.max(WALK_SPEED_MAX * 2, self:_get_deceleration())
 		
-		--log("decceleration is " .. decceleration .. "!")
+		if self.is_sliding then
+			--log("current speed is " .. math.abs(self._last_velocity_xy:length()) .. "!")
+		end
 		
 		local achieved_walk_vel = math.step(self._last_velocity_xy, Vector3(), decceleration * dt)
 		pos_new = mvec_pos_new
@@ -439,6 +553,12 @@ function PlayerStandard:_update_movement(t, dt)
 	elseif self._moving then
 		self._target_headbob = 0
 		self._moving = false
+		
+		self.is_sliding = nil
+		self._slide_acceleration = nil
+		self.is_wave_dash_slide = nil
+		self.wave_slide_acceleration = nil
+		--log("current speed is " .. math.abs(self._last_velocity_xy:length()) .. "!")
 
 		self:_update_crosshair_offset()
 	end
@@ -485,6 +605,165 @@ function PlayerStandard:_update_movement(t, dt)
 
 	self:_update_network_jump(cur_pos, false)
 	self:_update_network_position(t, dt, cur_pos, pos_new)
+end
+
+function PlayerStandard:_start_action_melee(t, input, instant)
+	self._equipped_unit:base():tweak_data_anim_stop("fire")
+	self:_interupt_action_reload(t)
+	self:_interupt_action_steelsight(t)
+	--self:_interupt_action_running(t)
+	self:_interupt_action_charging_weapon(t)
+
+	self._state_data.melee_charge_wanted = nil
+	self._state_data.meleeing = true
+	self._state_data.melee_start_t = nil
+	local melee_entry = managers.blackmarket:equipped_melee_weapon()
+	local primary = managers.blackmarket:equipped_primary()
+	local primary_id = primary.weapon_id
+	local bayonet_id = managers.blackmarket:equipped_bayonet(primary_id)
+	local bayonet_melee = false
+
+	if bayonet_id and melee_entry == "weapon" and self._equipped_unit:base():selection_index() == 2 then
+		bayonet_melee = true
+	end
+
+	if instant then
+		self:_do_action_melee(t, input)
+
+		return
+	end
+
+	self:_stance_entered()
+
+	if self._state_data.melee_global_value then
+		self._camera_unit:anim_state_machine():set_global(self._state_data.melee_global_value, 0)
+	end
+
+	local melee_entry = managers.blackmarket:equipped_melee_weapon()
+	self._state_data.melee_global_value = tweak_data.blackmarket.melee_weapons[melee_entry].anim_global_param
+
+	self._camera_unit:anim_state_machine():set_global(self._state_data.melee_global_value, 1)
+
+	local current_state_name = self._camera_unit:anim_state_machine():segment_state(self:get_animation("base"))
+	local attack_allowed_expire_t = tweak_data.blackmarket.melee_weapons[melee_entry].attack_allowed_expire_t or 0.15
+	self._state_data.melee_attack_allowed_t = t + (current_state_name ~= self:get_animation("melee_attack_state") and attack_allowed_expire_t or 0)
+	local instant_hit = tweak_data.blackmarket.melee_weapons[melee_entry].instant
+
+	if not instant_hit then
+		self._ext_network:send("sync_melee_start", 0)
+	end
+
+	if current_state_name == self:get_animation("melee_attack_state") then
+		self._ext_camera:play_redirect(self:get_animation("melee_charge"))
+
+		return
+	end
+
+	local offset = nil
+
+	if current_state_name == self:get_animation("melee_exit_state") then
+		local segment_relative_time = self._camera_unit:anim_state_machine():segment_relative_time(self:get_animation("base"))
+		offset = (1 - segment_relative_time) * 0.9
+	end
+
+	offset = math.max(offset or 0, attack_allowed_expire_t)
+
+	self._ext_camera:play_redirect(self:get_animation("melee_enter"), nil, offset)
+end
+
+function PlayerStandard:_start_action_running(t)
+	if not self._move_dir then
+		self._running_wanted = true
+
+		return
+	end
+
+	if self:on_ladder() or self:_on_zipline() then
+		return
+	end
+
+	if self._shooting and not self._equipped_unit:base():run_and_shoot_allowed() or self:_changing_weapon() or self._use_item_expire_t or self._state_data.in_air or self:_is_throwing_projectile() or self:_is_charging_weapon() then
+		self._running_wanted = true
+
+		return
+	end
+
+	if self._state_data.ducking and not self:_can_stand() then
+		self._running_wanted = true
+
+		return
+	end
+
+	if not self:_can_run_directional() then
+		return
+	end
+
+	self._running_wanted = false
+
+	if managers.player:get_player_rule("no_run") then
+		return
+	end
+
+	if not self._unit:movement():is_above_stamina_threshold() then
+		return
+	end
+
+	if (not self._state_data.shake_player_start_running or not self._ext_camera:shaker():is_playing(self._state_data.shake_player_start_running)) and managers.user:get_setting("use_headbob") then
+		if managers.player:has_category_upgrade("player", "wavedash") then
+			self._state_data.shake_player_start_running = self._ext_camera:play_shaker("player_start_running", 1)
+		else
+			self._state_data.shake_player_start_running = self._ext_camera:play_shaker("player_start_running", 0.75)
+		end
+	end
+	
+	local stamina_subtraction = tweak_data.player.movement_state.stamina.JUMP_STAMINA_DRAIN
+					
+	if managers.player:has_category_upgrade("player", "start_action_stam_drain_reduct") then
+		stamina_subtraction = stamina_subtraction * 0.5
+	end
+	
+	self._unit:movement():subtract_stamina(stamina_subtraction)
+
+	self:set_running(true)
+	
+	local testing = true
+	
+	if managers.player:has_category_upgrade("player", "wavedash") then
+		self._wave_dash_t = t + 0.3
+	end
+
+	self._end_running_expire_t = nil
+	self._start_running_t = t
+	self._play_stop_running_anim = nil
+
+	if not self:_is_reloading() or not self.RUN_AND_RELOAD then
+		if not self._equipped_unit:base():run_and_shoot_allowed() and not self:_is_meleeing() then
+			self._ext_camera:play_redirect(self:get_animation("start_running"))
+		else
+			if not self:_is_meleeing() then
+				self._ext_camera:play_redirect(self:get_animation("idle"))
+			end
+		end
+	end
+
+	if not self.RUN_AND_RELOAD then
+		self:_interupt_action_reload(t)
+	end
+
+	self:_interupt_action_steelsight(t)
+	self:_interupt_action_ducking(t)
+end
+
+function PlayerStandard:_end_action_running(t)
+	if not self._end_running_expire_t then
+		local speed_multiplier = self._equipped_unit:base():exit_run_speed_multiplier()
+		self._end_running_expire_t = t + 0.4 / speed_multiplier
+		local stop_running = not self._equipped_unit:base():run_and_shoot_allowed() and (not self.RUN_AND_RELOAD or not self:_is_reloading()) and not self:_is_meleeing()
+
+		if stop_running then
+			self._ext_camera:play_redirect(self:get_animation("stop_running"), speed_multiplier)
+		end
+	end
 end
 
 function PlayerStandard:_play_interact_redirect(t)
@@ -912,6 +1191,11 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	if self._melee_stunned and not self._melee_stunned_expire_t or self._melee_stunned_expire_t and self._melee_stunned_expire_t < t then
 		self._melee_stunned = nil
 		self:end_melee_stun()
+	end
+	
+	if self._wave_dash_t and self._wave_dash_t < t then
+		self._wave_dash_t = nil
+		self._speed_is_wavedash_boost = nil
 	end
 	
 	self:_update_interaction_timers(t)
