@@ -17,7 +17,7 @@
 	<model path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump" />	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"/>	
 
-	<!--Vanilla Murky Sniper(for packages)-->
+	<!-- Murky Sniper(for packages)-->
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper_husk" load="true"/>	
 	<material_config path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>
@@ -25,6 +25,12 @@
 	<object path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>
 	<model path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>	
+	
+	<!-- fixed alpha channel for this man's head -->
+	<texture path="units/pd2_mod_psc/characters/ene_murkywater_sniper/material_head_df"/>	
+	
+	<!--acc sniper-->
+	<unit_obj path="units/pd2_mod_psc/characters/ene_acc_dr_bob/ene_acc_dr_bob" />
 
 	<!--Vanilla Murky Tazer(for packages)-->
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer" load="true"/>
@@ -247,7 +253,7 @@
 	<texture path="units/pd2_mod_psc/characters/shared_textures/heads_atlas_df" />	
 	<texture path="units/pd2_mod_psc/characters/shared_textures/heads_atlas_nm" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/sam_head_df" />		
-	<texture path="units/pd2_mod_psc/characters/shared_textures/sam_head_nm" />		
+	<!-- <texture path="units/pd2_mod_psc/characters/shared_textures/sam_head_nm" />		 -->
 	<texture path="units/pd2_mod_psc/characters/shared_textures/shotgun_hood_df" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/shotgun_hood_nm" />		
 	<texture path="units/pd2_mod_psc/characters/shared_textures/helmet_tanker_df" />		
