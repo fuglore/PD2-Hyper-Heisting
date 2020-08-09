@@ -8,6 +8,11 @@ function PlayerCarry:_update_check_actions(t, dt)
 		self:end_melee_stun()
 	end
 	
+	if self._wave_dash_t and self._wave_dash_t < t then
+		self._wave_dash_t = nil
+		self._speed_is_wavedash_boost = nil
+	end
+	
 	self:_update_interaction_timers(t)
 	self:_update_throw_projectile_timers(t, input)
 	self:_update_reload_timers(t, dt, input)
