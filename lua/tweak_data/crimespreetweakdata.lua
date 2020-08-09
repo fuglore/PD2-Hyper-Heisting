@@ -794,9 +794,7 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				id = "mia_2",
 				icon = "csm_miami_2",
 				level = tweak_data.narrative.stages.mia_2
-			}
-		},
-		{
+			},
 			{
 				stage_id = "pbr2",
 				add = 10,
@@ -906,21 +904,21 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				stage_id = "watchdogs_2_n",
 				add = 10,
 				id = "watchdogs_2_n",
-				icon = "csm_watchdogs_2_n",
+				icon = "csm_watchdogs_02",
 				level = tweak_data.narrative.stages.watchdogs_2_n
 			},
 			{
 				stage_id = "election_day_3",
 				add = 8,
 				id = "election_day_3",
-				icon = "csm_election_day_3",
+				icon = "csm_electionday_03",
 				level = tweak_data.narrative.stages.election_day_3
 			},
 			{
 				stage_id = "four_stores",
 				add = 5,
 				id = "four_stores",
-				icon = "csm_four_stores",
+				icon = "csm_fourstores",
 				level = tweak_data.narrative.stages.four_stores
 			},
 			{
@@ -929,6 +927,13 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				id = "shoutout_raid",
 				icon = "csm_shoutout_raid",
 				level = tweak_data.narrative.stages.shoutout_raid
+			},
+			{	
+				stage_id = "sah",
+				add = 10,
+				id = "sah",
+				icon = "csm_sah",
+				level = tweak_data.narrative.stages.sah
 			},
 			{
 				stage_id = "nmh_hyper",
