@@ -49,6 +49,10 @@ function LevelsTweakData:init()
 	self.pex.package = {"packages/mexicoassets", "packages/job_pex"}
 	self.skm_bex.package = {"packages/mexicoassets", "packages/dlcs/skm/job_bex_skm"}
 	
+	if self.nmh_hyper then
+		self.nmh_hyper.package = {"packages/dlcs/nmh/job_nmh", "packages/murkyassets"}
+	end
+	
 	--fix missing ganster vo, ty rino
 	self.short2_stage1.package = {"packages/job_short2_stage1", "levels/narratives/dentist/mia/stage2/world_sounds"}
 	self.nightclub.package = {"packages/vlad_nightclub", "levels/narratives/dentist/mia/stage2/world_sounds"}
