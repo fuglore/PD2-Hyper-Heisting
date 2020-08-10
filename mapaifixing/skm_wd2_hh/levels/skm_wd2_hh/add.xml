@@ -19,6 +19,5 @@
 	<add path="effects/particles/rain/rain_only" type="effect">
 		<effect load="true" path="effects/particles/rain/rain_only" unload="true"/>
 	</add>
-	<texture path="levels/mods/skm_wd2_hh/cubemaps/100032"/>
-	<texture path="levels/mods/skm_wd2_hh/cubemaps/5"/>
+
 </table>

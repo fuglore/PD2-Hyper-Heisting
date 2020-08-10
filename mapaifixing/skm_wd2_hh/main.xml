@@ -48,7 +48,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" debrief_event="pln_fwb_34" icon="guis/dlcs/shl/textures/pd2/crimenet/skm_watchdogs" id="skm_watchdogs_stage2" jc="60" name_id="heist_skm_watchdogs_stage2" region="street" max_mission_xp="135900" min_mission_xp="8000">
+	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" debrief_event="pln_fwb_34" icon="guis/dlcs/shl/textures/pd2/crimenet/skm_watchdogs" id="skm_watchdogs_stage2" jc="60" max_mission_xp="135900" min_mission_xp="8000" name_id="heist_skm_watchdogs_stage2" region="street">
 		<chain>
 			<table level_id="skm_wd2_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
