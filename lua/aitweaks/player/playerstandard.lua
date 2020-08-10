@@ -427,15 +427,15 @@ function PlayerStandard:_update_movement(t, dt)
 				if not self.wave_slide_acceleration then
 					self.wave_slide_acceleration = math.abs(self._last_velocity_xy:length()) + WALK_SPEED_MAX
 				end
-				acceleration = self.wave_slide_acceleration * 0.75
-				decceleration = self.wave_slide_acceleration * 0.75
+				acceleration = self.wave_slide_acceleration * 0.9
+				decceleration = self.wave_slide_acceleration * 0.9
 				--log("wave")
 			else
 				if not self._slide_acceleration then
 					self._slide_acceleration = math.abs(self._last_velocity_xy:length()) + WALK_SPEED_MAX
 				end
-				acceleration = self._slide_acceleration * 0.5
-				decceleration = self._slide_acceleration * 0.5			
+				acceleration = self._slide_acceleration * 0.8
+				decceleration = self._slide_acceleration * 0.8			
 				--log("wave'nt")
 			end
 		else
@@ -669,6 +669,95 @@ function PlayerStandard:_start_action_melee(t, input, instant)
 	offset = math.max(offset or 0, attack_allowed_expire_t)
 
 	self._ext_camera:play_redirect(self:get_animation("melee_enter"), nil, offset)
+end
+
+function PlayerStandard:_check_action_run(t, input)
+	if self._setting_hold_to_run and input.btn_run_release or self._running and not self._move_dir then
+		self._running_wanted = false
+
+		if self._running then
+			self:_end_action_running(t)
+
+			if input.btn_steelsight_state and not self._state_data.in_steelsight then
+				self._steelsight_wanted = true
+			end
+		end
+	elseif not self._setting_hold_to_run and not self._move_dir then
+		self._running_wanted = false
+	elseif input.btn_run_press or self._running_wanted then
+		if not self._running or self._end_running_expire_t then
+			self:_start_action_running(t)
+		elseif self._running and not self._setting_hold_to_run then
+			self:_end_action_running(t)
+
+			if input.btn_steelsight_state and not self._state_data.in_steelsight then
+				self._steelsight_wanted = true
+			end
+		end
+	end
+end
+
+function PlayerStandard:_update_foley(t, input)
+	if self._state_data.on_zipline then
+		return
+	end
+
+	if not self._gnd_ray and not self._state_data.on_ladder then
+		if not self._state_data.in_air then
+			self._state_data.in_air = true
+			self._state_data.enter_air_pos_z = self._pos.z
+
+			self:_interupt_action_running(t)
+			self._unit:set_driving("orientation_object") -- i wonder what its like to constantly have this on lol
+		end
+	elseif self._state_data.in_air then
+		self._unit:set_driving("script")
+
+		self._state_data.in_air = false
+		local from = self._pos + math.UP * 10
+		local to = self._pos - math.UP * 60
+		local material_name, pos, norm = World:pick_decal_material(from, to, self._slotmask_bullet_impact_targets)
+
+		self._unit:sound():play_land(material_name)
+
+		if self._unit:character_damage():damage_fall({
+			height = self._state_data.enter_air_pos_z - self._pos.z
+		}) then
+			--self._running_wanted = false
+
+			managers.rumble:play("hard_land")
+			self._ext_camera:play_shaker("player_fall_damage")
+			self:_start_action_ducking(t)
+		elseif input.btn_run_state then
+			--self._running_wanted = true
+		end
+	
+		self._jump_t = nil
+		self._jump_vel_xy = nil
+
+		self._ext_camera:play_shaker("player_land", 0.5)
+		managers.rumble:play("land")
+	elseif self._jump_vel_xy and t - self._jump_t > 0.3 then
+		self._jump_vel_xy = nil
+		
+		if self._move_dir and self._running then -- if you're holding down a direction to move in and you were already sprinting, continue, otherwise, wait until landing to register anything
+			if self._setting_hold_to_run and input.btn_run_release then
+				self._running_wanted = false
+			else
+				self._running_wanted = true
+			end
+				
+			if not self._setting_hold_to_run and input.btn_run_press and self._running_wanted then
+				self._running_wanted = false
+			else
+				self._running_wanted = true
+			end
+		else
+			self._running_wanted = false
+		end
+	end
+
+	self:_check_step(t)
 end
 
 function PlayerStandard:_start_action_running(t)
