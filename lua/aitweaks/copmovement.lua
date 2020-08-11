@@ -1063,6 +1063,8 @@ function CopMovement:sync_action_spooc_stop(pos, nav_index, action_id)
 	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
 
 	if is_queued then
+		spooc_action.host_expired = true
+
 		if spooc_action.host_stop_pos_inserted then
 			nav_index = nav_index + spooc_action.host_stop_pos_inserted
 		end
@@ -1079,27 +1081,11 @@ function CopMovement:sync_action_spooc_stop(pos, nav_index, action_id)
 			spooc_action.nr_expected_nav_points = nav_index - #nav_path + 1
 		else
 			table.insert(nav_path, pos)
-		end
 
-		spooc_action.path_index = math.max(1, math.min(spooc_action.path_index, #nav_path - 1))
-
-		if not spooc_action.flying_strike and spooc_action.blocks then
-			spooc_action.blocks.idle = nil
+			spooc_action.path_index = math.max(1, math.min(spooc_action.path_index, #nav_path - 1))
 		end
 	elseif spooc_action then
-		if not spooc_action:is_flying_strike() and spooc_action._blocks then
-			spooc_action._blocks.idle = nil
-		end
-
-		if Network:is_server() then
-			self:action_request({
-				sync = true,
-				body_part = 1,
-				type = "idle"
-			})
-		else
-			spooc_action:sync_stop(pos, nav_index)
-		end
+		spooc_action:sync_stop(pos, nav_index)
 	end
 end
 
