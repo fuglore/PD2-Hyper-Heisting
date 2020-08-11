@@ -207,6 +207,22 @@
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper",
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"
 		}
+	local zombie_sniper2 = {
+			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2",
+			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2",
+			--снајпер је готов, посебно време и такође полиција
+			["units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"] = "units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_1/ene_bulldozer_hvh_1",	
+			["units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"] = "units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_2/ene_bulldozer_hvh_2",						
+			["units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"] = "units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_3/ene_bulldozer_hvh_3",
+			["units/payday2/characters/ene_swat_1/ene_swat_1"] = "units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1",
+			["units/payday2/characters/ene_swat_2/ene_swat_2"] = "units/pd2_dlc_hvh/characters/ene_swat_hvh_2/ene_swat_hvh_2",
+			["units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"] = "units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1",
+			["units/payday2/characters/ene_fbi_swat_2/ene_fbi_swat_2"] = "units/pd2_dlc_hvh/characters/ene_swat_hvh_2/ene_swat_hvh_2",
+			["units/payday2/characters/ene_spook_1/ene_spook_1"] = "units/pd2_dlc_hvh/characters/ene_spook_hvh_1/ene_spook_hvh_1",
+			["units/payday2/characters/ene_tazer_1/ene_tazer_1"] = "units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1",
+			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/pd2_dlc_hvh/characters/ene_shield_hvh_1/ene_shield_hvh_1",
+			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/pd2_dlc_hvh/characters/ene_shield_hvh_2/ene_shield_hvh_2"
+		}										
 	local sniper_cumsec = {
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper",
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper"
@@ -378,6 +394,14 @@ function ElementSpawnEnemyDummy:init(...)
 				self._values.enemy = federales[self._values.enemy] or self._values.enemy
 			end
 		end
+
+	if ai_type == "zombie" then
+		if zombie_sniper2[self._values.enemy] then
+			self._values.enemy = zombie_sniper2[self._values.enemy]
+		end
+		
+		self._values.enemy = zombie_sniper2[self._values.enemy] or self._values.enemy
+	end
 
 	
 	if job == "firestarter_1" or job == "firestarter_2" or job == "alex_3" or job == "hox_2" or job == "hox_3" or job == "watchdogs2" then  --FBI-related heists
