@@ -217,7 +217,7 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 	end
 	
 	if self._wave_dash_t and self._running then
-		multiplier = multiplier * 1.25
+		multiplier = multiplier * 1.5
 	end
 	
 	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
@@ -321,7 +321,7 @@ function PlayerStandard:_get_deceleration()
 	end
 	
 	if self._wave_dash_t and self._running then
-		multiplier = multiplier * 1.25
+		multiplier = multiplier * 1.5
 	end
 	
 	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
@@ -818,7 +818,7 @@ function PlayerStandard:_start_action_running(t)
 	local testing = true
 	
 	if managers.player:has_category_upgrade("player", "wavedash") then
-		self._wave_dash_t = t + 0.1
+		self._wave_dash_t = t + 0.3
 	end
 
 	self._end_running_expire_t = nil

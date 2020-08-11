@@ -183,7 +183,9 @@ function CopLogicAttack.update(data)
 	local focus_enemy = data.attention_obj
 	
 	if my_data.tasing then
-		CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
+		if focus_enemy then
+			CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
+		end
 		
 		if not my_data.update_queue_id then
 			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
@@ -246,6 +248,10 @@ function CopLogicAttack.update(data)
 		if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
 			CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
 		end
+	end
+	
+	if my_data ~= data.internal_data then
+		return
 	end
 
 	if data.team.id == "criminal1" then
@@ -1689,6 +1695,10 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) and my_data.optimal_pos and focus_enemy then
 		mvector3.set_z(my_data.optimal_pos, focus_enemy.m_pos.z)
 	end
+	
+	if my_data ~= data.internal_data then
+		return
+	end
 
 	if not is_synchronous then
 		CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, data.t + delay, data.important and true)
@@ -2336,6 +2346,10 @@ function CopLogicAttack.queue_update(data, my_data)
 	
 	data.logic._update_haste(data, data.internal_data)
 	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
+	
+	if my_data ~= data.internal_data then
+		return
+	end
 	
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, true)
 end
