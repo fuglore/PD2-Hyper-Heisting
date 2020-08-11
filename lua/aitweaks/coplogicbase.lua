@@ -1857,6 +1857,11 @@ function CopLogicBase.chk_start_action_dodge(data, reason)
 
 	local dodge_tweak = data.char_tweak.dodge.occasions[reason]
 	
+	if not dodge_tweak.variations then
+		log("unit " .. data.unit:base()._tweak_table .. " has broken dodges!")
+		return
+	end
+	
 	data.dodge_chk_timeout_t = TimerManager:game():time() + math.lerp(dodge_tweak.check_timeout[1], dodge_tweak.check_timeout[2], math.random())
 	if dodge_tweak.chance == 0 or dodge_tweak.chance < math.random() then
 		return
