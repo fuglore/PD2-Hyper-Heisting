@@ -315,7 +315,7 @@ function ElementSpawnEnemyDummy:init(...)
 		end
 
 		--LAPD Cops Spawn Overwrite
-		if job == "rvd1" or job == "rvd2" or job == "jolly" then  
+		if job == "rvd1" or job == "rvd2" or job == "jolly" or job == "friend" or job == "pal" or job == "kenaz" then  
 			 if lapd_beatpricks[self._values.enemy] then
 				self._values.enemy = lapd_beatpricks[self._values.enemy]
 			 end
