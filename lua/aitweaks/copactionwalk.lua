@@ -1200,8 +1200,14 @@ function CopActionWalk:_get_current_max_walk_speed(move_dir)
 		if self._ext_brain.is_hostage and self._ext_brain:is_hostage() then
 			is_hostage = true
 		end
-	elseif self._unit:interaction() and self._unit:interaction().tweak_data == "hostage_stay" then
-		is_hostage = true
+	else
+		local interaction_ext = self._unit:interaction()
+
+		if interaction_ext then
+			if interaction_ext.tweak_data == "hostage_stay" or interaction_ext.tweak_data == "hostage_move" then
+				is_hostage = true
+			end
+		end
 	end
 
 	local multiplier = is_hostage and self._common_data.char_tweak.hostage_move_speed or 1
