@@ -97,11 +97,17 @@ function PlayerTased:_check_action_shock(t, input)
 		self._unit:sound():play("tasered_shock")
 		managers.rumble:play("electric_shock")
 		if self._unit:character_damage()._tase_data and not self._is_non_lethal then
+			local damage = 4.1
+			
+			if Global.mutators and Global.mutators.tase_t_reduction then
+				damage = damage * 2
+			end
+			
 			local attack_data = {
 				attacker_unit = self._unit:character_damage()._tase_data.attacker_unit,
 				is_taser_shock = true,
 				armor_piercing = true,
-				damage = 4.1
+				damage = damage
 			}
 			self._unit:character_damage():damage_bullet(attack_data)
 		end
