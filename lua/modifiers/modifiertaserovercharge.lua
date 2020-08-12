@@ -8,9 +8,9 @@ function ModifierTaserOvercharge:init(data)
 	ModifierTaserOvercharge.super.init(self, data)
 	
 	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
-	if Global.game_settings.incsmission or managers.skirmish and managers.skirmish:is_skirmish() then
+	if Global.game_settings.incsmission then
 		if not Global.mutators.tase_t_reduction then
-			Global.mutators.tase_t_reduction = 0.5
+			Global.mutators.tase_t_reduction = 3.75
 		end
 	end
 	

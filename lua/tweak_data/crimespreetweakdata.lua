@@ -541,25 +541,24 @@ function CrimeSpreeTweakData:init_gage_assets(tweak_data)
 	}
 end
 
-
 function CrimeSpreeTweakData:init_missions(tweak_data)
 	local debug_short_add = 5
 	local debug_med_add = 7
 	local debug_long_add = 10
 	self.missions = {
-		{
+		{ --Stealth-possible heists
 			{
 				stage_id = "branchbank_cash",
 				id = "bb_cash",
 				icon = "csm_branchbank",
-				add = 8,
+				add = 5,
 				level = tweak_data.narrative.stages.branchbank_cash
 			},
 			{
 				stage_id = "cage",
 				id = "cage",
 				icon = "csm_carshop",
-				add = 8,
+				add = 6,
 				level = tweak_data.narrative.stages.cage
 			},
 			{
@@ -578,35 +577,35 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 			},
 			{
 				stage_id = "firestarter_2",
-				add = 6,
+				add = 8,
 				id = "fs_2",
 				icon = "csm_fs_2",
 				level = tweak_data.narrative.stages.firestarter_2
 			},
 			{
 				stage_id = "hox_3",
-				add = 4,
+				add = 6,
 				id = "hox_3",
 				icon = "csm_hoxvenge",
 				level = tweak_data.narrative.stages.hox_3
 			},
 			{
 				stage_id = "fish",
-				add = 4,
+				add = 6,
 				id = "fish",
 				icon = "csm_yacht",
 				level = tweak_data.narrative.stages.fish
 			},
 			{
 				stage_id = "election_day_2",
-				add = 8,
+				add = 10,
 				id = "ed_2",
 				icon = "csm_election_2",
 				level = tweak_data.narrative.stages.election_day_2
 			},
 			{
 				stage_id = "crojob1",
-				add = 8,
+				add = 14,
 				id = "crojob1",
 				icon = "csm_docks",
 				level = tweak_data.narrative.stages.crojob1
@@ -615,7 +614,7 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				stage_id = "framing_frame_3",
 				id = "framing_frame_3",
 				icon = "csm_framing_3",
-				add = 12,
+				add = 10,
 				level = tweak_data.narrative.stages.framing_frame_3
 			},
 			{
@@ -627,14 +626,14 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 			},
 			{
 				stage_id = "friend",
-				add = 14,
+				add = 20,
 				id = "friend",
 				icon = "csm_friend",
 				level = tweak_data.narrative.stages.friend
 			},
 			{
 				stage_id = "big",
-				add = 14,
+				add = 12,
 				id = "big",
 				icon = "csm_big",
 				level = tweak_data.narrative.stages.big
@@ -643,7 +642,7 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				stage_id = "mus",
 				id = "mus",
 				icon = "csm_diamond",
-				add = 12,
+				add = 10,
 				level = tweak_data.narrative.stages.mus
 			},
 			{
@@ -657,11 +656,11 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				stage_id = "red2",
 				id = "red2",
 				icon = "csm_fwb",
-				add = 10,
+				add = 12,
 				level = tweak_data.narrative.stages.red2
 			}
-		},
-		{
+		}, 
+		{ --loud short/medium
 			{
 				stage_id = "wwh",
 				add = 8,
@@ -671,14 +670,14 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 			},
 			{
 				stage_id = "rvd1",
-				add = 8,
+				add = 10,
 				id = "rvd1",
 				icon = "csm_rvd_1",
 				level = tweak_data.narrative.stages.rvd_1
 			},
 			{
 				stage_id = "rvd2",
-				add = 10,
+				add = 14,
 				id = "rvd2",
 				icon = "csm_rvd_2",
 				level = tweak_data.narrative.stages.rvd_2
@@ -734,7 +733,7 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 			},
 			{
 				stage_id = "chew",
-				add = 8,
+				add = 5,
 				id = "biker_2",
 				icon = "csm_biker_2",
 				level = tweak_data.narrative.stages.chew
@@ -755,16 +754,16 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 			},
 			{
 				stage_id = "watchdogs_1_d",
-				add = 6,
 				id = "watchdogs_1_d",
 				icon = "csm_watchdogs_1",
+				add = 6,
 				level = tweak_data.narrative.stages.watchdogs_1_d
 			},
 			{
 				stage_id = "pines",
 				id = "pines",
 				icon = "csm_white_xmas",
-				add = 6,
+				add = 8,
 				level = tweak_data.narrative.stages.pines
 			},
 			{
@@ -776,14 +775,14 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 			},
 			{
 				stage_id = "spa",
-				add = 10,
 				id = "spa",
 				icon = "csm_brooklyn",
+				add = 10,
 				level = tweak_data.narrative.stages.spa
 			},
 			{
 				stage_id = "cane",
-				add = 14,
+				add = 10,
 				id = "cane",
 				icon = "csm_santas_workshop",
 				level = tweak_data.narrative.stages.cane
@@ -796,8 +795,31 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				level = tweak_data.narrative.stages.mia_2
 			},
 			{
+				stage_id = "election_day_3",
+				add = 8,
+				id = "election_day_3",
+				icon = "csm_electionday_03",
+				level = tweak_data.narrative.stages.election_day_3
+			},
+			{
+				stage_id = "four_stores",
+				add = 5,
+				id = "four_stores",
+				icon = "csm_fourstores",
+				level = tweak_data.narrative.stages.four_stores
+			},
+			{
+				stage_id = "watchdogs_2_n",
+				add = 8,
+				id = "watchdogs_2_n",
+				icon = "csm_watchdogs_02",
+				level = tweak_data.narrative.stages.watchdogs_2_n
+			}
+		}, 
+		{ --loud long
+			{
 				stage_id = "pbr2",
-				add = 10,
+				add = 12,
 				id = "pbr2",
 				icon = "csm_sky",
 				level = tweak_data.narrative.stages.pbr2
@@ -810,9 +832,9 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				level = tweak_data.narrative.stages.pal
 			},
 			{
-				stage_id = "flat_hh",
-				add = 14,
-				id = "flat_hh",
+				stage_id = "flat",
+				add = 12,
+				id = "flat",
 				icon = "csm_panic_room",
 				level = tweak_data.narrative.stages.flat
 			},
@@ -820,26 +842,26 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				stage_id = "born",
 				id = "born",
 				icon = "csm_biker_1",
-				add = debug_long_add,
+				add = 12,
 				level = tweak_data.narrative.stages.born
 			},
 			{
 				stage_id = "hox_2",
-				add = 16,
+				add = 14,
 				id = "hoxton_2",
 				icon = "csm_hoxout_2",
 				level = tweak_data.narrative.stages.hox_2
 			},
 			{
 				stage_id = "hox_1",
-				add = 12,
+				add = 14,
 				id = "hoxton_1",
 				icon = "csm_hoxout_1",
 				level = tweak_data.narrative.stages.hox_1
 			},
 			{
 				stage_id = "welcome_to_the_jungle_2",
-				add = 20,
+				add = 14,
 				id = "bo_2",
 				icon = "csm_bigoil_2",
 				level = tweak_data.narrative.stages.welcome_to_the_jungle_2
@@ -862,7 +884,7 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				stage_id = "pbr",
 				id = "pbr",
 				icon = "csm_mountain",
-				add = debug_long_add,
+				add = 14,
 				level = tweak_data.narrative.stages.pbr
 			},
 			{
@@ -874,7 +896,7 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 			},
 			{
 				stage_id = "run",
-				add = 14,
+				add = 20,
 				id = "run",
 				icon = "csm_run",
 				level = tweak_data.narrative.stages.run
@@ -883,7 +905,7 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				stage_id = "man",
 				id = "man",
 				icon = "csm_undercover",
-				add = debug_long_add,
+				add = 10,
 				level = tweak_data.narrative.stages.man
 			},
 			{
@@ -901,29 +923,8 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				level = tweak_data.narrative.stages.jolly
 			},
 			{
-				stage_id = "watchdogs_2_n",
-				add = 10,
-				id = "watchdogs_2_n",
-				icon = "csm_watchdogs_02",
-				level = tweak_data.narrative.stages.watchdogs_2_n
-			},
-			{
-				stage_id = "election_day_3",
-				add = 8,
-				id = "election_day_3",
-				icon = "csm_electionday_03",
-				level = tweak_data.narrative.stages.election_day_3
-			},
-			{
-				stage_id = "four_stores",
-				add = 5,
-				id = "four_stores",
-				icon = "csm_fourstores",
-				level = tweak_data.narrative.stages.four_stores
-			},
-			{
 				stage_id = "shoutout_raid",
-				add = 12,
+				add = 16,
 				id = "shoutout_raid",
 				icon = "csm_shoutout_raid",
 				level = tweak_data.narrative.stages.shoutout_raid

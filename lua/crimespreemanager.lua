@@ -1,3 +1,5 @@
+CrimeSpreeManager.CS_VERSION = 69
+
 function CrimeSpreeManager:init()
 	self:_setup()
 	self._copaccmult = 1

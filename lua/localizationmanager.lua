@@ -138,6 +138,7 @@
 		["menu_cs_modifier_heavies"] = "All special enemies except Bulldozers now have body armor, adds a chance for an armored SMG heavy to spawn.",
 		["menu_cs_modifier_magnetstorm"] = "When enemies reload, they emit an electric burst after a short moment that tases players.",
 		["menu_cs_modifier_heavy_sniper"] = "Adds a chance for Sniperdozers to spawn.",
+		["menu_cs_modifier_taser_overcharge"] = "Tasers now deal double the amount of shock damage while tasing you.",
 		["menu_cs_modifier_dozer_lmg"] = "EVERYTHING IS HORRIBLE!!!",
 		["menu_cs_modifier_unison"] = "WIP NEW MODIFIER, DOES NOTHING CURRENTLY",
 		["menu_cs_modifier_dozer_rage"] = "Adds a chance for an armor piercing Deagle-toting Medic from another dimension to spawn.",

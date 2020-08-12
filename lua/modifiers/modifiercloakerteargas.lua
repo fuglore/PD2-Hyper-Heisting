@@ -23,7 +23,7 @@ function ModifierCloakerTearGas:OnEnemyDied(unit, damage_info)
 	end
 	
 	local gamemode_chk = game_state_machine:gamemode() 
-	if Global.game_settings.incsmission or managers.skirmish and managers.skirmish:is_skirmish() then
+	if Global.game_settings.incsmission then
 		if not Global.game_settings.telespooc then
 			Global.game_settings.telespooc = true
 		end
