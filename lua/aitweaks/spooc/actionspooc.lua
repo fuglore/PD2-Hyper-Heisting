@@ -1596,6 +1596,10 @@ function ActionSpooc.chk_can_start_flying_strike(unit, target_unit)
 	local target_pos = target_unit:movement():m_pos()
 	local my_pos = unit:movement():m_pos()
 	local target_vec = ActionSpooc._tmp_vec1
+	
+	if math.abs(target_pos.z - my_pos.z) > 250 then
+		return
+	end
 
 	mvec3_set(target_vec, target_pos)
 	mvec3_sub(target_vec, my_pos)
