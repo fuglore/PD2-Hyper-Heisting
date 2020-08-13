@@ -17,7 +17,7 @@
 	<model path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump" />	
 	<cooked_physics path="units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"/>	
 
-	<!-- Murky Sniper(for packages)-->
+	<!-- Murky Sniper-->
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper_husk" load="true"/>	
 	<material_config path="units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"/>
@@ -32,7 +32,7 @@
 	<!--acc sniper-->
 	<unit_obj path="units/pd2_mod_psc/characters/ene_acc_dr_bob/ene_acc_dr_bob" />
 
-	<!--Vanilla Murky Tazer(for packages)-->
+	<!-- Murky Tazer-->
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer_husk" load="true"/>	
 	<material_config path="units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer"/>
@@ -48,7 +48,7 @@
 	<unit path="units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld_husk" load="true"/>		
 	
-	<!--Vanilla Murky Medic(for packages)-->
+	<!-- Murky Medic-->
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_medic/ene_murkywater_medic" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_medic/ene_murkywater_medic_husk" load="true"/>	
 	<material_config path="units/pd2_mod_psc/characters/ene_murkywater_medic/ene_murkywater_medic"/>
@@ -238,7 +238,7 @@
 	<object path="units/pd2_mod_psc/characters/ene_murky_cloaker/debris/ene_cloaker_football_head_debris" />
 	
 	<!-- SHARED TEXTURES -->
-	<!-- Vanilla murky Special ASSet replacements (you can do those in packages just not reapers) -->
+	<!--  murky Special ASSet replacements (you can do those in packages just not reapers) -->
 	<texture path="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/material_v3_df" force="true" />
 	<texture path="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/material_v2_df" force="true" />	
 	<texture path="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/material_v4_df" force="true" />	
@@ -246,7 +246,7 @@
 	<texture path="units/pd2_mod_psc/characters/ene_murkywater_medic/material_head_df" force="true" />		
 	<texture path="units/pd2_mod_psc/characters/ene_murkywater_tazer/material_body_df" force="true" />	
 	<texture path="units/pd2_mod_psc/characters/ene_murkywater_tazer/material_head_df" force="true" />		
-	<!-- Vanilla murky Special ASSet replacements (you can do those in packages just not reapers) -->	
+	<!--  murky Special ASSet replacements (you can do those in packages just not reapers) -->	
 	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_df" />	
 	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_head_df" />	
 	<texture path="units/pd2_mod_psc/characters/shared_textures/punk_head_nm" />
@@ -312,7 +312,7 @@
 	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_murkywater_medic_helmet_r870/ene_acc_murkywater_medic_helmet_r870" load="true"/>
 	<unit_mat path="units/pd2_mod_psc/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" load="true"/>
 
-	<!--Vanilla Murky Dozers (i hate you ugly pricks FUCK you stupid dumbasses!!!)-->
+	<!-- Murky Dozers (i hate you ugly pricks FUCK you stupid dumbasses!!!)-->
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic" load="true"/>
 	<unit path="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic_husk" load="true"/>	
 	<material_config path="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"/>
