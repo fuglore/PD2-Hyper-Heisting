@@ -49,6 +49,8 @@ function LevelsTweakData:init()
 	self.pex.package = {"packages/mexicoassets", "packages/job_pex"}
 	self.skm_bex.package = {"packages/mexicoassets", "packages/dlcs/skm/job_bex_skm"}
 	
+	self.hvh.package = {"packages/zombieassets", "packages/narr_hvh"}
+	
 	if self.nmh_hyper then
 		self.nmh_hyper.package = {"packages/dlcs/nmh/job_nmh", "packages/murkyassets"}
 	end
@@ -60,18 +62,22 @@ function LevelsTweakData:init()
 	self.friend.package = {"levels/narratives/h_alex_must_die/stage_1/world_sounds", "packages/lvl_friend"}
 	self.cane.package = {"packages/cane", "levels/narratives/e_welcome_to_the_jungle/stage_1/world_sounds"}
 	
+	--halloween heists (designed to have the zombie faction disabled in crime spree)
 	if Global.game_settings and not Global.game_settings.incsmission then
 		self.haunted.package = {
+			"packages/zombieassets",
 			"packages/narr_haunted", 
 			"packages/narr_hvh", 
 			"levels/narratives/bain/hvh/world_sounds"
 		}
 		self.nail.package = {
+			"packages/zombieassets",
 			"packages/job_nail", 
 			"packages/narr_hvh", 
 			"levels/narratives/bain/hvh/world_sounds"
 		}
 		self.help.package = {
+			"packages/zombieassets",
 			"packages/lvl_help",
 			"packages/narr_hvh", 
 			"levels/narratives/bain/hvh/world_sounds"
@@ -80,6 +86,7 @@ function LevelsTweakData:init()
 		self.nail.ai_group_type = zombie
 		self.help.ai_group_type = zombie
 	end
+	
 end
 
 function LevelsTweakData:get_ai_group_type()

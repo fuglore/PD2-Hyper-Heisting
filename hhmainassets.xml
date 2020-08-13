@@ -85,13 +85,6 @@
 	<!-- lazily and horribly fixed his mipmaps lol -->
 	<texture path="units/payday2/characters/shared_textures/danial_df" force="true"/>
 	
-	<!--Fuck you. Here's your difficulty spike.-->
-	<unit path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween" load="true" force="true"/>
-	<unit path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween_husk" load="true" force="true"/>
-	<material_config path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween" load="true" force="true"/>
-	<material_config path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween_contour" load="true" force="true"/>
-	<sequence_manager path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween"/>
-	
 	<!--functional weapon sounds-->	
 	<unit path="units/payday2/weapons/wpn_npc_ump/wpn_npc_ump" load="true" force="true"/>
 	<unit path="units/payday2/weapons/wpn_npc_c45/wpn_npc_c45" load="true" force="true"/>
@@ -786,71 +779,6 @@
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_ftsudozer" force="false"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_bronconinja" force="false"/>
 
-
-	<!--halloween dudes-->	
-	
-	<!--vampire jerome-->	
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" load="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4_husk" load="true"/>
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4"/>	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4_contour"/>		
-	<object path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" />
-	<model path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4"/>
-	<texture path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/head_zomb_df" />
-	<texture path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/zomb_df" />
-	
-	<!--vampire vinny-->
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" load="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45_husk" load="true"/>
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"/>	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45_contour"/>		
-	<object path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" />
-	<model path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"/>
-	
-	<!--Zombie MP5 SWAT-->	
-	<unit path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3" load="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3_husk" load="true"/>
-	<material_config path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3"/>	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3_contour"/>		
-	<object path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3" />
-	<model path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3" />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3"/>
-
-	<!--Zombie MP5 FBI SWAT-->	
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" load="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3_husk" load="true"/>
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3"/>	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3_contour"/>		
-	<object path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" />
-	<model path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3"/>	
-			
-	<!--Zombie Mosconi Punkimus-->
-	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" load="true" force="true"/>
-	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3_husk" load="true" force="true"/>
-	<material_config path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" force="true"/>	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3_contour" force="true"/>		
-	<object path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" force="true" />
-	<model path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" force="true" />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3" force="true"/>	
-
-	<!--Zombie FBI Heavy Shield-->
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" load="true" />
-	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds_husk" load="true" />
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" />	
-	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds_contour" />		
-	<object path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds"  />
-	<model path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds"  />	
-	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" />	
-
-	<unit_mat path="units/pd2_dlc_hvh/characters/ene_acc_shield_hvh/ene_acc_shield_hvh" load="true" />	
-
-	<texture path="units/pd2_dlc_hvh/characters/ene_acc_shield_hvh/ene_acc_shield_hvh_lights_df" />	
-
-	<!-- BRAIINNNSS end	-->	
-
 	<!--SHADOW CLOACKERS-->	
 	
 	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true" load="true" />
@@ -1102,4 +1030,14 @@
 	<object path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>
 	<material_config path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>
 	<cooked_physics path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>	
+	
+	<!--Fuck you. Here's your difficulty spike.-->
+	<unit path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween" load="true" force="true"/>
+	<unit path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween_husk" load="true" force="true"/>
+	<material_config path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween" load="true" force="true"/>
+	<material_config path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween_contour" load="true" force="true"/>
+	<sequence_manager path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween" force="true"/>
+	
+	<!--dumbass fucks at overkill made a typo-->
+	<material_config path="units/pd2_dlc_hvh/ene_sniper_hvh_2/ene_sniper_hvh_2_contour" force="true"/>
 </table>
