@@ -86,7 +86,7 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 	}
 	self.settings.custom_enemy_suburbia_shootout = {
 		max_range = 12000,
-		reaction = "REACT_SHOOT",
+		reaction = "REACT_COMBAT",
 		notice_requires_FOV = true,
 		turn_around_range = 15000,
 		weight_mul = 1.25,
