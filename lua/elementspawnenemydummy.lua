@@ -8,10 +8,10 @@
 		}
 
 	local lapd_beatpricks = {
-			["units/payday2/characters/ene_cop_1/ene_cop_1"] = "units/pd2_dlc_rvd/characters/ene_cop_1/ene_cop_1",
-			["units/payday2/characters/ene_cop_2/ene_cop_2"] = "units/pd2_dlc_rvd/characters/ene_cop_2/ene_cop_2",
-			["units/payday2/characters/ene_cop_3/ene_cop_3"] = "units/pd2_dlc_rvd/characters/ene_cop_3/ene_cop_3",
-			["units/payday2/characters/ene_cop_4/ene_cop_4"] = "units/pd2_dlc_rvd/characters/ene_cop_4/ene_cop_4"			
+			["units/payday2/characters/ene_cop_1/ene_cop_1"] = "units/pd2_dlc_rvd/characters/ene_la_cop_1/ene_la_cop_1",
+			["units/payday2/characters/ene_cop_2/ene_cop_2"] = "units/pd2_dlc_rvd/characters/ene_la_cop_2/ene_la_cop_2",
+			["units/payday2/characters/ene_cop_3/ene_cop_3"] = "units/pd2_dlc_rvd/characters/ene_la_cop_3/ene_la_cop_3",
+			["units/payday2/characters/ene_cop_4/ene_cop_4"] = "units/pd2_dlc_rvd/characters/ene_la_cop_4/ene_la_cop_4"			
 		}	
 	
 	local sm_wish = {
@@ -207,7 +207,7 @@
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper",
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper"
 		}
-	local zombie_sniper2 = {
+	local zombies = {
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2",
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2",
 			--снајпер је готов, посебно време и такође полиција
@@ -261,9 +261,45 @@ function ElementSpawnEnemyDummy:init(...)
 	local difficulty_index = tweak_data:difficulty_to_index(difficulty)
 	local job = Global.level_data and Global.level_data.level_id
 	
+	local intense_heists = { --oof yike moment 
+		"wwh_hh",
+		"dah",
+		"glace"
+	}
+				
+	local nypd_heists = { 
+		"spa",
+		"dah",
+		"red2",
+		"brb",
+		"run",
+		"flat",
+		"flat_hh",
+		"dinner",
+		"nmh_hyper",
+		"glace"
+	}
+	
+	local fbi_overwrites = { 
+		"firestarter_1",
+		"firestarter_2",
+		"alex_3",
+		"hox_2",
+		"hox_3",
+		"watchdogs2"
+	}
+
+	local lapd_heists = { 
+		"rvd1",
+		"rvd2",
+		"jolly",
+		"friend",
+		"pal",
+		"kenaz"
+	}
+	
 	if ai_type == "america" then
-		if difficulty_index == 8 and job == "wwh_hh" or difficulty_index == 8 and job == "dah" or difficulty_index == 8 and job == "glace" then
-				-- log("wario land 4 my greatest achievement")
+		if difficulty_index == 8 and table.contains(intense_heists, Global.level_data.level_id) then  --this only gets set during init so parentheses can't be too bad, right
 			if sm_wish_intense[self._values.enemy] then
 				self._values.enemy = sm_wish_intense[self._values.enemy]
 			end
@@ -322,7 +358,7 @@ function ElementSpawnEnemyDummy:init(...)
 	end
 	
 	--NYPD Cops Spawn Overwrite
-		if job == "spa" or job == "glace" or job == "brb" or job == "red2" or job == "run" or job == "flat" or job == "flat_hh" or job == "dinner" or job == "nmh_hyper" then  
+		if table.contains(nypd_heists, Global.level_data.level_id) then  
 			 if nypd_beatpricks[self._values.enemy] then
 				self._values.enemy = nypd_beatpricks[self._values.enemy]
 			 end
@@ -331,7 +367,7 @@ function ElementSpawnEnemyDummy:init(...)
 		end
 
 		--LAPD Cops Spawn Overwrite
-		if job == "rvd1" or job == "rvd2" or job == "jolly" or job == "friend" or job == "pal" or job == "kenaz" then  
+		if table.contains(lapd_heists, Global.level_data.level_id) then  
 			 if lapd_beatpricks[self._values.enemy] then
 				self._values.enemy = lapd_beatpricks[self._values.enemy]
 			 end
@@ -396,15 +432,15 @@ function ElementSpawnEnemyDummy:init(...)
 		end
 
 	if ai_type == "zombie" then
-		if zombie_sniper2[self._values.enemy] then
-			self._values.enemy = zombie_sniper2[self._values.enemy]
+		if zombies[self._values.enemy] then
+			self._values.enemy = zombies[self._values.enemy]
 		end
 		
-		self._values.enemy = zombie_sniper2[self._values.enemy] or self._values.enemy
+		self._values.enemy = zombies[self._values.enemy] or self._values.enemy
 	end
 
 	
-	if job == "firestarter_1" or job == "firestarter_2" or job == "alex_3" or job == "hox_2" or job == "hox_3" or job == "watchdogs2" then  --FBI-related heists
+	if table.contains(fbi_overwrites, Global.level_data.level_id) then  --FBI-related heists
 		if overkill_290_and_easywish[self._values.enemy] then
 			self._values.enemy = overkill_290_and_easywish[self._values.enemy]
 		end
@@ -412,9 +448,9 @@ function ElementSpawnEnemyDummy:init(...)
 		self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 	end
 	
-	--if self._values.enemy then
-		--log(self._values.enemy)
-	--end
+	--[[if self._values.enemy then
+		log(self._values.enemy)
+	end--]]
 											
 	self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
 	self._values.enemy = nil
