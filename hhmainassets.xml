@@ -49,7 +49,7 @@
 	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> <!--Now, give them hell.-->
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 	<mission path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> <!--Makes Shadow Raid Murky.-->
-	<mission path="levels/narratives/butcher/friend/world" force="true" unload="true"/> <!--Removes the shitty spawn van escape from Scarface. -->
+	<mission path="levels/narratives/butcher/friend/world/world" force="true" unload="true"/> <!--Removes the shitty spawn van escape from Scarface. -->
 	
 	<mission path="levels/instances/shared/obj_skm/world/world" force="true" unload="true"/> <!-- replaces locke lines with negotiator lines -->
 	
