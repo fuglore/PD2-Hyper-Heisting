@@ -9,14 +9,16 @@
 	</body>
   </bodies>
   <effects>
-  	<effect_spawner name="flashlight" object="ls_flashlight" effect="effects/particles/weapons/flashlight/flashlight" enabled="false" assign_parent="true"/>
+	<effect_spawner name="flashlight" object="ls_flashlight" effect="effects/particles/weapons/flashlight/flashlight" enabled="true" assign_parent="true"/>
   </effects>
+  
+  
   <graphics>
         <object enabled="false" name="g_foldable" />
         <object enabled="false" name="g_body" />
         <object enabled="false" name="g_mag_long" />
 	</graphics>
   <lights>
-    <light multiplier="identity" far_range="1000" name="ls_flashlight" enabled="false" type="spot|specular" />
+    <light multiplier="identity" far_range="1000" name="ls_flashlight" enabled="true" type="spot|specular" />
   </lights>
 </dynamic_object>

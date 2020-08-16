@@ -2,7 +2,7 @@
 	<!--New CGs-->
 	<dds path="core/textures/cg_rvsb"/>
 	
-	 <scene path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
+	<scene path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
 	<material_config path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
 	<model path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />	
 	<texture path="core/environments/skies/sky_danger_moonlight/danger_moon_df" />
@@ -732,6 +732,8 @@
 	<cooked_physics path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>	
 	<sequence_manager path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>
 	
+	<unit path="units/pd2_dlc_drm/weapons/wpn_gas_smoke/wpn_gas_smoke" load="true"/>
+	
 	<unit path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer" load="true"/>
 	<material_config path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer"/>	
 	<object path="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer" />
@@ -747,14 +749,18 @@
 	<effect path="effects/pd2_mod_hh/particles/weapons/explosion/bouncer_explosion"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/explosion/smoke_hh_anarchy"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/explosion/smoke_hh_complex"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/explosion/cs_gas_hh"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/lotus_passive"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/lazer_passive"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/bouncer_passive"/>
 	<effect path="effects/pd2_mod_hh/particles/character/punk_effect"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/lotus_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/lotus_muzzle"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_civil"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"/>

@@ -97,8 +97,13 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 			{
 				id = "no_hurt",
 				icon = "crime_spree_no_hurt",
-				class = "ModifierNoHurtAnims",
-				data = {}
+				class = "ModifierHurtResist",
+				data = {
+					multiplier = {
+						0.75,
+						"add"
+					},
+				}
 			},
 			{
 				id = "heavy_sniper",
@@ -215,12 +220,24 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				class = "ModifierExplosionImmunity",
 				data = {}
 			},
+			
 			{
 				id = "dozer_medic",
-				icon = "cs_modifier_truelotusmaster",
-				class = "ModifierDozerMedic",
-				data = {}
+				icon = "crime_spree_cloaker_tear_gas",
+				class = "ModifierVolter",
+				data = {
+					chance = {
+						1.1,
+						"add"
+					}
+				}
 			},
+			--{
+			--	id = "dozer_medic",
+			--	icon = "cs_modifier_truelotusmaster",
+			--	class = "ModifierDozerMedic",
+			--	data = {}
+			--},
 			{
 				id = "shin",
 				icon = "cs_modifier_shoryu",

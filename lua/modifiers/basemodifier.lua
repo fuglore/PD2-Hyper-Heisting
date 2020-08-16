@@ -36,6 +36,38 @@ function ModifierBouncers:OnEnemyDied(unit, damage_info)
 	end
 end
 
+ModifierVolter = ModifierVolter or class(BaseModifier)
+ModifierVolter._type = "ModifierVolter"
+ModifierVolter.name_id = "none"
+ModifierVolter.desc_id = "menu_cs_modifier_voltergas"
+ModifierVolter.default_value = 0
+
+function ModifierVolter:modify_value(id, value)
+	if id == "HHLetsTryGas" then
+		if self:value("chance") > math.random() then
+			return Idstring("units/pd2_dlc_drm/weapons/wpn_gas_smoke/wpn_gas_smoke")
+		else
+			return value
+		end
+	end
+	
+	return value
+end
+
+ModifierHurtResist = ModifierHurtResist or class(BaseModifier)
+ModifierHurtResist._type = "ModifierHurtResist"
+ModifierHurtResist.name_id = "none"
+ModifierHurtResist.desc_id = "menu_cs_modifier_no_hurt"
+ModifierHurtResist.default_value = 0
+
+function ModifierHurtResist:modify_value(id, value)
+	if id == "HHHurtRes" then
+		return value + self:value("multiplier")
+	end
+	
+	return value
+end
+
 ModifierBulletknock = ModifierBulletknock or class(BaseModifier)
 ModifierBulletknock._type = "ModifierBulletknock"
 ModifierBulletknock.name_id = "none"

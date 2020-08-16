@@ -8016,6 +8016,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.akuma = deep_clone(self.shield)
 	self.akuma.weapon = presets.weapon.akuma
 	self.akuma.move_speed = presets.move_speed.lightning_constant
+	self.akuma.use_lotus_effect = true
 	self.akuma.speech_prefix_p1 = nil
 	self.akuma.speech_prefix_p2 = nil
 	self.akuma.cannot_throw_grenades = nil

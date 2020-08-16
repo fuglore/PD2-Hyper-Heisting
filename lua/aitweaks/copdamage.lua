@@ -112,11 +112,13 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 			hurtlevel_mult = hurtlevel_mult - 0.1
 		end
 		
+		hurtlevel_mult = managers.modifiers:modify_value("HHHurtRes", hurtlevel_mult)
+		
 		if self._hurt_level then
 			local mult_add = self._hurt_level * 0.1
 			time_mult = time_mult + mult_add
 		end
-			
+		
 		local time_to_chk = 0.2 * time_mult	
 		
 		if damage > 30 then

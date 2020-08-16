@@ -22,5 +22,12 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 				cooldown = "perkdeck_cooldown_over"
 			}
 		}
+		
+		self.projectiles.cs_grenade_quick = {
+			radius = 300,
+			radius_blurzone_multiplier = 0,
+			damage_tick_period = 0.35,
+			damage_per_tick = 1
+		}
 	end
 end)

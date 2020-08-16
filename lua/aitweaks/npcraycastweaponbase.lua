@@ -15,6 +15,10 @@ function NPCRaycastWeaponBase:init(...)
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak")
 	end
 	
+	if weapon_tweak and weapon_tweak.lotus_vis then
+		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/lotus_streak")
+	end
+	
 	if weapon_tweak and weapon_tweak.b_trail then
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b")
 	end
@@ -40,6 +44,10 @@ function NPCRaycastWeaponBase:init(...)
 	if self:weapon_tweak_data().armor_piercing then
 		self._use_armor_piercing = true
 	end
+	
+	if self._flashlight_data then
+		self:set_flashlight_enabled(true)
+	end
 end
 
 local setup_func = NPCRaycastWeaponBase.setup
@@ -53,7 +61,57 @@ function NPCRaycastWeaponBase:setup(setup_data, ...)
 			self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(16, 22) --removes criminals and certain kinds of bullet-impact related slotmasks
 			self._enemy_slotmask = managers.slot:get_mask("enemies")
 		end
-	end		
+	end
+
+	if self._flashlight_data then
+		self:set_flashlight_enabled(true)
+	end
+end
+
+function NPCRaycastWeaponBase:flashlight_state_changed()
+	if not self._flashlight_data then
+		return
+	end
+
+	if not self._flashlight_data.enabled or self._flashlight_data.dropped then
+		return
+	end
+	
+	local enabled = true --always enabled
+
+	if managers.game_play_central:flashlights_on() or enabled then
+		self._flashlight_data.light:set_enable(self._flashlight_light_lod_enabled)
+		self._flashlight_data.effect:activate()
+
+		self._flashlight_data.on = true
+	else
+		self._flashlight_data.light:set_enable(false)
+		self._flashlight_data.effect:kill_effect()
+
+		self._flashlight_data.on = false
+	end
+end
+
+function NPCRaycastWeaponBase:set_flashlight_enabled(enabled)
+	if not self._flashlight_data then
+		return
+	end
+	
+	enabled = true --always enabled
+
+	self._flashlight_data.enabled = enabled
+
+	if managers.game_play_central:flashlights_on() or enabled then
+		self._flashlight_data.light:set_enable(self._flashlight_light_lod_enabled)
+		self._flashlight_data.effect:activate()
+
+		self._flashlight_data.on = true
+	else
+		self._flashlight_data.light:set_enable(false)
+		self._flashlight_data.effect:kill_effect()
+
+		self._flashlight_data.on = false
+	end
 end
 
 function NPCRaycastWeaponBase:_get_spread(user_unit)

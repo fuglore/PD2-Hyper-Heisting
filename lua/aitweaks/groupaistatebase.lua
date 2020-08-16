@@ -530,7 +530,12 @@ function GroupAIStateBase:detonate_world_smoke_grenade(id)
 		self._smoke_grenades[id] = nil
 	else
 		data.duration = data.duration == 0 and 15 or data.duration
-		local smoke_grenade = World:spawn_unit(Idstring("units/weapons/smoke_grenade_quick/smoke_grenade_quick"), data.detonate_pos, Rotation())
+		
+		local smoke_name = Idstring("units/weapons/smoke_grenade_quick/smoke_grenade_quick")
+		
+		smoke_name = managers.modifiers:modify_value("HHLetsTryGas", smoke_name)
+		
+		local smoke_grenade = World:spawn_unit(smoke_name, data.detonate_pos, Rotation())
 
 		smoke_grenade:base():activate(data.detonate_pos, data.duration)
 		managers.groupai:state():teammate_comment(nil, "g40x_any", data.detonate_pos, true, 2000, false)

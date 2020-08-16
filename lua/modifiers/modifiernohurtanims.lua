@@ -9,9 +9,12 @@ ModifierNoHurtAnims.IgnoredHurtTypes = {
 }
 
 function ModifierNoHurtAnims:modify_value(id, value)
-	if id == "CopMovement:HurtType" and table.contains(ModifierNoHurtAnims.IgnoredHurtTypes, value) and math.random() < 0.5 then
-		return nil, true
-	end
+	if dont then
+		if id == "CopMovement:HurtType" and table.contains(ModifierNoHurtAnims.IgnoredHurtTypes, value) and math.random() < 0.5 then
+			return nil, true
+		end
 
-	return value
+		return value
+	end
 end
+

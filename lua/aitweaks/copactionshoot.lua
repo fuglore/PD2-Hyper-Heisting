@@ -86,11 +86,17 @@ function CopActionShoot:init(action_desc, common_data)
 
 	local shoot_from_pos = self._ext_movement:m_head_pos()
 	self._shoot_from_pos = shoot_from_pos
+	
+	self._mindcontrol_table = {
+		effect = Idstring("effects/pd2_mod_hh/particles/weapons/lotus_passive"),
+		parent = self._unit:get_object(Idstring("RightForeArm"))
+	}
 
 	self._shield = alive(self._ext_inventory._shield_unit) and self._ext_inventory._shield_unit or nil
 	self._tank_animations = self._ext_movement._anim_global == "tank" and true or nil
 	self._is_team_ai = managers.groupai:state():is_unit_team_AI(self._unit) and true or nil
 	self._shield_slotmask = managers.slot:get_mask("enemy_shield_check")
+	self._use_mindcontrol = common_data.char_tweak.use_lotus_effect
 
 	if not self._is_team_ai then
 		if self._ext_brain.converted and self._ext_brain:converted() or managers.groupai:state():is_enemy_converted_to_criminal(self._unit) then
@@ -260,6 +266,11 @@ function CopActionShoot:on_exit()
 	if self._modifier_on then
 		self[self._ik_preset.stop](self)
 	end
+	
+	if self._mindcontrol_effect then
+		World:effect_manager():kill(self._mindcontrol_effect)
+		self._mindcontrol_effect = nil
+	end
 
 	if self._autofiring then
 		self._weapon_base:stop_autofire()
@@ -388,8 +399,20 @@ function CopActionShoot:on_attention(attention, old_attention)
 				self._shoot_history = shoot_hist
 			end
 		end
+		
+		if self._use_mindcontrol then
+			if not self._mindcontrol_effect then
+				self._mindcontrol_effect = World:effect_manager():spawn(self._mindcontrol_table)
+			end
+		end
+		
 	else
 		self[self._ik_preset.stop](self)
+		
+		if self._mindcontrol_effect then
+			World:effect_manager():kill(self._mindcontrol_effect)
+			self._mindcontrol_effect = nil
+		end
 
 		if self._aim_transition then
 			self._aim_transition = nil
@@ -462,7 +485,7 @@ function CopActionShoot:update(t)
 	
 	if self._doom_enemy and ext_anim.upper_body_hurt then
 		shouldnt_shoot = true
-		log("doom")
+		--log("doom")
 	end
 
 	if not ext_anim.reload and not ext_anim.equip and not ext_anim.melee and not shouldnt_shoot then
