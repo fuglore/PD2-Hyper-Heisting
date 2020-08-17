@@ -1045,5 +1045,5 @@
 	<sequence_manager path="units/pd2_dlc_help/characters/ene_zeal_bulldozer_halloween/ene_zeal_bulldozer_halloween" force="true"/>
 	
 	<!--dumbass fucks at overkill made a typo-->
-	<material_config path="units/pd2_dlc_hvh/ene_sniper_hvh_2/ene_sniper_hvh_2_contour" force="true"/>
+	<material_config path="units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2_contour" force="true"/> 
 </table>
