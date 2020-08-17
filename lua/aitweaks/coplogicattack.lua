@@ -1692,6 +1692,10 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	
 	CopLogicAttack._upd_aim(data, my_data)
 	
+	if my_data ~= data.internal_data then
+		return
+	end
+	
 	if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) and my_data.optimal_pos and focus_enemy then
 		mvector3.set_z(my_data.optimal_pos, focus_enemy.m_pos.z)
 	end
@@ -1700,7 +1704,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 		return
 	end
 
-	if not is_synchronous then
+	if not is_synchronous and my_data == data.internal_data then
 		CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, data.t + delay, data.important and true)
 	end
 
