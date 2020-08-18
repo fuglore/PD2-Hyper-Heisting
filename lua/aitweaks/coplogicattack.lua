@@ -1557,6 +1557,10 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 			end
 		end
 	end
+	
+	if my_data ~= data.internal_data then
+		return
+	end
 		
 	if get_new_target then
 		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, detected_enemies, reaction_func)
@@ -1564,10 +1568,6 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	
 		CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
 		CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
-
-		if my_data ~= data.internal_data then
-			return
-		end
 
 		if new_attention then
 			if my_data.att_cover_charge_chk or old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
@@ -1682,6 +1682,10 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 		
 		my_data.flank_cover = nil
 		my_data.att_cover_charge_chk = nil
+	end
+	
+	if my_data ~= data.internal_data then
+		return
 	end
 
 	CopLogicBase._chk_call_the_police(data)
