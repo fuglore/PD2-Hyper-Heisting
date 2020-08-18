@@ -47,7 +47,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" debrief_event="pln_fwb_34" icon="guis/dlcs/bro/textures/pd2/crimenet/heat_street" id="skm_run" jc="60" max_mission_xp="135900" min_mission_xp="8000" name_id="heist_skm_run_h1" region="street">
+	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" debrief_event="pln_fwb_34" icon="guis/dlcs/shl/textures/pd2/crimenet/skm_run" id="skm_run" jc="60" max_mission_xp="135900" min_mission_xp="8000" name_id="heist_skm_run_h1" region="street">
 		<chain>
 			<table level_id="skm_run_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
