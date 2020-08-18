@@ -533,7 +533,9 @@ function GroupAIStateBase:detonate_world_smoke_grenade(id)
 		
 		local smoke_name = Idstring("units/weapons/smoke_grenade_quick/smoke_grenade_quick")
 		
-		smoke_name = managers.modifiers:modify_value("HHLetsTryGas", smoke_name)
+		if managers.modifiers and managers.modifiers:check_boolean("HHLetsTryGas") then
+			smoke_name = Idstring("units/pd2_dlc_drm/weapons/wpn_gas_smoke/wpn_gas_smoke")
+		end
 		
 		local smoke_grenade = World:spawn_unit(smoke_name, data.detonate_pos, Rotation())
 

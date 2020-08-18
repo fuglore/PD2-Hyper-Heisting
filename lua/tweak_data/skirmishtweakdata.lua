@@ -99,7 +99,13 @@ function SkirmishTweakData:_init_wave_modifiers()
 	}
 	self.wave_modifiers[3] = {
 		{
-			class = "ModifierSkulldozers"
+			class = "ModifierSkulldozers",
+			data = {
+				boolean = {
+					true,
+					"none"
+				}
+			}
 		}
 	}
 	self.wave_modifiers[5] = {
@@ -107,6 +113,15 @@ function SkirmishTweakData:_init_wave_modifiers()
 			class = "ModifierHeavySniper",
 			data = {
 				spawn_chance = 5
+			}
+		},
+		{
+			class = "ModifierVolter", --LETS TRY GAS
+			data = {
+				boolean = {
+					true,
+					"none"
+				}
 			}
 		}
 	}

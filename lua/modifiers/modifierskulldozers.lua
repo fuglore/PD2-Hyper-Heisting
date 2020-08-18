@@ -11,24 +11,6 @@ ModifierSkulldozers.unit_swaps = { --replace jerome with cool jerome when everyt
 function ModifierSkulldozers:init(data)
 	ModifierSkulldozers.super.init(self, data)
 	
-	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
-	if Global.game_settings.incsmission or managers.skirmish and managers.skirmish:is_skirmish() then
-		local current_wave = managers.skirmish:current_wave_number()
-		if Global.game_settings.incsmission or current_wave and current_wave ~= nil and current_wave >= 3 then
-			Global.game_settings.use_intense_AI = true
-			--log("itson")
-		end
-	else
-		Global.game_settings.use_intense_AI = nil
-	end
-	
-	if managers.skirmish then
-		local current_wave = managers.skirmish:current_wave_number()
-		if current_wave and current_wave ~= nil and current_wave < 3 then
-			Global.game_settings.use_intense_AI = nil
-		end
-	end
-	
 	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.america, Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"))
 	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.federales, Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"))
 	table.insert(tweak_data.group_ai.unit_categories.FBI_tank.unit_types.shared, Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"))
@@ -52,4 +34,12 @@ function ModifierSkulldozers:init(data)
 		end
 	end
 	
+end
+
+function ModifierSkulldozers:check_boolean(id)
+	if id == "TotalAnarchy" and self:value("boolean") ~= nil then
+		return self:value("boolean")
+	else
+		return nil
+	end
 end

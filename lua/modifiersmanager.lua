@@ -114,3 +114,24 @@ function ModifiersManager:modify_value(id, value, ...)
 	end
 	return result
 end
+
+function ModifiersManager:check_boolean(id)
+	local boolean = nil
+
+	for _, category in pairs(self._modifiers) do
+		for _, modifier in ipairs(category) do
+			if modifier.check_boolean then
+				--log("forfucks")
+				local new_boolean = modifier:check_boolean(id)
+				
+				if new_boolean ~= nil then
+					--log("PLEASE")
+					boolean = new_boolean
+					break
+				end
+			end
+		end
+	end
+	
+	return boolean
+end

@@ -103,7 +103,7 @@ function CopActionTase:init(action_desc, common_data)
 		end
 	end
 
-	if Global.game_settings.use_intense_AI or tweak_data:difficulty_to_index(Global.game_settings.difficulty) > 5 then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or tweak_data:difficulty_to_index(Global.game_settings.difficulty) > 5 then
 		self._shorter_tase_delay = true
 	end
 

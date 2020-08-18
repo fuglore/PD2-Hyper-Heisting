@@ -479,7 +479,7 @@ function GroupAIStateBesiege:update(t, dt)
 							self._activeassaultnextbreak_t = self._t + 120
 						end
 							
-						if diff_index > 6 or Global.game_settings.use_intense_AI then
+						if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 60
 							--log("breaksetforDW")
 						end
@@ -520,7 +520,7 @@ function GroupAIStateBesiege:update(t, dt)
 						self._activeassaultnextbreak_t = self._t + 120
 					end
 							
-					if diff_index > 6 or Global.game_settings.use_intense_AI then
+					if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 60
 						--log("breaksetforDW")
 					end

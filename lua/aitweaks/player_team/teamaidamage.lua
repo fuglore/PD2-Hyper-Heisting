@@ -35,7 +35,7 @@ function TeamAIDamage:damage_tase(attack_data)
 		tase_down_time = 4
 	end
 	
-	if tase_down_time and Global.mutators and Global.mutators.tase_t_reduction then
+	if tase_down_time and Global.mutators and managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
 		tase_down_time = tase_down_time * 0.5
 	end
 	

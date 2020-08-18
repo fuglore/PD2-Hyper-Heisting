@@ -968,7 +968,7 @@ function CopActionHurt:init(action_desc, common_data)
 			local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 
 			--punk rage buff will only apply on Death Sentence
-			if diff_index == 8 or Global.game_settings.use_intense_AI then
+			if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 				common_data.ext_base:add_buff("base_damage", 2)
 			end
 		end
@@ -1279,7 +1279,7 @@ function CopActionHurt:on_exit()
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 
 		--punk rage buff visual
-		if diff_index == 8 or Global.game_settings.use_intense_AI then
+		if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self._ext_damage:activate_punk_visual_effect()
 		end
 	end

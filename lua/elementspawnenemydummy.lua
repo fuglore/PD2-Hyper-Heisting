@@ -305,7 +305,7 @@ function ElementSpawnEnemyDummy:init(...)
 			end
 				
 			self._values.enemy = sm_wish_intense[self._values.enemy] or self._values.enemy	
-		elseif Global.game_settings and Global.game_settings.heavymutator then
+		elseif Global.game_settings and managers.modifiers and managers.modifiers:check_boolean("oopsallheavies") then
 			if enemy_annoying[self._values.enemy] then
 				self._values.enemy = enemy_annoying[self._values.enemy]
 			end

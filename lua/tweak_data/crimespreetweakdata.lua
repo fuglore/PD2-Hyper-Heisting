@@ -71,9 +71,9 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				icon = "crime_spree_taser_overcharge",
 				class = "ModifierTaserOvercharge",
 				data = {
-					speed = {
-						50,
-						"add"
+					boolean = {
+						true,
+						"none"
 					}
 				}
 			},
@@ -81,7 +81,12 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				id = "heavies",
 				icon = "crime_spree_heavies",
 				class = "ModifierHeavies",
-				data = {}
+				data = {
+					boolean = {
+						true,
+						"none"
+					}
+				}
 			},
 			{
 				id = "medic_1",
@@ -161,7 +166,12 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				id = "dozer_lmg",
 				icon = "cs_modifier_difficultyspike",
 				class = "ModifierSkulldozers",
-				data = {}
+				data = {
+					boolean = {
+						true,
+						"none"
+					}
+				}
 			},
 			{
 				id = "medic_adrenaline",
@@ -220,15 +230,14 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				class = "ModifierExplosionImmunity",
 				data = {}
 			},
-			
 			{
 				id = "dozer_medic",
 				icon = "crime_spree_cloaker_tear_gas",
 				class = "ModifierVolter",
 				data = {
-					chance = {
-						1.1,
-						"add"
+					boolean = {
+						true,
+						"none"
 					}
 				}
 			},
@@ -271,7 +280,12 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				id = "magnetstorm",
 				icon = "cs_modifier_magnetstorm",
 				class = "ModifierMagnetstorm",
-				data = {}
+				data = {
+					boolean = {
+						true,
+						"none"
+					}
+				}
 			}
 		},
 		stealth = {

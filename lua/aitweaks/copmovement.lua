@@ -746,7 +746,7 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 		local t = TimerManager:game():time()
 
-		if diff_index == 8 or Global.game_settings.use_intense_AI then
+		if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self._ext_damage._invulnerability_t = t + 4
 
 			if self._unit:contour() then

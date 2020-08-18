@@ -9306,7 +9306,7 @@ function CharacterTweakData:_set_overkill_145()
 		end
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		--fbi setup
 		
 		self.fbi.dodge = self.presets.dodge.ninja_complex

@@ -1,17 +1,25 @@
+--List of Modifiers using booleans:
+--Magnetstorm
+--Bulletknock
+--ModifierSkulldozers
+--ModifierTaserovercharge
+--ModifierHeavies
+
 ModifierMagnetstorm = ModifierMagnetstorm or class(BaseModifier)
 ModifierMagnetstorm._type = "ModifierMagnetstorm"
 ModifierMagnetstorm.name_id = "none"
 ModifierMagnetstorm.desc_id = "menu_cs_modifier_magnetstorm"
 
 function ModifierMagnetstorm:init(data)
-	ModifierMagnetstorm.super.init(self, data)
-	
-	if Global.game_settings.incsmission then
-		Global.game_settings.magnetstorm = true
+	ModifierMagnetstorm.super.init(self, data)	
+end
+
+function ModifierMagnetstorm:check_boolean(id)
+	if id == "Magnetstorm" and self:value("boolean") ~= nil then
+		return self:value("boolean")
 	else
-		Global.game_settings.magnetstorm = nil
+		return nil
 	end
-	
 end
 
 ModifierBouncers = ModifierBouncers or class(BaseModifier)
@@ -40,18 +48,13 @@ ModifierVolter = ModifierVolter or class(BaseModifier)
 ModifierVolter._type = "ModifierVolter"
 ModifierVolter.name_id = "none"
 ModifierVolter.desc_id = "menu_cs_modifier_voltergas"
-ModifierVolter.default_value = 0
 
-function ModifierVolter:modify_value(id, value)
-	if id == "HHLetsTryGas" then
-		if self:value("chance") > math.random() then
-			return Idstring("units/pd2_dlc_drm/weapons/wpn_gas_smoke/wpn_gas_smoke")
-		else
-			return value
-		end
+function ModifierVolter:check_boolean(id)
+	if id == "HHLetsTryGas" and self:value("boolean") ~= nil then
+		return true
+	else
+		return nil
 	end
-	
-	return value
 end
 
 ModifierHurtResist = ModifierHurtResist or class(BaseModifier)
@@ -75,13 +78,14 @@ ModifierBulletknock.desc_id = "menu_cs_modifier_bulletknock"
 
 function ModifierBulletknock:init(data)
 	ModifierBulletknock.super.init(self, data)
-	
-	if Global.game_settings.incsmission then
-		Global.game_settings.bulletknock = true
+end
+
+function ModifierBulletknock:check_boolean()
+	if id == "Bullethell" and self:value("boolean") ~= nil then
+		return self:value("boolean")
 	else
-		Global.game_settings.bulletknock = nil
+		return nil
 	end
-	
 end
 
 ModifierShin = ModifierShin or class(BaseModifier)

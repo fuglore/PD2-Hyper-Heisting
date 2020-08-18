@@ -6,20 +6,20 @@ ModifierTaserOvercharge.default_value = "speed"
 
 function ModifierTaserOvercharge:init(data)
 	ModifierTaserOvercharge.super.init(self, data)
-	
-	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
-	if Global.game_settings.incsmission then
-		if not Global.mutators.tase_t_reduction then
-			Global.mutators.tase_t_reduction = 3.75
-		end
+end
+
+function ModifierTaserOvercharge:check_boolean(id)
+	if id == "lightningbolt" and self:value("boolean") ~= nil then
+		return self:value("boolean")
+	else
+		return nil
 	end
-	
 end
 
 function ModifierTaserOvercharge:modify_value(id, value)
-	if id == "PlayerTased:TasedTime" then
-		value = value / (self:value() * 0.01 + 1)
-	end
+	--if id == "PlayerTased:TasedTime" then
+	--	value = value / (self:value() * 0.01 + 1)
+	--end
 
-	return value
+	--return value
 end

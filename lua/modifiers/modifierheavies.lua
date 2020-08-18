@@ -36,8 +36,6 @@ function ModifierHeavies:init(data)
 	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.shared, Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")) 
 	table.insert(tweak_data.group_ai.unit_categories.FBI_heavy_G36.unit_types.shared, Idstring("units/pd2_dlc_drm/characters/ene_murky_heavy_ump/ene_murky_heavy_ump"))	
 	
-	Global.game_settings.heavymutator = true --used to track various things related to unit distribution as to keep stuff consistent, not sure if i actually used this at all by now tbh
-	
 	for group, unit_group in pairs(tweak_data.group_ai.unit_categories) do
 		if unit_group.unit_types then
 			for continent, units in pairs(unit_group.unit_types) do
@@ -52,5 +50,13 @@ function ModifierHeavies:init(data)
 				end
 			end
 		end
+	end
+end
+
+function ModifierHeavies:check_boolean(id)
+	if id == "oopsallheavies" and self:value("boolean") ~= nil then
+		return self:value("boolean")
+	else
+		return nil
 	end
 end

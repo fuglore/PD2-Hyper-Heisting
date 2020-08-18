@@ -470,7 +470,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		walk = true
 	}
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then -- spicy
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then -- spicy
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
@@ -3112,7 +3112,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 	}
 	self.enemy_spawn_groups = {}
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI  then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
 		self.enemy_spawn_groups.recon_squad_A = {
 			amount = {
 				2,
@@ -3692,7 +3692,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI  then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
 		self.enemy_spawn_groups.punks_A = {
 			amount = {
 				3,
@@ -4198,7 +4198,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_swat_shotgun_rush = {
 			amount = {
 				4,
@@ -4504,7 +4504,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_swat_shotgun_flank = {
 			amount = {
 				4,
@@ -4808,7 +4808,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_swat_rifle = { --spamming three heavies is not interesting fuck off, no changes needed otherwise tbh
 			amount = {
 				4,
@@ -5066,7 +5066,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_swat_rifle_flank = { --spamming 3 heavies is not interesting fuck off
 			amount = {
 				4,
@@ -5372,7 +5372,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_shield_wall_ranged = { --surprisingly im fine with this, its a fairly balanced spawn group
 			amount = {
 				4,
@@ -5686,7 +5686,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_shield_wall_charge = {
 			amount = {
 				4,
@@ -5992,7 +5992,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_shield_wall = {
 			amount = {
 				6,
@@ -6232,7 +6232,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_tazer_flanking = {
 			amount = {
 				1,
@@ -6456,7 +6456,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_tazer_charge = {
 			amount = {
 				1,
@@ -6641,7 +6641,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_bull_rush = {
 			amount = {
 				1,
@@ -6841,7 +6841,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 	}
 	
 	--have to work with this unholy mess of bile because otherwise, cloakers don't spawn right
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				1,
@@ -7161,7 +7161,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		fade_duration = 30
 	}
 	
-	if difficulty_index == 7 or difficulty_index == 8 or Global.game_settings and Global.game_settings.use_intense_AI then
+	if difficulty_index == 7 or difficulty_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.assault.sustain_duration_min = {
 			395,
 			395,
@@ -7174,7 +7174,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI  then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
 		self.besiege.assault.delay = {
 			30,
 			30,
@@ -7212,7 +7212,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if Global.game_settings and Global.game_settings.use_intense_AI  then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
 		self.besiege.assault.hostage_hesitation_delay = {
 			15,
 			15,
@@ -7257,7 +7257,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	end
 
 	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" then
-		if Global.game_settings and Global.game_settings.use_intense_AI then
+		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.assault.force_balance_mul = {
 				22,
 				28,
@@ -7297,7 +7297,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				4
 			}
 		end
-	elseif Global.game_settings and Global.game_settings.use_intense_AI then
+	elseif managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.assault.force_balance_mul = {
 			32,
 			48,
@@ -7338,7 +7338,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
 				13.05,
@@ -8013,7 +8013,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		5
 	}
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
 				0, --22.5
@@ -8201,7 +8201,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	self.besiege.recon.interval_variation = 10
 	
 	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
-		if Global.game_settings and Global.game_settings.use_intense_AI then
+		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.recon.force = {
 				0.5,
 				0.5,
@@ -8220,7 +8220,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				0.5
 			}
 		end
-	elseif Global.game_settings and Global.game_settings.use_intense_AI then
+	elseif managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.recon.force = {
 			6,
 			6,
@@ -8240,7 +8240,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.recon.groups = {
 			recon_squad_B = {
 				25,

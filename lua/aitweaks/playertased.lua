@@ -99,7 +99,7 @@ function PlayerTased:_check_action_shock(t, input)
 		if self._unit:character_damage()._tase_data and not self._is_non_lethal then
 			local damage = 4.1
 			
-			if Global.mutators and Global.mutators.tase_t_reduction then
+			if managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
 				damage = damage * 2
 			end
 			
