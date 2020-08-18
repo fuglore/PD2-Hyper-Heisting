@@ -55,8 +55,8 @@ end
 
 function ModifierHeavies:check_boolean(id)
 	if id == "oopsallheavies" and self:value("boolean") ~= nil then
-		return self:value("boolean")
-	else
+		return true
+	else	
 		return nil
 	end
 end

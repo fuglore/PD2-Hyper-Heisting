@@ -67,23 +67,12 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
-				id = "taser_overcharge",
-				icon = "crime_spree_taser_overcharge",
-				class = "ModifierTaserOvercharge",
-				data = {
-					boolean = {
-						true,
-						"none"
-					}
-				}
-			},
-			{
 				id = "heavies",
 				icon = "crime_spree_heavies",
 				class = "ModifierHeavies",
 				data = {
 					boolean = {
-						true,
+						1,
 						"none"
 					}
 				}
@@ -109,6 +98,24 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 						"add"
 					},
 				}
+			},
+			{
+				id = "aggro",
+				icon = "cs_modifier_aggro",
+				class = "ModifierAggro",
+				level = 100,
+				data = {
+					boolean = {
+						1,
+						"none"
+					}
+				}
+			},
+			{
+				id = "shield_phalanx",
+				icon = "cs_modifier_saigasec",
+				class = "ModifierShieldPhalanx",
+				data = {}
 			},
 			{
 				id = "heavy_sniper",
@@ -141,6 +148,17 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
+				id = "taser_overcharge",
+				icon = "crime_spree_taser_overcharge",
+				class = "ModifierTaserOvercharge",
+				data = {
+					boolean = {
+						1,
+						"none"
+					}
+				}
+			},
+			{
 				id = "dozer_1",
 				icon = "crime_spree_more_dozers",
 				class = "ModifierMoreDozers",
@@ -166,9 +184,10 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				id = "dozer_lmg",
 				icon = "cs_modifier_difficultyspike",
 				class = "ModifierSkulldozers",
+				level = 200,
 				data = {
 					boolean = {
-						true,
+						1,
 						"none"
 					}
 				}
@@ -185,9 +204,20 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
-				id = "shield_phalanx",
-				icon = "cs_modifier_saigasec",
-				class = "ModifierShieldPhalanx",
+				id = "voltergas",
+				icon = "crime_spree_cloaker_tear_gas",
+				class = "ModifierVolter",
+				data = {
+					boolean = {
+						1,
+						"none"
+					}
+				}
+			},
+			{
+				id = "winters",
+				icon = "cs_modifier_truelotusmaster",
+				class = "ModifierDozerMedic",
 				data = {}
 			},
 			{
@@ -225,32 +255,10 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				}
 			},
 			{
-				id = "dozer_immunity",
-				icon = "cs_modifier_aggro",
-				class = "ModifierExplosionImmunity",
-				data = {}
-			},
-			{
-				id = "dozer_medic",
-				icon = "crime_spree_cloaker_tear_gas",
-				class = "ModifierVolter",
-				data = {
-					boolean = {
-						true,
-						"none"
-					}
-				}
-			},
-			--{
-			--	id = "dozer_medic",
-			--	icon = "cs_modifier_truelotusmaster",
-			--	class = "ModifierDozerMedic",
-			--	data = {}
-			--},
-			{
 				id = "shin",
 				icon = "cs_modifier_shoryu",
 				class = "ModifierShin",
+				level = 300,
 				data = {}
 			},
 			{
@@ -260,10 +268,15 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				data = {}
 			},
 			{
-				id = "cloaker_arrest",
-				icon = "crime_spree_cloaker_arrest",
-				class = "ModifierCloakerArrest",
-				data = {}
+				id = "megacloakers",
+				icon = "cs_modifier_themegas",
+				class = "ModifierMegaCloakers",
+				data = {
+					boolean = {
+						1,
+						"none"
+					}
+				}
 			},
 			{
 				id = "medic_rage",
@@ -282,7 +295,7 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				class = "ModifierMagnetstorm",
 				data = {
 					boolean = {
-						true,
+						1,
 						"none"
 					}
 				}

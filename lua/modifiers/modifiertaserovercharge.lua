@@ -10,7 +10,7 @@ end
 
 function ModifierTaserOvercharge:check_boolean(id)
 	if id == "lightningbolt" and self:value("boolean") ~= nil then
-		return self:value("boolean")
+		return true
 	else
 		return nil
 	end

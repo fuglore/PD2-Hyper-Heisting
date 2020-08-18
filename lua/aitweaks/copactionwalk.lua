@@ -1211,7 +1211,14 @@ function CopActionWalk:_get_current_max_walk_speed(move_dir)
 	end
 
 	local multiplier = is_hostage and self._common_data.char_tweak.hostage_move_speed or 1
+	
+	if not is_hostage then
+		multiplier = managers.groupai:state()._enemy_speed_mul
+		--log("multiplier is " .. tostring(multiplier) .. "!") careful uncommenting these, dont nuke your framerate, nerd.
+	end
+	
 	local speed = self._common_data.char_tweak.move_speed[self._ext_anim.pose][self._haste][self._stance.name][move_dir] * multiplier
+	--log("speed is " .. tostring(speed) .. "!")
 	local is_host = self._sync or Global.game_settings.single_player
 
 	if not is_host then

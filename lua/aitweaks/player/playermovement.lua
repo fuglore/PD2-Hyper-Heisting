@@ -98,16 +98,26 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 		return
 	end
 	
+	local damage = 23.75
+	local push_mul = 2000
+	local height_mul = 0.2
+	
+	if managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") then
+		damage = damage * 2
+		push_mul = 4000
+		height_mul = 0.1
+	end
+	
 	local push_vec = Vector3()
 	local distance = mvector3.direction(push_vec, enemy_unit:movement():m_head_pos(), self._unit:movement():m_pos())
 	mvector3.normalize(push_vec)
-	mvector3.set_z(push_vec, 0.2)
+	mvector3.set_z(push_vec, height_mul)
 	local attack_data = {
 		attacker_unit = enemy_unit,
 		is_cloaker_kick = true,
 		melee_armor_piercing = true,
-		damage = 23.75,
-		push_vel = push_vec * 2000
+		damage = damage,
+		push_vel = push_vec * push_mul
 	}
 	self._unit:character_damage():damage_melee(attack_data)
 		

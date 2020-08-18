@@ -38,7 +38,7 @@ end
 
 function ModifierSkulldozers:check_boolean(id)
 	if id == "TotalAnarchy" and self:value("boolean") ~= nil then
-		return self:value("boolean")
+		return true
 	else
 		return nil
 	end

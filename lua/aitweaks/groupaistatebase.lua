@@ -368,6 +368,14 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 					u_data.unit:sound():say("att", true)
 				end
 			end
+			
+			if Network:is_server() then
+				if managers.modifiers:check_boolean("itmightrain") then
+					self._enemy_speed_mul = self._enemy_speed_mul + 0.1
+				end
+					
+				LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
+			end
 
 			self._task_data.assault.phase = "build"
 			self._task_data.assault.phase_end_t = self._t + self._tweak_data.assault.build_duration
@@ -450,6 +458,14 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 			for u_key, u_data in pairs(group.units) do
 				u_data.unit:sound():say("g90", true)
 			end
+		end
+		
+		if Network:is_server() then
+			if managers.modifiers:check_boolean("itmightrain") then
+				self._enemy_speed_mul = self._enemy_speed_mul + 0.1
+			end
+				
+			LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
 		end
 
 		self._task_data.assault.phase = "build"

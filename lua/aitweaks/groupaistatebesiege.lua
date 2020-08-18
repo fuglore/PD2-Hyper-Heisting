@@ -21,6 +21,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	self._spawn_group_timers = {}
 	self._graph_distance_cache = {}
+	self._enemy_speed_mul = 1
 	self._had_hostages = nil
 	self._feddensityhigh = nil	
 	self._feddensityhighfrequency = 1
@@ -1141,6 +1142,14 @@ function GroupAIStateBesiege:_upd_assault_task()
 				for u_key, u_data in pairs(group.units) do
 					u_data.unit:sound():say("att", true)
 				end
+			end
+			
+			if Network:is_server() then
+				if managers.modifiers:check_boolean("itmightrain") then
+					self._enemy_speed_mul = self._enemy_speed_mul + 0.1
+				end
+				
+				LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
 			end
 
 			task_data.phase = "build"

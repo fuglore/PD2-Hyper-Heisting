@@ -256,7 +256,7 @@ function PlayerDamage:damage_melee(attack_data)
 	self._last_received_dmg = attack_data.damage
 	self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
 	
-	local allow_melee_dodge = true --manual toggle, to be later replaced with a Rogue melee dodge perk check
+	local allow_melee_dodge = true
 	
 	if allow_melee_dodge and not attack_data.is_cloaker_kick and pm:current_state() ~= "bleed_out" and pm:current_state() ~= "bipod" and pm:current_state() ~= "tased" then --self._bleed_out and current_state() ~= "bleed_out" aren't the same thing
 		local dodge_roll = math.random()

@@ -1605,8 +1605,14 @@ function ActionSpooc.chk_can_start_flying_strike(unit, target_unit)
 	mvec3_sub(target_vec, my_pos)
 
 	local target_dis = mvec3_len(target_vec)
+	
+	local dis = 1000
+	
+	if managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") then
+		dis = 2000
+	end
 
-	if target_dis > 1000 then
+	if target_dis > dis then
 		return
 	end
 
@@ -1877,7 +1883,7 @@ function ActionSpooc:_check_sounds_and_lights_state(state, is_dead)
 
 	if state then
 		if not self._chk_detect_sound_and_lights then
-			local detect_sound = not Global.game_settings.telespooc and self:get_sound_event("detect")
+			local detect_sound = not managers.modifiers:check_boolean("telespooc") and self:get_sound_event("detect")
 
 			if detect_sound then
 				self._unit:sound():play(detect_sound)

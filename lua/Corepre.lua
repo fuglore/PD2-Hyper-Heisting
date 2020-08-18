@@ -160,4 +160,13 @@ Hooks:Add("NetworkReceivedData", "shin_receive_network_data", function(sender, m
             end
         end
     end
-end) 
+	
+	if message == "shin_sync_speed_mul" then 
+        if sender == 1 then
+            if data then
+				local number_data = tonumber(data)
+				managers.groupai:state()._enemy_speed_mul = number_data
+			end
+        end
+    end
+end)

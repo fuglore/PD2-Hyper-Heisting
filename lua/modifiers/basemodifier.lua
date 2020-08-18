@@ -1,9 +1,46 @@
 --List of Modifiers using booleans:
+--MegaCloakers
 --Magnetstorm
 --Bulletknock
---ModifierSkulldozers
+--ModifierSkulldozers (everything is horrible)
 --ModifierTaserovercharge
 --ModifierHeavies
+--ModifierCloakerTearGas (telespooc)
+--ModifierAggro
+
+ModifierMegaCloakers = ModifierMegaCloakers or class(BaseModifier)
+ModifierMegaCloakers._type = "ModifierMegaCloakers"
+ModifierMegaCloakers.name_id = "none"
+ModifierMegaCloakers.desc_id = "menu_cs_modifier_megacloakers"
+
+function ModifierMegaCloakers:init(data)
+	ModifierMegaCloakers.super.init(self, data)	
+end
+
+function ModifierMegaCloakers:check_boolean(id)
+	if id == "woahtheyjomp" and self:value("boolean") ~= nil then
+		return true
+	else
+		return nil
+	end
+end
+
+ModifierAggro = ModifierAggro or class(BaseModifier)
+ModifierAggro._type = "ModifierAggro"
+ModifierAggro.name_id = "none"
+ModifierAggro.desc_id = "menu_cs_modifier_monsoon"
+
+function ModifierAggro:init(data)
+	ModifierAggro.super.init(self, data)	
+end
+
+function ModifierAggro:check_boolean(id)
+	if id == "itmightrain" and self:value("boolean") ~= nil then
+		return true
+	else
+		return nil
+	end
+end
 
 ModifierMagnetstorm = ModifierMagnetstorm or class(BaseModifier)
 ModifierMagnetstorm._type = "ModifierMagnetstorm"
@@ -16,7 +53,7 @@ end
 
 function ModifierMagnetstorm:check_boolean(id)
 	if id == "Magnetstorm" and self:value("boolean") ~= nil then
-		return self:value("boolean")
+		return true
 	else
 		return nil
 	end
@@ -82,7 +119,7 @@ end
 
 function ModifierBulletknock:check_boolean()
 	if id == "Bullethell" and self:value("boolean") ~= nil then
-		return self:value("boolean")
+		return true
 	else
 		return nil
 	end
@@ -112,5 +149,4 @@ function ModifierUnison:init(data)
 	else
 		Global.game_settings.thethreerulers = nil
 	end
-	
 end

@@ -240,7 +240,7 @@ function CopActionReload:execute_magnet_storm(t)
 
 	if alive(player) then
 		local pl_movement = player:movement()
-		local sq_dist_range = 160000
+		local sq_dist_range = 90000
 		local sq_dist = mvec3_dist_sq(mvec3_copy(self._ext_movement:m_com()), mvec3_copy(pl_movement:m_head_pos()))
 
 		if sq_dist <= sq_dist_range then

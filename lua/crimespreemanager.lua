@@ -1,4 +1,4 @@
-CrimeSpreeManager.CS_VERSION = 69
+CrimeSpreeManager.CS_VERSION = 70
 
 function CrimeSpreeManager:init()
 	self:_setup()

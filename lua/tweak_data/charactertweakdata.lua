@@ -9492,7 +9492,7 @@ function CharacterTweakData:_set_overkill_145()
 		self.concussion_multiplier = 1
 	end
 	
-	if Global.game_settings and Global.game_settings.telespooc then
+	if managers.modifiers and managers.modifiers:check_boolean("telespooc") then
 		self.spooc.move_speed = self.presets.move_speed.speedofsoundsonic
 	end
 end

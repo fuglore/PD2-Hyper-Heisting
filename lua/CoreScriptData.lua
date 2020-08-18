@@ -37,7 +37,7 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 	
 	BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_day_hh.custom_xml", "custom_xml", "environments/pd2_env_mid_day/pd2_env_mid_day", "environment")
 	
-	if diff_index == 8 then
+	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_night/pd2_env_night", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_hlm1/pd2_hlm1", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_rat_night/pd2_env_rat_night", "environment")
@@ -53,13 +53,17 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_kosugi/pd2_kosugi", "environment")
 	end
 	
-	if diff_index == 8 and sex == "friend" then
-		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/shitfaceenvironment.custom_xml", "custom_xml", "environments/pd2_friend/pd2_friend", "environment")
+	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		if sex == "friend" then
+			BeardLib:ReplaceScriptData(mod_path .. "scriptdata/shitfaceenvironment.custom_xml", "custom_xml", "environments/pd2_friend/pd2_friend", "environment")
+		end
 	end
 	
-	if diff_index == 8 and sex == "wwh_hh" then
-		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/albaniandeal.custom_xml", "custom_xml", "environments/pd2_wwh/pd2_wwh", "environment")
-		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/albaniandeal_indoor.custom_xml", "custom_xml", "environments/pd2_wwh/pd2_wwh_train", "environment")
+	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		if sex == "wwh_hh" then
+			BeardLib:ReplaceScriptData(mod_path .. "scriptdata/albaniandeal.custom_xml", "custom_xml", "environments/pd2_wwh/pd2_wwh", "environment")
+			BeardLib:ReplaceScriptData(mod_path .. "scriptdata/albaniandeal_indoor.custom_xml", "custom_xml", "environments/pd2_wwh/pd2_wwh_train", "environment")
+		end
 	end
 
 end)

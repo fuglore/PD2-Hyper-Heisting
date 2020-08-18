@@ -37,6 +37,15 @@ Hooks:PostHook(HudIconsTweakData, "init", "hh_icons", function(self)
 			image_sizes
 		}
 	}
+	self.cs_modifier_themegas = {
+		texture = "guis/dlcs/drm/textures/pd2/crime_spree/modifier_themegas",
+		texture_rect = {
+			image_sizes * 0,
+			image_sizes * 0,
+			image_sizes,
+			image_sizes
+		}
+	}
 	self.cs_modifier_truelotusmaster = { --wish i could spell it as "ture" since it was also mispelled in the game this is referencing, but, for my own safety...
 		texture = "guis/dlcs/drm/textures/pd2/crime_spree/modifier_lotus",
 		texture_rect = {
