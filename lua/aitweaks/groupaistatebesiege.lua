@@ -460,9 +460,9 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		if not self._enemies_killed_sustain_guaranteed_break then
 			if small_map then
-				self._enemies_killed_sustain_guaranteed_break = 100
+				self._enemies_killed_sustain_guaranteed_break = 128
 			else
-				self._enemies_killed_sustain_guaranteed_break = 200
+				self._enemies_killed_sustain_guaranteed_break = 256
 				--log("poggers <3")
 			end
 		end
@@ -494,9 +494,9 @@ function GroupAIStateBesiege:update(t, dt)
 					--self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
 					
 					if small_map then
-						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 100
+						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 128
 					else
-						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 200
+						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 256
 					end
 					
 					if not self._said_heat_bonus_dialog then
@@ -1101,10 +1101,12 @@ function GroupAIStateBesiege:_upd_assault_task()
 		--end
 	--end
 	
-	if task_data.is_first or self._assault_number and self._assault_number <= 2 or not self._assault_number then
-		assault_number_sustain_t_mul = 0.75 
+	if task_data.is_first or not self._assault_number then
+		assault_number_sustain_t_mul = 0.5
 	elseif self._assault_number >= 3 then
 		assault_number_sustain_t_mul = 1
+	else
+		assault_number_sustain_t_mul = 0.75
 	end
 	
 	if not task_data.active then
@@ -1116,7 +1118,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local force_pool = nil 
 	
 	if task_data.is_first or self._assault_number and self._assault_number <= 1 or not self._assault_number then
-		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
+		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.5 * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif self._assault_number == 2 then
 		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif self._assault_number >= 3 then

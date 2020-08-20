@@ -7142,14 +7142,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			}
 		},
 		sustain_duration_min = {
-			270,
-			270,
-			270
+			300,
+			300,
+			300
 		},
 		sustain_duration_max = {
-			270,
-			270,
-			270
+			300,
+			300,
+			300
 		},
 		sustain_duration_balance_mul = {
 			1,
@@ -7163,14 +7163,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	
 	if difficulty_index == 7 or difficulty_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.assault.sustain_duration_min = {
-			395,
-			395,
-			395
+			480,
+			480,
+			480
 		}
 		self.besiege.assault.sustain_duration_max = {
-			395,
-			395,
-			395
+			480,
+			480,
+			480
 		}
 	end
 	
@@ -7305,10 +7305,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			72
 		}
 		self.besiege.assault.force_pool_balance_mul = {
-			0.5,
-			0.75,
 			1,
-			1
+			1.5,
+			2,
+			2
 		}
 	elseif difficulty_index < 7 then
 		self.besiege.assault.force_balance_mul = {
@@ -7318,10 +7318,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			64
 		}
 		self.besiege.assault.force_pool_balance_mul = {
-			0.35,
-			0.5,
 			1,
-			1
+			1.5,
+			2,
+			2
 		}
 	else
 		self.besiege.assault.force_balance_mul = {
@@ -7331,10 +7331,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			72
 		}
 		self.besiege.assault.force_pool_balance_mul = {
-			0.5,
-			0.75,
 			1,
-			1
+			1.5,
+			2,
+			2
 		}
 	end
 	

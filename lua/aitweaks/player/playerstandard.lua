@@ -607,6 +607,53 @@ function PlayerStandard:_update_movement(t, dt)
 	self:_update_network_position(t, dt, cur_pos, pos_new)
 end
 
+function PlayerStandard:_activate_mover(mover, velocity)
+	self._unit:activate_mover(mover, velocity)
+	
+	if not self._original_damping_standard then
+		self._original_damping_standard = self._unit:mover():damping()
+	end
+
+	if self._state_data.on_ladder then
+		self._unit:mover():set_gravity(Vector3(0, 0, 0))
+		self._unit:mover():set_damping(self._original_damping_standard)
+	else
+		self._unit:mover():set_gravity(Vector3(0, 0, -982))
+		self._unit:mover():set_damping(self._tweak_data.gravity / self._tweak_data.terminal_velocity)
+	end
+
+	if self._is_jumping then
+		self._unit:mover():jump()
+		self._unit:mover():set_velocity(velocity)
+	end
+end
+
+function PlayerStandard:_start_action_ladder(t, ladder_unit)
+	self._state_data.on_ladder = true
+
+	self:_interupt_action_running(t)
+	self._unit:mover():set_velocity(Vector3())
+	self._unit:mover():set_gravity(Vector3(0, 0, 0))
+	self._unit:mover():set_damping(self._original_damping_standard)
+	self._unit:mover():jump()
+	self._unit:movement():on_enter_ladder(ladder_unit)
+end
+
+function PlayerStandard:_end_action_ladder(t, input)
+	if not self._state_data.on_ladder then
+		return
+	end
+
+	self._state_data.on_ladder = false
+
+	if self._unit:mover() then
+		self._unit:mover():set_gravity(Vector3(0, 0, -982))
+		self._unit:mover():set_damping(self._tweak_data.gravity / self._tweak_data.terminal_velocity)
+	end
+
+	self._unit:movement():on_exit_ladder()
+end
+
 function PlayerStandard:_start_action_melee(t, input, instant)
 	self._equipped_unit:base():tweak_data_anim_stop("fire")
 	self:_interupt_action_reload(t)
@@ -724,10 +771,13 @@ function PlayerStandard:_update_foley(t, input)
 			height = self._state_data.enter_air_pos_z - self._pos.z
 		}) then
 			--self._running_wanted = false
+			
+			local fall_distance = self._state_data.enter_air_pos_z - self._pos.z
+			local fall_distance_lerp = math.clamp(fall_distance, 315.5, 631) / 315.5
 
 			managers.rumble:play("hard_land")
-			self._ext_camera:play_shaker("player_fall_damage")
-			self:_start_action_ducking(t)
+			self._ext_camera:play_shaker("player_fall_damage", fall_distance_lerp)
+			--self:_start_action_ducking(t)
 		elseif input.btn_run_state then
 			--self._running_wanted = true
 		end
