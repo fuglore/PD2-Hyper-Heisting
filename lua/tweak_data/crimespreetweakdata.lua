@@ -876,11 +876,11 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				level = tweak_data.narrative.stages.pal
 			},
 			{
-				stage_id = "flat",
+				stage_id = "flat_hh",
 				add = 12,
 				id = "flat",
 				icon = "csm_panic_room",
-				level = tweak_data.narrative.stages.flat
+				level = tweak_data.narrative.stages.flat_hh
 			},
 			{
 				stage_id = "born",
@@ -985,7 +985,7 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				add = 20,
 				id = "nmh_hyper",
 				icon = "csm_nmh",
-				level = tweak_data.narrative.stages.nmh
+				level = tweak_data.narrative.stages.nmh_hyper
 			}
 		}
 	}

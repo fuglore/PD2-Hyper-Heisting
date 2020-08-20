@@ -83,6 +83,89 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+	presets.surrender = {
+		always = {
+			base_chance = 1
+		},
+		never = {
+			base_chance = 0
+		},
+		easy = {
+			base_chance = 0.3,
+			significant_chance = 0.35,
+			reasons = {
+				pants_down = 1,
+				isolated = 0.08,
+				weapon_down = 0.5,
+				health = {
+					[1.0] = 0.1,
+					[0.999] = 0.9
+				}
+			},
+			factors = {
+				unaware_of_aggressor = 0.1,
+				enemy_weap_cold = 0.11,
+				flanked = 0.05,
+				aggressor_dis = {
+					[300.0] = 0.2,
+					[1000.0] = 0
+				}
+			}
+		},
+		normal = {
+			base_chance = 0.3,
+			significant_chance = 0.35,
+			reasons = {
+				health = {
+					[1.0] = 0.1,
+					[0.999] = 0.9
+				}
+			},
+			factors = {}
+		},
+		hard = {
+			base_chance = 0.1,
+			significant_chance = 0.1,
+			--violence_timeout = 2,
+			reasons = {
+				pants_down = 1,
+				weapon_down = 0.2,
+				health = {
+					[1.0] = 0,
+					[0.75] = 0.5
+				}
+			},
+			factors = {
+				enemy_weap_cold = 0.05,
+				unaware_of_aggressor = 0,
+				flanked = 0.2,
+				isolated = 0.4,
+				aggressor_dis = {
+					[300.0] = 0.1,
+					[1000.0] = 0
+				}
+			}
+		},
+		special = {
+			base_chance = 0,
+			significant_chance = 0,
+			--violence_timeout = 2,
+			reasons = {
+				pants_down = 0,
+				weapon_down = 0.25,
+				health = {
+					[1] = 0,
+					[0.5] = 0.25
+				}
+			},
+			factors = {
+				enemy_weap_cold = 0.05,
+				unaware_of_aggressor = 0,
+				isolated = 0.15,
+				flanked = 0.1
+			}
+		}
+	}
 	
 	--Custom suppression presets for certain types of enemies which should be affected by suppressive effects but not have damage reactions, flawed, yes, but it's the best that can currently be done until someone can help me figure out how to disable the suppression resistance and instantaneous build up on hit.
 	presets.suppression.stalwart_nil = {
