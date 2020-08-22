@@ -50,6 +50,7 @@ function CopBase:default_weapon_name()
 	local weap_ids = tweak_data.character.weap_ids
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local faction = tweak_data.levels:get_ai_group_type()
+	local level = Global.level_data and Global.level_data.level_id
 	
 	--available vanilla weapons, using their in-game names to avoid confusion since I'm planning to post this in the WIP thread regarding incorrect weapons in vanilla
 	local suppressed_bernetti = Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92")
@@ -200,7 +201,7 @@ function CopBase:default_weapon_name()
 	elseif give_m4 then
 		return car4
 		
-	elseif hoxout_boss then
+	elseif hoxout_boss and not level == "tag" then
 		return izhma
 		
 	elseif give_r870 then
