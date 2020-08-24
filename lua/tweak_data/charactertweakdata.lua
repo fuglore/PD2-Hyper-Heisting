@@ -92,7 +92,6 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		easy = {
 			base_chance = 0.3,
-			significant_chance = 0.35,
 			reasons = {
 				pants_down = 1,
 				isolated = 0.08,
@@ -113,8 +112,7 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		},
 		normal = {
-			base_chance = 0.3,
-			significant_chance = 0.35,
+			base_chance = 0.15,
 			reasons = {
 				health = {
 					[1.0] = 0.1,
@@ -125,8 +123,6 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		hard = {
 			base_chance = 0.1,
-			significant_chance = 0.1,
-			--violence_timeout = 2,
 			reasons = {
 				pants_down = 1,
 				weapon_down = 0.2,
@@ -148,8 +144,6 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		special = {
 			base_chance = 0,
-			significant_chance = 0,
-			--violence_timeout = 2,
 			reasons = {
 				pants_down = 0,
 				weapon_down = 0.25,
@@ -159,10 +153,13 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			factors = {
-				enemy_weap_cold = 0.05,
+				enemy_weap_cold = 0.5,
 				unaware_of_aggressor = 0,
-				isolated = 0.15,
-				flanked = 0.1
+				isolated = 0.25,
+				aggressor_dis = {
+					[300.0] = 0.25,
+					[400.0] = 0
+				}
 			}
 		}
 	}
@@ -8480,7 +8477,6 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	self.city_swat.silent_priority_shout = "f37"
 	self.city_swat.speech_prefix_p1 = self._prefix_data_p1.heavy_swat()
 	self.city_swat.speech_prefix_p2 = "n"
-	self.city_swat.silent_priority_shout = "f37"
 	self.city_swat.speech_prefix_count = 4
 	self.city_swat.access = "swat"
 	self.city_swat.no_retreat = nil

@@ -611,15 +611,16 @@ function PlayerStandard:_activate_mover(mover, velocity)
 	self._unit:activate_mover(mover, velocity)
 	
 	if not self._original_damping_standard then
-		self._original_damping_standard = self._unit:mover():damping()
+		self._original_damping_standard = self._unit:mover():damping() --PLEASE DO NOT CHANGE THIS!!! WILL PROBABLY CAUSE WEIRD BEHAVIOR IN LADDERS!!!
 	end
 
 	if self._state_data.on_ladder then
 		self._unit:mover():set_gravity(Vector3(0, 0, 0))
-		self._unit:mover():set_damping(self._original_damping_standard)
+		self._unit:mover():set_damping(self._tweak_data.gravity / self._tweak_data.terminal_velocity) --sets how fast the player accelerates downwards in the air, i have no clue what the value for this actually represents since its something like 0.14-ish.
+		--self._unit:mover():set_damping(self._original_damping_standard)
 	else
-		self._unit:mover():set_gravity(Vector3(0, 0, -982))
-		self._unit:mover():set_damping(self._tweak_data.gravity / self._tweak_data.terminal_velocity)
+		self._unit:mover():set_gravity(Vector3(0, 0, -982)) --sets the actual gravity, you can set this to funny values if you want moon-jumping or something
+		self._unit:mover():set_damping(self._tweak_data.gravity / self._tweak_data.terminal_velocity) --sets how fast the player accelerates downwards in the air, i have no clue what the value for this actually represents since its something like 0.14-ish.
 	end
 
 	if self._is_jumping then
@@ -634,7 +635,7 @@ function PlayerStandard:_start_action_ladder(t, ladder_unit)
 	self:_interupt_action_running(t)
 	self._unit:mover():set_velocity(Vector3())
 	self._unit:mover():set_gravity(Vector3(0, 0, 0))
-	self._unit:mover():set_damping(self._original_damping_standard)
+	--self._unit:mover():set_damping(self._original_damping_standard)
 	self._unit:mover():jump()
 	self._unit:movement():on_enter_ladder(ladder_unit)
 end
