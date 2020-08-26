@@ -7250,9 +7250,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			1
 		}
 		self.besiege.assault.force_pool = {
-			256,
-			256,
-			256
+			128,
+			128,
+			128
 		}
 	end
 
@@ -7318,10 +7318,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			64
 		}
 		self.besiege.assault.force_pool_balance_mul = {
+			0.25,
+			0.5,
 			1,
-			1.5,
-			2,
-			2
+			1
 		}
 	else
 		self.besiege.assault.force_balance_mul = {
@@ -7331,8 +7331,8 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			72
 		}
 		self.besiege.assault.force_pool_balance_mul = {
+			0.5,
 			1,
-			1.5,
 			2,
 			2
 		}

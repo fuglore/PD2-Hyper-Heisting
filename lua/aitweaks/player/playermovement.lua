@@ -98,12 +98,10 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 		return
 	end
 	
-	local damage = 23.75
 	local push_mul = 2000
 	local height_mul = 0.2
 	
 	if managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") then
-		damage = damage * 2
 		push_mul = 4000
 		height_mul = 0.1
 	end
@@ -116,7 +114,7 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 		attacker_unit = enemy_unit,
 		is_cloaker_kick = true,
 		melee_armor_piercing = true,
-		damage = damage,
+		damage = 23.75,
 		push_vel = push_vec * push_mul
 	}
 	self._unit:character_damage():damage_melee(attack_data)

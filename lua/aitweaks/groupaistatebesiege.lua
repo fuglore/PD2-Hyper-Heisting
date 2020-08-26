@@ -35,6 +35,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._activeassaultbreak = nil
 	self._activeassaultnextbreak_t = nil
 	self._stopassaultbreak_t = nil
+	self._MAX_SIMULTANEOUS_SPAWNS = 1
 end
 
 function GroupAIStateBesiege:_draw_enemy_activity(t)
@@ -1117,7 +1118,23 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 	local force_pool = nil 
 	
-	if task_data.is_first or self._assault_number and self._assault_number <= 1 or not self._assault_number then
+	if managers.skirmish:is_skirmish() then
+		local force_pool_table = {
+			64,
+			64,
+			96,
+			128,
+			144,
+			160,
+			176,
+			240,
+			304,
+			400
+		}
+		local wave = math.clamp(managers.skirmish:current_wave_number(), 1, #force_pool_table)
+		local force_pool_to_use = force_pool_table[wave]
+		force_pool = force_pool_to_use * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
+	elseif task_data.is_first or self._assault_number and self._assault_number <= 1 or not self._assault_number then
 		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.5 * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif self._assault_number == 2 then
 		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
@@ -1125,10 +1142,18 @@ function GroupAIStateBesiege:_upd_assault_task()
 		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	end
 	
-	local task_spawn_allowance = force_pool - (self._hunt_mode and 0 or task_data.force_spawned)
+	local enemies_spawned = task_data.force_spawned
+	
+	if self._hunt_mode or task_data.phase == "anticipation" then
+		enemies_spawned = 0
+	end
+	
+	local enemykillcountchk = force_pool * 0.9
+	
+	local task_spawn_allowance = force_pool - enemies_spawned
 	
 	if task_data.phase == "anticipation" then
-		if task_spawn_allowance <= 0 then
+		if task_spawn_allowance <= 0 and self._enemies_killed_sustain >= enemykillcountchk then
 			--fade
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
@@ -1166,7 +1191,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			managers.hud:check_start_anticipation_music(task_data.phase_end_t - t)
 		end
 	elseif task_data.phase == "build" then
-		if task_spawn_allowance <= 0 then
+		if task_spawn_allowance <= 0 and self._enemies_killed_sustain >= enemykillcountchk then
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
 			local time = self._t
@@ -1193,7 +1218,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	elseif task_data.phase == "sustain" then
 		task_spawn_allowance = managers.modifiers:modify_value("GroupAIStateBesiege:SustainSpawnAllowance", task_spawn_allowance, force_pool)
 
-		if task_spawn_allowance <= 0 then
+		if task_spawn_allowance <= 0 and self._enemies_killed_sustain >= enemykillcountchk then
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
 			
@@ -1209,7 +1234,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 						end					   
 					end	
 				end	
-		elseif self._task_data.assault.phase_end_t < t and not self._hunt_mode and self._enemies_killed_sustain > 50 then
+		elseif self._task_data.assault.phase_end_t < t and self._enemies_killed_sustain >= enemykillcountchk and not self._hunt_mode then
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
 			local time = self._t
@@ -1232,14 +1257,16 @@ function GroupAIStateBesiege:_upd_assault_task()
 		if not self._hunt_mode then
 			local enemies_defeated_time_limit = 60
 			local drama_engagement_time_limit = 60
+			local min_enemies_left = 256 * 0.1
 
-			if managers.skirmish:is_skirmish() then
+			if managers.skirmish:is_skirmish() then	
+				min_enemies_left = 15
 				enemies_defeated_time_limit = 0
 				drama_engagement_time_limit = 0
 			end
-
-			local min_enemies_left = 30 --enemies remaining before considering all enemies defeated
-			local enemies_defeated = enemies_left < min_enemies_left
+			
+			 --enemies remaining before considering all enemies defeated
+			local enemies_defeated = enemies_left <= min_enemies_left
 			local taking_too_long = t > task_data.phase_end_t + enemies_defeated_time_limit
 			local fade_time_over = t > task_data.phase_end_t 
 			--self:_assign_assault_groups_to_retire()
@@ -2752,6 +2779,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 	if complete then
 		spawn_task.group.has_spawned = true
+		spawn_task.spawn_group.delay_t = self._t + math.lerp(2.5, 7.5, math.random())
 		
 		self:_voice_groupentry(spawn_task.group)
 		table.remove(self._spawning_groups, use_last and #self._spawning_groups or 1)
@@ -2877,7 +2905,7 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	local total_weight = 0
 	local candidate_groups = {}
 	self._debug_weights = {}
-	local dis_limit = 8000
+	local dis_limit = 20000
 
 	for i, dis in pairs(valid_spawn_group_distances) do
 		local my_wgt = math.lerp(1, 0.2, math.min(1, dis / dis_limit)) * 5

@@ -149,70 +149,80 @@ function SkirmishTweakData:_init_special_unit_spawn_limits()
 			medic = 4,
 			taser = 2,
 			tank = 1,
-			spooc = 2
+			spooc = 2,
+			ninja = 4
 		},
 		{
 			shield = 4,
 			medic = 6,
 			taser = 2,
 			tank = 1,
-			spooc = 2
+			spooc = 2,
+			ninja = 4
 		},
 		{
 			shield = 4,
 			medic = 6,
 			taser = 2,
 			tank = 1,
-			spooc = 2
+			spooc = 2,
+			ninja = 8
 		},
 		{
 			shield = 5,
 			medic = 8,
 			taser = 2,
 			tank = 1,
-			spooc = 2
+			spooc = 2,
+			ninja = 8
 		},
 		{
 			shield = 5,
 			medic = 8,
 			taser = 2,
 			tank = 2,
-			spooc = 2
+			spooc = 2,
+			ninja = 8
 		},
 		{
 			shield = 6,
 			medic = 8,
 			taser = 3,
 			tank = 2,
-			spooc = 2
+			spooc = 2,
+			ninja = 8
 		},
 		{
 			shield = 6,
 			medic = 8,
 			taser = 3,
 			tank = 2,
-			spooc = 3
+			spooc = 3,
+			ninja = 8
 		},
 		{
 			shield = 6,
 			medic = 8,
 			taser = 3,
 			tank = 2,
-			spooc = 3
+			spooc = 3,
+			ninja = 8
 		},
 		{
 			shield = 7,
 			medic = 10,
 			taser = 3,
 			tank = 2,
-			spooc = 3
+			spooc = 3,
+			ninja = 10
 		},
 		{
 			shield = 7,
 			medic = 10,
 			taser = 3,
 			tank = 2,
-			spooc = 3
+			spooc = 3,
+			ninja = 10
 		},
 		{
 			shield = 8,
@@ -308,16 +318,16 @@ function SkirmishTweakData:_init_wave_phase_durations(tweak_data)
 			1
 		}
 	}
-	skirmish_data.assault.build_duration = 30
+	skirmish_data.assault.build_duration = 1
 	skirmish_data.assault.sustain_duration_min = {
-		150,
-		150,
-		150
+		99999,
+		99999,
+		99999
 	}
 	skirmish_data.assault.sustain_duration_max = {
-		150,
-		150,
-		150
+		99999,
+		99999,
+		99999
 	}
 	skirmish_data.assault.sustain_duration_balance_mul = {
 		1,
@@ -344,9 +354,9 @@ function SkirmishTweakData:_init_wave_phase_durations(tweak_data)
 	}
 	skirmish_data.assault.force_pool_balance_mul = {
 		0.32,
-		0.5,
 		0.75,
-		0.75
+		1,
+		1
 	}
 	skirmish_data.assault.force_pool = {
 		256,

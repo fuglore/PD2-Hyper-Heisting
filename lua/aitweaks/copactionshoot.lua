@@ -1113,13 +1113,20 @@ function CopActionShoot:anim_clbk_melee_strike()
 		character_unit = character_unit or hit_unit
 
 		if character_unit == local_player then
+			local push_dis = 600
+			
+			if self._common_data.ext_base._tweak_table == "fbi" or self._common_data.ext_base._tweak_table == "fbi_xc45" or self._common_data.ext_base._tweak_table == "fbi_pager" then
+				damage = 15 * damage_multiplier
+				push_dis = 1200
+			end
+			
 			local action_data = {
 				variant = "melee",
 				damage = damage,
 				weapon_unit = self._weapon_unit,
 				attacker_unit = self._unit,
 				melee_weapon = melee_weapon,
-				push_vel = mvec3_copy(col_ray.ray:with_z(0.1)) * 600,
+				push_vel = mvec3_copy(col_ray.ray:with_z(0.1)) * push_dis,
 				tase_player = self._melee_weapon_data.electrical and true or nil,
 				col_ray = col_ray
 			}

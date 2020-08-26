@@ -295,6 +295,13 @@ function PlayerDamage:damage_melee(attack_data)
 		local dmg_mul = pm:damage_reduction_skill_multiplier("melee") --the vanilla function has this line, but it also uses bullet damage reduction skills due to it redirecting to damage_bullet to get results
 		attack_data.damage = attack_data.damage * dmg_mul
 		attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data) --apply damage resistances before checking for bleedout and other things
+	else
+		local damage = self:_max_health() / 4
+		if managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") then
+			damage = damage * 2
+		end
+		damage = damage + self:get_real_armor()
+		attack_data.damage = damage
 	end
 
 	local damage_absorption = pm:damage_absorption()
@@ -313,21 +320,19 @@ function PlayerDamage:damage_melee(attack_data)
 		--enemies were meleeing players and taking their guns away during invincibility frames and thats no bueno
 		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and dmg_is_allowed then
 			-- log("balls")				
-			if alive(player_unit) and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi" and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_xc45" and tostring(attack_data.attacker_unit:base()._tweak_table) ~= "fbi_pager" then
+			if alive(player_unit) then
 				local melee_stun_t = 0.4
+				
+				if tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_xc45" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_pager" then
+					melee_stun_t = 0.8
+				end
+				
 				if attack_data.is_cloaker_kick then
 					melee_stun_t = 1
 				end
+				
 				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), melee_stun_t)
 			end
-		end
-		
-		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
-			if tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_xc45" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_pager" then
-				if alive(player_unit) then
-					managers.player:set_player_state("arrested")
-				end
-			end	
 		end
 	end
 
@@ -353,8 +358,6 @@ function PlayerDamage:damage_melee(attack_data)
 			"melee_hit_var2"
 		}
 		
-		
-			
 		self._unit:camera():play_shaker(vars[math.random(#vars)], attack_data.is_cloaker_kick and 1 or 0.5)
 
 		--no pushing when in bleedout, looks silly in third-person
