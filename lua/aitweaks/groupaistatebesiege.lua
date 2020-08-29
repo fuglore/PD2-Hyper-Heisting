@@ -2677,6 +2677,10 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 				
 		spawn_data_delay = math.min(spawn_data_delay, spawn_delay_max)
 		
+		if managers.skirmish:is_skirmish() then
+			spawn_delay = spawn_delay * 0.5
+		end
+		
 		if self._activeassaultbreak then
 			return
 		end
@@ -2805,7 +2809,9 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 	end
 	
 	spawn_delay = math.min(spawn_delay, spawn_delay_max)
-
+	if managers.skirmish:is_skirmish() then
+		spawn_delay = spawn_delay * 0.5
+	end
 	if complete then
 		spawn_task.group.has_spawned = true
 		spawn_task.spawn_group.delay_t = self._t + spawn_delay

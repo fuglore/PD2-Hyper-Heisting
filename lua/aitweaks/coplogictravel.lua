@@ -2249,6 +2249,35 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 	end
 end
 
+function CopLogicTravel._update_cover(ignore_this, data)
+	local my_data = data.internal_data
+
+	CopLogicBase.on_delayed_clbk(my_data, my_data.cover_update_task_key)
+
+	local cover_release_dis = 100
+	local nearest_cover = my_data.nearest_cover
+	local best_cover = my_data.best_cover
+	local m_pos = data.m_pos
+
+	if not my_data.in_cover and nearest_cover and cover_release_dis < mvector3.distance(nearest_cover[1][1], m_pos) then
+		local fucking = managers.navigation:release_cover(nearest_cover[1])
+
+		my_data.nearest_cover = nil
+		nearest_cover = nil
+	end
+
+	if best_cover and cover_release_dis < mvector3.distance(best_cover[1][1], m_pos) then
+		local fucking = managers.navigation:release_cover(best_cover[1])
+		
+		my_data.best_cover = nil
+		best_cover = nil
+	end
+
+	if nearest_cover or best_cover then
+		CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 2)
+	end
+end
+
 function CopLogicTravel.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()
@@ -2362,7 +2391,9 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				data.logic._upd_stance_and_pose(data, data.internal_data)
 				CopLogicTravel._upd_combat_movement(data, true)
 			end
-		elseif my_data.moving_to_cover then
+		end
+		
+		if my_data.moving_to_cover then
 			if action:expired() then
 				if my_data.best_cover then
 					managers.navigation:release_cover(my_data.best_cover[1])
@@ -2375,27 +2406,13 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				local high_ray = CopLogicTravel._chk_cover_height(data, my_data.best_cover[1], data.visibility_slotmask)
 				my_data.best_cover[4] = high_ray
 				my_data.in_cover = true
-				local cover_wait_time = 0
-				
-				if my_data.coarse_path then
-				    cover_wait_time = my_data.coarse_path_index == #my_data.coarse_path - 1 and 0.3 or 0.6 + 0.4 * math.random()
-				else
-					cover_wait_time = 0.6 + 0.4 * math.random()
-  			    end
-				
+				local cover_wait_time = 0.6 + 0.4 * math.random()
+
 				if not CopLogicTravel._chk_close_to_criminal(data, my_data) then
 					cover_wait_time = 0
 				end
 
-				my_data.cover_leave_t = data.t
-				
-				if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
-					SpoocLogicAttack._upd_spooc_attack(data, my_data)
-				end
-				
-				CopLogicAttack._upd_aim(data, my_data)
-				data.logic._upd_stance_and_pose(data, data.internal_data)
-				CopLogicTravel._upd_combat_movement(data, true)
+				my_data.cover_leave_t = data.t + cover_wait_time
 			else
 				managers.navigation:release_cover(my_data.moving_to_cover[1])
 

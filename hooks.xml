@@ -47,7 +47,7 @@
 	
 	<post :script_path="menumanager.lua" :hook_id="managers/menumanager"/>
 	<post :script_path="hudassaultcorner.lua" :hook_id="managers/hud/hudassaultcorner"/>
-	<!--<post :script_path="navigationmanager.lua" :hook_id="managers/navigationmanager"/>-->
+	<post :script_path="navigationmanager.lua" :hook_id="managers/navigationmanager"/>
 	
 	<post :script_path="dialogmanager.lua" :hook_id="managers/dialogmanager"/>
 	

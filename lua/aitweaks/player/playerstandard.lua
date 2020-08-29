@@ -419,7 +419,7 @@ function PlayerStandard:_update_movement(t, dt)
 	local decceleration = acceleration * 1.25
 	
 	if self._state_data.in_air then
-		acceleration = air_acceleration
+		acceleration = 700
 		decceleration = acceleration * 1.25
 	elseif self._state_data.ducking and self.is_sliding then
 		if math.abs(self._last_velocity_xy:length()) > WALK_SPEED_MAX then
@@ -495,7 +495,9 @@ function PlayerStandard:_update_movement(t, dt)
 		--log("lleration: " .. lleration .. "")
 		
 		if self._jump_vel_xy and self._state_data.in_air and mvector3.dot(self._jump_vel_xy, self._last_velocity_xy) > 0 then
-			local input_move_vec = wanted_walk_speed * self._move_dir
+			local wanted_walk_speed_air = WALK_SPEED_MAX * math.min(1, self._move_dir:length())
+			local acceleration = self._state_data.in_air and 700 or self._running and 5000 or 3000
+			local input_move_vec = wanted_walk_speed_air * self._move_dir
 			local jump_dir = mvector3.copy(self._last_velocity_xy)
 			local jump_vel = mvector3.normalize(jump_dir)
 			local fwd_dot = jump_dir:dot(input_move_vec)
@@ -504,10 +506,10 @@ function PlayerStandard:_update_movement(t, dt)
 				local sustain_dot = (input_move_vec:normalized() * jump_vel):dot(jump_dir)
 				local new_move_vec = input_move_vec + jump_dir * (sustain_dot - fwd_dot)
 
-				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, lleration * dt)
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, 700 * dt)
 			else
-				mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed)
-				mvector3.step(achieved_walk_vel, self._last_velocity_xy, wanted_walk_speed * self._move_dir:normalized(), lleration * dt)
+				mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed_air)
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, wanted_walk_speed_air * self._move_dir:normalized(), acceleration * dt)
 			end
 
 			local fwd_component = nil
