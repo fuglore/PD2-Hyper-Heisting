@@ -1363,7 +1363,6 @@ function CopLogicTravel.queued_update(data)
 	end
 	
 	if data.important then
-		data.logic._update_haste(data, data.internal_data)
 		data.logic._upd_stance_and_pose(data, data.internal_data, objective)
 	end
 	
@@ -1705,7 +1704,10 @@ function CopLogicTravel._chk_request_action_walk_to_cover(data, my_data)
 
 		if my_data.combat_cover_movement then
 			my_data.at_cover_shoot_pos = nil
-			my_data.in_cover = nil
+			
+			if data.name == "travel" and my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
+				CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
+			end
 
 			data.brain:rem_pos_rsrv("path")
 		end
@@ -1844,7 +1846,10 @@ function CopLogicTravel._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 		if my_data.walking_to_cover_shoot_pos then
 			--my_data.walking_to_cover_shoot_pos = my_data.advancing
 			my_data.at_cover_shoot_pos = nil
-			my_data.in_cover = nil
+			
+			if data.name == "travel" and my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
+				CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
+			end
 
 			data.brain:rem_pos_rsrv("path")
 		end
@@ -1940,6 +1945,10 @@ function CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data, e
 			
 			my_data.optimal_pos = nil
 			data.brain:rem_pos_rsrv("path")
+			
+			if data.name == "travel" and my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
+				CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
+			end
 
 			return true
 		end
@@ -2228,6 +2237,10 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 					if not data.unit:in_slot(16) and data.char_tweak.chatter.dodge then
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
 					end
+				end
+				
+				if data.name == "travel" and my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
+					CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
 				end
 
 				return true

@@ -759,7 +759,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
 				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}		
 	elseif difficulty_index == 4 or difficulty_index == 5 then
 		self.unit_categories.punk_group = {
@@ -798,7 +798,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
 				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index == 6 or difficulty_index == 7 then
 		self.unit_categories.punk_group = {
@@ -837,7 +837,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
 				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.punk_group = {
@@ -876,7 +876,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
 				}								
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 
@@ -1052,7 +1052,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/pd2_mod_psc/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")				
 			}			
 		},
-		access = access_type_walk_only
+		access = access_type_all
 	}
 	
 	self.unit_categories.CS_cop_stealth_MP5 = {
@@ -1077,7 +1077,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/pd2_mod_psc/characters/ene_murkywater_light/ene_murkywater_light")				
 			}			
 		},
-		access = access_type_walk_only
+		access = access_type_all
 	}
 
 	if difficulty_index == 8 then
@@ -1273,7 +1273,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")		
 				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.CS_heavy_M4 = {
@@ -1346,7 +1346,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")					
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 
@@ -1428,7 +1428,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.CS_shield = {
@@ -1454,7 +1454,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 
@@ -2240,7 +2240,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")					
 				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.FBI_heavy_G36_w = {
@@ -2265,7 +2265,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")					
 				}							
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 
@@ -2304,7 +2304,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index < 8 then
 		self.unit_categories.FBI_shield = {
@@ -2330,7 +2330,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.FBI_shield = {
@@ -2356,7 +2356,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 	
@@ -2385,7 +2385,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index == 5 then
 		self.unit_categories.FBI_tank = {
@@ -2418,7 +2418,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index == 6 then
 		self.unit_categories.FBI_tank = {
@@ -2458,7 +2458,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")					
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index == 7 then
 		self.unit_categories.FBI_tank = {
@@ -2527,7 +2527,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.FBI_tank = {
@@ -2602,7 +2602,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic")					
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 	
@@ -2733,7 +2733,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
 			}			
 		},
-		access = access_type_walk_only
+		access = access_type_all
 	}
 	
 	self.unit_categories.Phalanx_vip = {
@@ -2759,7 +2759,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
 			}			
 		},
-		access = access_type_walk_only
+		access = access_type_all
 	}
 	
 end)
@@ -7239,9 +7239,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			1
 		}
 		self.besiege.assault.force_pool = {
-			128,
-			128,
-			128
+			32,
+			32,
+			32
 		}
 	else
 		self.besiege.assault.force = {

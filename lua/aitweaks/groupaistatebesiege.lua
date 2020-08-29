@@ -35,7 +35,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._activeassaultbreak = nil
 	self._activeassaultnextbreak_t = nil
 	self._stopassaultbreak_t = nil
-	self._MAX_SIMULTANEOUS_SPAWNS = 1
+	self._MAX_SIMULTANEOUS_SPAWNS = 3
 end
 
 function GroupAIStateBesiege:_draw_enemy_activity(t)
@@ -2641,11 +2641,41 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 	}
 	local group_ai_tweak = tweak_data.group_ai
 	local spawn_points = spawn_task.spawn_group.spawn_pts
-
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	--local spawn_delay_min = 3
+	local spawn_delay = 6
+	local spawn_delay_max = 12
+	
+	if Global.game_settings and Global.game_settings.one_down then --have fun assholes
+		--spawn_delay_min = 0
+		spawn_delay = 0.5
+		spawn_delay_max = 5
+	elseif diff_index > 5 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		--spawn_delay_min = 2
+		spawn_delay = 2
+		spawn_delay_max = 7.5
+	end
+	
 	local function _try_spawn_unit(u_type_name, spawn_entry)
 		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
 			return
 		end
+		
+		local spawn_data_delay = 0
+		
+		if group_ai_tweak.unit_categories[u_type_name].special and group_ai_tweak.unit_categories[u_type_name].special ~= "ninja" and group_ai_tweak.unit_categories[u_type_name].special ~= "shield" and group_ai_tweak.unit_categories[u_type_name].special ~= "medic" then
+			if group_ai_tweak.unit_categories[u_type_name].special == "tank" then
+				spawn_data_delay = spawn_data_delay + 1
+			else
+				spawn_data_delay = spawn_data_delay + 0.5
+			end
+		elseif u_type_name == "punk_group" then
+			spawn_data_delay = spawn_data_delay - 0.25 
+		else
+			spawn_data_delay = spawn_data_delay + 0.25 
+		end
+				
+		spawn_data_delay = math.min(spawn_data_delay, spawn_delay_max)
 		
 		if self._activeassaultbreak then
 			return
@@ -2660,8 +2690,6 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 			local please_stop = not sp_data.amount or sp_data.amount > 0
 			
 			if stop_please and please_stop and sp_data.mission_element:enabled() then
-				hopeless = false
-
 				if sp_data.delay_t < self._t then
 					local units = category.unit_types[current_unit_type]
 					produce_data.name = units[math.random(#units)]
@@ -2671,6 +2699,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 					local objective = nil
 					
 					if spawned_unit then
+						hopeless = nil
 						if spawn_task.objective then
 							objective = self.clone_objective(spawn_task.objective)
 						else
@@ -2716,7 +2745,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 						nr_units_spawned = nr_units_spawned + 1
 						
-						sp_data.delay_t = self._t + math.lerp(2.5, 7.5, math.random())
+						sp_data.delay_t = self._t + spawn_data_delay
 
 						if spawn_task.ai_task then
 							spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
@@ -2729,38 +2758,36 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 						return true
 					else
-						hopeless = true
+						--hopeless = true
 					end
 				end
 			end
 		end
 
 		if hopeless then
+			--log("crabsicles!")
 			--debug_pause("[GroupAIStateBesiege:_upd_group_spawning] spawn group", spawn_task.spawn_group.id, "failed to spawn unit", u_type_name)
 
 			return true
 		end
-	end
-
-	for u_type_name, spawn_info in pairs(spawn_task.units_remaining) do
-		if not group_ai_tweak.unit_categories[u_type_name].access.acrobatic then
-			for i = spawn_info.amount, 1, -1 do
-				local success = _try_spawn_unit(u_type_name, spawn_info.spawn_entry)
-
-				if success then
-					spawn_info.amount = spawn_info.amount - 1
-				end
-
-				break
-			end
-		end
-	end
+	end	
 
 	for u_type_name, spawn_info in pairs(spawn_task.units_remaining) do
 		for i = spawn_info.amount, 1, -1 do
 			local success = _try_spawn_unit(u_type_name, spawn_info.spawn_entry)
 
 			if success then
+				if group_ai_tweak.unit_categories[u_type_name].special and group_ai_tweak.unit_categories[u_type_name].special ~= "ninja" and group_ai_tweak.unit_categories[u_type_name].special ~= "shield" and group_ai_tweak.unit_categories[u_type_name].special ~= "medic" then
+					if group_ai_tweak.unit_categories[u_type_name].special == "tank" then
+						spawn_delay = spawn_delay + 1
+					else
+						spawn_delay = spawn_delay + 0.5
+					end
+				elseif u_type_name == "punk_group" then
+					spawn_delay = spawn_delay - 0.25 
+				else
+					spawn_delay = spawn_delay + 0.25 
+				end
 				spawn_info.amount = spawn_info.amount - 1
 			end
 
@@ -2776,11 +2803,12 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 			break
 		end
 	end
+	
+	spawn_delay = math.min(spawn_delay, spawn_delay_max)
 
 	if complete then
 		spawn_task.group.has_spawned = true
-		spawn_task.spawn_group.delay_t = self._t + math.lerp(2.5, 7.5, math.random())
-		
+		spawn_task.spawn_group.delay_t = self._t + spawn_delay
 		self:_voice_groupentry(spawn_task.group)
 		table.remove(self._spawning_groups, use_last and #self._spawning_groups or 1)
 

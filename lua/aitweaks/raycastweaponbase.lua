@@ -435,6 +435,9 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 	end
 
 	local result = nil
+	
+	local damage_lerp = math.clamp(damage, 2.4, 10) / 10
+	local push_multiplier = math.lerp(0, 1, damage_lerp) 
 
 	if alive(weapon_unit) and hit_unit:character_damage() and hit_unit:character_damage().damage_bullet then
 		local is_alive = not hit_unit:character_damage():dead()
@@ -453,18 +456,16 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 			end
 		end
 
-		local push_multiplier = self:_get_character_push_multiplier(weapon_unit, is_alive and is_dead)
-
 		managers.game_play_central:physics_push(col_ray, push_multiplier)
 	else
-		managers.game_play_central:physics_push(col_ray)
+		managers.game_play_central:physics_push(col_ray, push_multiplier)
 	end
 
 	if play_impact_flesh then
 		local fullautonpc = alive(weapon_unit) and weapon_unit:base().weapon_tweak_data and weapon_unit:base():weapon_tweak_data() and weapon_unit:base():weapon_tweak_data().fullautonpc ~= nil
 
 		if fullautonpc then --no more destroying my framerate you figgin' fuggin' goose
-			if math.random() < 0.25 then
+			if math.random() < 0.1 then
 				managers.game_play_central:play_impact_flesh({
 					col_ray = col_ray,
 					no_sound = no_sound

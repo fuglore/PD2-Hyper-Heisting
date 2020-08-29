@@ -2351,8 +2351,7 @@ function CopLogicAttack.queue_update(data, my_data)
 			
 		end	
 	end
-	
-	data.logic._update_haste(data, data.internal_data)
+
 	data.logic._upd_stance_and_pose(data, data.internal_data, objective)
 	
 	if my_data ~= data.internal_data then

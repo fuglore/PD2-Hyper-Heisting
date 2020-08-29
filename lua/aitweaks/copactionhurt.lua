@@ -105,6 +105,7 @@ function CopActionHurt:init(action_desc, common_data)
 	local is_civilian = CopDamage.is_civilian(tweak_table)
 	local is_female, uses_shield_anims, taser_tased_tasing = nil
 	local is_stealth = managers.groupai:state():whisper_mode()
+	local enable_running_hurts = nil
 
 	if common_data.machine:get_global("female") == 1 then
 		is_female = true
@@ -439,7 +440,7 @@ function CopActionHurt:init(action_desc, common_data)
 			elseif action_desc.variant == "poison" or action_desc.variant == "dot" then
 				keep_checking = nil
 				self:force_ragdoll()
-			elseif not common_data.char_tweak.no_run_death_anim then
+			elseif not common_data.char_tweak.no_run_death_anim and enable_running_hurts then
 				if common_data.ext_anim.run and common_data.ext_anim.move_fwd or common_data.ext_anim.sprint then
 					keep_checking = nil
 
@@ -471,24 +472,26 @@ function CopActionHurt:init(action_desc, common_data)
 				end
 			end
 		elseif action_type == "heavy_hurt" then
-			if common_data.ext_anim.run and common_data.ext_anim.move_fwd or common_data.ext_anim.sprint then
-				if not common_data.is_suppressed and not crouching then
-					keep_checking = nil
-					redir_res = common_data.ext_movement:play_redirect("heavy_run")
+			if enable_running_hurts then
+				if common_data.ext_anim.run and common_data.ext_anim.move_fwd or common_data.ext_anim.sprint then
+					if not common_data.is_suppressed and not crouching then
+						keep_checking = nil
+						redir_res = common_data.ext_movement:play_redirect("heavy_run")
 
-					if not redir_res then
-						--debug_pause("[CopActionHurt:init] heavy_run redirect failed in", common_data.machine:segment_state(ids_base))
+						if not redir_res then
+							--debug_pause("[CopActionHurt:init] heavy_run redirect failed in", common_data.machine:segment_state(ids_base))
 
-						return
+							return
+						end
+
+						local variant = self.running_hurt_anim_variants.fwd or 1
+
+						if variant > 1 then
+							variant = self:_pseudorandom(variant)
+						end
+
+						common_data.machine:set_parameter(redir_res, "var" .. tostring(variant), 1)
 					end
-
-					local variant = self.running_hurt_anim_variants.fwd or 1
-
-					if variant > 1 then
-						variant = self:_pseudorandom(variant)
-					end
-
-					common_data.machine:set_parameter(redir_res, "var" .. tostring(variant), 1)
 				end
 			end
 		end
@@ -585,7 +588,8 @@ function CopActionHurt:init(action_desc, common_data)
 					height = common_data.ext_movement:m_com().z < hit_z and "high" or "low"
 
 					if action_type == "death" then
-						if is_civilian then
+						local yes = true
+						if yes then
 							death_type = "normal"
 						end
 
@@ -655,9 +659,9 @@ function CopActionHurt:init(action_desc, common_data)
 					common_data.machine:set_parameter(redir_res, "hvy", 1)
 				elseif action_type == "death" then
 					if not is_civilian then
-						if death_type == "heavy" or action_desc.death_type == "heavy" then
-							common_data.machine:set_parameter(redir_res, "heavy", 1)
-						end
+						--if death_type == "heavy" or action_desc.death_type == "heavy" then
+						--	common_data.machine:set_parameter(redir_res, "heavy", 1)
+						--end
 					end
 				elseif action_type == "expl_hurt" then
 					common_data.machine:set_parameter(redir_res, "expl", 1)

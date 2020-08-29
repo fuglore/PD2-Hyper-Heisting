@@ -91,20 +91,20 @@ function CharacterTweakData:_presets(tweak_data)
 			base_chance = 0
 		},
 		easy = {
-			base_chance = 0.3,
+			base_chance = 0.1,
 			reasons = {
 				pants_down = 1,
-				isolated = 0.08,
-				weapon_down = 0.5,
+				isolated = 0.25,
+				weapon_down = 0.25,
 				health = {
 					[1.0] = 0.1,
-					[0.999] = 0.9
+					[0.9] = 0.75
 				}
 			},
 			factors = {
-				unaware_of_aggressor = 0.1,
-				enemy_weap_cold = 0.11,
-				flanked = 0.05,
+				unaware_of_aggressor = 0.075,
+				enemy_weap_cold = 0.5,
+				flanked = 0.5,
 				aggressor_dis = {
 					[300.0] = 0.2,
 					[1000.0] = 0
@@ -123,44 +123,46 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		hard = {
 			base_chance = 0.1,
+			significant_chance = 0.6,
 			reasons = {
 				pants_down = 1,
-				weapon_down = 0.2,
+				isolated = 0.25,
+				weapon_down = 0.25,
 				health = {
-					[1.0] = 0,
-					[0.75] = 0.5
+					[1.0] = 0.1,
+					[0.9] = 0.75
 				}
 			},
 			factors = {
-				enemy_weap_cold = 0.05,
-				unaware_of_aggressor = 0,
-				flanked = 0.2,
-				isolated = 0.4,
+				unaware_of_aggressor = 0.075,
+				enemy_weap_cold = 0.5,
+				flanked = 0.5,
 				aggressor_dis = {
-					[300.0] = 0.1,
+					[300.0] = 0.2,
 					[1000.0] = 0
 				}
 			}
 		},
 		special = {
-			base_chance = 0,
+			base_chance = 0, --0% base chance of surrender, quite literally.
+			significant_chance = 0.75, --due to the math used, you have to subtract this amount from 1 to figure out the minimum chance for them to even try to surrender, in this case, its 0.25, aka, 25%, you need at least 25%
 			reasons = {
-				pants_down = 0,
-				weapon_down = 0.25,
+				pants_down = 0, --an enemy that went uncool and was previously cool will get THIS much percentage, in this case, 0%
+				weapon_down = 0.1, --hurt or animations in which they cant shoot add 10%
 				health = {
 					[1] = 0,
-					[0.5] = 0.25
+					[0.5] = 0.35 --if the enemy is at less than 50% health, they gain 35% surrender chance 
 				}
 			},
 			factors = {
-				enemy_weap_cold = 0.5,
+				enemy_weap_cold = 0.1, --if an assault is not active, they gain 10% surrender chance
 				unaware_of_aggressor = 0,
-				isolated = 0.25,
 				aggressor_dis = {
-					[300.0] = 0.25,
+					[300.0] = 0.1, --if the aggressor/intimidator is within 3 meters of distance, they gain 10% surrender chance
 					[400.0] = 0
 				}
 			}
+			--overall surrender chance: 45% or 0.45 assuming an assault is active, and no skills boosting the chance
 		}
 	}
 	
@@ -8260,7 +8262,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.move_speed = presets.move_speed.civil_consistency
 	self.fbi.damage.no_suppression_crouch = true
 	self.fbi.suppression = presets.suppression.stalwart_nil
-	self.fbi.surrender = presets.surrender.hard
+	self.fbi.surrender = presets.surrender.special
 	self.fbi.damage.doom_hurt_type = "doom"
 	self.fbi.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.fbi.ecm_vulnerability = 1
@@ -8295,6 +8297,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	table.insert(self._enemy_list, "fbi_pager")
 	self.fbi_xc45 = deep_clone(self.fbi)
 	self.fbi_xc45.damage.hurt_severity = presets.hurt_severities.no_hurts
+	self.fbi_xc45.surrender = presets.surrender.special
 	self.fbi_xc45.allowed_stances = {
 		cbt = true
 	}

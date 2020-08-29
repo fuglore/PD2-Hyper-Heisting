@@ -7,7 +7,7 @@ function MenuCallbackHandler:accept_skirmish_contract(item)
 	local job_id = (node:parameters().menu_component_data or {}).job_id
 	local job_data = {
 		difficulty = "overkill_145",
-		one_down = true,		
+		one_down = false,		
 		customize_contract = true,
 		job_id = job_id or managers.skirmish:random_skirmish_job_id(),
 		difficulty_id = tweak_data:difficulty_to_index("overkill_145")
@@ -30,7 +30,7 @@ function MenuCallbackHandler:accept_skirmish_weekly_contract(item)
 	local job_data = {
 		difficulty = "overkill_145",
 		weekly_skirmish = true,
-		one_down = true,				
+		one_down = false,				
 		job_id = weekly_skirmish.id
 	}
 
