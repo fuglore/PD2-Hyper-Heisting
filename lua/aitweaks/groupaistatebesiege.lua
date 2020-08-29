@@ -2660,27 +2660,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
 			return
 		end
-		
-		local spawn_data_delay = 0
-		
-		if group_ai_tweak.unit_categories[u_type_name].special and group_ai_tweak.unit_categories[u_type_name].special ~= "ninja" and group_ai_tweak.unit_categories[u_type_name].special ~= "shield" and group_ai_tweak.unit_categories[u_type_name].special ~= "medic" then
-			if group_ai_tweak.unit_categories[u_type_name].special == "tank" then
-				spawn_data_delay = spawn_data_delay + 1
-			else
-				spawn_data_delay = spawn_data_delay + 0.5
-			end
-		elseif u_type_name == "punk_group" then
-			spawn_data_delay = spawn_data_delay - 0.25 
-		else
-			spawn_data_delay = spawn_data_delay + 0.25 
-		end
-				
-		spawn_data_delay = math.min(spawn_data_delay, spawn_delay_max)
-		
-		if managers.skirmish:is_skirmish() then
-			spawn_delay = spawn_delay * 0.5
-		end
-		
+
 		if self._activeassaultbreak then
 			return
 		end
@@ -2690,11 +2670,11 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 		for _, sp_data in ipairs(spawn_points) do
 			local category = group_ai_tweak.unit_categories[u_type_name]
-			local stop_please = sp_data.accessibility == "any" or category.access[sp_data.accessibility]
+			local stop_please = true --sp_data.accessibility == "any" or category.access[sp_data.accessibility]
 			local please_stop = not sp_data.amount or sp_data.amount > 0
 			
 			if stop_please and please_stop and sp_data.mission_element:enabled() then
-				if sp_data.delay_t < self._t then
+				if sp_data.delay_t < self._t or stop_please then
 					local units = category.unit_types[current_unit_type]
 					produce_data.name = units[math.random(#units)]
 					produce_data.name = managers.modifiers:modify_value("GroupAIStateBesiege:SpawningUnit", produce_data.name)
@@ -2749,7 +2729,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 						nr_units_spawned = nr_units_spawned + 1
 						
-						sp_data.delay_t = self._t + spawn_data_delay
+						sp_data.delay_t = self._t + 0.03
 
 						if spawn_task.ai_task then
 							spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
