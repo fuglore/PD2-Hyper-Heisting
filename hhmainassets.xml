@@ -45,7 +45,7 @@
 	<continent path="levels/narratives/elephant/born/world/world" force="true" unload="true"/><!--fixes cars clipping into ground-->		
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
-	<mission path="levels/narratives/locke/vit/world/world" force="true" unload="true"/> 
+	<!-- <mission path="levels/narratives/locke/vit/world/world" force="true" unload="true"/> --> <!-- aigrouptype element is currently dysfunctional-->
 	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> <!--Now, give them hell.-->
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 	<mission path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> <!--Makes Shadow Raid Murky.-->
