@@ -2729,7 +2729,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 						nr_units_spawned = nr_units_spawned + 1
 						
-						sp_data.delay_t = self._t + 0.03
+						sp_data.delay_t = self._t + 1
 
 						if spawn_task.ai_task then
 							spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
