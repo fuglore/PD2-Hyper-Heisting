@@ -478,7 +478,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 3
+			ninja = 8
 		}
 	elseif difficulty_index <= 2 then
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
@@ -506,7 +506,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,			
 			spooc = 1,
-			ninja = 1
+			ninja = 4
 		}
 	elseif difficulty_index == 5 then
 		self.special_unit_spawn_limits = { --overkill enables two spoocs, adds another taser, escalate the game meaningfully every difficulty by increasing complexity
@@ -516,7 +516,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			sniper = 3,						
 			tank = 1,
 			spooc = 1,
-			ninja = 2
+			ninja = 4
 		}
 	elseif difficulty_index == 6 then
 		self.special_unit_spawn_limits = { --begin coordinated spawngroups to heighten gameplay complexity, start pushing the boundaries, no big special limit change here outside of the cloakers, medics and shields, its fine though
@@ -526,7 +526,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,						
 			spooc = 1,
-			ninja = 3
+			ninja = 6
 		}
 	elseif difficulty_index == 7 then
 		self.special_unit_spawn_limits = { --setting medic limit to six allows for survivability within common enemy spawngroups since special enemies are now paired commonly with medics to keep them alive consistently
@@ -536,7 +536,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			sniper = 3,						
 			tank = 1,
 			spooc = 2,
-			ninja = 3
+			ninja = 8
 		}
 	elseif difficulty_index == 8 then
 		self.special_unit_spawn_limits = { --game reaches boiling point, 2 dozers, 4-5 tasers, 8-10 medics, 3-4 cloakers and 8-10 shields.
@@ -546,7 +546,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 3
+			ninja = 8
 		}
 	else
 		self.special_unit_spawn_limits = {
@@ -556,7 +556,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 3
+			ninja = 8
 		}
 	end
 
