@@ -1303,16 +1303,57 @@ function CharacterTweakData:_presets(tweak_data)
 		0.7,
 		0.7
 	}
-	presets.detection.civilian.cbt.dis_max = 700
+	presets.detection.civilian.cbt.dis_max = 10000
 	presets.detection.civilian.cbt.angle_max = 360
 	presets.detection.civilian.cbt.delay = {
 		0,
 		0
 	}
 	presets.detection.civilian.cbt.use_uncover_range = true
-	presets.detection.civilian.ntl.dis_max = 2000
+	presets.detection.civilian.ntl.dis_max = 1500
 	presets.detection.civilian.ntl.angle_max = 55
 	presets.detection.civilian.ntl.delay = {
+		0.7,
+		0.7
+	}
+	
+	presets.detection.enemyspooc = { 
+		idle = {},
+		combat = {},
+		recon = {},
+		guard = {},
+		ntl = {}
+	}
+	presets.detection.enemyspooc.idle.dis_max = 10000
+	presets.detection.enemyspooc.idle.angle_max = 360
+	presets.detection.enemyspooc.idle.delay = {
+		0,
+		0
+	}
+	presets.detection.enemyspooc.idle.use_uncover_range = true
+	presets.detection.enemyspooc.combat.dis_max = 10000
+	presets.detection.enemyspooc.combat.angle_max = 360
+	presets.detection.enemyspooc.combat.delay = {
+		0,
+		0
+	}
+	presets.detection.enemyspooc.combat.use_uncover_range = true
+	presets.detection.enemyspooc.recon.dis_max = 10000
+	presets.detection.enemyspooc.recon.angle_max = 360
+	presets.detection.enemyspooc.recon.delay = {
+		0,
+		0
+	}
+	presets.detection.enemyspooc.recon.use_uncover_range = true
+	presets.detection.enemyspooc.guard.dis_max = 10000
+	presets.detection.enemyspooc.guard.angle_max = 360
+	presets.detection.enemyspooc.guard.delay = {
+		0,
+		0
+	}
+	presets.detection.enemyspooc.ntl.dis_max = 3000
+	presets.detection.enemyspooc.ntl.angle_max = 55
+	presets.detection.enemyspooc.ntl.delay = {
 		0.7,
 		0.7
 	}
@@ -7911,7 +7952,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	}
 	self.spooc.experience = {}
 	self.spooc.weapon = deep_clone(presets.weapon.civil)
-	self.spooc.detection = presets.detection.enemymook
+	self.spooc.detection = presets.detection.enemyspooc
 	self.spooc.HEALTH_INIT = 20
 	self.spooc.headshot_dmg_mul = 6
 	self.spooc.damage.fire_damage_mul = 2

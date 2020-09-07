@@ -1,6 +1,6 @@
 Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata)
 	self.settings.pl_mask_on_foe_combatant_whisper_mode_stand = {
-		max_range = 2000,
+		max_range = 4000,
 		reaction = "REACT_COMBAT",
 		notice_interval = 0.1,
 		notice_delay_mul = 0.5,
@@ -24,8 +24,8 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 		filter = "non_combatant"
 	}
 	self.settings.pl_mask_on_foe_non_combatant_whisper_mode_crouch = {
-		max_range = 1000,
 		reaction = "REACT_COMBAT",
+		range_mul = 0.65,
 		notice_interval = 0.1,
 		notice_delay_mul = 1,
 		filter = "non_combatant",
@@ -36,7 +36,8 @@ Hooks:PostHook(AttentionTweakData, "init", "fuck_init", function(self, tweakdata
 		release_delay = 0.35
 	}
 	self.settings.pl_mask_on_foe_combatant_whisper_mode_crouch = {
-		max_range = 1000,
+		max_range = 4000,
+		range_mul = 0.65,
 		reaction = "REACT_COMBAT",
 		notice_interval = 0.1,
 		notice_delay_mul = 1,

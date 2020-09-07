@@ -2177,7 +2177,7 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 			max_walk_dis = 400
 		end
 				
-		local retreat_to = CopLogicAttack._find_retreat_position(data, from_pos, focus_enemy.m_pos, threat_head_pos, threat_tracker, max_walk_dis, vis_required)
+		local retreat_to = CopLogicAttack._find_retreat_position(from_pos, focus_enemy.m_pos, threat_head_pos, threat_tracker, max_walk_dis, vis_required)
 
 		if retreat_to then
 			CopLogicAttack._cancel_cover_pathing(data, my_data)
@@ -2237,10 +2237,6 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 					if not data.unit:in_slot(16) and data.char_tweak.chatter.dodge then
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "dodge")
 					end
-				end
-				
-				if data.name == "travel" and my_data.nearest_cover and notdelayclbksornotdlclbks_chk then
-					CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.066)
 				end
 
 				return true
@@ -2791,7 +2787,7 @@ function CopLogicTravel.get_pathing_prio(data)
         end
     end
 
-    if data.is_converted or data.unit:in_slot(16) then ----check, maybe 0 does give some form of priority for other enemies to path faster?
+    if data.is_converted or data.unit:in_slot(16) then --check, maybe 0 does give some form of priority for other enemies to path faster?
         if not prio then
             prio = 0
         end
