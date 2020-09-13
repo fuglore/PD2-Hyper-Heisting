@@ -258,7 +258,8 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				category = "player"
 			}
 		}
-		self.values.player.jackpot_safety = {
+		
+		self.values.player.jackpot_safety = { --jackpot
 			true
 		}
 		self.definitions.player_jackpot_safety = {
@@ -271,7 +272,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
-		self.values.player.phoenix_down = {
+		self.values.player.phoenix_down = { --ressurection
 			true
 		}
 		self.definitions.player_phoenix_down = {
@@ -312,7 +313,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
-		self.values.player.start_action_stam_drain_reduct = {
+		self.values.player.start_action_stam_drain_reduct = { --wave dash aced
 			true
 		}
 		self.definitions.player_start_action_stam_drain_reduct = {
@@ -371,6 +372,31 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			upgrade = {
 				value = 1,
 				upgrade = "strong_spirit",
+				category = "player"
+			}
+		}
+		
+		self.values.player.momentummaker_basic = {
+			true
+		}
+		self.definitions.player_momentummaker_basic = {
+			name_id = "menu_momentummaker_basic",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "momentummaker_basic",
+				category = "player"
+			}
+		}
+		self.values.player.momentummaker_aced = {
+			true
+		}
+		self.definitions.player_momentummaker_aced = {
+			name_id = "menu_momentummaker_aced",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "momentummaker_aced",
 				category = "player"
 			}
 		}

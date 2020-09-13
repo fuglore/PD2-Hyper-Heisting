@@ -1,3 +1,33 @@
+function BlackMarketManager:equipped_melee_weapon_damage_info(lerp_value)
+	lerp_value = lerp_value or 0
+	local melee_entry = self:equipped_melee_weapon()
+	local stats = tweak_data.blackmarket.melee_weapons[melee_entry].stats
+	local primary = self:equipped_primary()
+	local bayonet_id = self:equipped_bayonet(primary.weapon_id)
+	local player = managers.player:player_unit()
+	
+
+
+	if bayonet_id and player:movement():current_state()._equipped_unit:base():selection_index() == 2 and melee_entry == "weapon" then
+		stats = tweak_data.weapon.factory.parts[bayonet_id].stats
+	end
+	
+	local max_damage = stats.max_damage
+	
+	--log("max damage is:" .. max_damage .. "")
+	
+	if managers.player:has_category_upgrade("player", "momentummaker_aced") then
+		max_damage = max_damage * 2
+		
+		--log("mod damage is:" .. max_damage .. "")
+	end
+
+	local dmg = math.lerp(stats.min_damage, max_damage, lerp_value)
+	local dmg_effect = dmg * math.lerp(stats.min_damage_effect, stats.max_damage_effect, lerp_value)
+
+	return dmg, dmg_effect
+end
+
 function BlackMarketManager:damage_multiplier(name, categories, silencer, detection_risk, current_state, blueprint)
 	local multiplier = 1
 	

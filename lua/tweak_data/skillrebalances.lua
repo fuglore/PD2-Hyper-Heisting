@@ -151,6 +151,27 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 				12
 			}
 		}
+		
+		self.skills.bloodthirst = {
+			{
+				upgrades = {
+					"player_momentummaker_basic"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_momentummaker_aced"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_bloodthirst",
+			desc_id = "menu_bloodthirst_desc",
+			icon_xy = {
+				11,
+				6
+			}
+		}
 
 	end
 end)

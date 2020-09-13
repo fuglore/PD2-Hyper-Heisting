@@ -26,6 +26,16 @@ function PlayerManager:get_health_ratio_easy()
 	return damage_ext:health_ratio()
 end
 
+function PlayerManager:consume_bloodthirst_reload()	
+	if self._melee_reload_speed_active then
+		--log("*toilet flush noise*")
+		self._enemies_killed_bloodthirst = nil
+		self._melee_damage_mult = nil
+		self._melee_reload_speed_active = nil
+		self._reload_speed_bonus = nil
+	end
+end
+
 function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	local player_unit = self:player_unit()
 
@@ -88,6 +98,39 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 						unit:character_damage():build_suppression(amount, chance, true)
 					end
 				end
+			end
+		end
+	end
+	
+	if self:has_category_upgrade("player", "momentummaker_basic") then
+		if variant == "melee" or weapon_melee then
+			self._melee_damage_mult = nil
+			if self._reload_speed_bonus then
+				self._enemies_killed_bloodthirst = nil
+				self._melee_reload_speed_active = true
+				--log("gotcha")
+			end
+		elseif not self._melee_damage_mult or self._melee_damage_mult < 6 then
+			if not self._enemies_killed_bloodthirst then
+				self._enemies_killed_bloodthirst = 1
+				--log("begin")
+			else
+				self._enemies_killed_bloodthirst = self._enemies_killed_bloodthirst + 1
+				--log("number is: " .. self._enemies_killed_bloodthirst .. "")
+			end
+		
+			if self._enemies_killed_bloodthirst > 1 then
+				if not self._reload_speed_bonus or not self._melee_damage_mult then
+					self._reload_speed_bonus = 0.05
+					self._melee_damage_mult = 1
+					--log("start")
+				else
+					self._reload_speed_bonus = self._reload_speed_bonus + 0.05
+					self._melee_damage_mult = self._melee_damage_mult + 1
+					--log("melee damage mult is: " .. self._melee_damage_mult .. "")
+				end
+				
+				self._enemies_killed_bloodthirst = nil
 			end
 		end
 	end
