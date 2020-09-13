@@ -50,6 +50,7 @@
 	<unit path="units/payday2/characters/ene_sniper_2/ene_sniper_2" load="true" force="true"/>
 	<unit path="units/payday2/characters/ene_sniper_2/ene_sniper_2_husk" load="true" force="true"/>	
 
+	<!--Map Replacement Bullshit-->
 	<mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, 
 	and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
 	<mission path="levels/narratives/classics/red2/world/world" force="true" unload="true"/> <!--Makes FWB Vault Guards Gensex ninjas-->
@@ -62,6 +63,10 @@
 	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> <!--Now, give them hell.-->
 	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
 	<mission path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> <!--Makes Shadow Raid Murky.-->
+	<continent path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> <!--not all red is what you want.-->
+	<cover_data path="levels/narratives/bain/shadow_raid/world" force="true" unload="true"/>
+	<nav_manager path="levels/narratives/bain/shadow_raid/world" force="true" unload="true"/>
+	
 	<mission path="levels/narratives/butcher/friend/world/world" force="true" unload="true"/> <!--Removes the shitty spawn van escape from Scarface. -->
 	
 	<mission path="levels/instances/shared/obj_skm/world/world" force="true" unload="true"/> <!-- replaces locke lines with negotiator lines -->
