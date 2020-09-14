@@ -51,15 +51,16 @@
 	<unit path="units/payday2/characters/ene_sniper_2/ene_sniper_2_husk" load="true" force="true"/>	
 
 	<!--Map Replacement Bullshit-->
-	<mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, 
+	<!-- <mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, 
 	and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
+	<!-- <continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/> Hoe Ass.-->
+
 	
 	<mission path="levels/narratives/classics/red2/world/world" force="true" unload="true"/> <!--Makes FWB Vault Guards Gensex ninjas-->
 	<mission path="levels/instances/unique/red/red_camera_room/world/world" force="true" unload="true"/> <!--FWB SECURITY ROOM INSTANCE, PUTS IN RED FUCKER AS GUARD-->
 	
-	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>	
+	<continent path="levels/narratives/elephant/born/world/world" force="true" unload="true"/><!--fixes cars clipping into ground-->	
 	
-	<continent path="levels/narratives/elephant/born/world/world" force="true" unload="true"/><!--fixes cars clipping into ground-->		
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	
 	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
