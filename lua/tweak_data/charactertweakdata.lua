@@ -7971,7 +7971,8 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.no_suppression_reaction = true
 	self.spooc.surrender = presets.surrender.special
 	self.spooc.priority_shout = "f33"
-	self.spooc.priority_shout_max_dis = 700
+	self.spooc.silent_priority_shout = "f37"
+	--self.spooc.priority_shout_max_dis = 700
 	self.spooc.rescue_hostages = false
 	self.spooc.spooc_attack_timeout = {
 		0.35,

@@ -457,14 +457,23 @@ function GroupAIStateBesiege:update(t, dt)
 		
 		local level = Global.level_data and Global.level_data.level_id
 		
-		local small_map = level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking"
+		local small_map = self._small_map
 		
 		if not self._enemies_killed_sustain_guaranteed_break then
+			local value = 64
+					
+			if self._force_pool then
+				if small_map then
+					value = self._force_pool / 2
+				else
+					value = self._force_pool / 3
+				end
+			end
+					
 			if small_map then
-				self._enemies_killed_sustain_guaranteed_break = 128
+				self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
 			else
-				self._enemies_killed_sustain_guaranteed_break = 256
-				--log("poggers <3")
+				self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
 			end
 		end
 		
@@ -472,32 +481,42 @@ function GroupAIStateBesiege:update(t, dt)
 			--Nothing
 		else
 			if self._task_data.assault and self._task_data.assault.phase == "sustain" then
+				local task_data = self._task_data.assault
+				
 				if not self._activeassaultbreak then
 					if not self._activeassaultnextbreak_t then
 						--log("assaultstartedbreakset")
 						if small_map then
-							self._activeassaultnextbreak_t = self._t + 60
+							self._activeassaultnextbreak_t = self._t + 30
 						else
-							self._activeassaultnextbreak_t = self._t + 120
+							self._activeassaultnextbreak_t = self._t + 60
 						end
 							
 						if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 60
+							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
 							--log("breaksetforDW")
 						end
 					end
 				end
 				
 				if not self._activeassaultbreak and self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
-					
 					self._stopassaultbreak_t = self._t + 20
 					self._activeassaultbreak = true
 					--self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
+					local value = 64
+					
+					if self._force_pool then
+						if small_map then
+							value = self._force_pool / 2
+						else
+							value = self._force_pool / 3
+						end
+					end
 					
 					if small_map then
-						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 128
+						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
 					else
-						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + 256
+						self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
 					end
 					
 					if not self._said_heat_bonus_dialog then
@@ -517,13 +536,13 @@ function GroupAIStateBesiege:update(t, dt)
 					self._activeassaultbreak = nil
 					
 					if small_map then
-						self._activeassaultnextbreak_t = self._t + 60
+						self._activeassaultnextbreak_t = self._t + 30
 					else
-						self._activeassaultnextbreak_t = self._t + 120
+						self._activeassaultnextbreak_t = self._t + 60
 					end
 							
 					if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 60
+						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
 						--log("breaksetforDW")
 					end
 					
@@ -963,8 +982,9 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.is_first)
 	assault_task.force_anticipation = 16
 	assault_task.is_first = nil
+	self._force_pool = nil
 	self._enemies_killed_sustain = 0
-	self._enemies_killed_sustain_guaranteed_break = 50
+	--self._enemies_killed_sustain_guaranteed_break = 9999
 	assault_task.phase_end_t = self._t + anticipation_duration
 	
 	if not self._downleniency or self._downleniency < 1 then
@@ -1135,20 +1155,27 @@ function GroupAIStateBesiege:_upd_assault_task()
 		local force_pool_to_use = force_pool_table[wave]
 		force_pool = force_pool_to_use * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif task_data.is_first or self._assault_number and self._assault_number <= 1 or not self._assault_number then
-		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.5 * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
+		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.5
+		force_pool = force_pool * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif self._assault_number == 2 then
-		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
+		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.75
+		force_pool = force_pool * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif self._assault_number >= 3 then
 		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	end
 	
 	local enemies_spawned = task_data.force_spawned
 	
-	if self._hunt_mode or task_data.phase == "anticipation" then
+	if self._hunt_mode or task_data.phase == "anticipation" or task_data.phase == "build" then
 		enemies_spawned = 0
 	end
 	
-	local enemykillcountchk = force_pool * 0.9
+	local enemykillcountchk = force_pool * 0.75
+	
+	if not self._force_pool then
+		self._force_pool = force_pool
+		self._enemies_killed_sustain_guaranteed_break = nil
+	end
 	
 	local task_spawn_allowance = force_pool - enemies_spawned
 	
@@ -1212,8 +1239,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			managers.modifiers:run_func("OnEnterSustainPhase", sustain_duration)
 
 			self._task_data.assault.phase = "sustain"
-			self._task_data.assault.phase_end_t = t + sustain_duration
-			self._task_data.assault.phase_end_t_min = t + 30
+			self._task_data.assault.phase_end_t = t
 		end
 	elseif task_data.phase == "sustain" then
 		task_spawn_allowance = managers.modifiers:modify_value("GroupAIStateBesiege:SustainSpawnAllowance", task_spawn_allowance, force_pool)
@@ -2670,7 +2696,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 		for _, sp_data in ipairs(spawn_points) do
 			local category = group_ai_tweak.unit_categories[u_type_name]
-			local stop_please = true --sp_data.accessibility == "any" or category.access[sp_data.accessibility]
+			local stop_please = sp_data.accessibility == "any" or category.access[sp_data.accessibility]
 			local please_stop = not sp_data.amount or sp_data.amount > 0
 			
 			if stop_please and please_stop and sp_data.mission_element:enabled() then
@@ -2768,7 +2794,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 						spawn_delay = spawn_delay + 0.5
 					end
 				elseif u_type_name == "punk_group" then
-					spawn_delay = spawn_delay - 0.25 
+					--nothing 
 				else
 					spawn_delay = spawn_delay + 0.25 
 				end

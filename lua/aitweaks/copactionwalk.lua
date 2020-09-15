@@ -1288,53 +1288,49 @@ function CopActionWalk:save(save_data)
 end
 
 function CopActionWalk._calculate_simplified_path(good_pos, original_path, nr_iterations, height_test, apply_padding)
-	local simplified_path = {
-		good_pos
-	}
-	local nav_point_pos_func = CopActionWalk._nav_point_pos
-	local chk_shortcut_func = CopActionWalk._chk_shortcut_pos_to_pos
-	local original_path_size = #original_path
+    local simplified_path = {
+        good_pos
+    }
+    local nav_point_pos_func = CopActionWalk._nav_point_pos
+    local chk_shortcut_func = CopActionWalk._chk_shortcut_pos_to_pos
+    local original_path_size = #original_path
 
-	for i_nav_point, nav_point in ipairs(original_path) do
-		local is_nav_link = true
+    for i_nav_point, nav_point in ipairs(original_path) do
+        if not nav_point.x then
+            table_insert(simplified_path, nav_point)
+        elseif i_nav_point == original_path_size then
+            table_insert(simplified_path, mvec3_cpy(nav_point))
+        elseif i_nav_point == 1 or simplified_path[#simplified_path].x then
+            local pos_from = simplified_path[#simplified_path]
+            local pos_to = nav_point_pos_func(original_path[i_nav_point + 1])
+            local add_point = nil
 
-		if nav_point.x and i_nav_point ~= original_path_size then
-			if i_nav_point == 1 or simplified_path[#simplified_path].x then
-				is_nav_link = false
+            if height_test then
+                local height_diff = math_abs(nav_point.z - pos_from.z - (nav_point.z - pos_to.z))
 
-				local pos_from = simplified_path[#simplified_path]
-				local pos_to = nav_point_pos_func(original_path[i_nav_point + 1])
-				local add_point = nil
+                if height_diff > 60 then
+                    add_point = true
+                end
+            end
 
-				if height_test then
-					local height_diff = math_abs(nav_point.z - pos_from.z - (nav_point.z - pos_to.z))
+            if add_point or chk_shortcut_func(pos_from, pos_to) then
+                table_insert(simplified_path, mvec3_cpy(nav_point))
+            end
+        else
+            table_insert(simplified_path, mvec3_cpy(nav_point))
+        end
+    end
 
-					if height_diff > 60 then
-						add_point = true
-					end
-				end
+    if apply_padding and #simplified_path > 2 then
+        CopActionWalk._apply_padding_to_simplified_path(simplified_path)
+        CopActionWalk._calculate_shortened_path(simplified_path)
+    end
 
-				if add_point or chk_shortcut_func(pos_from, pos_to) then
-					table_insert(simplified_path, mvec3_cpy(nav_point))
-				end
-			end
-		end
+    if nr_iterations > 1 and #simplified_path > 2 then
+        simplified_path = CopActionWalk._calculate_simplified_path(good_pos, simplified_path, nr_iterations - 1, z_test, apply_padding)
+    end
 
-		if is_nav_link then
-			table_insert(simplified_path, nav_point)
-		end
-	end
-
-	if apply_padding and #simplified_path > 2 then
-		CopActionWalk._apply_padding_to_simplified_path(simplified_path)
-		CopActionWalk._calculate_shortened_path(simplified_path)
-	end
-
-	if nr_iterations > 1 and #simplified_path > 2 then
-		simplified_path = CopActionWalk._calculate_simplified_path(good_pos, simplified_path, nr_iterations - 1, z_test, apply_padding)
-	end
-
-	return simplified_path
+    return simplified_path
 end
 
 function CopActionWalk:_nav_chk_walk(t, dt, vis_state)

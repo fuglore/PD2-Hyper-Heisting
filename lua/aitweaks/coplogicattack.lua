@@ -2099,8 +2099,23 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 		return
 	end
 
-	if data.path_fail_t and data.t < data.path_fail_t + 6 then
+	if data.path_fail_t and data.t < data.path_fail_t + 1 then
 		return
+	end
+	
+	if data.is_converted then
+		if new_objective and (new_objective.type ~= "follow" and not new_objective.called) then
+			local allow_trans, obj_fail = CopLogicBase.is_obstructed(data, new_objective, 0.2) --trans rights
+			
+			if obj_fail then
+				return
+				--log("heck")
+			else
+				return true
+			end
+		else
+			return true
+		end
 	end
 
 	if data.is_suppressed then
