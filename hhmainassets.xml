@@ -82,8 +82,8 @@
 	<mission path="levels/instances/shared/skm_negotiator/world/world" force="true" unload="true"/> <!-- same as above-->
 	
 	<mission path="levels/narratives/classics/dah/world/world" force="true" unload="true"/>
-	<continent path="levels/naratives/classics/dah/world/continent" force="true" unload="true"/>
-	<cover_data path="levels/narratives/classics/dah/cover_data" force"true" unload="true"/>
+	<continent path="levels/naratives/classics/dah/world/world" force="true" unload="true"/>
+	<cover_data path="levels/narratives/classics/dah/cover_data" force="true" unload="true"/>
 	<nav_manager path="levels/naratives/classics/dah/nav_manager" force="true" unload="true"/>
 	
 	<!--enemy bullet impact fixes-->	
