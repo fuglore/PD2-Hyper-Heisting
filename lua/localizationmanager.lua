@@ -188,9 +188,10 @@
 		["loading_gameplay_37"] = "Higher damage rifles and shotguns can take out tougher enemies like Tasers and Bulldozers with less shots, but are weak at crowd control, try to make up for that with another weapon's capabilities!",
 		["loading_gameplay_46"] = "Snipers get more accurate as you spend time in their line of fire, try to kill them before that happens!",
 		["loading_gameplay_56"] = "During infinite assaults, players can still get out of custody by simply waiting!",
+		["loading_gameplay_76"] = "To kill the bulldozer, shoot at it until it dies! It's faceplate, visor, or face in specific!",
 		["loading_gameplay_92"] = "Snipers can very easily deplete your armor and health in seconds if ignored, deal with them quickly!",
 		["loading_gameplay_13"] = "Know your enemy. The Medic wears a red outfit when wielding a shotgun and a blue outfit when wielding a rifle!",
-		["loading_gameplay_73"] = "Not killing enough cops fast enough is a surefire way to guarantee you'll be unable to complete objectives.",
+		["loading_gameplay_73"] = "Running from the horde isn't a bad idea sometimes, but killing enemies is essential to ending an assault wave!",
 		["loading_gameplay_96"] = "Captain Winters does not show up in Hyper Heisting! Well, he does! But not really! But kinda! Yeah!",
 		["loading_gameplay_97"] = "If regular Captain Winters shows up in any way, for any reason, please post a comment on the MWS page! That's not supposed to happen!",
 		["loading_gameplay_126"] = "If you can't tolerate the game without Captain Winters in it, maybe try Restoration Mod!",
@@ -204,7 +205,7 @@
 		["loading_hh_2"] = "Ninja enemies deal more damage, and are way better at dodging than the regular assault force! Look out for less armored, more unique units during the assault!",
 		["loading_hh_3"] = "Shin Shootout is a mode meant for only the smartest, fastest, toughest players! Enemies become much more aggressive when it's enabled!",
 		["loading_hh_4"] = "If you're in a tough situation, don't give up! There's always a way out!",
-		["loading_hh_5"] = "ZEAL Cloakers are sneaky, listen out for their gasmask breathing, and pay attention to their nightvision googles, it's your only way to tell you're getting charged!",
+		["loading_hh_5"] = "Cloaker kicks can send you FLYING backwards and deal massive damage! Stay away from them!",
 		["loading_hh_6"] = "Special enemies get more dangerous as difficulties increase! Keep a close eye on them!",
 		["loading_hh_7"] = "The cops are generally more intelligent, get faster, deal slightly more damage, and are more accurate every 2 difficulties, while their group tactics get better every difficulty!",
 		["loading_hh_8"] = "Listen out for what the cops are saying from around the corner if you can, it'll help you predict what kind of tactics some of the groups might have! You can even hear them throw out smoke grenades and flashbangs!",
@@ -216,6 +217,8 @@
 		["loading_hh_14"] = "You can get to the Hyper Heisting Options through Mod Options in the Options menu!",
 		["loading_hh_15"] = "Getting hit by an enemy melee attack will temporarily stagger you, and cause you to be unable to attack for a few moments!",
 		["loading_hh_16"] = "Punks are overconfident fodder enemies wielding revolvers, double barreled shotguns, and submachine guns. They will not hurt you much if you do not let them!",
+		["loading_hh_17"] = "In Hyper Heisting, Tasers tasing you into incapacitation and getting downed by Cloakers count as actual downs, which can send you into custody! Be careful around them!",
+		["loading_hh_18"] = "Ammo pickups have a 5% chance by default to give you one throwable back!",				
 		["pattern_truthrunes_title"] = "Truth Runes",				
 		["menu_l_global_value_hyperheist"] = "This is a Hyper Heisting item!",
 		["menu_l_global_value_hyperheisting_desc"] = "This is a Hyper Heisting item!",		
@@ -321,6 +324,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_juggernaut_beta_desc"] = "BASIC: ##$basic##\nUnlocks the ability to wear the Improved Combined Tactical Vest. Your total armor value is increased by ##30%##. \n\nACE: ##$pro##\nYour total armor value is further increased by ##20%##.\n\n##For you.##",
 			
 			["bm_menu_skill_locked_level_7"] = "Requires the Big Guy skill",
+			
+			["menu_bandoliers_beta_desc"] = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nThe ammo pickup of your weapons is increased by ##100%##.\n\nNOTE: Does not stack with the ##Walk-in Closet## ammo pickup bonus gained from perk decks.",
 			
 			["menu_pistol_beta_messiah"] = "Resurrection",
 			["menu_pistol_beta_messiah_desc"] = "BASIC: ##$basic##\nWhile in bleedout, you can revive yourself if you kill an enemy.  This can only happen every ##120## seconds.\n\nACE: ##$pro##\nYou are now protected from otherwise lethal damage for ##1.5## seconds after being revived.\n\n##The mark of my divinity shall scar thy DNA.##",

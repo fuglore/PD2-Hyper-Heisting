@@ -6,6 +6,28 @@ local mvec3_add = mvector3.add
 local mvec3_mul = mvector3.multiply
 local mvec3_norm = mvector3.normalize
 
+function PlayerStandard:_find_pickups(t)
+	local pickups = World:find_units_quick("sphere", self._unit:movement():m_pos(), self._pickup_area, self._slotmask_pickups)
+	local grenade_tweak = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()]
+	local may_find_grenade = nil --blech, theres already a 5% chance now, so i dont think fully loaded needs this anymore
+
+	for _, pickup in ipairs(pickups) do
+		if pickup:pickup() and pickup:pickup():pickup(self._unit) then
+			if may_find_grenade then
+				local data = managers.player:upgrade_value("player", "regain_throwable_from_ammo", nil)
+
+				if data then
+					managers.player:add_coroutine("regain_throwable_from_ammo", PlayerAction.FullyLoaded, managers.player, data.chance, data.chance_inc)
+				end
+			end
+
+			for id, weapon in pairs(self._unit:inventory():available_selections()) do
+				managers.hud:set_ammo_amount(id, weapon.unit:base():ammo_info())
+			end
+		end
+	end
+end
+
 function PlayerStandard:on_melee_stun(t, timer)
 	self:_interupt_action_reload(t)
 	self:_interupt_action_steelsight(t)
@@ -1215,7 +1237,7 @@ function PlayerStandard:_start_action_running(t)
 		return
 	end
 
-	if self._shooting and not self._equipped_unit:base():run_and_shoot_allowed() or self:_changing_weapon() or self._use_item_expire_t or self._state_data.in_air or self:_is_throwing_projectile() or self:_is_charging_weapon() then
+	if self._shooting and not self._equipped_unit:base():run_and_shoot_allowed() or self._use_item_expire_t or self._state_data.in_air or self:_is_throwing_projectile() or self:_is_charging_weapon() then
 		self._running_wanted = true
 
 		return
@@ -1270,10 +1292,10 @@ function PlayerStandard:_start_action_running(t)
 	self._play_stop_running_anim = nil
 
 	if not self:_is_reloading() or not self.RUN_AND_RELOAD then
-		if not self._equipped_unit:base():run_and_shoot_allowed() and not self:_is_meleeing() then
+		if not self._equipped_unit:base():run_and_shoot_allowed() and not self:_is_meleeing() and not self:_changing_weapon() then
 			self._ext_camera:play_redirect(self:get_animation("start_running"))
 		else
-			if not self:_is_meleeing() then
+			if not self:_is_meleeing() and not self:_changing_weapon() then
 				self._ext_camera:play_redirect(self:get_animation("idle"))
 			end
 		end
@@ -1714,6 +1736,28 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 	end
 
 	return new_action
+end
+
+function PlayerStandard:_start_action_unequip_weapon(t, data)
+	local speed_multiplier = self:_get_swap_speed_multiplier()
+	
+	speed_multiplier = speed_multiplier + 0.5 --this needs to be faster. i hate weapon switching taking as long as it does. holy shit.
+
+	self._equipped_unit:base():tweak_data_anim_stop("equip")
+	self._equipped_unit:base():tweak_data_anim_play("unequip", speed_multiplier)
+
+	local tweak_data = self._equipped_unit:base():weapon_tweak_data()
+	self._change_weapon_data = data
+	self._unequip_weapon_expire_t = t + (tweak_data.timers.unequip or 0.5) / speed_multiplier
+
+	--self:_interupt_action_running(t)
+	self:_interupt_action_charging_weapon(t)
+
+	local result = self._ext_camera:play_redirect(self:get_animation("unequip"), speed_multiplier)
+
+	self:_interupt_action_reload(t)
+	self:_interupt_action_steelsight(t)
+	self._ext_network:send("switch_weapon", speed_multiplier, 1)
 end
 
 function PlayerStandard:_update_check_actions(t, dt, paused)

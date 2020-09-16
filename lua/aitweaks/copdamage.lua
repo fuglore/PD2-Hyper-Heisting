@@ -109,7 +109,7 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		end
 		
 		if damage_info.variant == "melee" then
-			hurtlevel_mult = hurtlevel_mult - 0.1
+			hurtlevel_mult = hurtlevel_mult - 0.2
 		end
 		
 		hurtlevel_mult = managers.modifiers:modify_value("HHHurtRes", hurtlevel_mult)

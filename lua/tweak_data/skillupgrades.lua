@@ -440,4 +440,8 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				category = "player"
 			}
 		}
+		self.values.player.pick_up_ammo_multiplier = {
+			1.35,
+			2
+		}
 end)

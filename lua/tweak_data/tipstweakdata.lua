@@ -143,6 +143,22 @@ Hooks:PostHook(TipsTweakData, "init", "hh_tips", function(self)
 			category = "hh"
 		}
 	)
+	table.insert(self.tips, 
+		{
+			cat_index = 17,
+			image = "enemy_tazer",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips, 
+		{
+			cat_index = 18,
+			image = "general_ammo_pickups",
+			consoles = true,
+			category = "hh"
+		}
+	)
 	
 	
     for _, tip in ipairs(self.tips) do
