@@ -25,45 +25,45 @@ function CharacterTweakData:_presets(tweak_data)
 		easy = {
 			panic_chance_mul = 1,
 			duration = {
-				10,
-				15
+				5,
+				7.5
 			},
 			react_point = {
 				0,
 				0
 			},
 			brown_point = {
-				1,
-				1
+				3,
+				3
 			}
 		},
 		hard_def = {
 			panic_chance_mul = 0.7,
 			duration = {
-				5,
-				10
+				2.5,
+				5
 			},
 			react_point = {
-				0,
+				1,
 				1
 			},
 			brown_point = {
-				2,
-				2
+				6,
+				6
 			}
 		},
 		hard_agg = {
 			panic_chance_mul = 0.7,
 			duration = {
-				5,
-				8
+				2.5,
+				5
 			},
 			react_point = {
 				3,
 				4
 			},
 			brown_point = {
-				5,
+				6,
 				6
 			}
 		},
@@ -8717,8 +8717,12 @@ Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, pre
 	self.cop.HEALTH_INIT = 15
 	self.cop.headshot_dmg_mul = 16
 	self.cop.access = "swat"	
-	self.cop.damage.hurt_severity = presets.hurt_severities.hordepunk
+	self.cop.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.cop_moss = deep_clone(self.cop)
+	self.cop_moss.tags = {
+		"law",
+		"punk_rage"
+	}
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
 		if faction == "america" then

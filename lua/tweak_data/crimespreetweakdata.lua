@@ -706,11 +706,11 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 		}, 
 		{ --loud short/medium
 			{
-				stage_id = "wwh",
+				stage_id = "wwh_hh",
 				add = 8,
-				id = "wwh",
+				id = "wwh_hh",
 				icon = "csm_wwh",
-				level = tweak_data.narrative.stages.wwh
+				level = tweak_data.narrative.stages.wwh_hh
 			},
 			{
 				stage_id = "rvd1",

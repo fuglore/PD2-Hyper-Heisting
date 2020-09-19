@@ -471,34 +471,44 @@ function GroupAIStateBesiege:update(t, dt)
 			end
 					
 			if small_map then
-				self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
+				self._enemies_killed_sustain_guaranteed_break = value
 			else
-				self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
+				self._enemies_killed_sustain_guaranteed_break = value
 			end
+		end
+		
+		--local testing = true
+		local task_data = self._task_data.assault
+		
+		if task_data and task_data.phase ~= "anticipation" then  
+			if not self._activeassaultnextbreak_t then
+				if testing then
+					self._activeassaultnextbreak_t = self._t + 15
+					--log("quit being a jerk and work")
+				elseif small_map then
+					self._activeassaultnextbreak_t = self._t + 30
+				else
+					self._activeassaultnextbreak_t = self._t + 60
+				end
+								
+				if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+					self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
+					--log("breaksetforDW")
+				end
+			end
+		else
+			if self._activeassaultbreak then
+				self._activeassaultbreak = nil
+				LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+			end
+			self._activeassaultnextbreak_t = nil
+			self._stopassaultbreak_t = nil
 		end
 		
 		if fliptheswitch then
 			--Nothing
-		else
-			if self._task_data.assault and self._task_data.assault.phase == "sustain" then
-				local task_data = self._task_data.assault
-				
-				if not self._activeassaultbreak then
-					if not self._activeassaultnextbreak_t then
-						--log("assaultstartedbreakset")
-						if small_map then
-							self._activeassaultnextbreak_t = self._t + 30
-						else
-							self._activeassaultnextbreak_t = self._t + 60
-						end
-							
-						if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
-							--log("breaksetforDW")
-						end
-					end
-				end
-				
+		else	
+			if self._task_data.assault and self._task_data.assault.phase == "sustain" then		
 				if not self._activeassaultbreak and self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
 					self._stopassaultbreak_t = self._t + 20
 					self._activeassaultbreak = true
@@ -509,7 +519,7 @@ function GroupAIStateBesiege:update(t, dt)
 						if small_map then
 							value = self._force_pool / 2
 						else
-							value = self._force_pool / 3
+							value = self._force_pool / 2
 						end
 					end
 					
@@ -521,11 +531,15 @@ function GroupAIStateBesiege:update(t, dt)
 					
 					if not self._said_heat_bonus_dialog then
 						self:play_heat_bonus_dialog()
-						for group_id, group in pairs(self._groups) do
-							for u_key, u_data in pairs(group.units) do
-								u_data.unit:sound():say("g90", true)
+						
+						for key, data in pairs(self._police) do
+							local dmg_ext = data.unit:character_damage()
+
+							if dmg_ext and dmg_ext.build_suppression then
+								dmg_ext:build_suppression(nil, -1)
 							end
 						end
+						
 					end
 					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
 					--log("assaultbreakon")
@@ -538,7 +552,7 @@ function GroupAIStateBesiege:update(t, dt)
 					if small_map then
 						self._activeassaultnextbreak_t = self._t + 30
 					else
-						self._activeassaultnextbreak_t = self._t + 60
+						self._activeassaultnextbreak_t = self._t + 30
 					end
 							
 					if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
@@ -551,12 +565,12 @@ function GroupAIStateBesiege:update(t, dt)
 					--log("assaultbreakreset")
 				end
 			else
-				self._stopassaultbreak_t = nil
 				if self._activeassaultbreak then
 					self._activeassaultbreak = nil
+					self._activeassaultnextbreak_t = nil
+					self._stopassaultbreak_t = nil
 					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
 				end
-				self._activeassaultnextbreak_t = nil
 			end
 		end
 		
@@ -569,15 +583,11 @@ function GroupAIStateBesiege:update(t, dt)
 end
 
 -- Fix for the bug when there is too many dozers/specials thank you andole im sorry
-local fixed = false
+--[[local fixed = false
 local origfunc2 = GroupAIStateBesiege._get_special_unit_type_count
 function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
-	if special_type == 'tank_mini' or special_type == 'tank_medic' or special_type == 'tank_ftsu' or special_type == 'spooc_heavy' or special_type == 'phalanx_minion' or special_type == 'tank_hw' or special_type == 'akuma' or special_type == 'fbi' or special_type == 'ninja' or special_type == 'fbi_xc45' then
-		--log("based")
-		fixed = true
-	end
 	
-	if not fixed and special_type == 'tank' then
+	if special_type == 'tank' then
 		local res1 = origfunc2(self, 'tank', ...) or 0
 		res1 = res1 + (origfunc2(self, 'tank_mini', ...) or 0)
 		res1 = res1 + (origfunc2(self, 'tank_medic', ...) or 0)
@@ -586,27 +596,174 @@ function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 		return res1
 	end
 	
-	if not fixed and special_type == 'spooc' then
+	if special_type == 'spooc' then
 		local res2 = origfunc2(self, 'spooc', ...) or 0
 		res2 = res2 + (origfunc2(self, 'spooc_heavy', ...) or 0)
 		return res2
 	end
 	
-	if not fixed and special_type == 'shield' then 
+	if special_type == 'shield' then 
 		local res3 = origfunc2(self, 'shield', ...) or 0
 		res3 = res3 + (origfunc2(self, 'phalanx_minion', ...) or 0)
 		res3 = res3 + (origfunc2(self, 'akuma', ...) or 0)
 		return res3
 	end
 	
-	if not fixed and special_type == 'ninja' then
+	if special_type == 'ninja' then
 		local res4 = origfunc2(self, 'ninja', ...) or 0
 		res4 = res4 + (origfunc2(self, 'fbi', ...) or 0)
 		res4 = res4 + (origfunc2(self, 'fbi_xc45', ...) or 0)
 	end
 	
+	if special_type == 'medic' then
+		local res5 = origfunc2(self, 'medic', ...) or 0
+		res5 = res5 + (origfunc2(self, 'tank_medic', ...) or 0)
+		return res5
+	end
+	
 	return origfunc2(self, special_type, ...)
+end]]
+
+function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, ai_task)
+	local spawn_group_desc = tweak_data.group_ai.enemy_spawn_groups[spawn_group_type]
+	local wanted_nr_units = nil
+
+	if type(spawn_group_desc.amount) == "number" then
+		wanted_nr_units = spawn_group_desc.amount
+	else
+		wanted_nr_units = math.random(spawn_group_desc.amount[1], spawn_group_desc.amount[2])
+	end
+
+	local valid_unit_types = {}
+
+	self._extract_group_desc_structure(spawn_group_desc.spawn, valid_unit_types)
+
+	local unit_categories = tweak_data.group_ai.unit_categories
+	local total_wgt = 0
+	local i = 1
+
+	while i <= #valid_unit_types do
+		local spawn_entry = valid_unit_types[i]
+		local cat_data = unit_categories[spawn_entry.unit]
+
+		if not cat_data then
+			debug_pause("[GroupAIStateBesiege:_spawn_in_group] unit category doesn't exist:", spawn_entry.unit)
+
+			return
+		end
+
+		local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
+
+		if cat_data.special_type and not cat_data.is_captain and spawn_limit <= self:_get_special_unit_type_count(cat_data.special_type) then
+			spawn_group.delay_t = self._t + 2.5 --try again in like 2 seconds or so nerd
+
+			return
+		else
+			total_wgt = total_wgt + spawn_entry.freq
+			i = i + 1
+		end
+	end
+
+	for _, sp_data in ipairs(spawn_group.spawn_pts) do
+		sp_data.delay_t = self._t + math.rand(0.5)
+	end
+
+	local spawn_task = {
+		objective = not grp_objective.element and self._create_objective_from_group_objective(grp_objective),
+		units_remaining = {},
+		spawn_group = spawn_group,
+		spawn_group_type = spawn_group_type,
+		ai_task = ai_task
+	}
+
+	table.insert(self._spawning_groups, spawn_task)
+
+	-- Lines 1373-1388
+	local function _add_unit_type_to_spawn_task(i, spawn_entry)
+		local spawn_amount_mine = 1 + (spawn_task.units_remaining[spawn_entry.unit] and spawn_task.units_remaining[spawn_entry.unit].amount or 0)
+		spawn_task.units_remaining[spawn_entry.unit] = {
+			amount = spawn_amount_mine,
+			spawn_entry = spawn_entry
+		}
+		wanted_nr_units = wanted_nr_units - 1
+
+		if spawn_entry.amount_min then
+			spawn_entry.amount_min = spawn_entry.amount_min - 1
+		end
+
+		if spawn_entry.amount_max then
+			spawn_entry.amount_max = spawn_entry.amount_max - 1
+
+			if spawn_entry.amount_max == 0 then
+				table.remove(valid_unit_types, i)
+
+				total_wgt = total_wgt - spawn_entry.freq
+
+				return true
+			end
+		end
+	end
+
+	local i = 1
+
+	while i <= #valid_unit_types do
+		local spawn_entry = valid_unit_types[i]
+
+		if i <= #valid_unit_types and wanted_nr_units > 0 and spawn_entry.amount_min and spawn_entry.amount_min > 0 and (not spawn_entry.amount_max or spawn_entry.amount_max > 0) then
+			if not _add_unit_type_to_spawn_task(i, spawn_entry) then
+				i = i + 1
+			end
+		else
+			i = i + 1
+		end
+	end
+
+	while wanted_nr_units > 0 and #valid_unit_types ~= 0 do
+		local rand_wght = math.random() * total_wgt
+		local rand_i = 1
+		local rand_entry = nil
+
+		repeat
+			rand_entry = valid_unit_types[rand_i]
+			rand_wght = rand_wght - rand_entry.freq
+
+			if rand_wght <= 0 then
+				break
+			else
+				rand_i = rand_i + 1
+			end
+		until false
+
+		local cat_data = unit_categories[rand_entry.unit]
+		local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
+
+		if cat_data.special_type and not cat_data.is_captain and spawn_limit <= self:_get_special_unit_type_count(cat_data.special_type) then
+			table.remove(valid_unit_types, rand_i)
+
+			total_wgt = total_wgt - rand_entry.freq
+		else
+			_add_unit_type_to_spawn_task(rand_i, rand_entry)
+		end
+	end
+
+	local group_desc = {
+		size = 0,
+		type = spawn_group_type
+	}
+
+	for u_name, spawn_info in pairs(spawn_task.units_remaining) do
+		group_desc.size = group_desc.size + spawn_info.amount
+	end
+
+	local group = self:_create_group(group_desc)
+	group.objective = grp_objective
+	group.objective.moving_out = true
+	group.team = self._teams[spawn_group.team_id or tweak_data.levels:get_default_team_ID("combatant")]
+	spawn_task.group = group
+
+	return group
 end
+
 
 function GroupAIStateBesiege:chk_assault_number()
 	if not self._assault_number then
@@ -984,7 +1141,7 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.is_first = nil
 	self._force_pool = nil
 	self._enemies_killed_sustain = 0
-	--self._enemies_killed_sustain_guaranteed_break = 9999
+	--self._enemies_killed_sustain_guaranteed_break = nil
 	assault_task.phase_end_t = self._t + anticipation_duration
 	
 	if not self._downleniency or self._downleniency < 1 then

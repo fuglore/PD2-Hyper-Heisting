@@ -106,6 +106,15 @@ function SkirmishTweakData:_init_wave_modifiers()
 					"none"
 				}
 			}
+		},
+		{
+			class = "ModifierAggro",
+			data = {
+				boolean = {
+					true,
+					"none"
+				}
+			}
 		}
 	}
 	self.wave_modifiers[5] = {

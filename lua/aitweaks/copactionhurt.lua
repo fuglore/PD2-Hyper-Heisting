@@ -967,15 +967,6 @@ function CopActionHurt:init(action_desc, common_data)
 				})
 			end
 		end
-
-		if common_data.ext_base._tweak_table == "cop_moss" then
-			local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-
-			--punk rage buff will only apply on Death Sentence
-			if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-				common_data.ext_base:add_buff("base_damage", 2)
-			end
-		end
 	end
 
 	if self:is_network_allowed(action_desc) then
@@ -1279,14 +1270,6 @@ function CopActionHurt:_get_floor_normal(at_pos, fwd, right)
 end
 
 function CopActionHurt:on_exit()
-	if self._ext_base._tweak_table == "cop_moss" then
-		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-
-		--punk rage buff visual
-		if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-			self._ext_damage:activate_punk_visual_effect()
-		end
-	end
 
 	if self._delayed_shooting_hurt_clbk_id then
 		managers.enemy:remove_delayed_clbk(self._delayed_shooting_hurt_clbk_id)

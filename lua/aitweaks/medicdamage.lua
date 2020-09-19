@@ -41,21 +41,11 @@ function MedicDamage:heal_unit(unit, override_cooldown)
 	self._heal_cooldown_t = t
 
 	if not self._unit:character_damage():dead() then
-		if Global.game_settings.one_down then
-			local redir_res = self._unit:movement():play_redirect("cmd_get_up")
+		local redir_res = self._unit:movement():play_redirect("cmd_get_up")
 
-			if redir_res then
-				self._unit:sound():say("heal")
-				self._unit:anim_state_machine():set_speed(redir_res, 0.5)
-			end
-		else
-			local action_data = {
-				body_part = 1,
-				type = "heal",
-				client_interrupt = Network:is_client()
-			}
-			
-			self._unit:movement():action_request(action_data)
+		if redir_res then
+			self._unit:sound():say("heal")
+			self._unit:anim_state_machine():set_speed(redir_res, 0.5)
 		end
 		
 		if self._unit:contour() then

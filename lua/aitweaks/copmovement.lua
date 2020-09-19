@@ -519,61 +519,20 @@ function CopMovement:on_suppressed(state)
 
 					if math.random() < crumble_chance then
 						if self._ext_anim.run and self._ext_anim.move_fwd then
-							if math.random() < 0.5 then
-								local vec_from = temp_vec1
-								local vec_to = temp_vec2
-								local ray_params = {
-									allow_entry = false,
-									trace = true,
-									tracker_from = self:nav_tracker(),
-									pos_from = vec_from,
-									pos_to = vec_to
+							local action_desc = {
+								clamp_to_graph = true,
+								type = "act",
+								body_part = 1,
+								variant = "e_so_sup_fumble_run_fwd",
+								blocks = {
+									action = -1,
+									walk = -1
 								}
+							}
 
-								mvec3_set(ray_params.pos_from, self:m_pos())
-								mvec3_set(ray_params.pos_to, self:m_rot():y())
-								mvec3_mul(ray_params.pos_to, 380) --small offset from 4m
-								mvec3_add(ray_params.pos_to, self:m_pos())
-
-								if not managers.navigation:raycast(ray_params) then
-									local action_desc = {
-										clamp_to_graph = true,
-										type = "act",
-										body_part = 1,
-										variant = "e_nl_slide_fwd_4m",
-										blocks = {
-											action = -1,
-											act = -1,
-											tase = -1,
-											bleedout = -1,
-											dodge = -1,
-											walk = -1,
-											hurt = -1,
-											heavy_hurt = -1
-										}
-									}
-
-									if self:action_request(action_desc) then
-										--self._unit:sound():say("lk3b", true) 
-										try_something_else = false
-									end
-								end
-							else
-								local action_desc = {
-									clamp_to_graph = true,
-									type = "act",
-									body_part = 1,
-									variant = "e_so_sup_fumble_run_fwd",
-									blocks = {
-										action = -1,
-										walk = -1
-									}
-								}
-
-								if self:action_request(action_desc) then
-									--self._unit:sound():say("hr01")
-									try_something_else = false
-								end
+							if self:action_request(action_desc) then
+								--self._unit:sound():say("hr01")
+								try_something_else = false
 							end
 						else
 							local allow = nil

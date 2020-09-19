@@ -495,6 +495,19 @@ function CopDamage:_on_damage_received(damage_info)
 	local speech_allowed = not self._next_allowed_hurt_t or self._next_allowed_hurt_t and self._next_allowed_hurt_t < t	
 	
 	if dmg_chk and damage_info.damage and damage_info.damage > 0.01 and self._health > damage_info.damage then
+		
+		if not damage_info.result_type or damage_info.result_type ~= "death"  then
+			if self._unit:base():has_tag("punk_rage") then
+				local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+
+				--punk rage buff will only apply on Death Sentence
+				if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+					self._unit:base():add_buff("base_damage", 2)
+					self:activate_punk_visual_effect()
+				end
+			end
+		end
+	
 		if speech_allowed then
 			if not damage_info.result_type or damage_info.result_type ~= "healed" and damage_info.result_type ~= "death" then
 				if self._unit:base():has_tag("takedown") and self._unit:base():has_tag("special") then

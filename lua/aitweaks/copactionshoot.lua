@@ -582,9 +582,9 @@ function CopActionShoot:update(t)
 
 						local lerp_dis = math_min(1, target_dis / self._falloff[#self._falloff].r)
 						local shoot_delay = math_lerp(falloff.recoil[1], falloff.recoil[2], lerp_dis)
-
-						if self._common_data.is_suppressed and not self._is_shin_shootout then
-							shoot_delay = shoot_delay * 1.5
+						
+						if self._unit:character_damage()._punk_effect then
+							shoot_delay = shoot_delay * 0.25
 						end
 
 						self._shoot_t = t + shoot_delay
@@ -777,8 +777,8 @@ function CopActionShoot:update(t)
 						local lerp_dis = math_min(1, target_dis / self._falloff[#self._falloff].r)
 						local shoot_delay = math_lerp(recoil_1, recoil_2, lerp_dis)
 
-						if self._common_data.is_suppressed and not self._is_shin_shootout then
-							shoot_delay = shoot_delay * 1.5
+						if self._unit:character_damage()._punk_effect then
+							shoot_delay = shoot_delay * 0.25
 						end
 
 						self._shoot_t = t + shoot_delay
@@ -922,7 +922,7 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 			hit_chance = hit_chance * 0.5
 		end
 
-		if self._common_data.ext_anim.move or self._common_data.ext_anim.run then
+		if self._common_data.ext_anim.run then
 			hit_chance = hit_chance * 0.75
 		end
 
@@ -942,6 +942,12 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 	if self._unit:character_damage().accuracy_multiplier then
 		hit_chance = hit_chance * self._unit:character_damage():accuracy_multiplier()
 	end
+	
+	if self._unit:character_damage()._punk_effect then
+		hit_chance = hit_chance * 3
+	end
+	
+	--log("hit_chance: " .. hit_chance .. "")
 
 	if self:_pseudorandom() < hit_chance then
 		mvec3_set(shoot_hist.m_last_pos, pos)
