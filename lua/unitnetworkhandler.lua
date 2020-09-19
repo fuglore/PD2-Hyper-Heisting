@@ -268,23 +268,11 @@ function UnitNetworkHandler:sync_medic_heal(unit, sender)
 	if self._verify_character(unit) then
 		unit:character_damage()._heal_cooldown_t = Application:time()
 
-		if unit:anim_data() and unit:anim_data().act then
+		local redir_res = unit:movement():play_redirect("cmd_get_up")
+
+		if redir_res then
 			unit:sound():say("heal")
-		elseif Global.game_settings.one_down then
-			local redir_res = unit:movement():play_redirect("cmd_get_up")
-
-			if redir_res then
-				unit:sound():say("heal")
-				unit:anim_state_machine():set_speed(redir_res, 0.5)
-			end
-		else
-			local action_data = {
-				body_part = 1,
-				type = "heal",
-				client_interrupt = Network:is_client()
-			}
-
-			unit:movement():action_request(action_data)
+			unit:anim_state_machine():set_speed(redir_res, 0.5)
 		end
 	end
 end
