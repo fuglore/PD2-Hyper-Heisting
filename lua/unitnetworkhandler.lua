@@ -268,11 +268,15 @@ function UnitNetworkHandler:sync_medic_heal(unit, sender)
 	if self._verify_character(unit) then
 		unit:character_damage()._heal_cooldown_t = Application:time()
 
-		local redir_res = unit:movement():play_redirect("cmd_get_up")
-
-		if redir_res then
+		if unit:anim_data() and unit:anim_data().act then --do not try to play the anim redirect if acting, just play the voiceline
 			unit:sound():say("heal")
-			unit:anim_state_machine():set_speed(redir_res, 0.5)
+		else
+			local redir_res = unit:movement():play_redirect("cmd_get_up")
+
+			if redir_res then
+				unit:sound():say("heal")
+				unit:anim_state_machine():set_speed(redir_res, 0.5)
+			end
 		end
 	end
 end
