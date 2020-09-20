@@ -25,16 +25,8 @@ function CopBase:init(unit)
 
 	self._char_tweak = tweak_data.character[self._tweak_table]
 	
-	if unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar") then
-		local tags = self:char_tweak().tags
-		table.insert(tags, "twitchy")
-	end
-	
-	if unit:name() ~= Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss") then
-		if self._tweak_table == "cop" then
-			local tags = self:char_tweak().tags
-			table.insert(tags, "panicked")
-		end
+	if unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss") then
+		self._voidrage = true
 	end
 
 	self.my_voice = nil

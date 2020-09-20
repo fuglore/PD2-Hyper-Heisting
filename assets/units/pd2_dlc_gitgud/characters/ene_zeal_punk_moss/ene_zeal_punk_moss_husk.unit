@@ -4,7 +4,7 @@
 	<object file="units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss" />
 
 	<dependencies>
-		
+		<depends_on effect="effects/pd2_mod_hh/particles/character/punk_effect" />
 	</dependencies>
 
 	<extensions>

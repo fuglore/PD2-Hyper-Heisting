@@ -785,6 +785,7 @@
 	<effect path="effects/pd2_mod_hh/particles/weapons/lazer_passive"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/bouncer_passive"/>
 	<effect path="effects/pd2_mod_hh/particles/character/punk_effect"/>
+	<effect path="effects/pd2_mod_hh/particles/character/punk_effect_void"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/lotus_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak"/>

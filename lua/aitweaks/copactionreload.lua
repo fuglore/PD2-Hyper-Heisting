@@ -126,7 +126,7 @@ function CopActionReload:init(action_desc, common_data)
 				self._execute_storm_t = t + 0.75
 				local tase_effect_table = self._unit:character_damage() ~= nil and self._unit:character_damage()._tase_effect_table
 
-				if tase_effect_table then
+				if tase_effect_table and not self._storm_effect then
 					self._storm_effect = World:effect_manager():spawn(tase_effect_table)
 				end
 			end

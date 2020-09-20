@@ -4,7 +4,7 @@
 	<object file="units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss" />
 
 	<dependencies>
-		
+		<depends_on effect="effects/pd2_mod_hh/particles/character/punk_effect_void" />
 	</dependencies>
 
 	<extensions>

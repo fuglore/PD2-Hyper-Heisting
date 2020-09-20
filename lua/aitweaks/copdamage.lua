@@ -13,13 +13,18 @@ function CopDamage:is_immune_to_shield_knockback()
 end
 
 function CopDamage:activate_punk_visual_effect()
-	self._punk_effect_table = {
-		effect = Idstring("effects/pd2_mod_hh/particles/character/punk_effect"),
-		parent = self._spine2_obj
-	}
-	
-	self._punk_effect = World:effect_manager():spawn(self._punk_effect_table)
-	
+	if not self._punk_effect then
+		self._punk_effect_table = {
+			effect = Idstring("effects/pd2_mod_hh/particles/character/punk_effect"),
+			parent = self._spine2_obj
+		}
+		
+		if self._unit:base()._voidrage then
+			self._punk_effect_table.effect = Idstring("effects/pd2_mod_hh/particles/character/punk_effect_void")
+		end
+		
+		self._punk_effect = World:effect_manager():spawn(self._punk_effect_table)
+	end
 end
 
 function CopDamage:kill_punk_visual_effect()
@@ -98,7 +103,9 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		local damage = damage_info.damage
 		local hurtlevel_mult = 1
 		
-		if doomzer then
+		if self._punk_effect then
+			hurtlevel_mult = 2
+		elseif doomzer then
 			hurtlevel_mult = 5
 		elseif heavy then
 			hurtlevel_mult = 0.5
@@ -621,6 +628,12 @@ function CopDamage:_on_damage_received(damage_info)
 		end
 	end
 	
+	if not dmg_chk or damage_info.result_type and damage_info.result_type == "death" then
+		if self._punk_effect then
+			self:kill_punk_visual_effect()
+		end
+	end
+	
 
 	if damage_info.variant == "melee" then
 		managers.statistics:register_melee_hit()
@@ -721,6 +734,10 @@ function CopDamage:damage_melee(attack_data)
 		if attack_data.attacker_unit:base().has_tag and attack_data.attacker_unit:base():has_tag("tank") and not self._unit:base():has_tag("tank") and not self._unit:base():has_tag("protected_reverse") then
 			attack_data.damage = attack_data.damage * 9
 		end
+	end
+	
+	if self._punk_effect then
+		attack_data.damage = attack_data.damage * 0.25
 	end
 
 	local result = nil
@@ -1242,10 +1259,14 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 			normal = attack_data.col_ray.ray
 		})
 	end
-
+	
 	local result = nil
 	local body_index = self._unit:get_body_index(attack_data.col_ray.body:name())
 	local head = self._head_body_name and not self._unit:in_slot(16) and not self._char_tweak.ignore_headshot and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
+
+	if self._punk_effect then
+		attack_data.damage = attack_data.damage * 0.25
+	end
 
 	--prevent headshots against these units unless shot from the front, used for bulldozers
 	if head and self._unit:base():has_tag("protected") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then
@@ -1755,7 +1776,11 @@ function CopDamage:damage_simple(attack_data)
 	local damage = attack_data.damage
 
 	damage = self:_apply_damage_reduction(damage) --they also forgot to add this one
-
+	
+	if self._punk_effect then
+		attack_data.damage = attack_data.damage * 0.25
+	end
+	
 	--Graze damage is supposed to not benefit from any damage bonuses (as the damage is defined by the shot and skill upgrade you have), but it's not supposed to not be clamped like in vanilla, where everything can get nuked by it
 	if self._unit:movement():cool() then --allowing stealth insta-kill
 		damage = self._HEALTH_INIT
@@ -2087,6 +2112,11 @@ function CopDamage:damage_fire(attack_data)
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 
 	local result = nil
+	
+	if self._punk_effect then
+		attack_data.damage = attack_data.damage * 0.25
+	end
+	
 	local damage = attack_data.damage
 
 	if attack_data.attacker_unit == managers.player:player_unit() then
@@ -2493,6 +2523,11 @@ function CopDamage:damage_explosion(attack_data)
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 
 	local result = nil
+	
+	if self._punk_effect then
+		attack_data.damage = attack_data.damage * 0.25
+	end
+	
 	local damage = attack_data.damage
 
 	if attack_data.attacker_unit == managers.player:player_unit() then
@@ -2852,6 +2887,10 @@ function CopDamage:damage_dot(attack_data)
 
 	local result = nil
 	local damage = attack_data.damage
+	
+	if self._punk_effect then
+		attack_data.damage = attack_data.damage * 0.25
+	end
 
 	if attack_data.attacker_unit == managers.player:player_unit() then
 		if self._char_tweak.priority_shout then
@@ -3045,6 +3084,11 @@ function CopDamage:damage_tase(attack_data)
 
 	damage = self:_apply_damage_reduction(damage)
 	damage = math.clamp(damage, 0, self._HEALTH_INIT)
+	
+	if self._punk_effect then
+		attack_data.damage = attack_data.damage * 0.25
+	end
+	
 	local damage_percent = math.ceil(damage / self._HEALTH_INIT_PRECENT)
 	damage = damage_percent * self._HEALTH_INIT_PRECENT
 	damage, damage_percent = self:_apply_min_health_limit(damage, damage_percent)
