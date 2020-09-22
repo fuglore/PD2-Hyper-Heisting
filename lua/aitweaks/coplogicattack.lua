@@ -616,7 +616,13 @@ function CopLogicAttack._upd_combat_movement(data)
 end
 
 function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, vis_required, assault_break)
-	if focus_enemy and focus_enemy.nav_tracker and focus_enemy.verified and focus_enemy.dis < 250 and CopLogicAttack._can_move(data) then
+	local can_perform_walk_action = not data.unit:movement():chk_action_forbidden("walk") and not my_data.turning or data.unit:anim_data().act_idle
+	
+	if not can_perform_walk_action then
+		return
+	end
+	
+	if focus_enemy and focus_enemy.nav_tracker and focus_enemy.verified and CopLogicAttack._can_move(data) then
 		local from_pos = mvec3_cpy(data.m_pos)
 		local threat_tracker = focus_enemy.nav_tracker
 		local threat_head_pos = focus_enemy.m_head_pos

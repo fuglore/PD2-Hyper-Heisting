@@ -31,6 +31,122 @@ function CopDamage:kill_punk_visual_effect()
 	if self._punk_effect then
 		World:effect_manager():fade_kill(self._punk_effect)
 		self._punk_effect = nil
+		self._punk_effect_table = nil
+	end
+end
+
+function CopDamage:save(data)
+	local save_health = self._health ~= self._HEALTH_INIT
+
+	if managers.crime_spree:is_active() then
+		save_health = save_health or managers.crime_spree:has_active_modifier_of_type("ModifierEnemyHealthAndDamage")
+	end
+
+	if save_health then
+		data.char_dmg = data.char_dmg or {}
+		data.char_dmg.health = self._health
+		data.char_dmg.health_init = self._HEALTH_INIT
+	end
+
+	if self._invulnerable then
+		data.char_dmg = data.char_dmg or {}
+		data.char_dmg.invulnerable = self._invulnerable
+	end
+
+	if self._immortal then
+		data.char_dmg = data.char_dmg or {}
+		data.char_dmg.immortal = self._immortal
+	end
+
+	if self._unit:in_slot(16) then
+		data.char_dmg = data.char_dmg or {}
+		data.char_dmg.is_converted = true
+	end
+
+	if self._lower_health_percentage_limit then
+		data.char_dmg = data.char_dmg or {}
+		data.char_dmg.lower_health_percentage_limit = self._lower_health_percentage_limit
+	end
+
+	if self._dead then
+		data.char_dmg = data.char_dmg or {}
+		data.char_dmg.is_dead = true
+	else
+		data.char_dmg = data.char_dmg or {}
+	
+		if self._punk_effect then
+			data._punk_effect = true
+		end
+		
+		if self._hurt_level then
+			data._hurt_level = self._hurt_level
+		end
+	end
+end
+
+function CopDamage:load(data)
+	if not data.char_dmg then
+		return
+	end
+
+	if data.char_dmg.health then
+		self._health = data.char_dmg.health
+		self._HEALTH_INIT = data.char_dmg.health_init or self._HEALTH_INIT
+		self._health_ratio = self._health / self._HEALTH_INIT
+	end
+
+	if data.char_dmg.invulnerable then
+		self._invulnerable = data.char_dmg.invulnerable
+	end
+
+	self._immortal = data.char_dmg.immortal or self._immortal
+	
+	if data.char_dmg.is_converted then
+		self._unit:set_slot(16)
+		managers.groupai:state():sync_converted_enemy(self._unit)
+		self:set_mover_collision_state(false)
+
+		local add_contour = true
+		local tweak_name = alive(self._unit) and self._unit:base() and self._unit:base()._tweak_table
+
+		if tweak_name then
+			local char_tweak_data = tweak_data.character[tweak_name]
+
+			if char_tweak_data then
+				add_contour = not char_tweak_data.ignores_contours
+			end
+		end
+
+		if add_contour then
+			self._unit:contour():add("friendly", false)
+		end
+	end
+
+	if data.char_dmg.lower_health_percentage_limit then
+		self:_set_lower_health_percentage_limit(data.char_dmg.lower_health_percentage_limit)
+	end
+
+	if data.char_dmg.is_dead then
+		self._dead = true
+
+		self:_remove_debug_gui()
+		self._unit:base():set_slot(self._unit, 17)
+		self._unit:inventory():drop_shield()
+		self:set_mover_collision_state(false)
+
+		if self._unit:base():has_tag("civilian") then
+			managers.enemy:on_civilian_died(self._unit, {})
+		else
+			managers.enemy:on_enemy_died(self._unit, {})
+		end
+	else	
+		if data._punk_effect then
+			self:activate_punk_visual_effect()
+		end
+		
+		if data._hurt_level then
+			self._hurt_level = data._hurt_level
+		end
 	end
 end
 
@@ -104,7 +220,7 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		local hurtlevel_mult = 1
 		
 		if self._punk_effect then
-			hurtlevel_mult = 2
+			hurtlevel_mult = 5
 		elseif doomzer then
 			hurtlevel_mult = 5
 		elseif heavy then
@@ -345,7 +461,7 @@ function CopDamage:die(attack_data)
 end
 
 function CopDamage:build_suppression(amount, panic_chance, was_saw)
-	if self._dead or not self._char_tweak.suppression then
+	if self._dead or not self._char_tweak.suppression or self._punk_effect then
 		return
 	end
 
@@ -503,14 +619,16 @@ function CopDamage:_on_damage_received(damage_info)
 	
 	if dmg_chk and damage_info.damage and damage_info.damage > 0.01 and self._health > damage_info.damage then
 		
-		if not damage_info.result_type or damage_info.result_type ~= "death"  then
-			if self._unit:base():has_tag("punk_rage") then
-				local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		if not self._dead then
+			if not damage_info.result_type or damage_info.result_type ~= "death"  then
+				if self._unit:base():has_tag("punk_rage") then
+					local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 
-				--punk rage buff will only apply on Death Sentence
-				if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-					self._unit:base():add_buff("base_damage", 2)
-					self:activate_punk_visual_effect()
+					--punk rage buff will only apply on Death Sentence
+					if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+						self._unit:base():add_buff("base_damage", 2)
+						self:activate_punk_visual_effect()
+					end
 				end
 			end
 		end
@@ -626,6 +744,7 @@ function CopDamage:_on_damage_received(damage_info)
 			end
 			
 		end
+	
 	end
 	
 	if not dmg_chk or damage_info.result_type and damage_info.result_type == "death" then

@@ -37,6 +37,17 @@ function CopBase:init(unit)
 	old_init(self, unit)
 end
 
+function CopBase:pre_destroy(unit)
+	if alive(self._headwear_unit) then
+		self._headwear_unit:set_slot(0)
+	end
+	
+	unit:character_damage():kill_punk_visual_effect()
+	unit:brain():pre_destroy(unit)
+	self._ext_movement:pre_destroy()
+	self._unit:inventory():pre_destroy()
+	UnitBase.pre_destroy(self, unit)
+end
 
 function CopBase:default_weapon_name()
 	local default_weapon_id = self._default_weapon_id

@@ -4,6 +4,7 @@ local origin_charmap = CharacterTweakData.character_map
 
 function CharacterTweakData:init(tweak_data)
 	local presets = self:_presets(tweak_data)
+	self.presets = presets
 	origin_init(self, tweak_data)
 	self._speech_prefix_p2 = "n"
 end
