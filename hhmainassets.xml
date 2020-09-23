@@ -51,9 +51,8 @@
 	<unit path="units/payday2/characters/ene_sniper_2/ene_sniper_2_husk" load="true" force="true"/>	
 
 	<!--Map Replacement Bullshit-->
-	<!-- <mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, 
-	and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
-	<!-- <continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/> Hoe Ass.-->
+	<mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
+	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/> <!-- fuck you derma -->
 
 	
 	<mission path="levels/narratives/classics/red2/world/world" force="true" unload="true"/> <!--Makes FWB Vault Guards Gensex ninjas-->
