@@ -73,7 +73,7 @@
 	<mission path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> <!--Makes Shadow Raid Murky.-->
 	<continent path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> <!--not all red is what you want.-->
 	<cover_data path="levels/narratives/bain/shadow_raid/cover_data" force="true" unload="true"/>
-	<nav_manager path="levels/narratives/bain/shadow_raid/nav_manager" force="true" unload="true"/>
+	<nav_data path="levels/narratives/bain/shadow_raid/nav_manager_data" force="true" unload="true"/>
 	
 	<mission path="levels/narratives/butcher/friend/world/world" force="true" unload="true"/> <!--Removes the shitty spawn van escape from Scarface. -->
 	
