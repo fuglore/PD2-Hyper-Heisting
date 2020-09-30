@@ -192,6 +192,9 @@
     <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/policia_heavy_df"/>    
     <texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/helmets_swat_df"/>
 
+	<!-- PUTOS RATEROS...SE ARREPENTIRAN! -->
+	<texture path="units/pd2_dlc_bex/characters/ene_policia_01/ene_bex_cop_policia_body_atlas_df" force="true"/>
+
 	<!-- policia bronco punk-->	
 	<unit path="units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco" load="true" force="true"/>
 	<unit path="units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco_husk" load="true" force="true"/>	

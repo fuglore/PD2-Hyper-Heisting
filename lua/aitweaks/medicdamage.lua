@@ -1,8 +1,4 @@
 function MedicDamage:heal_unit(unit, override_cooldown)
-	if self._unit:anim_data() and self._unit:anim_data().act then
-		return false
-	end
-
 	local t = Application:time()
 
 	if not override_cooldown then
@@ -41,17 +37,12 @@ function MedicDamage:heal_unit(unit, override_cooldown)
 	self._heal_cooldown_t = t
 
 	if not self._unit:character_damage():dead() then
-		local redir_res = self._unit:movement():play_redirect("cmd_get_up")
-
-		if redir_res then
-			self._unit:sound():say("heal")
-			self._unit:anim_state_machine():set_speed(redir_res, 0.5)
-		end
+		self._unit:sound():say("heal")
 		
 		if self._unit:contour() then
 			self._unit:contour():add("mark_enemy")
 		end
-
+		
 		if self._unit:base():char_tweak()["custom_voicework"] then
 			local voicelines = _G.voiceline_framework.BufferedSounds[self._unit:base():char_tweak().custom_voicework]
 
@@ -60,6 +51,17 @@ function MedicDamage:heal_unit(unit, override_cooldown)
 
 				self._unit:base():play_voiceline(line_to_use)
 			end
+		end
+		
+		if self._unit:anim_data() and self._unit:anim_data().act then
+			--nothing
+		else
+			
+			local redir_res = self._unit:movement():play_redirect("cmd_get_up")
+
+			if redir_res then
+				self._unit:anim_state_machine():set_speed(redir_res, 0.5)
+			end	
 		end
 	end
 
