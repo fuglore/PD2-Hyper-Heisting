@@ -150,13 +150,6 @@
 		["hud_assault_assault_mexcross"] = "ASALTO EN MARCHA",
 		["menu_toggle_one_down"] = "SHIN SHOOTOUT",
 		["menu_one_down"] = "SHIN SHOOTOUT",
-		["menu_risk_pd"] = "Simple, but challenging. Stone cold.",
-		["menu_risk_swat"] = "SWAT team wants to arrest you. We are cool.",
-		["menu_risk_fbi"] = "You're up against the feds. A nice breeze.",
-		["menu_risk_special"] = "The FBI wants you gone. A warm, summer day.",
-		["menu_risk_easy_wish"] = "GENSEC is out to get you! Getting hot in here!",
-		["menu_risk_elite"] = "New units rolling in! More heat around the corner!",
-		["menu_risk_sm_wish"] = "There is no escaping the flames! FIGHT!",
 		["menu_cs_modifier_heavies"] = "All special enemies except Bulldozers now have body armor, adds a chance for an armored SMG heavy to spawn.",
 		["menu_cs_modifier_magnetstorm"] = "When enemies reload, they emit an electric burst after a short moment that tases players.",
 		["menu_cs_modifier_heavy_sniper"] = "Adds a chance for Sniperdozers to spawn.",
@@ -235,7 +228,14 @@
 		["shin_toggle_overhaul_player_title"] = "HH Player-Side Rebalance!",
 		["shin_toggle_overhaul_player_desc"] = "Enables the HH playerside rebalance, paired with a modified version of Gambyt's VIWR mod! Featuring various reworks of existing skills to make the game feel fresh! WARNING: ONLY TAKES EFFECT AFTER FULL GAME RESTART!!!",
 		["shin_requires_restart_title"] = "Restart required!",
-		["shin_requires_restart_desc"] = "You have made changes to the following settings:\n$SETTINGSLIST\nChanges will take effect on game restart.\nHave a nice day!"
+		["shin_requires_restart_desc"] = "You have made changes to the following settings:\n$SETTINGSLIST\nChanges will take effect on game restart.\nHave a nice day!",
+		["menu_risk_pd"] = "Accessible. Stone cold.",
+		["menu_risk_swat"] = "Simple but challenging. We are cool.",
+		["menu_risk_fbi"] = "Challenging, but relaxed. A nice breeze.",
+		["menu_risk_special"] = "Plain challenging, keeps your attention. A warm, summer day.",
+		["menu_risk_easy_wish"] = "Demands focus. Getting hot in here!",
+		["menu_risk_elite"] = "More units rolling in! More heat around the corner!",
+		["menu_risk_sm_wish"] = "There is no escaping the flames! FIGHT!"
 	})
 end)
 
@@ -262,13 +262,13 @@ end
 if PD2THHSHIN and PD2THHSHIN:SkullDiffEnabled() then
 	Hooks:Add("LocalizationManagerPostInit", "HH_SKULLS", function(loc)
 		LocalizationManager:add_localized_strings({			
-			["menu_difficulty_normal"] = "SUPER SWEET",
+			["menu_difficulty_normal"] = "SIMPLE",
 			["menu_difficulty_hard"] = "SWEET",
 			["menu_difficulty_very_hard"] = "MILD",
 			["menu_difficulty_overkill"] = "SPICY",
 			["menu_difficulty_easy_wish"] = "ULTRA SPICY",
 			["menu_difficulty_apocalypse"] = "SCORCHING HOT",
-			["menu_difficulty_sm_wish"] = "INFERNO"	
+			["menu_difficulty_sm_wish"] = "INFERNAL"	
 		})
 	end)
 end

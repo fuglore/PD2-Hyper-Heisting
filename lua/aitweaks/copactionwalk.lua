@@ -1214,6 +1214,9 @@ function CopActionWalk:_get_current_max_walk_speed(move_dir)
 	
 	if not is_hostage then
 		multiplier = managers.groupai:state()._enemy_speed_mul
+		if self._common_data.ext_damage._punk_effect then --go to hell.
+			multiplier = multiplier + 0.75
+		end
 		--log("multiplier is " .. tostring(multiplier) .. "!") careful uncommenting these, dont nuke your framerate, nerd.
 	end
 	

@@ -7022,7 +7022,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	}
 	self.bain_assault_praise_limits = {
 		1,
-		3
+		4
 	}
 
 	if difficulty_index <= 2 then

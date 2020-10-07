@@ -785,14 +785,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 450,
-					fwd = 450,
-					bwd = 450
+					strafe = 350,
+					fwd = 350,
+					bwd = 350
 				},
 				cbt = {
-					strafe = 450,
-					fwd = 450,
-					bwd = 450
+					strafe = 350,
+					fwd = 350,
+					bwd = 350
 				}
 			}
 		},
@@ -811,14 +811,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
+					strafe = 250,
+					fwd = 250,
+					bwd = 250
 				},
 				cbt = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
+					strafe = 250,
+					fwd = 250,
+					bwd = 250
 				}
 			}
 		}
@@ -845,40 +845,40 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 518,
-					fwd = 518,
-					bwd = 518
+					strafe = 402,
+					fwd = 402,
+					bwd = 402
 				},
 				cbt = {
-					strafe = 518,
-					fwd = 518,
-					bwd = 518
+					strafe = 402,
+					fwd = 402,
+					bwd = 402
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 240,
-					fwd = 240,
-					bwd = 240
+					strafe = 242,
+					fwd = 242,
+					bwd = 242
 				},
 				cbt = {
-					strafe = 240,
-					fwd = 240,
-					bwd = 240
+					strafe = 242,
+					fwd = 242,
+					bwd = 242
 				}
 			},
 			run = {
 				hos = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
+					strafe = 288,
+					fwd = 288,
+					bwd = 288
 				},
 				cbt = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
+					strafe = 288,
+					fwd = 288,
+					bwd = 288
 				}
 			}
 		}
@@ -905,14 +905,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 540,
-					fwd = 540,
-					bwd = 540
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				},
 				cbt = {
-					strafe = 540,
-					fwd = 540,
-					bwd = 540
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				}
 			}
 		},
@@ -931,14 +931,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
+					strafe = 300,
+					fwd = 300,
+					bwd = 300
 				},
 				cbt = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
+					strafe = 300,
+					fwd = 300,
+					bwd = 300
 				}
 			}
 		}
@@ -965,14 +965,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 562,
-					fwd = 562,
-					bwd = 562
+					strafe = 438,
+					fwd = 438,
+					bwd = 438
 				},
 				cbt = {
-					strafe = 562,
-					fwd = 562,
-					bwd = 562
+					strafe = 438,
+					fwd = 438,
+					bwd = 438
 				}
 			}
 		},
@@ -991,14 +991,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 437,
-					fwd = 437,
-					bwd = 437
+					strafe = 312,
+					fwd = 312,
+					bwd = 312
 				},
 				cbt = {
-					strafe = 437,
-					fwd = 437,
-					bwd = 437
+					strafe = 312,
+					fwd = 312,
+					bwd = 312
 				}
 			}
 		}

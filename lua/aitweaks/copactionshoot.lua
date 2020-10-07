@@ -382,7 +382,7 @@ function CopActionShoot:on_attention(attention, old_attention)
 						aim_delay = math_lerp(aim_delay_minmax[1], aim_delay_minmax[2], lerp_dis)
 					end
 
-					if self._common_data.is_suppressed and self._is_shin_shootout then
+					if self._common_data.is_suppressed and not self._is_shin_shootout then
 						aim_delay = aim_delay * 1.5
 					end
 				end
