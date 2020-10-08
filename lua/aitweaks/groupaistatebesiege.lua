@@ -1679,6 +1679,78 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 	end
 end
 
+function GroupAIStateBesiege:_verify_group_objective(group)
+	local is_objective_broken = nil
+	local grp_objective = group.objective
+	local coarse_path = grp_objective.coarse_path
+	local nav_segments = managers.navigation._nav_segments
+
+	if coarse_path then
+		for i_node, node in ipairs(coarse_path) do
+			local nav_seg_id = node[1]
+
+			if nav_segments[nav_seg_id].disabled then
+				is_objective_broken = true
+
+				break
+			end
+		end
+	end
+
+	if not is_objective_broken then
+		return
+	end
+
+	local new_area = nil
+	local tested_nav_seg_ids = {}
+
+	for u_key, u_data in pairs(group.units) do
+		u_data.tracker:move(u_data.m_pos)
+
+		local nav_seg_id = u_data.tracker:nav_segment()
+
+		if not tested_nav_seg_ids[nav_seg_id] then
+			tested_nav_seg_ids[nav_seg_id] = true
+			local areas = self:get_areas_from_nav_seg_id(nav_seg_id)
+
+			for _, test_area in pairs(areas) do
+				for test_nav_seg, _ in pairs(test_area.nav_segs) do
+					if not nav_segments[test_nav_seg].disabled then
+						new_area = test_area
+
+						break
+					end
+				end
+
+				if new_area then
+					break
+				end
+			end
+		end
+
+		if new_area then
+			break
+		end
+	end
+
+	if not new_area then
+		print("[GroupAIStateBesiege:_verify_group_objective] could not find replacement area to", grp_objective.area)
+
+		return
+	end
+	if group.objective then
+		group.objective.moving_out = false
+		group.objective.type = grp_objective.type
+		group.objective.area = new_area
+	else
+		group.objective = {
+			moving_out = false,
+			type = grp_objective.type,
+			area = new_area
+		}
+	end
+end
+
 function GroupAIStateBesiege:_upd_groups()
 	for group_id, group in pairs(self._groups) do
 		self:_verify_group_objective(group)
@@ -1765,6 +1837,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 	objective.stance = grp_objective.stance or objective.stance
 	objective.pose = grp_objective.pose or objective.pose
 	objective.area = grp_objective.area
+	objective.tactic = grp_objective.tactic or nil
 	objective.nav_seg = grp_objective.nav_seg or objective.area.pos_nav_seg
 	objective.attitude = grp_objective.attitude or objective.attitude
 	objective.interrupt_dis = grp_objective.interrupt_dis or objective.interrupt_dis
@@ -2285,134 +2358,158 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	local low_carnage = self:_count_criminals_engaged_force(4) <= 4
 	local task_data = self._task_data.assault
 	local assaultactive = nil
-	local can_update_hunter = not self._next_allowed_hunter_upd_t or self._next_allowed_hunter_upd_t < self._t
+	--local can_update_chase = not self._next_allowed_chase_upd_t or self._next_allowed_chase_upd_t < self._t
 	
 	if phase == "build" or phase == "sustain" then
 		assaultactive = true
 	end
 	
-	if group_leader_u_data and group_leader_u_data.tactics then
+	if group_leader_u_data and group_leader_u_data.tactics_map then
 		tactics_map = {}
 
 		for _, tactic_name in ipairs(group_leader_u_data.tactics) do
 			tactics_map[tactic_name] = true
 		end
 
-		if current_objective.tactic and not tactics_map[current_objective.tactic] then
-			current_objective.tactic = nil
-		end
-
+		local should_update_chase_tactic = nil
+		local has_objective = nil
+		
 		for i_tactic, tactic_name in ipairs(group_leader_u_data.tactics) do
-			if tactic_name == "deathguard" and not phase_is_anticipation and not group.is_chasing then
-				if current_objective.tactic == tactic_name then
+			if has_objective then
+				--log("tactical objective found!!!")
+				break
+			end
+		
+			if current_objective.tactic then
+				--log("tactic is " .. current_objective.tactic .. "!")
+				if current_objective.tactic == "deathguard" then
+					--log("but")
 					for u_key, u_data in pairs(self._char_criminals) do
-						if u_data.status and current_objective.follow_unit == u_data.unit then
-							local crim_nav_seg = u_data.tracker:nav_segment()
+						if current_objective.follow_unit == u_data.unit then
+							if u_data.status and u_data.status ~= "electrified" then
+								local crim_nav_seg = u_data.tracker:nav_segment()
 
-							if current_objective.area.nav_segs[crim_nav_seg] then
-								--return
+								if current_objective.area.nav_segs[crim_nav_seg] then
+									has_objective = true
+								end
 							end
 						end
 					end
-				end
-
-				local closest_crim_u_data, closest_crim_dis_sq = nil
-				local crim_dis_sq_chk = not closest_crim_dis_sq or closest_u_dis_sq < closest_crim_dis_sq
-				for u_key, u_data in pairs(self._char_criminals) do
-					if u_data.status then
-						local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(u_data.m_pos, group.units)
-
-						if closest_u_dis_sq and crim_dis_sq_chk then
-							closest_crim_u_data = u_data
-							closest_crim_dis_sq = closest_u_dis_sq
-						end
-					end
-				end
-
-				if closest_crim_u_data then
-					local search_params = {
-						id = "GroupAI_deathguard",
-						from_tracker = group_leader_u_data.unit:movement():nav_tracker(),
-						to_tracker = closest_crim_u_data.tracker,
-						access_pos = self._get_group_acces_mask(group)
-					}
-					local coarse_path = managers.navigation:search_coarse(search_params)
-
-					if coarse_path then
-						self:_merge_coarse_path_by_area(coarse_path)
-						local grp_objective = {
-							distance = 800,
-							type = "assault_area",
-							attitude = "engage",
-							tactic = "deathguard",
-							moving_in = true,
-							follow_unit = closest_crim_u_data.unit,
-							area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
-							coarse_path = coarse_path
-						}
-						group.is_chasing = true
-
-						self:_set_objective_to_enemy_group(group, grp_objective)
-						self:_voice_deathguard_start(group)
-
-						return
-					end
-				end
-			elseif tactic_name == "hunter" and not phase_is_anticipation and can_update_hunter then
-				if current_objective.tactic == tactic_name and not group.is_chasing  then
+				elseif current_objective.tactic == "hunter" then
+					--log("why")
 					for u_key, u_data in pairs(self._char_criminals) do
-						if u_data.unit then
+						if current_objective.follow_unit == u_data.unit then
 							local players_nearby = managers.player:_chk_fellow_crimin_proximity(u_data.unit)
 							local crim_nav_seg = u_data.tracker:nav_segment()
 							if players_nearby and players_nearby <= 0 then
 								if current_objective.area.nav_segs[crim_nav_seg] then
-									--return
+									has_objective = true
 								end
 							end
 						end
 					end
 				end
-				local closest_crim_u_data, closest_crim_dis_sq = nil
-				local crim_dis_sq_chk = not closest_crim_dis_sq or closest_crim_dis_sq > closest_u_dis_sq
-				for u_key, u_data in pairs(self._char_criminals) do
-					if u_data.unit then
-						local players_nearby = managers.player:_chk_fellow_crimin_proximity(u_data.unit)
-						local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(u_data.m_pos, group.units)
-						if players_nearby and players_nearby <= 0 then
+			end
+			
+			if not has_objective then
+				--log("yay first update")
+				
+				if current_objective.tactic then
+					--log("oh!")
+				end
+				
+				if tactic_name == "deathguard" and not phase_is_anticipation then
+					local closest_crim_u_data, closest_crim_dis_sq = nil
+					local crim_dis_sq_chk = not closest_crim_dis_sq or closest_u_dis_sq < closest_crim_dis_sq
+					for u_key, u_data in pairs(self._char_criminals) do
+						if u_data.status and u_data.status ~= "electrified" then
+							local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(u_data.m_pos, group.units)
+
 							if closest_u_dis_sq and crim_dis_sq_chk then
 								closest_crim_u_data = u_data
 								closest_crim_dis_sq = closest_u_dis_sq
 							end
 						end
 					end
-				end
-				if closest_crim_u_data then
-					local search_params = {
-						from_tracker = group_leader_u_data.unit:movement():nav_tracker(),
-						to_tracker = closest_crim_u_data.tracker,
-						id = "GroupAI_deathguard",
-						access_pos = self._get_group_acces_mask(group)
-					}
-					local coarse_path = managers.navigation:search_coarse(search_params)
-					if coarse_path then
-						self:_merge_coarse_path_by_area(coarse_path)
-						local grp_objective = {
-							type = "assault_area",
-							tactic = "hunter",
-							distance = 9999,
-							follow_unit = closest_crim_u_data.unit,
-							area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
-							coarse_path = coarse_path,
-							attitude = "engage",
-							moving_in = true
+
+					if closest_crim_u_data then
+						local search_params = {
+							id = "GroupAI_deathguard",
+							from_tracker = group_leader_u_data.unit:movement():nav_tracker(),
+							to_tracker = closest_crim_u_data.tracker,
+							access_pos = self._get_group_acces_mask(group)
 						}
-						group.is_chasing = true
-						self:_set_objective_to_enemy_group(group, grp_objective)
-						return
+						local coarse_path = managers.navigation:search_coarse(search_params)
+
+						if coarse_path then
+							self:_merge_coarse_path_by_area(coarse_path)
+							local grp_objective = {
+								distance = 800,
+								type = "assault_area",
+								attitude = "engage",
+								tactic = "deathguard",
+								moving_in = true,
+								follow_unit = closest_crim_u_data.unit,
+								area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
+								coarse_path = coarse_path
+							}
+							group.is_chasing = true
+
+							self:_set_objective_to_enemy_group(group, grp_objective)
+							self:_voice_deathguard_start(group)
+							has_objective = true
+						end
+					end
+				elseif tactic_name == "hunter" and not phase_is_anticipation then		
+					local closest_crim_u_data, closest_crim_dis_sq = nil
+					local crim_dis_sq_chk = not closest_crim_dis_sq or closest_crim_dis_sq > closest_u_dis_sq
+					for u_key, u_data in pairs(self._char_criminals) do
+						if u_data.unit then
+							if not u_data.status or u_data.status == "electrified" then
+								local players_nearby = managers.player:_chk_fellow_crimin_proximity(u_data.unit)
+								local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(u_data.m_pos, group.units)
+								if players_nearby and players_nearby <= 0 then
+									if closest_u_dis_sq and crim_dis_sq_chk then
+										closest_crim_u_data = u_data
+										closest_crim_dis_sq = closest_u_dis_sq
+									end
+								end
+							end
+						end
+					end
+					
+					if closest_crim_u_data then
+						local search_params = {
+							from_tracker = group_leader_u_data.unit:movement():nav_tracker(),
+							to_tracker = closest_crim_u_data.tracker,
+							id = "GroupAI_hunter",
+							access_pos = self._get_group_acces_mask(group)
+						}
+						local coarse_path = managers.navigation:search_coarse(search_params)
+						if coarse_path then
+							self:_merge_coarse_path_by_area(coarse_path)
+							local grp_objective = {
+								type = "assault_area",
+								tactic = "hunter",
+								distance = 9999,
+								follow_unit = closest_crim_u_data.unit,
+								area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
+								coarse_path = coarse_path,
+								attitude = "engage",
+								moving_in = true
+							}
+							group.is_chasing = true
+							self:_set_objective_to_enemy_group(group, grp_objective)
+							
+							has_objective = true
+						end
 					end
 				end
-				self._next_allowed_hunter_upd_t = self._t + 1.5
 			end
+		end
+		
+		if has_objective then
+			return
 		end
 	end
 

@@ -529,6 +529,14 @@ function CopLogicIdle._chk_relocate(data)
 	local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
 	
 	if data.objective and data.objective.type == "follow" then
+		local check_for_vision = true
+		local range = 240
+		
+		if data.objective and data.objective.tactic then
+			range = 500
+			check_for_vision = nil
+		end
+		
 		if data.is_converted then
 			if TeamAILogicIdle._check_should_relocate(data, data.internal_data, data.objective) then
 				data.objective.in_place = nil
@@ -558,11 +566,11 @@ function CopLogicIdle._chk_relocate(data)
 		--	return
 		--end
 
-		if 240 < mvector3.distance(data.m_pos, follow_unit_pos) then
+		if range < mvector3.distance(data.m_pos, follow_unit_pos) then
 			relocate = true
 		end
 
-		if not relocate then
+		if check_for_vision then
 			if data.unit:raycast("ray", data.unit:movement():m_head_pos(), follow_unit:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", follow_unit, "report") then
 				relocate = true
 			end
@@ -580,6 +588,8 @@ function CopLogicIdle._chk_relocate(data)
 
 			return true
 		end
+	elseif data.objective and data.objective.tactic then
+		return 
 	elseif data.objective and data.objective.type == "defend_area" or data.objective and data.objective.type == "hunt" then
 		if not CopLogicAttack.is_available_for_assignment(data, data.objective) then
 			return
