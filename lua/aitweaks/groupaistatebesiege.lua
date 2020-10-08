@@ -2515,7 +2515,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 										from_seg = current_objective.area.pos_nav_seg,
 										to_seg = search_area.pos_nav_seg,
 										access_pos = self._get_group_acces_mask(group),
-										verify_clbk = callback(self, self, "is_nav_seg_safe")
+										verify_clbk = approach and callback(self, self, "is_nav_seg_safe") or nil
 									}
 									alternate_assault_path = managers.navigation:search_coarse(search_params)
 
@@ -2539,7 +2539,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 								from_seg = current_objective.area.pos_nav_seg,
 								to_seg = search_area.pos_nav_seg,
 								access_pos = self._get_group_acces_mask(group),
-								verify_clbk = callback(self, self, "is_nav_seg_safe")
+								verify_clbk = approach and callback(self, self, "is_nav_seg_safe") or nil
 							}
 							assault_path = managers.navigation:search_coarse(search_params)
 
