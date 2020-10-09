@@ -149,13 +149,13 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.smoke_npc.suppression = 1
 	self.quagmire_npc.suppression = 1
 	self.lazer_npc.suppression = 1
-	self.mp5_npc.suppression = 5
-	self.ump_npc.suppression = 5
-	self.mp9_npc.suppression = 5
+	self.mp5_npc.suppression = 2.5
+	self.ump_npc.suppression = 2.5
+	self.mp9_npc.suppression = 2.5
 	self.saiga_npc.suppression = 1
-	self.r870_npc.suppression = 2
-	self.blazter_npc.suppression = 2
-	self.silserbu_npc.suppression = 2
+	self.r870_npc.suppression = 5
+	self.blazter_npc.suppression = 5
+	self.silserbu_npc.suppression = 5
 	self.benelli_npc.suppression = 2
 	self.m249_npc.suppression = 5
 	self.mini_npc.suppression = 5
@@ -294,7 +294,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 		},
 		{
 			3000,
-			0.5
+			1
 		}
 	}
 	self.ceiling_turret_module.dontsuppressonmiss = true
@@ -388,24 +388,37 @@ function WeaponTweakData:_set_normal()
 	
 	self:_set_characters_weapon_preset(15, 10, 15, 60) --setting enemy weapon spread
 	
-	--Turret Tweaks.
-	self.swat_van_turret_module.HEALTH_INIT = 3500
-	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 70
-	self.swat_van_turret_module.DAMAGE = 0.5
-	self.ceiling_turret_module.HEALTH_INIT = 875
-	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 25
-	self.ceiling_turret_module.DAMAGE = 0.5
-	self.ceiling_turret_module.CLIP_SIZE = 100
-	self.aa_turret_module.HEALTH_INIT = 3500
-	self.aa_turret_module.SHIELD_HEALTH_INIT = 70
-	self.aa_turret_module.DAMAGE = 1
-	self.aa_turret_module.auto.fire_rate = 0.6 
-	self.aa_turret_module.suppression = 2
-	self.crate_turret_module.HEALTH_INIT = 875
-	self.crate_turret_module.SHIELD_HEALTH_INIT = 70
-	self.crate_turret_module.DAMAGE = 2.5
+	--Turret tweaks.
+	self.swat_van_turret_module.HEALTH_INIT = 750
+	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 300
+	self.swat_van_turret_module.DAMAGE = 2
+	self.swat_van_turret_module.CLIP_SIZE = 400
+	self.ceiling_turret_module.HEALTH_INIT = 400
+	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module.DAMAGE = 2
+	self.ceiling_turret_module.CLIP_SIZE = 150
+	self.aa_turret_module.HEALTH_INIT = 1500
+	self.aa_turret_module.SHIELD_HEALTH_INIT = 300
+	self.aa_turret_module.DAMAGE = 4
+	self.aa_turret_module.auto.fire_rate = 0.6 --sadly, the firing sound doesnt match but, functionally its a lot of fun
+	self.aa_turret_module.suppression = 8
+	self.aa_turret_module.CLIP_SIZE = 800
+	self.crate_turret_module.HEALTH_INIT = 500
+	self.crate_turret_module.SHIELD_HEALTH_INIT = 150
+	self.crate_turret_module.DAMAGE = 4
 	self.crate_turret_module.auto.fire_rate = 0.6
-	self.crate_turret_module.suppression = 2
+	self.crate_turret_module.suppression = 8
+	self.crate_turret_module.CLIP_SIZE = 400
+	
+	--ceiling turret clones
+	self.ceiling_turret_module_no_idle.HEALTH_INIT = 400
+	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module_no_idle.DAMAGE = 2
+	self.ceiling_turret_module_no_idle.CLIP_SIZE = 150
+	self.ceiling_turret_module_longer_range.HEALTH_INIT = 400
+	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module_longer_range.DAMAGE = 2
+	self.ceiling_turret_module_longer_range.CLIP_SIZE = 150
 end
 
 function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
@@ -444,24 +457,37 @@ function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
 	
 	self:_set_characters_weapon_preset(15, 10, 15, 60) --setting enemy weapon spread
 	
-	--Turret Tweaks.
-	self.swat_van_turret_module.HEALTH_INIT = 3500
-	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 70
-	self.swat_van_turret_module.DAMAGE = 0.5
-	self.ceiling_turret_module.HEALTH_INIT = 875
-	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 25
-	self.ceiling_turret_module.DAMAGE = 0.5
-	self.ceiling_turret_module.CLIP_SIZE = 100
-	self.aa_turret_module.HEALTH_INIT = 3500
-	self.aa_turret_module.SHIELD_HEALTH_INIT = 70
-	self.aa_turret_module.DAMAGE = 1
-	self.aa_turret_module.auto.fire_rate = 0.6 
-	self.aa_turret_module.suppression = 2
-	self.crate_turret_module.HEALTH_INIT = 875
-	self.crate_turret_module.SHIELD_HEALTH_INIT = 70
-	self.crate_turret_module.DAMAGE = 2.5
+	--Turret tweaks.
+	self.swat_van_turret_module.HEALTH_INIT = 750
+	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 300
+	self.swat_van_turret_module.DAMAGE = 2
+	self.swat_van_turret_module.CLIP_SIZE = 400
+	self.ceiling_turret_module.HEALTH_INIT = 400
+	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module.DAMAGE = 2
+	self.ceiling_turret_module.CLIP_SIZE = 150
+	self.aa_turret_module.HEALTH_INIT = 1500
+	self.aa_turret_module.SHIELD_HEALTH_INIT = 300
+	self.aa_turret_module.DAMAGE = 4
+	self.aa_turret_module.auto.fire_rate = 0.6 --sadly, the firing sound doesnt match but, functionally its a lot of fun
+	self.aa_turret_module.suppression = 8
+	self.aa_turret_module.CLIP_SIZE = 800
+	self.crate_turret_module.HEALTH_INIT = 500
+	self.crate_turret_module.SHIELD_HEALTH_INIT = 150
+	self.crate_turret_module.DAMAGE = 4
 	self.crate_turret_module.auto.fire_rate = 0.6
-	self.crate_turret_module.suppression = 2
+	self.crate_turret_module.suppression = 8
+	self.crate_turret_module.CLIP_SIZE = 400
+	
+	--ceiling turret clones
+	self.ceiling_turret_module_no_idle.HEALTH_INIT = 400
+	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module_no_idle.DAMAGE = 2
+	self.ceiling_turret_module_no_idle.CLIP_SIZE = 150
+	self.ceiling_turret_module_longer_range.HEALTH_INIT = 400
+	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module_longer_range.DAMAGE = 2
+	self.ceiling_turret_module_longer_range.CLIP_SIZE = 150
 end
 
 function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried about fdsamkfjdsakials
@@ -502,24 +528,37 @@ function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried abo
 	self.svdsil_snp_npc.suppression = 8
 	self.svdsil_snp_npc.CLIP_AMMO_MAX = 12
 	
-	--turret tweaks
-	self.swat_van_turret_module.HEALTH_INIT = 15000
+	--Turret tweaks.
+	self.swat_van_turret_module.HEALTH_INIT = 750
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 300
-	self.swat_van_turret_module.DAMAGE = 1
-	self.ceiling_turret_module.HEALTH_INIT = 9375
-	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 50
+	self.swat_van_turret_module.DAMAGE = 2
+	self.swat_van_turret_module.CLIP_SIZE = 400
+	self.ceiling_turret_module.HEALTH_INIT = 400
+	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
 	self.ceiling_turret_module.DAMAGE = 2
-	self.ceiling_turret_module.CLIP_SIZE = 100
-	self.aa_turret_module.HEALTH_INIT = 12500 --Fuck this thing, it sucks at the end of a sucky heist already, I've made it more fun to fight, but that won't do much.
-	self.aa_turret_module.SHIELD_HEALTH_INIT = 600
-	self.aa_turret_module.DAMAGE = 2.5
-	self.aa_turret_module.auto.fire_rate = 0.6 
-	self.aa_turret_module.suppression = 4
-	self.crate_turret_module.HEALTH_INIT = 9375
+	self.ceiling_turret_module.CLIP_SIZE = 150
+	self.aa_turret_module.HEALTH_INIT = 1500
+	self.aa_turret_module.SHIELD_HEALTH_INIT = 300
+	self.aa_turret_module.DAMAGE = 4
+	self.aa_turret_module.auto.fire_rate = 0.6 --sadly, the firing sound doesnt match but, functionally its a lot of fun
+	self.aa_turret_module.suppression = 8
+	self.aa_turret_module.CLIP_SIZE = 800
+	self.crate_turret_module.HEALTH_INIT = 500
 	self.crate_turret_module.SHIELD_HEALTH_INIT = 150
-	self.crate_turret_module.DAMAGE = 2.5
+	self.crate_turret_module.DAMAGE = 4
 	self.crate_turret_module.auto.fire_rate = 0.6
-	self.crate_turret_module.suppression = 4
+	self.crate_turret_module.suppression = 8
+	self.crate_turret_module.CLIP_SIZE = 400
+	
+	--ceiling turret clones
+	self.ceiling_turret_module_no_idle.HEALTH_INIT = 400
+	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module_no_idle.DAMAGE = 2
+	self.ceiling_turret_module_no_idle.CLIP_SIZE = 150
+	self.ceiling_turret_module_longer_range.HEALTH_INIT = 400
+	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module_longer_range.DAMAGE = 2
+	self.ceiling_turret_module_longer_range.CLIP_SIZE = 150
 end
 
 function WeaponTweakData:_set_overkill_145()
@@ -562,24 +601,37 @@ function WeaponTweakData:_set_overkill_145()
 	self.heavy_snp_npc.suppression = 8
 	self.heavy_snp_npc.CLIP_AMMO_MAX = 12
 	
-	--turret tweaks
-	self.swat_van_turret_module.HEALTH_INIT = 15000
+	--Turret tweaks.
+	self.swat_van_turret_module.HEALTH_INIT = 1500
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 300
-	self.swat_van_turret_module.DAMAGE = 1
-	self.ceiling_turret_module.HEALTH_INIT = 9375
-	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 50
+	self.swat_van_turret_module.DAMAGE = 2
+	self.swat_van_turret_module.CLIP_SIZE = 800
+	self.ceiling_turret_module.HEALTH_INIT = 1000
+	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
 	self.ceiling_turret_module.DAMAGE = 2
-	self.ceiling_turret_module.CLIP_SIZE = 100
-	self.aa_turret_module.HEALTH_INIT = 12500 --Fuck this thing, it sucks at the end of a sucky heist already, I've made it more fun to fight, but that won't do much.
-	self.aa_turret_module.SHIELD_HEALTH_INIT = 600
-	self.aa_turret_module.DAMAGE = 2.5
-	self.aa_turret_module.auto.fire_rate = 0.6 
-	self.aa_turret_module.suppression = 4
-	self.crate_turret_module.HEALTH_INIT = 9375
+	self.ceiling_turret_module.CLIP_SIZE = 300
+	self.aa_turret_module.HEALTH_INIT = 3000
+	self.aa_turret_module.SHIELD_HEALTH_INIT = 300
+	self.aa_turret_module.DAMAGE = 4
+	self.aa_turret_module.auto.fire_rate = 0.6 --sadly, the firing sound doesnt match but, functionally its a lot of fun
+	self.aa_turret_module.suppression = 8
+	self.aa_turret_module.CLIP_SIZE = 800
+	self.crate_turret_module.HEALTH_INIT = 500
 	self.crate_turret_module.SHIELD_HEALTH_INIT = 150
-	self.crate_turret_module.DAMAGE = 2.5
+	self.crate_turret_module.DAMAGE = 4
 	self.crate_turret_module.auto.fire_rate = 0.6
-	self.crate_turret_module.suppression = 4
+	self.crate_turret_module.suppression = 8
+	self.crate_turret_module.CLIP_SIZE = 800
+	
+	--ceiling turret clones
+	self.ceiling_turret_module_no_idle.HEALTH_INIT = 1000
+	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module_no_idle.DAMAGE = 2
+	self.ceiling_turret_module_no_idle.CLIP_SIZE = 300
+	self.ceiling_turret_module_longer_range.HEALTH_INIT = 1000
+	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module_longer_range.DAMAGE = 2
+	self.ceiling_turret_module_longer_range.CLIP_SIZE = 300
 end
 
 function WeaponTweakData:_set_easy_wish()
@@ -639,26 +691,36 @@ function WeaponTweakData:_set_easy_wish()
 	self.smoke_npc.DAMAGE = 1
 	
 	--Turret tweaks.
-	self.swat_van_turret_module.HEALTH_INIT = 25000
+	self.swat_van_turret_module.HEALTH_INIT = 2000
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 400
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 800
-	self.ceiling_turret_module.HEALTH_INIT = 10000
-	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 100
+	self.ceiling_turret_module.HEALTH_INIT = 1250
+	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module.DAMAGE = 2
-	self.ceiling_turret_module.CLIP_SIZE = 200
-	self.aa_turret_module.HEALTH_INIT = 25000
-	self.aa_turret_module.SHIELD_HEALTH_INIT = 600
+	self.ceiling_turret_module.CLIP_SIZE = 300
+	self.aa_turret_module.HEALTH_INIT = 4000
+	self.aa_turret_module.SHIELD_HEALTH_INIT = 400
 	self.aa_turret_module.DAMAGE = 4
 	self.aa_turret_module.auto.fire_rate = 0.6 --sadly, the firing sound doesnt match but, functionally its a lot of fun
 	self.aa_turret_module.suppression = 8
 	self.aa_turret_module.CLIP_SIZE = 800
-	self.crate_turret_module.HEALTH_INIT = 9750
+	self.crate_turret_module.HEALTH_INIT = 500
 	self.crate_turret_module.SHIELD_HEALTH_INIT = 300
 	self.crate_turret_module.DAMAGE = 4
 	self.crate_turret_module.auto.fire_rate = 0.6
 	self.crate_turret_module.suppression = 8
 	self.crate_turret_module.CLIP_SIZE = 800
+	
+	--ceiling turret clones
+	self.ceiling_turret_module_no_idle.HEALTH_INIT = 1250
+	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 400
+	self.ceiling_turret_module_no_idle.DAMAGE = 2
+	self.ceiling_turret_module_no_idle.CLIP_SIZE = 300
+	self.ceiling_turret_module_longer_range.HEALTH_INIT = 1250
+	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 400
+	self.ceiling_turret_module_longer_range.DAMAGE = 2
+	self.ceiling_turret_module_longer_range.CLIP_SIZE = 300
 end
 
 function WeaponTweakData:_set_overkill_290()
@@ -718,26 +780,36 @@ function WeaponTweakData:_set_overkill_290()
 	self.smoke_npc.DAMAGE = 1
 	
 	--Turret tweaks.
-	self.swat_van_turret_module.HEALTH_INIT = 25000
+	self.swat_van_turret_module.HEALTH_INIT = 2000
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 400
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 800
-	self.ceiling_turret_module.HEALTH_INIT = 10000
-	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 100
+	self.ceiling_turret_module.HEALTH_INIT = 1250
+	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module.DAMAGE = 2
-	self.ceiling_turret_module.CLIP_SIZE = 200
-	self.aa_turret_module.HEALTH_INIT = 25000
-	self.aa_turret_module.SHIELD_HEALTH_INIT = 600
+	self.ceiling_turret_module.CLIP_SIZE = 300
+	self.aa_turret_module.HEALTH_INIT = 4000
+	self.aa_turret_module.SHIELD_HEALTH_INIT = 400
 	self.aa_turret_module.DAMAGE = 4
 	self.aa_turret_module.auto.fire_rate = 0.6 --sadly, the firing sound doesnt match but, functionally its a lot of fun
 	self.aa_turret_module.suppression = 8
 	self.aa_turret_module.CLIP_SIZE = 800
-	self.crate_turret_module.HEALTH_INIT = 9750
+	self.crate_turret_module.HEALTH_INIT = 500
 	self.crate_turret_module.SHIELD_HEALTH_INIT = 300
 	self.crate_turret_module.DAMAGE = 4
 	self.crate_turret_module.auto.fire_rate = 0.6
 	self.crate_turret_module.suppression = 8
 	self.crate_turret_module.CLIP_SIZE = 800
+	
+	--ceiling turret clones
+	self.ceiling_turret_module_no_idle.HEALTH_INIT = 1250
+	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 400
+	self.ceiling_turret_module_no_idle.DAMAGE = 2
+	self.ceiling_turret_module_no_idle.CLIP_SIZE = 300
+	self.ceiling_turret_module_longer_range.HEALTH_INIT = 1250
+	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 400
+	self.ceiling_turret_module_longer_range.DAMAGE = 2
+	self.ceiling_turret_module_longer_range.CLIP_SIZE = 300
 end
 
 function WeaponTweakData:_set_sm_wish()
@@ -799,26 +871,36 @@ function WeaponTweakData:_set_sm_wish()
 	self.quagmire_npc.DAMAGE = 1
 	
 	--Turret tweaks.
-	self.swat_van_turret_module.HEALTH_INIT = 25000
+	self.swat_van_turret_module.HEALTH_INIT = 2500
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 400
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 800
-	self.ceiling_turret_module.HEALTH_INIT = 10000
-	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
+	self.ceiling_turret_module.HEALTH_INIT = 1500
+	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module.DAMAGE = 2
 	self.ceiling_turret_module.CLIP_SIZE = 300
-	self.aa_turret_module.HEALTH_INIT = 25000
-	self.aa_turret_module.SHIELD_HEALTH_INIT = 600
+	self.aa_turret_module.HEALTH_INIT = 4000
+	self.aa_turret_module.SHIELD_HEALTH_INIT = 400
 	self.aa_turret_module.DAMAGE = 4
 	self.aa_turret_module.auto.fire_rate = 0.6 --sadly, the firing sound doesnt match but, functionally its a lot of fun
 	self.aa_turret_module.suppression = 8
 	self.aa_turret_module.CLIP_SIZE = 800
-	self.crate_turret_module.HEALTH_INIT = 9750
+	self.crate_turret_module.HEALTH_INIT = 500
 	self.crate_turret_module.SHIELD_HEALTH_INIT = 300
 	self.crate_turret_module.DAMAGE = 4
 	self.crate_turret_module.auto.fire_rate = 0.6
 	self.crate_turret_module.suppression = 8
 	self.crate_turret_module.CLIP_SIZE = 800
+	
+	--ceiling turret clones
+	self.ceiling_turret_module_no_idle.HEALTH_INIT = 1500
+	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 400
+	self.ceiling_turret_module_no_idle.DAMAGE = 2
+	self.ceiling_turret_module_no_idle.CLIP_SIZE = 300
+	self.ceiling_turret_module_longer_range.HEALTH_INIT = 1500
+	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 400
+	self.ceiling_turret_module_longer_range.DAMAGE = 2
+	self.ceiling_turret_module_longer_range.CLIP_SIZE = 300
 end
 
 --glowstick

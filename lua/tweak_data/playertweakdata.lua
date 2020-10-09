@@ -18,7 +18,7 @@ function PlayerTweakData:_set_normal()
 		0.8
 	}
 	self.suppression = {
-		receive_mul = 10,
+		receive_mul = 1,
 		decay_start_delay = 1.5,
 		spread_mul = 1,
 		tolerance = 0,
@@ -40,7 +40,7 @@ function PlayerTweakData:_set_hard()
 		0.8
 	}
 	self.suppression = {
-		receive_mul = 10,
+		receive_mul = 1,
 		decay_start_delay = 1.5,
 		spread_mul = 1,
 		tolerance = 0,
@@ -61,7 +61,7 @@ function PlayerTweakData:_set_overkill()
 		0.6
 	}
 	self.suppression = {
-		receive_mul = 10,
+		receive_mul = 1,
 		decay_start_delay = 1.5,
 		spread_mul = 1,
 		tolerance = 0,
@@ -83,7 +83,7 @@ function PlayerTweakData:_set_overkill_145()
 		0.6
 	}
 	self.suppression = {
-		receive_mul = 10,
+		receive_mul = 1,
 		decay_start_delay = 1.5,
 		spread_mul = 1,
 		tolerance = 0,
@@ -104,7 +104,7 @@ function PlayerTweakData:_set_easy_wish()
 		0.5
 	}
 	self.suppression = {
-		receive_mul = 10,
+		receive_mul = 1,
 		decay_start_delay = 1.5,
 		spread_mul = 1,
 		tolerance = 0,
@@ -132,7 +132,7 @@ function PlayerTweakData:_set_overkill_290()
 		0.5
 	}
 	self.suppression = {
-		receive_mul = 10,
+		receive_mul = 1,
 		decay_start_delay = 1.5,
 		spread_mul = 1,
 		tolerance = 0,
@@ -161,7 +161,7 @@ function PlayerTweakData:_set_sm_wish()
 		0.5
 	}
 	self.suppression = {
-		receive_mul = 10,
+		receive_mul = 1,
 		decay_start_delay = 1.5,
 		spread_mul = 1,
 		tolerance = 0,

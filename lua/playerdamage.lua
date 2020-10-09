@@ -1248,15 +1248,22 @@ function PlayerDamage:build_suppression(amount)
 	
 	self._last_received_sup = amount
 	self._next_allowed_sup_t = managers.player:player_timer():time() + self._dmg_interval
+	
+	local decay_t = math.lerp(0.35, 2, self:suppression_ratio())
+	
+	if self._akuma_effect then
+		decay_t = decay_t + 2
+	end
+	
 	if not data.decay_start_t then
 		if self._akuma_effect then
-			data.decay_start_t = managers.player:player_timer():time() + 4
+			data.decay_start_t = managers.player:player_timer():time() + decay_t
 		else
-			data.decay_start_t = managers.player:player_timer():time() + 1
+			data.decay_start_t = managers.player:player_timer():time() + decay_t
 		end
 	else
 		if self._akuma_effect then
-			data.decay_start_t = managers.player:player_timer():time() + 4
+			data.decay_start_t = managers.player:player_timer():time() + decay_t
 		else
 			local raw_decay_start_t = data.decay_start_t - managers.player:player_timer():time()
 			if raw_decay_start_t <= 0.95 then

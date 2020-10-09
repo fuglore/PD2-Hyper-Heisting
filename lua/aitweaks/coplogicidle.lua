@@ -106,7 +106,7 @@ function CopLogicIdle.on_intimidated(data, amount, aggressor_unit)
 				
 				if surrender_tweak.significant_chance and hold_chance >= surrender_tweak.significant_chance then
 					dont_surrender = true
-						log("chance was " .. hold_chance .. "!")
+						--log("chance was " .. hold_chance .. "!")
 				end
 				if hold_chance >= 1 or dont_surrender then
 					-- Nothing
