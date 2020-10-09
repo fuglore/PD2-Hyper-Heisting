@@ -21,7 +21,7 @@
 	  "ene_murky_heavy_ump" : "Murkywater Heavy Marine",
 	  "ene_akan_dozer_medic" : "Medicdozer",
 	  "ene_medic_heavy" : "Heavy Medic",
-	  "ene_medic_carkdown" : "Zulu Medic",
+	  "ene_medic_carkdown" : "ZULU Medic",
 	  "ene_fbi_heavy_ump" : "FBI Heavy SWAT",
 	  "ene_city_swat_saiga" : "GenSec SWAT",
 	  "ene_bulldozer_sniper" : "Sniperdozer",
