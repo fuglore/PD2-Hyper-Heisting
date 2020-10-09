@@ -74,3 +74,75 @@ function CoreEnvironmentControllerManager:test_line_of_sight(test_pos, min_dista
 
 	return flash
 end
+
+if PD2THHSHIN and PD2THHSHIN:BlurzoneEnabled() then
+
+function CoreEnvironmentControllerManager:set_blurzone(id, mode, pos, radius, height, delete_after_fadeout)
+	local blurzone = self._blurzones[id]
+
+	if id then
+		blurzone = blurzone or {
+			opacity = 0,
+			radius = 0,
+			mode = -1,
+			height = 0,
+			delete_after_fadeout = false
+		}
+
+		if mode > 0 then
+			blurzone.mode = mode
+			blurzone.pos = pos
+			blurzone.radius = radius
+			blurzone.height = height
+
+			if mode == 2 then
+				blurzone.opacity = 1
+				blurzone.mode = 1
+				blurzone.update = self.blurzone_flash_in_line_of_sight
+			elseif mode == 3 then
+				blurzone.opacity = 1
+				blurzone.mode = 1
+				blurzone.update = self.blurzone_flash_in
+			else
+				blurzone.opacity = 0
+				blurzone.update = self.blurzone_fade_in
+			end
+
+			if height > 0 then
+				blurzone.check = self.blurzone_check_cylinder
+			else
+				blurzone.check = self.blurzone_check_sphere
+			end
+
+			blurzone.delete_after_fadeout = delete_after_fadeout
+		elseif blurzone and blurzone.mode > 0 then
+			blurzone.mode = mode
+			blurzone.pos = blurzone.pos or pos
+			blurzone.radius = blurzone.radius or radius
+			blurzone.height = blurzone.height or height
+			blurzone.opacity = 0.4
+			blurzone.update = self.blurzone_fade_out
+
+			if blurzone.height > 0 then
+				blurzone.check = self.blurzone_check_cylinder
+			else
+				blurzone.check = self.blurzone_check_sphere
+			end
+		end
+
+		self._blurzones[id] = blurzone
+	end
+end
+
+function CoreEnvironmentControllerManager:blurzone_fade_in(self, t, dt, camera_pos, blurzone)
+	blurzone.opacity = blurzone.opacity + dt
+
+	if blurzone.opacity > 0.4 then
+		blurzone.opacity = 0.4
+		blurzone.update = self.blurzone_fade_idle
+	end
+
+	return blurzone:check(blurzone, camera_pos)
+end
+
+end

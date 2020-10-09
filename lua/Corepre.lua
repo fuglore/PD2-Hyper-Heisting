@@ -9,6 +9,7 @@ PD2THHSHIN.settings = {
 	toggle_helmet = false,
 	toggle_hhassault = false,
 	toggle_hhskulldiff = false,
+	toggle_blurzonereduction = true,
 	first_launch = true
 }
 PD2THHSHIN.session_settings = {} --leave empty; generated on load
@@ -27,6 +28,10 @@ end
 
 function PD2THHSHIN:SkullDiffEnabled()
 	return self:GetSessionSetting("toggle_hhskulldiff")
+end
+
+function PD2THHSHIN:BlurzoneEnabled()
+	return self:GetSessionSetting("toggle_blurzonereduction")
 end
 
 function PD2THHSHIN:IsFlavorAssaultEnabled()

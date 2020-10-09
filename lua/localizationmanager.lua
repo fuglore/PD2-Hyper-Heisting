@@ -222,6 +222,8 @@
 		["shin_toggle_hhassault_desc"] = "Enhances the [POLICE ASSAULT IN PROGRESS] hud area by adding extra flavor! (Such as entirely unique assault text based on the faction you are fighting against!) NOTE: Requires restarting the heist if changed mid-game!",
 		["shin_toggle_hhskulldiff_title"] = "Extreme Difficulty Names!",
 		["shin_toggle_hhskulldiff_desc"] = "Changes the difficulty names to suit Hyper Heisting's style!",
+		["shin_toggle_blurzonereduction_title"] = "Less Blurry Blurzones!",
+		["shin_toggle_blurzonereduction_desc"] = "Gently reduces the blurring effect of things such as the Cook Off Methlab in order to stop them from getting in the way of gameplay!",
 		["shin_albanian_content_enable_title"] = "enable albanian joke content",
 		["shin_enable_albanian_content_title"] = "enable albanian joke content",
 		["shin_albanian_content_enable_desc"] = "nable abanian përmbajtje (WARNING: You probably shouldn't enable this!)",		

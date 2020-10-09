@@ -1738,6 +1738,28 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 	return new_action
 end
 
+function PlayerStandard:_interupt_action_reload(t)
+	if alive(self._equipped_unit) then
+		self._equipped_unit:base():check_bullet_objects()
+	end
+
+	if self:_is_reloading() then
+		self._equipped_unit:base():tweak_data_anim_stop("reload_enter")
+		self._equipped_unit:base():tweak_data_anim_stop("reload")
+		self._equipped_unit:base():tweak_data_anim_stop("reload_not_empty")
+		self._equipped_unit:base():tweak_data_anim_stop("reload_exit")
+	end
+
+	self._state_data.reload_enter_expire_t = nil
+	self._state_data.reload_expire_t = nil
+	self._state_data.reload_exit_expire_t = nil
+	--Thanks ZDANN!!!
+	self._queue_reload_interupt = nil
+
+	managers.player:remove_property("shock_and_awe_reload_multiplier")
+	self:send_reload_interupt()
+end 
+
 function PlayerStandard:_start_action_unequip_weapon(t, data)
 	local speed_multiplier = self:_get_swap_speed_multiplier()
 	
@@ -1758,6 +1780,60 @@ function PlayerStandard:_start_action_unequip_weapon(t, data)
 	self:_interupt_action_reload(t)
 	self:_interupt_action_steelsight(t)
 	self._ext_network:send("switch_weapon", speed_multiplier, 1)
+end
+
+function PlayerStandard:_start_action_equip_weapon(t)
+	if self._change_weapon_data.next then
+		local next_equip = self._ext_inventory:get_next_selection()
+		next_equip = next_equip and next_equip.unit
+
+		if next_equip then
+			local state = self:_is_underbarrel_attachment_active(next_equip) and "underbarrel" or "standard"
+
+			self:set_animation_state(state)
+		end
+
+		self._ext_inventory:equip_next(false)
+	elseif self._change_weapon_data.previous then
+		local prev_equip = self._ext_inventory:get_previous_selection()
+		prev_equip = prev_equip and next_equip.unit
+
+		if prev_equip then
+			local state = self:_is_underbarrel_attachment_active(prev_equip) and "underbarrel" or "standard"
+
+			self:set_animation_state(state)
+		end
+
+		self._ext_inventory:equip_previous(false)
+	elseif self._change_weapon_data.selection_wanted then
+		local select_equip = self._ext_inventory:get_selected(self._change_weapon_data.selection_wanted)
+		select_equip = select_equip and select_equip.unit
+
+		if select_equip then
+			local state = self:_is_underbarrel_attachment_active(select_equip) and "underbarrel" or "standard"
+
+			self:set_animation_state(state)
+		end
+
+		self._ext_inventory:equip_selection(self._change_weapon_data.selection_wanted, false)
+	end
+
+	self:set_animation_weapon_hold(nil)
+
+	local speed_multiplier = self:_get_swap_speed_multiplier()
+	
+	speed_multiplier = speed_multiplier + 0.5 --why not?
+
+	self._equipped_unit:base():tweak_data_anim_stop("unequip")
+	self._equipped_unit:base():tweak_data_anim_play("equip", speed_multiplier)
+
+	local tweak_data = self._equipped_unit:base():weapon_tweak_data()
+	self._equip_weapon_expire_t = t + (tweak_data.timers.equip or 0.7) / speed_multiplier
+
+	self._ext_camera:play_redirect(self:get_animation("equip"), speed_multiplier)
+	self._equipped_unit:base():tweak_data_anim_stop("unequip")
+	self._equipped_unit:base():tweak_data_anim_play("equip", speed_multiplier)
+	managers.upgrades:setup_current_weapon()
 end
 
 function PlayerStandard:_update_check_actions(t, dt, paused)
