@@ -2620,15 +2620,19 @@ function CopDamage:sync_damage_fire(attacker_unit, damage_percent, start_dot_dan
 end
 
 function CopDamage:is_friendly_fire(unit)
-	if not unit or unit:base() and unit:base().is_grenade and not unit:base().is_cop_grenade then
+	if not unit or not alive(unit) or unit:base() and unit:base().is_grenade and not unit:base().is_cop_grenade then
 		return false
 	end
 
 	if unit:movement() and unit:movement():team() and unit:movement():team() ~= self._unit:movement():team() and unit:movement():friendly_fire() then
 		return false
 	end
-
-	return not unit:movement():team().foes[self._unit:movement():team().id]
+	1
+	if unit:movement():team() and unit:movement():team().foes and self._unit:movement():team().id then
+		return not unit:movement():team().foes[self._unit:movement():team().id]
+	else
+		return false
+	end
 end
 
 function CopDamage:damage_explosion(attack_data)
