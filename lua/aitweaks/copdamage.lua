@@ -2627,7 +2627,7 @@ function CopDamage:is_friendly_fire(unit)
 	if unit:movement() and unit:movement():team() and unit:movement():team() ~= self._unit:movement():team() and unit:movement():friendly_fire() then
 		return false
 	end
-	1
+
 	if unit:movement():team() and unit:movement():team().foes and self._unit:movement():team().id then
 		return not unit:movement():team().foes[self._unit:movement():team().id]
 	else
