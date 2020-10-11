@@ -254,8 +254,8 @@ function CharacterTweakData:_presets(tweak_data)
 			preemptive = {
 				chance = 1,
 				check_timeout = {
-					0.5,
-					0.75
+					2,
+					3
 				},
 				variations = {
 					roll = {
@@ -352,8 +352,8 @@ function CharacterTweakData:_presets(tweak_data)
 			preemptive = {
 				chance = 1,
 				check_timeout = {
-					0,
-					0
+					1,
+					2
 				},
 				variations = {
 					roll = {
@@ -3266,11 +3266,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
 				r = 4000,
 				acc = {
 					0,
-					0.01
+					0
 				},
 				recoil = {
 					0.6,
@@ -3419,10 +3419,10 @@ function CharacterTweakData:_presets(tweak_data)
 					2
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}
@@ -3635,10 +3635,10 @@ function CharacterTweakData:_presets(tweak_data)
 					2
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}
@@ -4115,10 +4115,10 @@ function CharacterTweakData:_presets(tweak_data)
 					3
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}
@@ -4371,7 +4371,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
 				r = 4000,
 				acc = {
 					0,
@@ -4524,10 +4524,10 @@ function CharacterTweakData:_presets(tweak_data)
 					2
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}
@@ -4776,10 +4776,10 @@ function CharacterTweakData:_presets(tweak_data)
 					2
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}
@@ -5256,10 +5256,10 @@ function CharacterTweakData:_presets(tweak_data)
 					3
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}
@@ -5513,7 +5513,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
 				r = 4000,
 				acc = {
 					0,
@@ -5648,10 +5648,10 @@ function CharacterTweakData:_presets(tweak_data)
 					2
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}
@@ -5900,10 +5900,10 @@ function CharacterTweakData:_presets(tweak_data)
 					4.2
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}
@@ -6139,7 +6139,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, --12 damage, acc, recoil and falloff destroy themselves past 4000 no matter what weapon, to keep maps like birth of sky bearable and make open areas less of a pain in the fucking ass 
+				dmg_mul = 0,
 				r = 4000,
 				acc = {
 					0,
@@ -6380,10 +6380,10 @@ function CharacterTweakData:_presets(tweak_data)
 					3
 				},
 				mode = {
-					1,
 					0,
 					0,
-					0
+					0,
+					1
 				}
 			}
 		}

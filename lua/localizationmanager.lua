@@ -164,7 +164,7 @@
 		["menu_cs_modifier_shin"] = "SHIN SHOOTOUT is now enabled.",
 		["menu_cs_modifier_no_hurt"] = "Enemies are now more resistant to staggers.",
 		["menu_cs_modifier_medic_adrenaline"] = "Adds a chance for a fully armored ZEAL Light to spawn, killable only by shots in the back of the head.",
-		["menu_cs_modifier_megacloakers"] = "Cloakers now kick for double damage, send you twice as far, and can jumpkick you from twice as far.",
+		["menu_cs_modifier_megacloakers"] = "Cloakers now kick for 50% more damage, send you twice as far, and can jumpkick you from twice as far.",
 		["menu_cs_modifier_voltergas"] = "Smoke Grenades are replaced by Tear Gas Smoke Grenades.",
 		["menu_cs_modifier_bouncers"] = "Enemies have a chance drop a destructible explosive grenade with a beeping timer on death.",
 		["menu_cs_modifier_cloaker_tear_gas"] = "Cloakers are now silent while charging and move 25% faster.",

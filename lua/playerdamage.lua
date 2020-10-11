@@ -296,9 +296,9 @@ function PlayerDamage:damage_melee(attack_data)
 		attack_data.damage = attack_data.damage * dmg_mul
 		attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data) --apply damage resistances before checking for bleedout and other things
 	else
-		local damage = self:_max_health() / 4
+		local damage = self:_max_health() / 2
 		if managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") then
-			damage = damage * 2
+			damage = damage * 1.5
 		end
 		damage = damage + self:get_real_armor()
 		attack_data.damage = damage
@@ -880,10 +880,16 @@ end
 
 function PlayerDamage:_chk_dmg_too_soon(damage, ...)
 	local next_allowed_dmg_t = type(self._next_allowed_dmg_t) == "number" and self._next_allowed_dmg_t or Application:digest_value(self._next_allowed_dmg_t, false)
+	local min_allowed_dmg_t = next_allowed_dmg_t - 0.1
 	local t = managers.player:player_timer():time()
+	
 	if damage <= self._last_received_dmg + 0.01 and next_allowed_dmg_t > t then
 		self._old_last_received_dmg = nil
 		self._old_next_allowed_dmg_t = nil
+		return true
+	end
+	
+	if min_allowed_dmg_t > t then
 		return true
 	end
 	
@@ -930,12 +936,22 @@ function PlayerDamage:damage_bullet(attack_data)
 		self:play_whizby(attack_data.col_ray.position)
 
 		return
-	elseif not attack_data.is_taser_shock and not attack_data.ignore_suppression and not self:is_suppressed() then
+	elseif attack_data.damage < 0.011 then
 		self:play_whizby(attack_data.col_ray.position)
-
+		
 		return
 	elseif not attack_data.is_taser_shock and self:_chk_dmg_too_soon(attack_data.damage) then
+		self:play_whizby(attack_data.col_ray.position)
+		
 		return
+	end
+	
+	local pm = managers.player
+	
+	if attack_data.is_taser_shock then
+		self:build_suppression(20)
+	else
+		self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
 	end
 	
 	local armor_damage = self:_max_armor() > 0 and self:get_real_armor() < self:_max_armor()
@@ -955,10 +971,6 @@ function PlayerDamage:damage_bullet(attack_data)
 				end
 			end
 		end
-	end
-	
-	if attack_data.is_taser_shock then
-		self:build_suppression(20)
 	end
 	
 	--local testing = true
@@ -992,12 +1004,9 @@ function PlayerDamage:damage_bullet(attack_data)
 	end
 
 	self:_hit_direction(attack_data.attacker_unit:position())
-
-	local pm = managers.player
 	
 	if not attack_data.is_taser_shock then
 		self._last_received_dmg = attack_data.damage
-		self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
 
 		local dodge_roll = math.random()
 		local dodge_value = tweak_data.player.damage.DODGE_INIT or 0
