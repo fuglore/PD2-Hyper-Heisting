@@ -10282,7 +10282,7 @@ Hooks:PostHook(CharacterTweakData, "_init_spanish", "hhpost_spanish", function(s
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_american", "hhpost_american", function(self, presets)
-	self.american.weapon.weapons_of_choice.primary = "wpn_fps_ass_m4_npc"
+	self.american.weapon.weapons_of_choice.primary = "wpn_fps_ass_ak5_npc"
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_jowi", "hhpost_jowi", function(self, presets)
