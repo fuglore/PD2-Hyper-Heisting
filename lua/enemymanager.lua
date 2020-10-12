@@ -8,27 +8,25 @@ local tmp_vec1 = Vector3()
 local world_g = World
 
 function EnemyManager:get_nearby_medic(unit)
-    if self:is_civilian(unit) then
-        return nil
-    end
+	if self:is_civilian(unit) then
+		return nil
+	end
 
-    local t = Application:time()
-    local enemies = world_g:find_units_quick(unit, "sphere", unit:position(), tweak_data.medic.radius, managers.slot:get_mask("enemies"))
-	
-	
-    for _, enemy in ipairs(enemies) do
-		
-        if enemy:base():has_tag("medic") and enemy:character_damage()._heal_cooldown_t then
-            local cooldown = tweak_data.medic.cooldown
-            cooldown = managers.modifiers:modify_value("MedicDamage:CooldownTime", cooldown)
+	local t = Application:time()
+	local enemies = world_g:find_units_quick(unit, "sphere", unit:position(), tweak_data.medic.radius, managers.slot:get_mask("enemies"))
 
-            if t >= enemy:character_damage()._heal_cooldown_t + cooldown and not unit:raycast("ray", unit:movement():m_head_pos(), enemy:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "sphere_cast_radius", 5, "report") then
-                return enemy
-            end
-        end
-    end
+	for _, enemy in ipairs(enemies) do
+		if enemy:base():has_tag("medic") and enemy:character_damage()._heal_cooldown_t then
+			local cooldown = tweak_data.medic.cooldown
+			cooldown = managers.modifiers:modify_value("MedicDamage:CooldownTime", cooldown)
 
-    return nil
+			if t >= enemy:character_damage()._heal_cooldown_t + cooldown and not unit:raycast("ray", unit:movement():m_head_pos(), enemy:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "sphere_cast_radius", 5, "report") then
+				return enemy
+			end
+		end
+	end
+
+	return nil
 end
 
 function EnemyManager:_update_queued_tasks(t, dt)
@@ -533,28 +531,6 @@ function EnemyManager:set_corpse_disposal_enabled(state)
 		self:queue_task("EnemyManager._upd_corpse_disposal", EnemyManager._upd_corpse_disposal, self, self._t + self._corpse_disposal_upd_interval)
 		self:queue_task("EnemyManager._upd_shield_disposal", EnemyManager._upd_shield_disposal, self, self._t + self._shield_disposal_upd_interval)
 	end
-end
-
-function EnemyManager:get_nearby_medic(unit)
-	if self:is_civilian(unit) then
-		return nil
-	end
-
-	local t = Application:time()
-	local enemies = world_g:find_units_quick(unit, "sphere", unit:position(), tweak_data.medic.radius, managers.slot:get_mask("enemies"))
-
-	for _, enemy in ipairs(enemies) do
-		if enemy:base():has_tag("medic") and enemy:character_damage()._heal_cooldown_t then
-			local cooldown = tweak_data.medic.cooldown
-			cooldown = managers.modifiers:modify_value("MedicDamage:CooldownTime", cooldown)
-
-			if t >= enemy:character_damage()._heal_cooldown_t + cooldown then
-				return enemy
-			end
-		end
-	end
-
-	return nil
 end
 
 function EnemyManager:set_gfx_lod_enabled(state)
