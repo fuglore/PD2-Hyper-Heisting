@@ -1361,6 +1361,7 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	--make normal clone my new preset to keep enemies not currently set here capable of detecting people too
 	presets.detection.normal = deep_clone(presets.detection.enemymook)
+	presets.detection.guard = deep_clone(presets.detection.enemymook)
 	presets.detection.gang_member = deep_clone(presets.detection.enemymook)
 	
 	--custom hurt severities start here, focus on less enemy down time as enemy health goes up 

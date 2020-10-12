@@ -808,7 +808,7 @@ function EnemyManager:queue_task(id, task_clbk, data, execute_t, verification_cl
 		data = data,
 		t = execute_t,
 		v_cb = verification_clbk,
-		asap = true
+		asap = asap
 	}
 
 	if not execute_t and #self._queued_tasks < 1 and not self._queued_task_executed then
@@ -854,7 +854,7 @@ function EnemyManager:update_queue_task(id, task_clbk, data, execute_t, verifica
 		task_data.data = data or task_data.data
 		task_data.t = execute_t or task_data.t
 		task_data.v_cb = verification_clbk or task_data.v_cb
-		task_data.asap = true
+		task_data.asap = asap or task_data.asap
 
 		if not needs_moving then
 			return

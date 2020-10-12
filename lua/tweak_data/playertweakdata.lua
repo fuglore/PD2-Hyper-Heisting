@@ -99,6 +99,7 @@ function PlayerTweakData:_set_easy_wish()
 	self.damage.DOWNED_TIME_DEC = 20
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.BLEED_OT_TIME = 10
+	self.suspicion.buildup_mul = 0.9
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.5
@@ -127,6 +128,7 @@ function PlayerTweakData:_set_overkill_290()
 	self.damage.DOWNED_TIME_DEC = 20
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.BLEED_OT_TIME = 10
+	self.suspicion.buildup_mul = 0.9
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.5
@@ -155,7 +157,7 @@ function PlayerTweakData:_set_sm_wish()
 	self.damage.DOWNED_TIME_DEC = 20
 	self.damage.DOWNED_TIME_MIN = 1
 	self.damage.BLEED_OT_TIME = 10
-	self.suspicion.buildup_mul = 1.10
+	self.suspicion.buildup_mul = 1
 	self.damage.MIN_DAMAGE_INTERVAL = 0.35
 	self.damage.REVIVE_HEALTH_STEPS = {
 		0.5

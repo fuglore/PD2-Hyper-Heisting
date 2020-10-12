@@ -106,7 +106,7 @@ function CopLogicIdle.on_intimidated(data, amount, aggressor_unit)
 				
 				if surrender_tweak.significant_chance and hold_chance >= surrender_tweak.significant_chance then
 					dont_surrender = true
-						--log("chance was " .. hold_chance .. "!")
+					--log("chance was " .. hold_chance .. "!")
 				end
 				if hold_chance >= 1 or dont_surrender then
 					-- Nothing
@@ -745,4 +745,35 @@ function CopLogicIdle._chk_relocate(data)
 	end
 	
 	return
+end
+
+function CopLogicIdle._perform_objective_action(data, my_data, objective)
+	if objective and not my_data.action_started and (data.unit:anim_data().act_idle or not data.unit:movement():chk_action_forbidden("action")) then
+		if objective and objective.action and objective.action.variant then
+			local variant = objective.action.variant
+			if variant == "e_so_ntl_idle_look" or variant == "e_so_ntl_idle_look2" or variant == "e_so_ntl_idle_look3" then
+				objective.action_duration = math.lerp(2, 5, math.random())
+			end
+		end
+	
+		if objective.action then
+			my_data.action_started = data.unit:brain():action_request(objective.action)
+		else
+			my_data.action_started = true
+		end
+
+		if my_data.action_started then
+			if objective.action_duration or objective.action_timeout_t then
+				my_data.action_timeout_clbk_id = "CopLogicIdle_action_timeout" .. tostring(data.key)
+				local action_timeout_t = objective.action_timeout_t or data.t + objective.action_duration
+				objective.action_timeout_t = action_timeout_t
+
+				CopLogicBase.add_delayed_clbk(my_data, my_data.action_timeout_clbk_id, callback(CopLogicIdle, CopLogicIdle, "clbk_action_timeout", data), action_timeout_t)
+			end
+
+			if objective.action_start_clbk then
+				objective.action_start_clbk(data.unit)
+			end
+		end
+	end
 end
