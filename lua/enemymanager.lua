@@ -1,9 +1,9 @@
 local mvec3_dir = mvector3.direction
 local mvec3_dot = mvector3.dot
 local mvec3_dis = mvector3.distance
-local t_rem = table.remove
 local t_ins = table.insert
-local t_find_value = table.find_value
+local t_rem = table.remove
+local t_fv = table.find_value
 local tmp_vec1 = Vector3()
 local world_g = World
 
@@ -32,16 +32,35 @@ function EnemyManager:get_nearby_medic(unit)
 end
 
 function EnemyManager:_update_queued_tasks(t, dt)
-	local i_asap_task, asap_task_t = nil
+	local out_of_buffer = nil
 
 	if managers.groupai:state():whisper_mode() then
-		for i_task, task_data in ipairs(self._queued_tasks) do
-			if not task_data.t or task_data.t < t then
-				self:_execute_queued_task(i_task)
-			elseif task_data.asap then
-				if not asap_task_t or task_data.t < asap_task_t then
-					i_asap_task = i_task
-					asap_task_t = task_data.t
+		local all_tasks_no_t = self._queued_tasks_no_t
+
+		if all_tasks_no_t and #all_tasks_no_t > 0 then
+			local max_nr_loops = #all_tasks_no_t
+			local i = 0
+
+			while i < max_nr_loops do
+				self:_execute_queued_task_no_t(1)
+
+				i = i + 1
+			end
+		end
+
+		local all_tasks = self._queued_tasks
+
+		if #all_tasks > 0 then
+			local max_nr_loops = #all_tasks
+			local i = 0
+
+			while i < max_nr_loops do
+				if all_tasks[1].t < t then
+					self:_execute_queued_task(1)
+
+					i = i + 1
+				else
+					break
 				end
 			end
 		end
@@ -50,31 +69,77 @@ function EnemyManager:_update_queued_tasks(t, dt)
 		local tick_rate = tweak_data.group_ai.ai_tick_rate
 
 		if tick_rate <= self._queue_buffer then
-			for i_task, task_data in ipairs(self._queued_tasks) do
-				if not task_data.t or task_data.t < t then
-					self:_execute_queued_task(i_task)
+			local all_tasks_no_t = self._queued_tasks_no_t
+
+			if all_tasks_no_t and #all_tasks_no_t > 0 then
+				local max_nr_loops = #all_tasks_no_t
+				local i = 0
+
+				while i < max_nr_loops do
+					self:_execute_queued_task_no_t(1)
 
 					self._queue_buffer = self._queue_buffer - tick_rate
 
 					if self._queue_buffer <= 0 then
+						out_of_buffer = true
+
+						break
+					else
+						i = i + 1
+					end
+				end
+			end
+
+			local all_tasks = self._queued_tasks
+
+			if #all_tasks > 0 then
+				local max_nr_loops = #all_tasks
+				local i = 1
+
+				while i < max_nr_loops + 1 do
+					if all_tasks[1].t < t then
+						self:_execute_queued_task(1)
+
+						self._queue_buffer = self._queue_buffer - tick_rate
+
+						if self._queue_buffer <= 0 then
+							out_of_buffer = true
+
+							break
+						else
+							i = i + 1
+						end
+					else
 						break
 					end
-				elseif task_data.asap then
-					if not asap_task_t or task_data.t < asap_task_t then
-						i_asap_task = i_task
-						asap_task_t = task_data.t
-					end
+				end
+			end
+		else
+			out_of_buffer = true
+		end
+
+		if #self._queued_tasks == 0 then
+			if not self._queued_tasks_no_t or #self._queued_tasks_no_t == 0 then
+				self._queue_buffer = 0
+			end
+		end
+	end
+
+	if not out_of_buffer and not self._queued_task_executed then
+		local i_asap_task, asap_task_t = nil
+
+		for i_task, task_data in ipairs(self._queued_tasks) do
+			if task_data.asap then
+				if not asap_task_t or task_data.t < asap_task_t then
+					i_asap_task = i_task
+					asap_task_t = task_data.t
 				end
 			end
 		end
 
-		if #self._queued_tasks == 0 then
-			self._queue_buffer = 0
+		if i_asap_task then
+			self:_execute_queued_task(i_asap_task)
 		end
-	end
-
-	if i_asap_task and not self._queued_task_executed then
-		self:_execute_queued_task(i_asap_task)
 	end
 
 	local all_clbks = self._delayed_clbks
@@ -84,6 +149,17 @@ function EnemyManager:_update_queued_tasks(t, dt)
 
 		clbk()
 	end
+end
+
+function EnemyManager:_execute_queued_task_no_t(i)
+	local task = t_rem(self._queued_tasks_no_t, i)
+	self._queued_task_executed = true
+
+	if task.v_cb then
+		task.v_cb(task.id)
+	end
+
+	task.clbk(task.data)
 end
 
 function EnemyManager:_update_gfx_lod()
@@ -759,23 +835,105 @@ function EnemyManager:queue_task(id, task_clbk, data, execute_t, verification_cl
 		asap = true
 	}
 
-	t_ins(self._queued_tasks, task_data)
+	if not execute_t and #self._queued_tasks < 1 and not self._queued_task_executed then
+		t_ins(self._queued_tasks, task_data)
 
-	if not execute_t and #self._queued_tasks <= 1 and not self._queued_task_executed then
 		self:_execute_queued_task(1)
+	elseif not execute_t then
+		local all_tasks = self._queued_tasks_no_t or {}
+
+		t_ins(all_tasks, task_data)
+	else
+		local all_tasks = self._queued_tasks
+		local i = #all_tasks
+
+		while i > 0 and execute_t < all_tasks[i].t do
+			i = i - 1
+		end
+
+		t_ins(all_tasks, i + 1, task_data)
 	end
 end
 
 function EnemyManager:update_queue_task(id, task_clbk, data, execute_t, verification_clbk, asap)
-	local task_data, _ = t_find_value(self._queued_tasks, function (td)
+	local task_had_no_t = nil
+	local task_data, _ = t_fv(self._queued_tasks, function (td)
 		return td.id == id
 	end)
 
+	if not task_data and self._queued_tasks_no_t then
+		task_data, _ = t_fv(self._queued_tasks_no_t, function (td)
+			return td.id == id
+		end)
+
+		if task_data then
+			task_had_no_t = true
+		end
+	end
+
 	if task_data then
+		local needs_moving = task_data.t == nil and execute_t and true or task_data.t and execute_t == nil and true
+
 		task_data.clbk = task_clbk or task_data.clbk
 		task_data.data = data or task_data.data
 		task_data.t = execute_t or task_data.t
 		task_data.v_cb = verification_clbk or task_data.v_cb
 		task_data.asap = true
+
+		if not needs_moving then
+			return
+		end
+
+		local all_tasks, table_to_move_to = nil
+
+		if task_had_no_t then
+			all_tasks = self._queued_tasks_no_t
+			table_to_move_to = self._queued_tasks
+		else
+			all_tasks = self._queued_tasks
+			table_to_move_to = self._queued_tasks_no_t
+		end
+
+		for task_i, t_data in ipairs(all_tasks) do
+			if t_data.id == id then
+				t_rem(all_tasks, task_i)
+
+				break
+			end
+		end
+
+		self:queue_task(id, task_data.clbk, task_data.data, task_data.t, task_data.v_cb, task_data.asap)
 	end
+end
+
+function EnemyManager:unqueue_task(id, check_no_t)
+	local tasks = self._queued_tasks
+
+	if check_no_t then
+		if not self._queued_tasks_no_t then
+			--debug_pause("[EnemyManager:unqueue_task] task", id, "was not queued!!!")
+
+			return
+		end
+
+		tasks = self._queued_tasks_no_t
+	end
+
+	local i = #tasks
+
+	while i > 0 do
+		if tasks[i].id == id then
+			t_rem(tasks, i)
+
+			return
+		end
+
+		i = i - 1
+	end
+
+	if not check_no_t then
+		self:unqueue_task(id, true)
+	end
+
+	--debug_pause("[EnemyManager:unqueue_task] task", id, "was not queued!!!")
 end
