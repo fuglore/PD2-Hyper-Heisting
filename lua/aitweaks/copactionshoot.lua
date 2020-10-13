@@ -91,6 +91,16 @@ function CopActionShoot:init(action_desc, common_data)
 		effect = Idstring("effects/pd2_mod_hh/particles/weapons/lotus_passive"),
 		parent = self._unit:get_object(Idstring("RightForeArm"))
 	}
+	
+	if PD2THHSHIN and PD2THHSHIN:GlintEnabled() then
+		if self._weapon_base._hivis then
+			self._hivis = true
+			self._hivis_table = {
+				effect = Idstring("effects/pd2_mod_hh/particles/character/prefire_glint"),
+				parent = self._unit:get_object(Idstring("Head"))
+			}
+		end
+	end
 
 	self._shield = alive(self._ext_inventory._shield_unit) and self._ext_inventory._shield_unit or nil
 	self._tank_animations = self._ext_movement._anim_global == "tank" and true or nil
@@ -311,10 +321,20 @@ function CopActionShoot:on_attention(attention, old_attention)
 		end
 
 		self._mod_enable_t = t + 0.5
+		local ding = nil
+		local play_it_here = nil
 
 		if attention.unit then
 			if attention.unit:base() and attention.unit:base().is_local_player then
 				self._shooting_player = true
+				local vis_state = self._ext_base:lod_stage()
+				if self._hivis and self._ext_movement._allow_fire and self._ext_movement._allow_fire == true then
+					if not vis_state then
+						self._play_hivis_glint = true
+					else
+						play_it_here = true
+					end
+				end
 				attention.unit:movement():on_targetted_for_attack(true, self._unit)
 			else
 				if self._is_server then
@@ -338,7 +358,15 @@ function CopActionShoot:on_attention(attention, old_attention)
 
 			if shoot_hist then
 				local displacement = mvec3_dis(target_pos, shoot_hist.m_last_pos)
-
+				
+				if play_it_here then
+					local dis = mvec3_dis(target_pos, self._shoot_from_pos)
+					
+					if dis <= 300 then
+						ding = true
+					end
+				end
+				
 				if displacement > self._focus_displacement then
 					if self._draw_focus_displacement then
 						local line_1 = Draw:brush(Color.blue:with_alpha(0.5), 2)
@@ -372,6 +400,12 @@ function CopActionShoot:on_attention(attention, old_attention)
 				end
 
 				shoot_hist.m_last_pos = mvec3_copy(target_pos)
+				if shoot_hist.unit then
+					if shoot_hist.unit ~= attention.unit then
+						self._played_hivis_glint = nil
+					end
+				end
+				shoot_hist.unit = attention.unit
 			else
 				if aim_delay_minmax[1] ~= 0 or aim_delay_minmax[2] ~= 0 then
 					if aim_delay_minmax[1] == aim_delay_minmax[2] then
@@ -386,6 +420,14 @@ function CopActionShoot:on_attention(attention, old_attention)
 						aim_delay = aim_delay * 1.5
 					end
 				end
+				
+				if play_it_here then
+					local dis = target_dis
+					
+					if dis <= 300 then
+						ding = true
+					end
+				end
 
 				self._shoot_t = t + aim_delay
 				local melee_delay = math_min(aim_delay, 0.35)
@@ -394,7 +436,8 @@ function CopActionShoot:on_attention(attention, old_attention)
 				shoot_hist = {
 					focus_start_t = t,
 					focus_delay = self._focus_delay,
-					m_last_pos = mvec3_copy(target_pos)
+					m_last_pos = mvec3_copy(target_pos),
+					unit = attention.unit
 				}
 				self._shoot_history = shoot_hist
 			end
@@ -406,6 +449,9 @@ function CopActionShoot:on_attention(attention, old_attention)
 			end
 		end
 		
+		if play_it_here then
+			self:play_glint_effect(ding)
+		end
 	else
 		self[self._ik_preset.stop](self)
 		
@@ -421,6 +467,22 @@ function CopActionShoot:on_attention(attention, old_attention)
 	end
 
 	self._attention = attention
+end
+
+function CopActionShoot:play_glint_effect(ding)
+	if self._played_hivis_glint then
+		return
+	end
+	
+	local done = World:effect_manager():spawn(self._hivis_table)
+		
+	if ding then
+		self._unit:sound():play("bell_ring")
+	end
+	
+	if done then
+		self._played_hivis_glint = true
+	end
 end
 
 function CopActionShoot:update(t)
@@ -595,6 +657,17 @@ function CopActionShoot:update(t)
 			end
 		elseif self._common_data.allow_fire and target_vec and self._mod_enable_t < t then
 			local shoot = nil
+			
+			if vis_state < 4 and self._play_hivis_glint then
+				if self._hivis and self._ext_movement._allow_fire and self._ext_movement._allow_fire == true then
+					local ding = nil
+					if target_dis and target_dis <= 300 then
+						ding = true
+					end
+					
+					self:play_glint_effect(ding)
+				end
+			end
 
 			if self._common_data.char_tweak.no_move_and_shoot and self._common_data.active_actions[2] and self._common_data.active_actions[2]:type() == "walk" then
 				local moving_cooldown = self._common_data.char_tweak.move_and_shoot_cooldown or 1

@@ -9,6 +9,7 @@ PD2THHSHIN.settings = {
 	toggle_helmet = false,
 	toggle_hhassault = false,
 	toggle_hhskulldiff = false,
+	toggle_highpriorityglint = false,
 	toggle_blurzonereduction = true,
 	first_launch = true
 }
@@ -32,6 +33,10 @@ end
 
 function PD2THHSHIN:BlurzoneEnabled()
 	return self:GetSessionSetting("toggle_blurzonereduction")
+end
+
+function PD2THHSHIN:GlintEnabled()
+	return self:GetSessionSetting("toggle_highpriorityglint")
 end
 
 function PD2THHSHIN:IsFlavorAssaultEnabled()

@@ -30,6 +30,14 @@
 		},
 		{
 			"type" : "toggle",
+			"id" : "shin_toggle_highpriorityglint",
+			"title" : "shin_toggle_highpriorityglint_title",
+			"description" : "shin_toggle_highpriorityglint_desc",
+			"callback" : "callback_shin_toggle_highpriorityglint",
+			"value" : "toggle_highpriorityglint"
+		},
+		{
+			"type" : "toggle",
 			"id" : "shin_toggle_blurzonereduction",
 			"title" : "shin_toggle_blurzonereduction_title",
 			"description" : "shin_toggle_blurzonereduction_desc",

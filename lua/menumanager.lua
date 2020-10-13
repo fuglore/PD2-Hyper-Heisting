@@ -60,6 +60,10 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 		PD2THHSHIN:ChangeSetting("toggle_blurzonereduction",item:value() == "on")
 	end
 	
+	MenuCallbackHandler.callback_shin_toggle_highpriorityglint = function(self,item) --toggle
+		PD2THHSHIN:ChangeSetting("toggle_highpriorityglint",item:value() == "on")
+	end
+	
 	MenuCallbackHandler.callback_shin_toggle_hhassault = function(self,item) --toggle
 		PD2THHSHIN:ChangeSetting("toggle_hhassault",item:value() == "on")
 		if managers.hud then

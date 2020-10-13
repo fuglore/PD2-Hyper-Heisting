@@ -9,10 +9,12 @@ function NPCRaycastWeaponBase:init(...)
 		
 	if weapon_tweak and weapon_tweak.r_trail then
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r")
+		self._hivis = true
 	end
 	
 	if weapon_tweak and weapon_tweak.hivis then
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak")
+		self._hivis = true
 	end
 	
 	if weapon_tweak and weapon_tweak.lotus_vis then
