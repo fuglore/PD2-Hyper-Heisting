@@ -408,7 +408,7 @@ function CopActionTase:update(t)
 			end
 			
 			if PD2THHSHIN and PD2THHSHIN:GlintEnabled() then
-				if self._tasing_local_unit:base().is_local_player then
+				if self._tasing_player then
 					if not self._played_glint then
 						local ilovethisfuckingeffectlol = World:effect_manager():spawn({
 							effect = Idstring("effects/pd2_mod_hh/particles/character/pretase_glint"),
