@@ -7,10 +7,10 @@
             <worldtransform transform_rotations="false"/>
         </simulatorstack>
         <visualizerstack>
-            <billboard texture="effects/pd2_mod_hh/particles/textures/glint" intensity="flashlight" billboard_type="camera_facing" rotation_channel="world_rotation" blend_mode="add" render_template="effect_op_glow" origo="0.5 0.5" per_particle_age="false" size_input="keys" color_input="constant" color="255 255 255" opacity_input="constant" opacity="255" rotation_input="constant" rotation="0" rotation_axis="0 0 1" uv_size="1 1" uv_offset_input="constant" uv_offset="1 1">
+            <billboard texture="effects/pd2_mod_hh/particles/textures/taser_glint" intensity="identity" billboard_type="camera_facing" rotation_channel="world_rotation" blend_mode="add" render_template="effect_op_glow" origo="0.5 0.5" per_particle_age="false" size_input="keys" color_input="constant" color="255 255 255" opacity_input="constant" opacity="255" rotation_input="constant" rotation="0" rotation_axis="0 0 1" uv_size="1 1" uv_offset_input="constant" uv_offset="1 1">
                 <size_keys loop="false">
                     <key t="0" v="0 0"/>
-                    <key t="0.058193000257015" v="512 512"/>
+                    <key t="0.08" v="512 512"/>
 					<key t="0.34" v="0 0"/>
                 </size_keys>
             </billboard>

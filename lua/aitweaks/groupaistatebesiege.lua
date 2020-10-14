@@ -583,7 +583,7 @@ function GroupAIStateBesiege:update(t, dt)
 end
 
 -- Fix for the bug when there is too many dozers/specials thank you andole im sorry
---[[local fixed = false
+local fixed = false
 local origfunc2 = GroupAIStateBesiege._get_special_unit_type_count
 function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 	
@@ -610,9 +610,9 @@ function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 	end
 	
 	if special_type == 'ninja' then
-		local res4 = origfunc2(self, 'ninja', ...) or 0
-		res4 = res4 + (origfunc2(self, 'fbi', ...) or 0)
+		local res4 = origfunc2(self, 'fbi', ...) or 0
 		res4 = res4 + (origfunc2(self, 'fbi_xc45', ...) or 0)
+		return res4
 	end
 	
 	if special_type == 'medic' then
@@ -622,7 +622,7 @@ function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 	end
 	
 	return origfunc2(self, special_type, ...)
-end]]
+end
 
 function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, ai_task)
 	local spawn_group_desc = tweak_data.group_ai.enemy_spawn_groups[spawn_group_type]
@@ -641,7 +641,7 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 	local unit_categories = tweak_data.group_ai.unit_categories
 	local total_wgt = 0
 	local i = 1
-
+ 
 	while i <= #valid_unit_types do
 		local spawn_entry = valid_unit_types[i]
 		local cat_data = unit_categories[spawn_entry.unit]
@@ -678,7 +678,6 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 
 	table.insert(self._spawning_groups, spawn_task)
 
-	-- Lines 1373-1388
 	local function _add_unit_type_to_spawn_task(i, spawn_entry)
 		local spawn_amount_mine = 1 + (spawn_task.units_remaining[spawn_entry.unit] and spawn_task.units_remaining[spawn_entry.unit].amount or 0)
 		spawn_task.units_remaining[spawn_entry.unit] = {

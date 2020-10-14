@@ -349,7 +349,7 @@ function CopActionTase:update(t)
 
 				self._tase_effect = World:effect_manager():spawn({
 					force_synch = true,
-					effect = Idstring("effects/payday2/particles/character/taser_thread"),
+					effect = Idstring("effects/pd2_mod_hh/particles/character/taser_hit"),
 					parent = self._weapon_obj_fire
 				})
 
@@ -406,8 +406,33 @@ function CopActionTase:update(t)
 				self._played_sound_this_once = true
 				self._unit:sound():play("taser_charge", nil)
 			end
+			
+			if PD2THHSHIN and PD2THHSHIN:GlintEnabled() then
+				if self._tasing_local_unit:base().is_local_player then
+					if not self._played_glint then
+						local ilovethisfuckingeffectlol = World:effect_manager():spawn({
+							effect = Idstring("effects/pd2_mod_hh/particles/character/pretase_glint"),
+							parent = self._unit:get_object(Idstring("Head"))
+						})
+						
+						if ilovethisfuckingeffectlol then
+							self._played_glint = true
+						end
+					end
+				end
+			end
+			
+			if self._shoot_t and self._shoot_t > t then
+				if self._tase_effect then
+					World:effect_manager():fade_kill(self._tase_effect)
+				end
 
-			if self._shoot_t and self._mod_enable_t < t and self._shoot_t < t then
+				self._tase_effect = World:effect_manager():spawn({
+					force_synch = true,
+					effect = Idstring("effects/payday2/particles/character/taser_thread"),
+					parent = self._weapon_obj_fire
+				})
+			elseif self._shoot_t and self._mod_enable_t < t and self._shoot_t < t then
 				if self._tasing_local_unit and target_dis < self._tase_distance then
 					local record = managers.groupai:state():criminal_record(self._tasing_local_unit:key())
 
@@ -431,7 +456,7 @@ function CopActionTase:update(t)
 
 							self._tase_effect = World:effect_manager():spawn({
 								force_synch = true,
-								effect = Idstring("effects/payday2/particles/character/taser_thread"),
+								effect = Idstring("effects/pd2_mod_hh/particles/character/taser_hit"),
 								parent = self._weapon_obj_fire
 							})
 

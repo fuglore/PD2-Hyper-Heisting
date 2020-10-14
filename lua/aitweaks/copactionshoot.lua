@@ -359,11 +359,15 @@ function CopActionShoot:on_attention(attention, old_attention)
 			if shoot_hist then
 				local displacement = mvec3_dis(target_pos, shoot_hist.m_last_pos)
 				
-				if play_it_here then
-					local dis = mvec3_dis(target_pos, self._shoot_from_pos)
-					
-					if dis <= 300 then
-						ding = true
+				if self._hivis then
+					if play_it_here or self._play_hivis_glint then
+						local dis = mvec3_dis(target_pos, self._shoot_from_pos)
+							
+						if dis <= 300 then
+							ding = true
+							play_it_here = true
+							self._play_hivis_glint = nil
+						end
 					end
 				end
 				
@@ -421,11 +425,15 @@ function CopActionShoot:on_attention(attention, old_attention)
 					end
 				end
 				
-				if play_it_here then
-					local dis = target_dis
-					
-					if dis <= 300 then
-						ding = true
+				if self._hivis then
+					if play_it_here or self._play_hivis_glint then
+						local dis = target_dis
+							
+						if dis <= 300 then
+							ding = true
+							play_it_here = true
+							self._play_hivis_glint = nil
+						end
 					end
 				end
 
@@ -658,7 +666,7 @@ function CopActionShoot:update(t)
 		elseif self._common_data.allow_fire and target_vec and self._mod_enable_t < t then
 			local shoot = nil
 			
-			if vis_state < 4 and self._play_hivis_glint then
+			if vis_state < 4 and self._play_hivis_glint or self._play_hivis_glint and target_dis and target_dis <= 300 then
 				if self._hivis and self._ext_movement._allow_fire and self._ext_movement._allow_fire == true then
 					local ding = nil
 					if target_dis and target_dis <= 300 then
