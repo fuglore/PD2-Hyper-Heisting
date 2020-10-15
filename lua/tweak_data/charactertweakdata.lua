@@ -1244,6 +1244,66 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	
+	presets.move_speed.teamai = {
+		stand = {
+			walk = {
+				ntl = {
+					strafe = 200,
+					fwd = 200,
+					bwd = 200
+				},
+				hos = {
+					strafe = 350,
+					fwd = 350,
+					bwd = 350
+				},
+				cbt = {
+					strafe = 350,
+					fwd = 350,
+					bwd = 350
+				}
+			},
+			run = {
+				hos = {
+					strafe = 661,
+					fwd = 661,
+					bwd = 661
+				},
+				cbt = {
+					strafe = 661,
+					fwd = 661,
+					bwd = 661
+				}
+			}
+		},
+		crouch = {
+			walk = {
+				hos = {
+					strafe = 225,
+					fwd = 225,
+					bwd = 225
+				},
+				cbt = {
+					strafe = 225,
+					fwd = 225,
+					bwd = 2225
+				}
+			},
+			run = {
+				hos = {
+					strafe = 272,
+					fwd = 272,
+					bwd = 272
+				},
+				cbt = {
+					strafe = 272,
+					fwd = 272,
+					bwd = 272
+				}
+			}
+		}
+	}
+	
 	--prevents Application has crashed: C++ exception[string "core/lib/utils/coretable.lua"]:32: bad argument #1 to 'pairs' (table expected, got nil)
 	
 	for speed_preset_name, poses in pairs(presets.move_speed) do
@@ -10272,88 +10332,111 @@ end
 --Bot weapons, here we go
 Hooks:PostHook(CharacterTweakData, "_init_russian", "hhpost_russian", function(self, presets)
 	self.russian.weapon.weapons_of_choice.primary = "wpn_fps_ass_amcar_npc"
+	self.russian.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_german", "hhpost_german", function(self, presets)
 	self.german.weapon.weapons_of_choice.primary = "wpn_fps_shot_r870_npc"
+	self.german.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_spanish", "hhpost_spanish", function(self, presets)
 	self.spanish.weapon.weapons_of_choice.primary = "wpn_fps_lmg_m249_npc"
+	self.spanish.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_american", "hhpost_american", function(self, presets)
 	self.american.weapon.weapons_of_choice.primary = "wpn_fps_ass_ak5_npc"
+	self.american.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_jowi", "hhpost_jowi", function(self, presets)
 	self.jowi.weapon.weapons_of_choice.primary = "wpn_fps_snp_tti_npc"
+	self.jowi.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_old_hoxton", "hhpost_hoxton", function(self, presets)
 	self.old_hoxton.weapon.weapons_of_choice.primary = "wpn_fps_ass_m14_npc"
+	self.old_hoxton.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_clover", "hhpost_clover", function(self, presets)
 	self.female_1.weapon.weapons_of_choice.primary = "wpn_fps_ass_l85a2_npc"
+	self.female_1.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_dragan", "hhpost_dragan", function(self, presets)
 	self.dragan.weapon.weapons_of_choice.primary = "wpn_fps_ass_vhs_npc"
+	self.dragan.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_jacket", "hhpost_jacket", function(self, presets)
 	self.jacket.weapon.weapons_of_choice.primary = "wpn_fps_smg_cobray_npc"
+	self.jacket.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_bonnie", "hhpost_bonnie", function(self, presets)
 	self.bonnie.weapon.weapons_of_choice.primary = "wpn_fps_shot_b682_npc"
+	self.bonnie.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_sokol", "hhpost_sokol", function(self, presets)
 	self.sokol.weapon.weapons_of_choice.primary = "wpn_fps_ass_asval_npc"
+	self.sokol.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_dragon", "hhpost_dragon", function(self, presets)
 	self.dragon.weapon.weapons_of_choice.primary = "wpn_fps_smg_baka_npc"
+	self.dragon.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_bodhi", "hhpost_bodhi", function(self, presets)
 	self.bodhi.weapon.weapons_of_choice.primary = "wpn_fps_snp_model70_npc"
+	self.bodhi.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_jimmy", "hhpost_jimmy", function(self, presets)
 	self.jimmy.weapon.weapons_of_choice.primary = "wpn_fps_smg_sr2_npc"
+	self.jimmy.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_sydney", "hhpost_sydney", function(self, presets)
 	self.sydney.weapon.weapons_of_choice.primary = "wpn_fps_ass_tecci_npc"
+	self.sydney.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_wild", "hhpost_wild", function(self, presets)
 	self.wild.weapon.weapons_of_choice.primary = "wpn_fps_sho_boot_npc"
+	self.wild.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_chico", "hhpost_chico", function(self, presets)
 	self.chico.weapon.weapons_of_choice.primary = "wpn_fps_ass_contraband_npc"
+	self.chico.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_max", "hhpost_max", function(self, presets)
 	self.max.weapon.weapons_of_choice.primary = "wpn_fps_ass_akm_gold_npc"
+	self.max.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_joy", "hhpost_joy", function(self, presets)
 	self.joy.weapon.weapons_of_choice.primary = "wpn_fps_smg_shepheard_npc"
+	self.joy.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_myh", "hhpost_myh", function(self, presets)
 	self.myh.weapon.weapons_of_choice.primary = "wpn_fps_ass_ching_npc"
+	self.myh.move_speed = presets.move_speed.teamai
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_ecp", "hhpost_ecps", function(self, presets)
 	self.ecp_female.weapon.weapons_of_choice.primary = "wpn_fps_ass_famas_npc"
+	self.ecp_female.move_speed = presets.move_speed.teamai
 	self.ecp_male.weapon.weapons_of_choice.primary = "wpn_fps_ass_scar_npc"
+	self.ecp_male.move_speed = presets.move_speed.teamai
 end)
+
 --End Perferred Bot Weapons
 
 function CharacterTweakData:_create_table_structure() --vanilla table

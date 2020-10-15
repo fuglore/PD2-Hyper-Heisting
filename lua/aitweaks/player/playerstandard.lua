@@ -218,7 +218,7 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 	if speed_state == "climb" then
 		multiplier = multiplier * 1.2
 	else
-		multiplier = 1.1
+		multiplier = multiplier + 0.1
 	end
 
 	if self:_is_meleeing() then
