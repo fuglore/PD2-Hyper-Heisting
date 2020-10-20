@@ -1286,7 +1286,7 @@ function CharacterTweakData:_presets(tweak_data)
 				cbt = {
 					strafe = 225,
 					fwd = 225,
-					bwd = 2225
+					bwd = 225
 				}
 			},
 			run = {
@@ -1305,6 +1305,7 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	
 	--prevents Application has crashed: C++ exception[string "core/lib/utils/coretable.lua"]:32: bad argument #1 to 'pairs' (table expected, got nil)
+	
 	
 	for speed_preset_name, poses in pairs(presets.move_speed) do
 		for pose, hastes in pairs(poses) do
