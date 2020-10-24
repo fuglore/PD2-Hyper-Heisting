@@ -342,7 +342,7 @@ function ActionSpooc:_chk_can_strike()
 	local target_pos = self._tmp_vec1
 
 	if self._chase_tracker:lost() then
-		mvec3_set(target_pos, self._chase_tracker:field_position())
+		mvec3_set(target_pos, self._target_unit:movement():m_pos())
 	else
 		self._chase_tracker:m_position(target_pos)
 	end
@@ -354,8 +354,8 @@ function ActionSpooc:_chk_can_strike()
 
 		mvec3_set_z(pos, 0)
 
-		return mvec3_len_sq(pos) < 52900 and dif_z < 75
-	end
+		return mvec3_len_sq(pos) < 22500 and dif_z < 75
+	end	
 
 	if not _dis_chk(target_pos) then
 		return
@@ -436,7 +436,24 @@ function ActionSpooc:_upd_strike_first_frame(t)
 	end
 
 	if redir_result then
+		self._unit:anim_state_machine():set_speed(redir_result, 1.4)
 		self._ext_movement:spawn_wanted_items()
+		if PD2THHSHIN and PD2THHSHIN:GlintEnabled() then
+			if not self._played_glint then
+				local local_player_unit = managers.player:player_unit()
+				
+				if alive(local_player_unit) and self._target_unit == local_player_unit then
+					local ilovethisfuckingeffectlol = World:effect_manager():spawn({
+						effect = Idstring("effects/pd2_mod_hh/particles/character/marauderspooc_glint"),
+						parent = self._unit:get_object(Idstring("Head"))
+					})
+									
+					if ilovethisfuckingeffectlol then
+						self._played_glint = true
+					end
+				end
+			end
+		end
 	elseif self._is_local then
 		if self._is_server then
 			self:_expire()
@@ -1281,19 +1298,6 @@ function ActionSpooc:anim_act_clbk(anim_act)
 		return
 	end
 
-	local sound_string = "clk_punch_3rd_person_3p"
-
-	if self._stroke_t then
-		if self._strike_unit then
-			self._unit:sound():play(sound_string)
-		end
-
-		return
-	end
-
-	self._stroke_t = TimerManager:game():time()
-	self._unit:sound():play(sound_string)
-
 	local detect_stop_sound = self:get_sound_event("detect_stop")
 
 	if detect_stop_sound then
@@ -1347,18 +1351,45 @@ function ActionSpooc:anim_act_clbk(anim_act)
 	end
 
 	mvec3_set_z(target_vec, 0)
-
+	
 	if self._is_flying_strike then
 		local angle = mvec3_angle(target_vec, self._common_data.fwd)
 		local max_dis = math_lerp(170, 70, math_clamp(angle, 0, 90) / 90)
 		local target_dis_xy = mvec3_norm(target_vec)
-
 		if max_dis < target_dis_xy then
 			return
 		end
+	else
+		local fuckingpos = Vector3()
+		local my_pos = self._unit:movement():m_pos()
+		local fuckingpos = mvec3_copy(self._target_unit:movement():m_pos())
+		
+		mvec3_sub(fuckingpos, my_pos)
+
+		local dif_z = math_abs(mvec3_z(fuckingpos))
+
+		mvec3_set_z(fuckingpos, 0)
+		
+		if mvec3_len_sq(fuckingpos) > 52900 or dif_z > 75 then
+			return
+		end
+	end
+	
+	local sound_string = "clk_punch_3rd_person_3p"
+
+	if self._stroke_t then
+		if self._strike_unit then
+			self._unit:sound():play(sound_string)
+		end
+
+		return
 	end
 
+	self._stroke_t = TimerManager:game():time()
+	self._unit:sound():play(sound_string)
+	
 	self._strike_unit = self._target_unit
+	
 	local spooc_res = nil
 
 	if self._common_data.char_tweak.non_lethal_kick_damage and type(self._common_data.char_tweak.non_lethal_kick_damage) == "number" then
@@ -1720,6 +1751,24 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 	end
 
 	self._machine:set_speed(redir_result, speed_mul)
+	
+	if PD2THHSHIN and PD2THHSHIN:GlintEnabled() then
+		if not self._played_glint then
+			local local_player_unit = managers.player:player_unit()
+				
+			if alive(local_player_unit) and self._target_unit == local_player_unit then
+				local ilovethisfuckingeffectlol = World:effect_manager():spawn({
+					effect = Idstring("effects/pd2_mod_hh/particles/character/marauderspooc_glint"),
+					parent = self._unit:get_object(Idstring("Head"))
+				})
+									
+				if ilovethisfuckingeffectlol then
+					self._played_glint = true
+				end
+			end
+		end
+	end
+	
 	self:_set_updator("_upd_flying_strike")
 end
 

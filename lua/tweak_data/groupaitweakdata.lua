@@ -478,7 +478,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 8
+			ninja = 12
 		}
 	elseif difficulty_index <= 2 then
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
@@ -546,7 +546,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 8
+			ninja = 12
 		}
 	else
 		self.special_unit_spawn_limits = {
@@ -556,7 +556,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 8
+			ninja = 12
 		}
 	end
 
