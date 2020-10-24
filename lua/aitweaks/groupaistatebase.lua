@@ -159,6 +159,40 @@ function GroupAIStateBase:update(t, dt)
 	self:upd_team_AI_distance()
 end
 
+function GroupAIStateBase:set_point_of_no_return_timer(time, point_of_no_return_id)
+	if time == nil or setup:has_queued_exec() then
+		return
+	end
+	
+	local level = Global.level_data and Global.level_data.level_id
+	
+	if level and level == "bph" then
+		self._hunt_mode = true
+		self._danger_state = true
+		
+		if not Global.game_settings or not Global.game_settings.one_down then
+			return
+		else
+			time = time + 90
+		end
+	end
+
+	self._forbid_drop_in = true
+
+	managers.network.matchmake:set_server_joinable(false)
+
+	if not self._peers_inside_point_of_no_return then
+		self._peers_inside_point_of_no_return = {}
+	end
+
+	self._point_of_no_return_timer = time
+	self._point_of_no_return_id = point_of_no_return_id
+	self._point_of_no_return_areas = nil
+
+	managers.hud:show_point_of_no_return_timer()
+	managers.hud:add_updator("point_of_no_return", callback(self, self, "_update_point_of_no_return"))
+end
+
 function GroupAIStateBase:_check_drama_low_p()
 	local drama_tweak = tweak_data.drama
 	if not self._assault_number or self._assault_number and self._assault_number == 1 then

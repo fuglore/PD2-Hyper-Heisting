@@ -444,7 +444,7 @@ function GroupAIStateBesiege:update(t, dt)
 	if Network:is_server() then
 		self:_queue_police_upd_task()
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-		local fliptheswitch = Global.game_settings and Global.game_settings.one_down
+		local fliptheswitch = Global.game_settings and Global.game_settings.one_down or self._danger_state or nil
 		
 		if self._downcountleniency > 5 then
 			self._downcountleniency = 5
@@ -965,6 +965,7 @@ function GroupAIStateBesiege:_begin_new_tasks()
 
 	if recon_data.next_dispatch_t and recon_data.next_dispatch_t < t and not task_data.assault.active and not task_data.regroup.active then
 		recon_candidates = {}
+		recon_candidates_noobj = {}
 	end
 
 	local assault_candidates = nil
@@ -1007,20 +1008,21 @@ function GroupAIStateBesiege:_begin_new_tasks()
 		end
 	end
 
-	if #to_search_areas == 0 then
-		return
-	end
-
 	if assault_candidates and self._hunt_mode and self._char_criminals then
 		for criminal_key, criminal_data in pairs(self._char_criminals) do
-			if not criminal_data.status then
+			if not criminal_data.status or criminal_data.status == "electrified" then
 				local nav_seg = criminal_data.tracker:nav_segment()
 				local area = self:get_area_from_nav_seg_id(nav_seg)
 				found_areas[area] = true
-
+				
+				table.insert(to_search_areas, area)
 				table.insert(assault_candidates, area)
 			end
 		end
+	end
+	
+	if #to_search_areas == 0 then
+		return
 	end
 
 	local i = 1
@@ -1081,12 +1083,22 @@ function GroupAIStateBesiege:_begin_new_tasks()
 			end
 		end
 
-		if assault_candidates and area.criminal and area.criminal.units and self._criminals then
-			for criminal_key, _ in pairs(area.criminal.units) do
-				if criminal_key and self._criminals and self._criminals[criminal_key] and not self._criminals[criminal_key].status and not self._criminals[criminal_key].is_deployable then
-					table.insert(assault_candidates, area)
+		if assault_candidates or recon_candidates_noobj then
+			if area.criminal and area.criminal.units and self._criminals then
+				for criminal_key, _ in pairs(area.criminal.units) do
+					if criminal_key and self._criminals and self._criminals[criminal_key] and not self._criminals[criminal_key].is_deployable then
+						if not self._criminals[criminal_key].status or self._criminals[criminal_key].status == "electrified" then
+							if assault_candidates then
+								table.insert(assault_candidates, area)
+							end
+							
+							if recon_candidates_noobj then
+								table.insert(recon_candidates_noobj, area)
+							end
 
-					break
+							break
+						end
+					end
 				end
 			end
 		end
@@ -1103,6 +1115,10 @@ function GroupAIStateBesiege:_begin_new_tasks()
 
 		i = i + 1
 	until i > #to_search_areas
+	
+	if recon_candidates and #recon_candidates <= 0 then
+		recon_candidates = recon_candidates_noobj --if theres no hostages or loot, spawn anyways and rush at players if possible, but prioritize true objectives first
+	end
 
 	if assault_candidates and #assault_candidates > 0 then
 		self:_begin_assault_task(assault_candidates)
@@ -1121,8 +1137,6 @@ function GroupAIStateBesiege:_begin_new_tasks()
 		local reenforce_area = reenforce_candidates[lucky_i_candidate]
 
 		self:_begin_reenforce_task(reenforce_area)
-
-		recon_candidates = nil
 	end
 end
 
@@ -1737,6 +1751,7 @@ function GroupAIStateBesiege:_verify_group_objective(group)
 
 		return
 	end
+	
 	if group.objective then
 		group.objective.moving_out = false
 		group.objective.type = grp_objective.type

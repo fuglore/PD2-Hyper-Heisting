@@ -7,7 +7,7 @@ function TeamAIMovement:on_SPOOCed(enemy_unit)
 		attacker_unit = enemy_unit,
 		is_cloaker_kick = true,
 		melee_armor_piercing = true,
-		damage = 125,
+		damage = 400, --die
 		pos = self._unit:movement():m_pos(),
 		push_vel = push_vec * 2000
 	}

@@ -7832,18 +7832,18 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 	for _, cname in ipairs(common_units) do
 		self[cname].crumble_chance = common_chance
 		self[cname].allow_pass_out = true
-		self[cname].damage.fire_damage_mul = 3
+		self[cname].damage.fire_damage_mul = 4
 	end
 	
 	for _, lname in ipairs(light_units) do
 		self[lname].crumble_chance = light_swat_chance
 		self[lname].allow_pass_out = true
-		self[lname].damage.fire_damage_mul = 2
+		self[lname].damage.fire_damage_mul = 4
 	end
 	
 	for _, hname in ipairs(heavy_units) do
 		self[hname].crumble_chance = heavy_swat_chance
-		self[hname].damage.fire_damage_mul = 1.5
+		self[hname].damage.fire_damage_mul = 3
 	end
 end
 
@@ -8018,7 +8018,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.detection = presets.detection.enemyspooc
 	self.spooc.HEALTH_INIT = 20
 	self.spooc.headshot_dmg_mul = 6
-	self.spooc.damage.fire_damage_mul = 2
+	self.spooc.damage.fire_damage_mul = 4
 	self.spooc.move_speed = presets.move_speed.lightning_constant
 	self.spooc.no_retreat = nil
 	self.spooc.no_arrest = true
@@ -8182,7 +8182,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.deathguard = true
 	self.shield.no_equip_anim = true
 	self.shield.damage.explosion_damage_mul = 0.8
-	self.shield.damage.fire_damage_mul = 0.5
+	self.shield.damage.fire_damage_mul = 1
 	self.shield.calls_in = nil
 	self.shield.ignore_medic_revive_animation = true
 	self.shield.damage.shield_knocked = true
@@ -8248,6 +8248,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 			min_duration = 8
 		}
 	}
+	self.medic.damage.fire_damage_mul = 4
 	self.medic.chatter = presets.enemy_chatter.medic
 	self.medic.experience.cable_tie = "tie_swat"
 	self.medic.speech_prefix_p1 = self._prefix_data_p1.medic()
