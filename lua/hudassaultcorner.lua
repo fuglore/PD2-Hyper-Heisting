@@ -2,6 +2,7 @@
 if restoration and restoration:all_enabled("HUD/MainHUD", "HUD/AssaultPanel") then
 	return
 end
+
 if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
 
 function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
@@ -326,9 +327,9 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local level = Global.level_data and Global.level_data.level_id
 	local cover_line_to_use = "hud_assault_cover"
 	local danger_line_to_use = "hud_assault_danger"
-	local FG_chance = math.random(1, 278)
-	local danger_chance = math.random(1, 30)
-	local heat_chance = math.random(1, 24)
+	local FG_chance = math.random(1, 281)
+	local danger_chance = math.random(1, 32)
+	local heat_chance = math.random(1, 26)
 	local versusline = "hud_assault_faction_swat"
 	
 	local faction = tweak_data.levels:get_ai_group_type()
@@ -386,7 +387,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end			
 	end
 	
-	if FG_chance <= 78 then
+	if FG_chance <= 81 then
 		cover_line_to_use = "hud_assault_FG_cover" .. FG_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
@@ -402,7 +403,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if danger_chance <= 29 then
+	if danger_chance <= 31 then
 		danger_line_to_use = "hud_assault_FG_danger" .. danger_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
@@ -410,7 +411,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if heat_chance <= 23 then
+	if heat_chance <= 25 then
 		heatbonus_line_to_use = "hud_heat_" .. heat_chance
 	end
 	

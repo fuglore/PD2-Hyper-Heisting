@@ -7209,7 +7209,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" then
+	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" then
 		self.besiege.assault.force = {
 			1,
 			1,
@@ -7233,7 +7233,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" then
+	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" then
 		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.assault.force_balance_mul = {
 				22,
