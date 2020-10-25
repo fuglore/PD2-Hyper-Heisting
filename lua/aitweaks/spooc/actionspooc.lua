@@ -1303,6 +1303,19 @@ function ActionSpooc:anim_act_clbk(anim_act)
 	if detect_stop_sound then
 		self._unit:sound():play(detect_stop_sound)
 	end
+	
+	local sound_string = "clk_punch_3rd_person_3p"
+
+	if self._stroke_t then
+		if self._strike_unit then
+			self._unit:sound():play(sound_string)
+		end
+
+		return
+	end
+	
+	self._stroke_t = TimerManager:game():time()
+	self._unit:sound():play(sound_string)
 
 	managers.mutators:_run_func("OnPlayerCloakerKicked", self._unit)
 	managers.modifiers:run_func("OnPlayerCloakerKicked", self._unit)
@@ -1360,7 +1373,6 @@ function ActionSpooc:anim_act_clbk(anim_act)
 			return
 		end
 	else
-		local fuckingpos = Vector3()
 		local my_pos = self._unit:movement():m_pos()
 		local fuckingpos = mvec3_copy(self._target_unit:movement():m_pos())
 		
@@ -1370,23 +1382,10 @@ function ActionSpooc:anim_act_clbk(anim_act)
 
 		mvec3_set_z(fuckingpos, 0)
 		
-		if mvec3_len_sq(fuckingpos) > 52900 or dif_z > 75 then
+		if mvec3_len_sq(fuckingpos) > 52900 or dif_z > 75 then --the hitbox is 230 square centimeters big but i have no idea what the fuck that is so whatever
 			return
 		end
 	end
-	
-	local sound_string = "clk_punch_3rd_person_3p"
-
-	if self._stroke_t then
-		if self._strike_unit then
-			self._unit:sound():play(sound_string)
-		end
-
-		return
-	end
-
-	self._stroke_t = TimerManager:game():time()
-	self._unit:sound():play(sound_string)
 	
 	self._strike_unit = self._target_unit
 	
