@@ -29,6 +29,10 @@ function PlayerStandard:_find_pickups(t)
 end
 
 function PlayerStandard:on_melee_stun(t, timer)
+	if self:_is_meleeing() and managers.player:has_category_upgrade("player", "beatemup_aced") then
+		return
+	end
+
 	self:_interupt_action_reload(t)
 	self:_interupt_action_steelsight(t)
 	self:_interupt_action_running(t)
@@ -651,12 +655,23 @@ function PlayerStandard:_do_action_melee(t, input, skip_damage)
 	if bayonet_id and self._equipped_unit:base():selection_index() == 2 then
 		bayonet_melee = true
 	end
+	
+	local anim_speed_multiplier = 1
+	local t_multiplier = 1
+	
+	if managers.player:has_category_upgrade("player", "beatemup_basic") then
+		anim_speed_multiplier = anim_speed_multiplier + 0.5
+		t_multiplier = t_multiplier - 0.25
+	end
 
-	self._state_data.melee_expire_t = t + tweak_data.blackmarket.melee_weapons[melee_entry].expire_t
-	self._state_data.melee_repeat_expire_t = t + math.min(tweak_data.blackmarket.melee_weapons[melee_entry].repeat_expire_t, tweak_data.blackmarket.melee_weapons[melee_entry].expire_t)
+	self._state_data.melee_expire_t = t + tweak_data.blackmarket.melee_weapons[melee_entry].expire_t * t_multiplier
+	
+	local repeat_expire_t = math.min(tweak_data.blackmarket.melee_weapons[melee_entry].repeat_expire_t, tweak_data.blackmarket.melee_weapons[melee_entry].expire_t) * t_multiplier
+	
+	self._state_data.melee_repeat_expire_t = t + repeat_expire_t
 
 	if not instant_hit and not skip_damage then
-		self._state_data.melee_damage_delay_t = t + melee_damage_delay
+		self._state_data.melee_damage_delay_t = t + melee_damage_delay * t_multiplier
 
 		if pre_calc_hit_ray then
 			self._state_data.melee_hit_ray = self:_calc_melee_hit_ray(t, 20) or true
@@ -690,7 +705,7 @@ function PlayerStandard:_do_action_melee(t, input, skip_damage)
 			self._ext_camera:play_redirect(bayonet_melee and self:get_animation("melee_miss_bayonet") or self:get_animation("melee_miss"))
 		end
 	else
-		local state = self._ext_camera:play_redirect(self:get_animation("melee_attack"))
+		local state = self._ext_camera:play_redirect(self:get_animation("melee_attack"), anim_speed_multiplier)
 		local anim_attack_vars = tweak_data.blackmarket.melee_weapons[melee_entry].anim_attack_vars
 		self._melee_attack_var = anim_attack_vars and math.random(#anim_attack_vars)
 
@@ -839,7 +854,7 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 			if managers.player._melee_damage_mult then
 				dmg_multiplier = dmg_multiplier + managers.player._melee_damage_mult
 			end
-
+			
 			dmg_multiplier = dmg_multiplier * managers.player:upgrade_value("player", "melee_" .. tostring(tweak_data.blackmarket.melee_weapons[melee_entry].stats.weapon_type) .. "_damage_multiplier", 1)
 
 			if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
@@ -1130,8 +1145,14 @@ function PlayerStandard:_start_action_melee(t, input, instant)
 	end
 
 	offset = math.max(offset or 0, attack_allowed_expire_t)
+	
+	local speed_multiplier = 1
+	
+	if managers.player:has_category_upgrade("player", "beatemup_basic") then
+		speed_multiplier = speed_multiplier + 0.5
+	end
 
-	self._ext_camera:play_redirect(self:get_animation("melee_enter"), nil, offset)
+	self._ext_camera:play_redirect(self:get_animation("melee_enter"), speed_multiplier, offset)
 end
 
 function PlayerStandard:_check_action_run(t, input)

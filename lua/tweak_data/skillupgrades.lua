@@ -401,6 +401,32 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
+		self.values.player.beatemup_basic = {
+			true
+		}
+		self.definitions.player_beatemup_basic = {
+			name_id = "menu_beatemup_basic",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "beatemup_basic",
+				category = "player"
+			}
+		}
+		
+		self.values.player.beatemup_aced = {
+			true
+		}
+		self.definitions.player_beatemup_aced = {
+			name_id = "menu_beatemup_aced",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "beatemup_aced",
+				category = "player"
+			}
+		}
+		
 		self.weapon_movement_penalty.lmg = 0.8
 		self.weapon_movement_penalty.minigun = 0.6
 		

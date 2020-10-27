@@ -152,6 +152,29 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			}
 		}
 		
+		self.skills.steroids = {
+			{
+				upgrades = {
+					"player_non_special_melee_multiplier",
+					"player_melee_damage_multiplier",
+					"player_beatemup_basic"
+				},
+				cost = self.costs.default
+			},
+			{
+				upgrades = {
+					"player_beatemup_aced"
+				},
+				cost = self.costs.pro
+			},
+			name_id = "menu_steroids_beta",
+			desc_id = "menu_steroids_beta_desc",
+			icon_xy = {
+				1,
+				3
+			}
+		}
+		
 		self.skills.bloodthirst = {
 			{
 				upgrades = {
