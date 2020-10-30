@@ -361,7 +361,7 @@ function GroupAIStateBase:_draw_current_logics()
 				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
 			elseif brain:is_current_logic("sniper") then
 				local draw_duration = 0.1
-				local new_brush = Draw:brush(Color.red:with_alpha(0.1), draw_duration)
+				local new_brush = Draw:brush(Color.blue:with_alpha(0.1), draw_duration)
 				new_brush:sphere(data.unit:movement():m_head_pos(), 20)
 			elseif brain:is_current_logic("travel") then
 				local draw_duration = 0.1

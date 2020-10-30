@@ -1150,6 +1150,52 @@ function PlayerDamage:_calc_armor_damage(attack_data, ...)
 	return _calc_armor_damage_original(self, attack_data, ...)
 end
 
+function PlayerDamage:_calc_armor_damage(attack_data)
+	local health_subtracted = 0
+	
+	attack_data.damage = attack_data.damage - (self._old_last_received_dmg or 0)
+	
+	self._next_allowed_dmg_t = self._old_next_allowed_dmg_t and Application:digest_value(self._old_next_allowed_dmg_t, true) or self._next_allowed_dmg_t
+		
+	self._old_last_received_dmg = nil
+	self._old_next_allowed_dmg_t = nil
+	
+	if self:get_real_armor() > 0 then
+		health_subtracted = self:get_real_armor()
+
+		self:change_armor(-attack_data.damage)
+
+		health_subtracted = health_subtracted - self:get_real_armor()
+		
+		self:_damage_screen()
+		SoundDevice:set_rtpc("shield_status", self:armor_ratio() * 100)
+		self:_send_set_armor()
+
+		if self:get_real_armor() <= 0 then
+			self._unit:sound():play("player_armor_gone_stinger")
+
+			if attack_data.armor_piercing then
+				self._unit:sound():play("player_sniper_hit_armor_gone")
+			end
+
+			local pm = managers.player
+			
+			if not self._unit:movement():tased() then
+				self:_start_regen_on_the_side(pm:upgrade_value("player", "passive_always_regen_armor", 0))
+				
+				if pm:has_inactivate_temporary_upgrade("temporary", "armor_break_invulnerable") then
+					pm:activate_temporary_upgrade("temporary", "armor_break_invulnerable")
+
+					self._can_take_dmg_timer = pm:temporary_upgrade_value("temporary", "armor_break_invulnerable", 0)
+				end
+			end
+		end
+	end
+
+	managers.hud:damage_taken()
+
+	return health_subtracted
+end
 function PlayerDamage:_calc_health_damage(attack_data)
 
 	attack_data.damage = attack_data.damage - (self._old_last_received_dmg or 0)

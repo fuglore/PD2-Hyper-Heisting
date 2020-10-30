@@ -283,6 +283,36 @@ function PlayerTased:_check_action_primary_attack(t, input)
 	return new_action
 end
 
+function PlayerTased:_register_revive_SO()
+	if self._SO_id or not managers.navigation:is_data_ready() then
+		return
+	end
+
+	local objective = {
+		scan = true,
+		destroy_clbk_key = false,
+		type = "follow",
+		called = true,
+		follow_unit = self._unit:character_damage()._tase_data.attacker_unit,
+		nav_seg = self._unit:character_damage()._tase_data.attacker_unit:movement():nav_tracker():nav_segment(),
+		taserrescue = true
+	}
+	local so_descriptor = {
+		interval = 0,
+		chance_inc = 0,
+		search_dis_sq = 25000000,
+		base_chance = 1,
+		usage_amount = 1,
+		AI_group = "friendlies",
+		objective = objective,
+		search_pos = self._unit:position()
+	}
+	local so_id = "PlayerTased_assistance"
+	self._SO_id = so_id
+
+	managers.groupai:state():add_special_objective(so_id, so_descriptor)
+end
+
 
 function PlayerTased:on_tase_ended()
 	self._tase_ended = true

@@ -343,9 +343,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						end
 					end
 					
-					if diff_index > 5 and status and status == "electrified" then
-						target_priority_slot = target_priority_slot - 2
-					elseif not free_status and not justtunnel or pantsdownchk and not justharass then
+					if not free_status and not justtunnel or pantsdownchk and not justharass then
 						target_priority_slot = target_priority_slot + 4
 					end
 					
@@ -367,7 +365,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						target_priority_slot = 1
 					end
 						
-					if assault_reaction then
+					if assault_reaction and human_chk then
 						has_assault_reaction_target = true
 					end
 					

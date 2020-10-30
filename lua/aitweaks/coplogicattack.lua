@@ -2145,15 +2145,33 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 	if not data.attention_obj or data.attention_obj.reaction < REACT_COMBAT then
 		return
 	end
+	
+	if data.unit:in_slot(16) or data.is_converted then
+		if data.unit:anim_data().reload then
+			return true
+		end
+		
+		local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
 
-	if my_data.moving_to_cover or data.is_suppressed or my_data.attitude ~= "engage" or data.unit:anim_data().reload then
-		return true
-	end
+		if ammo / ammo_max < 0.2 then
+			return true
+		end
+		
+		if data.unit:character_damage()._health_ratio and data.unit:character_damage()._health_ratio < 0.5 then
+			return true
+		end
+		
+	else
 
-	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
+		if my_data.moving_to_cover or data.is_suppressed or my_data.attitude ~= "engage" or data.unit:anim_data().reload then
+			return true
+		end
 
-	if ammo / ammo_max < 0.2 then
-		return true
+		local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
+
+		if ammo / ammo_max < 0.2 then
+			return true
+		end
 	end
 end
 
