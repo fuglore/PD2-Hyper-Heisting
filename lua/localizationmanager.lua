@@ -81,6 +81,8 @@
 		["hud_assault_FG_cover79"] = "DO NOT THE COVER",
 		["hud_assault_FG_cover80"] = "MYURDERRRRR",
 		["hud_assault_FG_cover81"] = "GIVE THEM NO QUARTER",
+		["hud_assault_FG_cover82"] = "YOUR FOES ASSEMBLE",
+		["hud_assault_FG_cover83"] = "IT'S ON, FOLKS",
 		["hud_assault_faction_federales"] = "VS. LOS FEDERALES",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_sharedswat"] = "VS. SWAT TEAM & MURKYWATER BATTALION",		
