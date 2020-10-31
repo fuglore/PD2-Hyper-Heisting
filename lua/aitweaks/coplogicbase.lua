@@ -1597,7 +1597,7 @@ function CopLogicBase._get_logic_state_from_reaction(data, reaction)
 		return "attack"
 	end
 	
-	if data.is_converted then
+	if data.unit:in_slot(16) or data.is_converted then
 		if not reaction or reaction <= REACT_SCARED then
 			return "idle"
 		else

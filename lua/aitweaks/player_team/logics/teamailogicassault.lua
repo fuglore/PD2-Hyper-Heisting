@@ -1,16 +1,6 @@
 local math_min = math.min
 
-TeamAILogicAssault = class(CopLogicAttack)
 TeamAILogicAssault._COVER_CHK_INTERVAL = 0.1
-TeamAILogicAssault.on_cop_neutralized = TeamAILogicIdle.on_cop_neutralized
-TeamAILogicAssault.on_objective_unit_damaged = TeamAILogicIdle.on_objective_unit_damaged
-TeamAILogicAssault.on_alert = TeamAILogicIdle.on_alert
-TeamAILogicAssault.on_intimidated = TeamAILogicIdle.on_intimidated
-TeamAILogicAssault.on_long_dis_interacted = TeamAILogicIdle.on_long_dis_interacted
-TeamAILogicAssault.on_new_objective = TeamAILogicIdle.on_new_objective
-TeamAILogicAssault.on_objective_unit_destroyed = TeamAILogicBase.on_objective_unit_destroyed
-TeamAILogicAssault.is_available_for_assignment = TeamAILogicIdle.is_available_for_assignment
-TeamAILogicAssault.clbk_heat = TeamAILogicIdle.clbk_heat
 
 function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
