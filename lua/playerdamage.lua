@@ -1477,7 +1477,7 @@ function PlayerDamage:update(unit, t, dt)
 		self._bleed_out_blocked_by_movement_state = nil
 	end
 
-	if self._bleed_out_blocked_by_tased and not self._tased_during_berserker and not self._unit:movement():tased() then
+	if self._bleed_out_blocked_by_tased and not self._unit:movement():tased() then
 		self:force_into_bleedout()
 
 		self._bleed_out_blocked_by_tased = nil

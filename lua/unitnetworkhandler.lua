@@ -33,6 +33,24 @@ function UnitNetworkHandler:sync_add_doted_enemy(enemy_unit, variant, weapon_uni
 	end
 end
 
+function UnitNetworkHandler:request_throw_projectile(projectile_type_index, position, dir, sender)
+	local peer = self._verify_sender(sender)
+
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) or not peer then
+		return
+	end
+
+	local peer_id = peer:id()
+	local projectile_type = tweak_data.blackmarket:get_projectile_name_from_index(projectile_type_index)
+	local no_cheat_count = tweak_data.blackmarket.projectiles[projectile_type].no_cheat_count
+
+	if not managers.player:verify_grenade(peer_id) then
+		return
+	end
+
+	ProjectileBase.throw_projectile(projectile_type, position, dir, peer_id)
+end
+
 function UnitNetworkHandler:action_spooc_start(unit, target_u_pos, flying_strike, action_id)
 	if not self._verify_gamestate(self._gamestate_filter.any_ingame) or not self._verify_character(unit) then
 		return

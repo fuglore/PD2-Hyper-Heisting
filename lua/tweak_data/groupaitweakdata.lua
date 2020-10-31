@@ -475,7 +475,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			shield = 8,
 			medic = 8,
 			taser = 3,
-			tank = 1,
+			tank = 2,
 			sniper = 3,						
 			spooc = 3,
 			ninja = 12
@@ -514,7 +514,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 4,
 			taser = 1,
 			sniper = 3,						
-			tank = 1,
+			tank = 2,
 			spooc = 1,
 			ninja = 4
 		}
@@ -523,7 +523,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			shield = 8,
 			medic = 6,
 			taser = 1,
-			tank = 1,
+			tank = 2,
 			sniper = 3,						
 			spooc = 1,
 			ninja = 6
@@ -534,7 +534,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			medic = 6,
 			taser = 2,
 			sniper = 3,						
-			tank = 1,
+			tank = 2,
 			spooc = 2,
 			ninja = 8
 		}
@@ -543,7 +543,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			shield = 8,
 			medic = 8,
 			taser = 3,
-			tank = 1,
+			tank = 2,
 			sniper = 3,						
 			spooc = 3,
 			ninja = 12
@@ -553,7 +553,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			shield = 8,
 			medic = 8,
 			taser = 3,
-			tank = 1,
+			tank = 2,
 			sniper = 3,						
 			spooc = 3,
 			ninja = 12
