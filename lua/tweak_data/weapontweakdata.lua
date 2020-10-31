@@ -4796,7 +4796,7 @@ crouching = {
 end
 
 --Jackhammer
-if self.jackhammer then 
+if self.jackhammer and self.x_jackhammer then 
 self.jackhammer.AMMO_MAX = 50
 self.x_jackhammer.AMMO_MAX = 50
 self.x_jackhammer.stats.damage = 130
@@ -4808,24 +4808,24 @@ self.x_jackhammer.damage_far = 1050
 self.x_jackhammer.AMMO_PICKUP = {2, 5}
 self.jackhammer.AMMO_PICKUP = {2, 5}
 self.jackhammer.kick = {
-standing = {
-		4.5,
-		5.5,
-		-1.5,
-		1.5
-},
-steelsight = {
-		3.5,
-		4,
-		-1.5,
-		1.5
-},
-crouching = {
-		3.5,
-		4,
-		-1.5,
-		1.5
-}
+	standing = {
+			4.5,
+			5.5,
+			-1.5,
+			1.5
+	},
+	steelsight = {
+			3.5,
+			4,
+			-1.5,
+			1.5
+	},
+	crouching = {
+			3.5,
+			4,
+			-1.5,
+			1.5
+	}
 }
 end
 
