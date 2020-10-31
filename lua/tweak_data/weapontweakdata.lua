@@ -3989,7 +3989,7 @@ self.rally.stats.spread = 17
 end	
 
 -- Sr1
-if self.sr1 then 
+if self.sr1 and self.x_sr1 then 
 self.sr1.AMMO_MAX = 90
 self.sr1.stats.damage = 79
 self.sr1.fire_mode_data.fire_rate = 0.09
@@ -4001,7 +4001,7 @@ self.x_sr1.fire_mode_data.fire_rate = 0.09
 end	
 
 --QSZ
-if self.qsz92 then 
+if self.qsz92 and self.x_qsz92 then 
 self.qsz92.AMMO_MAX = 90
 self.qsz92.stats.damage = 79
 self.qsz92.fire_mode_data.fire_rate = 0.09
@@ -4022,7 +4022,7 @@ self.hk45c.spread = 17
 end	
 
 --Wacky Todd Pistol
-if self.p10mm then 
+if self.p10mm and self.x_p10mm then 
 self.p10mm.AMMO_MAX = 90
 self.p10mm.stats.damage = 79
 self.p10mm.fire_mode_data.fire_rate = 0.09
@@ -4415,7 +4415,7 @@ crouching = {
 end
 
 --TOZ66
-if self.toz66 then 
+if self.toz66 and self._xtoz66 then 
 self.toz66.stats.damage = 200
 self.toz66.stats_modifiers = {damage = 2}
 self.toz66.fire_mode_data.fire_rate = 0.075
@@ -7035,7 +7035,7 @@ crouching = {
 end
 
 --  czevo
-if self.czevo then 
+if self.czevo and self.x_czevo then 
 self.czevo.AMMO_MAX = 120
 self.x_czevo.AMMO_MAX = 150
 self.czevo.kick = {
