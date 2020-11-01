@@ -152,6 +152,52 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			}
 		}
 		
+		--High Vigour
+		self.skills.sprinter = {
+			{
+				upgrades = {
+					"player_stamina_regen_timer_multiplier",
+					"player_stamina_regen_multiplier"
+				},
+				cost = self.costs.default
+			},
+			{
+				upgrades = {
+					"player_highvigour_aced"
+				},
+				cost = self.costs.pro
+			},
+			name_id = "menu_sprinter_beta",
+			desc_id = "menu_sprinter_beta_desc",
+			icon_xy = {
+				10,
+				5
+			}
+		}
+		
+		--Sneakier Bastard
+		self.skills.jail_diet = {
+			{
+				upgrades = {
+					"player_detection_risk_add_dodge_chance_1",
+					"player_detection_risk_add_dodge_chance_2"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_sneakier_aced"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_jail_diet_beta",
+			desc_id = "menu_jail_diet_beta_desc",
+			icon_xy = {
+				1,
+				12
+			}
+		}
+		
 		self.skills.steroids = {
 			{
 				upgrades = {

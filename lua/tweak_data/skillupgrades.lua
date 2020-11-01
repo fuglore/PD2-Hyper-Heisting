@@ -285,7 +285,35 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
-		--Low Blow ACED
+		--Sneakier Bastard ACED
+		self.values.player.sneakier_aced = {
+			true
+		}
+		self.definitions.player_sneakier_aced = {
+			name_id = "menu_sneakier_aced",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "sneakier_aced",
+				category = "player"
+			}
+		}
+		
+		--High Vigour ACED
+		self.values.player.highvigour_aced = {
+			true
+		}
+		self.definitions.player_highvigour_aced = {
+			name_id = "menu_highvigour_aced",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "highvigour_aced",
+				category = "player"
+			}
+		}
+		
+		--Lower Blow ACED
 		self.values.player.crit_damage_up = {
 			true
 		}

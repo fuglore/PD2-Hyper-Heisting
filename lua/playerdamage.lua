@@ -257,7 +257,7 @@ function PlayerDamage:damage_melee(attack_data)
 	self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
 	
 	local allow_melee_dodge = true
-	
+	local sneakier_activated = nil
 	if allow_melee_dodge and not attack_data.is_cloaker_kick and pm:current_state() ~= "bleed_out" and pm:current_state() ~= "bipod" and pm:current_state() ~= "tased" then --self._bleed_out and current_state() ~= "bleed_out" aren't the same thing
 		local dodge_roll = math.random()
 		local dodge_value = tweak_data.player.damage.DODGE_INIT or 0
@@ -281,20 +281,35 @@ function PlayerDamage:damage_melee(attack_data)
 
 		dodge_value = 1 - (1 - dodge_value) * (1 - smoke_dodge)
 
-		if dodge_roll < dodge_value then
+		if dodge_roll <= dodge_value then
 			--do a push to simulate the dodge + small camera shake + show an indicator (no hit sounds or a blood effect)
 			self._unit:movement():push(attack_data.push_vel)
 			self._unit:camera():play_shaker("melee_hit", 0.2)
+			if pm:has_category_upgrade("player", "highvigour_aced") then
+				self._unit:movement():add_stamina(5)
+			end
 			pm:send_message(Message.OnPlayerDodge)
 
 			return
+		else
+			if pm:has_category_upgrade("player", "sneakier_aced") then
+				local new_roll = math.random()
+				if new_roll <= dodge_value then
+					sneakier_activated = true
+				end
+			end
 		end
 	end
 	
 	if not attack_data.is_cloaker_kick then
-		local dmg_mul = pm:damage_reduction_skill_multiplier("melee") --the vanilla function has this line, but it also uses bullet damage reduction skills due to it redirecting to damage_bullet to get results
+		log("damage was " .. tostring(attack_data.damage) .. "")
+		local dmg_mul = pm:damage_reduction_skill_multiplier("melee", sneakier_activated) --the vanilla function has this line, but it also uses bullet damage reduction skills due to it redirecting to damage_bullet to get results
+		
 		attack_data.damage = attack_data.damage * dmg_mul
+		
 		attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data) --apply damage resistances before checking for bleedout and other things
+		
+		log("damage became " .. tostring(attack_data.damage) .. "")
 	else
 		local damage = self:_max_health() / 2
 		if managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") then
@@ -1029,17 +1044,31 @@ function PlayerDamage:damage_bullet(attack_data)
 		end
 
 		dodge_value = 1 - (1 - dodge_value) * (1 - smoke_dodge)
-
-		if dodge_roll < dodge_value then
+		
+		local sneakier_activated = nil
+		
+		if dodge_roll <= dodge_value then
 			self:play_whizby(attack_data.col_ray.position)
 			pm:send_message(Message.OnPlayerDodge)
-
+			
+			if pm:has_category_upgrade("player", "highvigour_aced") then
+				self._unit:movement():add_stamina(5)
+			end
+			
 			return
+		else
+			if pm:has_category_upgrade("player", "sneakier_aced") then
+				local new_roll = math.random()
+				if new_roll <= dodge_value then
+					sneakier_activated = true
+				end
+			end
 		end
-		
-		local dmg_mul = pm:damage_reduction_skill_multiplier("bullet")
+		log("damage was " .. tostring(attack_data.damage) .. "")
+		local dmg_mul = pm:damage_reduction_skill_multiplier("bullet", sneakier_activated)
 		attack_data.damage = attack_data.damage * dmg_mul
 		attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data)
+		log("damage became " .. tostring(attack_data.damage) .. "")
 		attack_data.damage = managers.mutators:modify_value("PlayerDamage:TakeDamageBullet", attack_data.damage)
 		attack_data.damage = managers.modifiers:modify_value("PlayerDamage:TakeDamageBullet", attack_data.damage)
 

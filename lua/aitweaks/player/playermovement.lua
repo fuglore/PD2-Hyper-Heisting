@@ -87,6 +87,16 @@ function PlayerMovement:_calc_suspicion_ratio_and_sync(observer_unit, status, lo
 	end
 end
 
+function PlayerMovement:is_above_stamina_threshold()
+	local threshold = tweak_data.player.movement_state.stamina.MIN_STAMINA_THRESHOLD
+	
+	if managers.player:has_category_upgrade("player", "start_action_stam_drain_reduct") then
+		threshold = threshold * 0.5
+	end
+
+	return threshold < self._stamina
+end
+
 function PlayerMovement:on_SPOOCed(enemy_unit)
 	if managers.player:has_category_upgrade("player", "counter_strike_spooc") and self._current_state.in_melee and self._current_state:in_melee() then
 		self._current_state:discharge_melee()
