@@ -302,14 +302,14 @@ function PlayerDamage:damage_melee(attack_data)
 	end
 	
 	if not attack_data.is_cloaker_kick then
-		log("damage was " .. tostring(attack_data.damage) .. "")
+		--log("damage was " .. tostring(attack_data.damage) .. "")
 		local dmg_mul = pm:damage_reduction_skill_multiplier("melee", sneakier_activated) --the vanilla function has this line, but it also uses bullet damage reduction skills due to it redirecting to damage_bullet to get results
 		
 		attack_data.damage = attack_data.damage * dmg_mul
 		
 		attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data) --apply damage resistances before checking for bleedout and other things
 		
-		log("damage became " .. tostring(attack_data.damage) .. "")
+		--log("damage became " .. tostring(attack_data.damage) .. "")
 	else
 		local damage = self:_max_health() / 2
 		if managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") then
@@ -1064,11 +1064,11 @@ function PlayerDamage:damage_bullet(attack_data)
 				end
 			end
 		end
-		log("damage was " .. tostring(attack_data.damage) .. "")
+		--log("damage was " .. tostring(attack_data.damage) .. "")
 		local dmg_mul = pm:damage_reduction_skill_multiplier("bullet", sneakier_activated)
 		attack_data.damage = attack_data.damage * dmg_mul
 		attack_data.damage = pm:modify_value("damage_taken", attack_data.damage, attack_data)
-		log("damage became " .. tostring(attack_data.damage) .. "")
+		--log("damage became " .. tostring(attack_data.damage) .. "")
 		attack_data.damage = managers.mutators:modify_value("PlayerDamage:TakeDamageBullet", attack_data.damage)
 		attack_data.damage = managers.modifiers:modify_value("PlayerDamage:TakeDamageBullet", attack_data.damage)
 

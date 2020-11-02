@@ -31,7 +31,6 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._downcountleniency = 0
 	self._feddensity_active_t = nil
 	self._next_allowed_hunter_upd_t = nil
-	self._next_allowed_drama_reveal_t = nil
 	self._activeassaultbreak = nil
 	self._activeassaultnextbreak_t = nil
 	self._stopassaultbreak_t = nil
@@ -1274,7 +1273,7 @@ end
 		
 function GroupAIStateBesiege:_upd_assault_task()
 	
-	local low_carnage = self:_count_criminals_engaged_force(4) <= 4  
+	 
 	local task_data = self._task_data.assault
 	local assault_number_sustain_t_mul = nil
 	
@@ -1305,6 +1304,8 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 
 	local t = self._t
+	
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 
 	local force_pool = nil 
 	
@@ -1545,7 +1546,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	end
 	
-	if task_data.phase ~= "fade" and task_data.phase ~= "anticipation"  then
+	if task_data.phase ~= "fade" then
 		if task_data.use_smoke_timer < t then
 			task_data.use_smoke = true
 		end
@@ -1555,8 +1556,20 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	local enemy_count = self:_count_police_force("assault")
 	local nr_wanted = task_data.force - self:_count_police_force("assault")
-	local anticipation_count = task_data.force * 0.25
-
+	--local enemies_wanted = task_data.force * 0.25
+	
+	local low_carnage = self:_count_criminals_engaged_force(4) <= 16
+	
+	if low_carnage or self._drama_data.amount <= self._drama_data.low_p then
+		if not self._next_reveal_t or self._next_reveal_t < t then
+			for criminal_key, criminal_data in pairs(self._criminals) do
+				self:criminal_spotted(criminal_data.unit)
+			end
+			
+			self._next_reveal_t = t + 0.5
+		end
+	end
+	
 	if self._task_data.assault.target_areas and primary_target_area and nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh or self._task_data.assault.target_areas and primary_target_area and self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil
 
@@ -2369,7 +2382,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	local obstructed_area = self:_chk_group_areas_tresspassed(group)
 	local group_leader_u_key, group_leader_u_data = self._determine_group_leader(group.units)
 	local tactics_map = nil
-	local low_carnage = self:_count_criminals_engaged_force(4) <= 4
+	local low_carnage = self:_count_criminals_engaged_force(4) <= 16
 	local task_data = self._task_data.assault
 	local assaultactive = nil
 	--local can_update_chase = not self._next_allowed_chase_upd_t or self._next_allowed_chase_upd_t < self._t

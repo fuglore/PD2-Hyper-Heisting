@@ -1700,7 +1700,12 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						local up, down, left, right = unpack(weap_tweak_data.kick[self._state_data.in_steelsight and "steelsight" or self._state_data.ducking and "crouching" or "standing"])
 
 						self._camera_unit:base():recoil_kick(up * recoil_multiplier, down * recoil_multiplier, left * recoil_multiplier, right * recoil_multiplier)
-
+						
+						if not managers.groupai:state():whisper_mode() then
+							managers.groupai:state():report_aggression(self._unit)
+							managers.groupai:state():mass_identify_criminal(self._unit)
+						end
+						
 						if self._shooting_t then
 							local time_shooting = t - self._shooting_t
 							local achievement_data = tweak_data.achievement.never_let_you_go

@@ -3,6 +3,9 @@
 	<!-- imagine being me and not fucking testing anything -->
 	
 	<pre :script_path="Corepre.lua" :hook_id="entry"/>
+	<post :script_path="missionscriptelement.lua" :hook_id="managers/mission/missionscriptelement"/>
+	
+	
 	<post :script_path="tweak_data/charactertweakdata.lua" :hook_id="tweak_data/charactertweakdata"/>
 	<post :script_path="tweak_data/equipmentstweakdata.lua" :hook_id="tweak_data/equipmentstweakdata"/>
 	<post :script_path="tweak_data/groupaitweakdata.lua" :hook_id="tweak_data/groupaitweakdata"/>

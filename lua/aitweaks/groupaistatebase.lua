@@ -1,3 +1,13 @@
+local mvec3_dot = mvector3.dot
+local mvec3_set = mvector3.set
+local mvec3_sub = mvector3.subtract
+local mvec3_dis_sq = mvector3.distance_sq
+local mvec3_dir = mvector3.direction
+local mvec3_l_sq = mvector3.length_sq
+local tmp_vec1 = Vector3()
+local tmp_vec2 = Vector3()
+local ids_unit = Idstring("unit")
+
 -- Andole's dozer spawncap fix
 local origfunc3 = GroupAIStateBase._init_misc_data
 function GroupAIStateBase:_init_misc_data(...)
@@ -296,6 +306,19 @@ function GroupAIStateBase:criminal_spotted(unit)
 			reason = "criminal",
 			record = u_sighting
 		})
+	end
+	
+	if not self:whisper_mode() and self._task_data.assault and self._task_data.assault.active then
+		self:mass_identify_criminal(unit)
+	end
+end
+
+function GroupAIStateBase:mass_identify_criminal(unit)
+	local u_key = unit:key()
+	for group_id, group in pairs(self._groups) do
+		for u_key, u_data in pairs(group.units) do
+			u_data.unit:brain():clbk_group_member_attention_identified(nil, u_key)
+		end
 	end
 end
 
