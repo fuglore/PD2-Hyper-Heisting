@@ -50,18 +50,28 @@ function AmmoClip:_pickup(unit)
 					end
 				end
 			end
+			
+			if picked_up and managers.blackmarket:equipped_grenade() then
+				local id = managers.blackmarket:equipped_grenade()
+				
+				if id then
+					local chance = tweak_data:get_raw_value("blackmarket", "projectiles", id, "pickup_chance") or -1
+					--log("chance is " .. tostring(chance) .. "")
+					if not player_manager:got_max_grenades() and math.random() <= chance then
+						managers.player:add_grenade_amount(1)
+					end
+				end
+			end
+			
 		end
 
 		if picked_up then
-			self._picked_up = true
+			self._picked_up = true	
+			
 			local rand = math.random()
 
 			if rand <= CABLE_TIE_GET_CHANCE and self._ammo_box then
 				managers.player:add_cable_ties(CABLE_TIE_GET_AMOUNT)
-			end
-			
-			if not self._projectile_id and not player_manager:got_max_grenades() and rand <= 0.05 then
-				managers.player:add_grenade_amount(1)
 			end
 			
 			if not self._projectile_id and not self._weapon_category then

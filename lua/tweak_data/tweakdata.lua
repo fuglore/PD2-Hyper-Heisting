@@ -1,3 +1,5 @@
+
+
 local filters = {
 	"rvsb"
 }
@@ -8,6 +10,23 @@ for index, filter in pairs(filters) do
 		text_id = "menu_color_" .. filter
 	})
 end
+
+if not tweak_data then 
+	return 
+end
+
+--Why are projectile's damage stats handled here? I don't know! Fuck you Jules!
+tweak_data.projectiles.wpn_prj_ace.damage = 10
+tweak_data.projectiles.wpn_prj_jav.damage = 300
+tweak_data.projectiles.wpn_prj_target.damage = 40
+tweak_data.projectiles.wpn_prj_hur.damage = 60
+tweak_data.projectiles.fir_com.fire_dot_data = {
+	dot_trigger_chance = 100,
+	dot_damage = 16,
+	dot_length = 2.1,
+	dot_trigger_max_distance = 3000,
+	dot_tick_period = 0.5
+}
 
 function TweakData:_set_normal()
 	self.player:_set_normal()

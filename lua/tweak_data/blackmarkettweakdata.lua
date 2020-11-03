@@ -29,5 +29,29 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 			damage_tick_period = 0.35,
 			damage_per_tick = 1
 		}
+		
+		self.projectiles.frag.pickup_chance = 0.05
+		self.projectiles.frag_com.pickup_chance = 0.05
+		self.projectiles.dada_com.pickup_chance = 0.05
+		self.projectiles.dynamite.pickup_chance = 0.025
+		self.projectiles.molotov.pickup_chance = 0.01
+		self.projectiles.molotov.max_amount = 2
+		self.projectiles.fir_com.pickup_chance = 0.03
+		self.projectiles.fir_com.max_amount = 3
+		self.projectiles.concussion.pickup_chance = 0.1
+		self.projectiles.concussion.max_amount = 2
+		self.projectiles.wpn_prj_four.pickup_chance = 0.1
+		--self.projectiles.wpn_prj_ace.damage = 100
+		self.projectiles.wpn_prj_ace.pickup_chance = 0.1
+		--self.projectiles.wpn_prj_hur.damage = 60
+		self.projectiles.wpn_prj_hur.pickup_chance = 0.05
+		self.projectiles.wpn_prj_hur.max_amount = 5
+		--self.projectiles.wpn_prj_target.damage = 40
+		self.projectiles.wpn_prj_target.pickup_chance = 0.05
+		self.projectiles.wpn_prj_target.max_amount = 8
+		--self.projectiles.wpn_prj_jav.damage = 300
+		self.projectiles.wpn_prj_jav.pickup_chance = 0.03
+		self.projectiles.wpn_prj_jav.max_amount = 1
+		
 	end
 end)
