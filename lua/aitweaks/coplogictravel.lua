@@ -1714,6 +1714,12 @@ function CopLogicTravel._chk_request_action_walk_to_cover(data, my_data)
 	end
 end
 
+function CopLogicTravel.queue_update(data, my_data, delay)
+	delay = data.important and 0 or delay or 0.2
+
+	CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicTravel.queued_update, data, data.t + delay, data.important and true)
+end
+
 function CopLogicTravel._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, speed)
 	local can_perform_walking_action = not data.unit:movement():chk_action_forbidden("walk") and not my_data.turning or data.unit:anim_data().act_idle
 	

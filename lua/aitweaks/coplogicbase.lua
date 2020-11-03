@@ -1968,12 +1968,15 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 	end
 	
 	if data.unit then
-		if data.unit:base():has_tag("takedown") or data.important or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
-			asap = true
-			exec_t = data.t
-			
-			if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
-				exec_t = nil
+		if not managers.groupai:state():whisper_mode() then
+			if data.unit:base():has_tag("special") then
+				asap = true
+				if exec_t and exec_t > data.t then
+					exec_t = data.t
+				end
+			elseif data.is_converted or data.unit:in_slot(16) or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+				exec_t = data.t
+				asap = true
 			end
 		end
 	end
