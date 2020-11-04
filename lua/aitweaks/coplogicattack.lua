@@ -94,7 +94,7 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	local key_str = tostring(data.key)
 	my_data.detection_task_key = "CopLogicAttack._upd_enemy_detection" .. key_str
 
-	CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, data.t, data.important and true)
+	--CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, data.t, data.important and true)
 	CopLogicIdle._chk_has_old_action(data, my_data)
 
 	my_data.attitude = data.objective and data.objective.attitude or "avoid"
@@ -1706,7 +1706,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 		return
 	end
 
-	if not is_synchronous and my_data == data.internal_data then
+	if not is_synchronous and my_data == data.internal_data and my_data.detection_task_key then
 		CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, data.t + delay, data.important and true)
 	end
 

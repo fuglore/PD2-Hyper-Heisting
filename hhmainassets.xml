@@ -10,7 +10,12 @@
 	
 	<!--Base Game Asset Replacements-->
 	<material_config path="units/pd2_dlc_friend/nature/terrain/sfm_backdrop" force="true"/>
-	<texture path="units/payday2/characters/shared_textures/spook_il" force="true"/>
+	<texture path="guis/textures/characters/shared_textures/spook_il" force="true"/>
+	<texture path="units/menu/menu_scene/menu_cylinder_logo" force="true" />
+	<texture path="guis/textures/game_small_logo" force="true"/>
+	<texture path="guis/textures/menu_title_screen" force="true"/>
+	
+	
 	
 	<!-- HH SWAT TIER REWORK-->
 	<material_config path="units/payday2/characters/ene_swat_1/ene_swat_1" force="true"/>

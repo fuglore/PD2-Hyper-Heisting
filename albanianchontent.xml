@@ -2,7 +2,6 @@
 	<!--glry 2 albnia-->
 	<texture path="guis/textures/crimenet_map" force="true" />	
 	<texture path="units/menu/menu_scene/menu_background_pattern" force="true" />
-	<texture path="units/menu/menu_scene/menu_cylinder_logo" force="true" />
 	<texture path="units/menu/menu_scene/menu_cylinder_texture" force="true" />
 </table>
 	

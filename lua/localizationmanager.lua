@@ -245,7 +245,7 @@
 		["shin_toggle_hhskulldiff_desc"] = "Changes the difficulty names to suit Hyper Heisting's style!",
 		["shin_toggle_blurzonereduction_title"] = "Less Blurry Blurzones!",
 		["shin_toggle_blurzonereduction_desc"] = "Gently reduces the blurring effect of things such as the Cook Off Methlab in order to stop them from getting in the way of gameplay!",
-		["shin_toggle_highpriorityglint_title"] = "High Priority Glint!",
+		["shin_toggle_highpriorityglint_title"] = "High Priority Tells!",
 		["shin_toggle_highpriorityglint_desc"] = "Adds a glint to high priority enemies when they're about to fire, and plays a *ding!* when they're within 3 meters to let you know your goose is cooked! (Note: All of this only applies if they're targeting you!)",
 		["shin_albanian_content_enable_title"] = "enable albanian joke content",
 		["shin_enable_albanian_content_title"] = "enable albanian joke content",
