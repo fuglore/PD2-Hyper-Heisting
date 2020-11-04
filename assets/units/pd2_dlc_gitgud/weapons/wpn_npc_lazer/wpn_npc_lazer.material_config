@@ -1,14 +1,14 @@
 <materials version="3" group="wpn_npc_m4">
     <material name="mtr_m4" version="2" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM">
         <diffuse_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_df"/>
-        <bump_normal_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_nm"/>
+        <bump_normal_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_df"/>
 		<self_illumination_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_il"/>
         <variable type="scalar" name="il_bloom" value="10"/>
         <variable type="scalar" name="il_multiplier" value="sun"/>
     </material>
     <material name="weapon_lod1" version="2" render_template="generic:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM">
         <diffuse_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_df"/>
-        <bump_normal_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_nm"/>
+        <bump_normal_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_df"/>
 		<self_illumination_texture file="units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_smoke_il"/>
         <variable type="scalar" name="il_bloom" value="10"/>
         <variable type="scalar" name="il_multiplier" value="sun"/>

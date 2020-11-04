@@ -6,12 +6,13 @@
 	<dependencies>
 		
 		<depends_on bnk="soundbanks/regular_vox" />
+		<depends_on effect="effects/pd2_mod_hh/particles/character/punk_effect_void" />
 	</dependencies>
 
 	<extensions>
 		<extension name="unit_data" class="ScriptUnitData" />
 		<extension name="base" class="CopBase" >
-			<var name="_tweak_table" value="cop" />
+			<var name="_tweak_table" value="cop_moss" />
 			<var name="_default_weapon_id" value="mossberg" />
 		</extension>
 		<extension name="inventory" class="CopInventory" />

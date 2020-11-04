@@ -18,6 +18,10 @@ function CopLogicSniper._upd_enemy_detection(data)
 		if allow_trans and obj_failed then
 			wanted_state = CopLogicBase._get_logic_state_from_reaction(data)
 		end
+		
+		if wanted_state == "attack" then
+			wanted_state = "sniper"
+		end
 
 		if wanted_state and wanted_state ~= data.name then
 			if obj_failed then
@@ -35,14 +39,6 @@ function CopLogicSniper._upd_enemy_detection(data)
 	end
 
 	CopLogicSniper._upd_aim(data, my_data)
-	
-	local focus_enemy = data.attention_obj
-	
-	if Global.game_settings.one_down or managers.skirmish:is_skirmish() then
-		delay = 0
-	else
-		delay = 0.35
-	end
 
 	CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicSniper._upd_enemy_detection, data, data.t + delay)
 	CopLogicBase._report_detections(data.detected_attention_objects)

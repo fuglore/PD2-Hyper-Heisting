@@ -1,4 +1,20 @@
 <table directory="assets">
+		
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_cs_shield_c45/ene_akan_cs_shield_c45" force="true" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_cs_shield_c45/ene_akan_cs_shield_c45_husk" force="true" load="true"/>
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_shield_c45/ene_akan_cs_shield_c45" force="true" />	
+	
+	<!--Akan Shield Acc Small-->
+	<unit path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" load="false"/>
+	<model path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>
+	<object path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>
+	<cooked_physics path="units/pd2_dlc_mad/characters/ene_acc_shield_akan_shield_small/ene_acc_shield_akan_small" force="false"/>
+	
+	<!--Akan Shotgun Punk-->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870" force="true" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870_husk" force="true" load="true"/>	
+
 	<!--Light FBI Akan SMG-->
 	<unit path="units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg" load="true"/>
 	<unit path="units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg_husk" load="true"/>	
@@ -7,7 +23,57 @@
 	<object path="units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg" />
 	<model path="units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg" />	
 	<cooked_physics path="units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg"/>	
-
+	
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/head_atlas_df" force="false"/>
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/head_atlas_nm" force="false"/>
+	
+	<!--Light Akan Rifle -->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass_husk" load="true"/>		
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass" force="true"/>
+	<model path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass" force="true"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass_contour" force="true"/>
+	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/akan_light_rifle_df" force="false"/>
+	
+	<!--Light Akan Shotgunner -->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870_husk" load="true"/>		
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870" force="true"/>
+	<model path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870" force="true"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870_contour" force="true"/>
+	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870" force="true"/>
+	
+	<!--Heavy Akan Rifle -->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh_contour"/>	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh" />
+	<model path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh" />	
+	<cooked_physics path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/akan_heavy_rifle_df" force="false"/>	
+	
+	<!--Heavy Akan Shotgunner -->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh_contour"/>	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh" />
+	<model path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh" />	
+	<cooked_physics path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh"/>
+	
+	<!--Medic Rifle-->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh_husk" load="true"/>	
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh_contour"/>	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh" />
+	<model path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh" />	
+	<cooked_physics path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_body_df" />
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_head_df" />
+	
 	<!--Light SWAT Akan SMG-->
 	<unit path="units/pd2_dlc_mad/characters/ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg" load="true"/>
 	<unit path="units/pd2_dlc_mad/characters/ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg_husk" load="true"/>	
@@ -43,8 +109,87 @@
 	<object path="units/pd2_dlc_mad/characters/ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield" />
 	<model path="units/pd2_dlc_mad/characters/ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield" />	
 	<cooked_physics path="units/pd2_dlc_mad/characters/ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield"/>	
+		
+	<!--White Streak-->
+	<unit_mat path="units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_pl14" load="true"/>	
+	<cooked_physics path="units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_pl14"/>	
+	
+	<!--White Streak for Reaper Hobo Ninja-->	
+	<unit path="units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14" load="true"/>	
 
+	<!--akan/bex medic dozer-->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic_husk" load="true"/>
+	<object path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"/>
+	<model path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic_contour"/>
+	<sequence_manager path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/bulldozer_df"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/maska_df"/>
+
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/debris"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/back/back"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/chest/chest"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/neck/neck"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/plate/plate"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/stomach/stomach"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/debris/throat/throat"/>
+	
+	<!--akan mini dozer-->
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini" load="true"/>
+	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini_husk" load="true"/>
+	<object path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini"/>
+	<model path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini"/>
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini_contour"/>
+	<sequence_manager path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/maska_df"/>
+
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/debris/debris"/>
+	<unit_obj path="units/pd2_dlc_mad/characters/ene_akan_dozer_mini/debris/plate/plate"/>
+	
+	<!--K63 helmets for rifle and shotgunner heavies -->
+	<unit path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_rifle/ene_acc_helmet_k63_rifle" force="false" load="true"/>
+	<model path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_rifle/ene_acc_helmet_k63_rifle" force="false" />
+	<cooked_physics path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_rifle/ene_acc_helmet_k63_rifle" force="false" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_rifle/ene_acc_helmet_k63_rifle" force="false" />
+	<object path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_rifle/ene_acc_helmet_k63_rifle" force="false" />
+    <sequence_manager path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_rifle/ene_acc_helmet_k63_rifle" force="false" />
+	
+	<unit path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" load="true"/>
+	<model path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" />
+	<cooked_physics path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" />
+	<object path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" />
+    <sequence_manager path="units/pd2_dlc_mad/characters/ene_acc_helmet_k63_shot/ene_acc_helmet_k63_shot" force="false" />
+	
+	<!--fixed cloaker lods + nicer illum-->
+	<model path="units/pd2_dlc_mad/characters/ene_akan_fbi_spooc_asval_smg/ene_akan_fbi_spooc_asval_smg" force="true" />
+	<object path="units/pd2_dlc_mad/characters/ene_akan_fbi_spooc_asval_smg/ene_akan_fbi_spooc_asval_smg" force="true" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_spooc_asval_smg/ene_akan_fbi_spooc_asval_smg" force="true" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_fbi_spooc_asval_smg/ene_akan_fbi_spooc_asval_smg_contour" force="true" />\
+	
+	<!--Vanilla Texture Replacements-->
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/ene_soldier_akan_head_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/ene_soldier_akan_3_nm" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/spook_heavy_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/akan_light_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/akan_heavy_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_body_df" force="true"/>
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_head_df" force="true"/>
+	
+	<!-- new textures -->
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/k63_nm" />
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/k63_shot_df" />
+	<texture path="units/pd2_dlc_mad/characters/shared_textures/k63_rifle_df" />	
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/fbi_akmsu_df" />	
+	<texture path="units/pd2_mod_psc/characters/ene_murky_heavy_scar/murky_glass_op" />	
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/reaper_heavy_glass_df" />	
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/tank_glass_df" />
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/dark_glass_op" />
+	<texture path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/glass_reflection" />	
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/fbininja_c45_df" />	
+	<df_nm path="units/pd2_dlc_mad/characters/shared_textures/fbininja_c45_head" />		
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/fbininja_m4_df" />	
 </table>

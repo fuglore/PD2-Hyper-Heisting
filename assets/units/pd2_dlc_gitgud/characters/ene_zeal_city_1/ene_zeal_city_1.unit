@@ -12,6 +12,7 @@
 		<extension name="base" class="CopBase" >
 			<var name="_tweak_table" value="swat" />
 			<var name="_default_weapon_id" value="s553_zeal" />
+			<var name="_melee_weapon_table" value="glowstick" />
 		</extension>
 		<extension name="inventory" class="CopInventory" />
 		<extension name="brain" class="CopBrain" />

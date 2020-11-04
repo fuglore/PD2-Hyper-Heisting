@@ -1,0 +1,115 @@
+<table name="skm_friend_hh">
+	<level ai_group_type="america" briefing_dialog="Play_loc_skm_brf" cube="cube_apply_heist_bank" group_ai_state="skirmish" id="skm_friend_hh" intro_event="Play_loc_skm_intro" name_id="heist_friend_hl" narrator="locke" wave_count="9">
+		<add file="levels/skm_friend_hh/add.xml"/>
+		<assets/>
+		<include directory="levels/skm_friend_hh">
+			<file file="world.world" type="binary"/>
+			<file file="continents.continents" type="binary"/>
+			<file file="mission.mission" type="binary"/>
+			<file file="nav_manager_data.nav_data" type="binary"/>
+			<file file="world_sounds.world_sounds" type="binary"/>
+			<file file="world_cameras.world_cameras" type="binary"/>
+			<file file="collision/collision.continent" type="binary"/>
+			<file file="collision/collision.mission" type="binary"/>
+			<file file="art_upper_courtyard/art_upper_courtyard.continent" type="binary"/>
+			<file file="art_upper_courtyard/art_upper_courtyard.mission" type="binary"/>
+			<file file="art_main_yard/art_main_yard.continent" type="binary"/>
+			<file file="art_main_yard/art_main_yard.mission" type="binary"/>
+			<file file="editor_only/editor_only.continent" type="binary"/>
+			<file file="editor_only/editor_only.mission" type="binary"/>
+			<file file="art_patio/art_patio.continent" type="binary"/>
+			<file file="art_patio/art_patio.mission" type="binary"/>
+			<file file="art_lower_courtyard/art_lower_courtyard.continent" type="binary"/>
+			<file file="art_lower_courtyard/art_lower_courtyard.mission" type="binary"/>
+			<file file="world/world.continent" type="binary"/>
+			<file file="world/world.mission" type="binary"/>
+			<file file="art_bo_cheng/art_bo_cheng.continent" type="binary"/>
+			<file file="art_bo_cheng/art_bo_cheng.mission" type="binary"/>
+			<file file="art_house_exterior/art_house_exterior.continent" type="binary"/>
+			<file file="art_house_exterior/art_house_exterior.mission" type="binary"/>
+			<file file="cover_data.cover_data" type="binary"/>
+			<file file="environments/scarfacenight.environment" type="custom_xml"/>
+		</include>
+		<outro_event>
+			<value_node value="Play_loc_skm_end_win"/>
+			<value_node value="Play_loc_skm_end_fail"/>
+		</outro_event>
+		<packages>
+			<value_node value="packages/dlcs/skm/job_skm"/>
+			<value_node value="levels/instances/shared/obj_skm/world"/>
+			<value_node value="levels/instances/shared/obj_skm/world/world"/>
+			<value_node value="levels/instances/shared/obj_skm/world_sounds"/>
+			<value_node value="levels/instances/shared/skm_negotiator/world_sounds"/>
+			<value_node value="levels/instances/shared/skm_negotiator/world"/>
+			<value_node value="levels/instances/shared/skm_negotiator/world/world"/>
+			<value_node value="levels/narratives/h_alex_must_die/stage_1/world_sounds"/>
+			<value_node value="packages/lvl_friend"/>
+			<value_node value="levels/narratives/butcher/friend/world"/>
+			<value_node value="levels/narratives/butcher/friend/world_sounds"/>
+			<value_node value="levels/narratives/butcher/friend/collision/collision"/>
+			<value_node value="levels/narratives/butcher/friend/art_upper_courtyard/art_upper_courtyard"/>
+			<value_node value="levels/narratives/butcher/friend/art_main_yard/art_main_yard"/>
+			<value_node value="levels/narratives/butcher/friend/editor_only/editor_only"/>
+			<value_node value="levels/narratives/butcher/friend/art_patio/art_patio"/>
+			<value_node value="levels/narratives/butcher/friend/art_lower_courtyard/art_lower_courtyard"/>
+			<value_node value="levels/narratives/butcher/friend/world/world"/>
+			<value_node value="levels/narratives/butcher/friend/art_bo_cheng/art_bo_cheng"/>
+			<value_node value="levels/narratives/butcher/friend/art_house_exterior/art_house_exterior"/>
+			<value_node value="levels/instances/unique/mus_helicopter/world/world"/>
+			<value_node value="levels/instances/unique/brb/brb_sniper_spawns/world/world"/>
+			<value_node value="levels/instances/unique/chew/chew_swat_van/world/world"/>
+		</packages>
+		<script_data_mods directory="scriptdata">
+			<mod replacement="objectives.objective" replacement_type="custom_xml" target_ext="objective" target_path="gamedata/objectives">
+				<options merge_mode="add" mode="add"/>
+			</mod>
+		</script_data_mods>
+	</level>
+	<narrative briefing_event="pln_fwb_cbf_01" contact="skirmish" icon="guis/dlcs/bro/textures/pd2/crimenet/mansion" id="skm_friend_hh" jc="60" load_screen="guis/dlcs/pic/textures/loading/job_mansion" max_mission_xp="135900" min_mission_xp="8000" name_id="heist_friend" region="street">
+		<chain>
+			<table level_id="skm_friend_hh" type="d" type_id="heist_type_assault"/>
+		</chain>
+		<contract_cost>
+			<value_node value="16000"/>
+			<value_node value="32000"/>
+			<value_node value="80000"/>
+			<value_node value="160000"/>
+			<value_node value="200000"/>
+			<value_node value="200000"/>
+			<value_node value="200000"/>
+		</contract_cost>
+		<crimenet_callouts>
+			<value_node value="Play_loc_tag_cnc_01"/>
+		</crimenet_callouts>
+		<crimenet_videos>
+			<value_node value="codex/locke1"/>
+		</crimenet_videos>
+		<date_added>
+			<value_node value="2020"/>
+			<value_node value="7"/>
+			<value_node value="1"/>
+		</date_added>
+		<debrief_event>
+			<value_node value="Play_btc_fri_end_a"/>
+			<value_node value="Play_btc_fri_end_b"/>
+		</debrief_event>
+		<experience_mul>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="3"/>
+			<value_node value="3"/>
+			<value_node value="3"/>
+		</experience_mul>
+		<payout>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+		</payout>
+	</narrative>
+</table>

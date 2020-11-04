@@ -1,13 +1,16 @@
-function HuskCopDamage:damage_bullet(attack_data)
-	if self._dead or self._invulnerable then
-		return
-	end
+local old_death = HuskCopDamage.die
+function HuskCopDamage:die(variant)
+    old_death(self, variant)
 
-	local attacker_unit = attack_data.attacker_unit
-	local attacker_base = alive(attacker_unit) and attacker_unit.base and attacker_unit:base()
-	if attacker_base.is_local_player then
-		return HuskCopDamage.super.damage_bullet(self, attack_data)
-	end
-
-	return self:is_friendly_fire(attacker_unit) and 'friendly_fire' or nil
+    if self._unit:base():char_tweak().die_sound_event then
+        self._unit:sound():play(self._unit:base():char_tweak().die_sound_event, nil, nil)
+    else
+        if self._unit:base():char_tweak()["custom_voicework"] then
+            local voicelines = _G.voiceline_framework.BufferedSounds[self._unit:base():char_tweak().custom_voicework]
+            if voicelines and voicelines["death"] then
+                local line_to_use = voicelines.death[math.random(#voicelines.death)]
+                self._unit:base():play_voiceline(line_to_use, true)
+            end
+        end
+    end
 end

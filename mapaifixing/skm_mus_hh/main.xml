@@ -1,0 +1,95 @@
+<table name="skm_mus_hh">
+	<level ai_group_type="america" briefing_dialog="Play_loc_skm_brf" cube="cube_apply_heist_bank" group_ai_state="skirmish" id="skm_mus_hh" intro_event="Play_loc_skm_intro" music_ext="heist" narrator="locke" wave_count="9" name_id="heist_mus_hl">
+		<add file="levels/skm_mus_hh/add.xml"/>
+		<assets/>
+		<include directory="levels/skm_mus_hh">
+			<file file="world.world" type="binary"/>
+			<file file="continents.continents" type="binary"/>
+			<file file="mission.mission" type="binary"/>
+			<file file="nav_manager_data.nav_data" type="binary"/>
+			<file file="world_sounds.world_sounds" type="binary"/>
+			<file file="world_cameras.world_cameras" type="binary"/>
+			<file file="collision/collision.continent" type="binary"/>
+			<file file="collision/collision.mission" type="binary"/>
+			<file file="editor_only/editor_only.continent" type="binary"/>
+			<file file="editor_only/editor_only.mission" type="binary"/>
+			<file file="new_props/new_props.continent" type="binary"/>
+			<file file="new_props/new_props.mission" type="binary"/>
+			<file file="lighting/lighting.continent" type="binary"/>
+			<file file="lighting/lighting.mission" type="binary"/>
+			<file file="world/world.continent" type="binary"/>
+			<file file="world/world.mission" type="binary"/>
+			<file file="art/art.continent" type="binary"/>
+			<file file="art/art.mission" type="binary"/>
+			<file file="cover_data.cover_data" type="binary"/>
+			<file file="environments/pd2_indiana_big_room_hh.environment" type="custom_xml"/>
+		</include>
+		<outro_event>
+			<value_node value="Play_loc_skm_end_win"/>
+			<value_node value="Play_loc_skm_end_fail"/>
+		</outro_event>
+		<packages>
+			<value_node value="packages/dlcs/skm/job_skm"/>
+			<value_node value="levels/narratives/skm/skm_mus/world"/>
+			<value_node value="levels/narratives/skm/skm_mus/world_sounds"/>
+			<value_node value="levels/narratives/skm/skm_mus/collision/collision"/>
+			<value_node value="levels/narratives/skm/skm_mus/world/world"/>
+			<value_node value="levels/narratives/skm/skm_mus/new_props/new_props"/>
+			<value_node value="levels/narratives/skm/skm_mus/lighting/lighting"/>
+			<value_node value="levels/narratives/skm/skm_mus/art/art"/>
+			<value_node value="levels/narratives/skm/skm_mus/editor_only/editor_only"/>
+		</packages>
+		<script_data_mods directory="scriptdata">
+			<mod replacement="objectives.objective" replacement_type="custom_xml" target_ext="objective" target_path="gamedata/objectives">
+				<options merge_mode="add" mode="add"/>
+			</mod>
+		</script_data_mods>
+	</level>
+	<narrative briefing_event="dentist_hd1_cbf_01" contact="skirmish" icon="guis/dlcs/bro/textures/pd2/crimenet/museum" id="skm_mus" jc="50" max_mission_xp="135900" min_mission_xp="8000" region="street" name_id="heist_mus">
+		<chain>
+			<table level_id="skm_mus_hh" type="d" type_id="heist_type_assault"/>
+		</chain>
+		<contract_cost>
+			<value_node value="16000"/>
+			<value_node value="32000"/>
+			<value_node value="80000"/>
+			<value_node value="160000"/>
+			<value_node value="200000"/>
+			<value_node value="200000"/>
+			<value_node value="200000"/>
+		</contract_cost>
+		<crimenet_callouts>
+			<value_node value="Play_loc_tag_cnc_01"/>
+		</crimenet_callouts>
+		<crimenet_videos>
+			<value_node value="codex/locke1"/>
+		</crimenet_videos>
+		<date_added>
+			<value_node value="2018"/>
+			<value_node value="4"/>
+			<value_node value="23"/>
+		</date_added>
+		<debrief_event>
+			<value_node value="dentist_hd1_debrief_01"/>
+			<value_node value="dentist_hd1_debrief_02"/>
+		</debrief_event>
+		<experience_mul>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="3"/>
+			<value_node value="3"/>
+			<value_node value="3"/>
+		</experience_mul>
+		<payout>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+			<value_node value="0"/>
+		</payout>
+	</narrative>
+</table>

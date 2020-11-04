@@ -1,0 +1,84 @@
+<table>
+	<editor_groups/>
+	<instances/>
+	<statics>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_002" position="103 309 0" rotation="0 0 0 -1" unit_id="600000"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_003" position="31 249 0" rotation="0 0 -0.707107 -0.707107" unit_id="600001"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_004" position="-38.6747 324.072 0" rotation="0 0 0.165047 -0.986286" unit_id="600002"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_005" position="38.8764 372.41 0" rotation="0 0 -0.694659 -0.71934" unit_id="600003"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_001" position="3570 1097 0.38195" rotation="0 0 0 -1" unit_id="600004"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_006" position="3624 1014 0.38195" rotation="0 0 -0.707107 -0.707107" unit_id="600005"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_007" position="3701.06 1092.12 -0.618057" rotation="0 0 0.999962 0.00872642" unit_id="600006"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_008" position="3632.79 1192.33 -0.618057" rotation="0 0 0.71325 -0.700909" unit_id="600007"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_009" position="3406 1352 0.38195" rotation="0 0 0 -1" unit_id="600008"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_010" position="3349.21 1407.23 0.38195" rotation="0 0 -0.67559 -0.737277" unit_id="600009"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_011" position="3079 1183 0.38195" rotation="0 0 0 -1" unit_id="600010"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_012" position="3076 1037 0.38195" rotation="0 0 -0.707107 -0.707107" unit_id="600011"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_013" position="3026.19 1102.34 0.38195" rotation="0 0 0.052336 -0.99863" unit_id="600012"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_chair_01" name_id="nmh_mullplan_chair_01_014" position="3194.5 1107.26 0.38195" rotation="0 0 0.0348995 -0.999391" unit_id="600013"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_02" name_id="nmh_mullplan_small_light_02_002" position="22 318 0" rotation="0 0 0 -1" unit_id="600014"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_02" name_id="nmh_mullplan_small_light_02_001" position="203 12 0" rotation="0 0 0 -1" unit_id="600015"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_02" name_id="nmh_mullplan_small_light_02_003" position="177 -389 0" rotation="0 0 0 -1" unit_id="600016"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_02" name_id="nmh_mullplan_small_light_02_004" position="316 442 0" rotation="0 0 0 -1" unit_id="600017"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_02" name_id="nmh_mullplan_small_light_02_005" position="-26 1275 0" rotation="0 0 0 -1" unit_id="600018"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_02" name_id="nmh_mullplan_small_light_02_006" position="-26 1620 0" rotation="0 0 0 -1" unit_id="600019"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_01" name_id="nmh_mullplan_small_light_01_001" position="736 -100 0" rotation="0 0 -0.707107 -0.707107" unit_id="600020"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_01" name_id="nmh_mullplan_small_light_01_002" position="736 168 0" rotation="0 0 -0.707107 -0.707107" unit_id="600021"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_01" name_id="nmh_mullplan_small_light_01_003" position="582 457 0" rotation="0 0 1 -1.19209e-007" unit_id="600022"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/mullplan_vehicle_small_light_02" name_id="mullplan_vehicle_small_light_02_001" position="719.816 362.034 0" rotation="0 0 -0.848048 -0.529919" unit_id="600023"/>
+		</table>
+		<table>
+			<unit_data continent="art_light" name="units/payday2/props/shadow_mullplan/nmh_mullplan_small_light_01" name_id="nmh_mullplan_small_light_01_004" position="315 -55 0" rotation="0 0 -0.707107 -0.707107" unit_id="600024"/>
+		</table>
+	</statics>
+	<values>
+		<workviews/>
+	</values>
+</table>

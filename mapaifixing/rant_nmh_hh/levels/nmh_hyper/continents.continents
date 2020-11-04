@@ -1,0 +1,7 @@
+<table>
+	<art_light base_id="600000" editor_only="false" enabled="true" enabled_in_simulation="true" locked="false" name="art_light" visible="false"/>
+	<editor_only base_id="400000" editor_only="false" enabled="true" enabled_in_simulation="true" locked="false" name="editor_only" visible="true"/>
+	<env base_id="200000" editor_only="false" enabled="true" enabled_in_simulation="true" locked="false" name="env" visible="false"/>
+	<lights base_id="300000" editor_only="false" enabled="true" enabled_in_simulation="true" locked="false" name="lights" visible="true"/>
+	<world base_id="100000" editor_only="false" enabled="true" enabled_in_simulation="true" locked="false" name="world" visible="true"/>
+</table>

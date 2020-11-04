@@ -11,7 +11,7 @@
 	<extensions>
 		<extension name="unit_data" class="ScriptUnitData" />
 		<extension name="base" class="HuskCopBase" >
-			<var name="_tweak_table" value="cop" />
+			<var name="_tweak_table" value="cop_moss" />
 			<var name="_default_weapon_id" value="mossberg" />
 		</extension>
 		<extension name="inventory" class="HuskCopInventory" />

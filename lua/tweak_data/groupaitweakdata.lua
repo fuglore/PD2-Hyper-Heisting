@@ -6,7 +6,7 @@ function GroupAITweakData:init(tweak_data)
 
 	--print("[GroupAITweakData:init] difficulty", difficulty, "difficulty_index", difficulty_index)
 
-	self.ai_tick_rate =  0.012499990
+	self.ai_tick_rate = 0.016666666666666666
 
 	self:_read_mission_preset(tweak_data)
 	self:_create_table_structure()
@@ -43,11 +43,19 @@ function GroupAITweakData:_init_chatter_data()
 		group_min = 0,
 		queue = "g90"
 	}
+	self.enemy_chatter.lotusapproach = {
+		radius = 4000,
+		max_nr = 40,
+		duration = {1, 1},
+		interval = {1, 4},
+		group_min = 0,
+		queue = "ch3"
+	}
 	self.enemy_chatter.aggressivecontrolsurprised1 = {
 		radius = 2000,
 	    max_nr = 4,
 	    duration = {0.5, 0.5},
-	    interval = {0.75, 1.5},
+	    interval = {1.75, 2.5},
 	    group_min = 0,
 	    queue = "lk3b"
 	}
@@ -55,7 +63,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 4,
 	    duration = {0.5, 0.5},
-	    interval = {0.75, 1.5},
+	    interval = {1.75, 2.5},
 	    group_min = 0,
 	    queue = "hlp"
 	}
@@ -63,7 +71,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {0.5, 0.5},
-	    interval = {1, 2},
+	    interval = {1.75, 2.5},
 	    group_min = 0,
 	    queue = "c01"
 	}
@@ -111,9 +119,17 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 		max_nr = 5,
 		duration = {2, 4},
-		interval = {0.5, 3},
+		interval = {2, 3},
 		group_min = 0,
 		queue = "rdy"
+	}
+	self.enemy_chatter.cuffed = {
+		radius = 1000,
+	    max_nr = 1,
+	    duration = {0.5, 0.5},
+	    interval = {2, 6},
+	    group_min = 0,
+	    queue = "hr01 "
 	}
 	self.enemy_chatter.contact = {
 		radius = 2000,
@@ -127,7 +143,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 1500,
 		max_nr = 4,
 		duration = {1, 1},
-		interval = {2, 4},
+		interval = {2, 2},
 		group_min = 0,
 		queue = "c01x_plu"
 	}
@@ -142,8 +158,8 @@ function GroupAITweakData:_init_chatter_data()
 	self.enemy_chatter.controlpanic = {
 		radius = 2000,
 	    max_nr = 40,
-	    duration = {1, 1},
-	    interval = {2, 4.5},
+	    duration = {3, 6},
+	    interval = {6, 8},
 	    group_min = 1,
 	    queue = "g90"
 	}
@@ -151,7 +167,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 10,
 	    duration = {1, 1},
-	    interval = {10, 20},
+	    interval = {8, 16},
 	    group_min = 1,
 	    queue = "e03"
 	}
@@ -159,7 +175,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 10,
 	    duration = {1, 1},
-	    interval = {10, 20},
+	    interval = {8, 16},
 	    group_min = 1,
 	    queue = "e01"
 	}
@@ -167,7 +183,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 10,
 	    duration = {1, 1},
-	    interval = {10, 20},
+	    interval = {8, 16},
 	    group_min = 1,
 	    queue = "e04"
 	}
@@ -175,15 +191,23 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 10,
 	    duration = {1, 1},
-	    interval = {10, 20},
+	    interval = {8, 16},
 	    group_min = 1,
 	    queue = "l01"
+	}
+	self.enemy_chatter.sabotagehostages = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {8, 16},
+	    group_min = 1,
+	    queue = "civ"
 	}
 	self.enemy_chatter.hostagepanic1 = {
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {1, 1},
-	    interval = {2, 4.5},
+	    interval = {8, 12},
 	    group_min = 1,
 	    queue = "p01"
 	}
@@ -191,15 +215,31 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 40,
 	    duration = {1, 1},
-	    interval = {2, 4.5},
+	    interval = {8, 12},
 	    group_min = 1,
-	    queue = "p01"
+	    queue = "p02"
+	}
+	self.enemy_chatter.hostagepanic3 = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {8, 12},
+	    group_min = 1,
+	    queue = "p03"
+	}
+	self.enemy_chatter.civilianpanic = {
+		radius = 2000,
+	    max_nr = 40,
+	    duration = {1, 1},
+	    interval = {6, 8},
+	    group_min = 1,
+	    queue = "bak"
 	}
 	self.enemy_chatter.clear = {
 		radius = 2000,
 	    max_nr = 1,
 	    duration = {60, 60},
-	    interval = {4, 5},
+	    interval = {3, 8},
 	    group_min = 1,
 	    queue = "clr"
 	}
@@ -429,77 +469,94 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		acrobatic = true,
 		walk = true
 	}
-	if Global.game_settings and Global.game_settings.use_intense_AI then -- spicy
+	
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then -- spicy
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
 			taser = 3,
-			tank = 1,
-			spooc = 3
+			tank = 2,
+			sniper = 3,						
+			spooc = 3,
+			ninja = 12
 		}
 	elseif difficulty_index <= 2 then
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
 			shield = 4,
 			medic = 0,
-			taser = 2,
+			taser = 1,
 			tank = 0,
+			sniper = 3,			
 			spooc = 0
 		}
 	elseif difficulty_index == 3 then
 		self.special_unit_spawn_limits = { --hard escalates this, enables medics to keep tasers alive, adds a rare occasional dozer
 			shield = 4,
 			medic = 3,
-			taser = 2,
+			taser = 1,
 			tank = 1,
+			sniper = 3,			
 			spooc = 0
 		}
 	elseif difficulty_index == 4 then
 		self.special_unit_spawn_limits = { --very hard enables satan himself to come visit you, increases max medics and shields
 			shield = 6,
 			medic = 4,
-			taser = 2,
+			taser = 1,
 			tank = 1,
-			spooc = 1
+			sniper = 3,			
+			spooc = 1,
+			ninja = 4
 		}
 	elseif difficulty_index == 5 then
 		self.special_unit_spawn_limits = { --overkill enables two spoocs, adds another taser, escalate the game meaningfully every difficulty by increasing complexity
 			shield = 6,
 			medic = 4,
-			taser = 3,
-			tank = 1,
-			spooc = 2
+			taser = 1,
+			sniper = 3,						
+			tank = 2,
+			spooc = 1,
+			ninja = 4
 		}
 	elseif difficulty_index == 6 then
 		self.special_unit_spawn_limits = { --begin coordinated spawngroups to heighten gameplay complexity, start pushing the boundaries, no big special limit change here outside of the cloakers, medics and shields, its fine though
 			shield = 8,
 			medic = 6,
-			taser = 3,
-			tank = 1,
-			spooc = 3
+			taser = 1,
+			tank = 2,
+			sniper = 3,						
+			spooc = 1,
+			ninja = 6
 		}
 	elseif difficulty_index == 7 then
 		self.special_unit_spawn_limits = { --setting medic limit to six allows for survivability within common enemy spawngroups since special enemies are now paired commonly with medics to keep them alive consistently
 			shield = 8,
 			medic = 6,
-			taser = 3,
-			tank = 1,
-			spooc = 3
+			taser = 2,
+			sniper = 3,						
+			tank = 2,
+			spooc = 2,
+			ninja = 8
 		}
 	elseif difficulty_index == 8 then
 		self.special_unit_spawn_limits = { --game reaches boiling point, 2 dozers, 4-5 tasers, 8-10 medics, 3-4 cloakers and 8-10 shields.
 			shield = 8,
 			medic = 8,
 			taser = 3,
-			tank = 1,
-			spooc = 3
+			tank = 2,
+			sniper = 3,						
+			spooc = 3,
+			ninja = 12
 		}
 	else
 		self.special_unit_spawn_limits = {
 			shield = 8,
 			medic = 8,
 			taser = 3,
-			tank = 1,
-			spooc = 3
+			tank = 2,
+			sniper = 3,						
+			spooc = 3,
+			ninja = 12
 		}
 	end
 
@@ -519,10 +576,13 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_spook_hvh_1/ene_spook_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_cloaker_policia_federale/ene_swat_cloaker_policia_federale")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_cloaker/ene_zeal_cloaker")
 				}
 			},
@@ -542,16 +602,125 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_spook_hvh_1/ene_spook_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_cloaker_policia_federale/ene_swat_cloaker_policia_federale")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker"),
 					Idstring("units/payday2/characters/ene_spook_1/ene_spook_1")
 				}
 			},
 			access = access_type_all
 		}
 	end
+
+	if difficulty_index < 4 then
+		self.unit_categories.sniper_ass = { --babe it's 4 pm, time for your brain flattening!
+			special_type = "sniper",  --yes honey...
+			unit_types = {
+				america = {
+					Idstring("units/payday2/characters/ene_sniper_1/ene_sniper_1")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper")
+				},
+				shared = {
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
+					Idstring("units/payday2/characters/ene_sniper_1/ene_sniper_1")					
+				}
+			},
+			access = access_type_all
+		}
+	elseif difficulty_index == 5 then
+		self.unit_categories.sniper_ass = {
+			special_type = "sniper",
+			unit_types = {
+				america = {
+					Idstring("units/payday2/characters/ene_sniper_2/ene_sniper_2")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper")
+				},
+				shared = {
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
+					Idstring("units/payday2/characters/ene_sniper_2/ene_sniper_2")					
+				}
+			},
+			access = access_type_all
+		}
+	elseif difficulty_index <= 7 then
+		self.unit_categories.sniper_ass = {
+			special_type = "sniper",
+			unit_types = {
+				america = {
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper")
+				},
+				shared = {
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_sniper/ene_gensec_sniper")					
+				}
+			},
+			access = access_type_all
+		}
+	else 
+		self.unit_categories.sniper_ass = {
+			special_type = "sniper",
+			unit_types = {
+				america = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper")
+				},
+				russia = {
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp")
+				},
+				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2")
+				},
+				murkywater = {
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper")
+				},
+				shared = {
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper")					
+				}
+			},
+			access = access_type_all
+		}	
+	end	
 	
 	if difficulty_index <= 3 then
 		self.unit_categories.punk_group = {
@@ -568,17 +737,30 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				}
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")					
+				}				
 			},
-			access = access_type_walk_only
-		}
+			access = access_type_all
+		}		
 	elseif difficulty_index == 4 or difficulty_index == 5 then
 		self.unit_categories.punk_group = {
 			unit_types = {
@@ -594,18 +776,30 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				}
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+					Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+					Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
-		
 	elseif difficulty_index == 6 or difficulty_index == 7 then
 		self.unit_categories.punk_group = {
 			unit_types = {
@@ -621,16 +815,29 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				}
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
+				},
+				shared = {
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_mp5/ene_gensec_punk_mp5"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_moss/ene_gensec_punk_moss"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_punk_bronco/ene_gensec_punk_bronco")					
+				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.punk_group = {
@@ -647,19 +854,32 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
-				}
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_02/ene_policia_02"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"),
+					Idstring("units/pd2_dlc_bex/characters/ene_policia_03/ene_policia_03")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_mp5/ene_zeal_punk_mp5"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_moss/ene_zeal_punk_moss"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_punk_bronco/ene_zeal_punk_bronco"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco")
+				}								
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
-	
+
 	if difficulty_index < 6 then
 		self.unit_categories.FBI_LHmix = {
 			unit_types = {
@@ -669,7 +889,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
@@ -679,10 +899,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_fbi/ene_swat_policia_federale_fbi"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
+				},
 				shared = {
 					Idstring("units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"),
 					Idstring("units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"),
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),
+					Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
@@ -700,8 +924,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
@@ -710,6 +934,10 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_fbi/ene_swat_policia_federale_fbi"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),					
@@ -730,8 +958,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
@@ -741,13 +969,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_fbi/ene_swat_policia_federale_fbi"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
+				},
 				shared = {
-					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),					
 					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),
-					Idstring("units/payday2/characters/ene_city_swat_3/ene_city_swat_3"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+					Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),					
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				}
 			},
 			access = access_type_all
@@ -760,8 +990,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/ene_zeal_swat_heavy_hh")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
@@ -771,13 +1001,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_fbi/ene_swat_policia_federale_fbi"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
+				},
 				shared = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/ene_zeal_swat_heavy_hh"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
 				}
 			},
 			access = access_type_all
@@ -798,15 +1030,31 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			zombie = {
 				Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_1/ene_cop_hvh_1"),
-				Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_3/ene_cop_hvh_3"),
+				Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss"),
 				Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_4/ene_cop_hvh_4")
 			},
+			federales = {
+				Idstring("units/payday2/characters/ene_cop_1/ene_cop_1"),
+				Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+				Idstring("units/payday2/characters/ene_cop_4/ene_cop_4")
+			},
 			murkywater = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")
-			}
+				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+				Idstring("units/pd2_mod_psc/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")				
+			},
+			shared = {
+				Idstring("units/payday2/characters/ene_cop_1/ene_cop_1"),
+				Idstring("units/payday2/characters/ene_cop_3/ene_cop_3"),
+				Idstring("units/payday2/characters/ene_cop_4/ene_cop_4"),			
+				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45"), --PLACEHOLDER BEATCOP
+				Idstring("units/pd2_mod_psc/characters/ene_murky_punk_mp5/ene_murky_punk_mp5"),
+				Idstring("units/pd2_mod_psc/characters/ene_murkywater_light_r870/ene_murkywater_light_r870")				
+			}			
 		},
-		access = access_type_walk_only
+		access = access_type_all
 	}
+	
 	self.unit_categories.CS_cop_stealth_MP5 = {
 		unit_types = {
 			america = {
@@ -819,10 +1067,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_2/ene_cop_hvh_2")
 			},
 			murkywater = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light")
-			}
+				Idstring("units/pd2_mod_psc/characters/ene_murkywater_light/ene_murkywater_light")
+			},
+			federales = {
+				Idstring("units/payday2/characters/ene_cop_2/ene_cop_2")
+			},
+			shared = {
+				Idstring("units/payday2/characters/ene_cop_2/ene_cop_2"),
+				Idstring("units/pd2_mod_psc/characters/ene_murkywater_light/ene_murkywater_light")				
+			}			
 		},
-		access = access_type_walk_only
+		access = access_type_all
 	}
 
 	if difficulty_index == 8 then
@@ -842,13 +1097,18 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3")
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")					
 				}
 			},
 			access = access_type_all
@@ -866,7 +1126,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
-				}
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh")
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_swat_2/ene_swat_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")					
+				}				
 			},
 			access = access_type_all
 		}
@@ -879,27 +1146,32 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_swat_3/ene_swat_3")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_ak47_ass/ene_akan_cs_swat_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_swat_ak47_ass/ene_akan_cs_swat_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_swat_akmsu_smg/ene_akan_hyper_swat_akmsu_smg")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_swat_hvh_1/ene_swat_hvh_1"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_5/ene_cop_hvh_5")				
+					Idstring("units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3")				
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump"),
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
 					Idstring("units/payday2/characters/ene_swat_1/ene_swat_1"),
-					Idstring("units/payday2/characters/ene_cop_3/ene_cop_5"),
+					Idstring("units/payday2/characters/ene_swat_3/ene_swat_3"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				}	
 			},
 			access = access_type_all
@@ -918,9 +1190,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"),
-					Idstring("units/payday2/characters/ene_swat_2/ene_swat_2")
+					Idstring("units/payday2/characters/ene_swat_2/ene_swat_2"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
 				}
 			},
 			access = access_type_all
@@ -941,14 +1216,21 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
-				}
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
+				}				
 			},
 			access = access_type_all
 		}
 		self.unit_categories.CS_heavy_R870 = {
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870")
+					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870") --what
 				},
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_heavy_r870/ene_akan_cs_heavy_r870")
@@ -958,7 +1240,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870")
-				}
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870")
+				}				
 			},
 			access = access_type_all
 		}
@@ -975,9 +1264,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
-				}
+				},
+				federales = {				
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale")
+				},
+				shared = {		
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")		
+				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.CS_heavy_M4 = {
@@ -994,9 +1290,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle"),
-					Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1")
+					Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
 				}
 			},
 			access = access_type_all
@@ -1015,9 +1314,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_r870/ene_swat_heavy_policia_federale_r870")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870"),
-					Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870")
+					Idstring("units/payday2/characters/ene_swat_heavy_r870/ene_swat_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_r870/ene_murky_NH_r870")
 				}
 			},
 			access = access_type_all
@@ -1036,12 +1338,15 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale/ene_swat_heavy_policia_federale")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle"),
-					Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1")
+					Idstring("units/payday2/characters/ene_swat_heavy_1/ene_swat_heavy_1"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_NH_rifle/ene_murky_NH_rifle")					
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 
@@ -1059,11 +1364,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_tazer_policia_federale/ene_swat_tazer_policia_federale")
 				},
 				shared = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer")
 				}
 			},
 			access = access_type_all
@@ -1082,11 +1390,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_tazer_hvh_1/ene_tazer_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_tazer_policia_federale/ene_swat_tazer_policia_federale")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_tazer_1/ene_tazer_1"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer")
 				}
 			},
 			access = access_type_all
@@ -1107,13 +1418,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_shield_hvh_2/ene_shield_hvh_2")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/ene_zeal_swat_shield_hh"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.CS_shield = {
@@ -1129,14 +1444,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_shield_hvh_2/ene_shield_hvh_2")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_c45/ene_swat_shield_policia_federale_c45")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_shield_2/ene_shield_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 
@@ -1151,86 +1469,96 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass")
 			},
 			zombie = {
-				Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1"),
-				Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_2/ene_fbi_hvh_2")
+				Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"),
+				Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4")
 			},
 			murkywater = {
-				Idstring("units/pd2_dlc_bph/characters/ene_murkywater_light_fbi/ene_murkywater_light_fbi")
-			}
+				Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")				
+			},
+			federales = {
+				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+				Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2")
+			},
+			shared = {
+				Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+				Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
+				Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")				
+			}			
 		},
 		access = access_type_all
 	}
 	
 	if difficulty_index < 6 then
 		self.unit_categories.FBI_suit_M4_MP5 = {
+			special_type = "ninja",
 			unit_types = {
 				america = {
 					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
-					Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2"),
-					Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3")
+					Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_2/ene_fbi_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"),
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"),
+					Idstring("units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
 					Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2"),
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
 				}
 			},
 			access = access_type_all
 		}
 	elseif difficulty_index == 6 or difficulty_index == 7 then
 		self.unit_categories.FBI_suit_M4_MP5 = {
+			special_type = "ninja",
 			unit_types = {
 				america = {
 					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"),
-					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4"),
-					Idstring("units/payday2/characters/ene_city_swat_3/ene_city_swat_3")
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_ak47_ass/ene_akan_hyper_fbininja_ak47_ass"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_2/ene_fbi_hvh_2"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"),
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"),
+					Idstring("units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04")
 				},
 				shared = {
-					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
-					Idstring("units/payday2/characters/ene_fbi_2/ene_fbi_2"),
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"),
+					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
-					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
 				}
 			},
 			access = access_type_all
 		}
 	else
 		self.unit_categories.FBI_suit_M4_MP5 = {
+			special_type = "ninja",
 			unit_types = {
 				america = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4"),
@@ -1248,8 +1576,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"),
+					Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45")
+				},
 				shared = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_m4/ene_murky_fbigod_m4"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45"),					
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4")
 				}
 			},
@@ -1260,7 +1594,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 	self.unit_categories.FBI_suit_stealth_MP5 = {
 		unit_types = {
 			america = {
-				Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3")
+				Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3")
 			},
 			russia = {
 				Idstring("units/pd2_dlc_mad/characters/ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg")
@@ -1268,9 +1602,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			zombie = {
 				Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
 			},
+			federales = {
+				Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale")
+			},
 			murkywater = {
 				Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
-			}
+			},
+			shared = {
+				Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3"),			
+				Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+			}			
 		},
 		access = access_type_all
 	}
@@ -1285,10 +1626,13 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_cop_hvh_5/ene_cop_hvh_5")
+					Idstring("units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_swat_3/ene_swat_3"),
@@ -1307,13 +1651,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
+				},
 				shared = {
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),
+					Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				}
 			},
@@ -1329,13 +1676,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
+				},
 				shared = {
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),
+					Idstring("units/payday2/characters/ene_city_swat_3/ene_city_swat_3"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				}
 			},
@@ -1351,13 +1701,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
+				},
 				shared = {
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				}
 			},
@@ -1381,17 +1734,22 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
+				},
 				shared = {
 					Idstring("units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"),
 					Idstring("units/payday2/characters/ene_fbi_swat_1/ene_fbi_swat_1"),
-					Idstring("units/payday2/characters/ene_fbi_3/ene_fbi_3"),
+					Idstring("units/payday2/characters/ene_fbi_swat_3/ene_fbi_swat_3"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
@@ -1411,24 +1769,30 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_swat_3/ene_city_swat_3")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
+				},
 				shared = {
 					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),					
 					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),
 					Idstring("units/payday2/characters/ene_city_swat_3/ene_city_swat_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
@@ -1445,19 +1809,24 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_swat_3/ene_city_swat_3")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_city_swat_1/ene_city_swat_1"),					
@@ -1479,19 +1848,24 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_3/ene_zeal_city_3")					
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_ak47_ass/ene_akan_fbi_swat_dw_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_ak47_ass/ene_akan_fbi_swat_ak47_ass"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbi_akmsu_smg/ene_akan_hyper_fbi_akmsu_smg")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_1/ene_fbi_swat_hvh_1"),
-					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_ump/ene_murky_light_ump")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5")
 				},
 				shared = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_1/ene_zeal_city_1"),
@@ -1523,6 +1897,9 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh")
+				},
 				shared = {
 					Idstring("units/payday2/characters/ene_fbi_swat_2/ene_fbi_swat_2"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
@@ -1541,13 +1918,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				russia = {
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870"),
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_r870/ene_akan_fbi_swat_dw_r870"),					
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870"),					
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_2/ene_fbi_swat_hvh_2")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_city_swat_2/ene_city_swat_2"),
@@ -1563,13 +1943,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_swat_2/ene_city_swat_2")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_r870/ene_akan_fbi_swat_dw_r870")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_2/ene_fbi_swat_hvh_2")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_city_swat_2/ene_city_swat_2"),
@@ -1585,13 +1968,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_2/ene_zeal_city_2")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_dw_r870/ene_akan_fbi_swat_dw_r870")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_swat_r870/ene_akan_fbi_swat_r870")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_2/ene_fbi_swat_hvh_2")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh")
 				},
 				shared = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_city_2/ene_zeal_city_2"),
@@ -1606,16 +1992,24 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.FBI_heavy_G36 = {
 			unit_types = {
 				america = {
+					Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"),
 					Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1"),
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1")
 				},
 				murkywater = {
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"),
@@ -1633,13 +2027,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36"),
@@ -1655,13 +2052,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_city_heavy_g36/ene_city_heavy_g36"),
@@ -1677,13 +2077,16 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/ene_zeal_swat_heavy_hh")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
 				},
 				shared = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/ene_zeal_swat_heavy_hh"),
@@ -1702,7 +2105,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870/ene_akan_fbi_heavy_r870")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870")
@@ -1711,9 +2114,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-					Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870")
+					Idstring("units/payday2/characters/ene_fbi_heavy_r870/ene_fbi_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				}
 			},
 			access = access_type_all
@@ -1727,7 +2133,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870")					
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870/ene_akan_fbi_heavy_r870")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870")
@@ -1735,9 +2141,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870")
+					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				}
 			},
 			access = access_type_all
@@ -1749,7 +2158,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870/ene_akan_fbi_heavy_r870")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870")
@@ -1757,9 +2166,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870")
+					Idstring("units/payday2/characters/ene_city_heavy_r870/ene_city_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				}
 			},
 			access = access_type_all
@@ -1771,7 +2183,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870/ene_akan_fbi_heavy_r870")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_r870_hh/ene_akan_fbi_heavy_r870_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_r870/ene_fbi_heavy_hvh_r870")
@@ -1779,9 +2191,12 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh")
+				},
 				shared = {
-					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870"),
-					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870")
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/ene_zeal_swat_heavy_r870"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_r870/ene_murky_heavy_r870")
 				}
 			},
 			access = access_type_all
@@ -1795,16 +2210,23 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy")
-				}
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
+				},
+				shared = {
+					Idstring("units/payday2/characters/ene_fbi_heavy_1/ene_fbi_heavy_1"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")					
+				}				
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.FBI_heavy_G36_w = {
@@ -1813,16 +2235,23 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36/ene_akan_fbi_heavy_g36")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_heavy_g36_hh/ene_akan_fbi_heavy_g36_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_heavy_hvh_1/ene_fbi_heavy_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_heavy/ene_murkywater_heavy")
-				}
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi/ene_swat_heavy_policia_federale_fbi")
+				},
+				shared = {
+					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/ene_zeal_swat_heavy"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_heavy_scar/ene_murky_heavy_scar")					
+				}							
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 
@@ -1831,6 +2260,9 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			special_type = "shield",
 			unit_types = {
 				america = {
+					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1"),
+					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1"),
+					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1"),
 					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1")
 				},
 				russia = {
@@ -1840,14 +2272,25 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_shield_hvh_1/ene_shield_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
+					Idstring("units/payday2/characters/ene_shield_1/ene_shield_1"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield"),
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index < 8 then
 		self.unit_categories.FBI_shield = {
@@ -1857,20 +2300,23 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/payday2/characters/ene_city_shield/ene_city_shield")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_shield_dw_sr2_smg/ene_akan_fbi_shield_dw_sr2_smg")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_shield_sr2_smg/ene_akan_fbi_shield_sr2_smg")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_shield_hvh_1/ene_shield_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_shield_policia_federale_mp9/ene_swat_shield_policia_federale_mp9")
 				},
 				shared = {
 					Idstring("units/payday2/characters/ene_city_shield/ene_city_shield"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield")
+					Idstring("units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.FBI_shield = {
@@ -1883,17 +2329,20 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_DS_shield/ene_akan_hyper_DS_shield")
 				},
 				zombie = {
-					Idstring("units/pd2_dlc_hvh/characters/ene_zeal_swat_shield_hvh/ene_zeal_swat_shield_hvh")
+					Idstring("units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds")
 				},
 				murkywater = {
 					Idstring("units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_heavy_swat_shield_federale_ds/ene_heavy_swat_shield_federale_ds")
 				},
 				shared = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_swat_shield_hh/ene_zeal_swat_shield_hh"),
 					Idstring("units/pd2_mod_psc/characters/ene_murky_DS_shield/ene_murky_DS_shield")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 	
@@ -1912,14 +2361,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_1/ene_bulldozer_hvh_1")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870")
 				},
 				shared = { 
 					Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index == 5 then
 		self.unit_categories.FBI_tank = {
@@ -1938,17 +2390,21 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_2/ene_bulldozer_hvh_2")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870")
 				},
 				shared = { 
 					Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index == 6 then
 		self.unit_categories.FBI_tank = {
@@ -1970,20 +2426,25 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_3/ene_bulldozer_hvh_3")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
 					Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
-					Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3")
+					Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3")					
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	elseif difficulty_index == 7 then
 		self.unit_categories.FBI_tank = {
@@ -2005,7 +2466,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_r870/ene_akan_fbi_tank_r870"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_saiga/ene_akan_fbi_tank_saiga"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_rpk_lmg/ene_akan_fbi_tank_rpk_lmg"),
-					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_1/ene_bulldozer_hvh_1"),
@@ -2017,33 +2478,42 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun")
 				},
 				--Lord, I hate everything about how this physically and visually presents itself.
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
 					Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"),
 					Idstring("units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1"),
 					Idstring("units/payday2/characters/ene_bulldozer_2/ene_bulldozer_2"),
 					Idstring("units/payday2/characters/ene_bulldozer_3/ene_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),					
 					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun_classic/ene_bulldozer_minigun_classic")
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	else
 		self.unit_categories.FBI_tank = {
@@ -2066,8 +2536,8 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_r870/ene_akan_fbi_tank_r870"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_saiga/ene_akan_fbi_tank_saiga"),
 					Idstring("units/pd2_dlc_mad/characters/ene_akan_fbi_tank_rpk_lmg/ene_akan_fbi_tank_rpk_lmg"),
-					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic"),
-					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic"),
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_dozer_mini/ene_akan_dozer_mini")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_1/ene_bulldozer_hvh_1"),
@@ -2080,24 +2550,26 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/ene_swat_dozer_policia_federale_saiga"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun"),
+					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_medic_policia_federale/ene_swat_dozer_medic_policia_federale")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3"),
@@ -2105,10 +2577,18 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3"),
 					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic"),
-					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun")
+					Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic")					
 				}
 			},
-			access = access_type_walk_only
+			access = access_type_all
 		}
 	end
 	
@@ -2117,20 +2597,23 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			special_type = "medic",
 			unit_types = {
 				america = {
-					Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4")
+					Idstring("units/payday2/characters/ene_medic_m4_hh/ene_medic_m4_hh")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_ak47_ass")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_m4/ene_medic_hvh_m4")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_medic/ene_murkywater_medic")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/ene_medic_federale_rifle_hh")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"),
-					Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4")
+					Idstring("units/payday2/characters/ene_medic_m4/ene_medic_m4"),				
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_medic/ene_murkywater_medic")
 				}
 			},
 			access = access_type_all
@@ -2148,11 +2631,14 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_r870/ene_medic_hvh_r870")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/ene_medic_federale_r870_hh")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"),
-					Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870")
+					Idstring("units/payday2/characters/ene_medic_r870/ene_medic_r870"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")					
 				}
 			},
 			access = access_type_all
@@ -2165,16 +2651,19 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic")
 				},
 				russia = {
-					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_ak47_ass")
+					Idstring("units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass_hh/ene_akan_medic_ak47_ass_hh")
 				},
 				zombie = {
 					Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_m4/ene_medic_hvh_m4")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_medic/ene_murkywater_medic")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/ene_medic_federale_rifle_hh")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_medic/ene_murkywater_medic"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_medic/ene_zeal_medic")
 				}
 			},
@@ -2193,10 +2682,13 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 					Idstring("units/pd2_dlc_hvh/characters/ene_medic_hvh_r870/ene_medic_hvh_r870")
 				},
 				murkywater = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870")
+				},
+				federales = {
+					Idstring("units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/ene_medic_federale_r870_hh")
 				},
 				shared = {
-					Idstring("units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"),
+					Idstring("units/pd2_mod_psc/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"),
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_medic_r870/ene_zeal_medic_r870")
 				}
 			},
@@ -2205,6 +2697,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 	end
 		
 	self.unit_categories.Phalanx_minion = {
+		is_captain = true,
 		special_type = "shield",
 		unit_types = {
 			america = {
@@ -2218,10 +2711,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			},
 			murkywater = {
 				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
-			}
+			},
+			federales = {
+				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
+			},
+			shared = {
+				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
+			}			
 		},
-		access = access_type_walk_only
+		access = access_type_all
 	}
+	
 	self.unit_categories.Phalanx_vip = {
 		is_captain = true,
 		special_type = "shield",
@@ -2236,11 +2736,18 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				Idstring("units/pd2_dlc_vip/characters/ene_vip_1/ene_vip_1")
 			},
 			murkywater = {
-				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1") --pfft what
-			}
+				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
+			},
+			federales = {
+				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
+			},
+			shared = {
+				Idstring("units/pd2_dlc_vip/characters/ene_phalanx_1/ene_phalanx_1")
+			}			
 		},
-		access = access_type_walk_only
+		access = access_type_all
 	}
+	
 end)
 
 Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_spawn_groups", function(self, difficulty_index)
@@ -2260,6 +2767,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"groupany"
 		},
+		swat_rifle_civil_indenpendant = {
+			"ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"lonewolf",
+			"groupany"
+		},
 		swat_rifle_flank_civil = {
 			"flank",
 			"provide_coverfire",
@@ -2268,11 +2783,28 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"groupany"
 		},
+		swat_rifle_flank_civil_independant = {
+			"flank",
+			"provide_coverfire",
+			"ranged_fire",
+			"smoke_grenade",
+			"provide_support",
+			"lonewolf",
+			"groupany"
+		},
 		swat_rifle_complex = {
 			"elite_ranged_fire",
 			"provide_coverfire",
 			"flash_grenade",
 			"provide_support",
+			"groupany"
+		},
+		swat_rifle_complex_independant = {
+			"elite_ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"lonewolf",
 			"groupany"
 		},
 		swat_rifle_flank_complex = {
@@ -2284,12 +2816,31 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"groupany"
 		},
+		swat_rifle_flank_complex_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"elite_ranged_fire",
+			"smoke_grenade",
+			"provide_support",
+			"lonewolf",
+			"groupany"
+		},
 		swat_rifle = {
 			"elite_ranged_fire",
 			"provide_coverfire",
 			"flash_grenade",
 			"provide_support",
 			"harass",
+			"groupany"
+		},
+		swat_rifle_independant = {
+			"elite_ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"harass",
+			"lonewolf",
 			"groupany"
 		},
 		swat_rifle_flank = {
@@ -2301,11 +2852,48 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"groupany"
 		},
+		swat_rifle_flank_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"elite_ranged_fire",
+			"smoke_grenade",
+			"provide_support",
+			"lonewolf",
+			"groupany"
+		},
+		sniper_direct = {
+			"elite_ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"harass",
+			"groupany",
+			"sniper"
+		},
+		sniper_flank = {
+			"flank",
+			"elite_ranged_fire",
+			"provide_coverfire",
+			"flash_grenade",
+			"provide_support",
+			"harass",
+			"groupany",
+			"sniper"
+		},
 		swat_shotgun_rush_civil = {
 			"charge",
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
 			"provide_support",
+			"groupany"
+		},
+		swat_shotgun_rush_civil_independant = {
+			"charge",
+			"provide_coverfire",
+			"flash_grenade", --pushers use flashes
+			"provide_support",
+			"lonewolf",
 			"groupany"
 		},
 		swat_shotgun_rush_complex = {
@@ -2314,6 +2902,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
 			"provide_support",
+			"groupany"
+		},
+		swat_shotgun_rush_complex_independant = {
+			"deathguard",
+			"charge",
+			"provide_coverfire",
+			"flash_grenade", --pushers use flashes
+			"provide_support",
+			"lonewolf",
 			"groupany"
 		},
 		swat_shotgun_rush = {
@@ -2325,19 +2922,46 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"harass",
 			"groupany"
 		},
+		swat_shotgun_rush_independant = {
+			"deathguard",
+			"charge",
+			"provide_coverfire",
+			"flash_grenade", --pushers use flashes
+			"provide_support",
+			"harass",
+			"lonewolf",
+			"groupany"
+		},
 		swat_shotgun_flank_civil = {
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
 			"provide_support",
 			"groupany"
-		},		
+		},
+		swat_shotgun_flank_civil_independant = {
+			"flank",
+			"provide_coverfire",
+			"smoke_grenade", --flank uses smoke
+			"provide_support",
+			"groupany"
+		},
 		swat_shotgun_flank_complex = {
 			"hunter",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
 			"provide_support",
+			"groupany",
+			"hitnrun" --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
+		},
+		swat_shotgun_flank_complex_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"smoke_grenade", --flank uses smoke
+			"provide_support",
+			"lonewolf",
 			"groupany",
 			"hitnrun" --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
 		},
@@ -2349,7 +2973,17 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_support",
 			"hitnrun", --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
 			"groupany"
-		},	
+		},
+		swat_shotgun_flank_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"smoke_grenade", --flank uses smoke
+			"provide_support",
+			"lonewolf",
+			"hitnrun", --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
+			"groupany"
+		},
 		shield_wall_ranged = {
 			"shield",
 			"ranged_fire",
@@ -2378,20 +3012,26 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		},
 		shield_wall = {
 			"hunter",
-			"deathguard",
 			"shield_cover", 
 			"shield",
 			"charge",
 			"hitnrun", --they'll charge, barrage and back off
 			"provide_support",
-			"murder"
+			"tunnel"
 		},
 		tazer_flanking = {
 			"hunter",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade",
-			"murder"		 
+			"tunnel"		 
+		},
+		tazer_flanking_independant = {
+			"hunter",
+			"flank",
+			"provide_coverfire",
+			"smoke_grenade",
+			"tunnel"		 
 		},
 		tazer_charge = {
 			"deathguard",
@@ -2406,18 +3046,29 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"flash_grenade", --use flashes
 			"provide_coverfire",
 			"shield_cover", --if he spawns with a shield, he'll get covered so he can bust your fucking ass
-			"murder"
+			"tunnel"
+		},
+		tank_rush_independant = {
+			"deathguard",
+			"charge",
+			"flash_grenade", --use flashes
+			"provide_coverfire",
+			"shield_cover", --if he spawns with a shield, he'll get covered so he can bust your fucking ass
+			"lonewolf",
+			"tunnel"
 		},
 		spooc = {
 			"shield_cover",
 			"flank",
 			"smoke_grenade",
+			"lonewolf",
 			"spooctargeting"			
 		},
 		spoocaggressive = {
 			"shield_cover",
 			"charge",
 			"flash_grenade",
+			"lonewolf",
 			"spooctargeting"
 		},
 		spoocelite = {
@@ -2425,6 +3076,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover",
 			"flank",
 			"smoke_grenade",
+			"lonewolf",
 			"harass"
 		},
 		spoocaggressiveelite = {
@@ -2432,6 +3084,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover",
 			"charge",
 			"flash_grenade",
+			"lonewolf",
 			"harass"		
 		},
 		spooccreep = {
@@ -2439,12 +3092,133 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover",
 			"charge",
 			"spoocavoidance",
+			"lonewolf",
 			"harass"
 		}
 	}
 	self.enemy_spawn_groups = {}
 	
-	if difficulty_index <= 3 then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
+		self.enemy_spawn_groups.recon_squad_A = {
+			amount = {
+				2,
+				4
+			},
+			spawn = {
+				{
+					freq = 1.25,
+					amount_min = 1,
+					amount_max = 3,
+					rank = 2,
+					unit = "punk_group",
+					tactics = self._tactics.swat_rifle_flank
+				},
+				{
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "CS_swat_SMG",
+					tactics = self._tactics.swat_rifle_flank
+				}
+			}
+		}
+		self.enemy_spawn_groups.recon_squad_B = {
+			amount = {
+				3,
+				3
+			},
+			spawn = {
+				{
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "CS_swat_SMG",
+					tactics = self._tactics.swat_rifle_flank
+				},
+				{
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_LHmix",
+					tactics = self._tactics.swat_rifle_flank
+				},
+			}
+		}
+		self.enemy_spawn_groups.recon_squad_C = {
+			amount = {
+				5,
+				5
+			},
+			spawn = {
+				{
+					freq = 0.5,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					freq = 1,
+					amount_min = 1,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall_charge
+				},
+				{
+					freq = 0.5,
+					amount_max = 2,
+					rank = 2,
+					unit = "CS_swat_SMG",
+					tactics = self._tactics.shield_support_charge
+				},
+				{
+					freq = 0.5,
+					amount_max = 2,
+					rank = 2,
+					unit = "punk_group",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+			}
+		}
+		self.enemy_spawn_groups.recon_squad_D = {
+			amount = {
+				4,
+				5
+			},
+			spawn = {
+				{
+					freq = 1,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_heavy_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					freq = 1.25,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					freq = 1.25,
+					amount_min = 1,
+					amount_max = 3,
+					rank = 2,
+					unit = "CS_swat_SMG",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+				{
+					freq = 1.5,
+					amount_max = 2,
+					rank = 2,
+					unit = "punk_group",
+					tactics = self._tactics.swat_shotgun_flank
+				},
+			}
+		}
+	elseif difficulty_index <= 3 then
 		self.enemy_spawn_groups.recon_squad_A = {
 			amount = {
 				2,
@@ -2904,7 +3678,134 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if difficulty_index <= 3 then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
+		self.enemy_spawn_groups.punks_A = {
+			amount = {
+				3,
+				5
+			},
+			spawn = {
+				{
+					freq = 1.5,
+					amount_min = 2,
+					amount_max = 2,
+					rank = 2,
+					unit = "punk_group",
+					tactics = self._tactics.swat_rifle_complex
+				},
+				{
+					freq = 0.75,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_swat_M4",
+					tactics = self._tactics.shield_support_ranged
+				},
+				{
+					freq = 0.75,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_M4",
+					tactics = self._tactics.shield_support_ranged
+				},
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 2,
+					rank = 3,
+					unit = "FBI_shield",
+					tactics = self._tactics.shield_wall_ranged
+				}
+			}
+		}
+		self.enemy_spawn_groups.punks_B = {
+			amount = {
+				4,
+				5
+			},
+			spawn = {
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_swat_R870",
+					tactics = self._tactics.swat_shotgun_rush_complex
+				},
+				{
+					amount_min = 1,
+					freq = 2,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_swat_M4",
+					tactics = self._tactics.swat_rifle_complex
+				},
+				{
+					freq = 2.25,
+					amount_min = 2,
+					amount_max = 3,
+					rank = 1,
+					unit = "punk_group",
+					tactics = self._tactics.swat_shotgun_rush_complex
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 3,
+					unit = "medic_M4",
+					tactics = self._tactics.swat_rifle_complex
+				}
+			}
+		}
+		self.enemy_spawn_groups.punks_C = {
+			amount = {
+				3,
+				5
+			},
+			spawn = {
+				{
+					amount_min = 0,
+					freq = 1,
+					amount_max = 2,
+					rank = 2,
+					unit = "FBI_LHmix",
+					tactics = self._tactics.swat_rifle_complex
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "CS_tazer",
+					tactics = self._tactics.tazer_charge
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "FBI_tank",
+					tactics = self._tactics.tank_rush
+				},
+				{
+					amount_min = 0,
+					freq = 0.5,
+					amount_max = 1,
+					rank = 2,
+					unit = "medic_R870",
+					tactics = self._tactics.swat_shotgun_rush_complex
+				},
+				{
+					freq = 1,
+					amount_min = 2,
+					amount_max = 2,
+					rank = 1,
+					unit = "punk_group",
+					tactics = self._tactics.swat_shotgun_rush_civil
+				}
+			}
+		}
+	elseif difficulty_index <= 3 then
 		self.enemy_spawn_groups.punks_A = {
 			amount = {
 				2,
@@ -3283,7 +4184,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_swat_shotgun_rush = {
 			amount = {
 				4,
@@ -3320,7 +4221,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --Pinch.
+					tactics = self._tactics.tazer_flanking_independant --Pinch.
 				},
 				{
 					amount_min = 0,
@@ -3493,7 +4394,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil --forced pinch, no hit and run
+					tactics = self._tactics.swat_shotgun_flank_civil_independant --forced pinch, no hit and run
 				}
 			}
 		}
@@ -3534,7 +4435,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil --forced pinch, no hit and run
+					tactics = self._tactics.swat_shotgun_flank_civil_independant --forced pinch, no hit and run
 				}
 			}
 		}
@@ -3575,7 +4476,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --Pinch.
+					tactics = self._tactics.tazer_flanking_independant --Pinch.
 				},
 				{
 					amount_min = 0,
@@ -3583,13 +4484,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870", --They're just heavies.
-					tactics = self._tactics.swat_shotgun_flank_civil
+					tactics = self._tactics.swat_shotgun_flank_civil_independant
 				}
 			}
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_swat_shotgun_flank = {
 			amount = {
 				4,
@@ -3605,7 +4506,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_rifle
 				},
 				{
-					freq = 0.5,
+					freq = 0.75,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5", 
 					tactics = self._tactics.swat_rifle
@@ -3616,7 +4517,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_R870",
-					tactics = self._tactics.swat_shotgun_flank
+					tactics = self._tactics.swat_shotgun_flank_independant
 				},
 				{
 					amount_min = 0,
@@ -3624,7 +4525,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_R870",
-					tactics = self._tactics.swat_shotgun_flank
+					tactics = self._tactics.swat_shotgun_flank_independant
 				},
 				{
 					amount_min = 0,
@@ -3632,7 +4533,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_tank",
-					tactics = self._tactics.tank_rush --Basically your worst nightmare.
+					tactics = self._tactics.tank_rush_independant --Basically your worst nightmare.
 				}
 			}
 		}
@@ -3677,7 +4578,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank_civil
 				},
 				{
-					amount_min = 2,
+					amount_min = 2,	
 					freq = 1,
 					amount_max = 2,
 					rank = 3,
@@ -3691,7 +4592,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 2,
 					unit = "medic_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				}
+				}								
 			}
 		}
 	elseif difficulty_index == 4 then
@@ -3743,10 +4644,10 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank_civil
 				},
 				{
-					freq = 1,
+					freq = 0.75,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_shotgun_rush_civil --oh no they're dumb
+					tactics = self._tactics.swat_shotgun_rush_civil_independant --oh no they're dumb
 				},
 				{
 					amount_min = 2,
@@ -3763,7 +4664,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 2,
 					unit = "medic_R870",
 					tactics = self._tactics.swat_shotgun_flank_civil
-				}
+				}																
 			}
 		}
 	elseif difficulty_index == 6 then
@@ -3779,7 +4680,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_rush_complex --these guys are dumb too but at least that means the heavy and medic can flank
+					tactics = self._tactics.swat_shotgun_rush_complex_independant --these guys are dumb too but at least that means the heavy and medic can flank
 				},
 				{
 					amount_min = 2,
@@ -3798,11 +4699,11 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					tactics = self._tactics.swat_shotgun_flank
 				},
 				{
-					freq = 1,
+					freq = 0.5,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_complex --oh no they're dumb
-				}
+					tactics = self._tactics.swat_rifle_complex_independant --oh no they're dumb
+				}																				
 			}
 		}
 	elseif difficulty_index == 7 then
@@ -3826,7 +4727,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_R870",
-					tactics = self._tactics.swat_shotgun_rush_complex --flankers do hit and run while heavies and medic do a raw charge
+					tactics = self._tactics.swat_shotgun_rush_complex_independant --flankers do hit and run while heavies and medic do a raw charge
 				},
 				{
 					amount_min = 0,
@@ -3834,14 +4735,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_R870",
-					tactics = self._tactics.swat_shotgun_rush_complex
+					tactics = self._tactics.swat_shotgun_rush_complex_independant
 				},
 				{
-					freq = 1,
+					freq = 0.5,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5",
 					tactics = self._tactics.swat_rifle_flank_complex --they're coordinated
-				}
+				}																				
 			}
 		}
 	else
@@ -3857,13 +4758,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_G36",
-					tactics = self._tactics.swat_rifle
+					tactics = self._tactics.swat_rifle_independant
 				},
 				{
-					freq = 0.5,
+					freq = 0.75,
 					rank = 3,
 					unit = "FBI_suit_M4_MP5", 
-					tactics = self._tactics.swat_rifle
+					tactics = self._tactics.swat_rifle_independant
 				},
 				{
 					amount_min = 2,
@@ -3887,13 +4788,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_tank",
-					tactics = self._tactics.tank_rush --Basically your worst nightmare.
-				}
+					tactics = self._tactics.tank_rush_independant --Basically your worst nightmare.
+				}																				
 			}
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_swat_rifle = { --spamming three heavies is not interesting fuck off, no changes needed otherwise tbh
 			amount = {
 				4,
@@ -4151,7 +5052,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_swat_rifle_flank = { --spamming 3 heavies is not interesting fuck off
 			amount = {
 				4,
@@ -4178,7 +5079,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_G36", 
-					tactics = self._tactics.swat_rifle
+					tactics = self._tactics.swat_rifle_independant
 				},
 				{
 					amount_min = 0,
@@ -4186,7 +5087,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_M4",
-					tactics = self._tactics.swat_rifle --others push while medic and heavies distract
+					tactics = self._tactics.swat_rifle_independant --others push while medic and heavies distract
 				},
 				{
 					amount_min = 0,
@@ -4194,7 +5095,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --asshole-brand taser
+					tactics = self._tactics.tazer_flanking_independant --asshole-brand taser
 				}
 			}
 		}
@@ -4341,7 +5242,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_complex --they're uncoordinated
+					tactics = self._tactics.swat_rifle_complex_independant --they're uncoordinated
 				},
 				{
 					amount_min = 1,
@@ -4435,7 +5336,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 3,
 					unit = "FBI_heavy_G36", 
-					tactics = self._tactics.swat_rifle
+					tactics = self._tactics.swat_rifle_independant
 				},
 				{
 					amount_min = 0,
@@ -4443,7 +5344,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_M4",
-					tactics = self._tactics.swat_rifle --others push while medic and heavies distract
+					tactics = self._tactics.swat_rifle_independant --others push while medic and heavies distract
 				},
 				{
 					amount_min = 0,
@@ -4457,7 +5358,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_shield_wall_ranged = { --surprisingly im fine with this, its a fairly balanced spawn group
 			amount = {
 				4,
@@ -4502,7 +5403,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank
+					tactics = self._tactics.swat_shotgun_flank_independant
 				}
 			}
 		}
@@ -4667,7 +5568,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_complex
+					tactics = self._tactics.swat_shotgun_flank_complex_independant
 				}
 			}
 		}
@@ -4716,7 +5617,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_complex
+					tactics = self._tactics.swat_shotgun_flank_complex_independant
 				}
 			}
 		}
@@ -4765,13 +5666,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 2,
 					rank = 2,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank
+					tactics = self._tactics.swat_shotgun_flank_independant
 				}
 			}
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_shield_wall_charge = {
 			amount = {
 				4,
@@ -4808,7 +5709,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --pinch boi
+					tactics = self._tactics.tazer_flanking_independant --pinch boi
 				},
 				{
 					amount_min = 0,
@@ -4816,7 +5717,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_heavy_G36",
-					tactics = self._tactics.swat_rifle --distant support
+					tactics = self._tactics.swat_rifle_independant --distant support
 				}
 			}
 		}
@@ -4899,7 +5800,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_swat_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil --pinchy boi
+					tactics = self._tactics.swat_shotgun_flank_civil_independant --pinchy boi
 				}
 			}
 		}
@@ -4940,7 +5841,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_heavy_R870",
-					tactics = self._tactics.swat_shotgun_flank_civil --pinchy boi
+					tactics = self._tactics.swat_shotgun_flank_civil_independant --pinchy boi
 				}
 			}
 		}
@@ -4981,7 +5882,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_heavy_R870",
-					tactics = self._tactics.swat_shotgun_flank_complex --pinchy boi
+					tactics = self._tactics.swat_shotgun_flank_complex_independant --pinchy boi
 				}
 			}
 		}
@@ -5022,7 +5923,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --pinch boi
+					tactics = self._tactics.tazer_flanking_independant --pinch boi
 				}
 			}
 		}
@@ -5063,7 +5964,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
-					tactics = self._tactics.tazer_flanking --pinch boi
+					tactics = self._tactics.tazer_flanking_independant --pinch boi
 				},
 				{
 					amount_min = 0,
@@ -5071,13 +5972,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_max = 1,
 					rank = 3,
 					unit = "FBI_heavy_G36",
-					tactics = self._tactics.swat_rifle --distant support
+					tactics = self._tactics.swat_rifle_independant --distant support
 				}
 			}
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_shield_wall = {
 			amount = {
 				6,
@@ -5317,7 +6218,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_tazer_flanking = {
 			amount = {
 				1,
@@ -5326,8 +6227,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_flanking
@@ -5336,7 +6237,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				},
 				{
 					amount_min = 0,
@@ -5420,7 +6321,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				}
 			}
 		}
@@ -5443,7 +6344,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				},
 				{
 					amount_min = 0,
@@ -5470,8 +6371,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_flanking
@@ -5480,7 +6381,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				},
 				{
 					amount_min = 0,
@@ -5509,8 +6410,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_flanking
@@ -5519,7 +6420,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_civil
+					tactics = self._tactics.swat_rifle_civil_indenpendant
 				},
 				{
 					amount_min = 0,
@@ -5541,7 +6442,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_tazer_charge = {
 			amount = {
 				1,
@@ -5550,8 +6451,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.shield_support_charge
@@ -5560,7 +6461,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank_civil_independant
 				},
 				{
 					freq = 0.5,
@@ -5650,22 +6551,23 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.tac_tazer_charge = {
 			amount = {
 				1,
-				4
+				3
 			},
 			spawn = {
 				{
 					amount_min = 1,
 					freq = 1,
-					amount_max = 2,
+					amount_max = 1,
 					rank = 3,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_charge
 				},
 				{
+					amount_max = 2,
 					freq = 0.5,
 					rank = 2,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank_civil_independant
 				},
 				{
 					amount_min = 0,
@@ -5686,17 +6588,18 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			spawn = {
 				{
 					amount_min = 1,
-					freq = 2,
-					amount_max = 2,
+					freq = 1,
+					amount_max = 1,
 					rank = 2,
 					unit = "CS_tazer",
 					tactics = self._tactics.shield_support_charge
 				},
 				{
+					amount_max = 2,
 					freq = 0.5,
 					rank = 1,
 					unit = "FBI_suit_M4_MP5",
-					tactics = self._tactics.swat_rifle_flank_civil
+					tactics = self._tactics.swat_rifle_flank_civil_independant
 				},
 				{
 					freq = 0.5,
@@ -5724,7 +6627,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		}
 	end
 	
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.tac_bull_rush = {
 			amount = {
 				1,
@@ -5734,7 +6637,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				{
 					amount_min = 1,
 					freq = 1,
-					amount_max = 2,
+					amount_max = 1,
 					rank = 2,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush
@@ -5843,7 +6746,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				{
 					amount_min = 1,
 					freq = 1,
-					amount_max = 2,
+					amount_max = 1,
 					rank = 3,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush
@@ -5868,7 +6771,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				{
 					amount_min = 1,
 					freq = 1,
-					amount_max = 2,
+					amount_max = 1,
 					rank = 2,
 					unit = "FBI_tank",
 					tactics = self._tactics.tank_rush
@@ -5924,11 +6827,11 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 	}
 	
 	--have to work with this unholy mess of bile because otherwise, cloakers don't spawn right
-	if Global.game_settings and Global.game_settings.use_intense_AI then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
-				2, --guaranteed two on DS
-				3 
+				1,
+				1 
 			},
 			spawn = {
 				{
@@ -5964,18 +6867,18 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooc
-				}
+				}				
 			}
 		}
 	elseif difficulty_index == 5 then
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				1,
-				2
+				1
 			},
 			spawn = {
 				{
-					freq = 1.5,
+					freq = 1,
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooc
@@ -5986,7 +6889,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				1,
-				2
+				1
 			},
 			spawn = {
 				{
@@ -6000,14 +6903,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spoocaggressive --these spoocs go hard instead of their normal approach, and use flashes, essentially randomly a pinch group
-				}
+				}												
 			}
 		}
 	elseif difficulty_index == 7 then
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
 				1,
-				3 --fucking power rangers insta-down squad bullshit
+				1
 			},
 			spawn = {
 				{
@@ -6021,14 +6924,14 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spoocaggressive --these spoocs go hard instead of their normal approach, and use flashes, essentially randomly a pinch group
-				}
+				}												
 			}
 		}
 	else
 		self.enemy_spawn_groups.FBI_spoocs = {
 			amount = {
-				2, --guaranteed two on DS
-				3 
+				1, 
+				1
 			},
 			spawn = {
 				{
@@ -6048,10 +6951,11 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					rank = 1,
 					unit = "spooc",
 					tactics = self._tactics.spooccreep --pretty much jerks, they'll hide from sight once aimed at, will otherwise attempt to rush you
-				}
+				}												
 			}
 		}
 	end
+
 end)
 
 Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", function(self, difficulty_index, difficulty)
@@ -6059,20 +6963,13 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	local level = Global.level_data and Global.level_data.level_id
 	self.max_nr_simultaneous_boss_types = 0
 	self.difficulty_curve_points = {
-		0.5
+		0.1
 	}
-
-	if difficulty_index < 6 then
-		self.smoke_and_flash_grenade_timeout = {
-			25,
-			18
-		}
-	else
-		self.smoke_and_flash_grenade_timeout = {
-			20,
-			15
-		}
-	end
+	
+	self.smoke_and_flash_grenade_timeout = {
+		30,
+		20
+	}
 
 	if difficulty_index < 6 then
 		self.smoke_grenade_lifetime = 7.5
@@ -6094,6 +6991,20 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			0.025
 		}
 	}
+	
+	self.bouncer_grenade = {
+		timer = 3,
+		light_range = 600,
+		range = 500,
+		light_specular = 2,
+		beep_fade_speed = 4,
+		beep_multi = 0.3,
+		light_color = Vector3(255, 255, 0),
+		beep_speed = {
+			1,
+			0.33
+		}
+	}
 
 	if difficulty_index <= 5 then
 		self.flash_grenade.timer = 3
@@ -6111,7 +7022,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	}
 	self.bain_assault_praise_limits = {
 		1,
-		3
+		4
 	}
 
 	if difficulty_index <= 2 then
@@ -6217,14 +7128,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			}
 		},
 		sustain_duration_min = {
-			240,
-			240,
-			240
+			0,
+			0,
+			0
 		},
 		sustain_duration_max = {
-			240,
-			240,
-			240
+			0,
+			0,
+			0
 		},
 		sustain_duration_balance_mul = {
 			1,
@@ -6232,24 +7143,21 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			1,
 			1
 		},
-		build_duration = 35,
+		build_duration = 90,
 		fade_duration = 30
 	}
 	
-	if difficulty_index == 7 or difficulty_index == 8 then
-		self.besiege.assault.sustain_duration_min = {
-			360,
-			360,
-			360
-		}
-		self.besiege.assault.sustain_duration_max = {
-			360,
-			360,
-			360
-		}
+	if difficulty_index == 7 or difficulty_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		self.besiege.assault.build_duration = 120
 	end
 	
-	if difficulty_index <= 2 then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
+		self.besiege.assault.delay = {
+			30,
+			30,
+			30
+		}	
+	elseif difficulty_index <= 2 then
 		self.besiege.assault.delay = {
 			40,
 			40,
@@ -6281,7 +7189,13 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if difficulty_index <= 5 then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
+		self.besiege.assault.hostage_hesitation_delay = {
+			15,
+			15,
+			15	
+		}
+	elseif difficulty_index <= 5 then
 		self.besiege.assault.hostage_hesitation_delay = {
 			20,
 			20,
@@ -6295,87 +7209,186 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" then
+	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" then
 		self.besiege.assault.force = {
 			1,
 			1,
 			1
 		}
 		self.besiege.assault.force_pool = {
-			75,
-			75,
-			75
+			32,
+			32,
+			32
 		}
 	else
 		self.besiege.assault.force = {
-			16,
-			16,
-			16
+			1,
+			1,
+			1
 		}
 		self.besiege.assault.force_pool = {
-			125,
-			125,
-			125
+			64,
+			64,
+			64
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" then
-		if difficulty_index <= 7 then
+	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" then
+		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.assault.force_balance_mul = {
-				16,
-				20,
-				24,
-				24
-			}
-			self.besiege.assault.force_pool_balance_mul = {
-				1,
-				2,
-				3,
-				4
-			}
-		else
-			self.besiege.assault.force_balance_mul = {
-				20,
-				24,
+				22,
+				28,
 				32,
 				32
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
 				2,
-				3,
+				4,
+				4
+			}
+		elseif difficulty_index < 7 then
+			self.besiege.assault.force_balance_mul = {
+				16,
+				20,
+				26,
+				26
+			}
+			self.besiege.assault.force_pool_balance_mul = {
+				1,
+				2,
+				4,
+				4
+			}
+		else
+			self.besiege.assault.force_balance_mul = {
+				22,
+				28,
+				32,
+				32
+			}
+			self.besiege.assault.force_pool_balance_mul = {
+				1,
+				2,
+				4,
 				4
 			}
 		end
-	elseif difficulty_index <= 7 then
+	elseif managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.assault.force_balance_mul = {
-			1.25,
-			2.5,
-			4,
-			4
+			32,
+			48,
+			72,
+			72
 		}
 		self.besiege.assault.force_pool_balance_mul = {
 			1,
+			1.5,
 			2,
-			3,
-			4
+			2
+		}
+	elseif difficulty_index < 7 then
+		self.besiege.assault.force_balance_mul = {
+			16,
+			24,
+			64,
+			64
+		}
+		self.besiege.assault.force_pool_balance_mul = {
+			0.25,
+			0.5,
+			1,
+			1
 		}
 	else
 		self.besiege.assault.force_balance_mul = {
-			1.5,
-			3,
-			4.5,
-			4.5
+			32,
+			48,
+			72,
+			72
 		}
 		self.besiege.assault.force_pool_balance_mul = {
+			0.5,
 			1,
 			2,
-			3,
-			4
+			2
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		self.besiege.assault.groups = {
+			tac_swat_shotgun_rush = {
+				13.05,
+				13.05,
+				13.05
+			},
+			tac_swat_shotgun_flank = {
+				13.05,
+				13.05,
+				13.05
+			},
+			tac_swat_rifle = {
+				13.1,
+				13.1,
+				13.1
+			},
+			tac_swat_rifle_flank = {
+				13.15,
+				13.15,
+				13.15
+			},
+			punks_A = {
+				5.25,
+				5.25,
+				5.25
+			},
+			punks_B = {
+				5.25,
+				5.25,
+				5.25
+			},
+			punks_C = {
+				5.25,
+				5.25,
+				5.25
+			},
+			tac_shield_wall_ranged = {
+				3,
+				3,
+				3
+			},
+			tac_shield_wall_charge = {
+				3,
+				3,
+				3
+			},
+			tac_shield_wall = {
+				3,
+				3,
+				3
+			},
+			tac_tazer_flanking = {
+				4.95,
+				4.95,
+				4.95
+			},
+			tac_tazer_charge = {
+				4.95,
+				4.95,
+				4.95
+			},
+			FBI_spoocs = {
+				6.5,
+				6.5,
+				6.5
+			},
+			tac_bull_rush = {
+				6.50,
+				6.50,
+				6.50
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
 				11,
@@ -6826,14 +7839,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				13.05
 			},
 			tac_swat_rifle = {
-				13.2,
-				13.2,
-				13.2
+				13.1,
+				13.1,
+				13.1
 			},
 			tac_swat_rifle_flank = {
-				13.2,
-				13.2,
-				13.2
+				13.15,
+				13.15,
+				13.15
 			},
 			punks_A = {
 				5.25,
@@ -6866,19 +7879,19 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				3
 			},
 			tac_tazer_flanking = {
-				5,
-				5,
-				5
+				4.95,
+				4.95,
+				4.95
 			},
 			tac_tazer_charge = {
-				5,
-				5,
-				5
+				4.95,
+				4.95,
+				4.95
 			},
 			FBI_spoocs = {
-				6.25,
-				6.25,
-				6.25
+				6.5,
+				6.5,
+				6.5
 			},
 			tac_bull_rush = {
 				6.50,
@@ -6976,150 +7989,183 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		5,
 		5
 	}
-
-	if difficulty_index <= 2 then
+	
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.reenforce.groups = {
-			punks_A = {
-				25,
-				25,
-				25
+			tac_swat_shotgun_rush = {
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_shotgun_flank = {
-				25,
-				25,
-				25
+				0, --20
+				0,
+				0
 			},
-			punks_B = {
-				25,
-				25,
-				25
+			tac_swat_rifle = {
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_rifle_flank = {
-				25,
-				25,
-				25
+				0, --20
+				0,
+				0
+			},
+			recon_squad_B = {
+				0, --7.5
+				0,
+				0
+			},
+			punks_B = {
+				0, --7.5
+				0,
+				0
+			}
+		}
+	elseif difficulty_index <= 2 then
+		self.besiege.reenforce.groups = {
+			punks_A = {
+				0,--25
+				0,--25
+				0 --25
+			},
+			tac_swat_shotgun_flank = {
+				0,--25
+				0,--25
+				0 --25
+			},
+			punks_B = {
+				0,--25
+				0,--25
+				0 --25
+			},
+			tac_swat_rifle_flank = {
+				0,--25
+				0,--25
+				0 --25
 			}
 		}
 	elseif difficulty_index == 3 then
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			punks_C = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			tac_swat_rifle = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			},
 			punks_B = {
-				25,
-				25,
-				25
+				0,--25
+				0,--25
+				0 --25
 			}
 		}
 	elseif difficulty_index == 4 then
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_shotgun_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			tac_swat_rifle = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_rifle_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			recon_squad_B = {
-				7.5,
-				7.5,
-				7.5
+				0, --7.5
+				0,
+				0
 			},
 			punks_B = {
-				7.5,
-				7.5,
-				7.5
+				0, --7.5
+				0,
+				0
 			}
 		}
 	elseif difficulty_index == 5 then
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_shotgun_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			tac_swat_rifle = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_rifle_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
-			punks_A = {
-				7.5,
-				7.5,
-				7.5
+			recon_squad_B = {
+				0, --7.5
+				0,
+				0
 			},
 			punks_B = {
-				7.5,
-				7.5,
-				7.5
+				0, --7.5
+				0,
+				0
 			}
 		}
 	else
 		self.besiege.reenforce.groups = {
 			tac_swat_shotgun_rush = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_shotgun_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			tac_swat_rifle = {
-				22.5,
-				22.5,
-				22.5
+				0, --22.5
+				0,
+				0
 			},
 			tac_swat_rifle_flank = {
-				20,
-				20,
-				20
+				0, --20
+				0,
+				0
 			},
 			recon_squad_B = {
-				7.5,
-				7.5,
-				7.5
+				0, --7.5
+				0,
+				0
 			},
-			punks_C = {
-				7.5,
-				7.5,
-				7.5
+			punks_B = {
+				0, --7.5
+				0,
+				0
 			}
 		}
 	end
@@ -7131,8 +8177,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	}
 	self.besiege.recon.interval_variation = 10
 	
-	if level == "sah" or level == "chew" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" then
-		if difficulty_index <= 7 then
+	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
+		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+			self.besiege.recon.force = {
+				0.5,
+				0.5,
+				0.5
+			}
+		elseif difficulty_index <= 7 then
 			self.besiege.recon.force = {
 				0.5,
 				0.5,
@@ -7145,6 +8197,12 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				0.5
 			}
 		end
+	elseif managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		self.besiege.recon.force = {
+			6,
+			6,
+			6
+		}
 	elseif difficulty_index < 6 then
 		self.besiege.recon.force = {
 			4,
@@ -7158,8 +8216,31 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			6
 		}
 	end
-
-	if difficulty_index <= 2 then
+	
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		self.besiege.recon.groups = {
+			recon_squad_B = {
+				25,
+				25,
+				25
+			},
+			recon_squad_C = {
+				25,
+				25,
+				25
+			},
+			recon_squad_D = {
+				25,
+				25,
+				25
+			},
+			recon_squad_A = {
+				25,
+				25,
+				25
+			}
+		}
+	elseif difficulty_index <= 2 then
 		self.besiege.recon.groups = {
 			tac_swat_shotgun_flank = {
 				30,
@@ -7358,5 +8439,4 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	end
 
 	self.safehouse = self.besiege
-end
-)
+end)

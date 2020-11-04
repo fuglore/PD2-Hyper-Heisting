@@ -9,14 +9,24 @@ function NPCRaycastWeaponBase:init(...)
 		
 	if weapon_tweak and weapon_tweak.r_trail then
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r")
+		self._hivis = true
 	end
 	
 	if weapon_tweak and weapon_tweak.hivis then
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak")
+		self._hivis = true
+	end
+	
+	if weapon_tweak and weapon_tweak.lotus_vis then
+		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/lotus_streak")
 	end
 	
 	if weapon_tweak and weapon_tweak.b_trail then
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b")
+	end
+	
+	if weapon_Tweak and weapon_tweak.no_vis then
+		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak")
 	end
 		
 	self._trail_effect_table = {
@@ -36,6 +46,10 @@ function NPCRaycastWeaponBase:init(...)
 	if self:weapon_tweak_data().armor_piercing then
 		self._use_armor_piercing = true
 	end
+	
+	if self._flashlight_data then
+		self:set_flashlight_enabled(true)
+	end
 end
 
 local setup_func = NPCRaycastWeaponBase.setup
@@ -49,17 +63,56 @@ function NPCRaycastWeaponBase:setup(setup_data, ...)
 			self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(16, 22) --removes criminals and certain kinds of bullet-impact related slotmasks
 			self._enemy_slotmask = managers.slot:get_mask("enemies")
 		end
-	end		
+	end
+
+	if self._flashlight_data then
+		self:set_flashlight_enabled(true)
+	end
 end
 
-function NPCRaycastWeaponBase:_spawn_trail_effect(direction, col_ray)
-	self._obj_fire:m_position(self._trail_effect_table.position)
-	mvector3.set(self._trail_effect_table.normal, direction)
+function NPCRaycastWeaponBase:flashlight_state_changed()
+	if not self._flashlight_data then
+		return
+	end
 
-	local trail = World:effect_manager():spawn(self._trail_effect_table)
+	if not self._flashlight_data.enabled or self._flashlight_data.dropped then
+		return
+	end
+	
+	local enabled = true --always enabled
 
-	if col_ray then
-		World:effect_manager():set_remaining_lifetime(trail, math.clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
+	if managers.game_play_central:flashlights_on() or enabled then
+		self._flashlight_data.light:set_enable(self._flashlight_light_lod_enabled)
+		self._flashlight_data.effect:activate()
+
+		self._flashlight_data.on = true
+	else
+		self._flashlight_data.light:set_enable(false)
+		self._flashlight_data.effect:kill_effect()
+
+		self._flashlight_data.on = false
+	end
+end
+
+function NPCRaycastWeaponBase:set_flashlight_enabled(enabled)
+	if not self._flashlight_data then
+		return
+	end
+	
+	enabled = true --always enabled
+
+	self._flashlight_data.enabled = enabled
+
+	if managers.game_play_central:flashlights_on() or enabled then
+		self._flashlight_data.light:set_enable(self._flashlight_light_lod_enabled)
+		self._flashlight_data.effect:activate()
+
+		self._flashlight_data.on = true
+	else
+		self._flashlight_data.light:set_enable(false)
+		self._flashlight_data.effect:kill_effect()
+
+		self._flashlight_data.on = false
 	end
 end
 
@@ -191,22 +244,22 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 		local weaponname = tweak_data.weapon[self._name_id]
 
 		if weaponname.suppression and weaponname.suppression >= 5 then
-			target_unit:character_damage():build_suppression(tweak_data.weapon[self._name_id].suppression)
+			target_unit:character_damage():build_suppression(math.max(tweak_data.weapon[self._name_id].suppression, 1))
 			shouldnt_suppress_on_hit = true
 		end
 	end
 
-	if hit_player and target_unit and target_unit:character_damage() and target_unit:character_damage().build_suppression and not shouldnt_suppress_on_hit then
-		target_unit:character_damage():build_suppression(tweak_data.weapon[self._name_id].suppression)
+	if hit_player and target_unit and target_unit:character_damage() and target_unit:character_damage().build_suppression and not shouldnt_suppress_on_hit then	
+		target_unit:character_damage():build_suppression(math.max(tweak_data.weapon[self._name_id].suppression, 1))
 	end
 
 	result.hit_enemy = char_hit
-
-	if (furthest_hit and furthest_hit.distance > 600 or not furthest_hit or result.guaranteed_miss) and alive(self._obj_fire) then
+	local fhover600ornohitormiss = furthest_hit and furthest_hit.distance > 600 or not furthest_hit or result.guaranteed_miss
+	if fhover600ornohitormiss and alive(self._obj_fire) then
 		local num_rays = (tweak_data.weapon[self._name_id] or {}).rays or 1
 		local trail_direction = furthest_hit and furthest_hit.ray or direction
 
-		for i = 1, num_rays, 1 do
+		for i = 1, num_rays do
 			mvector3.set(mvec_spread, trail_direction)
 
 			if i > 1 then

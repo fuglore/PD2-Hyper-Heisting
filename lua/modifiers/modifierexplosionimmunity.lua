@@ -7,7 +7,7 @@ function ModifierExplosionImmunity:init(data)
 	ModifierExplosionImmunity.super.init(self, data)
 	
 	local gamemode_chk = game_state_machine and game_state_machine:gamemode() 
-	if gamemode_chk == "crime_spree" or managers.skirmish and managers.skirmish:is_skirmish() then
+	if Global.game_settings.incsmission then
 		if not Global.game_settings.aggroAI then
 			Global.game_settings.aggroAI = true
 		end

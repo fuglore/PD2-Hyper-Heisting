@@ -1,0 +1,15 @@
+<materials version="3" group="ene_akan_fbi_tank_saiga_federale">
+    <material render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" name="mtr_akan_bulldozer">
+        <bump_normal_texture file="units/payday2/characters/shared_textures/bulldozer_nm"/>
+        <diffuse_texture file="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_saiga/saiga_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0" type="scalar" name="contour_opacity"/>
+    </material>
+    <material render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" name="mtr_helmet">
+        <bump_normal_texture file="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_akan_dozer_policia_federale_masks_nm"/>
+        <diffuse_texture file="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_akan_dozer_policia_federale_masks_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0" type="scalar" name="contour_opacity"/>
+    </material>
+    <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
+</materials>

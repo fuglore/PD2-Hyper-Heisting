@@ -1,0 +1,112 @@
+<table name="flat_hh">
+	<level ai_group_type="america" brief_id="heist_flat_hl_briefing" briefing_dialog="Play_pln_flt_brf_01" cube="cube_apply_heist_bank" id="flat_hh" intro_event="Play_pln_flt_intro_01" max_bags="11" name_id="heist_flat_hl" outro_event="Play_pln_flt_50">
+		<add file="levels/flat_hh/add.xml"/>
+		<assets>
+			<asset name="ammo_bag"/>
+            <asset name="health_bag"/>
+            <asset name="grenade_crate"/>
+		</assets>
+		<include directory="levels/flat_hh">
+			<file file="world.world" type="binary"/>
+			<file file="continents.continents" type="binary"/>
+			<file file="mission.mission" type="binary"/>
+			<file file="nav_manager_data.nav_data" type="binary"/>
+			<file file="world_sounds.world_sounds" type="binary"/>
+			<file file="world_cameras.world_cameras" type="binary"/>
+			<file file="art_dhruva/art_dhruva.continent" type="binary"/>
+			<file file="art_dhruva/art_dhruva.mission" type="binary"/>
+			<file file="collision/collision.continent" type="binary"/>
+			<file file="collision/collision.mission" type="binary"/>
+			<file file="editor only/editor only.continent" type="binary"/>
+			<file file="editor only/editor only.mission" type="binary"/>
+			<file file="flt_backdrop/flt_backdrop.continent" type="binary"/>
+			<file file="flt_backdrop/flt_backdrop.mission" type="binary"/>
+			<file file="lights/lights.continent" type="binary"/>
+			<file file="lights/lights.mission" type="binary"/>
+			<file file="backdrop/backdrop.continent" type="binary"/>
+			<file file="backdrop/backdrop.mission" type="binary"/>
+			<file file="world/world.continent" type="binary"/>
+			<file file="world/world.mission" type="binary"/>
+			<file file="cover_data.cover_data" type="binary"/>
+		</include>
+		<music_overrides track_47_gen="track_47_flat"/>
+		<packages>
+			<value_node value="packages/narr_flat"/>
+			<value_node value="packages/thabeatpricks"/>
+			<value_node value="levels/narratives/classics/flat/world"/>
+			<value_node value="levels/narratives/classics/flat/world_sounds"/>
+			<value_node value="levels/narratives/classics/flat/art_dhruva/art_dhruva"/>
+			<value_node value="levels/narratives/classics/flat/collision/collision"/>
+			<value_node value="levels/narratives/classics/flat/editor only/editor only"/>
+			<value_node value="levels/narratives/classics/flat/flt_backdrop/flt_backdrop"/>
+			<value_node value="levels/narratives/classics/flat/lights/lights"/>
+			<value_node value="levels/narratives/classics/flat/world/world"/>
+			<value_node value="levels/instances/unique/kenaz/security_room/world"/>
+			<value_node value="levels/instances/unique/are_pyro_booth/world"/>
+			<value_node value="packages/vr_menu"/>
+		</packages>
+		<script_data_mods directory="scriptdata">
+			<mod replacement="objectives.objective" replacement_type="custom_xml" target_ext="objective" target_path="gamedata/objectives">
+				<options merge_mode="add" mode="add"/>
+			</mod>
+		</script_data_mods>
+	</level>
+	<narrative brief_id="heist_flat_crimenet" briefing_event="pln_flt_cbf_01" contact="classic" icon="guis/dlcs/bro/textures/pd2/crimenet/panicroom" id="flat" jc="30" load_screen="guis/dlcs/pic/textures/loading/job_panicroom" name_id="heist_flat_hl" region="street">
+		<chain>
+			<table level_id="flat_hh" type="d" type_id="heist_type_assault"/>
+		</chain>
+		<contract_cost>
+			<value_node value="70000"/>
+			<value_node value="150000"/>
+			<value_node value="350307"/>
+			<value_node value="700000"/>
+			<value_node value="900000"/>
+			<value_node value="900000"/>
+			<value_node value="900000"/>
+		</contract_cost>
+		<crimenet_callouts>
+			<value_node value="pln_flt_cnc_01"/>
+		</crimenet_callouts>
+		<crimenet_videos>
+			<value_node value="cn_branchbank1"/>
+			<value_node value="cn_branchbank2"/>
+			<value_node value="cn_branchbank3"/>
+		</crimenet_videos>
+		<experience_mul>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="1"/>
+			<value_node value="3"/>
+			<value_node value="3"/>
+			<value_node value="3"/>
+		</experience_mul>
+		<max_mission_xp>
+			<value_node value="30500"/>
+			<value_node value="30500"/>
+			<value_node value="30500"/>
+			<value_node value="30500"/>
+			<value_node value="30500"/>
+			<value_node value="30500"/>
+			<value_node value="30500"/>
+		</max_mission_xp>
+		<min_mission_xp>
+			<value_node value="12000"/>
+			<value_node value="25000"/>
+			<value_node value="25000"/>
+			<value_node value="25000"/>
+			<value_node value="25000"/>
+			<value_node value="25000"/>
+			<value_node value="25000"/>
+		</min_mission_xp>
+		<payout>
+			<value_node value="118000"/>
+			<value_node value="236000"/>
+			<value_node value="826000"/>
+			<value_node value="1.18e+006"/>
+			<value_node value="1.357e+006"/>
+			<value_node value="1.534e+006"/>
+			<value_node value="1.652e+006"/>
+		</payout>
+	</narrative>
+</table>

@@ -99,7 +99,22 @@ function SkirmishTweakData:_init_wave_modifiers()
 	}
 	self.wave_modifiers[3] = {
 		{
-			class = "ModifierSkulldozers"
+			class = "ModifierSkulldozers",
+			data = {
+				boolean = {
+					true,
+					"none"
+				}
+			}
+		},
+		{
+			class = "ModifierAggro",
+			data = {
+				boolean = {
+					true,
+					"none"
+				}
+			}
 		}
 	}
 	self.wave_modifiers[5] = {
@@ -108,8 +123,22 @@ function SkirmishTweakData:_init_wave_modifiers()
 			data = {
 				spawn_chance = 5
 			}
+		},
+		{
+			class = "ModifierVolter", --LETS TRY GAS
+			data = {
+				boolean = {
+					true,
+					"none"
+				}
+			}
 		}
 	}
+	self.wave_modifiers[6] = {
+		{
+			class = "ModifierDozerRage"
+		}
+	}	
 	self.wave_modifiers[7] = {
 		{
 			class = "ModifierDozerMedic"
@@ -129,70 +158,80 @@ function SkirmishTweakData:_init_special_unit_spawn_limits()
 			medic = 4,
 			taser = 2,
 			tank = 1,
-			spooc = 2
+			spooc = 2,
+			ninja = 4
 		},
 		{
 			shield = 4,
 			medic = 6,
 			taser = 2,
 			tank = 1,
-			spooc = 2
+			spooc = 2,
+			ninja = 4
 		},
 		{
 			shield = 4,
 			medic = 6,
 			taser = 2,
 			tank = 1,
-			spooc = 2
+			spooc = 2,
+			ninja = 8
 		},
 		{
 			shield = 5,
 			medic = 8,
 			taser = 2,
 			tank = 1,
-			spooc = 2
+			spooc = 2,
+			ninja = 8
 		},
 		{
 			shield = 5,
 			medic = 8,
 			taser = 2,
 			tank = 2,
-			spooc = 2
+			spooc = 2,
+			ninja = 8
 		},
 		{
 			shield = 6,
 			medic = 8,
 			taser = 3,
 			tank = 2,
-			spooc = 2
+			spooc = 2,
+			ninja = 8
 		},
 		{
 			shield = 6,
 			medic = 8,
 			taser = 3,
 			tank = 2,
-			spooc = 3
+			spooc = 3,
+			ninja = 8
 		},
 		{
 			shield = 6,
 			medic = 8,
 			taser = 3,
 			tank = 2,
-			spooc = 3
+			spooc = 3,
+			ninja = 8
 		},
 		{
 			shield = 7,
 			medic = 10,
 			taser = 3,
 			tank = 2,
-			spooc = 3
+			spooc = 3,
+			ninja = 10
 		},
 		{
 			shield = 7,
 			medic = 10,
 			taser = 3,
 			tank = 2,
-			spooc = 3
+			spooc = 3,
+			ninja = 10
 		},
 		{
 			shield = 8,
@@ -288,16 +327,16 @@ function SkirmishTweakData:_init_wave_phase_durations(tweak_data)
 			1
 		}
 	}
-	skirmish_data.assault.build_duration = 30
+	skirmish_data.assault.build_duration = 1
 	skirmish_data.assault.sustain_duration_min = {
-		150,
-		150,
-		150
+		99999,
+		99999,
+		99999
 	}
 	skirmish_data.assault.sustain_duration_max = {
-		150,
-		150,
-		150
+		99999,
+		99999,
+		99999
 	}
 	skirmish_data.assault.sustain_duration_balance_mul = {
 		1,
@@ -324,9 +363,9 @@ function SkirmishTweakData:_init_wave_phase_durations(tweak_data)
 	}
 	skirmish_data.assault.force_pool_balance_mul = {
 		0.32,
-		0.5,
 		0.75,
-		0.75
+		1,
+		1
 	}
 	skirmish_data.assault.force_pool = {
 		256,
@@ -369,54 +408,41 @@ function SkirmishTweakData:_init_spawn_group_weights(tweak_data)
 			5
 		},
 		{
-			17,
 			16,
-			17,
 			16,
-			4,
-			4,
-			4,
-			6,
-			6,
-			4,
-			5
-		},
-		{
-			17,
 			16,
-			17,
 			16,
 			4,
 			4,
 			4,
+			7,
 			6,
-			6,
-			4,
+			5,
 			5
 		},
 		{
 			16,
+			16,
+			16,
+			16,
+			4,
+			4,
+			4,
+			6,
+			6,
+			6,
+			5
+		},
+		{
 			15,
-			16,
+			15,
+			15,
 			15,
 			4,
 			5,
 			4,
 			6,
 			6,
-			6,
-			6
-		},
-		{
-			15,
-			14,
-			15,
-			14,
-			4,
-			5,
-			4,
-			7,
-			7,
 			7,
 			7
 		},
@@ -425,7 +451,7 @@ function SkirmishTweakData:_init_spawn_group_weights(tweak_data)
 			14,
 			14,
 			14,
-			5,
+			4,
 			5,
 			5,
 			7,
@@ -435,15 +461,28 @@ function SkirmishTweakData:_init_spawn_group_weights(tweak_data)
 		},
 		{
 			14,
+			13.5,
 			14,
+			13.5,
+			4,
+			4,
+			4,
+			8,
+			8,
+			8,
+			8
+		},
+		{
 			14,
+			13.5,
 			14,
-			5,
-			5,
-			5,
-			6,
-			6,
-			7,
+			13.5,
+			3,
+			3,
+			3,
+			8,
+			9,
+			9,
 			9
 		},
 		{

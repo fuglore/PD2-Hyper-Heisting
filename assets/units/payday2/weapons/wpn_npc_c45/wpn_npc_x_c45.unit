@@ -3,7 +3,8 @@
   <object file="units/payday2/weapons/wpn_npc_c45/wpn_npc_c45" />
    <dependencies>
 	<depends_on effect="effects/particles/weapons/c45/muzzleflash_3dp" />
-		<depends_on bnk="soundbanks/weapon_c45" />
+	<depends_on effect="effects/payday2/particles/weapons/9mm_auto" />
+	<depends_on bnk="soundbanks/weapon_g17" />
   </dependencies>
   <extensions>
   	<extension name="unit_data" class="ScriptUnitData" />

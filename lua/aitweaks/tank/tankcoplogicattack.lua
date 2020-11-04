@@ -85,7 +85,7 @@ function TankCopLogicAttack.update(data)
 			local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 			local run_dist = nil
 			
-			if difficulty_index == 8 or Global.game_settings.use_intense_AI then
+			if difficulty_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 				run_dist = 900
 				--log("aggressive dozer active")
 			else

@@ -1,0 +1,23 @@
+<table directory="assets">
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/103867"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/100929"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/100960"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/103805"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/100276"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/100810"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/102720"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/101022"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/101581"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/101225"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/101582"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/100648"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/101226"/>
+	<texture path="levels/mods/skm_wd2_hh/cube_lights/100824"/>
+	<add path="effects/particles/rain/raindrop_screen" type="effect">
+		<effect load="true" path="effects/particles/rain/raindrop_screen" unload="true"/>
+	</add>
+	<add path="effects/particles/rain/rain_only" type="effect">
+		<effect load="true" path="effects/particles/rain/rain_only" unload="true"/>
+	</add>
+
+</table>

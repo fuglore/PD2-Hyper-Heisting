@@ -1,0 +1,20 @@
+<dynamic_object>
+	<diesel materials="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer" orientation_object="rp_wpn_frag_flashbang" />
+	<sequence_manager file="units/pd2_dlc_drm/weapons/wpn_frag_bouncer/wpn_frag_bouncer" />
+	<animations>
+		<animation_group name="enter">
+			<object name="anim_enter_flashbang" enabled="true" />
+		</animation_group>
+	</animations>
+	<bodies>
+		<body remove_ray_type="walk vis_graph" collides_with_mover="false" name="flash" enabled="false" template="static">
+			<object name="c_hitbox" collision_type="box" padding="-2"/>
+		</body>
+	</bodies>
+	<effects>
+		<effect_spawner name="passive_bouncer" object="g_body" effect="effects/pd2_mod_hh/particles/weapons/bouncer_passive" enabled="true" assign_parent="true"/>
+	</effects>
+	<graphics>
+		<object name="g_body" enabled="true" />
+	</graphics>
+</dynamic_object>

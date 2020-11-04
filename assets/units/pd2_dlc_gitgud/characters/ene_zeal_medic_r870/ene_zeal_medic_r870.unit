@@ -17,6 +17,7 @@
 			<var name="can_be_marked" value="true" />
 			<var name="_tweak_table" value="medic" />
 			<var name="_default_weapon_id" value="benelli" />
+			<var name="_melee_weapon_table" value="glowstick" />
 		</extension>
 		<extension name="inventory" class="CopInventory" />
 		<extension name="brain" class="CopBrain" />

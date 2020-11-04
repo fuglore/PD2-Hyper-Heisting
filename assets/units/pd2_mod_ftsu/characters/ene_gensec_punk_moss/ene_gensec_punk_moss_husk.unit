@@ -10,7 +10,7 @@
 	<extensions>
 		<extension name="unit_data" class="ScriptUnitData" />
 		<extension name="base" class="HuskCopBase" >
-			<var name="_tweak_table" value="cop" />
+			<var name="_tweak_table" value="cop_moss" />
 			<var name="_default_weapon_id" value="mossberg" />
 		</extension>
 		<extension name="inventory" class="HuskCopInventory" />
@@ -18,6 +18,9 @@
 		<extension name="anim_data" class="PlayerAnimationData" />
 		<extension name="character_damage" class="HuskCopDamage" >
 			<var name="_head_body_name" value="head" />
+			<var name="_head_gear_object" value="g_hat_lod" />
+			<var name="_nr_head_gear_objects" value="2" />
+			<var name="_head_gear" value="units/pd2_mod_ftsu/characters/ene_acc_gensec_beret/ene_acc_gensec_beret" />
 		</extension>
 		<extension name="movement" class="HuskCopMovement" >
 			<var name="_footwear" value="hardsole" />

@@ -1,0 +1,56 @@
+{
+	"menu_id" : "shin_options",
+	"parent_menu_id" : "blt_options",
+	"title" : "shin_options_title",
+	"back_callback" : "callback_shin_close",
+	"items" : [
+		{
+			"type" : "toggle",
+			"id" : "shin_toggle_helmet",
+			"title" : "shin_toggle_helmet_title",
+			"description" : "shin_toggle_helmet_desc",
+			"callback" : "callback_shin_toggle_helmet",
+			"value" : "toggle_helmet"
+		},
+		{
+			"type" : "toggle",
+			"id" : "shin_toggle_hhassault",
+			"title" : "shin_toggle_hhassault_title",
+			"description" : "shin_toggle_hhassault_desc",
+			"callback" : "callback_shin_toggle_hhassault",
+			"value" : "toggle_hhassault"
+		},
+		{
+			"type" : "toggle",
+			"id" : "shin_toggle_hhskulldiff",
+			"title" : "shin_toggle_hhskulldiff_title",
+			"description" : "shin_toggle_hhskulldiff_desc",
+			"callback" : "callback_shin_toggle_hhskulldiff",
+			"value" : "toggle_hhskulldiff"
+		},
+		{
+			"type" : "toggle",
+			"id" : "shin_toggle_highpriorityglint",
+			"title" : "shin_toggle_highpriorityglint_title",
+			"description" : "shin_toggle_highpriorityglint_desc",
+			"callback" : "callback_shin_toggle_highpriorityglint",
+			"value" : "toggle_highpriorityglint"
+		},
+		{
+			"type" : "toggle",
+			"id" : "shin_toggle_blurzonereduction",
+			"title" : "shin_toggle_blurzonereduction_title",
+			"description" : "shin_toggle_blurzonereduction_desc",
+			"callback" : "callback_shin_toggle_blurzonereduction",
+			"value" : "toggle_blurzonereduction"
+		},
+		{
+			"type" : "toggle",
+			"id" : "shin_enable_albanian_content",
+			"title" : "shin_albanian_content_enable_title",
+			"description" : "shin_albanian_content_enable_desc",
+			"callback" : "callback_shin_albanian_content_enable",
+			"value" : "enable_albanian_content"
+		}		
+	]
+}

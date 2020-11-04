@@ -1,0 +1,59 @@
+<table directory="assets">
+	<!--vampire jerome-->	
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" load="true"/>
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4_husk" load="true"/>
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4"/>	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4_contour"/>		
+	<object path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" />
+	<model path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4" />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/ene_fbigod_hvh_m4"/>
+	<texture path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/head_zomb_df" />
+	<texture path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_m4/zomb_df" />
+	
+	<!--vampire vinny-->
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" load="true"/>
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45_husk" load="true"/>
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"/>	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45_contour"/>		
+	<object path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" />
+	<model path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45" />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"/>
+	
+	<!--Zombie MP5 SWAT-->	
+	<unit path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3" load="true"/>
+	<unit path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3_husk" load="true"/>
+	<material_config path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3"/>	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3_contour"/>		
+	<object path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3" />
+	<model path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3" />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_swat_hvh_3/ene_swat_hvh_3"/>
+
+	<!--Zombie MP5 FBI SWAT-->	
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" load="true"/>
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3_husk" load="true"/>
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3"/>	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3_contour"/>		
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" />
+	<model path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3" />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbi_swat_hvh_3/ene_fbi_swat_hvh_3"/>	
+			
+	<!--Zombie Mosconi Punkimus-->
+	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss" load="true" />
+	<unit path="units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss_husk" load="true" />	
+	<object path="units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss"/>	
+	<model path="units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss" />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_cop_hvh_moss/ene_cop_hvh_moss" />	
+
+	<!--Zombie FBI Heavy Shield-->
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" load="true" />
+	<unit path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds_husk" load="true" />
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" />	
+	<material_config path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds_contour" />		
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds"  />
+	<model path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds"  />	
+	<cooked_physics path="units/pd2_dlc_hvh/characters/ene_fbi_swat_shield_ds/ene_fbi_swat_shield_ds" />	
+
+	<unit_mat path="units/pd2_dlc_hvh/characters/ene_acc_shield_hvh/ene_acc_shield_hvh" load="true" />	
+
+	<texture path="units/pd2_dlc_hvh/characters/ene_acc_shield_hvh/ene_acc_shield_hvh_lights_df" />	
+</table>

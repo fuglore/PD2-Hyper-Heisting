@@ -1,0 +1,21 @@
+<materials version="3" group="ene_vip_1">
+	<material name="mtr_head" render_template="generic:DIFFUSE_TEXTURE:RL_COPS:SKINNED_3WEIGHTS" version="2">
+		<diffuse_texture 		file="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotuseye"/>
+	</material>
+	<material name="mtr_head_lod1" render_template="generic:DIFFUSE_TEXTURE:RL_COPS:SKINNED_3WEIGHTS" version="2">
+		<diffuse_texture 		file="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotuseye" mip="1"/>
+	</material>
+	<material name="mtr_head_lod2" render_template="generic:DIFFUSE_TEXTURE:RL_COPS:SKINNED_3WEIGHTS" version="2">
+		<diffuse_texture 		file="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotuseye" mip="4"/>
+	</material>
+	<material name="mtr_body" render_template="generic:DIFFUSE_TEXTURE:RL_COPS:SKINNED_3WEIGHTS" version="2">
+		<diffuse_texture 		file="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotusbody"/>
+	</material>
+	<material name="mtr_body_lod1" render_template="generic:DIFFUSE_TEXTURE:RL_COPS:SKINNED_3WEIGHTS" version="2">
+		<diffuse_texture 		file="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotusbody" mip="1"/>
+	</material>
+	<material name="mtr_body_lod2" render_template="generic:DIFFUSE_TEXTURE:RL_COPS:SKINNED_3WEIGHTS" version="2">
+		<diffuse_texture 		file="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotusbody" mip="4"/>
+	</material>
+    <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
+</materials>

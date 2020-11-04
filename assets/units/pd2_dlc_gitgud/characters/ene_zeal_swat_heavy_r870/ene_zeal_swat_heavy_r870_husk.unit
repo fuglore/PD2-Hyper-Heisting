@@ -12,6 +12,7 @@
 		<extension name="base" class="HuskCopBase" >
 			<var name="_tweak_table" value="heavy_swat" />
 			<var name="_default_weapon_id" value="blazter" />
+			<var name="_melee_weapon_table" value="glowstick" />
 		</extension>
 		<extension name="inventory" class="HuskCopInventory" />
 		<extension name="brain" class="HuskCopBrain" />
