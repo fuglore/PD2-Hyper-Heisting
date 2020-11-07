@@ -482,7 +482,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 		end
 		
 		if new_attention and new_reaction then
-			local path_fail_t_chk = data.important and 0.5 or 2
+			local path_fail_t_chk = data.important and 0.5 or 1
 			if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
 				if data.important and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.nav_tracker and not my_data.walking_to_optimal_pos then
 					if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
@@ -625,7 +625,7 @@ end
 
 function CopLogicTravel._get_pos_on_wall(from_pos, max_dist, step_offset, is_recurse)
 	local nav_manager = managers.navigation
-	local nr_rays = 7
+	local nr_rays = 8
 	local ray_dis = max_dist or 1000
 	local step = 360 / nr_rays
 	local offset = step_offset or math.random(360)
@@ -865,7 +865,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	end
 	
 	if not ignore_walks then
-		local path_fail_t_chk = data.important and 0.5 or 2
+		local path_fail_t_chk = data.important and 0.5 or 1
 		if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - t > path_fail_t_chk then
 			if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 				if not action_taken then
@@ -1176,15 +1176,7 @@ function CopLogicTravel._on_destination_reached(data)
 
 	if objective.type == "free" then
 		if not objective.action_duration then
-			if objective.pos then
-				if mvector3.distance(data.objective.pos, data.m_pos) < 30 then
-					data.objective_complete_clbk(data.unit, objective)
-				else
-					data.objective_failed_clbk(data.unit, objective)
-				end
-			else
-				data.objective_complete_clbk(data.unit, objective)
-			end
+			data.objective_complete_clbk(data.unit, objective)
 
 			return
 		end
@@ -1200,16 +1192,7 @@ function CopLogicTravel._on_destination_reached(data)
 
 			return
 		else	
-			if objective.pos then
-				if mvector3.distance(data.objective.pos, data.m_pos) < 40 then
-					data.objective_complete_clbk(data.unit, objective)
-				else
-					data.objective_failed_clbk(data.unit, objective)
-				end
-			else
-				data.objective_complete_clbk(data.unit, objective)
-			end
-			
+			data.objective_complete_clbk(data.unit, objective)
 			managers.groupai:state():on_defend_travel_end(data.unit, objective)
 		end
 	end
@@ -2377,7 +2360,7 @@ function CopLogicTravel._update_cover(ignore_this, data)
 	end
 
 	if nearest_cover or best_cover then
-		CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 2)
+		CopLogicBase.add_delayed_clbk(my_data, my_data.cover_update_task_key, callback(CopLogicTravel, CopLogicTravel, "_update_cover", data), data.t + 0.2)
 	end
 end
 
@@ -2883,7 +2866,7 @@ function CopLogicTravel.get_pathing_prio(data)
     local objective = data.objective
 
     if objective then
-        prio = 0 --once I added this here, it changed everything
+        prio = 0
 
         if objective.type == "phalanx" then
             prio = 4
@@ -2894,7 +2877,7 @@ function CopLogicTravel.get_pathing_prio(data)
         end
     end
 
-    if data.is_converted or data.unit:in_slot(16) then --check, maybe 0 does give some form of priority for other enemies to path faster?
+    if data.is_converted or data.unit:in_slot(16) then
         if not prio then
             prio = 0
         end
@@ -3377,6 +3360,14 @@ function CopLogicTravel.upd_advance(data)
 		return
 	end
 	
+	if my_data.processing_advance_path or my_data.processing_coarse_path then
+		CopLogicTravel._upd_pathing(data, my_data)
+
+		if my_data ~= data.internal_data then
+			return
+		end
+	end
+	
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
 	elseif my_data.warp_pos then
@@ -3409,13 +3400,7 @@ function CopLogicTravel.upd_advance(data)
 		if my_data.coarse_path_index and my_data.advancing and my_data.path_ahead then
 			CopLogicTravel._check_start_path_ahead(data)
 		end
-	elseif my_data.processing_advance_path or my_data.processing_coarse_path then
-		CopLogicTravel._upd_pathing(data, my_data)
-
-		if my_data ~= data.internal_data then
-			return
-		end
-	elseif objective and (objective.nav_seg or objective.type == "follow") then
+	elseif objective and objective.nav_seg or objective and objective.type == "follow" then
 		if my_data.coarse_path then
 			if my_data.coarse_path_index == #my_data.coarse_path then
 				CopLogicTravel._on_destination_reached(data)

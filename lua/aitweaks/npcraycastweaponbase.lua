@@ -238,19 +238,13 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 		end
 	end
 
-	local shouldnt_suppress_on_hit = nil
-
-	if target_unit and nc_or_nothit_chk and target_unit:character_damage() and target_unit:character_damage().build_suppression then
+	if target_unit and not hit_player and nc_or_nothit_chk and target_unit:character_damage() and target_unit:character_damage().build_suppression then
 		local weaponname = tweak_data.weapon[self._name_id]
 
 		if weaponname.suppression and weaponname.suppression >= 5 then
 			target_unit:character_damage():build_suppression(math.max(tweak_data.weapon[self._name_id].suppression, 1))
 			shouldnt_suppress_on_hit = true
 		end
-	end
-
-	if hit_player and target_unit and target_unit:character_damage() and target_unit:character_damage().build_suppression and not shouldnt_suppress_on_hit then	
-		target_unit:character_damage():build_suppression(math.max(tweak_data.weapon[self._name_id].suppression, 1))
 	end
 
 	result.hit_enemy = char_hit
