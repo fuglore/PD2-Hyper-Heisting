@@ -37,15 +37,13 @@ function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 		return
 	end
 	
-	if data.objective and data.objective.type == "follow" and data.objective.taserrescue then
-		if not alive(data.objective.follow_unit) then
-			data.objective_complete_clbk(data.unit, data.objective)
-		elseif data.attention_obj and data.attention_obj.unit == data.objective.follow_unit then
-			if data.objective.follow_unit:character_damage():dead() then
-				data.objective_complete_clbk(data.unit, data.objective)
-			end
-		end
-	end
+    if data.objective and data.objective.type == "follow" and data.objective.taserrescue then
+        if not alive(data.objective.follow_unit) then
+            data.objective_complete_clbk(data.unit, data.objective)
+        elseif data.objective.follow_unit:character_damage():dead() then
+            data.objective_complete_clbk(data.unit, data.objective)
+        end
+    end
 
 	CopLogicAttack._upd_aim(data, my_data)
 
