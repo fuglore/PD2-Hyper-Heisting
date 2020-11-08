@@ -768,9 +768,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 200,
-					fwd = 200,
-					bwd = 200
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 220,
@@ -828,9 +828,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 200,
-					fwd = 200,
-					bwd = 200
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 253,
@@ -888,9 +888,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 200,
-					fwd = 200,
-					bwd = 200
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 264,
@@ -948,9 +948,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 200,
-					fwd = 200,
-					bwd = 200
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 275,
@@ -1008,9 +1008,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 144,
-					fwd = 144,
-					bwd = 144
+					strafe = 60,
+					fwd = 80,
+					bwd = 50
 				},
 				hos = {
 					strafe = 144,
@@ -1128,9 +1128,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 800,
-					fwd = 800,
-					bwd = 800
+					strafe = 240,
+					fwd = 300,
+					bwd = 200
 				},
 				hos = {
 					strafe = 800,
@@ -1188,9 +1188,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 1000,
-					fwd = 1000,
-					bwd = 1000
+					strafe = 240,
+					fwd = 300,
+					bwd = 200
 				},
 				hos = {
 					strafe = 1000,
@@ -1248,9 +1248,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 200,
-					fwd = 200,
-					bwd = 200
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 350,
