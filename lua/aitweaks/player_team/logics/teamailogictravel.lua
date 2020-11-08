@@ -88,15 +88,15 @@ function TeamAILogicTravel._upd_enemy_detection(data)
 		end
 	end
 	
+	CopLogicAttack._upd_aim(data, my_data)
+	
 	if data.objective and data.objective.type == "follow" and data.objective.taserrescue then
-		if data.attention_obj and data.attention_obj.unit == data.objective.follow_unit then
-			if data.attention_obj.verified then
-				data.objective_complete_clbk(data.unit, data.objective)
-			end
+		if not alive(data.objective.follow_unit) then
+			data.objective_complete_clbk(data.unit, data.objective)
+		elseif data.objective.follow_unit:character_damage():dead() then
+			data.objective_complete_clbk(data.unit, data.objective)
 		end
 	end
-
-	CopLogicAttack._upd_aim(data, my_data)
 
 	if not my_data._intimidate_chk_t or my_data._intimidate_chk_t + 0.5 < data.t then
 		if not data.unit:brain()._intimidate_t or data.unit:brain()._intimidate_t + 2 < data.t then
@@ -150,4 +150,22 @@ function TeamAILogicTravel._upd_enemy_detection(data)
 	TeamAILogicAssault._chk_request_combat_chatter(data, my_data)
 	TeamAILogicIdle._upd_sneak_spotting(data, my_data)
 	CopLogicBase.queue_task(my_data, my_data.detection_task_key, TeamAILogicTravel._upd_enemy_detection, data, data.t + delay)
+end
+
+function TeamAILogicTravel.update(data)
+	if data.objective.type == "revive" and managers.player:is_custom_cooldown_not_active("team", "crew_inspire") then
+		local attention = data.detected_attention_objects[data.objective.follow_unit:key()]
+
+		TeamAILogicTravel.check_inspire(data, attention)
+	end
+
+	if data.objective and data.objective.type == "follow" and data.objective.taserrescue and not data.objective.pos then
+		local pos = CopLogicTravel._get_pos_on_wall(data.objective.follow_unit:movement():nav_tracker():field_position(), 800, nil, true)
+		
+		if pos then
+			data.objective.pos = pos
+		end
+	end
+
+	return CopLogicTravel.upd_advance(data)
 end

@@ -809,16 +809,14 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 	local delay = is_cool and 0 or 2
 	
-	if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
-		if not is_cool then
-			delay = 0.2
+	if not is_cool then	
+		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+			delay = 0
+		elseif data.important then
+			delay = 0
 		end
-	elseif data.important and not is_cool then
-		delay = 0.7
 	end
 	
-	
-
 	for u_key, attention_info in pairs(detected_obj) do
 		local can_detect = true
 
@@ -1969,7 +1967,7 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 	
 	if data.unit then
 		if not managers.groupai:state():whisper_mode() then
-			if data.unit:base():has_tag("special") then
+			if data.unit:base():has_tag("special") or data.important then
 				asap = true
 				if exec_t and exec_t > data.t then
 					exec_t = data.t

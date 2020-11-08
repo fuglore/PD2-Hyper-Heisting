@@ -18,12 +18,13 @@ function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 	local old_att_obj = data.attention_obj
 
 	TeamAILogicBase._set_attention_obj(data, new_attention, new_reaction)
-	TeamAILogicAssault._chk_exit_attack_logic(data, new_reaction)
-
+	
+	TeamAILogicAssault._chk_exit_attack_logic(data, new_reaction)	
+	
 	if my_data ~= data.internal_data then
 		return
 	end
-
+	
 	if data.objective and data.objective.type == "follow" and TeamAILogicIdle._check_should_relocate(data, my_data, data.objective) and not data.unit:movement():chk_action_forbidden("walk") then
 		data.objective.in_place = nil
 
@@ -36,13 +37,13 @@ function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 		return
 	end
 	
-	if data.objective and data.objective.type == "follow" and data.objective.taserrescue then
-		if data.attention_obj and data.attention_obj.unit == data.objective.follow_unit then
-			if data.attention_obj.verified then
-				data.objective_complete_clbk(data.unit, data.objective)
-			end
-		end
-	end
+    if data.objective and data.objective.type == "follow" and data.objective.taserrescue then
+        if not alive(data.objective.follow_unit) then
+            data.objective_complete_clbk(data.unit, data.objective)
+        elseif data.objective.follow_unit:character_damage():dead() then
+            data.objective_complete_clbk(data.unit, data.objective)
+        end
+    end
 
 	CopLogicAttack._upd_aim(data, my_data)
 

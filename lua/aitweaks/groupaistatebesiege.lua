@@ -2986,10 +2986,12 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 					produce_data.name = units[math.random(#units)]
 					produce_data.name = managers.modifiers:modify_value("GroupAIStateBesiege:SpawningUnit", produce_data.name)
 					local spawned_unit = sp_data.mission_element:produce(produce_data)
-					local u_key = spawned_unit:key()
+				
 					local objective = nil
 					
 					if spawned_unit then
+						local u_key = spawned_unit:key()
+						
 						hopeless = nil
 						if spawn_task.objective then
 							objective = self.clone_objective(spawn_task.objective)
@@ -3049,7 +3051,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 
 						return true
 					else
-						--hopeless = true
+						hopeless = true
 					end
 				end
 			end

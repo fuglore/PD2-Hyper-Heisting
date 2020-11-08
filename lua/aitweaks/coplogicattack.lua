@@ -94,7 +94,7 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	local key_str = tostring(data.key)
 	my_data.detection_task_key = "CopLogicAttack._upd_enemy_detection" .. key_str
 
-	--CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, data.t, data.important and true)
+	CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, data.t, data.important and true)
 	CopLogicIdle._chk_has_old_action(data, my_data)
 
 	my_data.attitude = data.objective and data.objective.attitude or "avoid"
@@ -1346,7 +1346,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 		reaction_func = SpoocLogicAttack.chk_reaction_to_attention_object
 	end
 	
-	local path_fail_t_chk = data.important and 0.5 or 2
+	local path_fail_t_chk = 0.5
 	if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
 		if data.important and alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 			local focus_enemy, focus_enemy_angle, focus_enemy_reaction = nil
@@ -1573,7 +1573,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 		local old_att_obj = data.attention_obj
 	
 		CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
-		CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
+		--CopLogicAttack._chk_exit_attack_logic(data, new_reaction) pretty sure enemies will find a reason to leave attack logic anyways probably, this is the main source of that coplogicattack crash too, im 100% on that
 
 		if new_attention then
 			if my_data.att_cover_charge_chk or old_att_obj and old_att_obj.u_key ~= new_attention.u_key then

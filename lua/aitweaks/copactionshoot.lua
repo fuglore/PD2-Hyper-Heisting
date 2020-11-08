@@ -141,11 +141,12 @@ function CopActionShoot:init(action_desc, common_data)
 			}
 
 			if self._is_team_ai then
-				damage = self._w_usage_tweak.melee_dmg
+				damage = 45
 				slotmask = managers.slot:get_mask("bullet_impact_targets_no_criminals")
 				shield_knock = true
 				hit_player = nil
 			elseif self._is_converted then
+				damage = 45
 				slotmask = managers.slot:get_mask("bullet_impact_targets_no_criminals")
 				hit_player = nil
 			end
