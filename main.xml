@@ -44,11 +44,11 @@
 		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_hvh/characters/ene_bulldozer_hvh_3/ene_bulldozer_hvh_3" target_type="sequence_manager" merge_mode="script_merge"/>
 		
 		<!--murky bulldozers -->				
-		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2" target_type="sequence_manager" merge_mode="script_merge"/>				
-		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1" target_type="sequence_manager" merge_mode="script_merge"/>				
-		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3" target_type="sequence_manager" merge_mode="script_merge"/>				
-		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4" target_type="sequence_manager" merge_mode="script_merge"/>
-		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic" target_type="sequence_manager" merge_mode="script_merge"/>
+		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2" target_type="sequence_manager" merge_mode="script_merge"/>				
+		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1" target_type="sequence_manager" merge_mode="script_merge"/>				
+		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3" target_type="sequence_manager" merge_mode="script_merge"/>				
+		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4" target_type="sequence_manager" merge_mode="script_merge"/>
+		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_mod_psc/characters/ene_murkywater_bulldozer_medic/ene_murkywater_bulldozer_medic" target_type="sequence_manager" merge_mode="script_merge"/>
 		
 		<!--policia federal bulldozers -->				
 		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_r870/ene_swat_dozer_policia_federale_r870" target_type="sequence_manager" merge_mode="script_merge"/>				
