@@ -46,7 +46,7 @@ function TeamAILogicDisabled._upd_enemy_detection(data)
 
 	TeamAILogicBase._set_attention_obj(data, new_attention, new_reaction)
 		
-	if not my_data.retry_so_t or my_data.retry_so_t < data.t then --PRIORITIZE PLAYERS FIRST DICKHEADS
+	--[[if not my_data.retry_so_t or my_data.retry_so_t < data.t then --figure out why this isnt working correctly
 	
 		local cannot_try_SO = nil
 		
@@ -67,7 +67,7 @@ function TeamAILogicDisabled._upd_enemy_detection(data)
 				TeamAILogicDisabled._register_revive_SO(data, my_data, "revive")
 			end
 		end
-	end
+	end]]
 	
 	TeamAILogicDisabled._upd_aim(data, my_data)
 

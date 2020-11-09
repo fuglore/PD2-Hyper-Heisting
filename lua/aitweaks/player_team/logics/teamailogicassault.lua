@@ -19,21 +19,34 @@ function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 
 	TeamAILogicBase._set_attention_obj(data, new_attention, new_reaction)
 	
-	TeamAILogicAssault._chk_exit_attack_logic(data, new_reaction)	
+	if data.objective then
 	
+		if data.objective.type == "revive" and managers.player:is_custom_cooldown_not_active("team", "crew_inspire") then
+			local attention = data.detected_attention_objects[data.objective.follow_unit:key()]
+
+			TeamAILogicTravel.check_inspire(data, attention)
+		end
+		
+		if data.objective.type == "follow" or data.objective.type == "revive" then
+			if TeamAILogicIdle._check_should_relocate(data, my_data, data.objective) and not data.unit:movement():chk_action_forbidden("walk") then
+				data.objective.in_place = nil
+
+				data.objective.called = true
+
+				TeamAILogicBase._exit(data.unit, "travel")
+
+				return
+			end
+		end
+	end
+
 	if my_data ~= data.internal_data then
 		return
 	end
 	
-	if data.objective and data.objective.type == "follow" and TeamAILogicIdle._check_should_relocate(data, my_data, data.objective) and not data.unit:movement():chk_action_forbidden("walk") then
-		data.objective.in_place = nil
+	TeamAILogicAssault._chk_exit_attack_logic(data, new_reaction)
 
-		if new_prio_slot and new_prio_slot > 5 then
-			data.objective.called = true
-		end
-
-		TeamAILogicBase._exit(data.unit, "travel")
-
+	if my_data ~= data.internal_data then
 		return
 	end
 	

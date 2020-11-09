@@ -1825,6 +1825,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.stance = "hos"
 		objective.pose = "stand"
 		objective.scan = true
+		objective.path_ahead = true
 		objective.interrupt_dis = 200
 		objective.interrupt_suppression = nil
 	elseif grp_objective.type == "retire" then
@@ -1835,17 +1836,18 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.scan = true
 	elseif grp_objective.type == "assault_area" then
 		objective.type = "defend_area"
-
-		if grp_objective.follow_unit then
-			objective.follow_unit = grp_objective.follow_unit
-			objective.distance = grp_objective.distance
-		end
-
 		objective.stance = "hos"
 		objective.pose = "stand"
 		objective.scan = true
+		objective.path_ahead = true
 		objective.interrupt_dis = 200
 		objective.interrupt_suppression = true
+		if grp_objective.follow_unit then
+			objective.follow_unit = grp_objective.follow_unit
+			objective.distance = grp_objective.distance
+			objective.interrupt_dis = nil
+			objective.interrupt_suppression = nil
+		end
 	elseif grp_objective.type == "create_phalanx" then
 		objective.type = "phalanx"
 		objective.stance = "hos"

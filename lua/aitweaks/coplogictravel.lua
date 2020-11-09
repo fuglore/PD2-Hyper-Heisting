@@ -168,12 +168,15 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	end
 
 	my_data.attitude = data.objective.attitude or "avoid"
-	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range
+	local range = {
+		optimal = 3000,
+		far = 4000, 
+		close = 2000
+	}
+	
+	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range or range
 	if not data.team then
 		data.unit:movement():set_team(managers.groupai:state()._teams["law1"])
-		if data.team then
-			
-		end
 	end
 	my_data.path_safely = data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area" or nil
 	my_data.path_ahead = data.cool or objective.path_ahead or data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player")
@@ -814,7 +817,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 		end
 	end
 	
-	local engage_range = my_data.weapon_range.close or 1500
+	local engage_range = my_data.weapon_range and my_data.weapon_range.close or 1500
 
 	local action_taken = data.logic.action_taken(data, my_data)
 	local focus_enemy = data.attention_obj

@@ -644,44 +644,6 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 	return best_target, best_target_priority_slot, best_target_reaction
 end
 
-function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
-	local follow_unit = objective.follow_unit
-	local my_nav_seg_id = data.unit:movement():nav_tracker():nav_segment()
-	local follow_unit_nav_seg_id = follow_unit:movement():nav_tracker():nav_segment()
-
-	local max_allowed_dis_xy = 300
-	local max_allowed_dis_z = 250
-	local max_allowed_dis_same_seg = 600
-
-	mvector3.set(tmp_vec1, follow_unit:movement():m_pos())
-	mvector3.subtract(tmp_vec1, data.m_pos)
-
-	local too_far = nil
-	local too_far_same_seg = nil
-
-	if max_allowed_dis_z < math.abs(mvector3.z(tmp_vec1)) then
-		too_far = true
-	else
-		mvector3.set_z(tmp_vec1, 0)
-		
-		if max_allowed_dis_same_seg < mvector3.length(tmp_vec1) then
-			too_far_same_seg = true
-		end
-		
-		if my_nav_seg_id == follow_unit_nav_seg_id and not too_far_same_seg then
-			return
-		end
-
-		if max_allowed_dis_xy < mvector3.length(tmp_vec1) then
-			too_far = true
-		end
-	end
-	
-	if too_far or too_far_same_seg then
-		return true
-	end
-end
-
 function TeamAILogicIdle._upd_enemy_detection(data)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
