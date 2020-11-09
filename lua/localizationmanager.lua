@@ -232,7 +232,7 @@
 		["loading_hh_15"] = "Getting hit by an enemy melee attack will temporarily stagger you, and cause you to be unable to attack for a few moments!",
 		["loading_hh_16"] = "Punks are overconfident fodder enemies wielding revolvers, double barreled shotguns, and submachine guns. They will not hurt you much if you do not let them!",
 		["loading_hh_17"] = "In Hyper Heisting, Tasers tasing you into incapacitation and getting downed by Cloakers count as actual downs, which can send you into custody! Be careful around them!",
-		["loading_hh_18"] = "Ammo pickups have a 5% chance by default to give you one throwable back!",				
+		["loading_hh_18"] = "Ammo pickups have a chance by default to give you one throwable back! This chance is based on which throwable you choose!",				
 		["pattern_truthrunes_title"] = "Truth Runes",				
 		["menu_l_global_value_hyperheist"] = "This is a Hyper Heisting item!",
 		["menu_l_global_value_hyperheisting_desc"] = "This is a Hyper Heisting item!",		
