@@ -1156,10 +1156,11 @@ function PlayerStandard:_start_action_melee(t, input, instant)
 end
 
 function PlayerStandard:_check_action_run(t, input)
+	local valid_t = not self._start_running_t or t - self._start_running_t > 0.05
 	if self._setting_hold_to_run and input.btn_run_release or self._running and not self._move_dir then
 		self._running_wanted = false
 
-		if self._running then
+		if self._running and valid_t then
 			self:_end_action_running(t)
 
 			if input.btn_steelsight_state and not self._state_data.in_steelsight then
@@ -1171,7 +1172,7 @@ function PlayerStandard:_check_action_run(t, input)
 	elseif input.btn_run_press or self._running_wanted then
 		if not self._running or self._end_running_expire_t then
 			self:_start_action_running(t)
-		elseif self._running and not self._setting_hold_to_run then
+		elseif self._running and valid_t and not self._setting_hold_to_run then
 			self:_end_action_running(t)
 
 			if input.btn_steelsight_state and not self._state_data.in_steelsight then

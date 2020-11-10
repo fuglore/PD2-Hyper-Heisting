@@ -489,6 +489,15 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 			local aimed_at = TeamAILogicIdle.chk_am_i_aimed_at(data, attention_data, attention_data.aimed_at and 0.95 or 0.985)
 			attention_data.aimed_at = aimed_at
 			local reaction_too_mild = nil
+			
+			if data.objective and data.objective.taserrescue and data.objective.follow_unit == attention_data.unit then
+				best_target = attention_data
+				best_target_priority_slot = 1
+				best_target_priority = distance
+				best_target_reaction = reaction
+				
+				break
+			end		
 
 			if not reaction or best_target_reaction and reaction < best_target_reaction then
 				reaction_too_mild = true
@@ -531,17 +540,10 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 				local activetaser = is_taser and attention_data.unit:movement().active_actions and attention_data.unit:movement().active_actions[3] and attention_data.unit:movement().active_actions[3]:type() == "tase"
 				
 				if visible then
-					if rescuing then
-						target_priority_slot = 5
-					elseif is_medic then
+					if is_medic then
 						target_priority_slot = 1
 						has_special_in_sight = true
 						targeting_medic = true
-					elseif data.objective and data.objective.taserrescue and data.objective.follow_unit == attention_data.unit then
-						target_priority_slot = 1
-						has_special_in_sight = true
-						attackingactivetaser = true
-						rescuing = true
 					elseif activetaser then
 						target_priority_slot = 1
 						has_special_in_sight = true
@@ -1140,3 +1142,63 @@ function TeamAILogicIdle._upd_sneak_spotting(data, my_data)
 		end
 	end
 end
+
+function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
+	local follow_unit = objective.follow_unit
+	local my_nav_seg_id = data.unit:movement():nav_tracker():nav_segment()
+	local my_areas = managers.groupai:state():get_areas_from_nav_seg_id(my_nav_seg_id)
+	local follow_unit_nav_seg_id = follow_unit:movement():nav_tracker():nav_segment()
+
+	--for _, area in ipairs(my_areas) do
+	--	if area.nav_segs[follow_unit_nav_seg_id] then
+	--		return
+	--	end
+	--end
+
+	local is_my_area_dangerous, is_follow_unit_area_dangerous = nil
+
+	for _, area in ipairs(my_areas) do
+		if area.nav_segs[follow_unit_nav_seg_id] then
+			is_my_area_dangerous = true
+
+			break
+		end
+	end
+
+	local follow_unit_areas = managers.groupai:state():get_areas_from_nav_seg_id(follow_unit_nav_seg_id)
+
+	for _, area in ipairs(follow_unit_areas) do
+		if next(area.police.units) then
+			is_follow_unit_area_dangerous = true
+
+			break
+		end
+	end
+
+	if not is_my_area_dangerous and is_follow_unit_area_dangerous then
+		return true
+	end
+
+	local max_allowed_dis_xy = 500
+	local max_allowed_dis_z = 200
+
+	mvector3.set(tmp_vec1, follow_unit:movement():m_pos())
+	mvector3.subtract(tmp_vec1, data.m_pos)
+
+	local too_far = nil
+
+	if max_allowed_dis_z < math.abs(mvector3.z(tmp_vec1)) then
+		too_far = true
+	else
+		mvector3.set_z(tmp_vec1, 0)
+
+		if max_allowed_dis_xy < mvector3.length(tmp_vec1) then
+			too_far = true
+		end
+	end
+
+	if too_far then
+		return true
+	end
+end
+
