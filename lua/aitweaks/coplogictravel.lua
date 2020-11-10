@@ -3064,7 +3064,13 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 				cover = CopLogicTravel._find_cover(data, objective.nav_seg, near_pos)
 			end
 
-			if cover then
+			local max_dist = 1200
+
+			if objective.called or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.tactics and data.tactics.shield_cover and objective.follow_unit then
+				max_dist = 300
+			end
+		
+			if cover and mvector3.distance(cover[1], near_pos) < max_dist then
 				local cover_entry = {
 					cover
 				}

@@ -235,7 +235,7 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		local hurt_level_add = 0.5
 		local time_mult = 1
 		local damage = damage_info.damage
-		local hurtlevel_mult = 1
+		local hurtlevel_mult = 0.75
 		
 		if self._punk_effect then
 			hurtlevel_mult = 5
@@ -695,7 +695,7 @@ function CopDamage:_on_damage_received(damage_info)
 			local hurt_level_add = 0.5
 			local time_mult = 1
 			local damage = damage_info.damage
-			local hurtlevel_mult = 1
+			local hurtlevel_mult = 0.75
 			
 			if doomzer then
 				hurtlevel_mult = 5
