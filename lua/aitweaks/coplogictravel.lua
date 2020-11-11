@@ -2808,9 +2808,9 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		optimal_threat_dis = 100
 		allow_fwd = true
 		
-		if not near_pos and my_data.optimal_pos or data.is_suppressed and my_data.optimal_pos then
-			near_pos = my_data.optimal_pos
-		end
+		--if not near_pos and my_data.optimal_pos or data.is_suppressed and my_data.optimal_pos then
+		--	near_pos = my_data.optimal_pos
+		--end
 		
 		near_pos = near_pos or search_area.pos
 		
@@ -2850,9 +2850,9 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	end	
 		
 	if not data.cool and not cover then
-		if my_data.optimal_pos then
-			near_pos = my_data.optimal_pos
-		end		
+		--if my_data.optimal_pos then
+		--	near_pos = my_data.optimal_pos
+		--end		
 			
 		cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
 			
@@ -3057,20 +3057,10 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 				radius = objective.radius
 			}
 		else
-			local near_pos = objective.follow_unit and objective.follow_unit:movement():nav_tracker():field_position() or path_pos or nil
-			local cover = nil
-			
-			if not data.cool then
-				cover = CopLogicTravel._find_cover(data, objective.nav_seg, near_pos)
-			end
+			local near_pos = objective.follow_unit and objective.follow_unit:movement():nav_tracker():field_position() or path_pos or managers.navigation._nav_segments[objective.nav_seg].pos
+			local cover = CopLogicTravel._find_cover(data, objective.nav_seg, nil)
 
-			local max_dist = 1200
-
-			if objective.called or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.tactics and data.tactics.shield_cover and objective.follow_unit then
-				max_dist = 300
-			end
-		
-			if cover and mvector3.distance(cover[1], near_pos) < max_dist then
+			if cover then
 				local cover_entry = {
 					cover
 				}
@@ -3081,13 +3071,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 					radius = objective.radius
 				}
 			else
-				local pos = CopLogicTravel._get_pos_on_wall(managers.navigation._nav_segments[objective.nav_seg].pos)
-				
-				if path_pos then
-					pos = path_pos
-				end
-				
-				near_pos = CopLogicTravel._get_pos_on_wall(pos, 700)
+				near_pos = CopLogicTravel._get_pos_on_wall(near_pos, 1600)
 				occupation = {
 					type = "defend",
 					seg = objective.nav_seg,
@@ -3125,19 +3109,15 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 		if data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 			threat_pos = data.attention_obj.nav_tracker:field_position()
 		end
-
-		local cover = nil
-		
-		if not data.cool then
-			cover = CopLogicTravel._find_follow_cover(data, dest_nav_seg_id, follow_pos, dest_area)
-		end
 		
 		local max_dist = 1200
 
-		if objective.called or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.tactics and data.tactics.shield_cover then
+		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or objective.called then
 			max_dist = 300
 		end
-		
+
+		local cover = managers.navigation:find_cover_in_nav_seg_3(dest_area.nav_segs, nil, follow_pos, threat_pos)
+
 		if cover and mvector3.distance(cover[1], follow_pos) < max_dist then
 			local cover_entry = {
 				cover
@@ -3147,7 +3127,9 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 				cover = cover_entry
 			}
 		else
-			local to_pos = CopLogicTravel._get_pos_on_wall(follow_pos, max_dist)
+			local pos = path_pos or dest_area.pos
+			local to_pos = CopLogicTravel._get_pos_on_wall(pos, max_dist)
+			
 			occupation = {
 				type = "defend",
 				pos = to_pos
