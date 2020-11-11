@@ -482,7 +482,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
 	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
 	
-	if not action_taken and want_to_take_cover and not best_cover or not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify then
+	if not action_taken and want_to_take_cover and not best_cover or not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or not action_taken and data.unit:base()._tweak_table == "chavez_boss" then
 		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil)
 	end
 
@@ -681,9 +681,14 @@ function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, 
 
 		if retreat_to then
 			CopLogicAttack._cancel_cover_pathing(data, my_data)
-
+			local haste = "walk"
+			
+			if data.unit:base()._tweak_table == "chavez_boss" then
+				haste = "run"
+			end
+			
 			local new_action_data = {
-				variant = "walk",
+				variant = haste,
 				body_part = 2,
 				type = "walk",
 				nav_path = {

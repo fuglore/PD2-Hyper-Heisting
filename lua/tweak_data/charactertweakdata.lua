@@ -5738,7 +5738,7 @@ function CharacterTweakData:_presets(tweak_data)
 		range = {
 			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 1500 
+			close = 1200 
 		},
 		FALLOFF = {
 			{

@@ -224,8 +224,8 @@ function CopLogicBase._evaluate_reason_to_surrender(data, my_data, aggressor_uni
 	
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
-	if diff_index <= 6 then
-		hold_chance = hold_chance * 0.75
+	if diff_index > 6 then
+		hold_chance = hold_chance * 1.25
 	end
 
 	for factor, factor_data in pairs(surrender_tweak.factors) do

@@ -8,7 +8,7 @@ function CopLogicIntimidated._add_delayed_rescue_SO(data, my_data)
 			if my_data.rescuer then
 				local rescuer = my_data.rescuer
 								
-				if rescuer:brain():objective() then
+				if alive(rescuer) and rescuer:brain() and rescuer:brain():objective() then
 					managers.groupai:state():on_objective_failed(rescuer, rescuer:brain():objective())
 				end
 				my_data.rescuer = nil
