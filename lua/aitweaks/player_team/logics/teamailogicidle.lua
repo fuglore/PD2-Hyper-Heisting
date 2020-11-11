@@ -432,12 +432,6 @@ function TeamAILogicIdle.is_available_for_assignment(data, new_objective)
 		if data.internal_data.performing_act_objective and not data.unit:anim_data().act_idle then
 			return
 		end
-		
-		if new_objective and new_objective.taserrescue then
-			if not data.objective.type or data.objective.type ~= "revive" then
-				return true
-			end
-		end
 
 		if new_objective and (new_objective.type ~= "follow" and not new_objective.called) and CopLogicBase.is_obstructed(data, new_objective, 0.2) then
 			return
