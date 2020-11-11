@@ -47,6 +47,7 @@ function LevelsTweakData:init()
 	-- Federales heists
 	self.bex.package = {"packages/mexicoassets", "packages/job_bex"}
 	self.pex.package = {"packages/mexicoassets", "packages/job_pex"}
+	self.fex.package = {"packages/mexicoassets", "packages/job_fex"}
 	self.skm_bex.package = {"packages/mexicoassets", "packages/dlcs/skm/job_bex_skm"}
 	
 	self.hvh.package = {"packages/zombieassets", "packages/narr_hvh"}
