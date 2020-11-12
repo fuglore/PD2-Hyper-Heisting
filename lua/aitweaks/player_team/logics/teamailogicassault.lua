@@ -2,6 +2,55 @@ local math_min = math.min
 
 TeamAILogicAssault._COVER_CHK_INTERVAL = 0.1
 
+function TeamAILogicAssault.action_complete_clbk(data, action)
+	local my_data = data.internal_data
+	local action_type = action:type()
+
+	if action_type == "walk" then
+		my_data.advancing = nil
+
+		if my_data.surprised then
+			my_data.surprised = false
+		elseif my_data.moving_to_cover then
+			if action:expired() then
+				my_data.in_cover = my_data.moving_to_cover
+				my_data.cover_enter_t = data.t
+				my_data.cover_sideways_chk = nil
+			end
+
+			my_data.moving_to_cover = nil
+		elseif my_data.walking_to_cover_shoot_pos then
+			my_data.walking_to_cover_shoot_pos = nil
+		end
+		
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+		end	
+	elseif action_type == "shoot" then
+		my_data.shooting = nil
+	elseif action_type == "turn" then
+		my_data.turning = nil
+
+		if my_data._turning_to_intimidate then
+			my_data._turning_to_intimidate = nil
+
+			TeamAILogicIdle.intimidate_civilians(data, data.unit, true, true, my_data._primary_intimidation_target)
+
+			my_data._primary_intimidation_target = nil
+		end
+		
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+		end	
+	elseif action_type == "hurt" then
+		if action:expired() then
+			CopLogicAttack._upd_aim(data, my_data)
+		end
+	elseif action_type == "dodge" then
+		CopLogicAttack._upd_aim(data, my_data)
+	end
+end
+
 function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
@@ -28,16 +77,14 @@ function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 		end
 		
 		if data.objective.type == "follow" or data.objective.type == "revive" then
-			if not new_prio_slot or new_prio_slot > 2 then
-				if TeamAILogicIdle._check_should_relocate(data, my_data, data.objective) and not data.unit:movement():chk_action_forbidden("walk") or data.objective.called and not data.unit:movement():chk_action_forbidden("walk") then
-					data.objective.in_place = nil
+			if TeamAILogicIdle._check_should_relocate(data, my_data, data.objective) and not data.unit:movement():chk_action_forbidden("walk") then
+				data.objective.in_place = nil
 
-					data.objective.called = true
+				data.objective.called = true
 
-					TeamAILogicBase._exit(data.unit, "travel")
+				TeamAILogicBase._exit(data.unit, "travel")
 
-					return
-				end
+				return
 			end
 		end
 	end
