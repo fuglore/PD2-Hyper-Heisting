@@ -40,7 +40,7 @@ function CopLogicIntimidated.register_rescue_SO(ignore_this, data)
 	end
 	
 	if not my_tracker then
-		log("go fuck yourself")
+		--log("go fuck yourself")
 		
 		return
 	end

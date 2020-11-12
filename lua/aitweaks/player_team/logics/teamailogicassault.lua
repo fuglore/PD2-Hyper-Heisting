@@ -28,14 +28,16 @@ function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 		end
 		
 		if data.objective.type == "follow" or data.objective.type == "revive" then
-			if new_prio_slot and new_prio_slot > 2 and TeamAILogicIdle._check_should_relocate(data, my_data, data.objective) and not data.unit:movement():chk_action_forbidden("walk") then
-				data.objective.in_place = nil
+			if not new_prio_slot or new_prio_slot > 2 then
+				if TeamAILogicIdle._check_should_relocate(data, my_data, data.objective) and not data.unit:movement():chk_action_forbidden("walk") or data.objective.called and not data.unit:movement():chk_action_forbidden("walk") then
+					data.objective.in_place = nil
 
-				data.objective.called = true
+					data.objective.called = true
 
-				TeamAILogicBase._exit(data.unit, "travel")
+					TeamAILogicBase._exit(data.unit, "travel")
 
-				return
+					return
+				end
 			end
 		end
 	end

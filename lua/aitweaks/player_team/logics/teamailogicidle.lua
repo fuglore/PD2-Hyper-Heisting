@@ -1165,13 +1165,13 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 		return true
 	end
 
-	for _, area in ipairs(my_areas) do
-		if area.nav_segs[follow_unit_nav_seg_id] then
-			return
-		end
+	if my_nav_seg_id == follow_unit_nav_seg_id then
+		--log("they're in my area")
+		return
 	end
 	
 	if data.unit:raycast("ray", data.unit:movement():m_head_pos(), follow_unit:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", follow_unit, "report") then
+		--log("no los")
 		return true
 	end	
 

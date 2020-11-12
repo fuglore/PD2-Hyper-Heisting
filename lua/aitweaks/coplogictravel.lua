@@ -3309,7 +3309,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 		local nav_seg = coarse_path[nav_index][1]
 		local area = managers.groupai:state():get_area_from_nav_seg_id(nav_seg)
 		if data.cool then
-			cover = managers.navigation:find_cover_in_nav_seg_1(area.nav_segs)
+			--cover = managers.navigation:find_cover_in_nav_seg_1(area.nav_segs)
 		else
 			cover = CopLogicTravel._find_cover(data, nav_seg, nil)
 		end
