@@ -5,6 +5,7 @@ local tmp_vec3 = Vector3()
 local mvec3_dot = mvector3.dot
 local mvec3_dist_sq = mvector3.distance_sq
 local mvec3_dist = mvector3.distance
+local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_norm = mvector3.normalize
 local math_max = math.max
 local math_min = math.min
@@ -1142,12 +1143,37 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 	local my_nav_seg_id = data.unit:movement():nav_tracker():nav_segment()
 	local my_areas = managers.groupai:state():get_areas_from_nav_seg_id(my_nav_seg_id)
 	local follow_unit_nav_seg_id = follow_unit:movement():nav_tracker():nav_segment()
+	
+	local max_allowed_dis_xy = 500 * 500
+	local max_allowed_dis_z = 200
 
-	--for _, area in ipairs(my_areas) do
-	--	if area.nav_segs[follow_unit_nav_seg_id] then
-	--		return
-	--	end
-	--end
+	local too_far = nil
+
+	if math.abs(data.m_pos.z - follow_unit:movement():m_pos().z) > max_allowed_dis_z then
+		too_far = true
+		--log("no")
+	else	
+		local dis = mvec3_dis_sq(data.m_pos, follow_unit:movement():m_pos())
+
+		if max_allowed_dis_xy < dis then
+			--log("yes")
+			too_far = true
+		end
+	end
+
+	if too_far then
+		return true
+	end
+
+	for _, area in ipairs(my_areas) do
+		if area.nav_segs[follow_unit_nav_seg_id] then
+			return
+		end
+	end
+	
+	if data.unit:raycast("ray", data.unit:movement():m_head_pos(), follow_unit:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", follow_unit, "report") then
+		return true
+	end	
 
 	local is_my_area_dangerous, is_follow_unit_area_dangerous = nil
 
@@ -1169,30 +1195,7 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 		end
 	end
 
-	if not is_my_area_dangerous and is_follow_unit_area_dangerous then
-		return true
-	end
-
-	local max_allowed_dis_xy = 500
-	local max_allowed_dis_z = 200
-
-	mvector3.set(tmp_vec1, follow_unit:movement():m_pos())
-	mvector3.subtract(tmp_vec1, data.m_pos)
-
-	local too_far = nil
-
-	if max_allowed_dis_z < math.abs(mvector3.z(tmp_vec1)) then
-		too_far = true
-	else
-		mvector3.set_z(tmp_vec1, 0)
-
-		if max_allowed_dis_xy < mvector3.length(tmp_vec1) then
-			too_far = true
-		end
-	end
-
-	if too_far then
+	if is_my_area_dangerous and not is_follow_unit_area_dangerous then
 		return true
 	end
 end
-
