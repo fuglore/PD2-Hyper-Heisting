@@ -131,6 +131,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 		self.morale_boost_speed_bonus = 1.3
 		self.morale_boost_reload_speed_bonus = 1.3
+		self.morale_boost_suppression_resistance = 0.5
 		self.values.player.melee_knockdown_mul = {2}		
 		self.values.player.pick_lock_easy_speed_multiplier = {0.75, 0.5}	
 		self.values.player.armor_multiplier = {1.3, 1.5}

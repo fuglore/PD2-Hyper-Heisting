@@ -1333,13 +1333,13 @@ function PlayerDamage:build_suppression(amount)
 	self._last_received_sup = amount
 	self._next_allowed_sup_t = managers.player:player_timer():time() + self._dmg_interval
 	
-	local decay_t = math.lerp(0.35, 1.5, self:suppression_ratio())
+	local decay_t = 0.1 * math.min(amount, 15)
 	
 	if self._akuma_effect then
 		decay_t = decay_t + 2
 	end
 	
-	if not data.decay_start_t then
+	if not data.decay_start_t or data.decay_start_t < managers.player:player_timer():time() then
 		if self._akuma_effect then
 			data.decay_start_t = managers.player:player_timer():time() + decay_t
 		else
@@ -1349,9 +1349,22 @@ function PlayerDamage:build_suppression(amount)
 		if self._akuma_effect then
 			data.decay_start_t = managers.player:player_timer():time() + decay_t
 		else
-			local raw_decay_start_t = data.decay_start_t - managers.player:player_timer():time()
-			if raw_decay_start_t <= 0.95 then
-				data.decay_start_t = data.decay_start_t + 0.05
+			local raw_decay_start_t = math.max(0, data.decay_start_t - managers.player:player_timer():time())
+			
+			--log("current regen t is " .. tostring(raw_decay_start_t) .. "")
+			
+			if raw_decay_start_t >= 0 and raw_decay_start_t < 1.5 then
+				decay_t = math.min(1.5, decay_t)
+				
+				if decay_t + raw_decay_start_t > 1.5 then
+					decay_t = decay_t - raw_decay_start_t
+				end
+				
+				if decay_t > 0 then
+					--log("decay t is " .. tostring(decay_t) .. "")	
+					
+					data.decay_start_t = data.decay_start_t + decay_t
+				end
 			end
 		end
 	end
@@ -1362,7 +1375,10 @@ function PlayerDamage:_upd_suppression(t, dt)
 
 	if data.value then
 		if data.decay_start_t < t then
+			local drain = dt * 2
 			data.value = data.value - data.value
+			
+			--log("suppression is " .. tostring(data.value) .. "")
 
 			if data.value <= 0 then
 				data.value = nil
