@@ -105,7 +105,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			1,
 			5
 		}		
-		self.values.temporary.overkill_damage_multiplier = {{1.35, 8}}
+		self.values.temporary.overkill_damage_multiplier = {{1.50, 3}}
 		self.values.pistol.damage_addend = {0.5, 1}
 		--[[
             self.values.player.head_shot_ammo_return = {
@@ -122,7 +122,15 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
             --]]	
 		self.values.saw.damage_multiplier = {1.528} --closest i Could get!!! atleast the menu rounds up correctly. still, without perkdecks the 100% increase is somehow wrong. shouldn't matter regardless cause everyone and their grandma plays with an aced perk deck.
 		self.values.pistol.fire_rate_multiplier = {1.25}
-		self.values.pistol.reload_speed_multiplier = {1.25}		
+		self.values.pistol.reload_speed_multiplier = {1.25}
+		self.values.cooldown.long_dis_revive = {
+			{
+				1,
+				30
+			}
+		}
+		self.morale_boost_speed_bonus = 1.3
+		self.morale_boost_reload_speed_bonus = 1.3
 		self.values.player.melee_knockdown_mul = {2}		
 		self.values.player.pick_lock_easy_speed_multiplier = {0.75, 0.5}	
 		self.values.player.armor_multiplier = {1.3, 1.5}

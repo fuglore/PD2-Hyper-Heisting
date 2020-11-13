@@ -1,20 +1,20 @@
 Hooks:PostHook( WeaponFactoryTweakData, "init", "gwepmodsrebalance", function(self)
 
 
-self.parts.wpn_fps_m4_upg_m_quick.stats.reload = 5
-self.parts.wpn_fps_m4_upg_m_quick.stats.concealment = -1
-self.parts.wpn_fps_upg_ak_m_quick.stats.reload = 5
-self.parts.wpn_fps_upg_ak_m_quick.stats.concealment = -1
-self.parts.wpn_fps_ass_g36_m_quick.stats.reload = 5
-self.parts.wpn_fps_ass_g36_m_quick.stats.concealment = -1
-self.parts.wpn_fps_smg_p90_m_strap.stats.reload = 5
-self.parts.wpn_fps_smg_p90_m_strap.stats.concealment = -1
-self.parts.wpn_fps_ass_aug_m_quick.stats.reload = 5
-self.parts.wpn_fps_ass_aug_m_quick.stats.concealment = -1
-self.parts.wpn_fps_smg_mac10_m_quick.stats.reload = 5
-self.parts.wpn_fps_smg_mac10_m_quick.stats.concealment = -1
-self.parts.wpn_fps_smg_sr2_m_quick.stats.reload = 5
-self.parts.wpn_fps_smg_sr2_m_quick.stats.concealment = -1
+self.parts.wpn_fps_m4_upg_m_quick.stats.reload = 3
+self.parts.wpn_fps_m4_upg_m_quick.stats.concealment = -2
+self.parts.wpn_fps_upg_ak_m_quick.stats.reload = 3
+self.parts.wpn_fps_upg_ak_m_quick.stats.concealment = -2
+self.parts.wpn_fps_ass_g36_m_quick.stats.reload = 3
+self.parts.wpn_fps_ass_g36_m_quick.stats.concealment = -2
+self.parts.wpn_fps_smg_p90_m_strap.stats.reload = 3
+self.parts.wpn_fps_smg_p90_m_strap.stats.concealment = -2
+self.parts.wpn_fps_ass_aug_m_quick.stats.reload = 3
+self.parts.wpn_fps_ass_aug_m_quick.stats.concealment = -2
+self.parts.wpn_fps_smg_mac10_m_quick.stats.reload = 3
+self.parts.wpn_fps_smg_mac10_m_quick.stats.concealment = -2
+self.parts.wpn_fps_smg_sr2_m_quick.stats.reload = 3
+self.parts.wpn_fps_smg_sr2_m_quick.stats.concealment = -2
 
 self.parts.wpn_fps_pis_c96_b_long.stats = { value = 2, damage = 0, total_ammo_mod = 0, extra_ammo= 0, spread = 1}
 self.parts.wpn_fps_pis_c96_b_long.custom_stats = nil
