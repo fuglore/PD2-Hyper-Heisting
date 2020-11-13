@@ -1672,6 +1672,12 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 					new_action = true
 
 					if fired then
+						local fire_rate = weap_base:fire_rate_multiplier()
+						
+						if managers.player._magic_bullet_aced_t then
+							fire_rate = fire_rate * 1.2
+						end
+					
 						managers.rumble:play("weapon_fire")
 
 						local weap_tweak_data = tweak_data.weapon[weap_base:get_name_id()]
@@ -1682,13 +1688,13 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						self._equipped_unit:base():tweak_data_anim_stop("unequip")
 						self._equipped_unit:base():tweak_data_anim_stop("equip")
 
-						if not self._state_data.in_steelsight or not weap_base:tweak_data_anim_play("fire_steelsight", weap_base:fire_rate_multiplier()) then
-							weap_base:tweak_data_anim_play("fire", weap_base:fire_rate_multiplier())
+						if not self._state_data.in_steelsight or not weap_base:tweak_data_anim_play("fire_steelsight", fire_rate) then
+							weap_base:tweak_data_anim_play("fire", fire_rate)
 						end
 
 						if fire_mode == "single" and weap_base:get_name_id() ~= "saw" then
 							if not self._state_data.in_steelsight then
-								self._ext_camera:play_redirect(self:get_animation("recoil"), weap_base:fire_rate_multiplier())
+								self._ext_camera:play_redirect(self:get_animation("recoil"), fire_rate)
 							elseif weap_tweak_data.animations.recoil_steelsight then
 								self._ext_camera:play_redirect(weap_base:is_second_sight_on() and self:get_animation("recoil") or self:get_animation("recoil_steelsight"), 1)
 							end

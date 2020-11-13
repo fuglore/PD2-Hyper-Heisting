@@ -342,7 +342,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_deck2_7_desc"] = "On killing an enemy, you have a ##50%## chance to spread ##Panic## amongst enemies within a ##6m## radius of the victim.\n\n##Panic## will make enemies go into ##bursts of uncontrollable fear.##",
 			
-			["menu_deck2_9_desc"] = "You gain an additional ##20%## more health.\n\nYou regenerate ##0.5%## of your health every ##5## seconds.",
+			["menu_deck2_9_desc"] = "You gain an additional ##20%## more health.\n\nYou regenerate ##1%## of your health every ##5## seconds.",
 			
 			["menu_deck10_3_desc"] = "When you pick up ammo, you trigger an ammo pickup for ##50%## of normal pickup to other players in your team.\n\nCannot occur more than once every ##5## seconds.\n\nYou gain ##10%## more health.",
 
@@ -376,7 +376,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_carbon_blade_beta_desc"] = "BASIC: ##$basic##\nYour saws no longer wear down on damage to enemies. Your saws deal ##100%## more damage.\n\n##Don't forget, huh, I mean for real, my saws all rule, with the world, with appeal!## \n\nACE: ##$pro##\nYou can now saw through shields with your OVE9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10m## radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.",
 			
-			-- ["menu_single_shot_ammo_return_beta_desc"] = "BASIC: ##$basic##\nGetting ##2## headshots in less than ##6## seconds without missing will magically refund ##1## bullet to your used weapon. Can only be triggered by SMGs, Assault Rifles and Sniper Rifles in any firemode.\n\nACE: ##$pro##\nThe amount of headshots required is reduced to ##1##.",
+			["menu_single_shot_ammo_return_beta"] = "Strange Bandolier",
+			["menu_single_shot_ammo_return_beta_desc"] = "BASIC: ##$basic##\nGetting a headshot will refund ##1## bullet to your used weapon.\n\nThis can only be triggered by Pistols, SMGs, Assault Rifles and Sniper Rifles.\n\nACE: ##$pro##\nGetting a headshot will increase your firerate by ##20%## for ##2## seconds.\n\nThis can only be activated by Pistols, SMGs, Assault Rifles and Sniper Rifles.\n\n##The internal feed mechanisms for your weapons are now shaped like an infinity symbol...##",
 			
 			-- this was sposed to have a 15% speed bonus but fuck you 			
 			["menu_juggernaut_beta"] = "Big Guy",

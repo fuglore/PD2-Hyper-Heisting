@@ -5,6 +5,27 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		table.insert(self.default_upgrades, "player_can_free_run")
 		table.insert(self.default_upgrades, "player_run_and_reload")
 		
+		self.skills.spotter_teamwork = {
+			{
+				upgrades = {
+					"player_magic_bullet_basic"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_magic_bullet_aced"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_single_shot_ammo_return_beta",
+			desc_id = "menu_single_shot_ammo_return_beta_desc",
+			icon_xy = {
+				8,
+				4
+			}
+		}
+		
 		self.skills.second_chances[2].upgrades = {"player_pick_lock_easy_speed_multiplier_2", "player_pick_lock_hard"}
 		
 		self.skills.juggernaut[2].upgrades = {"player_armor_multiplier_cooler"}

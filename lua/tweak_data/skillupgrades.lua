@@ -202,7 +202,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 	}
 	
 	self.values.player.passive_health_regen = {
-		0.005
+		0.01
 	}
 		
 		--fuck you you piece of shit i'm not doing all this shit to make you function properly you fuck i hate your guts i hate you i hate you FUCK YOU
@@ -218,6 +218,32 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				category = "player"
 			}
 		}--]]
+		
+		self.values.player.magic_bullet_basic = {
+			true
+		}
+		self.definitions.player_magic_bullet_basic = {
+			name_id = "menu_magic_bullet_basic",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "magic_bullet_basic",
+				category = "player"
+			}
+		}
+		
+		self.values.player.magic_bullet_aced = {
+			true
+		}
+		self.definitions.player_magic_bullet_aced = {
+			name_id = "menu_magic_bullet_aced",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "magic_bullet_aced",
+				category = "player"
+			}
+		}
 		
 		self.definitions.player_armor_multiplier_cooler = {
 			name_id = "menu_player_armor_multiplier",

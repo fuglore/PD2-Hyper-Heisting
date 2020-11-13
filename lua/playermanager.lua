@@ -347,6 +347,10 @@ function PlayerManager:update(t, dt)
 		end
 	end
 	
+	if self._magic_bullet_aced_t and self._magic_bullet_aced_t < t then
+		self._magic_bullet_aced_t = nil
+	end
+	
 	if self._max_messiah_charges > 0 then
 		if self._messiah_charges < self._max_messiah_charges then
 			if not self._messiah_recharge_t then
@@ -389,6 +393,20 @@ function PlayerManager:on_headshot_dealt()
 				damage_ext:activate_jackpot_token()
 				self._safety_headshot_t = t + 5
 			end
+		end
+	end
+	
+	local weapon_unit = self:equipped_weapon_unit()
+	
+	if self:has_category_upgrade("player", "magic_bullet_basic") then
+		if weapon_unit and weapon_unit:base():is_category("pistol", "smg", "assault_rifle", "snp") then
+			self:on_ammo_increase(1)
+		end
+	end
+	
+	if self:has_category_upgrade("player", "magic_bullet_aced") then
+		if weapon_unit and weapon_unit:base():is_category("pistol", "smg", "assault_rifle", "snp") then
+			self._magic_bullet_aced_t = t + 2
 		end
 	end
 	
