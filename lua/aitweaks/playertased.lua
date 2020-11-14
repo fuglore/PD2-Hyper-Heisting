@@ -10,9 +10,9 @@ function PlayerTased:enter(state_data, enter_data)
 
 		managers.enemy:add_delayed_clbk(self._recover_delayed_clbk, callback(self, self, "clbk_exit_to_std"), recover_time)
 	else
-		if Network:is_server() then
-			self:_register_revive_SO()
-		end
+		--if Network:is_server() then
+		--	self:_register_revive_SO()
+		--end
 		self._fatal_delayed_clbk = "PlayerTased_fatal_delayed_clbk"
 		local tased_time = 9999
 		--tased_time = managers.modifiers:modify_value("PlayerTased:TasedTime", tased_time)
