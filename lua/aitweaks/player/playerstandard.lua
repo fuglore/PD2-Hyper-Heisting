@@ -663,6 +663,18 @@ function PlayerStandard:_do_action_melee(t, input, skip_damage)
 		anim_speed_multiplier = anim_speed_multiplier + 0.5
 		t_multiplier = t_multiplier - 0.25
 	end
+	
+	local stack = self._state_data.stacking_melee_speed
+	
+	if stack and stack[2] then
+		anim_speed_multiplier = anim_speed_multiplier + stack[2]
+		local t_multiplier_reduction = stack[2] * 0.5
+		t_multiplier = t_multiplier - t_multiplier_reduction
+	end
+	
+	if t_multiplier < 0.01 then
+		t_multiplier = 0.01
+	end
 
 	self._state_data.melee_expire_t = t + tweak_data.blackmarket.melee_weapons[melee_entry].expire_t * t_multiplier
 	
@@ -671,7 +683,8 @@ function PlayerStandard:_do_action_melee(t, input, skip_damage)
 	self._state_data.melee_repeat_expire_t = t + repeat_expire_t
 
 	if not instant_hit and not skip_damage then
-		self._state_data.melee_damage_delay_t = t + melee_damage_delay * t_multiplier
+		melee_damage_delay = melee_damage_delay * t_multiplier
+		self._state_data.melee_damage_delay_t = t + melee_damage_delay
 
 		if pre_calc_hit_ray then
 			self._state_data.melee_hit_ray = self:_calc_melee_hit_ray(t, 20) or true
@@ -857,21 +870,6 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 			
 			dmg_multiplier = dmg_multiplier * managers.player:upgrade_value("player", "melee_" .. tostring(tweak_data.blackmarket.melee_weapons[melee_entry].stats.weapon_type) .. "_damage_multiplier", 1)
 
-			if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
-				self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
-				self._state_data.stacking_dmg_mul.melee = self._state_data.stacking_dmg_mul.melee or {
-					nil,
-					0
-				}
-				local stack = self._state_data.stacking_dmg_mul.melee
-
-				if stack[1] and t < stack[1] then
-					dmg_multiplier = dmg_multiplier * (1 + managers.player:upgrade_value("melee", "stacking_hit_damage_multiplier", 0) * stack[2])
-				else
-					stack[2] = 0
-				end
-			end
-
 			local health_ratio = self._ext_damage:health_ratio()
 			local damage_health_ratio = managers.player:get_damage_health_ratio(health_ratio, "melee")
 
@@ -915,24 +913,42 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 			action_data.name_id = melee_entry
 			action_data.charge_lerp_value = charge_lerp_value
 
+			local defense_data = character_unit:character_damage():damage_melee(action_data)
+			
 			if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
-				self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
-				self._state_data.stacking_dmg_mul.melee = self._state_data.stacking_dmg_mul.melee or {
-					nil,
-					0
-				}
-				local stack = self._state_data.stacking_dmg_mul.melee
+				if defense_data and defense_data ~= "friendly_fire" then
+					if target_dead then --note: actually means "not dead"
+						self._state_data.stacking_melee_speed = self._state_data.stacking_melee_speed or {
+							nil,
+							0
+						}
+						
+						local stack = self._state_data.stacking_melee_speed
 
-				if character_unit:character_damage().dead and not character_unit:character_damage():dead() then
-					stack[1] = t + managers.player:upgrade_value("melee", "stacking_hit_expire_t", 1)
-					stack[2] = math.min(stack[2] + 1, tweak_data.upgrades.max_melee_weapon_dmg_mul_stacks or 5)
-				else
-					stack[1] = nil
-					stack[2] = 0
+						if stack[1] and t < stack[1] then
+							if stack[2] < 0.99 then
+								stack[2] = stack[2] + 0.25
+							end
+							stack[1] = t + 1.5
+						else
+							stack[1] = t + 1.5
+							stack[2] = 0.25
+						end
+					else
+						if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
+							self._state_data.stacking_melee_speed = self._state_data.stacking_melee_speed or {
+								nil,
+								0
+							}
+									
+							local stack = self._state_data.stacking_melee_speed
+
+							stack[1] = nil
+							stack[2] = 0
+						end
+					end
 				end
 			end
-
-			local defense_data = character_unit:character_damage():damage_melee(action_data)
 			
 			--managers.player:reset_bloodthirst_damage()
 			
@@ -946,12 +962,13 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 	end
 
 	if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
-		self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
-		self._state_data.stacking_dmg_mul.melee = self._state_data.stacking_dmg_mul.melee or {
+		self._state_data.stacking_melee_speed = self._state_data.stacking_melee_speed or {
 			nil,
 			0
 		}
-		local stack = self._state_data.stacking_dmg_mul.melee
+				
+		local stack = self._state_data.stacking_melee_speed
+
 		stack[1] = nil
 		stack[2] = 0
 	end
@@ -1120,11 +1137,31 @@ function PlayerStandard:_start_action_melee(t, input, instant)
 	local melee_entry = managers.blackmarket:equipped_melee_weapon()
 	self._state_data.melee_global_value = tweak_data.blackmarket.melee_weapons[melee_entry].anim_global_param
 
+	local t_multiplier = 1
+	
+	if managers.player:has_category_upgrade("player", "beatemup_basic") then
+		t_multiplier = t_multiplier - 0.25
+	end
+	
+	local stack = self._state_data.stacking_melee_speed
+	
+	if stack and stack[2] then
+		local t_multiplier_reduction = stack[2] * 0.5
+		t_multiplier = t_multiplier - t_multiplier_reduction
+	end
+	
+	if t_multiplier < 0.01 then
+		t_multiplier = 0.01
+	end
+	
+	--log("t_multiplier is " .. tostring(t_multiplier) .. "")
+
 	self._camera_unit:anim_state_machine():set_global(self._state_data.melee_global_value, 1)
 
 	local current_state_name = self._camera_unit:anim_state_machine():segment_state(self:get_animation("base"))
 	local attack_allowed_expire_t = tweak_data.blackmarket.melee_weapons[melee_entry].attack_allowed_expire_t or 0.15
-	self._state_data.melee_attack_allowed_t = t + (current_state_name ~= self:get_animation("melee_attack_state") and attack_allowed_expire_t or 0)
+	attack_allowed_expire_t = attack_allowed_expire_t * t_multiplier
+	self._state_data.melee_attack_allowed_t = t + (current_state_name ~= self:get_animation("melee_attack_state") and attack_allowed_expire_t or 0) 
 	local instant_hit = tweak_data.blackmarket.melee_weapons[melee_entry].instant
 
 	if not instant_hit then
@@ -1145,12 +1182,6 @@ function PlayerStandard:_start_action_melee(t, input, instant)
 	end
 
 	offset = math.max(offset or 0, attack_allowed_expire_t)
-	
-	local speed_multiplier = 1
-	
-	if managers.player:has_category_upgrade("player", "beatemup_basic") then
-		speed_multiplier = speed_multiplier + 0.5
-	end
 
 	self._ext_camera:play_redirect(self:get_animation("melee_enter"), speed_multiplier, offset)
 end
@@ -1544,6 +1575,28 @@ function PlayerStandard:_check_action_steelsight(t, input)
 	return new_action
 end
 
+function PlayerStandard:_check_stop_shooting()
+	if self._shooting then
+		self._equipped_unit:base():stop_shooting()
+		self._camera_unit:base():stop_shooting(self._equipped_unit:base():recoil_wait())
+
+		local weap_base = self._equipped_unit:base()
+		local fire_mode = weap_base:fire_mode()
+
+		if fire_mode == "auto" and (not weap_base.akimbo or weap_base:weapon_tweak_data().allow_akimbo_autofire) then
+			self._ext_network:send("sync_stop_auto_fire_sound", 0)
+		end
+
+		if fire_mode == "auto" and not self:_is_reloading() and not self:_is_meleeing() then
+			self._unit:camera():play_redirect(self:get_animation("recoil_exit"))
+		end
+
+		self._shooting = false
+		self._shooting_t = nil
+		self._shooting_t_pop = nil
+	end
+end
+
 function PlayerStandard:_check_action_primary_attack(t, input)
 	local new_action = nil
 	local action_wanted = input.btn_primary_attack_state or input.btn_primary_attack_release
@@ -1598,6 +1651,9 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 
 								self._shooting = true
 								self._shooting_t = t
+								if not self._shooting_t_pop then
+									self._shooting_t_pop = t + 3
+								end
 								start_shooting = true
 
 								if fire_mode == "auto" then
@@ -1677,7 +1733,12 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						if managers.player._magic_bullet_aced_t then
 							fire_rate = fire_rate * 1.2
 						end
-					
+						
+						if managers.player._pop_pop_mul then
+							local mul = 1 +  math.abs(managers.player._pop_pop_mul)
+							fire_rate = fire_rate * mul
+						end
+						
 						managers.rumble:play("weapon_fire")
 
 						local weap_tweak_data = tweak_data.weapon[weap_base:get_name_id()]
@@ -1716,14 +1777,14 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						if self._shooting_t then
 							local time_shooting = t - self._shooting_t
 							local achievement_data = tweak_data.achievement.never_let_you_go
-
+							
 							if achievement_data and weap_base:get_name_id() == achievement_data.weapon_id and achievement_data.timer <= time_shooting then
 								managers.achievment:award(achievement_data.award)
 
 								self._shooting_t = nil
 							end
 						end
-
+						
 						if managers.player:has_category_upgrade(primary_category, "stacking_hit_damage_multiplier") then
 							self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
 							self._state_data.stacking_dmg_mul[primary_category] = self._state_data.stacking_dmg_mul[primary_category] or {

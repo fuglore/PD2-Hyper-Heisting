@@ -307,6 +307,19 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
+		self.values.player.pop_pop = { --pop pop aced
+			true
+		}
+		self.definitions.player_pop_pop = {
+			name_id = "menu_pop_pop",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "pop_pop",
+				category = "player"
+			}
+		}
+		
 		self.values.player.phoenix_down = { --ressurection
 			true
 		}

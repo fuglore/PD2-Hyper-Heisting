@@ -34,8 +34,9 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		self.skills.overkill[2].upgrades = {"player_overkill_damage_multiplier"}
 		self.skills.overkill[1].upgrades = {"player_killshot_close_panic_chance"}	
 		
-		self.skills.fast_fire[2].upgrades = {"player_automatic_mag_increase_1"}
-		self.skills.fast_fire[1].upgrades = {"player_ap_bullets_1"}	
+		self.skills.fast_fire[1].upgrades = {"player_automatic_mag_increase_1"}	
+		self.skills.fast_fire[2].upgrades = {"player_pop_pop"}
+
 		
 		self.skills.carbon_blade[1].upgrades = {"saw_damage_mult", "saw_enemy_slicer"}	
 			

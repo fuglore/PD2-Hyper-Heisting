@@ -347,6 +347,10 @@ function PlayerManager:update(t, dt)
 		end
 	end
 	
+	if self:has_category_upgrade("player", "pop_pop") then
+		self:upd_pop_pop(t)
+	end
+	
 	if self._magic_bullet_aced_t and self._magic_bullet_aced_t < t then
 		self._magic_bullet_aced_t = nil
 	end
@@ -362,6 +366,48 @@ function PlayerManager:update(t, dt)
 	end
 
 	self:update_smoke_screens(t, dt)
+end
+
+function PlayerManager:upd_pop_pop(t)
+	--log("hmm")
+	local player_unit = self:player_unit()
+
+	if not player_unit then
+		--log("how")
+		self._pop_pop_mul = nil
+		return
+	end
+	
+	if not player_unit:movement():current_state()._shooting_t_pop then
+		--log("hmm")
+		self._pop_pop_mul = nil
+		return
+	end
+	
+	local weapon_unit = self:equipped_weapon_unit()
+	
+	if not weapon_unit or weapon_unit:base():fire_mode() == "single" then
+		--log("nani")
+		return
+	end
+	
+	local state = player_unit:movement():current_state()
+	
+	if state._shooting_t_pop then
+		local pop_t = state._shooting_t_pop - t
+		pop_t = math.max(pop_t, 0)
+		--log("pop_t is " .. tostring(pop_t) .. "")
+		local lerp_value = math.clamp(pop_t, 0, 3) / 3
+		local pop_mul = math.lerp(0.25, 0, lerp_value)
+		
+		self._pop_pop_mul = 0 - pop_mul
+		
+		--log("pop is " .. tostring(self._pop_pop_mul) .. "")
+	else
+		--log("aargh")
+		self._pop_pop_mul = nil
+	end
+		
 end
 
 function PlayerManager:on_headshot_dealt()

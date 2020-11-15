@@ -317,7 +317,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_more_fire_power_desc"] = "BASIC: ##$basic;##\nYou gain ##1## more shaped charge and ##4## more trip mines.\n\nACE: ##$pro;##\nYou gain ##4## more shaped charges and ##7## more trip mines.",
 			
 			--Infiltrator/Sociopath Shit--
-			["menu_deck8_7_desc"] = "Your movement speed is increased by ##15%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
+			["menu_deck8_7_desc"] = "Your movement speed is increased by ##15%##. \n\nEach consecutive melee hit will increase your melee weapon swing speed by ##25%## for ##1.5## seconds.\n\nThis can be stacked up to ##4## times.\n\nMissing your melee swing or running out of time will reset all stacks.",
 			
 			["menu_deck8_1_desc"] = "Your movement speed is further increased by ##5%##.",
 			
@@ -325,7 +325,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 
 			["menu_deck9_1"] = "No Talk",
 
-			["menu_deck9_1_desc"] = "Your movement speed is increased by ##15%##. \n\nYour second and each consecutive melee hit within ##1## second of the last one will deal ##10## times its normal damage.",
+			["menu_deck9_1_desc"] = "Your movement speed is increased by ##15%##. \n\nEach consecutive melee hit will increase your melee weapon swing speed by ##25%##for ##1.5## seconds.\n\nThis can be stacked up to ##4## times.\n\nMissing your melee swing or running out of time will reset all stacks.",
  
 			["menu_deck9_5_desc"] ="Killing an enemy with a melee weapon regenerates ##10%## health. \n\nThis cannot occur more than once every ##1## second. \n\nYour movement speed is further increased by ##5%##.",
  
@@ -390,8 +390,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_pistol_beta_messiah"] = "Resurrection",
 			["menu_pistol_beta_messiah_desc"] = "BASIC: ##$basic##\nWhile in bleedout, you can revive yourself if you kill an enemy.  This can only happen every ##120## seconds.\n\nACE: ##$pro##\nYou are now protected from otherwise lethal damage for ##1.5## seconds after being revived.\n\n##The mark of my divinity shall scar thy DNA.##",
 			
-			["menu_fast_fire_beta"] = "Spray & Pray",
-			["menu_fast_fire_beta_desc"] = "BASIC: ##$basic##\nYour ranged weapons can now pierce through enemy body armor. This does not apply to throwable weapons. \n\nACE: ##$pro##\nYour SMGs, LMGs and Assault Rifles gain ##15## more bullets in their magazines. This does not affect Lock n' Load aced.",
+			["menu_fast_fire_beta"] = "Lead Demiurge",
+			["menu_fast_fire_beta_desc"] = "BASIC: ##$basic##\nYour SMGs, LMGs and Assault Rifles gain ##15## more bullets in their magazines. This does not affect Lock n' Load aced.\n\nACE: ##$pro##\nHolding down your fire button with any weapon set to automatic fire will slowly increase your firerate by ##25%## over the course of ##3## seconds.\n\n##no popo##",
 			
 			["menu_gun_fighter_beta_desc"] = "BASIC: ##$basic##\nPistols gain ##5## more damage points. \n\nACE: ##$pro##\nPistols gain an additional ##5## damage points.",
 		

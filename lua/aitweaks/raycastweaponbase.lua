@@ -163,6 +163,16 @@ function RaycastWeaponBase:update_next_shooting_time()
 	if managers.player._magic_bullet_aced_t then
 		next_fire = next_fire * 0.8
 	end
+	
+	if managers.player._pop_pop_mul then
+		local pop_pop_mul_true = managers.player._pop_pop_mul + 1
+		next_fire = next_fire * pop_pop_mul_true
+	end
+	
+	if next_fire < 0 then
+		next_fire = 0
+	end
+	
 	self._next_fire_allowed = self._next_fire_allowed + next_fire
 end
 
