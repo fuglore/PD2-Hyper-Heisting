@@ -3181,7 +3181,9 @@ self.hs2000.fire_mode_data.fire_rate = 0.09
 
 --Model 3
 self.model3.AMMO_MAX = 78
+self.model3.upgrade_blocks = nil
 self.x_model3.AMMO_MAX = 90
+self.x_model3.upgrade_blocks = nil
 
 
 --Crosskill
@@ -3211,6 +3213,7 @@ self.lemming.AMMO_PICKUP = {1, 3}
 
 --Peacemaker
 self.peacemaker.AMMO_MAX = 48
+self.peacemaker.upgrade_blocks = nil
 self.peacemaker.fire_mode_data.fire_rate = 0.09
 self.peacemaker.stats.damage = 200
 self.peacemaker.stats_modifiers = {damage = 2}
@@ -3257,12 +3260,16 @@ crouching = {
 
 --Bronco
 self.new_raging_bull.AMMO_PICKUP = {0.54, 1}
+self.new_raging_bull.upgrade_blocks = nil
+
 
 --Castigo
 self.chinchilla.AMMO_PICKUP = {0.54, 1}
+self.chinchilla.upgrade_blocks = nil
 
 --Matever
 self.mateba.AMMO_PICKUP = {0.54, 1}
+self.mateba.upgrade_blocks = nil
 
 --Crosskill Guard
 self.shrew.stats.damage = 59
@@ -3493,12 +3500,15 @@ crouching = {
 
 --Bronco
 self.x_rage.AMMO_PICKUP = {0.54, 1}
+self.x_rage.upgrade_blocks = nil
 
 --Castigo
 self.x_chinchilla.AMMO_PICKUP = {0.54, 1}
+self.x_chinchilla.upgrade_blocks = nil
 
 --Matever
 self.x_2006m.AMMO_PICKUP = {0.54, 1}
+self.x_2006m.upgrade_blocks = nil
 
 --Crosskill Guard
 self.x_shrew.stats.damage = 59
