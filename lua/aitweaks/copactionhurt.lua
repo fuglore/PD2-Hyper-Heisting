@@ -106,6 +106,19 @@ function CopActionHurt:init(action_desc, common_data)
 	local is_female, uses_shield_anims, taser_tased_tasing = nil
 	local is_stealth = managers.groupai:state():whisper_mode()
 	local enable_running_hurts = nil
+	local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	self._tank_animations = self._ext_movement._anim_global == "tank" and true or nil
+	self._speed = 1
+	
+	if not self._tank_animations then
+		if difficulty_index == 8 then
+			self._speed = 1.5
+		elseif difficulty_index == 6 or difficulty_index == 7 then
+			self._speed = 1.25
+		else
+			self._speed = 1
+		end
+	end
 
 	if common_data.machine:get_global("female") == 1 then
 		is_female = true
@@ -176,6 +189,8 @@ function CopActionHurt:init(action_desc, common_data)
 		if not redir_res then
 			return
 		end
+		
+		self._machine:set_speed_soft(redir_res, self._speed, 0.5)
 
 		if action_desc.ignite_character == "dragonsbreath" then
 			self:_dragons_breath_sparks()
@@ -357,6 +372,8 @@ function CopActionHurt:init(action_desc, common_data)
 		end
 
 		redir_res = common_data.ext_movement:play_redirect("hurt_sick")
+		
+		
 
 		if not redir_res then
 			--debug_pause("[CopActionHurt:init] hurt_sick redirect failed in", common_data.machine:segment_state(ids_base))
@@ -483,7 +500,7 @@ function CopActionHurt:init(action_desc, common_data)
 
 							return
 						end
-
+						
 						local variant = self.running_hurt_anim_variants.fwd or 1
 
 						if variant > 1 then
@@ -540,6 +557,10 @@ function CopActionHurt:init(action_desc, common_data)
 				end
 			--[[else
 				Application:stack_dump_error("There's no redirect in CopActionHurt!")]]
+			end
+			
+			if action_type == "hurt" or action_type == "expl_hurt" or action_type == "heavy_hurt" or action_type == "shield_knock" then
+				self._machine:set_speed_soft(redir_res, self._speed, 0.7)
 			end
 
 			if not redir_res then

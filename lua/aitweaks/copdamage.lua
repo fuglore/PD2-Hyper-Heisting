@@ -268,6 +268,9 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		elseif damage > 20 then
 			time_to_chk = 1.35 * time_mult
 			hurt_level_add = 6
+		elseif damage > 12 then
+			time_to_chk = 1.2 * time_mult
+			hurt_level_add = 4
 		elseif damage > 8 then
 			time_to_chk = 1 * time_mult
 			hurt_level_add = 2
@@ -724,6 +727,9 @@ function CopDamage:_on_damage_received(damage_info)
 			elseif damage > 20 then
 				time_to_chk = 1.35 * time_mult
 				hurt_level_add = 6
+			elseif damage > 12 then
+				time_to_chk = 1.2 * time_mult
+				hurt_level_add = 4
 			elseif damage > 8 then
 				time_to_chk = 1 * time_mult
 				hurt_level_add = 2
