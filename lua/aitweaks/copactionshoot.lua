@@ -234,12 +234,14 @@ function CopActionShoot:init(action_desc, common_data)
 		common_data.ext_network:send("action_aim_state", true)
 	else
 		self._turn_allowed = true
-		self._turn_speed = nil
+		self._turn_speed = 1.25
 
 		local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-
-		if not self._tank_animations then
-			if difficulty_index == 8 then
+		
+		if self._unit:in_slot(16) or self._unit:in_slot(managers.slot:get_mask("criminals")) then
+			self._turn_speed = 2
+		elseif not self._tank_animations then
+			if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or difficulty_index == 8 then
 				self._turn_speed = 1.75
 			elseif difficulty_index == 6 or difficulty_index == 7 then
 				self._turn_speed = 1.5

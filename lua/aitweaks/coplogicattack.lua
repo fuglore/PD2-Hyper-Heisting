@@ -872,12 +872,27 @@ function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos,
 	local fwd = data.unit:movement():m_rot():y()
 	local target_vec = enemy_pos - my_pos
 	local error_spin = target_vec:to_polar_with_reference(fwd, math_up).spin
-
+	
 	if math_abs(error_spin) > 27 then
+		local speed = 1.25
+	
+		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+			speed = 2
+		elseif data.unit:base():has_tag("law") then
+			local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+
+			if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or difficulty_index == 8 then
+				speed = 1.75
+			elseif difficulty_index == 6 or difficulty_index == 7 then
+				speed = 1.5
+			end
+		end
+
 		local new_action_data = {
 			type = "turn",
 			body_part = 2,
-			angle = error_spin
+			angle = error_spin,
+			speed = speed
 		}
 
 		if data.brain:action_request(new_action_data) then

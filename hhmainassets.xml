@@ -9,8 +9,11 @@
 	<texture path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight_df" />
 	
 	<!--Base Game Asset Replacements-->
+	<object path="units/payday2/weapons/wpn_npc_smg_mp9/wpn_npc_smg_mp9" force="true"/>
 	<material_config path="units/pd2_dlc_friend/nature/terrain/sfm_backdrop" force="true"/>
-	<texture path="guis/textures/characters/shared_textures/spook_il" force="true"/>
+	<texture path="units/payday2/characters/shared_textures/spook_il" force="true"/>
+	<texture path="effects/particles/weapons/flashlight/e_flare_01" force="true"/>
+	<texture path="effects/particles/weapons/flashlight/e_gradient_radial2" force="true"/>
 	<texture path="units/menu/menu_scene/menu_cylinder_logo" force="true" />
 	<texture path="guis/textures/game_small_logo" force="true"/>
 	<texture path="guis/textures/menu_title_screen" force="true"/>
@@ -788,6 +791,8 @@
 	<texture path="effects/pd2_mod_hh/particles/textures/taser_glint" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/marauderspooc_glint" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/glint" load="true" />
+	<effect path="effects/particles/weapons/flashlight/flashlight" force="true"/>
+	<effect path="effects/particles/weapons/flashlight/flashlight_mp9" load="true"/>
 	<effect path="effects/pd2_mod_hh/particles/character/prefire_glint"/>
 	<effect path="effects/pd2_mod_hh/particles/character/pretase_glint"/>
 	<effect path="effects/pd2_mod_hh/particles/character/marauderspooc_glint"/>

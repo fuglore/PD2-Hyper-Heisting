@@ -111,7 +111,7 @@ function CopActionHurt:init(action_desc, common_data)
 	self._speed = 1
 	
 	if not self._tank_animations then
-		if difficulty_index == 8 then
+		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or difficulty_index == 8 then
 			self._speed = 1.5
 		elseif difficulty_index == 6 or difficulty_index == 7 then
 			self._speed = 1.25

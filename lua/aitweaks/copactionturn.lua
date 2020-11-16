@@ -38,10 +38,12 @@ function CopActionTurn:_upd_wait_full_blend(t)
 				end
 			end
 			
-			if self._machine:get_global("shield") == 1 then
-				self._machine:set_speed(redir_res, 0.5)
-			elseif speed ~= 1 then
-				self._machine:set_speed_soft(redir_res, speed, 0.9)
+			if not self._machine:get_global("tank") == 1 then
+				if self._machine:get_global("shield") == 1 then
+					self._machine:set_speed(redir_res, 0.5)
+				elseif speed ~= 1 then
+					self._machine:set_speed_soft(redir_res, speed, 0.9)
+				end
 			end
 
 			self._common_data.unit:set_driving("animation")

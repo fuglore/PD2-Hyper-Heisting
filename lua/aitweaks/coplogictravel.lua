@@ -3333,6 +3333,44 @@ function CopLogicTravel.upd_advance(data)
 	end
 end
 
+function CopLogicTravel._chk_request_action_turn_to_cover(data, my_data)
+	local fwd = data.unit:movement():m_rot():y()
+
+	mvector3.set(tmp_vec1, my_data.best_cover[1][2])
+	mvector3.negate(tmp_vec1)
+
+	local error_spin = tmp_vec1:to_polar_with_reference(fwd, math.UP).spin
+
+	if math.abs(error_spin) > 25 then
+		local speed = 1.25
+	
+		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+			speed = 2
+		elseif data.unit:base():has_tag("law") then
+			local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+
+			if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or difficulty_index == 8 then
+				speed = 1.75
+			elseif difficulty_index == 6 or difficulty_index == 7 then
+				speed = 1.5
+			end
+		end
+
+		local new_action_data = {
+			type = "turn",
+			body_part = 2,
+			angle = error_spin,
+			speed = speed
+		}
+		my_data.turning = data.unit:brain():action_request(new_action_data)
+
+		if my_data.turning then
+			return true
+		end
+	end
+end
+
+
 function CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 	local objective = data.objective
 

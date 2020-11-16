@@ -281,6 +281,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 		}
 	}
 	self.swat_van_turret_module.dontsuppressonmiss = true
+	self.swat_van_turret_module.enemy_turret = true
 	self.swat_van_turret_module.FIRE_DMG_MUL = 4
 	self.swat_van_turret_module.BAG_DMG_MUL = 4
 	self.ceiling_turret_module.DAMAGE_MUL_RANGE = {
@@ -298,6 +299,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 		}
 	}
 	self.ceiling_turret_module.dontsuppressonmiss = true
+	self.ceiling_turret_module.enemy_turret = true
 	self.ceiling_turret_module.FIRE_DMG_MUL = 4
 	self.ceiling_turret_module.BAG_DMG_MUL = 4
 	self.aa_turret_module.DAMAGE_MUL_RANGE = {
@@ -315,6 +317,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 		}
 	}
 	self.aa_turret_module.dontsuppressonmiss = true
+	self.aa_turret_module.enemy_turret = true
 	self.aa_turret_module.FIRE_DMG_MUL = 4
 	self.aa_turret_module.BAG_DMG_MUL = 4
 	self.crate_turret_module.DAMAGE_MUL_RANGE = {
@@ -332,6 +335,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 		}
 	}
 	self.crate_turret_module.dontsuppressonmiss = true
+	self.crate_turret_module.enemy_turret = true
 	self.crate_turret_module.FIRE_DMG_MUL = 4
 	self.crate_turret_module.BAG_DMG_MUL = 4
 	
