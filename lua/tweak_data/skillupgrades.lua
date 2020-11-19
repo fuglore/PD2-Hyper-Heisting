@@ -245,6 +245,32 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
+		self.values.player.fineredmist_basic = { --fine red mist
+			true
+		}
+		self.definitions.player_fineredmist_basic = {
+			name_id = "menu_fineredmist_basic",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "fineredmist_basic",
+				category = "player"
+			}
+		}
+		
+		self.values.player.fineredmist_aced = { --fine red mist
+			true
+		}
+		self.definitions.player_fineredmist_aced = {
+			name_id = "menu_fineredmist_aced",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "fineredmist_aced",
+				category = "player"
+			}
+		}
+		
 		self.definitions.player_armor_multiplier_cooler = {
 			name_id = "menu_player_armor_multiplier",
 			category = "feature",

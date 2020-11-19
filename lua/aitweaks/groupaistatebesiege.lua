@@ -1830,6 +1830,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.interrupt_suppression = nil
 	elseif grp_objective.type == "retire" then
 		objective.type = "defend_area"
+		objective.retiring = true
 		objective.running = true
 		objective.stance = "hos"
 		objective.pose = "stand"
@@ -2566,6 +2567,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			end
 		elseif not current_objective.moving_out then
 			local has_criminals_close = nil
+			local criminals_in_my_area = nil
 			
 			for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
 				if next(neighbour_area.criminal.units) then
@@ -2574,7 +2576,12 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					break
 				end
 			end
-			if self._activeassaultbreak then
+			
+			if next(current_objective.area.criminal.units) then
+				criminals_in_my_area = true
+			end
+			
+			if self._activeassaultbreak or phase_is_anticipation and criminals_in_my_area then
 				pull_back = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
 				approach = true
@@ -2590,7 +2597,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	end
 
-	objective_area = current_objective.area or objective_area
+	objective_area = objective_area or current_objective.area
 
 	if open_fire then
 		local grp_objective = {

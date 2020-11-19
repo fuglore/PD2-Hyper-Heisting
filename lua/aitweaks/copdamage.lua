@@ -1950,8 +1950,8 @@ function CopDamage:damage_simple(attack_data)
 
 		--allowing knock_down and stagger, explanation at the end of the function
 		local weapon_unit = attack_data.attacker_unit and attack_data.attacker_unit:inventory() and attack_data.attacker_unit:inventory():equipped_unit()
-		local knock_down = weapon_unit and weapon_unit:base()._knock_down and weapon_unit:base()._knock_down > 0 and math.random() < weapon_unit:base()._knock_down
-		local stagger = weapon_unit and weapon_unit:base()._stagger
+		local knock_down = weapon_unit and weapon_unit:base()._knock_down and weapon_unit:base()._knock_down > 0 and math.random() < weapon_unit:base()._knock_down or attack_data.guaranteed_knockdown
+		local stagger = weapon_unit and weapon_unit:base()._stagger or attack_data.guaranteed_stagger
 		local result_type = not self._char_tweak.immune_to_knock_down and (knock_down and "knock_down" or stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent, nil, attack_data)
 
 		result = {

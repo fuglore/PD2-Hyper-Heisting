@@ -105,6 +105,43 @@ function GroupAIStateBase:chk_guard_delay_deduction()
 	end
 end
 
+function GroupAIStateBase:chk_area_leads_to_enemy(start_nav_seg_id, test_nav_seg_id, enemy_is_criminal)
+	local enemy_areas = {}
+
+	for c_key, c_data in pairs(enemy_is_criminal and self._criminals or self._police) do
+		enemy_areas[c_data.tracker:nav_segment()] = true
+	end
+
+	local all_nav_segs = managers.navigation._nav_segments
+	local found_nav_segs = {
+		[start_nav_seg_id] = true,
+		[test_nav_seg_id] = true
+	}
+	local to_search_nav_segs = {
+		test_nav_seg_id
+	}
+
+	repeat
+		local chk_nav_seg_id = table.remove(to_search_nav_segs)
+		local chk_nav_seg = all_nav_segs[chk_nav_seg_id]
+
+		if enemy_areas[chk_nav_seg_id] then
+			--log("executing")
+			return true
+		end
+
+		local neighbours = chk_nav_seg.neighbours
+
+		for neighbour_seg_id, door_list in pairs(neighbours) do
+			if not all_nav_segs[neighbour_seg_id].disabled and not found_nav_segs[neighbour_seg_id] then
+				found_nav_segs[neighbour_seg_id] = true
+
+				table.insert(to_search_nav_segs, neighbour_seg_id)
+			end
+		end
+	until #to_search_nav_segs == 0
+end
+
 function GroupAIStateBase:get_assault_hud_state()
 	local nr_players = 0
 	local nr_players_alive = 0

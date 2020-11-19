@@ -1,7 +1,10 @@
+local world_g = World
+local temp_vec1 = Vector3()
+
 function PlayerManager:_chk_fellow_crimin_proximity(unit)
 	local players_nearby = 0
 		
-	local enemies = World:find_units_quick(unit, "sphere", unit:position(), 1500, managers.slot:get_mask("criminals_no_deployables"))
+	local enemies = world_g:find_units_quick(unit, "sphere", unit:position(), 1500, managers.slot:get_mask("criminals_no_deployables"))
 
 	for _, enemy in ipairs(enemies) do
 		players_nearby = players_nearby + 1
@@ -160,16 +163,60 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	self._message_system:notify(Message.OnEnemyKilled, nil, equipped_unit, variant, killed_unit)
 	
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
+		local equipped_unit = self:get_current_state()._equipped_unit:base()
+		
 		if self:has_category_upgrade("player", "panic_suppression") then --let's make this fuckin' happen
-			local equipped_unit = self:get_current_state()._equipped_unit:base()
 			local suppression_amount = equipped_unit._suppression
-			--local sup_chance = equipped_unit._panic_suppression_chance * 1.75
 			local pos = killed_unit:position()
-			local enemies = World:find_units_quick("sphere", pos, 600, 12, 21)
+			local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, 600, 12, 21)
 				
 			for i, unit in ipairs(enemies) do
 				if unit:character_damage() and unit:character_damage().build_suppression then
 					unit:character_damage():build_suppression(suppression_amount, 50, nil)
+				end
+			end
+		end
+		
+		if headshot and self:has_category_upgrade("player", "fineredmist_basic") and equipped_unit:fire_mode() == "single" then
+			local damage = 0
+			
+			if self:has_category_upgrade("player", "fineredmist_aced") then
+				damage = equipped_unit._damage * 0.5
+			end
+			
+			local pos = killed_unit:movement():m_head_pos()
+			
+			--hopefully ill get this working in a pretty way
+			world_g:effect_manager():spawn({
+				effect = Idstring("effects/pd2_mod_hh/particles/character/gore_explosion"),
+				position = pos,
+				normal = math.UP
+			})
+			--split_gen_body
+			
+			player_unit:sound():play("expl_gen_head", nil, nil)
+				
+			if self:has_category_upgrade("player", "fineredmist_aced") then
+				player_unit:sound():play("split_gen_body", nil, nil) --play both of these at once if aced for extra impact
+			end
+			
+			local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, 300, 12, 21)
+			
+			for i, unit in ipairs(enemies) do
+				local raycast = unit:raycast("ray", unit:movement():m_com(), pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", killed_unit, "report")
+				if not raycast then
+					if unit:character_damage() and unit:character_damage().damage_simple then
+						local attack_dir = pos - unit:movement():m_com()
+						local attack_data = {
+							damage = damage,
+							attacker_unit = player_unit,
+							guaranteed_stagger = true,
+							pos = pos,
+							attack_dir = attack_dir,
+							weapon_unit = self:get_current_state()._equipped_unit
+						}
+						unit:character_damage():damage_simple(attack_data)
+					end
 				end
 			end
 		end

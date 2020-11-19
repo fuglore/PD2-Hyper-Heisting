@@ -178,7 +178,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	if not data.team then
 		data.unit:movement():set_team(managers.groupai:state()._teams["law1"])
 	end
-	my_data.path_safely = data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area" or nil
+	my_data.path_safely = data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area" or data.objective and data.objective.running or nil
 	my_data.path_ahead = data.cool or objective.path_ahead or data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player")
 
 	data.unit:brain():set_update_enabled_state(false)

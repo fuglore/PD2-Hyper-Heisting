@@ -916,6 +916,14 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 			local defense_data = character_unit:character_damage():damage_melee(action_data)
 			
 			if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
+				if not self._state_data.stacking_dmg_mul or not self._state_data.stacking_dmg_mul.melee then
+					self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
+					self._state_data.stacking_dmg_mul.melee = self._state_data.stacking_dmg_mul.melee or {
+						nil,
+						0
+					}
+				end
+				
 				if defense_data and defense_data ~= "friendly_fire" then
 					if target_dead then --note: actually means "not dead"
 						self._state_data.stacking_melee_speed = self._state_data.stacking_melee_speed or {
@@ -962,6 +970,13 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 	end
 
 	if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
+		if not self._state_data.stacking_dmg_mul or not self._state_data.stacking_dmg_mul.melee then
+			self._state_data.stacking_dmg_mul = self._state_data.stacking_dmg_mul or {}
+			self._state_data.stacking_dmg_mul.melee = self._state_data.stacking_dmg_mul.melee or {
+				nil,
+				0
+			}
+		end
 		self._state_data.stacking_melee_speed = self._state_data.stacking_melee_speed or {
 			nil,
 			0

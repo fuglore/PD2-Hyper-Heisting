@@ -793,6 +793,7 @@
 	<texture path="effects/pd2_mod_hh/particles/textures/glint" load="true" />
 	<effect path="effects/particles/weapons/flashlight/flashlight" force="true"/>
 	<effect path="effects/particles/weapons/flashlight/flashlight_mp9" load="true"/>
+	<effect path="effects/pd2_mod_hh/particles/character/gore_explosion"/>
 	<effect path="effects/pd2_mod_hh/particles/character/prefire_glint"/>
 	<effect path="effects/pd2_mod_hh/particles/character/pretase_glint"/>
 	<effect path="effects/pd2_mod_hh/particles/character/marauderspooc_glint"/>

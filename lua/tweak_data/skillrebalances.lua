@@ -37,13 +37,33 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		self.skills.fast_fire[1].upgrades = {"player_automatic_mag_increase_1"}	
 		self.skills.fast_fire[2].upgrades = {"player_pop_pop"}
 
-		
 		self.skills.carbon_blade[1].upgrades = {"saw_damage_mult", "saw_enemy_slicer"}	
 			
 		self.skills.perseverance[2].upgrades = {"temporary_berserker_damage_multiplier_2"}
 		self.skills.perseverance[1].upgrades = {"temporary_berserker_damage_multiplier_1"}
 
 		self.skills.oppressor.icon_xy = {2.03, 11.9}
+		
+		self.skills.single_shot_ammo_return = {
+			{
+				upgrades = {
+					"player_fineredmist_basic"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_fineredmist_aced"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_sniper_graze_damage",
+			desc_id = "menu_sniper_graze_damage_desc",
+			icon_xy = {
+				11,
+				9
+			}
+		}
 		
 		self.skills.prison_wife = {
 			{

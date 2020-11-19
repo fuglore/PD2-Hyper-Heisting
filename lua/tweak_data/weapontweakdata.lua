@@ -2984,6 +2984,9 @@ self.wa2000.CLIP_AMMO_MAX = 15
 
 --Thanatos
 self.m95.stats.damage = 200
+self.m95.stats_modifiers = {
+	damage = 24
+}
 
 
 --GRENADE LAUNCHERS--

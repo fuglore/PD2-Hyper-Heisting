@@ -597,7 +597,7 @@ function CopLogicIdle._chk_relocate(data)
 		
 		local current_assault_target_area = managers.groupai:state()._task_data.assault.target_areas and managers.groupai:state()._task_data.assault.target_areas[math.random(#managers.groupai:state()._task_data.assault.target_areas)] or nil
 		
-		if managers.groupai:state():chk_assault_active_atm() and not recon_group or Global.game_settings.one_down then
+		if managers.groupai:state():chk_assault_active_atm() and not recon_group and not data.objective.running or Global.game_settings.one_down then
 			local area = data.objective.area
 
 			if area and not next(area.criminal.units) then
@@ -664,6 +664,57 @@ function CopLogicIdle._chk_relocate(data)
 
 					return true
 				end
+			end
+		elseif data.objective.running and not data.objective.retiring then
+			local area = data.objective.area
+			
+			if area and next(area.criminal.units) then
+				local found_areas = {
+					[area] = true
+				}
+				local areas_to_search = {
+					area
+				}
+				local target_area = nil
+
+				while next(areas_to_search) do
+					local current_area = table.remove(areas_to_search)
+								
+					if current_area.criminal and next(area.criminal.units) then
+						--nothing
+					else
+						target_area = current_area
+
+						break
+					end
+
+					for _, n_area in pairs(current_area.neighbours) do
+						if not found_areas[n_area] then
+							found_areas[n_area] = true
+
+							table.insert(areas_to_search, n_area)
+						end
+					end
+				end
+				
+				if target_area then
+					data.objective.running = true
+					data.objective.in_place = nil
+					data.objective.area = target_area
+					data.objective.nav_seg = next(target_area.nav_segs)
+					data.objective.path_data = {
+						{
+							data.objective.nav_seg
+						}
+					}
+
+					if data.name ~= "travel" then
+						data.logic._exit(data.unit, "travel")
+					end
+
+					return true
+				end
+					
 			end
 		else
 			local area = data.objective.area

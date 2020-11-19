@@ -7868,7 +7868,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	}
 	self.tank.weapon = deep_clone(presets.weapon.civil)
 	self.tank.detection = presets.detection.enemymook
-	self.tank.HEALTH_INIT = 450
+	self.tank.HEALTH_INIT = 502.5
 	self.tank.headshot_dmg_mul = 64
 	self.tank.damage.explosion_damage_mul = 1.75 --nngh.
 	self.tank.damage.fire_damage_mul = 2
