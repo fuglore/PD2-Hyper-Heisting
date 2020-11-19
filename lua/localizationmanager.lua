@@ -395,7 +395,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_single_shot_ammo_return_beta_desc"] = "BASIC: ##$basic##\nGetting a headshot will refund ##1## bullet to your used weapon.\n\nThis can only be triggered by Pistols, SMGs, Assault Rifles and Sniper Rifles.\n\nACE: ##$pro##\nGetting a headshot will increase your firerate by ##20%## for ##2## seconds.\n\nThis can only be activated by Pistols, SMGs, Assault Rifles and Sniper Rifles.\n\n##The internal mechanisms of your weapons appear to have been re-shapen into mobius strips...##",
 			
 			["menu_sniper_graze_damage"] = "Fine Red Mist",
-			["menu_sniper_graze_damage_desc"] = "BASIC: ##$basic##\nSuccessfully killing an enemy with a headshot will cause a ##massive blood explosion## that ##staggers## enemies within a ##3m## radius of the victim.\n\nACE: ##$pro##\nFine Red Mist's blood explosion now ##deals 50% of your weapon's damage##.\n\n##Thanks for standing still, wanker!##",
+			["menu_sniper_graze_damage_desc"] = "BASIC: ##$basic##\nSuccessfully killing an enemy with a headshot will cause a ##massive blood explosion## that ##staggers## enemies within a ##3m## radius of the victim.\n\nThis can only be activated by weapons fired in their ##single-fire## mode.\n\nACE: ##$pro##\nFine Red Mist's blood explosion now ##deals 50% of your weapon's damage##.\n\n##Thanks for standing still, wanker!##",
 			
 			-- this was sposed to have a 15% speed bonus but fuck you 			
 			["menu_juggernaut_beta"] = "Big Guy",
