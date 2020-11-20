@@ -1556,9 +1556,14 @@ function PlayerDamage:update(unit, t, dt)
 
 	if not self._downed_timer and self._downed_progression then
 		self._downed_progression = math.max(0, self._downed_progression - dt * 50)
-
+		local blur = self._downed_progression
+		
+		if PD2THHSHIN and PD2THHSHIN:BlurzoneEnabled() then
+			blur = blur * 0.5
+		end
+		
 		if not _G.IS_VR then
-			managers.environment_controller:set_downed_value(self._downed_progression)
+			managers.environment_controller:set_downed_value(blur)
 		end
 
 		SoundDevice:set_rtpc("downed_state_progression", self._downed_progression)

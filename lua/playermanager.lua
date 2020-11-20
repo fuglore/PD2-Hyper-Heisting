@@ -35,7 +35,7 @@ function PlayerManager:skill_dodge_chance(running, crouching, on_zipline, overri
 	if player_unit then
 		local wavedash_active = player_unit:movement():current_state()._wave_dash_t
 		
-		if wavedash_active then
+		if wavedash_active and player_unit:movement():is_above_stamina_threshold() then
 			chance = chance + 0.05
 		end
 	end
@@ -47,7 +47,7 @@ function PlayerManager:skill_dodge_chance(running, crouching, on_zipline, overri
 	chance = chance + dodge_shot_gain
 	chance = chance + self:upgrade_value("player", "tier_dodge_chance", 0)
 
-	if running then
+	if running and player_unit:movement():is_above_stamina_threshold() then
 		chance = chance + self:upgrade_value("player", "run_dodge_chance", 0)
 	end
 
@@ -181,7 +181,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 			local damage = 0
 			
 			if self:has_category_upgrade("player", "fineredmist_aced") then
-				damage = equipped_unit._damage * 0.5
+				damage = 40
 			end
 			
 			local pos = killed_unit:movement():m_head_pos()
@@ -200,7 +200,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 				player_unit:sound():play("split_gen_body", nil, nil) --play both of these at once if aced for extra impact
 			end
 			
-			local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, 300, 12, 21)
+			local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, 400, 12, 21)
 			
 			for i, unit in ipairs(enemies) do
 				local raycast = unit:raycast("ray", unit:movement():m_com(), pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", killed_unit, "report")

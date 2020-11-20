@@ -1947,6 +1947,8 @@ function CopDamage:damage_simple(attack_data)
 		end
 	else
 		attack_data.damage = damage
+		--log("hp is " .. tostring(self._health) .. "")
+		--log("damage was " .. tostring(attack_data.damage) .. "")
 
 		--allowing knock_down and stagger, explanation at the end of the function
 		local weapon_unit = attack_data.attacker_unit and attack_data.attacker_unit:inventory() and attack_data.attacker_unit:inventory():equipped_unit()
@@ -2047,6 +2049,8 @@ function CopDamage:damage_simple(attack_data)
 	if not is_civilian and attack_data.attacker_unit and alive(attack_data.attacker_unit) then
 		managers.player:send_message(Message.OnEnemyShot, nil, self._unit, attack_data)
 	end
+	
+	--log("hp post-instance is " .. tostring(self._health) .. "")
 
 	return result
 end

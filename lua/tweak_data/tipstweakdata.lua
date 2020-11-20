@@ -159,6 +159,22 @@ Hooks:PostHook(TipsTweakData, "init", "hh_tips", function(self)
 			category = "hh"
 		}
 	)
+	table.insert(self.tips, 
+		{
+			cat_index = 19,
+			image = "general_skills",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips, 
+		{
+			cat_index = 20,
+			image = "general_skills",
+			consoles = true,
+			category = "hh"
+		}
+	)
 	
 	
     for _, tip in ipairs(self.tips) do

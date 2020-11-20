@@ -558,15 +558,19 @@ function CopActionHurt:init(action_desc, common_data)
 			--[[else
 				Application:stack_dump_error("There's no redirect in CopActionHurt!")]]
 			end
-			
-			if action_type == "hurt" or action_type == "expl_hurt" or action_type == "heavy_hurt" or action_type == "shield_knock" then
-				self._machine:set_speed_soft(redir_res, self._speed, 0.7)
-			end
 
 			if not redir_res then
 				--debug_pause_unit(common_data.unit, "[CopActionHurt:init]", redirect, "redirect failed in", common_data.machine:segment_state(ids_base), common_data.unit)
 
 				return
+			end
+			
+			if action_type == "hurt" or action_type == "expl_hurt" or action_type == "heavy_hurt" or action_type == "shield_knock" then
+				--log("type is " .. action_type .. "")
+				--if redirect then
+				--	log("redirect was " .. tostring(redirect) .. "")
+				--end
+				self._machine:set_speed_soft(redir_res, self._speed, 0.7)
 			end
 
 			if action_desc.variant ~= "bleeding" then

@@ -191,6 +191,16 @@ function PlayerStandard:_play_distance_interact_redirect(t, variant)
 	self._ext_camera:play_redirect(Idstring(variant))
 end
 
+function PlayerStandard:_update_running_timers(t)
+	if self._end_running_expire_t then
+		if self._end_running_expire_t <= t then
+			self._end_running_expire_t = nil
+
+			self:set_running(false)
+		end
+	end
+end
+
 function PlayerStandard:_get_max_walk_speed(t, force_run)
 	local speed_tweak = self._tweak_data.movement.speed
 	local movement_speed = speed_tweak.STANDARD_MAX
@@ -209,7 +219,12 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 		movement_speed = speed_tweak.INAIR_MAX
 		speed_state = nil
 	elseif self._running or force_run then
-		movement_speed = speed_tweak.RUNNING_MAX
+		if self._unit:movement():is_above_stamina_threshold() then
+			movement_speed = speed_tweak.RUNNING_MAX * 1.2 --dont tell anyone c;
+		else
+			movement_speed = speed_tweak.RUNNING_MAX
+		end
+		
 		speed_state = "run"
 	end
 
@@ -242,8 +257,10 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 		multiplier = multiplier * 1.25
 	end
 	
-	if self._wave_dash_t and self._running then
-		multiplier = multiplier * 1.5
+	if self._unit:movement():is_above_stamina_threshold() then
+		if self._wave_dash_t and self._running then
+			multiplier = multiplier * 1.5
+		end
 	end
 	
 	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
@@ -441,27 +458,27 @@ function PlayerStandard:_update_movement(t, dt)
 		end
 	end
 	
-	local acceleration = self._running and 3500 or 1800
+	local acceleration = WALK_SPEED_MAX * 8
 	local decceleration = acceleration * 1.25
 	
 	if self._state_data.in_air then
-		acceleration = 700
-		decceleration = acceleration * 1.25
+		--acceleration = 700
+		--decceleration = acceleration * 1.25
 	elseif self._state_data.ducking and self.is_sliding then
 		if math.abs(self._last_velocity_xy:length()) > WALK_SPEED_MAX then
 			if self.is_wave_dash_slide then
 				if not self.wave_slide_acceleration then
 					self.wave_slide_acceleration = math.abs(self._last_velocity_xy:length()) + WALK_SPEED_MAX
 				end
-				acceleration = self.wave_slide_acceleration * 0.9
 				decceleration = self.wave_slide_acceleration * 0.9
+				acceleration = decceleration * 0.75
 				--log("wave")
 			else
 				if not self._slide_acceleration then
 					self._slide_acceleration = math.abs(self._last_velocity_xy:length()) + WALK_SPEED_MAX
 				end
-				acceleration = self._slide_acceleration * 0.8
-				decceleration = self._slide_acceleration * 0.8			
+				decceleration = self._slide_acceleration * 0.8
+				acceleration = decceleration * 0.75
 				--log("wave'nt")
 			end
 		else
@@ -1326,34 +1343,36 @@ function PlayerStandard:_start_action_running(t)
 	if managers.player:get_player_rule("no_run") then
 		return
 	end
-
-	if not self._unit:movement():is_above_stamina_threshold() then
-		return
+	
+	if self._unit:movement():is_above_stamina_threshold() then
+		local stamina_subtraction = tweak_data.player.movement_state.stamina.JUMP_STAMINA_DRAIN
+					
+		if managers.player:has_category_upgrade("player", "start_action_stam_drain_reduct") then
+			stamina_subtraction = stamina_subtraction * 0.5
+		end
+		
+		self._unit:movement():subtract_stamina(stamina_subtraction)
+		
+		if managers.player:has_category_upgrade("player", "wavedash") then
+			self._wave_dash_t = t + 0.3
+		end
 	end
 
 	if (not self._state_data.shake_player_start_running or not self._ext_camera:shaker():is_playing(self._state_data.shake_player_start_running)) and managers.user:get_setting("use_headbob") then
 		if managers.player:has_category_upgrade("player", "wavedash") then
-			self._state_data.shake_player_start_running = self._ext_camera:play_shaker("player_start_running", 1)
+			if self._unit:movement():is_above_stamina_threshold() then
+				self._state_data.shake_player_start_running = self._ext_camera:play_shaker("player_start_running", 1)
+			else
+				self._state_data.shake_player_start_running = self._ext_camera:play_shaker("player_start_running", 0.75)
+			end
 		else
 			self._state_data.shake_player_start_running = self._ext_camera:play_shaker("player_start_running", 0.75)
 		end
 	end
 	
-	local stamina_subtraction = tweak_data.player.movement_state.stamina.JUMP_STAMINA_DRAIN
-					
-	if managers.player:has_category_upgrade("player", "start_action_stam_drain_reduct") then
-		stamina_subtraction = stamina_subtraction * 0.5
-	end
-	
-	self._unit:movement():subtract_stamina(stamina_subtraction)
-
 	self:set_running(true)
 	
 	local testing = true
-	
-	if managers.player:has_category_upgrade("player", "wavedash") then
-		self._wave_dash_t = t + 0.3
-	end
 
 	self._end_running_expire_t = nil
 	self._start_running_t = t
