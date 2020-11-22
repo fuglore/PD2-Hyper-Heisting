@@ -1,6 +1,7 @@
 local mvec_1 = Vector3()
 local mvec_2 = Vector3()
 local table_size = table.size
+local world_g = World
 
 function CopDamage:is_immune_to_shield_knockback()
 	if self._immune_to_knockback then
@@ -1312,11 +1313,18 @@ function CopDamage:sync_damage_melee(attacker_unit, damage_percent, damage_effec
 	self:_on_damage_received(attack_data)
 end
 
+function CopDamage:chk_killshot(attacker_unit, variant, headshot, weapon_id)
+	if attacker_unit and attacker_unit == managers.player:player_unit() then
+		return managers.player:on_killshot(self._unit, variant, headshot, weapon_id)
+	end
+end
+
 function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do because of post-hooks not working right.
 	if self._dead or self._invulnerable or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then
 		return
 	end
 
+	local effect_to_sync = nil
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 
 	if self._has_plate and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_plate_name and not attack_data.armor_piercing then
@@ -1560,7 +1568,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 			}
 
 			self:die(attack_data)
-			self:chk_killshot(attack_data.attacker_unit, "bullet", headshot)
+			effect_to_sync = self:chk_killshot(attack_data.attacker_unit, "bullet", headshot)
 		end
 	else
 		attack_data.damage = damage
@@ -1650,8 +1658,9 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 			end
 		end
 	end
+	
+	local hit_offset_height = effect_to_sync or 0
 
-	local hit_offset_height = math.clamp(attack_data.col_ray.position.z - self._unit:movement():m_pos().z, 0, 300)
 	local attacker = attack_data.attacker_unit
 	
 	if attacker:id() == -1 then
@@ -1740,8 +1749,54 @@ function CopDamage:roll_critical_hit(attack_data)
 	return critical_hit, damage
 end
 
+function CopDamage:play_offset_effects(index)
+	--log("executed")
+	local pos = Vector3()
+	
+	if index == 1 then --fine red mist basic	
+		--log("index 1")
+		if self._dead then
+			local obj = self._unit:get_object(Idstring("Head"))
+			obj:m_position(pos)
+		else
+			mvector3.set(pos, self._unit:movement():m_head_pos())
+		end
+
+	
+		world_g:effect_manager():spawn({
+			effect = Idstring("effects/pd2_mod_hh/particles/character/gore_explosion"),
+			position = pos,
+			normal = math.UP
+		})
+		
+		self._unit:sound():play("expl_gen_head", nil, nil)
+	elseif index == 2 then --fine red mist aced
+		--log("index 2")
+		if self._dead then
+			local obj = self._unit:get_object(Idstring("Head"))
+			obj:m_position(pos)
+		else
+			mvector3.set(pos, self._unit:movement():m_head_pos())
+		end
+	
+		world_g:effect_manager():spawn({
+			effect = Idstring("effects/pd2_mod_hh/particles/character/gore_explosion"),
+			position = pos,
+			normal = math.UP
+		})
+		
+		self._unit:sound():play("expl_gen_head", nil, nil)
+		self._unit:sound():play("split_gen_body", nil, nil) --play both of these at once if aced for extra impact
+	end
+
+end
+
 function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit_offset_height, variant, death)
+	--log("it starts here")
+	self:play_offset_effects(hit_offset_height)
+
 	if self._dead then
+		--log("it stops here")
 		return
 	end
 
@@ -1758,6 +1813,8 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 	attack_data.attacker_unit = attacker_unit
 	attack_data.variant = "bullet"
 	local attack_dir, distance = nil
+	
+	--self:play_offset_effects(hit_offset_height)
 
 	if attacker_unit then
 		local from_pos = attacker_unit:movement().m_detect_pos and attacker_unit:movement():m_detect_pos() or attacker_unit:movement():m_head_pos()
@@ -1947,8 +2004,6 @@ function CopDamage:damage_simple(attack_data)
 		end
 	else
 		attack_data.damage = damage
-		--log("hp is " .. tostring(self._health) .. "")
-		--log("damage was " .. tostring(attack_data.damage) .. "")
 
 		--allowing knock_down and stagger, explanation at the end of the function
 		local weapon_unit = attack_data.attacker_unit and attack_data.attacker_unit:inventory() and attack_data.attacker_unit:inventory():equipped_unit()
@@ -2049,8 +2104,6 @@ function CopDamage:damage_simple(attack_data)
 	if not is_civilian and attack_data.attacker_unit and alive(attack_data.attacker_unit) then
 		managers.player:send_message(Message.OnEnemyShot, nil, self._unit, attack_data)
 	end
-	
-	--log("hp post-instance is " .. tostring(self._health) .. "")
 
 	return result
 end

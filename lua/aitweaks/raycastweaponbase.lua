@@ -454,8 +454,8 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 
 	local result = nil
 	
-	local damage_lerp = math.clamp(damage, 2.4, 10) / 10
-	local push_multiplier = math.lerp(0, 1, damage_lerp) 
+	local damage_lerp = math.clamp(damage, 2.4, 12) / 12
+	local push_multiplier = math.lerp(0, 1, damage_lerp)
 
 	if alive(weapon_unit) and hit_unit:character_damage() and hit_unit:character_damage().damage_bullet then
 		local is_alive = not hit_unit:character_damage():dead()
@@ -473,6 +473,14 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 				play_impact_flesh = false
 			end
 		end
+		
+		--uncomment below for fun :)
+		--if is_dead then
+		--	local damage_lerp_for_pm_multipler = math.clamp(damage, 2.4, 40) / 40
+		--	local push_multiplier_multiplier = math.lerp(push_multiplier, 8, damage_lerp_for_pm_multipler)
+			
+		--	push_multiplier = push_multiplier * push_multiplier_multiplier
+		--end
 
 		managers.game_play_central:physics_push(col_ray, push_multiplier)
 	else

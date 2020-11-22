@@ -68,7 +68,6 @@ function PlayerManager:skill_dodge_chance(running, crouching, on_zipline, overri
 	return chance
 end
 
-
 function PlayerManager:speak(message, arg1, arg2)
 	if self:player_unit() and self:player_unit():sound() then
 		self:player_unit():sound():say(message, arg1, arg2)
@@ -136,6 +135,7 @@ end
 
 function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	local player_unit = self:player_unit()
+	local effect_sync_index = nil
 
 	if not player_unit then
 		return
@@ -192,11 +192,14 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 				position = pos,
 				normal = math.UP
 			})
+			effect_sync_index = 1
+			
 			--split_gen_body
 			
 			player_unit:sound():play("expl_gen_head", nil, nil)
 				
 			if self:has_category_upgrade("player", "fineredmist_aced") then
+				effect_sync_index = 2
 				player_unit:sound():play("split_gen_body", nil, nil) --play both of these at once if aced for extra impact
 			end
 			
@@ -211,7 +214,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 							damage = damage,
 							attacker_unit = player_unit,
 							guaranteed_stagger = true,
-							pos = pos,
+							pos = unit:movement():m_com(),
 							attack_dir = attack_dir,
 							weapon_unit = self:get_current_state()._equipped_unit
 						}
@@ -300,7 +303,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	end
 
 	if self._on_killshot_t and t < self._on_killshot_t then
-		return
+		return effect_sync_index
 	end
 
 	local regen_armor_bonus = self:upgrade_value("player", "killshot_regen_armor_bonus", 0)
@@ -347,6 +350,8 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 
 		player_unit:movement():add_stamina(stamina_regen)
 	end
+	
+	return effect_sync_index
 end
 
 function PlayerManager:update(t, dt)

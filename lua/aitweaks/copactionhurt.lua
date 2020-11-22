@@ -457,28 +457,33 @@ function CopActionHurt:init(action_desc, common_data)
 			elseif action_desc.variant == "poison" or action_desc.variant == "dot" then
 				keep_checking = nil
 				self:force_ragdoll()
-			elseif not common_data.char_tweak.no_run_death_anim and enable_running_hurts then
+			elseif not common_data.char_tweak.no_run_death_anim then
 				if common_data.ext_anim.run and common_data.ext_anim.move_fwd or common_data.ext_anim.sprint then
-					keep_checking = nil
+					if enable_running_hurts then
+						keep_checking = nil
 
-					redir_res = common_data.ext_movement:play_redirect("death_run")
+						redir_res = common_data.ext_movement:play_redirect("death_run")
 
-					if not redir_res then
-						--debug_pause("[CopActionHurt:init] death_run redirect failed in", common_data.machine:segment_state(ids_base))
+						if not redir_res then
+							--debug_pause("[CopActionHurt:init] death_run redirect failed in", common_data.machine:segment_state(ids_base))
 
-						return
+							return
+						end
+
+						self:_prepare_ragdoll()
+
+						local variant_type = is_female and "female" or "male"
+						local variant = self.running_death_anim_variants[variant_type] or 1
+
+						if variant > 1 then
+							variant = self:_pseudorandom(variant)
+						end
+
+						common_data.machine:set_parameter(redir_res, "var" .. tostring(variant), 1)
+					else
+						keep_checking = nil
+						self:force_ragdoll()
 					end
-
-					self:_prepare_ragdoll()
-
-					local variant_type = is_female and "female" or "male"
-					local variant = self.running_death_anim_variants[variant_type] or 1
-
-					if variant > 1 then
-						variant = self:_pseudorandom(variant)
-					end
-
-					common_data.machine:set_parameter(redir_res, "var" .. tostring(variant), 1)
 				end
 			end
 
@@ -613,11 +618,6 @@ function CopActionHurt:init(action_desc, common_data)
 					height = common_data.ext_movement:m_com().z < hit_z and "high" or "low"
 
 					if action_type == "death" then
-						local yes = true
-						if yes then
-							death_type = "normal"
-						end
-
 						local pose_type = crouching and "crouching" or "not_crouching"
 
 						if is_female then
