@@ -96,19 +96,28 @@ function PlayerTased:_check_action_shock(t, input)
 		self._unit:sound():play("tasered_shock")
 		managers.rumble:play("electric_shock")
 		if self._unit:character_damage()._tase_data and not self._is_non_lethal then
-			local damage = 4.1
-			
-			if managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
-				damage = damage * 2
+			if self._num_shocks == 3 then
+				if not self._played_sound_this_once then
+					self._played_sound_this_once = true
+					self._unit:character_damage()._tase_data.attacker_unit:sound():say("post_tasing_taunt")
+				end
+			elseif self._num_shocks >= 4 then
+				--local damage = 4.1
+				
+				--if managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
+					--damage = damage * 2
+				--end
+				
+				local attack_data = {
+					attacker_unit = self._unit:character_damage()._tase_data.attacker_unit,
+					is_taser_shock = true,
+					armor_piercing = true,
+					damage = 1
+				}
+				self._unit:movement():play_taser_boom(true)
+				self._unit:character_damage():damage_bullet(attack_data)
+				self:on_tase_ended()
 			end
-			
-			local attack_data = {
-				attacker_unit = self._unit:character_damage()._tase_data.attacker_unit,
-				is_taser_shock = true,
-				armor_piercing = true,
-				damage = damage
-			}
-			self._unit:character_damage():damage_bullet(attack_data)
 		end
 
 		if not alive(self._counter_taser_unit) then
@@ -311,7 +320,6 @@ function PlayerTased:_register_revive_SO()
 
 	managers.groupai:state():add_special_objective(so_id, so_descriptor)
 end
-
 
 function PlayerTased:on_tase_ended()
 	self._tase_ended = true

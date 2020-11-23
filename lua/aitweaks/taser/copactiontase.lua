@@ -202,6 +202,8 @@ function CopActionTase:on_attention(attention)
 	if self._shorter_tase_delay then
 		shoot_delay = 0.85
 	end
+	
+	self._num_shocks = 0
 
 	self._tasing_local_unit = nil
 	self._tasing_player = nil
@@ -343,6 +345,7 @@ function CopActionTase:update(t)
 	if not self._ext_anim.reload and not self._ext_anim.equip and not self._ext_anim.melee then
 		if self._firing_at_husk then
 			if self._attention.unit:movement():tased() then
+				
 				if self._tase_effect then
 					World:effect_manager():fade_kill(self._tase_effect)
 				end
@@ -363,9 +366,22 @@ function CopActionTase:update(t)
 				self._firing_at_husk = nil
 			end
 		elseif self._discharging_on_husk then
+			if not self._next_shock_t then
+				self._next_shock_t = t + 0.75
+			elseif self._next_shock_t < t then
+				self._num_shocks = self._num_shocks + 1
+				self._next_shock_t = t + 0.75
+			end
+		
 			if not self._attention.unit:movement():tased() then
 				self._discharging_on_husk = nil
 				self._unit:character_damage()._tasing = nil
+				
+				if self._num_shocks >= 4 then
+					if self._attention.unit:movement()._play_taser_boom then
+						self._attention.unit:movement():_play_taser_boom()
+					end
+				end
 				
 				if self._is_server then
 					self._expired = true
@@ -375,6 +391,27 @@ function CopActionTase:update(t)
 			end
 		elseif self._discharging then
 			local cancel_tase = nil
+			
+			if self._tasing_player then
+				if self._num_shocks >= 3 then
+					if not self._played_warning_effect then
+						local warning = World:effect_manager():spawn({
+							effect = Idstring("effects/pd2_mod_hh/particles/character/taser_warning"),
+							parent = self._weapon_obj_fire
+						})
+									
+						if warning then
+							self._played_warning_effect = true
+						end
+					end
+				elseif not self._next_shock_t then
+					self._num_shocks = self._num_shocks + 1
+					self._next_shock_t = t + 0.75
+				elseif self._next_shock_t < t then
+					self._num_shocks = self._num_shocks + 1
+					self._next_shock_t = t + 0.75
+				end
+			end
 
 			if not self._tasing_local_unit:movement():tased() then
 				cancel_tase = true
@@ -422,7 +459,8 @@ function CopActionTase:update(t)
 				end
 			end
 			
-			if self._shoot_t and self._shoot_t > t then
+			if self._shoot_t and self._shoot_t > t then				
+			
 				if self._tase_effect then
 					World:effect_manager():fade_kill(self._tase_effect)
 				end
@@ -435,14 +473,14 @@ function CopActionTase:update(t)
 			elseif self._shoot_t and self._mod_enable_t < t and self._shoot_t < t then
 				if self._tasing_local_unit and target_dis < self._tase_distance then
 					local record = managers.groupai:state():criminal_record(self._tasing_local_unit:key())
-
+					
 					if not record or record.status or self._tasing_local_unit:movement():chk_action_forbidden("hurt") or self._tasing_local_unit:movement():zipline_unit() then
 						if self._is_server then
 							self._expired = true
 						end
 					else
 						local is_obstructed = nil
-
+		
 						if self._shield then
 							is_obstructed = self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", self._sphere_radius, "ignore_unit", self._shield, "report")
 						else

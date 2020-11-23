@@ -1,3 +1,8 @@
+local world_g = World
+local mvec3_set = mvector3.set
+local mvec3_mul = mvector3.multiply
+local mvec3_add = mvector3.add
+
 function PlayerMovement:clbk_attention_notice_sneak(observer_unit, status, local_client_detection)
 	if alive(observer_unit) then
 		self:on_suspicion(observer_unit, status, local_client_detection)
@@ -85,6 +90,26 @@ function PlayerMovement:_calc_suspicion_ratio_and_sync(observer_unit, status, lo
 			managers.network:session():send_to_peers_synched("suspicion", peer:id(), suspicion_sync)
 		end
 	end
+end
+
+function PlayerMovement:play_taser_boom(local_unit)
+	local pos = Vector3()
+	
+	if local_unit then
+		mvec3_set(pos, self._m_head_rot:y())
+		mvec3_mul(pos, 20)
+		mvec3_add(pos, self:m_head_pos())
+	else
+		mvec3_set(pos, self._unit:movement():m_pos())
+	end
+	
+	world_g:effect_manager():spawn({
+		effect = Idstring("effects/pd2_mod_hh/particles/weapons/explosion/electric_explosion"),
+		position = pos,
+		normal = math.UP
+	})
+	
+	self._unit:sound():play("c4_explode_metal")
 end
 
 function PlayerMovement:is_above_stamina_threshold()

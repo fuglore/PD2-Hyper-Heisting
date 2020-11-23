@@ -28,7 +28,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue what call is used in chatter
 	]]--
 	self.enemy_chatter.aggressive = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 40,
 		duration = {3, 4},
 		interval = {4, 6},
@@ -52,7 +52,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "ch3"
 	}
 	self.enemy_chatter.aggressivecontrolsurprised1 = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 4,
 	    duration = {0.5, 0.5},
 	    interval = {1.75, 2.5},
@@ -60,7 +60,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "lk3b"
 	}
 	self.enemy_chatter.aggressivecontrolsurprised2 = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 4,
 	    duration = {0.5, 0.5},
 	    interval = {1.75, 2.5},
@@ -68,7 +68,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "hlp"
 	}
 	self.enemy_chatter.aggressivecontrol = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 40,
 	    duration = {0.5, 0.5},
 	    interval = {1.75, 2.5},
@@ -76,7 +76,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "c01"
 	}
 	self.enemy_chatter.assaultpanic = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 40,
 		duration = {3, 4},
 		interval = {3, 6},
@@ -84,7 +84,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "g90"
 	}
 	self.enemy_chatter.assaultpanicsuppressed1 = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 40,
 		duration = {3, 4},
 		interval = {3, 6},
@@ -92,7 +92,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "hlp"
 	}
 	self.enemy_chatter.assaultpanicsuppressed2 = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 40,
 	    duration = {3, 4},
 		interval = {3, 6},
@@ -100,7 +100,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "lk3b"
 	}
 	self.enemy_chatter.open_fire = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 40,
 		duration = {2, 4},
 		interval = {2, 4},
@@ -108,7 +108,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "att"
 	}		
 	self.enemy_chatter.retreat = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 20,
 		duration = {2, 4},
 		interval = {0.25, 0.75},
@@ -116,7 +116,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "m01"
 	}		
 	self.enemy_chatter.deathguard = { --this isnt actually kill lines those are done in playerdamage
-		radius = 2000,
+		radius = 300,
 		max_nr = 5,
 		duration = {2, 4},
 		interval = {2, 3},
@@ -129,10 +129,10 @@ function GroupAITweakData:_init_chatter_data()
 	    duration = {0.5, 0.5},
 	    interval = {2, 6},
 	    group_min = 0,
-	    queue = "hr01 "
+	    queue = "hr01"
 	}
 	self.enemy_chatter.contact = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 20,
 		duration = {1, 3},
 		interval = {4, 6},
@@ -140,7 +140,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "c01"
 	}
 	self.enemy_chatter.cloakercontact = {
-		radius = 1500,
+		radius = 300,
 		max_nr = 4,
 		duration = {1, 1},
 		interval = {2, 2},
@@ -148,7 +148,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "c01x_plu"
 	}
 	self.enemy_chatter.cloakeravoidance = {
-		radius = 4000,
+		radius = 300,
 		max_nr = 4,
 		duration = {1, 1},
 		interval = {2, 4},
@@ -156,7 +156,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "m01x_plu"
 	}
 	self.enemy_chatter.controlpanic = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 40,
 	    duration = {3, 6},
 	    interval = {6, 8},
@@ -164,7 +164,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "g90"
 	}
 	self.enemy_chatter.sabotagepower = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 10,
 	    duration = {1, 1},
 	    interval = {8, 16},
@@ -172,7 +172,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "e03"
 	}
 	self.enemy_chatter.sabotagedrill = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 10,
 	    duration = {1, 1},
 	    interval = {8, 16},
@@ -180,7 +180,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "e01"
 	}
 	self.enemy_chatter.sabotagegeneric = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 10,
 	    duration = {1, 1},
 	    interval = {8, 16},
@@ -188,7 +188,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "e04"
 	}
 	self.enemy_chatter.sabotagebags = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 10,
 	    duration = {1, 1},
 	    interval = {8, 16},
@@ -196,7 +196,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "l01"
 	}
 	self.enemy_chatter.sabotagehostages = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 40,
 	    duration = {1, 1},
 	    interval = {8, 16},
@@ -204,7 +204,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "civ"
 	}
 	self.enemy_chatter.hostagepanic1 = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 40,
 	    duration = {1, 1},
 	    interval = {8, 12},
@@ -212,7 +212,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "p01"
 	}
 	self.enemy_chatter.hostagepanic2 = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 40,
 	    duration = {1, 1},
 	    interval = {8, 12},
@@ -220,7 +220,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "p02"
 	}
 	self.enemy_chatter.hostagepanic3 = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 40,
 	    duration = {1, 1},
 	    interval = {8, 12},
@@ -228,7 +228,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "p03"
 	}
 	self.enemy_chatter.civilianpanic = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 40,
 	    duration = {1, 1},
 	    interval = {6, 8},
@@ -236,7 +236,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "bak"
 	}
 	self.enemy_chatter.clear = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 1,
 	    duration = {60, 60},
 	    interval = {3, 8},
@@ -308,7 +308,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "gr1d"
 	}
 	self.enemy_chatter.dodge = {
-		radius = 2000,
+		radius = 300,
 	    max_nr = 1,
 	    duration = {0.5, 0.5},
 	    interval = {0.75, 1.5},
@@ -316,7 +316,7 @@ function GroupAITweakData:_init_chatter_data()
 	    queue = "lk3b"
 	}
 	self.enemy_chatter.clear_whisper = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 1,
 		duration = {60, 60},
 		interval = {10, 20},
@@ -324,7 +324,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "a05"
 	}
 	self.enemy_chatter.go_go = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 40,
 		duration = {2, 2},
 		interval = {3, 6},
@@ -332,7 +332,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "mov"
 	}
 	self.enemy_chatter.push = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 40,
 		duration = {2, 4},
 		interval = {3, 6},
@@ -340,7 +340,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "pus"
 	}
 	self.enemy_chatter.reload = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 40,
 		duration = {2, 4},
 		interval = {2, 5},
@@ -348,7 +348,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "rrl"
 	}
 	self.enemy_chatter.look_for_angle = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 40,
 		duration = {2, 4},
 		interval = {2, 3},
@@ -356,7 +356,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "t01"
 	}
 	self.enemy_chatter.ready = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 16,
 		duration = {2, 4},
 		interval = {1, 3.5},
@@ -364,7 +364,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "rdy"
 	}
 	self.enemy_chatter.affirmative = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 8,
 		duration = {2, 4},
 		interval = {0.75, 1.5},
@@ -372,7 +372,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "r01"
 	}
 	self.enemy_chatter.inpos = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 16,
 		duration = {2, 4},
 		interval = {0.75, 1.5},
@@ -404,7 +404,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "ch3"
 	}
 	self.enemy_chatter.saw = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 10,
 		duration = {2, 4},
 		interval = {4, 10},
@@ -412,7 +412,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "ch4"
 	}
 	self.enemy_chatter.trip_mines = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 10,
 		duration = {2, 4},
 		interval = {0.75, 1.5},
@@ -420,7 +420,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "ch1"
 	}
 	self.enemy_chatter.sentry = {
-		radius = 2000,
+		radius = 300,
 		max_nr = 10,
 		duration = {2, 4},
 		interval = {4, 10},

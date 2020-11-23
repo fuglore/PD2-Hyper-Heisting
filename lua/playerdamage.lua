@@ -856,7 +856,7 @@ function PlayerDamage:damage_tase(attack_data)
 		self:_call_listeners(damage_info)
 
 		if attack_data.attacker_unit and attack_data.attacker_unit:alive() and attack_data.attacker_unit:base()._tweak_table == "taser" then
-			attack_data.attacker_unit:sound():say("post_tasing_taunt")
+			--attack_data.attacker_unit:sound():say("post_tasing_taunt")
 
 			if managers.blackmarket:equipped_mask().mask_id == tweak_data.achievement.its_alive_its_alive.mask then
 				managers.achievment:award_progress(tweak_data.achievement.its_alive_its_alive.stat)
@@ -929,8 +929,6 @@ function PlayerDamage:damage_bullet(attack_data)
 
 	if self:is_friendly_fire(attack_data.attacker_unit) then
 		return
-	elseif self._unit:movement():tased() and not attack_data.is_taser_shock then
-		return
 	elseif self._god_mode then
 		if attack_data.damage > 0 then
 			self:_send_damage_drama(attack_data, attack_data.damage)
@@ -964,7 +962,35 @@ function PlayerDamage:damage_bullet(attack_data)
 	local pm = managers.player
 	
 	if attack_data.is_taser_shock then
+		local damage = self:_max_health() / 4
+		if managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
+			damage = damage * 2
+		end
+		damage = damage + self:get_real_armor()
+		attack_data.damage = damage
 		self:build_suppression(20)
+		self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
+		
+		local from_pos = nil
+		
+		--probably unnecessary but you never know
+		if attack_data.attacker_unit:movement() then
+			if attack_data.attacker_unit:movement().m_head_pos then
+				from_pos = attack_data.attacker_unit:movement():m_head_pos()
+			elseif attack_data.attacker_unit:movement().m_pos then
+				from_pos = attack_data.attacker_unit:movement():m_pos()
+			else
+				from_pos = attack_data.attacker_unit:position()
+			end
+		else
+			from_pos = attack_data.attacker_unit:position()
+		end
+		
+		local push_vec = Vector3()
+		local distance = mvector3.direction(push_vec, from_pos, self._unit:movement():m_head_pos())
+		mvector3.normalize(push_vec)
+		
+		self._unit:movement():push(push_vec * 1600)
 	else
 		self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
 	end

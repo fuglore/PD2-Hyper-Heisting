@@ -173,12 +173,11 @@ function CopDamage:get_damage_type(damage_percent, category, attack_data)
 	local hurt_table = self._char_tweak.damage.hurt_severity[category or "bullet"]
 	local dmg = damage_percent / self._HEALTH_GRANULARITY
 	
-	if self._tasing then
-		if math.random() < 0.1 then
-			--log("broke free!")
+	--if self._tasing then shouldn't be needed but might uncomment this if people are STILL BITCHING
+		--if math.random() < 0.1 then
 			--return "hurt"
-		end
-	end
+		--end
+	--end
 	
 	if attack_data and self._char_tweak.damage.doom_hurt_type or self._char_tweak.damage.hurt_severity.doom_light then
 		local result = self:determine_doom_hurt_type(attack_data)
@@ -242,6 +241,9 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 			hurtlevel_mult = 5
 		elseif doomzer then
 			hurtlevel_mult = 5
+		elseif self._tasing then
+			hurtlevel_mult = 0.5
+			time_mult = time_mult + 0.5
 		elseif heavy then
 			hurtlevel_mult = 0.5
 			time_mult = time_mult + 0.5

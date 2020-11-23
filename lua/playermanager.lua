@@ -178,47 +178,55 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		end
 		
 		if headshot and self:has_category_upgrade("player", "fineredmist_basic") and equipped_unit:fire_mode() == "single" then
-			local damage = 0
-			
-			if self:has_category_upgrade("player", "fineredmist_aced") then
-				damage = 40
-			end
-			
+			--THANK YOU FOR IMPROVING ALL OF THIS HOXI AAAAAAAAAAAAAAAAAAAA <33333333
 			local pos = killed_unit:movement():m_head_pos()
-			
+
 			--hopefully ill get this working in a pretty way
 			world_g:effect_manager():spawn({
 				effect = Idstring("effects/pd2_mod_hh/particles/character/gore_explosion"),
 				position = pos,
 				normal = math.UP
 			})
-			effect_sync_index = 1
-			
+
 			--split_gen_body
-			
+
 			player_unit:sound():play("expl_gen_head", nil, nil)
-				
+
+			local damage = nil
+
 			if self:has_category_upgrade("player", "fineredmist_aced") then
+				damage = 40
 				effect_sync_index = 2
+
 				player_unit:sound():play("split_gen_body", nil, nil) --play both of these at once if aced for extra impact
+			else
+				damage = 0
+				effect_sync_index = 1
 			end
-			
-			local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, 400, 12, 21)
-			
-			for i, unit in ipairs(enemies) do
-				local raycast = unit:raycast("ray", unit:movement():m_com(), pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", killed_unit, "report")
-				if not raycast then
-					if unit:character_damage() and unit:character_damage().damage_simple then
-						local attack_dir = pos - unit:movement():m_com()
+
+			local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, 400, managers.slot:get_mask("enemies", "civilians"))
+			local obstruction_slotmask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
+			local weap_unit = self:get_current_state()._equipped_unit
+
+			for _, enemy in ipairs(enemies) do
+				local dmg_ext = enemy:character_damage()
+
+				if dmg_ext and dmg_ext.damage_simple then
+					local center_of_mass = enemy:movement():m_com()
+					local obstructed = enemy:raycast("ray", pos, center_of_mass, "slot_mask", obstruction_slotmask, "report")
+
+					if not obstructed then
+						local attack_dir = center_of_mass - pos
 						local attack_data = {
 							damage = damage,
 							attacker_unit = player_unit,
 							guaranteed_stagger = true,
-							pos = unit:movement():m_com(),
+							pos = center_of_mass,
 							attack_dir = attack_dir,
-							weapon_unit = self:get_current_state()._equipped_unit
+							weapon_unit = weap_unit
 						}
-						unit:character_damage():damage_simple(attack_data)
+
+						dmg_ext:damage_simple(attack_data)
 					end
 				end
 			end
