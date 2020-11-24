@@ -180,8 +180,8 @@ function TeamAILogicDisabled._register_revive_SO(data, my_data, rescue_type)
 		followup_objective = followup_objective
 	}
 	local so_descriptor = {
-		interval = 2,
-		search_dis_sq = 9000000, --10 METERS. 10 FUCKING METERS. PLEASE.
+		interval = 0.1,
+		search_dis_sq = 9000000, --10 METERS. 10 FUCKING METERS. PLEASE. THIS IS NOW 30.
 		AI_group = "friendlies",
 		base_chance = 1,
 		chance_inc = 0,

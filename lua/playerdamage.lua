@@ -535,7 +535,7 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 			self._current_state = nil
 			
 			if is_special_attack then
-				managers.player:set_player_state("fatal")
+				managers.player:set_player_state("incapacitated")
 			else
 				managers.player:set_player_state("bleed_out")
 			end

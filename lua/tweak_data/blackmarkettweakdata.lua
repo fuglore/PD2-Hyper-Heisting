@@ -34,7 +34,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 		self.projectiles.frag_com.pickup_chance = 0.05
 		self.projectiles.dada_com.pickup_chance = 0.05
 		self.projectiles.dynamite.pickup_chance = 0.025
-		self.projectiles.molotov.pickup_chance = 0.01
+		self.projectiles.molotov.pickup_chance = 0.02
 		self.projectiles.molotov.max_amount = 2
 		self.projectiles.fir_com.pickup_chance = 0.03
 		self.projectiles.fir_com.max_amount = 3

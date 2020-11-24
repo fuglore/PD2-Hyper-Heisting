@@ -53,6 +53,70 @@ function HuskPlayerMovement:_calculate_m_pose()
 	self._obj_head:m_position(self._m_head_pos)
 end
 
+function HuskPlayerMovement:_register_revive_SO()
+	local followup_objective = {
+		scan = true,
+		type = "act",
+		action = {
+			variant = "crouch",
+			body_part = 1,
+			type = "act",
+			blocks = {
+				heavy_hurt = -1,
+				hurt = -1,
+				action = -1,
+				aim = -1,
+				walk = -1
+			}
+		}
+	}
+	local objective = {
+		type = "revive",
+		called = true,
+		scan = true,
+		destroy_clbk_key = false,
+		follow_unit = self._unit,
+		nav_seg = self._unit:movement():nav_tracker():nav_segment(),
+		fail_clbk = callback(self, self, "on_revive_SO_failed"),
+		complete_clbk = callback(self, self, "on_revive_SO_completed"),
+		action = {
+			align_sync = true,
+			type = "act",
+			body_part = 1,
+			variant = self._state == "arrested" and "untie" or "revive",
+			blocks = {
+				light_hurt = -1,
+				hurt = -1,
+				action = -1,
+				heavy_hurt = -1,
+				aim = -1,
+				walk = -1
+			}
+		},
+		action_duration = tweak_data.interaction[self._state == "arrested" and "free" or "revive"].timer,
+		followup_objective = followup_objective
+	}
+	local so_descriptor = {
+		interval = 0,
+		AI_group = "friendlies",
+		base_chance = 1,
+		chance_inc = 0,
+		usage_amount = 1,
+		objective = objective,
+		search_pos = self._unit:position(),
+		admin_clbk = callback(self, self, "on_revive_SO_administered"),
+		verification_clbk = callback(HuskPlayerMovement, HuskPlayerMovement, "rescue_SO_verification", self._unit)
+	}
+	local so_id = "PlayerHusk_revive" .. tostring(self._unit:key())
+	self._revive_SO_id = so_id
+
+	managers.groupai:state():add_special_objective(so_id, so_descriptor)
+
+	if not self._deathguard_SO_id then
+		self._deathguard_SO_id = PlayerBleedOut._register_deathguard_SO(self._unit)
+	end
+end
+
 function HuskPlayerMovement:sync_action_walk_nav_point(pos, speed, action, params)
 	if pos then
 		self:_update_real_pos(pos)
