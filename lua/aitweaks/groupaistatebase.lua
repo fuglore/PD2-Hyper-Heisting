@@ -1115,3 +1115,64 @@ function GroupAIStateBase:_get_spawn_unit_name(weights, wanted_access_type)
 
 	return spawn_unit_name, lucky_cat_name
 end
+
+function GroupAIStateBase:_determine_objective_for_criminal_AI(unit)
+	local objective, closest_dis, closest_record = nil
+	local ai_pos = (self._ai_criminals[unit:key()] or self._police[unit:key()]).m_pos
+
+	for pl_key, pl_record in pairs(self._player_criminals) do
+		if pl_record.status ~= "dead" then
+			local my_dis = mvector3.distance(ai_pos, pl_record.m_pos)
+
+			if not closest_dis or my_dis < closest_dis then
+				closest_dis = my_dis
+				closest_record = pl_record
+			end
+		end
+	end
+
+	if closest_record then
+		objective = {
+			scan = true,
+			is_default = true,
+			type = "follow",
+			follow_unit = closest_record.unit
+		}
+	end
+
+	local ai_pos = (self._ai_criminals[unit:key()] or self._police[unit:key()]).m_pos
+	local skip_hostage_trade_time_reset = nil
+
+	if not objective and self:is_ai_trade_possible() then
+		local guard_time = managers.trade:get_guard_hostage_time()
+
+		if guard_time >= 6 then
+			local hostage = managers.trade:get_best_hostage(ai_pos)
+			skip_hostage_trade_time_reset = hostage
+
+			if hostage then
+				self._guard_hostage_trade_time_map = self._guard_hostage_trade_time_map or {}
+				local time = Application:time()
+				local unit_key = unit:key()
+				local last_time = self._guard_hostage_trade_time_map[unit_key]
+
+				if not last_time or time > last_time + 6 then
+					self._guard_hostage_trade_time_map[unit_key] = time
+
+					return {
+						scan = true,
+						type = "free",
+						stance = "hos",
+						nav_seg = hostage.tracker:nav_segment()
+					}
+				end
+			end
+		end
+	end
+
+	if not skip_hostage_trade_time_reset then
+		self._guard_hostage_trade_time_map = nil
+	end
+
+	return objective
+end
