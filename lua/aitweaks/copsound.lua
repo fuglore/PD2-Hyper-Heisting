@@ -1,5 +1,6 @@
 function CopSound:init(unit)
 	self._unit = unit
+	self._chatter = {}
 	self._speak_expire_t = 0
 	unit:base():post_init()
 	self._prefix = self:get_appropriate_unit_sound_prefix()

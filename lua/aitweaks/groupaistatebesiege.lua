@@ -16,7 +16,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	local level = Global.level_data and Global.level_data.level_id
 		
-	local small_map = level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa"
+	local small_map = level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat"
 	self._small_map = small_map or nil
 	
 	self._spawn_group_timers = {}
@@ -2486,7 +2486,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							group.is_chasing = true
 
 							self:_set_objective_to_enemy_group(group, grp_objective)
-							self:_voice_deathguard_start(group)
 							has_objective = true
 						end
 					end
@@ -2588,7 +2587,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
 				--open_fire = true
 				push = true
-				self:_voice_open_fire_start(group)
+				--self:_voice_open_fire_start(group)
 			elseif charge and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak then
 				push = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak and not phase_is_anticipation and self._drama_data.amount <= self._drama_data.low_p then
@@ -2617,7 +2616,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		}
 
 		self:_set_objective_to_enemy_group(group, grp_objective)
-		self:_voice_open_fire_start(group)
+		--self:_voice_open_fire_start(group)
 	elseif approach or push then
 		local assault_area, alternate_assault_area, alternate_assault_area_from, assault_path, alternate_assault_path = nil
 		local assault_area_uno, assault_area_dos, assault_area_tres, assault_area_quatro = nil
@@ -2754,7 +2753,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local used_grenade = nil
 
 			if push then
-				self:_voice_move_in_start(group)
+				--self:_voice_move_in_start(group)
 			end
 
 			local grp_objective = {

@@ -28,16 +28,16 @@ function GroupAITweakData:_init_chatter_data()
 		queue what call is used in chatter
 	]]--
 	self.enemy_chatter.aggressive = {
-		radius = 300,
-		max_nr = 40,
+		radius = 2000,
+		max_nr = 6,
 		duration = {3, 4},
-		interval = {4, 6},
+		interval = {4, 8},
 		group_min = 0,
 		queue = "g90"
 	}
 	self.enemy_chatter.approachingspecial = {
-		radius = 4000,
-		max_nr = 4,
+		radius = 1500,
+		max_nr = 6,
 		duration = {1, 1},
 		interval = {6, 10},
 		group_min = 0,
@@ -52,336 +52,348 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "ch3"
 	}
 	self.enemy_chatter.aggressivecontrolsurprised1 = {
-		radius = 300,
-	    max_nr = 4,
-	    duration = {0.5, 0.5},
-	    interval = {1.75, 2.5},
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {3, 6},
 	    group_min = 0,
 	    queue = "lk3b"
 	}
 	self.enemy_chatter.aggressivecontrolsurprised2 = {
-		radius = 300,
-	    max_nr = 4,
-	    duration = {0.5, 0.5},
-	    interval = {1.75, 2.5},
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {3, 6},
 	    group_min = 0,
 	    queue = "hlp"
 	}
 	self.enemy_chatter.aggressivecontrol = {
-		radius = 300,
-	    max_nr = 40,
-	    duration = {0.5, 0.5},
-	    interval = {1.75, 2.5},
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
 	    group_min = 0,
 	    queue = "c01"
 	}
 	self.enemy_chatter.assaultpanic = {
-		radius = 300,
-		max_nr = 40,
-		duration = {3, 4},
-		interval = {3, 6},
+		radius = 2000,
+		max_nr = 6,
+		duration = {2, 4},
+		interval = {4, 8},
 		group_min = 0,
 		queue = "g90"
 	}
 	self.enemy_chatter.assaultpanicsuppressed1 = {
-		radius = 300,
-		max_nr = 40,
-		duration = {3, 4},
-		interval = {3, 6},
+		radius = 2000,
+		max_nr = 6,
+		duration = {2, 4},
+		interval = {4, 8},
 		group_min = 0,
 		queue = "hlp"
 	}
 	self.enemy_chatter.assaultpanicsuppressed2 = {
-		radius = 300,
-	    max_nr = 40,
-	    duration = {3, 4},
-		interval = {3, 6},
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+		interval = {4, 8},
 	    group_min = 0,
 	    queue = "lk3b"
 	}
 	self.enemy_chatter.open_fire = {
-		radius = 300,
-		max_nr = 40,
+		radius = 2000,
+		max_nr = 6,
 		duration = {2, 4},
-		interval = {2, 4},
+		interval = {4, 8},
 		group_min = 0,
 		queue = "att"
 	}		
 	self.enemy_chatter.retreat = {
-		radius = 300,
-		max_nr = 20,
+		radius = 2000,
+		max_nr = 2,
 		duration = {2, 4},
-		interval = {0.25, 0.75},
+		interval = {4, 12},
 		group_min = 0,
 		queue = "m01"
 	}		
 	self.enemy_chatter.deathguard = { --this isnt actually kill lines those are done in playerdamage
-		radius = 300,
+		radius = 2000,
 		max_nr = 5,
 		duration = {2, 4},
-		interval = {2, 3},
+		interval = {4, 12},
 		group_min = 0,
 		queue = "rdy"
 	}
 	self.enemy_chatter.cuffed = {
 		radius = 1000,
 	    max_nr = 1,
-	    duration = {0.5, 0.5},
-	    interval = {2, 6},
+	    duration = {2, 4},
+	    interval = {4, 12},
 	    group_min = 0,
 	    queue = "hr01"
 	}
 	self.enemy_chatter.contact = {
-		radius = 300,
-		max_nr = 20,
-		duration = {1, 3},
-		interval = {4, 6},
+		radius = 2000,
+		max_nr = 6,
+		duration = {3, 6},
+		interval = {4, 12},
 		group_min = 0,
 		queue = "c01"
 	}
 	self.enemy_chatter.cloakercontact = {
-		radius = 300,
-		max_nr = 4,
+		radius = 2000,
+		max_nr = 6,
 		duration = {1, 1},
 		interval = {2, 2},
 		group_min = 0,
 		queue = "c01x_plu"
 	}
 	self.enemy_chatter.cloakeravoidance = {
-		radius = 300,
-		max_nr = 4,
+		radius = 2000,
+		max_nr = 6,
 		duration = {1, 1},
-		interval = {2, 4},
+		interval = {2, 2},
 		group_min = 0,
-		queue = "m01x_plu"
+		queue = "c01x_plu"
 	}
 	self.enemy_chatter.controlpanic = {
-		radius = 300,
-	    max_nr = 40,
+		radius = 2000,
+	    max_nr = 6,
 	    duration = {3, 6},
-	    interval = {6, 8},
-	    group_min = 1,
+	    interval = {6, 12},
+	    group_min = 2,
 	    queue = "g90"
 	}
 	self.enemy_chatter.sabotagepower = {
-		radius = 300,
-	    max_nr = 10,
-	    duration = {1, 1},
-	    interval = {8, 16},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {5, 10},
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "e03"
 	}
 	self.enemy_chatter.sabotagedrill = {
-		radius = 300,
-	    max_nr = 10,
-	    duration = {1, 1},
-	    interval = {8, 16},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {5, 10},
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "e01"
 	}
 	self.enemy_chatter.sabotagegeneric = {
-		radius = 300,
-	    max_nr = 10,
-	    duration = {1, 1},
-	    interval = {8, 16},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {5, 10},
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "e04"
 	}
 	self.enemy_chatter.sabotagebags = {
-		radius = 300,
-	    max_nr = 10,
-	    duration = {1, 1},
-	    interval = {8, 16},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {5, 10},
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "l01"
 	}
 	self.enemy_chatter.sabotagehostages = {
-		radius = 300,
-	    max_nr = 40,
-	    duration = {1, 1},
-	    interval = {8, 16},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {5, 10},
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "civ"
 	}
 	self.enemy_chatter.hostagepanic1 = {
-		radius = 300,
-	    max_nr = 40,
-	    duration = {1, 1},
-	    interval = {8, 12},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {5, 10},
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "p01"
 	}
 	self.enemy_chatter.hostagepanic2 = {
-		radius = 300,
-	    max_nr = 40,
-	    duration = {1, 1},
-	    interval = {8, 12},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {5, 10},
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "p02"
 	}
 	self.enemy_chatter.hostagepanic3 = {
-		radius = 300,
-	    max_nr = 40,
+		radius = 2000,
+	    max_nr = 6,
 	    duration = {1, 1},
-	    interval = {8, 12},
-	    group_min = 1,
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "p03"
 	}
 	self.enemy_chatter.civilianpanic = {
-		radius = 300,
-	    max_nr = 40,
-	    duration = {1, 1},
-	    interval = {6, 8},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {5, 10},
+	    interval = {8, 24},
+	    group_min = 2,
 	    queue = "bak"
 	}
 	self.enemy_chatter.clear = {
-		radius = 300,
-	    max_nr = 1,
-	    duration = {60, 60},
-	    interval = {3, 8},
-	    group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {3, 6},
+	    interval = {8, 12},
+	    group_min = 2,
 	    queue = "clr"
 	}
+	
+	--enemy group entry lines start here
 	self.enemy_chatter.csalpha = {
 		radius = 6000,
 	    max_nr = 1,
-	    duration = {3, 4},
-		interval = {2, 4},
-		group_min = 0,
+	    duration = {0, 0},
+		interval = {0, 0},
+		group_min = 2,
 	    queue = "gr2a"
 	}
 	self.enemy_chatter.csbravo = {
 		radius = 6000,
 	    max_nr = 1,
-	    duration = {3, 4},
-		interval = {2, 4},
+	    duration = {0, 0},
+		interval = {0, 0},
 		group_min = 0,
 	    queue = "gr2b"
 	}
 	self.enemy_chatter.cscharlie = {
 		radius = 6000,
 	    max_nr = 1,
-	    duration = {3, 4},
-		interval = {2, 4},
+	    duration = {0, 0},
+		interval = {0, 0},
 		group_min = 0,
 	    queue = "gr2c"
 	}
 	self.enemy_chatter.csdelta = {
 		radius = 6000,
 	    max_nr = 1,
-	    duration = {3, 4},
-		interval = {2, 4},
+	    duration = {0, 0},
+		interval = {0, 0},
 		group_min = 0,
 	    queue = "gr2d"
 	}
 	self.enemy_chatter.hrtalpha = {
 		radius = 6000,
 	    max_nr = 1,
-	    duration = {3, 4},
-		interval = {2, 4},
+	    duration = {0, 0},
+		interval = {0, 0},
 		group_min = 0,
 	    queue = "gr1a"
 	}
 	self.enemy_chatter.hrtbravo = {
 		radius = 6000,
 	    max_nr = 1,
-	    duration = {3, 4},
-		interval = {2, 4},
+	    duration = {0, 0},
+		interval = {0, 0},
 		group_min = 0,
 	    queue = "gr1b"
 	}
 	self.enemy_chatter.hrtcharlie = {
 		radius = 6000,
 	    max_nr = 1,
-	    duration = {3, 4},
-		interval = {2, 4},
+	    duration = {0, 0},
+		interval = {0, 0},
 		group_min = 0,
 	    queue = "gr1c"
 	}
 	self.enemy_chatter.hrtdelta = {
 		radius = 6000,
 	    max_nr = 1,
-	    duration = {3, 4},
-		interval = {2, 4},
+	    duration = {0, 0},
+		interval = {0, 0},
 		group_min = 0,
 	    queue = "gr1d"
 	}
+	--end of enemy group entry
+	
 	self.enemy_chatter.dodge = {
-		radius = 300,
+		radius = 6000,
 	    max_nr = 1,
-	    duration = {0.5, 0.5},
-	    interval = {0.75, 1.5},
-	    group_min = 0,
+	    duration = {0, 0},
+		interval = {0, 0},
+		group_min = 0,
 	    queue = "lk3b"
 	}
 	self.enemy_chatter.clear_whisper = {
-		radius = 300,
-		max_nr = 1,
-		duration = {60, 60},
+		radius = 2000,
+		max_nr = 2,
+		duration = {5, 10},
 		interval = {10, 20},
 		group_min = 0,
 		queue = "a05"
 	}
-	self.enemy_chatter.go_go = {
-		radius = 300,
-		max_nr = 40,
-		duration = {2, 2},
-		interval = {3, 6},
+	self.enemy_chatter.clear_whisper_2 = {
+		radius = 2000,
+		max_nr = 2,
+		duration = {5, 10},
+		interval = {10, 20},
 		group_min = 0,
+		queue = "a06"
+	}
+	self.enemy_chatter.go_go = {
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "mov"
 	}
 	self.enemy_chatter.push = {
-		radius = 300,
-		max_nr = 40,
-		duration = {2, 4},
-		interval = {3, 6},
-		group_min = 0,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "pus"
 	}
 	self.enemy_chatter.reload = {
-		radius = 300,
-		max_nr = 40,
-		duration = {2, 4},
+		radius = 1500,
+		max_nr = 1,
+		duration = {3, 3},
 		interval = {2, 5},
 		group_min = 2,
 		queue = "rrl"
 	}
 	self.enemy_chatter.look_for_angle = {
-		radius = 300,
-		max_nr = 40,
+		radius = 2000,
+	    max_nr = 6,
 		duration = {2, 4},
-		interval = {2, 3},
-		group_min = 0,
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "t01"
 	}
 	self.enemy_chatter.ready = {
-		radius = 300,
-		max_nr = 16,
-		duration = {2, 4},
-		interval = {1, 3.5},
-		group_min = 1,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "rdy"
 	}
 	self.enemy_chatter.affirmative = {
-		radius = 300,
-		max_nr = 8,
-		duration = {2, 4},
-		interval = {0.75, 1.5},
-		group_min = 2,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "r01"
 	}
 	self.enemy_chatter.inpos = {
-		radius = 300,
-		max_nr = 16,
-		duration = {2, 4},
-		interval = {0.75, 1.5},
-		group_min = 0,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "pos"
 	}
 	self.enemy_chatter.smoke = {
 		radius = 1000,
-		max_nr = 3,
+		max_nr = 6,
 	    duration = {2, 2},
 		interval = {0.1, 0.1},
 		group_min = 0,
@@ -389,44 +401,45 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.flash_grenade = {
 		radius = 1000,
-		max_nr = 3,
+		max_nr = 6,
 		duration = {2, 2},
 	    interval = {0.1, 0.1},
 		group_min = 0,
 		queue = "d02"
 	}
 	self.enemy_chatter.ecm = {
-		radius = 1000,
-		max_nr = 20,
-		duration = {2, 4},
-		interval = {0.75, 1.5},
-		group_min = 0,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "ch3"
 	}
 	self.enemy_chatter.saw = {
-		radius = 300,
-		max_nr = 10,
-		duration = {2, 4},
-		interval = {4, 10},
-		group_min = 0,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "ch4"
 	}
 	self.enemy_chatter.trip_mines = {
-		radius = 300,
-		max_nr = 10,
-		duration = {2, 4},
-		interval = {0.75, 1.5},
-		group_min = 0,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "ch1"
 	}
 	self.enemy_chatter.sentry = {
-		radius = 300,
-		max_nr = 10,
-		duration = {2, 4},
-		interval = {4, 10},
-		group_min = 0,
+		radius = 2000,
+	    max_nr = 6,
+	    duration = {2, 4},
+	    interval = {6, 12},
+	    group_min = 2,
 		queue = "ch2"
 	}
+	
 	self.enemy_chatter.incomming_tank = {
 		radius = 1500,
 		max_nr = 0,
@@ -436,7 +449,7 @@ function GroupAITweakData:_init_chatter_data()
 		queue = "bdz"
 	}
 	self.enemy_chatter.incomming_spooc = {
-		radius = 1200,
+		radius = 2000,
 		max_nr = 0,
 		duration = {10, 10},
 		interval = {0.5, 1},
@@ -7209,7 +7222,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" then
+	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" then
 		self.besiege.assault.force = {
 			1,
 			1,
@@ -7233,7 +7246,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" then
+	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" then
 		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.assault.force_balance_mul = {
 				22,
@@ -8177,7 +8190,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	}
 	self.besiege.recon.interval_variation = 10
 	
-	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" then
+	if level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" then
 		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.recon.force = {
 				0.5,

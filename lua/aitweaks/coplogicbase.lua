@@ -474,24 +474,6 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 			new_att_obj.acquire_t = data.t
 		end
 
-		if contact_chatter_time_ok and data.char_tweak.chatter and data.char_tweak.chatter.contact and new_att_obj.is_person and new_att_obj.verified and REACT_COMBAT <= new_reaction then
-			if data.unit:anim_data().idle or data.unit:anim_data().move then
-				local tweak_table = data.unit:base()._tweak_table
-
-				if tweak_table == "gensec" or tweak_table == "security" then
-					data.unit:sound():say("a01", true)
-				elseif data.unit:base().has_tag and data.unit:base():has_tag("shield") then
-					if not data.attack_sound_t or data.t - data.attack_sound_t > 40 then
-						data.attack_sound_t = data.t
-
-						data.unit:sound():play("shield_identification", nil, true)
-					end
-				else
-					data.unit:sound():say("c01", true)
-				end
-			end
-		end
-
 		if data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].use_laser and not data.weapon_laser_on then
 			data.unit:inventory():equipped_unit():base():set_laser_enabled(true)
 

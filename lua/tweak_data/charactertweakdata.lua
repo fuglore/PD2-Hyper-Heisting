@@ -529,9 +529,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 220,
@@ -546,40 +546,40 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 450,
-					fwd = 450,
-					bwd = 450
+					strafe = 350,
+					fwd = 350,
+					bwd = 350
 				},
 				cbt = {
-					strafe = 450,
-					fwd = 450,
-					bwd = 450
+					strafe = 350,
+					fwd = 350,
+					bwd = 350
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 230,
-					fwd = 230,
-					bwd = 230
+					strafe = 220,
+					fwd = 220,
+					bwd = 220
 				},
 				cbt = {
-					strafe = 230,
-					fwd = 230,
-					bwd = 230
+					strafe = 220,
+					fwd = 220,
+					bwd = 220
 				}
 			},
 			run = {
 				hos = {
-					strafe = 460,
-					fwd = 460,
-					bwd = 460
+					strafe = 350,
+					fwd = 350,
+					bwd = 350
 				},
 				cbt = {
-					strafe = 460,
-					fwd = 460,
-					bwd = 460
+					strafe = 350,
+					fwd = 350,
+					bwd = 350
 				}
 			}
 		}
@@ -588,9 +588,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 253,
@@ -605,40 +605,40 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 518,
-					fwd = 518,
-					bwd = 518
+					strafe = 402,
+					fwd = 402,
+					bwd = 402
 				},
 				cbt = {
-					strafe = 518,
-					fwd = 518,
-					bwd = 518
+					strafe = 402,
+					fwd = 402,
+					bwd = 402
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 263,
-					fwd = 263,
-					bwd = 263
+					strafe = 253,
+					fwd = 253,
+					bwd = 253
 				},
 				cbt = {
-					strafe = 263,
-					fwd = 263,
-					bwd = 263
+					strafe = 253,
+					fwd = 253,
+					bwd = 253
 				}
 			},
 			run = {
 				hos = {
-					strafe = 528,
-					fwd = 528,
-					bwd = 528
+					strafe = 402,
+					fwd = 402,
+					bwd = 402
 				},
 				cbt = {
-					strafe = 528,
-					fwd = 528,
-					bwd = 528
+					strafe = 402,
+					fwd = 402,
+					bwd = 402
 				}
 			}
 		}
@@ -647,9 +647,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 264,
@@ -664,40 +664,40 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 540,
-					fwd = 540,
-					bwd = 540
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				},
 				cbt = {
-					strafe = 540,
-					fwd = 540,
-					bwd = 540
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 274,
-					fwd = 274,
-					bwd = 274
+					strafe = 264,
+					fwd = 264,
+					bwd = 264
 				},
 				cbt = {
-					strafe = 274,
-					fwd = 274,
-					bwd = 274
+					strafe = 264,
+					fwd = 264,
+					bwd = 264
 				}
 			},
 			run = {
 				hos = {
-					strafe = 550,
-					fwd = 550,
-					bwd = 550
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				},
 				cbt = {
-					strafe = 550,
-					fwd = 550,
-					bwd = 550
+					strafe = 420,
+					fwd = 420,
+					bwd = 420
 				}
 			}
 		}
@@ -706,9 +706,9 @@ function CharacterTweakData:_presets(tweak_data)
 		stand = {
 			walk = {
 				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 120,
+					fwd = 150,
+					bwd = 100
 				},
 				hos = {
 					strafe = 275,
@@ -723,40 +723,40 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 562,
-					fwd = 562,
-					bwd = 562
+					strafe = 438,
+					fwd = 438,
+					bwd = 438
 				},
 				cbt = {
-					strafe = 562,
-					fwd = 562,
-					bwd = 562
+					strafe = 438,
+					fwd = 438,
+					bwd = 438
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 285,
-					fwd = 285,
-					bwd = 285
+					strafe = 275,
+					fwd = 275,
+					bwd = 275
 				},
 				cbt = {
-					strafe = 285,
-					fwd = 285,
-					bwd = 285
+					strafe = 275,
+					fwd = 275,
+					bwd = 275
 				}
 			},
 			run = {
 				hos = {
-					strafe = 572,
-					fwd = 572,
-					bwd = 572
+					strafe = 438,
+					fwd = 438,
+					bwd = 438
 				},
 				cbt = {
-					strafe = 572,
-					fwd = 572,
-					bwd = 572
+					strafe = 438,
+					fwd = 438,
+					bwd = 438
 				}
 			}
 		}
@@ -1265,14 +1265,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 661,
-					fwd = 661,
-					bwd = 661
+					strafe = 727,
+					fwd = 727,
+					bwd = 727
 				},
 				cbt = {
-					strafe = 661,
-					fwd = 661,
-					bwd = 661
+					strafe = 727,
+					fwd = 727,
+					bwd = 727
 				}
 			}
 		},
@@ -8989,7 +8989,13 @@ function CharacterTweakData:_set_normal()
 	self.fbi_pager.weapon = self.presets.weapon.complex
 	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency	
 	--Cop health tweak
-	self.cop_female.HEALTH_INIT = 15
+	self.cop_female.HEALTH_INIT = 16
+	self.security.HEALTH_INIT = 16
+	self.security_undominatable.HEALTH_INIT = 16	
+	self.mute_security_undominatable.HEALTH_INIT = 16
+	self.security_mex.HEALTH_INIT = 16
+	self.cop.HEALTH_INIT = 16
+	self.gensec.HEALTH_INIT = 16
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
 		0.35,
 		0.35
@@ -9150,7 +9156,13 @@ function CharacterTweakData:_set_hard()
 	self.fbi_pager.weapon = self.presets.weapon.complex
 	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency		
 	--Cop health tweak
-	self.cop_female.HEALTH_INIT = 15
+	self.cop_female.HEALTH_INIT = 16
+	self.security.HEALTH_INIT = 16
+	self.security_undominatable.HEALTH_INIT = 16	
+	self.mute_security_undominatable.HEALTH_INIT = 16
+	self.security_mex.HEALTH_INIT = 16
+	self.cop.HEALTH_INIT = 16
+	self.gensec.HEALTH_INIT = 16
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
 		0.35,
 		0.35
@@ -9339,8 +9351,14 @@ function CharacterTweakData:_set_overkill()
 	--special movespeed
 	self.taser.move_speed = self.presets.move_speed.civil_consistency
 	self.medic.move_speed = self.presets.move_speed.civil_consistency
-	--cop health
-	self.cop_female.HEALTH_INIT = 15
+	--security health
+	self.cop_female.HEALTH_INIT = 16
+	self.security.HEALTH_INIT = 16
+	self.security_undominatable.HEALTH_INIT = 16	
+	self.mute_security_undominatable.HEALTH_INIT = 16
+	self.security_mex.HEALTH_INIT = 16
+	self.cop.HEALTH_INIT = 16
+	self.gensec.HEALTH_INIT = 16
 	self.flashbang_multiplier = 1.75
 	self.concussion_multiplier = 1
 end
@@ -9497,6 +9515,15 @@ function CharacterTweakData:_set_overkill_145()
 			self.city_swat.spawn_scream = "g90"
 		end
 	end
+	
+	self.cop_female.HEALTH_INIT = 16
+	self.security.HEALTH_INIT = 16
+	self.security_undominatable.HEALTH_INIT = 16	
+	self.mute_security_undominatable.HEALTH_INIT = 16
+	self.security_mex.HEALTH_INIT = 16
+	self.cop.HEALTH_INIT = 16
+	self.gensec.HEALTH_INIT = 16
+
 	
 	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		--fbi setup
@@ -9727,7 +9754,9 @@ function CharacterTweakData:_set_easy_wish()
 	self.security_undominatable.HEALTH_INIT = 16
 	self.security_undominatable.no_arrest = true		
 	self.mute_security_undominatable.HEALTH_INIT = 16
-	self.mute_security_undominatable.no_arrest = true	
+	self.mute_security_undominatable.no_arrest = true
+	self.cop_female.HEALTH_INIT = 16
+	self.cop_female.no_arrest = true
 	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
@@ -9929,15 +9958,18 @@ function CharacterTweakData:_set_overkill_290()
 	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
 	self.security_mex.HEALTH_INIT = 16
-	self.security_mex.no_arrest = true
+	self.security_mex.no_arrest = true	
 	self.security_undominatable.HEALTH_INIT = 16
-	self.security_undominatable.no_arrest = true			
+	self.security_undominatable.no_arrest = true		
 	self.mute_security_undominatable.HEALTH_INIT = 16
-	self.mute_security_undominatable.no_arrest = true		
+	self.mute_security_undominatable.no_arrest = true
+	self.cop_female.HEALTH_INIT = 16
+	self.cop_female.no_arrest = true
 	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
+	
 	--sniper stuff
 	self.sniper.weapon.is_rifle.focus_delay = 2
 	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
@@ -10137,16 +10169,19 @@ function CharacterTweakData:_set_sm_wish()
 	self.city_swat.no_arrest = true
 	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
-	self.security_undominatable.HEALTH_INIT = 16
-	self.security_undominatable.no_arrest = true			
-	self.mute_security_undominatable.HEALTH_INIT = 16
-	self.mute_security_undominatable.no_arrest = true		
 	self.security_mex.HEALTH_INIT = 16
-	self.security_mex.no_arrest = true
-	self.cop.no_arrest = true
+	self.security_mex.no_arrest = true	
+	self.security_undominatable.HEALTH_INIT = 16
+	self.security_undominatable.no_arrest = true		
+	self.mute_security_undominatable.HEALTH_INIT = 16
+	self.mute_security_undominatable.no_arrest = true
+	self.cop_female.HEALTH_INIT = 16
+	self.cop_female.no_arrest = true
 	self.cop.HEALTH_INIT = 16
+	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
+	
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.ninja_complex
 	self.fbi.weapon = self.presets.weapon.fbigod
@@ -10237,6 +10272,7 @@ function CharacterTweakData:_set_sm_wish()
 			}
 		}
 	}
+
 	--Anti-Fire DOT setup
 	self.taser.DAMAGE_CLAMP_FIREDOT = 5 --Tasers and Shields need significant resistance to fire.
 	self.tank.DAMAGE_CLAMP_FIREDOT = 10

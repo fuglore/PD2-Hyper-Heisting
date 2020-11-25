@@ -252,7 +252,7 @@ function GroupAIStateBase:_check_drama_low_p()
 end
 
 function GroupAIStateBase:_check_assault_panic_chatter()
-	if self._t and self._last_killed_cop_t and self._t - self._last_killed_cop_t < math.random(0.15, 1.2) then
+	if self._t and self._last_killed_cop_t and self._t - self._last_killed_cop_t < 5 then
 		return true
 	end
 	
@@ -589,11 +589,13 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 
 	if e_data.group then
 		self:_remove_group_member(e_data.group, u_key, dead)
+		
 		if dead and self._task_data and self._task_data.assault and self._task_data.assault.active then
-			self:_voice_friend_dead(e_data.group)
+			--self:_voice_friend_dead(e_data.group)
 			self._last_killed_cop_t = self._t
 		end
-			if self._task_data and self._task_data.assault and self._task_data.assault.phase == "sustain" and self._task_data.assault.active then
+		
+		if dead and self._task_data and self._task_data.assault and self._task_data.assault.phase == "sustain" and self._task_data.assault.active then
 			self._enemies_killed_sustain = self._enemies_killed_sustain + 1
 		end
 	end
@@ -841,17 +843,6 @@ function GroupAIStateBase:chk_unregister_irrelevant_attention_objects()
 		if not att_info.nav_tracker and not att_info.unit:vehicle_driving() or att_info.unit:in_slot(1) then
 			self:store_removed_attention_object(u_key, att_info)
 			att_info.handler:set_attention(nil)
-		end
-	end
-end
-
-local _remove_group_member_ori = GroupAIStateBase._remove_group_member
-function GroupAIStateBase:_remove_group_member(group, u_key, is_casualty)
-	_remove_group_member_ori(self, group, u_key, is_casualty)
-	if is_casualty then
-		local unit_to_scream = group.units[math.random(#group.units)]
-		if unit_to_scream then
-			unit_to_scream:sound():say("buddy_died", true)
 		end
 	end
 end
@@ -1175,4 +1166,81 @@ function GroupAIStateBase:_determine_objective_for_criminal_AI(unit)
 	end
 
 	return objective
+end
+
+function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
+	if unit:sound():speaking(self._t) then
+		return
+	end
+
+	local chatter_tweak = tweak_data.group_ai.enemy_chatter[chatter_type]
+	local chatter_type_hist = unit:sound()._chatter[chatter_type]
+	local chatter_type_events = self._enemy_chatter[chatter_type]
+
+	if not chatter_type_hist then
+		chatter_type_hist = {
+			cooldown_t = 0
+		}
+		unit:sound()._chatter[chatter_type] = chatter_type_hist
+	end
+	
+	if not chatter_type_events then
+		chatter_type_events = {
+			events = {},
+			global_cooldown_t = 0
+		}
+		self._enemy_chatter[chatter_type] = chatter_type_events
+	end
+
+	local t = self._t
+
+	if t < chatter_type_hist.cooldown_t then
+		return
+	end
+	
+	if t < chatter_type_events.global_cooldown_t then
+		return
+	end
+	
+	local nr_events_in_area = 0
+
+	for i_event, event_data in pairs(chatter_type_events.events) do
+		if event_data.expire_t < t then
+			chatter_type_hist[i_event] = nil
+		elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
+			if nr_events_in_area == chatter_tweak.max_nr - 1 then
+				return
+			else
+				nr_events_in_area = nr_events_in_area + 1
+			end
+		end
+	end
+
+	local group_requirement = chatter_tweak.group_min
+
+	if group_requirement and group_requirement > 1 then
+		local u_data = self._police[unit:key()]
+		local nr_in_group = 1
+
+		if u_data.group then
+			nr_in_group = u_data.group.size
+		end
+
+		if nr_in_group < group_requirement then
+			return
+		end
+	end
+
+	chatter_type_hist.cooldown_t = t + math.lerp(chatter_tweak.interval[1], chatter_tweak.interval[2], math.random())
+	chatter_type_events.global_cooldown_t = t + math.lerp(chatter_tweak.duration[1], chatter_tweak.duration[2], math.random())
+	
+	local new_event = {
+		epicenter = mvector3.copy(unit_pos),
+		expire_t = chatter_type_hist.cooldown_t
+	}
+	table.insert(chatter_type_events.events, new_event)
+
+	unit:sound():say(chatter_tweak.queue, true)
+
+	return true
 end
