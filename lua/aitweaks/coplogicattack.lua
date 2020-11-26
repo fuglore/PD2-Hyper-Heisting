@@ -2300,7 +2300,7 @@ function CopLogicAttack.queue_update(data, my_data)
 		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
 	end
 	
-	if objective.running and objective.retiring then
+	if objective and objective.running and objective.retiring then
 		ignore_radio_rules = true
 		ignore_skirmish_rules = true		
 		chosen_sabotage_chatter = "retreat"
