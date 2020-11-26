@@ -8241,7 +8241,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 		7,
 		12
 	}
-	self.medic.ecm_vulnerability = 1
+	self.medic.ecm_vulnerability = 0
 	self.medic.ecm_hurts = {
 		ears = {
 			max_duration = 10,
@@ -8284,11 +8284,11 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.no_retreat = nil
 	self.taser.no_arrest = true
 	self.taser.surrender = presets.surrender.special
-	self.taser.ecm_vulnerability = 0.9
+	self.taser.ecm_vulnerability = 0
 	self.taser.ecm_hurts = {
 		ears = {
-			max_duration = 8,
-			min_duration = 6
+			max_duration = 3,
+			min_duration = 1
 		}
 	}
 	self.taser.surrender_break_time = {
@@ -8371,11 +8371,11 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.surrender = presets.surrender.special
 	self.fbi.damage.doom_hurt_type = "doom"
 	self.fbi.damage.hurt_severity = presets.hurt_severities.specialenemy
-	self.fbi.ecm_vulnerability = 1
+	self.fbi.ecm_vulnerability = 0
 	self.fbi.ecm_hurts = {
 		ears = {
-			max_duration = 10,
-			min_duration = 8
+			max_duration = 3,
+			min_duration = 1
 		}
 	}
 	self.fbi.weapon_voice = "2"
@@ -8618,11 +8618,11 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.sniper.no_move_and_shoot = true
 	self.sniper.move_and_shoot_cooldown = 1
 	self.sniper.suppression = nil --i dont want to put stalwart versions of suppression here due to it hampering the sniper's ability to hold down areas properly.
-	self.sniper.ecm_vulnerability = 1
+	self.sniper.ecm_vulnerability = 0
 	self.sniper.ecm_hurts = {
 		ears = {
-			max_duration = 10,
-			min_duration = 8
+			max_duration = 3,
+			min_duration = 1
 		}
 	}
 	self.sniper.weapon_voice = "1"

@@ -926,7 +926,11 @@ function CopActionHurt:init(action_desc, common_data)
 				common_data.unit:sound():say("burndeath")
 			else
 				if common_data.ext_base:has_tag("law") and not common_data.ext_base:has_tag("special") then
-					common_data.unit:sound():say("ch3")
+					if math_random() < 0.5 then
+						common_data.unit:sound():say("ch3")
+					else
+						common_data.unit:sound():say("burndeath")
+					end
 				else
 					common_data.unit:sound():say("x01a_any_3p")
 				end

@@ -78,32 +78,32 @@ function GroupAITweakData:_init_chatter_data()
 	self.enemy_chatter.assaultpanic = {
 		radius = 2000,
 		max_nr = 6,
-		duration = {2, 4},
-		interval = {4, 8},
+		duration = {1, 2},
+		interval = {3, 6},
 		group_min = 0,
 		queue = "g90"
 	}
 	self.enemy_chatter.assaultpanicsuppressed1 = {
 		radius = 2000,
 		max_nr = 6,
-		duration = {2, 4},
-		interval = {4, 8},
+		duration = {1, 2},
+		interval = {3, 6},
 		group_min = 0,
 		queue = "hlp"
 	}
 	self.enemy_chatter.assaultpanicsuppressed2 = {
 		radius = 2000,
 	    max_nr = 6,
-	    duration = {2, 4},
-		interval = {4, 8},
+	    duration = {1, 2},
+		interval = {3, 6},
 	    group_min = 0,
 	    queue = "lk3b"
 	}
 	self.enemy_chatter.open_fire = {
 		radius = 2000,
 		max_nr = 6,
-		duration = {2, 4},
-		interval = {4, 8},
+		duration = {1, 2},
+		interval = {3, 6},
 		group_min = 0,
 		queue = "att"
 	}		
@@ -339,7 +339,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 6,
 	    duration = {2, 4},
-	    interval = {6, 12},
+	    interval = {4, 8},
 	    group_min = 2,
 		queue = "mov"
 	}
@@ -347,7 +347,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 6,
 	    duration = {2, 4},
-	    interval = {6, 12},
+	    interval = {4, 8},
 	    group_min = 2,
 		queue = "pus"
 	}
@@ -363,7 +363,7 @@ function GroupAITweakData:_init_chatter_data()
 		radius = 2000,
 	    max_nr = 6,
 		duration = {2, 4},
-	    interval = {6, 12},
+	    interval = {4, 8},
 	    group_min = 2,
 		queue = "t01"
 	}
