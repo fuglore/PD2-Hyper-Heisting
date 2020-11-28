@@ -8332,8 +8332,8 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.ecm_vulnerability = 1
 	self.swat.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	self.swat.move_speed = presets.move_speed.simple_consistency
@@ -8461,8 +8461,8 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.ecm_vulnerability = 1
 	self.heavy_swat.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	self.heavy_swat.damage.explosion_damage_mul = 1
@@ -8508,8 +8508,8 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.ecm_vulnerability = 1
 	self.fbi_swat.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	self.fbi_swat.move_speed = presets.move_speed.simple_consistency
@@ -8567,8 +8567,8 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.ecm_vulnerability = 1
 	self.fbi_heavy_swat.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	self.fbi_heavy_swat.damage.explosion_damage_mul = 1
@@ -8610,8 +8610,8 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	self.city_swat.ecm_vulnerability = 1
 	self.city_swat.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	self.city_swat.move_speed = presets.move_speed.simple_consistency
@@ -8819,8 +8819,8 @@ Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, pre
 	self.cop.ecm_vulnerability = 1
 	self.cop.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	self.cop.damage.hurt_severity = presets.hurt_severities.hordemook
@@ -8847,8 +8847,8 @@ Hooks:PostHook(CharacterTweakData, "_init_gensec", "hhpost_gensec", function(sel
 	self.gensec.chatter = presets.enemy_chatter.security
 	self.gensec.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 end)
@@ -8859,8 +8859,8 @@ Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(s
 	self.security.chatter = presets.enemy_chatter.security
 	self.security.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	-- if i fucked something i'm going to kill
@@ -8869,8 +8869,8 @@ Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(s
 	self.security_undominatable.chatter = presets.enemy_chatter.security
 	self.security_undominatable.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	self.mute_security_undominatable.HEALTH_INIT = 6
@@ -8878,8 +8878,8 @@ Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(s
 	self.mute_security_undominatable.chatter = presets.enemy_chatter.security
 	self.mute_security_undominatable.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 	-- why
@@ -8888,8 +8888,8 @@ Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(s
 	self.security_mex.chatter = presets.enemy_chatter.security
 	self.security_mex.ecm_hurts = {
 		ears = {
-			max_duration = 1.99,
-			min_duration = 1.99
+			max_duration = 2,
+			min_duration = 2
 		}
 	}
 end)

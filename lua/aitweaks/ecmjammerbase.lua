@@ -78,7 +78,7 @@ function ECMJammerBase:_set_feedback_active(state)
 
 			local t = TimerManager:game():time()
 			self._feedback_clbk_id = "ecm_feedback" .. tostring(self._unit:key())
-			self._feedback_interval = tweak_data.upgrades.ecm_feedback_interval or 1.5
+			self._feedback_interval = tweak_data.upgrades.ecm_feedback_interval or 1
 			self._feedback_range = tweak_data.upgrades.ecm_jammer_base_range
 			local duration_mul = 1
 
