@@ -100,7 +100,11 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			1.2,
 			1.25,
 			1.3
-		}		
+		}
+		self.ecm_feedback_retrigger_interval = 240 --4 minutes is fine!
+		self.ecm_feedback_min_duration = 15
+		self.ecm_feedback_max_duration = 15
+		self.ecm_feedback_interval = 1
 		self.values.shape_charge.quantity = {
 			1,
 			5
@@ -566,6 +570,12 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 				value = 4,
 				upgrade = "perkdeck_movespeed_mult",
 				category = "player"
+			}
+		}
+		self.values.temporary.melee_life_leech = {
+			{
+				2.5,
+				5
 			}
 		}
 		self.values.player.pick_up_ammo_multiplier = {

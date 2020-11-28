@@ -337,11 +337,13 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_more_fire_power_desc"] = "BASIC: ##$basic;##\nYou gain ##1## more shaped charge and ##4## more trip mines.\n\nACE: ##$pro;##\nYou gain ##4## more shaped charges and ##7## more trip mines.",
 			
 			--Infiltrator/Sociopath Shit--
-			["menu_deck8_7_desc"] = "Your movement speed is increased by ##15%##. \n\nEach consecutive melee hit will increase your melee weapon swing speed by ##25%## for ##1.5## seconds.\n\nThis can be stacked up to ##4## times.\n\nMissing your melee swing or running out of time will reset all stacks.",
-			
 			["menu_deck8_1_desc"] = "Your movement speed is further increased by ##5%##.",
 			
 			["menu_deck8_3_desc"] = "Your movement speed is further increased by ##5%##.",
+			
+			["menu_deck8_7_desc"] = "Your movement speed is increased by ##15%##. \n\nEach consecutive melee hit will increase your melee weapon swing speed by ##25%## for ##1.5## seconds.\n\nThis can be stacked up to ##4## times.\n\nMissing your melee swing or running out of time will reset all stacks.",
+			
+			["menu_deck8_9_desc"] = "Striking an enemy with your melee weapon will heal you for ##+25 Health##.\n\nThis cannot occur more than once every ##5## seconds",
 
 			["menu_deck9_1"] = "No Talk",
 

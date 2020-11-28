@@ -902,7 +902,7 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 
 			if target_dead and target_hostile and life_leach_available then
 				managers.player:activate_temporary_upgrade("temporary", "melee_life_leech")
-				self._unit:character_damage():restore_health(managers.player:temporary_upgrade_value("temporary", "melee_life_leech", 1))
+				self._unit:character_damage():restore_health(managers.player:temporary_upgrade_value("temporary", "melee_life_leech", 1), true)
 			end
 
 			local special_weapon = tweak_data.blackmarket.melee_weapons[melee_entry].special_weapon

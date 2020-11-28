@@ -2497,7 +2497,7 @@ function CopDamage:damage_fire(attack_data)
 			elseif alive(attack_data.weapon_unit) and attack_data.weapon_unit:base()._parts then
 				for part_id, part in pairs(attack_data.weapon_unit:base()._parts) do
 					if tweak_data.weapon.factory.parts[part_id].custom_stats and tweak_data.weapon.factory.parts[part_id].custom_stats.fire_dot_data then
-						dot_damage = dot_damage * damage * 0.1 --Dragon's Breath rounds, scale DoT damage depending on the total damage dealt through direct (impact) fire damage
+						dot_damage = dot_damage * damage * 0.05 --Dragon's Breath rounds, scale DoT damage depending on the total damage dealt through direct (impact) fire damage
 						--usual dot_damage is 10
 					end
 				end

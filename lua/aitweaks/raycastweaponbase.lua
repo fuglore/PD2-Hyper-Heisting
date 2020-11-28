@@ -13,6 +13,16 @@ local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_rot1 = Rotation()
 
+local afsf_blacklist = {
+	["saw"] = true,
+	["saw_secondary"] = true,
+	["flamethrower_mk2"] = true,
+	["m134"] = true,
+	["mg42"] = true,
+	["shuno"] = true,
+	["system"] = true
+}
+
 function RaycastWeaponBase:setup(setup_data, damage_multiplier)
 	self._autoaim = setup_data.autoaim
 	local stats = tweak_data.weapon[self._name_id].stats
@@ -621,13 +631,20 @@ if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		end
 
 		if self._bullets_fired then
-			if self._bullets_fired == 1 and self:weapon_tweak_data().sounds.fire_single then
-				self:play_tweak_data_sound("stop_fire")
-				self:play_tweak_data_sound("fire_auto", "fire")
-			end
+		--i've commented and preserved the vanilla code that caused the need for this AFSF2 update:
+		--the game plays starts the firesound when firing, in addition to calling _fire_sound()
+		--this causes some firesounds to play twice, while also not playing the correct fire sound.
+		--so U200 both broke AutoFireSoundFix, made the existing problem worse, and then added a new problem on top of that
+	
+--		if self._bullets_fired == 1 and self:weapon_tweak_data().sounds.fire_single then
+--			self:play_tweak_data_sound("stop_fire")
+--			self:play_tweak_data_sound("fire_auto", "fire")
+--		end
 
-			self._bullets_fired = self._bullets_fired + 1
-		end
+		self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single,"fire_single")
+		
+		self._bullets_fired = self._bullets_fired + 1
+	end
 
 		local is_player = self._setup.user_unit == managers.player:player_unit()
 		local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
@@ -717,16 +734,6 @@ end
 --New version uploaded and maintained by Offyerrocker.
 --At this point all of my previous code is bad and obsolete yay
 
-
-local afsf_blacklist = {
-	["saw"] = true,
-	["saw_secondary"] = true,
-	["flamethrower_mk2"] = true,
-	["m134"] = true,
-	["mg42"] = true,
-	["shuno"] = true,
-	["system"] = true
-}
 --This blacklist defines which weapons are prevented from playing their single-fire sound in AFSF.
 	--Weapons not on this list will repeatedly play their single-fire sound rather than their auto-fire loop.
 	--Weapons on this list will play their sound as normal
@@ -737,21 +744,23 @@ local afsf_blacklist = {
 --Check for manual blacklist.
 --If check passed, check for if the weapon has a singlefire sound to play
 --This is both for future-proofing and for custom weapon support, I think. I'm actually not sure which part of AFSF fixes custom weapon sounds otherwise
+--Check for if AFSF's fix code should apply to this particular weapon
 function RaycastWeaponBase:_soundfix_should_play_normal()
 	local name_id = self:get_name_id() or "xX69dank420blazermachineXx" --if somehow get_name_id() returns nil, crashing won't be my fault. though i guess you'll have bigger problems in that case. also you'll look dank af B)
 	if not self._setup.user_unit == managers.player:player_unit() then
 		--don't apply fix for NPCs or other players
 		return true
+	elseif tweak_data.weapon[name_id].use_fix == true then 
+		--for custom weapons
+		return false
 	elseif afsf_blacklist[name_id] then
 		--blacklisted sound
 		return true
 	elseif not tweak_data.weapon[name_id].sounds.fire_single then
 		--no singlefire sound; should play normal
-		--doesn't seem to be necessary to check for underbarrel gadget override via self:gadget_overrides_weapon_functions() anymore
 		return true
-	--elseif not tweak_data.weapon[name_id].use_fix then return true --for custom weapons; beardlib should cover that though
 	end
-	
+	return false
 	--else, AFSF2 can apply fix to this weapon
 end
 
@@ -765,21 +774,6 @@ function RaycastWeaponBase:_fire_sound(...)
 end
 
 --Play sounds here instead for fix-applicable weapons; or else if blacklisted, use original function and don't play the fixed fire sound
-local orig_fire = RaycastWeaponBase.fire
-function RaycastWeaponBase:fire(...)
-	local result = orig_fire(self, ...)
-	if self:_soundfix_should_play_normal() then
-		return result
-	end
-
-	if result and self._setup.user_unit == managers.player:player_unit() then
-		self:play_tweak_data_sound("fire_single","fire")
-		self:play_tweak_data_sound("stop_fire") --i don't know why this still caused reverb for me when i tried it initially
---		self._sound_fire:stop() --stops sounds immediately and without a reverb. todo figure out how to run this as a callback after fire sound play completion, instead of cutting off current sound
-	end
-	
-	return result
-end
 
 --stop_shooting is only used for fire sound loops, so playing individual single-fire sounds means it doesn't need to be called
 local orig_stop_shooting = RaycastWeaponBase.stop_shooting

@@ -236,8 +236,8 @@ function CharacterTweakData:_presets(tweak_data)
 					roll = {
 						chance = 1,
 						timeout = {
-							0.7,
-							1
+							1,
+							2
 						}
 					},
 					dive = {
@@ -289,14 +289,14 @@ function CharacterTweakData:_presets(tweak_data)
 						shoot_accuracy = 0.6,
 						timeout = {
 							1,
-							1.5
+							2
 						}
 					},
 					roll = {
 						chance = 1,
 						timeout = {
-							0.7,
-							1
+							1,
+							2
 						}
 					},
 					dive = {
@@ -304,8 +304,8 @@ function CharacterTweakData:_presets(tweak_data)
 						shoot_chance = 0.6,
 						shoot_accuracy = 0.4,
 						timeout = {
-							0.75,
-							1
+							2,
+							3
 						}
 					}
 				}
@@ -8329,6 +8329,13 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.detection = presets.detection.enemymook
 	self.swat.HEALTH_INIT = 10
 	self.swat.headshot_dmg_mul = 6
+	self.swat.ecm_vulnerability = 1
+	self.swat.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	self.swat.move_speed = presets.move_speed.simple_consistency
 	self.swat.damage.doom_hurt_type = "light"
 	self.swat.damage.hurt_severity = presets.hurt_severities.hordemook
@@ -8451,6 +8458,13 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.detection = presets.detection.enemymook
 	self.heavy_swat.HEALTH_INIT = 20
 	self.heavy_swat.headshot_dmg_mul = 4
+	self.heavy_swat.ecm_vulnerability = 1
+	self.heavy_swat.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	self.heavy_swat.damage.explosion_damage_mul = 1
 	self.heavy_swat.damage.doom_hurt_type = "heavy"
 	self.heavy_swat.move_speed = presets.move_speed.simple_consistency
@@ -8491,6 +8505,13 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.detection = presets.detection.enemymook
 	self.fbi_swat.HEALTH_INIT = 10
 	self.fbi_swat.headshot_dmg_mul = 6
+	self.fbi_swat.ecm_vulnerability = 1
+	self.fbi_swat.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	self.fbi_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_swat.suppression = presets.suppression.hard_def
 	self.fbi_swat.surrender = presets.surrender.easy
@@ -8543,6 +8564,13 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.detection = presets.detection.enemymook
 	self.fbi_heavy_swat.HEALTH_INIT = 20
 	self.fbi_heavy_swat.headshot_dmg_mul = 4
+	self.fbi_heavy_swat.ecm_vulnerability = 1
+	self.fbi_heavy_swat.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	self.fbi_heavy_swat.damage.explosion_damage_mul = 1
 	self.fbi_heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_heavy_swat.damage.doom_hurt_type = "heavy"
@@ -8579,6 +8607,13 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	self.city_swat.detection = presets.detection.enemymook
 	self.city_swat.HEALTH_INIT = 10
 	self.city_swat.headshot_dmg_mul = 6	
+	self.city_swat.ecm_vulnerability = 1
+	self.city_swat.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	self.city_swat.move_speed = presets.move_speed.simple_consistency
 	self.city_swat.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.city_swat.suppression = presets.suppression.hard_def
@@ -8780,7 +8815,14 @@ end)
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
 	self.cop.HEALTH_INIT = 15
 	self.cop.headshot_dmg_mul = 16
-	self.cop.access = "swat"	
+	self.cop.access = "swat"
+	self.cop.ecm_vulnerability = 1
+	self.cop.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	self.cop.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.cop_moss = deep_clone(self.cop)
 	self.cop_moss.tags = {
@@ -8803,23 +8845,53 @@ Hooks:PostHook(CharacterTweakData, "_init_gensec", "hhpost_gensec", function(sel
 	self.gensec.HEALTH_INIT = 6
 	self.gensec.headshot_dmg_mul = 16
 	self.gensec.chatter = presets.enemy_chatter.security
+	self.gensec.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(self, presets)
 	self.security.HEALTH_INIT = 6
 	self.security.headshot_dmg_mul = 16
 	self.security.chatter = presets.enemy_chatter.security
+	self.security.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	-- if i fucked something i'm going to kill
 	self.security_undominatable.HEALTH_INIT = 6
 	self.security_undominatable.headshot_dmg_mul = 16
 	self.security_undominatable.chatter = presets.enemy_chatter.security
+	self.security_undominatable.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	self.mute_security_undominatable.HEALTH_INIT = 6
 	self.mute_security_undominatable.headshot_dmg_mul = 16
 	self.mute_security_undominatable.chatter = presets.enemy_chatter.security
+	self.mute_security_undominatable.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 	-- why
 	self.security_mex.HEALTH_INIT = 6
 	self.security_mex.headshot_dmg_mul = 16
-	self.security_mex.chatter = presets.enemy_chatter.security	
+	self.security_mex.chatter = presets.enemy_chatter.security
+	self.security_mex.ecm_hurts = {
+		ears = {
+			max_duration = 1.99,
+			min_duration = 1.99
+		}
+	}
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_mobster_boss", "hhpost_mboss", function(self, presets)
