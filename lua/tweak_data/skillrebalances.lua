@@ -85,7 +85,29 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 				11
 			}
 		}
-		
+	
+		self.skills.oppressor = {
+			{
+				upgrades = {
+					"player_flashbang_multiplier_1",
+					"player_flashbang_multiplier_2"
+				},
+				cost = self.costs.default
+			},
+			{
+				upgrades = {
+					"player_armor_regen_time_mul_1"
+				},
+				cost = self.costs.pro
+			},
+			name_id = "menu_oppressor_beta",
+			desc_id = "menu_oppressor_beta_desc",
+			icon_xy = {
+				2,
+				12
+			}
+		}
+	
 		self.skills.wolverine = {
 			{
 				upgrades = {

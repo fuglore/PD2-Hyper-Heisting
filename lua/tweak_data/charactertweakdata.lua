@@ -9431,7 +9431,7 @@ function CharacterTweakData:_set_overkill()
 	self.security_mex.HEALTH_INIT = 16
 	self.cop.HEALTH_INIT = 16
 	self.gensec.HEALTH_INIT = 16
-	self.flashbang_multiplier = 1.75
+	self.flashbang_multiplier = 1
 	self.concussion_multiplier = 1
 end
 
@@ -9748,7 +9748,7 @@ function CharacterTweakData:_set_overkill_145()
 		self.fbi_heavy_swat.dodge = self.presets.dodge.heavy_complex
 		self.armored_sniper.dodge = self.presets.dodge.heavy_complex
 		self.spooc.dodge = self.presets.dodge.ninja_complex
-		self.flashbang_multiplier = 2
+		self.flashbang_multiplier = 1.5
 		self.concussion_multiplier = 1
 	else
 		--fbi setup.
@@ -9779,7 +9779,7 @@ function CharacterTweakData:_set_overkill_145()
 		--special movespeed
 		self.taser.move_speed = self.presets.move_speed.civil_consistency
 		self.medic.move_speed = self.presets.move_speed.civil_consistency
-		self.flashbang_multiplier = 1.75
+		self.flashbang_multiplier = 1.25
 		self.concussion_multiplier = 1
 	end
 	
@@ -9899,7 +9899,7 @@ function CharacterTweakData:_set_easy_wish()
 	self.phalanx_vip.HEALTH_INIT = 800
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 800
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
-	self.flashbang_multiplier = 2
+	self.flashbang_multiplier = 1.25
 	self.concussion_multiplier = 1
 end
 
@@ -10109,7 +10109,7 @@ function CharacterTweakData:_set_overkill_290()
 	self.phalanx_vip.HEALTH_INIT = 800
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 800
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
-	self.flashbang_multiplier = 2
+	self.flashbang_multiplier = 1.25
 	self.concussion_multiplier = 1
 end
 
@@ -10435,7 +10435,7 @@ function CharacterTweakData:_set_sm_wish()
 	self.phalanx_vip.HEALTH_INIT = 80
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 80
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
-	self.flashbang_multiplier = 2.25
+	self.flashbang_multiplier = 1.5
 	self.concussion_multiplier = 1
 end
 

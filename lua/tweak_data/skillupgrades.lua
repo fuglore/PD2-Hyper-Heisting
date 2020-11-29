@@ -223,6 +223,11 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}--]]
 		
+		self.values.player.flashbang_multiplier = {
+			0.75,
+			0.75
+		}
+		
 		self.values.player.magic_bullet_basic = {
 			true
 		}
