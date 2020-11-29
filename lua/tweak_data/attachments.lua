@@ -35,17 +35,25 @@ self.parts.wpn_fps_upg_a_slug.custom_stats = {
 					armor_piercing_add = 1,
 					can_shoot_through_shield = true,
 					can_shoot_through_wall = true,
-					damage_far_mul = 5,
-					damage_near_mul = 5,
+					damage_far_mul = 6,
+					damage_near_mul = 6,
 					can_shoot_through_enemy = true,
 					rays = 1
 	}
+self.parts.wpn_fps_upg_a_slug.stats.total_ammo_mod = -5
+
+self.parts.wpn_fps_upg_a_slug.stats.spread = 6
 	
 self.parts.wpn_fps_upg_a_piercing.custom_stats = {
-					damage_near_mul = 3,
+					damage_near_mul = 1,
 					armor_piercing_add = 1,
-					damage_far_mul = 3
+					can_shoot_through_enemy = true,
+					can_shoot_through_shield = false,
+					can_shoot_through_wall = false,
+					damage_far_mul = 1
 	}
+self.parts.wpn_fps_upg_a_piercing.stats.total_ammo_mod = -5
+self.parts.wpn_fps_upg_a_piercing.stats.damage = -50
 
 self.wpn_fps_shot_serbu.override = {
 			wpn_fps_upg_a_slug = {
@@ -54,8 +62,8 @@ self.wpn_fps_shot_serbu.override = {
 					armor_piercing_add = 1,
 					can_shoot_through_shield = true,
 					can_shoot_through_wall = true,
-					damage_far_mul = 5,
-					damage_near_mul = 5,
+					damage_far_mul = 1,
+					damage_near_mul = 1,
 					can_shoot_through_enemy = true,
 					rays = 1
 				}
@@ -79,8 +87,8 @@ self.wpn_fps_sho_striker.override = {
 					armor_piercing_add = 1,
 					can_shoot_through_shield = true,
 					can_shoot_through_wall = true,
-					damage_far_mul = 5,
-					damage_near_mul = 5,
+					damage_far_mul = 1,
+					damage_near_mul = 1,
 					can_shoot_through_enemy = true,
 					rays = 1
 				}
@@ -102,9 +110,9 @@ self.wpn_fps_pis_judge.override = {
 			wpn_fps_upg_ns_sho_salvo_large = {parent = "slide"},
 			wpn_fps_upg_ns_duck = {parent = "slide"},
 			wpn_fps_upg_a_piercing = {custom_stats = {
-				damage_near_mul = 3,
+				damage_near_mul = 1,
 				armor_piercing_add = 1,
-				damage_far_mul = 3
+				damage_far_mul = 1
 			}},
 			wpn_fps_upg_a_explosive = {custom_stats = {
 				ignore_statistic = true,
@@ -122,9 +130,9 @@ self.wpn_fps_pis_x_judge.override = {
 			wpn_fps_upg_ns_sho_salvo_large = {parent = "slide"},
 			wpn_fps_upg_ns_duck = {parent = "slide"},
 			wpn_fps_upg_a_piercing = {custom_stats = {
-				damage_near_mul = 3,
+				damage_near_mul = 1,
 				armor_piercing_add = 1,
-				damage_far_mul = 3
+				damage_far_mul = 1
 			}},
 			wpn_fps_upg_a_explosive = {custom_stats = {
 				ignore_statistic = true,
@@ -146,138 +154,6 @@ self.parts.wpn_fps_ass_ak_m_proto.stats.concealment = -2
 self.parts.wpn_fps_ass_ak_m_proto.stats.reload = 3
 end
 
--- PX4
-if self.wpn_fps_pis_px4 then
-		self.parts.wpn_fps_upg_px4_ammo_45acp.pcs = nil											
-		self.parts.wpn_fps_upg_px4_ammo_9mm.pcs = nil
-end	
-
--- M&P 40
-if self.wpn_fps_pis_swmp40 then
-		self.parts.wpn_fps_upg_swmp40_ammo_9mm.pcs = nil											
-end	
-
--- P99
-if self.wpn_fps_pis_p99 then
-		self.parts.wpn_fps_upg_p99_ammo_40sw.pcs = nil											
-end	
-
--- SW659
-if self.wpn_fps_pis_sw659 then
-		self.parts.wpn_fps_pis_sw659_a_c45.pcs = nil		
-		self.parts.wpn_fps_pis_sw659_a_gen.pcs = nil				
-end	
-
--- TT33
-if self.wpn_fps_pis_gtt33 then
-		self.parts.wpn_fps_pis_gtt33_a_c45.pcs = nil					
-end	
-
--- G19
-if self.wpn_fps_pis_g19 then
-		self.parts.wpn_fps_upg_g19_ammo_9mm_p.pcs = nil					
-end	
-
--- Max9
-if self.wpn_fps_pis_max9 then
-		self.parts.wpn_fps_pis_max9_b_short.pcs = nil	
-		self.parts.wpn_fps_pis_max9_b_nosup.pcs = nil					
-end	
-
--- P22-whatever who cares
-if self.wpn_fps_pis_noodle then
-		self.parts.wpn_fps_pis_noodle_a1_10mm.pcs = nil					
-end	
-
--- Brown Bricks -browning hp-
-if self.wpn_fps_pis_hpb then
-		self.parts.wpn_fps_pis_hpb_a_c45.pcs = nil					
-end	
-
--- A glock
-if self.wpn_fps_pis_glawk then
-		self.parts.wpn_fps_pis_glawk_a1_22lr.pcs = nil		
-		self.parts.wpn_fps_pis_glawk_a1_40sw.pcs = nil	
-		self.parts.wpn_fps_pis_glawk_a2_10mm.pcs = nil	
-		self.parts.wpn_fps_pis_glawk_a3_357sig.pcs = nil
-		self.parts.wpn_fps_pis_glawk_a4_45acp.pcs = nil		
-		self.parts.wpn_fps_pis_glawk_a5_45gap.pcs = nil				
-end	
-
--- AMT
-if self.wpn_fps_pis_amt then
-		self.parts.wpn_fps_pis_amt_a_357.pcs = nil		
-		self.parts.wpn_fps_pis_amt_a_44.pcs = nil			
-end	
-
--- Doom Shotgun
-if self.wpn_fps_shot_super then
-		self.parts.wpn_fps_upg_super_ammo_piercing.pcs = nil			
-end	
-
--- GITS M4
-if self.wpn_fps_ass_cinnamonroll then
-		self.parts.wpn_fps_ass_cinnamonroll_bc_a.pcs = nil
-		self.parts.wpn_fps_ass_cinnamonroll_bc_b.pcs = nil		
-		self.parts.wpn_fps_ass_cinnamonroll_bc_c.pcs = nil				
-end	
-
--- GITS munmu
-if self.wpn_fps_ass_munmu then
-		self.parts.wpn_fps_ass_munmu_bc_dam.pcs = nil
-		self.parts.wpn_fps_ass_munmu_bc_acc.pcs = nil		
-		self.parts.wpn_fps_ass_munmu_bc_sta.pcs = nil				
-end	
-
--- Tar21
-if self.wpn_fps_ass_tar21 then
-		self.parts.wpn_fps_ass_tar21_a_sniper.pcs = nil	
-end	
-
--- an hk rifle
-if self.wpn_fps_ass_raifu then
-		self.parts.wpn_fps_upg_raifu_am_blackhills.pcs = nil	
-end	
-
--- m14e2131241
-if self.wpn_fps_ass_m14e2 then
-		self.parts.wpn_fps_ass_m14e2_m_extended.pcs = nil	
-end	
-
--- Howa
-if self.wpn_fps_ass_howa then
-		self.parts.wpn_fps_ass_howa_t64_body.pcs = nil	
-end	
-
--- an92
-if self.wpn_fps_ass_tilt then
-		self.parts.wpn_fps_ass_tilt_a_fuerte.pcs = nil	
-end	
-
--- mk18s
-if self.wpn_fps_ass_mk18s then
-		self.parts.wpn_fps_ass_mk18s_a_dmr.pcs = nil	
-		self.parts.wpn_fps_ass_mk18s_a_weak.pcs = nil	
-		self.parts.wpn_fps_ass_mk18s_a_strong.pcs = nil	
-		self.parts.wpn_fps_ass_mk18s_a_classic.pcs = nil	
-end	
-
--- mikon
-if self.wpn_fps_ass_mikon then
-		self.parts.wpn_fps_upg_mikon_am_spc.pcs = nil	
-		self.parts.wpn_fps_upg_mikon_am_parp.pcs = nil	
-end	
-
--- lkrifle
-if self.wpn_fps_ass_lkrifle then
-		self.parts.wpn_fps_ass_lkrifle_a_fuerte.pcs = nil	
-end	
-
--- evo
-if self.wpn_fps_smg_czevo then
-		self.parts.wpn_fps_smg_czevo_a_strong.pcs = nil	
-		self.parts.wpn_fps_smg_czevo_a_classic.pcs = nil	
-end	
 
 
 end)

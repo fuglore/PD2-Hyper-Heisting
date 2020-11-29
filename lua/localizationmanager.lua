@@ -458,6 +458,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			-- weapon stuff below	
 			["bm_wp_g3_b_short"] = "Short Barrel",
 			["bm_wp_g3_b_sniper"] = "Long Barrel",
+			["bm_wp_upg_a_piercing_desc"] = "Pierces through enemy armor.",
+			["bm_w_p90"] = "Kobus 90 A/P Submachine Gun",
 			["bm_w_asval"] = "Valkyria AP Rifle",		
 		})
 	end

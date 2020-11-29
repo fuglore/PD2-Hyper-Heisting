@@ -2988,7 +2988,6 @@ self.m95.stats_modifiers = {
 	damage = 24
 }
 
-
 --GRENADE LAUNCHERS--
 
 --Arbiter
@@ -3192,7 +3191,6 @@ self.model3.upgrade_blocks = nil
 self.x_model3.AMMO_MAX = 90
 self.x_model3.upgrade_blocks = nil
 
-
 --Crosskill
 self.colt_1911.AMMO_MAX = 120
 self.colt_1911.stats.damage = 79
@@ -3268,7 +3266,6 @@ crouching = {
 --Bronco
 self.new_raging_bull.AMMO_PICKUP = {0.54, 1}
 self.new_raging_bull.upgrade_blocks = nil
-
 
 --Castigo
 self.chinchilla.AMMO_PICKUP = {0.54, 1}
@@ -3598,11 +3595,68 @@ self.sgs.AMMO_MAX = 45
 self.sgs.AMMO_PICKUP = {1, 2.1}
 end
 
+--Breaker
+self.boot.stats.damage = 200
+self.boot.stats_modifiers = {damage = 2}
+self.boot.damage_near = 650
+self.boot.damage_far = 1120
+self.boot.AMMO_MAX = 30
+self.boot.AMMO_PICKUP = {0.32, 1.12}
+self.boot.kick = {
+standing = {
+		4,
+		5,
+		-1,
+		1
+},
+steelsight = {
+		3,
+		3.5,
+		-1,
+		1
+},
+crouching = {
+		3,
+		3.5,
+		-1,
+		1
+}
+}
+
+--Hammer 23
+if self.bs23 then 
+self.bs23.stats.damage = 145
+self.bs23.damage_near = 650
+self.bs23.damage_far = 1120
+self.bs23.AMMO_MAX = 24
+self.bs23.stats_modifiers = {damage = 3}
+self.bs23.kick = {
+standing = {
+		4,
+		5,
+		-1,
+		1
+},
+steelsight = {
+		3,
+		3.5,
+		-1,
+		1
+},
+crouching = {
+		3,
+		3.5,
+		-1,
+		1
+}
+}
+end
+
 --Reinbeck
 if self.beck then 
 self.beck.stats.damage = 190
-self.beck.damage_near = 550
-self.beck.damage_far = 1050
+self.beck.damage_near = 650
+self.beck.damage_far = 1120
 self.beck.AMMO_PICKUP = {1.8, 2.9}
 self.beck.AMMO_MAX = 42
 self.beck.fire_mode_data.fire_rate = 0.35294117647
@@ -3745,6 +3799,5 @@ crouching = {
 }}
 end
 
---Developer's Note: The suffering I am feeling from adding all of these custom weapons is unimaginable
 --Thank you for all your work, Gambyt!
 end)

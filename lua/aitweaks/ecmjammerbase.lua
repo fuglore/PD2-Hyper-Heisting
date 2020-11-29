@@ -167,7 +167,7 @@ function ECMJammerBase:clbk_feedback()
 	end
 
 	--print("PUKING!!!!!")
-	self._detect_and_give_dmg(self._position + self._unit:rotation():y() * 15, self._unit, self:owner(), self._feedback_range)
+	self._detect_and_give_dmg(self._position, self._unit, self:owner(), self._feedback_range)
 
 	if self._feedback_expire_t < t then
 		self._feedback_clbk_id = nil
