@@ -498,9 +498,8 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 	end
 
 	if play_impact_flesh then
-		local fullautonpc = alive(weapon_unit) and weapon_unit:base().weapon_tweak_data and weapon_unit:base():weapon_tweak_data() and weapon_unit:base():weapon_tweak_data().fullautonpc ~= nil
 
-		if fullautonpc then --no more destroying my framerate you figgin' fuggin' goose
+		if self.low_prio then --*sigh*
 			if math.random() < 0.1 then
 				managers.game_play_central:play_impact_flesh({
 					col_ray = col_ray,

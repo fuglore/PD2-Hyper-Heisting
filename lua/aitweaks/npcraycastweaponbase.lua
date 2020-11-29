@@ -2,6 +2,7 @@ local trail_func = NPCRaycastWeaponBase.init
 function NPCRaycastWeaponBase:init(...)
 	trail_func(self, ...)
 	self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(22)
+	self.low_prio = true
 	
 	local weapon_tweak = tweak_data.weapon[self._name_id]
 
