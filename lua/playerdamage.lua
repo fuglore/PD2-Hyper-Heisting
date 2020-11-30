@@ -1689,6 +1689,10 @@ function PlayerDamage:revive(silent)
 	if not self._phoenix_down_t and managers.player:has_category_upgrade("player", "phoenix_down") then
 		self._start_phoenix_down_t = true
 	end
+	
+	if managers.player:has_category_upgrade("player", "comeback") then
+		 managers.player:do_comeback_blast() --DON'T CALL IT A COMEBACK!!!
+	end
 
 	if managers.player:has_inactivate_temporary_upgrade("temporary", "revived_damage_resist") then
 		managers.player:activate_temporary_upgrade("temporary", "revived_damage_resist")

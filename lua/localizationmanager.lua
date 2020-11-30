@@ -412,6 +412,11 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_bandoliers_beta_desc"] = "BASIC: ##$basic##\nYour total ammo capacity is increased by ##25%##.\n\nACE: ##$pro##\nThe ammo pickup of your weapons is increased by ##100%##.\n\nNOTE: Does not stack with the ##Walk-in Closet## ammo pickup bonus gained from perk decks.",
 			
+			["menu_nine_lives_beta_desc"] = "BASIC: ##$basic##\nAfter being revived, you knock down all cops within ##4 meters##.\n\nACE: ##$pro##\nYou gain the ability to get downed ##1## more time before going into custody",
+			
+			["menu_feign_death"] = "Dark Metamorphosis",
+			["menu_feign_death_desc"] = "BASIC: ##$basic##\nUpon killing an enemy, regenerate ##1## Health.\n\nACE: ##$pro##\nThe regeneration is increased to ##2.5## Health.\n\n##...But enough talk! Have at you!##",
+			
 			["menu_pistol_beta_messiah"] = "Resurrection",
 			["menu_pistol_beta_messiah_desc"] = "BASIC: ##$basic##\nWhile in bleedout, you can revive yourself if you kill an enemy.  This can only happen every ##120## seconds.\n\nACE: ##$pro##\nYou are now protected from otherwise lethal damage for ##1.5## seconds after being revived.\n\n##The mark of my divinity shall scar thy DNA.##",
 			

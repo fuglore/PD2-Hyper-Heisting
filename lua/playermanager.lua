@@ -309,6 +309,14 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 			self._throw_regen_kills = 0
 		end
 	end
+	
+	if damage_ext then
+		if self:has_category_upgrade("player", "dark_metamorphosis_aced") then
+			damage_ext:restore_health(0.25, true)
+		elseif self:has_category_upgrade("player", "dark_metamorphosis_basic") then
+			damage_ext:restore_health(0.1, true)
+		end
+	end
 
 	if self._on_killshot_t and t < self._on_killshot_t then
 		return effect_sync_index
@@ -513,6 +521,41 @@ function PlayerManager:on_headshot_dealt()
 	if self:has_category_upgrade("player", "magic_bullet_aced") then
 		if weapon_unit and weapon_unit:base():is_category("pistol", "smg", "assault_rifle", "snp") then
 			self._magic_bullet_aced_t = t + 2
+		end
+	end
+	
+end
+
+function PlayerManager:do_comeback_blast()
+	local player_unit = self:player_unit()
+	
+	if not player_unit then
+		return
+	end
+	
+	local pos = player_unit:movement():m_head_pos()
+	
+	local enemies = world_g:find_units_quick(player_unit, "sphere", pos, 400, managers.slot:get_mask("enemies"))
+	
+	for _, enemy in ipairs(enemies) do
+		local dmg_ext = enemy:character_damage()
+
+		if dmg_ext and dmg_ext.damage_simple then
+			local center_of_mass = enemy:movement():m_com()
+			local obstructed = enemy:raycast("ray", pos, center_of_mass, "slot_mask", obstruction_slotmask, "report")
+
+			if not obstructed then
+				local attack_dir = center_of_mass - pos
+				local attack_data = {
+					damage = 0,
+					attacker_unit = player_unit,
+					guaranteed_knockdown = true,
+					pos = center_of_mass,
+					attack_dir = attack_dir
+				}
+
+				dmg_ext:damage_simple(attack_data)
+			end
 		end
 	end
 	

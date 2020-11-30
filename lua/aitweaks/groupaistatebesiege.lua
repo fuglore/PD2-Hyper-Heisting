@@ -2841,7 +2841,7 @@ function GroupAIStateBesiege:_end_regroup_task()
 		local limits = tweak_data.group_ai.bain_assault_praise_limits
 		local result = dmg < limits[1] and 0 or dmg < limits[2] and 1 or 2
 		
-		if self._downs_during_assault > 4 then
+		if self._downs_during_assault > 5 then
 			self._assault_was_hell = true
 		end
 

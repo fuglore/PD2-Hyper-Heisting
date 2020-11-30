@@ -355,6 +355,45 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		
+		self.values.player.comeback = { --ressurection
+			true
+		}
+		self.definitions.player_comeback = {
+			name_id = "menu_comeback",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "comeback",
+				category = "player"
+			}
+		}
+		
+		self.values.player.dark_metamorphosis_basic = {
+			true
+		}
+		self.definitions.player_dark_metamorphosis_basic = {
+			name_id = "menu_dark_metamorphosis_basic",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "dark_metamorphosis_basic",
+				category = "player"
+			}
+		}
+		
+		self.values.player.dark_metamorphosis_aced = {
+			true
+		}
+		self.definitions.player_dark_metamorphosis_aced = {
+			name_id = "menu_dark_metamorphosis_aced",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "dark_metamorphosis_aced",
+				category = "player"
+			}
+		}
+		
 		self.values.player.phoenix_down = { --ressurection
 			true
 		}

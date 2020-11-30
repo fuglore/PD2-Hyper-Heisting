@@ -1968,7 +1968,7 @@ function CopDamage:damage_simple(attack_data)
 	damage = self:_apply_damage_reduction(damage) --they also forgot to add this one
 	
 	--Graze damage is supposed to not benefit from any damage bonuses (as the damage is defined by the shot and skill upgrade you have), but it's not supposed to not be clamped like in vanilla, where everything can get nuked by it
-	if self._unit:movement():cool() then --allowing stealth insta-kill
+	if self._unit:movement():cool() and damage > 0 then --allowing stealth insta-kill
 		damage = self._HEALTH_INIT
 	else
 		if self._char_tweak.DAMAGE_CLAMP_SHOCK then --no unit has DAMAGE_CLAMP_SHOCK, which is why Winters and the Phalanx can all die instantly to one headshot-proced Graze attack in vanilla
