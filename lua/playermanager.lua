@@ -1,5 +1,6 @@
 local world_g = World
 local temp_vec1 = Vector3()
+local mvec3_norm = mvector3.normalize
 
 function PlayerManager:_chk_fellow_crimin_proximity(unit)
 	local players_nearby = 0
@@ -217,6 +218,8 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 
 					if not obstructed then
 						local attack_dir = center_of_mass - pos
+						mvec3_norm(attack_dir)
+
 						local attack_data = {
 							damage = damage,
 							attacker_unit = player_unit,
@@ -546,6 +549,8 @@ function PlayerManager:do_comeback_blast()
 
 			if not obstructed then
 				local attack_dir = center_of_mass - pos
+				mvec3_norm(attack_dir)
+
 				local attack_data = {
 					damage = 0,
 					attacker_unit = player_unit,
