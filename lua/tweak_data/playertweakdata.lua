@@ -1,5 +1,4 @@
 Hooks:PostHook(PlayerTweakData, "init", "hhplayertweakbullshit", function(self, tweak_data)
-	self.damage.HEALTH_INIT = 46
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		self.put_on_mask_time = 1
 		self.movement_state.stamina.STAMINA_REGEN_RATE = 6
@@ -31,7 +30,6 @@ function PlayerTweakData:_set_normal()
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
-	self.damage.LIVES_INIT = 2
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 end
 
@@ -54,7 +52,6 @@ function PlayerTweakData:_set_hard()
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
-	self.damage.LIVES_INIT = 2
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 end
 
@@ -76,7 +73,6 @@ function PlayerTweakData:_set_overkill()
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
-	self.damage.LIVES_INIT = 2
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 end
 
@@ -99,7 +95,6 @@ function PlayerTweakData:_set_overkill_145()
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
-	self.damage.LIVES_INIT = 2
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 end
 
@@ -123,9 +118,13 @@ function PlayerTweakData:_set_easy_wish()
 	}
 	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
-	self.damage.LIVES_INIT = 2
-	self.damage.INCAPACITATED_TIME = 25
-	self.damage.DOWNED_TIME = 25
+	if Global.game_settings.single_player then
+		--Nothing.
+	else
+		self.damage.LIVES_INIT = 3 --This increases complexity immediately, effectively and satisfyingly, requires more scrutinity though.
+		self.damage.INCAPACITATED_TIME = 25
+		self.damage.DOWNED_TIME = 25
+	end 
 end
 
 function PlayerTweakData:_set_overkill_290()
@@ -148,9 +147,13 @@ function PlayerTweakData:_set_overkill_290()
 	}
 	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
-	self.damage.LIVES_INIT = 2
-	self.damage.INCAPACITATED_TIME = 25
-	self.damage.DOWNED_TIME = 25
+	if Global.game_settings.single_player then
+		--Nothing.
+	else
+		self.damage.LIVES_INIT = 3
+		self.damage.INCAPACITATED_TIME = 25
+		self.damage.DOWNED_TIME = 25
+	end
 end
 
 function PlayerTweakData:_set_sm_wish()
@@ -173,9 +176,13 @@ function PlayerTweakData:_set_sm_wish()
 	}
 	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
-	self.damage.LIVES_INIT = 2
-	self.damage.INCAPACITATED_TIME = 20
-	self.damage.DOWNED_TIME = 20
+	if Global.game_settings.single_player then
+		self.damage.LIVES_INIT = 3
+	else
+		self.damage.LIVES_INIT = 2
+		self.damage.INCAPACITATED_TIME = 20
+		self.damage.DOWNED_TIME = 20
+	end
 end
 
 function PlayerTweakData:_set_singleplayer()

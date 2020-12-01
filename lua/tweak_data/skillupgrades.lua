@@ -87,27 +87,19 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		end
 		
 		self.values.player.body_armor.skill_max_health_store = {
+			11,
+			11,
+			10,
+			9,
 			8,
-			8,
-			7,
 			6,
-			5,
-			4,
-			3
+			5
 		}
 		self.values.player.perkdeck_movespeed_mult = {
 			1.15,
 			1.2,
 			1.25,
 			1.3
-		}
-		self.doctor_bag_base = 1
-		self.values.doctor_bag.amount_increase = {
-			1
-		}
-		self.values.first_aid_kit.quantity = {
-			2,
-			4
 		}
 		self.ecm_feedback_retrigger_interval = 240 --4 minutes is fine!
 		self.ecm_feedback_min_duration = 15
@@ -234,45 +226,6 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		self.values.player.flashbang_multiplier = {
 			0.75,
 			0.75
-		}
-		
-		self.values.player.soldiersyringe_basic = { --Trooper's Syringe Basic
-			true
-		}
-		self.definitions.player_soldiersyringe_basic = {
-			name_id = "menu_soldiersyringe_basic",
-			category = "feature",
-			upgrade = {
-				value = 1,
-				upgrade = "soldiersyringe_basic",
-				category = "player"
-			}
-		}
-		
-		self.values.player.soldiersyringe_aced = { --Trooper's Syringe Aced
-			true
-		}
-		self.definitions.player_soldiersyringe_aced = {
-			name_id = "menu_soldiersyringe_aced",
-			category = "feature",
-			upgrade = {
-				value = 1,
-				upgrade = "soldiersyringe_aced",
-				category = "player"
-			}
-		}
-		
-		self.values.player.antilethal_meds = {
-			true
-		}
-		self.definitions.player_antilethal_meds = {
-			name_id = "menu_antilethal_meds",
-			category = "feature",
-			upgrade = {
-				value = 1,
-				upgrade = "antilethal_meds",
-				category = "player"
-			}
 		}
 		
 		self.values.player.magic_bullet_basic = {
