@@ -13,6 +13,8 @@ local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_rot1 = Rotation()
 
+PlayerDamage._UPPERS_COOLDOWN = 60
+
 Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	self._lives_init = tweak_data.player.damage.LIVES_INIT
 
@@ -874,6 +876,11 @@ function PlayerDamage:activate_jackpot_token()
 	--log("this party's gettin crazy")
 end
 
+function PlayerDamage:activate_docbag_token()
+	self._docbag_token = true
+	log("yes")
+end
+
 function PlayerDamage:_regenerated(no_messiah)
 	self:set_health(self:_max_health())
 	self:_send_set_health()
@@ -1251,6 +1258,7 @@ function PlayerDamage:_calc_armor_damage(attack_data)
 
 	return health_subtracted
 end
+
 function PlayerDamage:_calc_health_damage(attack_data)
 
 	attack_data.damage = attack_data.damage - (self._old_last_received_dmg or 0)
@@ -1267,7 +1275,7 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	local health_subtracted = 0
 	local death_prevented = nil
 	health_subtracted = self:get_real_health()
-	local revive_reasons = self._phoenix_down_t or self._jackpot_token
+	local revive_reasons = self._phoenix_down_t or self._docbag_token or self._jackpot_token
 	
 	if revive_reasons and self:get_real_health() - attack_data.damage <= 0 then
 		death_prevented = true
@@ -1300,14 +1308,21 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	self:_set_health_effect()
 	managers.statistics:health_subtracted(health_subtracted)
 	
-	if self._phoenix_down_t and death_prevented then
-		self._unit:sound():play("pickup_fak_skill")
-		return 0
-	elseif self._jackpot_token and death_prevented then
-		self._jackpot_token = nil
-		self._unit:sound():play("pickup_fak_skill")
-		--log("Jackpot just saved you!")
-		return 0
+	if death_prevented then 
+		if self._phoenix_down_t then
+			self._unit:sound():play("pickup_fak_skill")
+			return 0
+		elseif self._docbag_token then
+			self._docbag_token = nil
+			self._unit:sound():play("pickup_fak_skill")
+			--log("WOO")
+			return 0
+		elseif self._jackpot_token then
+			self._jackpot_token = nil
+			self._unit:sound():play("pickup_fak_skill")
+			--log("Jackpot just saved you!")
+			return 0
+		end
 	else
 		return health_subtracted
 	end

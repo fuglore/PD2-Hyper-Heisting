@@ -4,6 +4,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		table.insert(self.default_upgrades, "player_pick_lock_easy_speed_multiplier_1")
 		table.insert(self.default_upgrades, "player_can_free_run")
 		table.insert(self.default_upgrades, "player_run_and_reload")
+		--table.insert(self.default_upgrades, "first_aid_kit_deploy_time_multiplier") WIP
 		
 		self.skills.spotter_teamwork = {
 			{
@@ -43,6 +44,70 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		self.skills.perseverance[1].upgrades = {"temporary_berserker_damage_multiplier_1"}
 
 		self.skills.oppressor.icon_xy = {2.03, 11.9}
+		
+		--[[self.skills.tea_time = { WIP
+			{
+				upgrades = {
+					"soldiersyringe_basic"
+				},
+				cost = self.costs.default
+			},
+			{
+				upgrades = {
+					"soldiersyringe_aced"
+				},
+				cost = self.costs.pro
+			},
+			name_id = "menu_tea_time_beta",
+			desc_id = "menu_tea_time_beta_desc",
+			icon_xy = {
+				1,
+				11
+			}
+		}
+		]]--
+		
+		self.skills.tea_cookies = {
+			{
+				upgrades = {
+					"first_aid_kit_quantity_increase_1"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"first_aid_kit_auto_recovery_1"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_tea_cookies_beta",
+			desc_id = "menu_tea_cookies_beta_desc",
+			icon_xy = {
+				2,
+				11
+			}
+		}
+		
+		self.skills.medic_2x = {
+			{
+				upgrades = {
+					"doctor_bag_amount_increase1"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_antilethal_meds"
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_medic_2x_beta",
+			desc_id = "menu_medic_2x_beta_desc",
+			icon_xy = {
+				5,
+				8
+			}
+		}
 		
 		self.skills.single_shot_ammo_return = {
 			{
