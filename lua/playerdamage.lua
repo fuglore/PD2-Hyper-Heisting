@@ -878,7 +878,7 @@ end
 
 function PlayerDamage:activate_docbag_token()
 	self._docbag_token = true
-	log("yes")
+	--log("yes")
 end
 
 function PlayerDamage:_regenerated(no_messiah)
