@@ -2900,11 +2900,25 @@ function CopLogicTravel._set_verified_paths(data, verified_paths)
 	data.internal_data.charge_path = verified_paths.charge_path
 end
 
+function CopLogicTravel._investigate_safe_flank_path(shait, nav_seg)
+	return managers.groupai:state():is_nav_seg_populated_and_safe(nav_seg)
+end
+
+function CopLogicTravel._investigate_flank_path(shait, nav_seg)
+	return managers.groupai:state():is_nav_seg_populated(nav_seg)
+end
+
 function CopLogicTravel._begin_coarse_pathing(data, my_data)
 	local verify_clbk = nil
-
-	if my_data.path_safely then
-		verify_clbk = callback(CopLogicTravel, CopLogicTravel, "_investigate_coarse_path_verify_clbk")
+	
+	if my_data.path_safely then --I am laughing maniacally right now.
+		if not data.objective.follow_unit and data.tactics and data.tactics.flank then
+			verify_clbk = callback(CopLogicTravel, CopLogicTravel, "_investigate_safe_flank_path")
+		else
+			verify_clbk = callback(CopLogicTravel, CopLogicTravel, "_investigate_coarse_path_verify_clbk")
+		end
+	elseif not data.objective.follow_unit and data.tactics and data.tactics.flank then
+		verify_clbk = callback(CopLogicTravel, CopLogicTravel, "_investigate_flank_path")
 	end
 
 	local nav_seg = nil
