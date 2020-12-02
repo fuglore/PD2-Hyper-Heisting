@@ -2809,7 +2809,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				pushed = push or nil,
 				interrupt_dis = 200
 			}
-			group.is_chasing = group.is_chasing or push
+			group.is_chasing = group.is_chasing
 
 			self:_set_objective_to_enemy_group(group, grp_objective)
 		end
@@ -2965,7 +2965,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				charge = charge,
 				interrupt_dis = 200
 			}
-			group.is_chasing = group.is_chasing or push
+			group.is_chasing = group.is_chasing
 
 			self:_set_objective_to_enemy_group(group, grp_objective)
 		end

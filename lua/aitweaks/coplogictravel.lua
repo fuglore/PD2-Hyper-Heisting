@@ -6,19 +6,21 @@ local tmp_vec_cone_dir = Vector3()
 local mvec3_set = mvector3.set
 local mvec3_add = mvector3.add
 local mvec3_mul = mvector3.multiply
-local mvec3_set_l = mvector3.set_length
+local mvec3_set_length = mvector3.set_length
 local mvec3_dir = mvector3.direction
 local mvec3_copy = mvector3.copy
 local mvec3_norm = mvector3.normalize
 local mvec3_dis = mvector3.distance
 local mvec3_dis_sq = mvector3.distance_sq
-local mvec3_rot_with = mvector3.rotate_with
+local mvec3_step = mvector3.step
+local mvec3_rotate_with = mvector3.rotate_with
 local math_lerp = math.lerp
+local math_random = math.random
+local math_up = math.UP
+local math_abs = math.abs
+local math_clamp = math.clamp
 local math_min = math.min
 local math_max = math.max
-local math_abs = math.abs
-local math_random = math.random
-local math_UP = math.UP
 local math_sign = math.sign
 local mrot_y = mrotation.y
 local mrot_z = mrotation.z
@@ -2740,110 +2742,83 @@ function CopLogicTravel.action_complete_clbk(data, action)
 	end	
 end
 
---[[function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
+function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local cover = nil
 	local search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local threat_tracker = nil
-	local threat_area = nil
-	local allow_fwd = nil
-	local my_data = data.internal_data
-	local my_pos = data.m_pos
-	local shouldnt_use_follow_stuff = data.tactics and data.tactics.lonewolf
-	
-	if data.objective and data.objective.type == "follow" and not shouldnt_use_follow_stuff then
-		if data.tactics and data.tactics.shield_cover and data.attention_obj and data.attention_obj.nav_tracker and data.attention_obj.reaction and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
-			local threat_nav_pos = data.attention_obj.nav_tracker:field_position()
 
-			local threat_pos = data.attention_obj.m_pos --the threat
-			local shield_pos = mvec3_copy(data.objective.follow_unit:movement():m_pos()) --the pillar
-			mvec3_dir(tmp_vec1, threat_pos, shield_pos)
-			mvec3_norm(tmp_vec1)
-
-			local near_pos = shield_pos + tmp_vec1 * 120
-			local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
-			local objective_dis = data.objective.distance and data.objective.distance * 0.9 or nil
-			local cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, objective_dis, near_pos, threat_nav_pos)
-
-			if cover then
-				return cover
-			end
-		elseif data.objective.follow_unit:movement():nav_tracker() then
-			search_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
-		else
-			search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
-		end
-	else
-		search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
-	end
-	
-	local want_to_take_cover = my_data.want_to_take_cover
-	local flank_cover = my_data.flank_cover
-	local min_dis, max_dis = nil
-	
 	if data.unit:movement():cool() then
 		cover = managers.navigation:find_cover_in_nav_seg_1(search_area.nav_segs)
 	else
-		local optimal_threat_dis, threat_pos = nil
-		
-		optimal_threat_dis = 100
-		allow_fwd = true
-		
-		--if not near_pos and my_data.optimal_pos or data.is_suppressed and my_data.optimal_pos then
-		--	near_pos = my_data.optimal_pos
-		--end
-		
-		near_pos = near_pos or search_area.pos
-		
-		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.is_person and data.attention_obj.verified then
-			threat_pos = data.attention_obj.m_pos
-			threat_tracker = data.attention_obj.nav_tracker
-			threat_area = managers.groupai:state():get_area_from_nav_seg_id(threat_tracker:nav_segment())
-			--log("got an area!")
-		elseif my_data.expected_pos then
-			threat_pos = my_data.expected_pos
-		else
-			local all_criminals = managers.groupai:state():all_char_criminals()
-			local closest_crim_u_data, closest_crim_dis = nil
+		local search_start_pos, cone_base, cone_angle, variation_z, optimal_threat_dis, max_dist, threat_pos = nil
 
+		near_pos = near_pos or nil
+		
+		local all_criminals = managers.groupai:state():all_char_criminals()
+		local closest_crim_u_data, closest_crim_dis = nil
+		
+		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
+			threat_pos = data.attention_obj.nav_tracker:field_position()
+		else
 			for u_key, u_data in pairs(all_criminals) do
-				local crim_area = managers.groupai:state():get_area_from_nav_seg_id(u_data.tracker:nav_segment()) --this checks for the area any criminal units are standing in, this includes players and bots, keep in mind, this is nav-segment to nav-segment, so its map-dependant
+				local crim_area = managers.groupai:state():get_area_from_nav_seg_id(u_data.tracker:nav_segment())
 
 				if crim_area == search_area then
 					threat_pos = u_data.m_pos
-					--near_pos = threat_pos
-					threat_tracker = u_data.tracker
-					threat_area = managers.groupai:state():get_area_from_nav_seg_id(threat_tracker:nav_segment())
-					--log("got an area!")
+
 					break
 				else
-					local crim_dis = mvec3_dis_sq(near_pos, u_data.m_pos)
+					local pos_to_check = near_pos or search_area.pos
+					local crim_dis = mvector3.distance_sq(pos_to_check, u_data.m_pos)
 
 					if not closest_crim_dis or crim_dis < closest_crim_dis then
-						threat_pos = u_data.m_pos
-						threat_tracker = u_data.tracker
-						threat_area = managers.groupai:state():get_area_from_nav_seg_id(threat_tracker:nav_segment())
+						threat_pos = u_data.unit:movement():nav_tracker():field_position()
 						closest_crim_dis = crim_dis
 					end
 				end
 			end
 		end
-	end	
 		
-	if not data.cool and not cover then
-		--if my_data.optimal_pos then
-		--	near_pos = my_data.optimal_pos
-		--end		
-			
-		cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
-			
-		if cover then
-			return cover
+		if threat_pos then		
+			if data.objective.attitude == "engage" then
+				search_start_pos = threat_pos or nil
+				optimal_threat_dis = nil
+			else
+				optimal_threat_dis = data.internal_data.weapon_range.far
+			end			
 		end
+		
+		if near_pos then
+			if not data.objective.distance then
+				max_dist = 800
+
+				if data.objective.called or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.tactics and data.tactics.shield_cover then
+					max_dist = 300
+				end
+			else
+				max_distance = data.objective.distance * 0.9
+			end
+			--variation_z = 250 causes an access violation crash, probably needs something else...
+		end
+		
+		
+		--things commented out here need setups that i wouldnt know how to make...
+		local search_params = {
+			in_nav_seg = search_nav_seg, 
+			optimal_threat_dis = optimal_threat_dis or nil, 
+			near_pos = near_pos or nil, 
+			threat_pos = threat_pos or nil,
+			--cone_base = cone_base or nil,
+			--cone_angle = cone_angle or nil,
+			max_dist = max_dist or nil,
+			--variation_z = variation_z or nil,
+			search_start_pos = search_start_pos or near_pos or nil
+		}
+
+		cover = managers.navigation:find_cover_from_literally_anything(search_params) --custom function, pay attention
 	end
 
 	return cover
-end]]
+end
 
 function CopLogicTravel.get_pathing_prio(data)
     local prio = nil
@@ -2917,7 +2892,7 @@ function CopLogicTravel._begin_coarse_pathing(data, my_data)
 		else
 			verify_clbk = callback(CopLogicTravel, CopLogicTravel, "_investigate_coarse_path_verify_clbk")
 		end
-	elseif not data.objective.follow_unit and data.tactics and data.tactics.flank then
+	elseif data.tactics and data.tactics.flank then
 		verify_clbk = callback(CopLogicTravel, CopLogicTravel, "_investigate_flank_path")
 	end
 
@@ -3002,7 +2977,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 				max_dist_fail = 500
 			end
 		
-			if not near_pos and cover or cover and mvector3.distance(cover[1], near_pos) < max_dist then
+			if cover then
 				local cover_entry = {
 					cover
 				}
@@ -3057,7 +3032,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 		local cover = nil
 		
 		if not data.cool then
-			cover = managers.navigation:find_cover_in_nav_seg_3(dest_area.nav_segs, nil, follow_pos, threat_pos)
+			cover = CopLogicTravel._find_cover(data, dest_area.nav_segs, follow_pos)
 		end
 		
 		local max_dist = 1200

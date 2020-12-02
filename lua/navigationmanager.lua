@@ -85,3 +85,17 @@ function NavigationManager:release_cover(cover)
 		cover[self.COVER_RESERVED] = reserved - 1
 	end
 end
+
+function NavigationManager:find_cover_from_literally_anything(search_params)
+	if not search_params then
+		return
+	end
+	
+	if type(search_params.in_nav_seg) == "table" then
+		search_params.in_nav_seg = self._convert_nav_seg_map_to_vec(search_params.in_nav_seg)
+	end
+	
+	--log("cum")
+
+	return self._quad_field:find_cover(search_params)
+end
