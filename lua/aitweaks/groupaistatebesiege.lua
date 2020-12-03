@@ -355,15 +355,9 @@ end
 
 function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
-		local next_upd_t = 0.028888888888888888
-		local asap = nil
-		if next(self._spawning_groups) then
-			next_upd_t = 0.014444444444444444
-			asap = true
-		end
 		self._police_upd_task_queued = true
 
-		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + next_upd_t, nil, asap) --please dont let your own algorithms implode like that, ovk, thanks
+		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t - 0.1, nil, true) --please dont let your own algorithms implode like that, ovk, thanks
 	end
 end
 
@@ -1780,25 +1774,80 @@ end
 
 function GroupAIStateBesiege:_upd_groups()
 	for group_id, group in pairs(self._groups) do
-		self:_verify_group_objective(group)
+		if group.has_spawned or group.objective.type == "retire" then
+			self:_verify_group_objective(group)
+			
+			local group_leader_u_key, group_leader_u_data = nil
+			
+			if group.objective.type ~= "retire" then
+				group_leader_u_key, group_leader_u_data = self._determine_group_leader(group.units)
+			end
+			
+			if group.objective.type == "retire" or not group_leader_u_data then
+				for u_key, u_data in pairs(group.units) do
+					local brain = u_data.unit:brain()
+					local current_objective = brain:objective()
+					local noobjordefaultorgrpobjchkandnoretry = not current_objective or current_objective.is_default or current_objective.grp_objective and current_objective.grp_objective ~= group.objective and not current_objective.grp_objective.no_retry
+					
+					if noobjordefaultorgrpobjchkandnoretry and notfollowingorfollowingaliveunit then
+						local objective = self._create_objective_from_group_objective(group.objective, u_data.unit)
 
-		for u_key, u_data in pairs(group.units) do
-			local brain = u_data.unit:brain()
-			local current_objective = brain:objective()
-			local noobjordefaultorgrpobjchkandnoretry = not current_objective or current_objective.is_default or current_objective.grp_objective and current_objective.grp_objective ~= group.objective and not current_objective.grp_objective.no_retry
-			local notfollowingorfollowingaliveunit = not group.objective.follow_unit or alive(group.objective.follow_unit)
+						if objective and brain:is_available_for_assignment(objective) then
+							self:set_enemy_assigned(objective.area or group.objective.area, u_key)
 
-			if noobjordefaultorgrpobjchkandnoretry and notfollowingorfollowingaliveunit then
-				local objective = self._create_objective_from_group_objective(group.objective, u_data.unit)
+							if objective.element then
+								objective.element:clbk_objective_administered(u_data.unit)
+							end
 
-				if objective and brain:is_available_for_assignment(objective) then
-					self:set_enemy_assigned(objective.area or group.objective.area, u_key)
-
-					if objective.element then
-						objective.element:clbk_objective_administered(u_data.unit)
+							u_data.unit:brain():set_objective(objective)
+						end
 					end
+				end
+			else
+				local brain = group_leader_u_data.unit:brain()
+				local current_objective = brain:objective()
+				local notfollowingorfollowingaliveunit = not group.objective.follow_unit or alive(group.objective.follow_unit)
 
-					u_data.unit:brain():set_objective(objective)
+				if noobjordefaultorgrpobjchkandnoretry and notfollowingorfollowingaliveunit then
+					local objective = self._create_objective_from_group_objective(group.objective, group_leader_u_data.unit)
+
+					if objective and brain:is_available_for_assignment(objective) then
+						self:set_enemy_assigned(objective.area or group.objective.area, group_leader_u_key)
+
+						if objective.element then
+							objective.element:clbk_objective_administered(group_leader_u_data.unit)
+						end
+
+						group_leader_u_data.unit:brain():set_objective(objective)
+					end
+				end
+				
+				for u_key, u_data in pairs(group.units) do
+					local brain = u_data.unit:brain()
+					local current_objective = brain:objective()
+					
+					if u_key ~= group_leader_u_key then
+						if not current_objective or current_objective.type ~= "follow" then
+							objective = {
+								attitude = group.objective.attitude or "avoid",
+								scan = group.objective.attitude,
+								type = "follow",
+								bagjob = group.objective.bagjob or nil,
+								hostagejob = group.objective.hostagejob or nil,
+								follow_unit = group_leader_u_data.unit
+							}
+							
+							if objective and brain:is_available_for_assignment(objective) then
+								self:set_enemy_assigned(objective.area or group.objective.area, u_key)
+
+								if objective.element then
+									objective.element:clbk_objective_administered(u_data.unit)
+								end
+
+								u_data.unit:brain():set_objective(objective)
+							end
+						end
+					end
 				end
 			end
 		end
@@ -3451,4 +3500,56 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	end
 
 	return self:_choose_best_group(candidate_groups, total_weight)
+end
+
+function GroupAIStateBesiege:on_cop_jobless(unit)
+	local u_key = unit:key()
+
+	if not self._police[u_key].assigned_area then
+		return
+	end
+
+	local nav_seg = unit:movement():nav_tracker():nav_segment()
+	local new_occupation = self:find_occupation_in_area(nav_seg)
+	local area = self:get_area_from_nav_seg_id(nav_seg)
+	local force_factor = area.factors.force
+	local demand = force_factor and force_factor.force
+	local nr_police = table.size(area.police.units)
+	local undershot = demand and demand - nr_police
+
+	if undershot and undershot > 0 then
+		local new_objective = {
+			type = "defend_area",
+			interrupt_health = 0.75,
+			is_default = true,
+			stance = "hos",
+			in_place = true,
+			scan = true,
+			interrupt_dis = 700,
+			attitude = "avoid",
+			nav_seg = nav_seg
+		}
+
+		self:set_enemy_assigned(self._area_data[nav_seg], u_key)
+		unit:brain():set_objective(new_objective)
+
+		return true
+	end
+
+	if not area.is_safe then
+		local new_objective = {
+			stance = "hos",
+			scan = true,
+			in_place = true,
+			type = "free",
+			is_default = true,
+			attitude = "avoid",
+			nav_seg = nav_seg
+		}
+
+		self:set_enemy_assigned(self._area_data[nav_seg], u_key)
+		unit:brain():set_objective(new_objective)
+
+		return true
+	end
 end

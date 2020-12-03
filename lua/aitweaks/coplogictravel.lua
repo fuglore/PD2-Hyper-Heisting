@@ -1186,8 +1186,8 @@ function CopLogicTravel.queued_update(data)
 	local focus_enemy = data.attention_obj
 	
 	if not data.is_converted and data.unit:base():has_tag("law") then
-		if objective then --currently trying to get rawed by 9 lonewolves at the burger king drive-in in front of 81 other cops
-			if Global.game_settings.one_down or data.tactics and data.tactics.lonewolf then
+		if objective then 
+			--[[if Global.game_settings.one_down or data.tactics and data.tactics.lonewolf then --currently trying to get rawed by 9 lonewolves at the burger king drive-in in front of 81 other cops
 				if objective.follow_unit then
 					if objective.follow_unit:brain() and objective.follow_unit:brain().objective and objective.follow_unit:brain():objective() ~= nil then
 						local new_objective = objective.follow_unit:brain():objective() --ignore following the "follow_unit", copy their objective and become standalone instead in order to execute pinches and flanking manuevers freely
@@ -1201,7 +1201,7 @@ function CopLogicTravel.queued_update(data)
 						end
 					end
 				end
-			end
+			end]]
 			
 			if objective.type == "defend_area" and objective.grp_objective and objective.grp_objective.type ~= "retire" or objective.type == "hunt" then
 				if CopLogicIdle._chk_relocate(data) then
@@ -2756,35 +2756,72 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		local all_criminals = managers.groupai:state():all_char_criminals()
 		local closest_crim_u_data, closest_crim_dis = nil
 		
-		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-			threat_pos = data.attention_obj.nav_tracker:field_position()
-		else
-			for u_key, u_data in pairs(all_criminals) do
-				local crim_area = managers.groupai:state():get_area_from_nav_seg_id(u_data.tracker:nav_segment())
+		if data.unit:in_slot(managers.slot:get_mask("enemies")) and not data.is_converted then
+			if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
+				threat_pos = data.attention_obj.nav_tracker:field_position()
+			else
+				for u_key, u_data in pairs(all_criminals) do
+					local crim_area = managers.groupai:state():get_area_from_nav_seg_id(u_data.tracker:nav_segment())
 
-				if crim_area == search_area then
-					threat_pos = u_data.m_pos
+					if crim_area == search_area then
+						threat_pos = u_data.m_pos
 
-					break
-				else
-					local pos_to_check = near_pos or search_area.pos
-					local crim_dis = mvector3.distance_sq(pos_to_check, u_data.m_pos)
+						break
+					else
+						local pos_to_check = near_pos or search_area.pos
+						local crim_dis = mvector3.distance_sq(pos_to_check, u_data.m_pos)
 
-					if not closest_crim_dis or crim_dis < closest_crim_dis then
-						threat_pos = u_data.unit:movement():nav_tracker():field_position()
-						closest_crim_dis = crim_dis
+						if not closest_crim_dis or crim_dis < closest_crim_dis then
+							threat_pos = u_data.unit:movement():nav_tracker():field_position()
+							closest_crim_dis = crim_dis
+						end
 					end
 				end
 			end
-		end
+	
 		
-		if threat_pos then		
-			if data.objective.attitude == "engage" then
-				search_start_pos = threat_pos or nil
-				optimal_threat_dis = nil
-			else
-				optimal_threat_dis = data.internal_data.weapon_range.far
-			end			
+			if data.objective.follow_unit then
+				local follow_unit = data.objective.follow_unit
+				if data.tactics and data.tactics.shield_cover then
+					if not data.objective.follow_unit:in_slot(managers.slot:get_mask("criminals")) then
+						local follow_tracker = follow_unit:movement():nav_tracker()
+						local field_pos = follow_tracker:field_position()
+						local advance_pos = follow_unit:brain() and follow_unit:brain():is_advancing()
+						local follow_unit_pos = advance_pos or field_pos
+						local pos = Vector3()
+						
+						if not alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then --this is probably better than sex.
+							mvec3_set(pos, follow_unit:movement()._m_rot:y())
+							mvec3_mul(pos, -60)
+							mvec3_add(pos, follow_unit_pos)
+						else
+							mvec3_set(pos, follow_unit:movement()._m_rot:x())
+							local dir = math.random() < 0.5 and -60 or 60
+							mvec3_mul(pos, dir)
+							mvec3_add(pos, follow_unit_pos)
+						end
+
+						near_pos = pos
+						
+						--local draw_duration = 1
+						--local line = Draw:brush(Color.green:with_alpha(0.5), draw_duration)
+						--line:cylinder(data.m_pos, near_pos, 4)
+						--local sphere = Draw:brush(Color.green:with_alpha(0.5), draw_duration)
+						--line:sphere(near_pos, 20)
+					end
+				end
+			end
+		
+			if threat_pos then		
+				if data.objective.attitude == "engage" then
+					if not near_pos then
+						search_start_pos = threat_pos or nil
+					end
+					optimal_threat_dis = nil
+				else
+					optimal_threat_dis = data.internal_data.weapon_range.far
+				end			
+			end
 		end
 		
 		if near_pos then
@@ -2795,11 +2832,10 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 					max_dist = 300
 				end
 			else
-				max_distance = data.objective.distance * 0.9
+				max_dist = data.objective.distance * 0.9
 			end
 			--variation_z = 250 causes an access violation crash, probably needs something else...
 		end
-		
 		
 		--things commented out here need setups that i wouldnt know how to make...
 		local search_params = {
@@ -2943,6 +2979,9 @@ function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 	data.unit:brain():search_for_path(my_data.advance_path_search_id, to_pos, prio, nil, nav_segs)
 end
 
+local vec_from = Vector3()
+local vec_to = Vector3()
+
 function CopLogicTravel._determine_destination_occupation(data, objective, path_pos)
 	local occupation = nil
 
@@ -2974,7 +3013,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 
 			if objective.called or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.tactics and data.tactics.shield_cover then
 				max_dist = 300
-				max_dist_fail = 500
+				max_dist_fail = 300
 			end
 		
 			if cover then
@@ -2988,7 +3027,58 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 					radius = objective.radius
 				}
 			else
-				local pos = near_pos or path_pos or managers.navigation._nav_segments[objective.nav_seg].pos
+				local pos = nil
+				
+				if objective.follow_unit then
+					if data.tactics and data.tactics.shield_cover then
+						if not objective.follow_unit:in_slot(managers.slot:get_mask("criminals")) then
+							local ray_params = {
+								allow_entry = false,
+								trace = true,
+								tracker_from = follow_tracker,
+								pos_from = vec_from,
+								pos_to = vec_to
+							}
+							
+							pos = Vector3()
+							
+							if not alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then --this is probably better than sex.
+								mvec3_set(ray_params.pos_from, follow_pos)
+								mvec3_set(ray_params.pos_to, objective.follow_unit:movement()._m_rot:y())
+								mvec3_mul(ray_params.pos_to, -60)
+								mvec3_add(ray_params.pos_to, follow_pos)
+								
+								local ray_res = managers.navigation:raycast(ray_params)
+							
+								mvec3_set(pos, ray_params.trace[1])
+								
+								--local draw_duration = 1
+								--local line = Draw:brush(Color.blue:with_alpha(0.5), draw_duration)
+								--line:cylinder(data.m_pos, pos, 4)
+								
+							else
+								local dir = math.random() < 0.5 and -60 or 60
+								
+								mvec3_set(ray_params.pos_from, follow_pos)
+								mvec3_set(ray_params.pos_to, objective.follow_unit:movement()._m_rot:x())
+								mvec3_mul(ray_params.pos_to, dir)
+								mvec3_add(ray_params.pos_to, follow_pos)
+								
+								local ray_res = managers.navigation:raycast(ray_params)
+								
+								mvec3_set(pos, ray_params.trace[1])
+								
+								--local draw_duration = 1
+								--local line = Draw:brush(Color.blue:with_alpha(0.5), draw_duration)
+								--line:cylinder(data.m_pos, pos, 4)
+							end
+						end
+					end
+				end
+				
+				if not pos then
+					pos = near_pos or path_pos or managers.navigation._nav_segments[objective.nav_seg].pos
+				end
 				
 				local wall_pos = CopLogicTravel._get_pos_on_wall(pos, max_dist_fail)
 				occupation = {
@@ -3019,10 +3109,13 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 		}
 	elseif objective.type == "follow" then
 		local my_data = data.internal_data
-		local follow_tracker = objective.follow_unit:movement():nav_tracker()
+		local follow_unit = objective.follow_unit
+		local follow_tracker = follow_unit:movement():nav_tracker()
 		local dest_nav_seg_id = my_data.coarse_path[#my_data.coarse_path][1]
 		local dest_area = managers.groupai:state():get_area_from_nav_seg_id(dest_nav_seg_id)
-		local follow_pos = follow_tracker:field_position()
+		local field_pos = follow_tracker:field_position()
+		local advance_pos = follow_unit:brain() and follow_unit:brain():is_advancing()
+		local follow_pos = advance_pos or field_pos
 		local threat_pos = nil
 
 		if data.attention_obj and data.attention_obj.nav_tracker and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
@@ -3040,10 +3133,10 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 
 		if objective.called or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.tactics and data.tactics.shield_cover then
 			max_dist = 300
-			max_dist_fail = 500
+			max_dist_fail = 300
 		end
 		
-		if cover and mvector3.distance(cover[1], follow_pos) < max_dist then
+		if cover then
 			local cover_entry = {
 				cover
 			}
@@ -3051,7 +3144,58 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 				type = "defend",
 				cover = cover_entry
 			}
-		else		
+		else
+			if data.tactics and data.tactics.shield_cover then
+				if not follow_unit:in_slot(managers.slot:get_mask("criminals")) then
+					local ray_params = {
+						allow_entry = false,
+						trace = true,
+						tracker_from = follow_tracker,
+						pos_from = vec_from,
+						pos_to = vec_to
+					}
+					local pos = Vector3()
+					if not alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then --this is probably better than sex.
+						mvec3_set(ray_params.pos_from, follow_pos)
+						mvec3_set(ray_params.pos_to, follow_unit:movement()._m_rot:y())
+						mvec3_mul(ray_params.pos_to, -60)
+						mvec3_add(ray_params.pos_to, follow_pos)
+						
+						local ray_res = managers.navigation:raycast(ray_params)
+					
+						mvec3_set(pos, ray_params.trace[1])
+						
+						follow_pos = pos
+						
+						--local draw_duration = 1
+						--local line = Draw:brush(Color.blue:with_alpha(0.5), draw_duration)
+						--line:cylinder(data.m_pos, pos, 4)
+						--local sphere = Draw:brush(Color.blue:with_alpha(0.5), draw_duration)
+						--line:sphere(pos, 20)
+					else
+						local dir = math.random() < 0.5 and -60 or 60
+						
+						mvec3_set(ray_params.pos_from, follow_pos)
+						mvec3_set(ray_params.pos_to, follow_unit:movement()._m_rot:x())
+						mvec3_mul(ray_params.pos_to, dir)
+						mvec3_add(ray_params.pos_to, follow_pos)
+						
+						local ray_res = managers.navigation:raycast(ray_params)
+						
+						mvec3_set(pos, ray_params.trace[1])
+						
+						follow_pos = pos
+						
+						--local draw_duration = 1
+						--local line = Draw:brush(Color.blue:with_alpha(0.5), draw_duration)
+						--line:cylinder(data.m_pos, pos, 4)
+						--local sphere = Draw:brush(Color.blue:with_alpha(0.5), draw_duration)
+						--line:sphere(pos, 20)
+					end
+
+				end
+			end
+			
 			local to_pos = CopLogicTravel._get_pos_on_wall(follow_pos, max_dist_fail)
 			occupation = {
 				type = "defend",

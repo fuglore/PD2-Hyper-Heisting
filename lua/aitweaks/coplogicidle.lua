@@ -528,10 +528,10 @@ function CopLogicIdle._chk_relocate(data)
 	
 	if data.objective and data.objective.type == "follow" then
 		local check_for_vision = true
-		local range = 240
+		local range = 400
 		
 		if data.objective and data.objective.tactic then
-			range = 500
+			range = 600
 			check_for_vision = nil
 		end
 		
@@ -560,12 +560,22 @@ function CopLogicIdle._chk_relocate(data)
 		local advance_pos = follow_unit:brain() and follow_unit:brain():is_advancing()
 		local follow_unit_pos = advance_pos or follow_unit:movement():m_pos()
 
-		--if data.objective.relocated_to and mvector3.equal(data.objective.relocated_to, follow_unit_pos) then
-		--	return
-		--end
+		local max_allowed_dis_xy = 500
+		local max_allowed_dis_z = 250
 
-		if range < mvector3.distance(data.m_pos, follow_unit_pos) then
-			relocate = true
+		mvector3.set(tmp_vec1, follow_unit_pos)
+		mvector3.subtract(tmp_vec1, data.m_pos)
+
+		local too_far = nil
+
+		if max_allowed_dis_z < math.abs(mvector3.z(tmp_vec1)) then
+			too_far = true
+		else
+			mvector3.set_z(tmp_vec1, 0)
+
+			if max_allowed_dis_xy < mvector3.length(tmp_vec1) then
+				too_far = true
+			end
 		end
 
 		if check_for_vision then

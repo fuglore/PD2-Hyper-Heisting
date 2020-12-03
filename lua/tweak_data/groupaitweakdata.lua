@@ -2998,7 +2998,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"groupany"
 		},
 		shield_wall_ranged = {
-			"shield",
+			"shield_cover",
 			"ranged_fire",
 			"provide_support",
 			"provide_coverfire"
@@ -3010,14 +3010,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"smoke_grenade" 
 		},
 		shield_wall_charge = {
+			"shield_cover",
 			"deathguard",
 			"shield",
 			"charge",
 			"provide_support"
 		},
 		shield_support_charge = {
-			"deathguard", 
 			"shield_cover",
+			"deathguard", 
 			"charge",
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
@@ -3033,6 +3034,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"tunnel"
 		},
 		tazer_flanking = {
+			"shield_cover",
 			"hunter",
 			"flank",
 			"provide_coverfire",
@@ -3044,6 +3046,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade",
+			"lonewolf",
 			"tunnel"		 
 		},
 		tazer_charge = {
@@ -3174,7 +3177,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 1,
 					amount_min = 1,
 					amount_max = 1,
-					rank = 2,
+					rank = 3,
 					unit = "FBI_shield",
 					tactics = self._tactics.shield_wall_charge
 				},
@@ -5934,7 +5937,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					amount_min = 0,
 					freq = 0.35,
 					amount_max = 1,
-					rank = 3,
+					rank = 1,
 					unit = "CS_tazer",
 					tactics = self._tactics.tazer_flanking_independant --pinch boi
 				}

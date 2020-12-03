@@ -220,11 +220,10 @@ function CopLogicAttack.update(data)
 		return
 	end
 
-	--if not data.attention_obj or data.attention_obj.reaction < REACT_COMBAT or data.attention_obj.verified_dis > 1500 then
-		if CopLogicIdle._chk_relocate(data) then
-			return
-		end
-	--end
+	if CopLogicIdle._chk_relocate(data) then
+		return
+	end
+
 
 	if CopLogicAttack._chk_exit_non_walkable_area(data) then
 		return
@@ -1593,7 +1592,11 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 		local old_att_obj = data.attention_obj
 	
 		CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
-		--CopLogicAttack._chk_exit_attack_logic(data, new_reaction) pretty sure enemies will find a reason to leave attack logic anyways probably, this is the main source of that coplogicattack crash too, im 100% on that
+		CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
+		
+		if my_data ~= data.internal_data then
+			return
+		end
 
 		if new_attention then
 			if my_data.att_cover_charge_chk or old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
@@ -2134,16 +2137,6 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 		else
 			return true
 		end
-	end
-
-	if data.is_suppressed then
-		return
-	end
-
-	local att_obj = data.attention_obj
-
-	if not att_obj or att_obj.reaction < REACT_AIM then
-		return true
 	end
 
 	if not new_objective or new_objective.type == "free" then

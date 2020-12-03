@@ -1363,7 +1363,7 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.detection.enemymook.ntl.angle_max = 55
 	presets.detection.enemymook.ntl.delay = {
 		0.7,
-		0.7
+		2
 	}
 	presets.detection.civilian.cbt.dis_max = 10000
 	presets.detection.civilian.cbt.angle_max = 360
@@ -1376,7 +1376,7 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.detection.civilian.ntl.angle_max = 55
 	presets.detection.civilian.ntl.delay = {
 		0.7,
-		0.7
+		2
 	}
 	
 	presets.detection.enemyspooc = { 
