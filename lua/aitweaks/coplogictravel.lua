@@ -3030,6 +3030,12 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 				local pos = nil
 				
 				if objective.follow_unit then
+					local follow_unit = objective.follow_unit
+					local follow_tracker = follow_unit:movement():nav_tracker()
+					local field_pos = follow_tracker:field_position()
+					local advance_pos = follow_unit:brain() and follow_unit:brain():is_advancing()
+					local follow_pos = advance_pos or field_pos
+					
 					if data.tactics and data.tactics.shield_cover then
 						if not objective.follow_unit:in_slot(managers.slot:get_mask("criminals")) then
 							local ray_params = {
@@ -3411,6 +3417,7 @@ function CopLogicTravel.upd_advance(data)
 	local unit = data.unit
 	local my_data = data.internal_data
 	local objective = data.objective
+	
 	local t = TimerManager:game():time()
 	data.t = t
 	

@@ -1823,31 +1823,29 @@ function GroupAIStateBesiege:_upd_groups()
 				end
 				
 				for u_key, u_data in pairs(group.units) do
-					local brain = u_data.unit:brain()
-					local current_objective = brain:objective()
-					
 					if u_key ~= group_leader_u_key then
-						if not current_objective or current_objective.type ~= "follow" then
-							objective = {
-								attitude = group.objective.attitude or "avoid",
-								scan = group.objective.attitude,
-								type = "follow",
-								bagjob = group.objective.bagjob or nil,
-								hostagejob = group.objective.hostagejob or nil,
-								follow_unit = group_leader_u_data.unit
-							}
-							
+						local brain = u_data.unit:brain()
+						local current_objective = brain:objective()
+						local noobjordefaultorgrpobjchkandnoretry = not current_objective or current_objective.is_default or current_objective.grp_objective and current_objective.grp_objective ~= group.objective and not current_objective.grp_objective.no_retry
+						
+						if noobjordefaultorgrpobjchkandnoretry and notfollowingorfollowingaliveunit then
+							local objective = self._create_objective_from_group_objective(group.objective, u_data.unit)
+
 							if objective and brain:is_available_for_assignment(objective) then
 								self:set_enemy_assigned(objective.area or group.objective.area, u_key)
 
 								if objective.element then
 									objective.element:clbk_objective_administered(u_data.unit)
 								end
+								
+								if not objective.follow_unit then
+									objective.follow_unit = group_leader_u_data.unit
+								end
 
 								u_data.unit:brain():set_objective(objective)
 							end
 						end
-					end
+					end	
 				end
 			end
 		end
