@@ -2826,7 +2826,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		
 		if near_pos then
 			if not data.objective.distance then
-				max_dist = 800
+				max_dist = 600
 
 				if data.objective.called or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.tactics and data.tactics.shield_cover then
 					max_dist = 300

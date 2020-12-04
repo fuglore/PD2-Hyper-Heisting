@@ -436,7 +436,7 @@ function ActionSpooc:_upd_strike_first_frame(t)
 	end
 
 	if redir_result then
-		self._unit:anim_state_machine():set_speed(redir_result, 1.4)
+		self._unit:anim_state_machine():set_speed(redir_result, 1.5)
 		self._ext_movement:spawn_wanted_items()
 		if PD2THHSHIN and PD2THHSHIN:GlintEnabled() then
 			if not self._played_glint then
@@ -1382,7 +1382,7 @@ function ActionSpooc:anim_act_clbk(anim_act)
 
 		mvec3_set_z(fuckingpos, 0)
 		
-		if mvec3_len_sq(fuckingpos) > 52900 or dif_z > 75 then --the hitbox is 230 square centimeters big but i have no idea what the fuck that is so whatever
+		if mvec3_len_sq(fuckingpos) > 78400 or dif_z > 150 then --the hitbox is 280 square centimeters big but i have no idea what the fuck that is so whatever
 			return
 		end
 	end

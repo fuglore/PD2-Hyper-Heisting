@@ -1838,7 +1838,7 @@ function GroupAIStateBesiege:_upd_groups()
 									objective.element:clbk_objective_administered(u_data.unit)
 								end
 								
-								if not objective.follow_unit then
+								if not objective.follow_unit and not objective.pos then
 									objective.follow_unit = group_leader_u_data.unit
 								end
 
