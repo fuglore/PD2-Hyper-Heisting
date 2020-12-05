@@ -270,6 +270,8 @@
 		["shin_toggle_blurzonereduction_desc"] = "Gently reduces the blurring effect of things such as the Cook Off Methlab in order to stop them from getting in the way of gameplay!",
 		["shin_toggle_highpriorityglint_title"] = "High Priority Tells!",
 		["shin_toggle_highpriorityglint_desc"] = "Adds a glint to high priority enemies when they're about to fire, and plays a *ding!* when they're within 3 meters to let you know your goose is cooked! (Note: All of this only applies if they're targeting you!)",
+		["shin_toggle_suppression_title"] = "Extreme Visible Suppression!",
+		["shin_toggle_suppression_desc"] = "Adds a unique visual effect to your screen for when you are being suppressed by enemies! (Looks even more powerful if you have Chromatic Aberration on!)",
 		["shin_albanian_content_enable_title"] = "enable albanian joke content",
 		["shin_enable_albanian_content_title"] = "enable albanian joke content",
 		["shin_albanian_content_enable_desc"] = "nable abanian përmbajtje (WARNING: You probably shouldn't enable this!)",		

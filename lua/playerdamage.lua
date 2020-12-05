@@ -258,6 +258,8 @@ function PlayerDamage:damage_melee(attack_data)
 	self._last_received_dmg = attack_data.damage
 	self._next_allowed_dmg_t = Application:digest_value(pm:player_timer():time() + self._dmg_interval, true)
 	
+	self:build_suppression(20)
+	
 	local allow_melee_dodge = true
 	local sneakier_activated = nil
 	if allow_melee_dodge and not attack_data.is_cloaker_kick and pm:current_state() ~= "bleed_out" and pm:current_state() ~= "bipod" and pm:current_state() ~= "tased" then --self._bleed_out and current_state() ~= "bleed_out" aren't the same thing
@@ -1416,23 +1418,29 @@ function PlayerDamage:_upd_suppression(t, dt)
 
 	if data.value then
 		if data.decay_start_t < t then
-			local drain = dt * 2
-			data.value = data.value - data.value
+			local drain = dt * 30
+			data.value = data.value - drain
+			
+			--log("ratio is " .. tostring(self:suppression_ratio()) .. "")
 			
 			--log("suppression is " .. tostring(data.value) .. "")
 
 			if data.value <= 0 then
 				data.value = nil
 				data.decay_start_t = nil
-
-				managers.environment_controller:set_suppression_value(0, 0)
+				if PD2THHSHIN:SupEnabled() then
+					managers.environment_controller:set_chromatic_value_lerp(0)
+					managers.environment_controller:set_contrast_value_lerp(0)
+				end
 			end
 		elseif data.value == tweak_data.player.suppression.max_value and self._regenerate_timer then
 			self._listener_holder:call("suppression_max")
 		end
-
-		if data.value then
-			managers.environment_controller:set_suppression_value(self:effective_suppression_ratio(), self:suppression_ratio())
+		if PD2THHSHIN:SupEnabled() then
+			if data.value then
+				managers.environment_controller:set_chromatic_value_lerp(self:suppression_ratio())
+				managers.environment_controller:set_contrast_value_lerp(self:suppression_ratio())
+			end
 		end
 	end
 end
@@ -1599,7 +1607,7 @@ function PlayerDamage:update(unit, t, dt)
 		self._downed_progression = math.max(0, self._downed_progression - dt * 50)
 		local blur = self._downed_progression
 		
-		if PD2THHSHIN and PD2THHSHIN:BlurzoneEnabled() then
+		if PD2THHSHIN:BlurzoneEnabled() then
 			blur = blur * 0.5
 		end
 		
@@ -1646,6 +1654,12 @@ function PlayerDamage:update(unit, t, dt)
 		if self._revive_miss <= 0 then
 			self._revive_miss = nil
 		end
+	end
+	
+	if PD2THHSHIN.need_to_reset_visuals then
+		managers.environment_controller:set_chromatic_value_lerp(0)
+		managers.environment_controller:set_contrast_value_lerp(0)
+		PD2THHSHIN.need_to_reset_visuals = nil
 	end
 
 	self:_upd_suppression(t, dt)

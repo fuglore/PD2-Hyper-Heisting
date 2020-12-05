@@ -38,6 +38,14 @@
 		},
 		{
 			"type" : "toggle",
+			"id" : "shin_toggle_suppression",
+			"title" : "shin_toggle_suppression_title",
+			"description" : "shin_toggle_suppression_desc",
+			"callback" : "callback_shin_toggle_suppression",
+			"value" : "toggle_suppression"
+		},
+		{
+			"type" : "toggle",
 			"id" : "shin_toggle_blurzonereduction",
 			"title" : "shin_toggle_blurzonereduction_title",
 			"description" : "shin_toggle_blurzonereduction_desc",

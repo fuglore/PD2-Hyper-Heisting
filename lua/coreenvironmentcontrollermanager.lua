@@ -75,6 +75,49 @@ function CoreEnvironmentControllerManager:test_line_of_sight(test_pos, min_dista
 	return flash
 end
 
+function CoreEnvironmentControllerManager:set_chromatic_enabled(enabled)
+	self._chromatic_enabled = enabled
+
+	if self._material then
+		if self._chromatic_enabled then
+			self._material:set_variable(Idstring("chromatic_amount"), self._base_chromatic_amount)
+		else
+			self._material:set_variable(Idstring("chromatic_amount"), 0)
+		end
+	end
+end
+
+function CoreEnvironmentControllerManager:set_contrast_value_lerp(lerp_value)
+	if not lerp_value then
+		return
+	end
+
+	if self._material then
+		local high_contrast = lerp_value >= 0.99 and math.lerp(0.25, 0.3, math.random()) or 0.25
+		local new_contrast_value = math.lerp(self._base_contrast, high_contrast, lerp_value)
+		self._material:set_variable(Idstring("contrast"), new_contrast_value)
+	end
+end
+
+function CoreEnvironmentControllerManager:set_chromatic_value_lerp(lerp_value)
+	if not lerp_value then
+		return
+	end
+	
+	if not self._chromatic_enabled then
+		return
+	end
+
+	if self._material then
+		if self._chromatic_enabled then
+			--log("nice")
+			local high_chrom = lerp_value >= 0.99 and math.lerp(-0.85, -1.4, math.random()) or -0.85
+			local new_chrom_value = math.lerp(self._base_chromatic_amount, high_chrom, lerp_value)
+			self._material:set_variable(Idstring("chromatic_amount"), new_chrom_value)
+		end
+	end
+end
+
 if PD2THHSHIN and PD2THHSHIN:BlurzoneEnabled() then
 
 function CoreEnvironmentControllerManager:set_blurzone(id, mode, pos, radius, height, delete_after_fadeout)

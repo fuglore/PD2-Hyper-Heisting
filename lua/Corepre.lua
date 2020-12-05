@@ -10,6 +10,7 @@ PD2THHSHIN.settings = {
 	toggle_hhassault = false,
 	toggle_hhskulldiff = false,
 	toggle_highpriorityglint = false,
+	toggle_suppression = false,
 	toggle_blurzonereduction = true,
 	first_launch = true
 }
@@ -37,6 +38,10 @@ end
 
 function PD2THHSHIN:GlintEnabled()
 	return self:GetSessionSetting("toggle_highpriorityglint")
+end
+
+function PD2THHSHIN:SupEnabled()
+	return self:GetSessionSetting("toggle_suppression")
 end
 
 function PD2THHSHIN:IsFlavorAssaultEnabled()
