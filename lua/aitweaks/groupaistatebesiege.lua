@@ -2694,11 +2694,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	if obstructed_area then
 		if phase_is_anticipation or self._activeassaultbreak then
 			pull_back = true
-		elseif current_objective.moving_out then
-			if not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
-				open_fire = true
-			end
-		elseif not current_objective.pushed and not self._feddensityhigh and not self._activeassaultbreak or charge and not current_objective.charge and not self._feddensityhigh and not self._activeassaultbreak then
+		elseif not self._feddensityhigh and not self._activeassaultbreak then
 			push = true
 		end
 	else
