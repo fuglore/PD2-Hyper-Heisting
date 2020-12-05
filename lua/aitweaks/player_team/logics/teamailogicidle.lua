@@ -526,6 +526,7 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 				local dangerous_special = attention_data.unit:base().has_tag and attention_data.unit:base():has_tag("takedown")
 				local is_shield = attention_data.is_shield
 				local is_dozer = attention_data.unit:base().has_tag and attention_data.unit:base():has_tag("tank")
+				local is_extremely_dangerous = attention_data.unit:base().has_tag and attention_data.unit:base():has_tag("ohfuck")
 				local is_medic = attention_data.unit:base().has_tag and attention_data.unit:base():has_tag("medic")
 				local is_cloaker = attention_data.unit:base().has_tag and attention_data.unit:base():has_tag("spooc")
 				local is_taser = attention_data.unit:base().has_tag and attention_data.unit:base():has_tag("taser")
@@ -535,7 +536,22 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 				local activetaser = is_taser and attention_data.unit:movement().active_actions and attention_data.unit:movement().active_actions[3] and attention_data.unit:movement().active_actions[3]:type() == "tase"
 				
 				if visible then
-					if is_medic then
+					if dangerous_special or been_marked then
+						if is_extremely_dangerous and sevenmeters then --minigunners are guaranteed to make bots panic
+							target_priority_slot = 1
+							has_special_in_sight = true
+							targeting_medic = true
+						elseif activetaser then
+							target_priority_slot = 1
+							has_special_in_sight = true
+							attackingactivetaser = true
+						elseif is_dozer and sevenmeters or is_taser or is_cloaker then
+							target_priority_slot = 1
+							has_special_in_sight = true
+						else
+							target_priority_slot = 3
+						end
+					elseif is_medic then
 						target_priority_slot = 1
 						has_special_in_sight = true
 						targeting_medic = true
@@ -543,13 +559,6 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 						target_priority_slot = 1
 						has_special_in_sight = true
 						attackingactivetaser = true
-					elseif dangerous_special or been_marked then
-						if is_taser or is_cloaker or is_dozer then
-							target_priority_slot = 1
-							has_special_in_sight = true
-						else
-							target_priority_slot = 3
-						end
 					elseif literallyinmyface and reaction >= AIAttentionObject.REACT_COMBAT and not has_enemy_in_face and not targeting_medic and not has_special_in_sight and not attackingactivetaser then
 						target_priority_slot = 1
 						has_enemy_in_face = true

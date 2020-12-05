@@ -2694,20 +2694,28 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	if obstructed_area then
 		if phase_is_anticipation or self._activeassaultbreak then
 			pull_back = true
-		elseif not self._feddensityhigh and not self._activeassaultbreak then
+		else
 			push = true
+		end
+		
+		if tactics_map and tactics_map.flank then
+			flank = true
 		end
 	else
 		local obstructed_path_index = self:_chk_coarse_path_obstructed(group)
 
-		if obstructed_path_index and phase_is_anticipation then
+		if phase_is_anticipation then
 			--print("obstructed_path_index", obstructed_path_index)
-
-			objective_area = self:get_area_from_nav_seg_id(group.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
-			if phase_is_anticipation then
-				pull_back = true
+			
+			if obstructed_path_index then
+				objective_area = self:get_area_from_nav_seg_id(group.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
+				if phase_is_anticipation then
+					pull_back = true
+				end
+			else
+				approach = true
 			end
-		elseif not current_objective.moving_out then
+		elseif not current_objective.moving_in then
 			local has_criminals_close = nil
 			local criminals_in_my_area = nil
 			
@@ -2727,14 +2735,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				pull_back = true
 			elseif not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
 				approach = true
-			elseif not phase_is_anticipation and not current_objective.open_fire and not self._feddensityhigh and not self._activeassaultbreak then
+			elseif not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak then
 				--open_fire = true
 				push = true
 				--self:_voice_open_fire_start(group)
-			elseif charge and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak or low_carnage and not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak then
-				push = true
-			elseif not self._feddensityhigh and not self._activeassaultbreak and not phase_is_anticipation and self._drama_data.amount <= self._drama_data.low_p then
-				push = true
 			end
 		end
 		

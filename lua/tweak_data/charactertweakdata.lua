@@ -6942,7 +6942,7 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 4,
-				r = 300,
+				r = 800,
 				acc = {
 					1,
 					1
@@ -6953,9 +6953,9 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					0,
-					0.25,
-					0.25,
-					0.5
+					0,
+					0,
+					1
 				}
 			},
 			{
@@ -6972,8 +6972,8 @@ function CharacterTweakData:_presets(tweak_data)
 				mode = {
 					0,
 					0.25,
-					0.25,
-					0.5
+					0.5,
+					0.25
 				}
 			},
 			{
@@ -6988,15 +6988,15 @@ function CharacterTweakData:_presets(tweak_data)
 					0.8
 				},
 				mode = {
-					0,
+					0.25,
 					0.25,
 					0.5,
-					0.25
+					0
 				}
 			},
 			{
 				dmg_mul = 4,
-				r = 6000,
+				r = 4000,
 				acc = {
 					0,
 					0.25
@@ -7006,10 +7006,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.8
 				},
 				mode = {
-					0,
+					0.25,
 					0.5,
 					0.25,
-					0.25
+					0
 				}
 			},
 		}
@@ -7851,6 +7851,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank = deep_clone(presets.base)
 	self.tank.tags = {
 		"law",
+		"takedown",
 		"tank",
 		"special",
 		"protected"
@@ -7924,8 +7925,10 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_hw = deep_clone(self.tank)
 	self.tank_hw.tags = {
 		"law",
+		"takedown",
 		"tank",
-		"special"
+		"special",
+		"ohfuck"
 	}
 	self.tank_hw.move_speed = presets.move_speed.slow_consistency --lol stop
 	self.tank_hw.HEALTH_INIT = 100 --3200 on top difficulty, encourage teamfire against these guys since they're gonna be on the halloween maps
@@ -7944,6 +7947,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_medic.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_medic.tags = {
 		"law",
+		"takedown",
 		"tank",
 		"medic",
 		"special",
@@ -7951,7 +7955,13 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	}
 
 	self.tank_mini = deep_clone(self.tank)
-	self.tank_mini.weapon.mini = {}
+	self.tank_mini.tags = {
+		"law",
+		"takedown",
+		"tank",
+		"special",
+		"ohfuck"
+	}
 	self.tank_mini.move_speed = presets.move_speed.mini_consistency --New movement presets.
 	self.tank_mini.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_mini.always_face_enemy = true
