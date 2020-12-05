@@ -538,7 +538,7 @@ function GroupAIStateBesiege:update(t, dt)
 					--log("assaultbreakon")
 				end
 				
-				if self._activeassaultbreak and self._current_assault_state == "heat" and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+				if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
 					self._stopassaultbreak_t = nil
 					self._activeassaultbreak = nil
 					
@@ -2532,11 +2532,70 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if not has_objective then
 				--log("yay first update")
 				
-				if current_objective.tactic then
+				--if current_objective.tactic then
 					--log("oh!")
-				end
+				--end
 				
-				if tactic_name == "deathguard" and not phase_is_anticipation then
+				if self._current_assault_state and self._current_assault_state == "lastcrimstanding" or Global.game_settings.one_down or tactic_name == "charge" then --all of the functionality below really boils down to "charge this motherfucker relentlessly"
+					local poor_bastard = nil
+					local criminals = Global.game_settings.one_down and self:all_player_criminals() or self._criminals
+					
+					if Global.game_settings.one_down or tactic_name == "charge" then 
+						if self._current_assault_state and self._current_assault_state ~= "lastcrimstanding"  then
+							local lowest_engagement = nil
+							for u_key, u_data in pairs(criminals) do
+								local record = self._criminals[u_key]
+								
+								if record then
+									if not lowest_engagement or record.engaged_force < lowest_engagement then
+										lowest_engagement = record.engaged_force
+										poor_bastard = u_data
+									end
+								end
+							end
+						else
+							for u_key, u_data in pairs(criminals) do
+								if not u_data.status or u_data.status and u_data.status == "electrified" then
+									poor_bastard = u_data
+								end
+							end
+						end
+					else
+						for u_key, u_data in pairs(criminals) do
+							if not u_data.status or u_data.status and u_data.status == "electrified" then
+								poor_bastard = u_data
+							end
+						end
+					end
+					
+					if poor_bastard then
+						--log("there are federal agents outside my house")
+						local search_params = {
+							id = "GroupAI_hellchase",
+							from_tracker = group_leader_u_data.unit:movement():nav_tracker(),
+							to_tracker = poor_bastard.tracker,
+							access_pos = self._get_group_acces_mask(group)
+						}
+						local coarse_path = managers.navigation:search_coarse(search_params)
+
+						if coarse_path then
+							self:_merge_coarse_path_by_area(coarse_path)
+							local grp_objective = {
+								distance = 600,
+								type = "assault_area",
+								attitude = "engage",
+								moving_in = true,
+								follow_unit = poor_bastard.unit,
+								area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
+								coarse_path = coarse_path
+							}
+							group.is_chasing = true
+
+							self:_set_objective_to_enemy_group(group, grp_objective)
+							has_objective = true
+						end
+					end
+				elseif tactic_name == "deathguard" and not phase_is_anticipation then
 					local closest_crim_u_data, closest_crim_dis_sq = nil
 					local crim_dis_sq_chk = not closest_crim_dis_sq or closest_u_dis_sq < closest_crim_dis_sq
 					for u_key, u_data in pairs(self._char_criminals) do
@@ -2608,7 +2667,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							local grp_objective = {
 								type = "assault_area",
 								tactic = "hunter",
-								distance = 9999,
+								distance = 600,
 								follow_unit = closest_crim_u_data.unit,
 								area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
 								coarse_path = coarse_path,
@@ -2716,10 +2775,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		local assault_path_uno, assault_path_dos, assault_path_tres, assault_path_quatro = nil
 		local from_seg, to_seg, access_pos, verify_clbk = nil
 		local to_search_areas = {
-			objective_area
+			self._current_target_area
 		}
 		local found_areas = {
-			[objective_area] = "init"
+			[self._current_target_area] = "init"
 		}
 
 		repeat
@@ -2866,10 +2925,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		local assault_path_uno, assault_path_dos, assault_path_tres, assault_path_quatro = nil
 		local from_seg, to_seg, access_pos, verify_clbk = nil
 		local to_search_areas = {
-			objective_area
+			self._current_target_area
 		}
 		local found_areas = {
-			[objective_area] = "init"
+			[self._current_target_area] = "init"
 		}
 
 		repeat

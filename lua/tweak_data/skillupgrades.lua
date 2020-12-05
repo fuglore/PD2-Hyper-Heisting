@@ -209,8 +209,8 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 	self.values.player.passive_health_multiplier = {
 		1.05,
 		1.1,
-		1.2,
-		1.4
+		1.15,
+		1.2
 	}
 	
 	self.values.player.passive_health_regen = {

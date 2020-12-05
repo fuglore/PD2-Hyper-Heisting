@@ -166,7 +166,9 @@ function GroupAIStateBase:get_assault_hud_state()
 	local nr_people = nr_players + nr_ai
 	local nr_people_alive = nr_players_alive + nr_ai_alive
 	
-	if nr_people < 3 or nr_people_alive < nr_people then
+	if self._activeassaultbreak then
+		self._current_assault_state = "heat"
+	elseif nr_people < 3 or nr_people_alive < nr_people then
 		local lastcrimstanding = nr_people_alive < 2
 		
 		if lastcrimstanding then
@@ -177,11 +179,7 @@ function GroupAIStateBase:get_assault_hud_state()
 			end
 		end
 	else
-		if self._activeassaultbreak then
-			self._current_assault_state = "heat"
-		else
-			self._current_assault_state = "normal"
-		end
+		self._current_assault_state = "normal"
 	end
 	
 end
