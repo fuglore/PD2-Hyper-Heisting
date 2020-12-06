@@ -31,19 +31,13 @@ function CopLogicIntimidated.register_rescue_SO(ignore_this, data)
 	--CopLogicBase.on_delayed_clbk(my_data, my_data.delayed_rescue_SO_id)
 
 	my_data.delayed_rescue_SO_id = nil
-	local my_tracker = nil
-	local objective_pos = nil
-	
-	if data.unit and data.unit:character_damage() and not data.unit:character_damage():dead() and data.unit:movement() and data.unit:movement():nav_tracker() then
-		my_tracker = data.unit:movement():nav_tracker()
-		objective_pos = my_tracker:field_position()
-	end
+	local my_tracker = data.unit:movement():nav_tracker()
 	
 	if not my_tracker then
-		--log("go fuck yourself")
-		
 		return
 	end
+	
+	local objective_pos = my_tracker:field_position()
 	
 	local followup_objective = {
 		scan = true,
@@ -140,9 +134,7 @@ end
 function CopLogicIntimidated._unregister_rescue_SO(data, my_data)
 	if my_data.rescuer then
 		local rescuer = my_data.rescuer
-		if alive(rescuer) and rescuer:brain() and rescuer:brain():objective() then
-			managers.groupai:state():on_objective_failed(rescuer, rescuer:brain():objective())
-		end
+		managers.groupai:state():on_objective_failed(rescuer, rescuer:brain():objective())
 		my_data.rescuer = nil
 	elseif my_data.rescue_SO_id then
 		managers.groupai:state():remove_special_objective(my_data.rescue_SO_id)
@@ -150,6 +142,7 @@ function CopLogicIntimidated._unregister_rescue_SO(data, my_data)
 		my_data.rescue_SO_id = nil
 	elseif my_data.delayed_rescue_SO_id then
 		CopLogicBase.chk_cancel_delayed_clbk(my_data, my_data.delayed_rescue_SO_id)
+		my_data.delayed_rescue_SO_id = nil
 	end
 end
 

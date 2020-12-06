@@ -599,10 +599,7 @@ function CopLogicIdle._chk_relocate(data)
 	elseif data.objective and data.objective.tactic then
 		return 
 	elseif data.objective and data.objective.type == "defend_area" or data.objective and data.objective.type == "hunt" then
-		if not CopLogicAttack.is_available_for_assignment(data, data.objective) then
-			return
-		end
-		
+
 		local recon_group = data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area"
 		
 		local current_assault_target_area = managers.groupai:state()._task_data.assault.target_areas and managers.groupai:state()._task_data.assault.target_areas[math.random(#managers.groupai:state()._task_data.assault.target_areas)] or nil

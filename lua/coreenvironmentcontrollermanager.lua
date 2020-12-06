@@ -93,7 +93,10 @@ function CoreEnvironmentControllerManager:set_contrast_value_lerp(lerp_value)
 	end
 
 	if self._material then
-		local high_contrast = lerp_value >= 0.99 and math.lerp(0.25, 0.3, math.random()) or 0.25
+		local high_contrast = lerp_value >= 0.99 and math.lerp(0.5, 0.6, math.random()) or 0.5
+		if self._chromatic_enabled then
+			high_contrast = high_contrast * 0.5
+		end
 		local new_contrast_value = math.lerp(self._base_contrast, high_contrast, lerp_value)
 		self._material:set_variable(Idstring("contrast"), new_contrast_value)
 	end

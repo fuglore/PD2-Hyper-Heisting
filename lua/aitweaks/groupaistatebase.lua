@@ -454,20 +454,18 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 			managers.mission:call_global_event("start_assault")
 			managers.hud:start_assault(self._assault_number)
 			managers.groupai:dispatch_event("start_assault", self._assault_number)
-			self:_set_rescue_state(false)
+			managers.enemy:add_delayed_clbk("set_rescue_state_false", callback(self, self, "_set_rescue_state", false), self._t + 0.1)
 			for group_id, group in pairs(self._groups) do
 				for u_key, u_data in pairs(group.units) do
 					u_data.unit:sound():say("att", true)
 				end
 			end
 			
-			if Network:is_server() then
-				if managers.modifiers:check_boolean("itmightrain") then
-					self._enemy_speed_mul = self._enemy_speed_mul + 0.1
-				end
-					
-				LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
+			if managers.modifiers:check_boolean("itmightrain") then
+				self._enemy_speed_mul = self._enemy_speed_mul + 0.1
 			end
+					
+			LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
 
 			self._task_data.assault.phase = "build"
 			self._task_data.assault.phase_end_t = self._t + self._tweak_data.assault.build_duration
@@ -545,20 +543,18 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		managers.mission:call_global_event("start_assault")
 		managers.hud:start_assault(self._assault_number)
 		managers.groupai:dispatch_event("start_assault", self._assault_number)
-		self:_set_rescue_state(false)
+		managers.enemy:add_delayed_clbk("set_rescue_state_false", callback(self, self, "_set_rescue_state", false), self._t + 0.1)
 		for group_id, group in pairs(self._groups) do
 			for u_key, u_data in pairs(group.units) do
 				u_data.unit:sound():say("g90", true)
 			end
 		end
 		
-		if Network:is_server() then
-			if managers.modifiers:check_boolean("itmightrain") then
-				self._enemy_speed_mul = self._enemy_speed_mul + 0.1
-			end
-				
-			LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
+		if managers.modifiers:check_boolean("itmightrain") then
+			self._enemy_speed_mul = self._enemy_speed_mul + 0.1
 		end
+				
+		LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
 
 		self._task_data.assault.phase = "build"
 		self._task_data.assault.phase_end_t = self._t + self._tweak_data.assault.build_duration
@@ -1218,6 +1214,11 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 
 	if group_requirement and group_requirement > 1 then
 		local u_data = self._police[unit:key()]
+		
+		if not u_data then --fix for a weird as fuck edge-case relating to scripted unit spawns *sigh*
+			return
+		end
+		
 		local nr_in_group = 1
 
 		if u_data.group then
