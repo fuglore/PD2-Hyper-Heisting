@@ -250,220 +250,225 @@ function CopLogicTravel._upd_enemy_detection(data)
 		reaction_func = SpoocLogicAttack.chk_reaction_to_attention_object
 	end
 	
-	local path_fail_t_chk = data.important and 0.5 or 2
-	if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
-		if data.important and alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
-			local focus_enemy, focus_enemy_angle, focus_enemy_reaction = nil
-			local enemies = {}
-			local enemies_cpy = {}
-			local passive_enemies = {}
-			local threat_epicenter, threats = nil
-			local nr_threats = 0
-			local verified_chk_t = data.t - 8
-			for key, enemy_data in pairs(detected_enemies) do
-				if AIAttentionObject.REACT_COMBAT <= enemy_data.reaction and enemy_data.identified and enemy_data.verified_t and verified_chk_t < enemy_data.verified_t then
-					enemies[key] = enemy_data
-					enemies_cpy[key] = enemy_data
+	
+	if use_optimal_pos_stuff then
+		local path_fail_t_chk = data.important and 0.5 or 2
+		
+		if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
+			if data.important and alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
+				local focus_enemy, focus_enemy_angle, focus_enemy_reaction = nil
+				local enemies = {}
+				local enemies_cpy = {}
+				local passive_enemies = {}
+				local threat_epicenter, threats = nil
+				local nr_threats = 0
+				local verified_chk_t = data.t - 8
+				for key, enemy_data in pairs(detected_enemies) do
+					if AIAttentionObject.REACT_COMBAT <= enemy_data.reaction and enemy_data.identified and enemy_data.verified_t and verified_chk_t < enemy_data.verified_t then
+						enemies[key] = enemy_data
+						enemies_cpy[key] = enemy_data
+					end
 				end
-			end
 
-			for key, enemy_data in pairs(enemies) do
-				threat_epicenter = threat_epicenter or Vector3()
+				for key, enemy_data in pairs(enemies) do
+					threat_epicenter = threat_epicenter or Vector3()
 
-				mvector3.add(threat_epicenter, enemy_data.m_pos)
+					mvector3.add(threat_epicenter, enemy_data.m_pos)
 
-				nr_threats = nr_threats + 1
-				enemy_data.aimed_at = CopLogicIdle.chk_am_i_aimed_at(data, enemy_data, enemy_data.aimed_at and 0.95 or 0.985)
-			end
+					nr_threats = nr_threats + 1
+					enemy_data.aimed_at = CopLogicIdle.chk_am_i_aimed_at(data, enemy_data, enemy_data.aimed_at and 0.95 or 0.985)
+				end
 
-			if threat_epicenter then
-				mvector3.divide(threat_epicenter, nr_threats)
+				if threat_epicenter then
+					mvector3.divide(threat_epicenter, nr_threats)
 
-				local from_threat = mvector3.copy(threat_epicenter)
+					local from_threat = mvector3.copy(threat_epicenter)
 
-				mvector3.subtract(from_threat, data.m_pos)
-				mvector3.normalize(from_threat)
+					mvector3.subtract(from_threat, data.m_pos)
+					mvector3.normalize(from_threat)
 
-				local furthest_pt_dist = 0
+					local furthest_pt_dist = 0
+		
 				local furthest_line = nil
 
-				if not my_data.threat_epicenter or mvector3.distance(threat_epicenter, my_data.threat_epicenter) > 100 then
-					my_data.threat_epicenter = mvector3.copy(threat_epicenter)
+					if not my_data.threat_epicenter or mvector3.distance(threat_epicenter, my_data.threat_epicenter) > 100 then
+						my_data.threat_epicenter = mvector3.copy(threat_epicenter)
 
-					for key1, enemy_data1 in pairs(enemies) do
-						enemies_cpy[key1] = nil
+						for key1, enemy_data1 in pairs(enemies) do
+							enemies_cpy[key1] = nil
 
-						for key2, enemy_data2 in pairs(enemies_cpy) do
-							if nr_threats == 2 then
-								local AB = mvector3.copy(enemy_data1.m_pos)
+							for key2, enemy_data2 in pairs(enemies_cpy) do
+								if nr_threats == 2 then
+									local AB = mvector3.copy(enemy_data1.m_pos)
 
-								mvector3.subtract(AB, enemy_data2.m_pos)
-								mvector3.normalize(AB)
+									mvector3.subtract(AB, enemy_data2.m_pos)
+									mvector3.normalize(AB)
 
-								local PA = mvector3.copy(data.m_pos)
+									local PA = mvector3.copy(data.m_pos)
 
-								mvector3.subtract(PA, enemy_data1.m_pos)
-								mvector3.normalize(PA)
+									mvector3.subtract(PA, enemy_data1.m_pos)
+									mvector3.normalize(PA)
 
-								local PB = mvector3.copy(data.m_pos)
+									local PB = mvector3.copy(data.m_pos)
 
-								mvector3.subtract(PB, enemy_data2.m_pos)
-								mvector3.normalize(PB)
+									mvector3.subtract(PB, enemy_data2.m_pos)
+									mvector3.normalize(PB)
 
-								local dot1 = mvector3.dot(AB, PA)
-								local dot2 = mvector3.dot(AB, PB)
+									local dot1 = mvector3.dot(AB, PA)
+									local dot2 = mvector3.dot(AB, PB)
 
-								if dot1 < 0 and dot2 < 0 or dot1 > 0 and dot2 > 0 then
-									break
-								else
-									furthest_line = {
-										enemy_data1.m_pos,
-										enemy_data2.m_pos
-									}
-
-									break
-								end
-							end
-
-							local pt = math.line_intersection(enemy_data1.m_pos, enemy_data2.m_pos, threat_epicenter, data.m_pos)
-							local to_pt = mvector3.copy(threat_epicenter)
-
-							mvector3.subtract(to_pt, pt)
-							mvector3.normalize(to_pt)
-
-							if mvector3.dot(from_threat, to_pt) > 0 then
-								local line = mvector3.copy(enemy_data2.m_pos)
-
-								mvector3.subtract(line, enemy_data1.m_pos)
-
-								local line_len = mvector3.normalize(line)
-								local pt_line = mvector3.copy(pt)
-
-								mvector3.subtract(pt_line, enemy_data1.m_pos)
-
-								local dot = mvector3.dot(line, pt_line)
-
-								if dot < line_len and dot > 0 then
-									local dist = mvector3.distance(pt, threat_epicenter)
-
-									if furthest_pt_dist < dist then
-										furthest_pt_dist = dist
+									if dot1 < 0 and dot2 < 0 or dot1 > 0 and dot2 > 0 then
+										break
+									else
 										furthest_line = {
 											enemy_data1.m_pos,
 											enemy_data2.m_pos
 										}
+
+										break
+									end
+								end
+
+								local pt = math.line_intersection(enemy_data1.m_pos, enemy_data2.m_pos, threat_epicenter, data.m_pos)
+								local to_pt = mvector3.copy(threat_epicenter)
+
+								mvector3.subtract(to_pt, pt)
+								mvector3.normalize(to_pt)
+
+								if mvector3.dot(from_threat, to_pt) > 0 then
+									local line = mvector3.copy(enemy_data2.m_pos)
+
+									mvector3.subtract(line, enemy_data1.m_pos)
+
+									local line_len = mvector3.normalize(line)
+									local pt_line = mvector3.copy(pt)
+
+									mvector3.subtract(pt_line, enemy_data1.m_pos)
+
+									local dot = mvector3.dot(line, pt_line)
+
+									if dot < line_len and dot > 0 then
+										local dist = mvector3.distance(pt, threat_epicenter)
+
+										if furthest_pt_dist < dist then
+											furthest_pt_dist = dist
+											furthest_line = {
+												enemy_data1.m_pos,
+												enemy_data2.m_pos
+											}
+										end
 									end
 								end
 							end
 						end
 					end
-				end
 
-				local optimal_direction = nil
+					local optimal_direction = nil
 
-				if furthest_line then
-					local BA = mvector3.copy(furthest_line[2])
+					if furthest_line then
+						local BA = mvector3.copy(furthest_line[2])
 
-					mvector3.subtract(BA, furthest_line[1])
+						mvector3.subtract(BA, furthest_line[1])
 
-					local PA = mvector3.copy(furthest_line[1])
+						local PA = mvector3.copy(furthest_line[1])
 
-					mvector3.subtract(PA, data.m_pos)
+						mvector3.subtract(PA, data.m_pos)
 
-					local out = nil
+						local out = nil
 
-					if nr_threats == 2 then
-						mvector3.normalize(BA)
+						if nr_threats == 2 then
+							mvector3.normalize(BA)
 
-						local len = mvector3.dot(BA, PA)
-						local x = mvector3.copy(furthest_line[1])
+							local len = mvector3.dot(BA, PA)
+							local x = mvector3.copy(furthest_line[1])
 
-						mvector3.multiply(BA, len)
-						mvector3.subtract(x, BA)
+							mvector3.multiply(BA, len)
+							mvector3.subtract(x, BA)
 
-						out = mvector3.copy(data.m_pos)
+							out = mvector3.copy(data.m_pos)
 
-						mvector3.subtract(out, x)
+							mvector3.subtract(out, x)
+						else
+							local EA = mvector3.copy(threat_epicenter)
+
+							mvector3.subtract(EA, furthest_line[1])
+
+							local rot_axis = Vector3()
+
+							mvector3.cross(rot_axis, BA, EA)
+							mvector3.set_static(rot_axis, 0, 0, rot_axis.z)
+
+							out = Vector3()
+
+							mvector3.cross(out, BA, rot_axis)
+						end
+
+						mvector3.normalize(out)
+
+						optimal_direction = mvector3.copy(out)
+
+						mvector3.multiply(optimal_direction, -1)
+						mvector3.multiply(out, mvector3.dot(out, PA) + 600)
+
+						my_data.optimal_pos = mvector3.copy(data.m_pos)
+
+						mvector3.add(my_data.optimal_pos, out)
 					else
-						local EA = mvector3.copy(threat_epicenter)
+						optimal_direction = mvector3.copy(threat_epicenter)
 
-						mvector3.subtract(EA, furthest_line[1])
+						mvector3.subtract(optimal_direction, data.m_pos)
+						mvector3.normalize(optimal_direction)
 
-						local rot_axis = Vector3()
+						local optimal_length = 0
 
-						mvector3.cross(rot_axis, BA, EA)
-						mvector3.set_static(rot_axis, 0, 0, rot_axis.z)
+						for _, enemy in pairs(enemies) do
+							local enemy_dir = mvector3.copy(threat_epicenter)
 
-						out = Vector3()
+							mvector3.subtract(enemy_dir, enemy.m_pos)
 
-						mvector3.cross(out, BA, rot_axis)
-					end
-
-					mvector3.normalize(out)
-
-					optimal_direction = mvector3.copy(out)
-
-					mvector3.multiply(optimal_direction, -1)
-					mvector3.multiply(out, mvector3.dot(out, PA) + 600)
-
-					my_data.optimal_pos = mvector3.copy(data.m_pos)
-
-					mvector3.add(my_data.optimal_pos, out)
-				else
-					optimal_direction = mvector3.copy(threat_epicenter)
-
-					mvector3.subtract(optimal_direction, data.m_pos)
-					mvector3.normalize(optimal_direction)
-
-					local optimal_length = 0
-
-					for _, enemy in pairs(enemies) do
-						local enemy_dir = mvector3.copy(threat_epicenter)
-
-						mvector3.subtract(enemy_dir, enemy.m_pos)
-
-						local len = mvector3.dot(enemy_dir, optimal_direction)
-						optimal_length = math.max(len, optimal_length)
-					end
-
-					local optimal_pos = mvector3.copy(optimal_direction)
-
-					mvector3.multiply(optimal_pos, -(optimal_length + 600))
-					mvector3.add(optimal_pos, threat_epicenter)
-
-					my_data.optimal_pos = optimal_pos
-				end
-				
-				--if my_data.optimal_pos then
-				--	local draw_duration = 2
-				--	local lineshield = Draw:brush(Color.green:with_alpha(0.5), draw_duration)
-				--	lineshield:cylinder(data.m_pos, my_data.optimal_pos, 4)
-				--end
-
-				for key, enemy_data in pairs(enemies) do
-					local reaction = CopLogicSniper._chk_reaction_to_attention_object(data, enemy_data, true)
-
-					if not focus_enemy_reaction or focus_enemy_reaction <= reaction then
-						local enemy_dir = tmp_vec1
-
-						mvector3.direction(enemy_dir, data.m_pos, enemy_data.m_pos)
-
-						local angle = mvector3.dot(optimal_direction, enemy_dir)
-
-						if data.attention_obj and key == data.attention_obj.u_key then
-							angle = angle + 0.15
+							local len = mvector3.dot(enemy_dir, optimal_direction)
+							optimal_length = math.max(len, optimal_length)
 						end
 
-						if not focus_enemy or enemy_data.verified and not focus_enemy.verified or (enemy_data.verified or not focus_enemy.verified) and focus_enemy_angle < angle then
-							focus_enemy = enemy_data
-							focus_enemy_angle = angle
-							focus_enemy_reaction = reaction
+						local optimal_pos = mvector3.copy(optimal_direction)
+
+						mvector3.multiply(optimal_pos, -(optimal_length + 600))
+						mvector3.add(optimal_pos, threat_epicenter)
+
+						my_data.optimal_pos = optimal_pos
+					end
+					
+					--if my_data.optimal_pos then
+					--	local draw_duration = 2
+					--	local lineshield = Draw:brush(Color.green:with_alpha(0.5), draw_duration)
+					--	lineshield:cylinder(data.m_pos, my_data.optimal_pos, 4)
+					--end
+
+					for key, enemy_data in pairs(enemies) do
+						local reaction = CopLogicSniper._chk_reaction_to_attention_object(data, enemy_data, true)
+
+						if not focus_enemy_reaction or focus_enemy_reaction <= reaction then
+							local enemy_dir = tmp_vec1
+
+							mvector3.direction(enemy_dir, data.m_pos, enemy_data.m_pos)
+
+							local angle = mvector3.dot(optimal_direction, enemy_dir)
+
+							if data.attention_obj and key == data.attention_obj.u_key then
+								angle = angle + 0.15
+							end
+
+							if not focus_enemy or enemy_data.verified and not focus_enemy.verified or (enemy_data.verified or not focus_enemy.verified) and focus_enemy_angle < angle then
+								focus_enemy = enemy_data
+								focus_enemy_angle = angle
+								focus_enemy_reaction = reaction
+							end
 						end
 					end
-				end
 
-				CopLogicBase._set_attention_obj(data, focus_enemy, focus_enemy_reaction)
-				get_new_target = nil
+					CopLogicBase._set_attention_obj(data, focus_enemy, focus_enemy_reaction)
+					get_new_target = nil
+				end
 			end
 		end
 	end
@@ -486,7 +491,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 			end
 		end
 		
-		if new_attention and new_reaction then
+		if use_optimal_pos_stuff and new_attention and new_reaction then
 			local path_fail_t_chk = data.important and 0.5 or 1
 			if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
 				if data.important and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.nav_tracker and not my_data.walking_to_optimal_pos then
@@ -566,6 +571,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 				end
 			end
 		end
+	
 	end
 	
 	local chosen_attention = focus_enemy or new_attention or nil
@@ -796,6 +802,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	local t = data.t
 	local unit = data.unit
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	ignore_walks = true --currently disabling optimal_pos out of interest
 	
 	if not data.unit:base():has_tag("law") then
 		return
@@ -1258,7 +1265,7 @@ function CopLogicTravel.queued_update(data)
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
 			if not objective or objective.type == "defend_area" and objective.grp_objective and objective.grp_objective.type ~= "retire" or objective.type == "hunt" then
 				if data.unit:base():has_tag("takedown") then
-					if data.attention_obj.dis > 100 then
+					if data.attention_obj.dis > 250 then
 						if my_data.pathing_to_optimal_pos then
 							-- Nothing
 						elseif my_data.walking_to_optimal_pos then
@@ -1284,14 +1291,11 @@ function CopLogicTravel.queued_update(data)
 				end
 			end
 			
-			if data.important or data.unit:base():has_tag("special") then
-				--CopLogicTravel._chk_start_action_move_out_of_the_way(data, my_data)
-				should_update_combat_movement = nil
-				CopLogicTravel._upd_combat_movement(data)
+			should_update_combat_movement = nil
+			CopLogicTravel._upd_combat_movement(data)
 				
-				if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
-					CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
-				end
+			if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
+				CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
 			end
 		end
 	end

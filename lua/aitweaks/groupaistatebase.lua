@@ -454,7 +454,7 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 			managers.mission:call_global_event("start_assault")
 			managers.hud:start_assault(self._assault_number)
 			managers.groupai:dispatch_event("start_assault", self._assault_number)
-			managers.enemy:add_delayed_clbk("set_rescue_state_false", callback(self, self, "_set_rescue_state", false), self._t + 0.1)
+
 			for group_id, group in pairs(self._groups) do
 				for u_key, u_data in pairs(group.units) do
 					u_data.unit:sound():say("att", true)
@@ -543,7 +543,7 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		managers.mission:call_global_event("start_assault")
 		managers.hud:start_assault(self._assault_number)
 		managers.groupai:dispatch_event("start_assault", self._assault_number)
-		managers.enemy:add_delayed_clbk("set_rescue_state_false", callback(self, self, "_set_rescue_state", false), self._t + 0.1)
+
 		for group_id, group in pairs(self._groups) do
 			for u_key, u_data in pairs(group.units) do
 				u_data.unit:sound():say("g90", true)
@@ -680,6 +680,9 @@ function GroupAIStateBase:is_area_safe_assault(area)
 	end
 
 	return true
+end
+
+function GroupAIStateBase:_set_rescue_state(state)
 end
 
 function GroupAIStateBase:_get_anticipation_duration(anticipation_duration_table, is_first)
@@ -1243,3 +1246,30 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 
 	return true
 end
+
+function GroupAIStateBase:_try_use_task_spawn_event(t, target_area, task_type, target_pos, force)
+	local max_dis = 8000
+	local min_dis = 1000
+	local mvec3_dis = mvector3.distance
+	target_pos = target_pos or target_area.pos
+
+	for event_id, event_data in pairs(self._spawn_events) do
+		if event_data.task_type == task_type or event_data.task_type == "any" then
+			local dis = mvec3_dis(target_pos, event_data.pos)
+
+			if dis > min_dis and dis < max_dis then
+				if force or math.random() < event_data.chance then
+					self._anticipated_police_force = self._anticipated_police_force + event_data.amount
+					self._police_force = self._police_force + event_data.amount
+
+					self:_use_spawn_event(event_data)
+
+					return
+				else
+					event_data.chance = math.min(1, event_data.chance + event_data.chance_inc)
+				end
+			end
+		end
+	end
+end
+

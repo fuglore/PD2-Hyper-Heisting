@@ -1238,7 +1238,7 @@ function GroupAIStateBesiege:set_wave_mode(flag)
 		self._wave_mode = "besiege"
 
 		managers.hud:start_assault(self._assault_number)
-		self:_set_rescue_state(true)
+		--self:_set_rescue_state(true)
 		self:set_assault_mode(true)
 		managers.trade:set_trade_countdown(false)
 		self:_end_regroup_task()
@@ -1355,7 +1355,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			managers.mission:call_global_event("start_assault")
 			managers.hud:start_assault(self._assault_number)
 			managers.groupai:dispatch_event("start_assault", self._assault_number)
-			self:_set_rescue_state(true)
+			--self:_set_rescue_state(true)
 			
 			for group_id, group in pairs(self._groups) do
 				for u_key, u_data in pairs(group.units) do
@@ -1579,7 +1579,8 @@ function GroupAIStateBesiege:_upd_assault_task()
 			if next(self._spawning_groups) then
 				-- Nothing
 			else
-				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, nil, nil)
+				--local max_dis = self._small_map and 4000 or 8000
+				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, nil)
 
 				if spawn_group then
 					local grp_objective = {
@@ -3151,7 +3152,7 @@ function GroupAIStateBesiege:_end_regroup_task()
 		managers.groupai:dispatch_event("end_assault_late", self._assault_number)
 		managers.hud:end_assault(result)
 		self:_mark_hostage_areas_as_unsafe()
-		self:_set_rescue_state(true)
+		--self:_set_rescue_state(true)
 
 		if not self._task_data.assault.next_dispatch_t then
 			local assault_delay = self._tweak_data.assault.delay
@@ -3436,8 +3437,14 @@ end
 
 function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_groups, target_pos, max_dis, verify_clbk)
 	local all_areas = self._area_data
-	local mvec3_dis = mvector3.distance_sq
+	local mvec3_dis_sq = mvector3.distance_sq
 	max_dis = max_dis and max_dis * max_dis
+	local min_dis = nil
+	
+	if not Global.game_settings.one_down then
+		min_dis = self._small_map and 2250000 or 9000000
+	end
+	
 	local t = self._t
 	local valid_spawn_groups = {}
 	local valid_spawn_group_distances = {}
@@ -3476,7 +3483,7 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 								local nxt = path[i][2]
 
 								if current and nxt then
-									dis = dis + mvector3.distance(current, nxt)
+									dis = dis + mvec3_dis_sq(current, nxt)
 								end
 
 								current = nxt
@@ -3488,13 +3495,26 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 
 					if self._graph_distance_cache[dis_id] then
 						local my_dis = self._graph_distance_cache[dis_id]
-
-						if not max_dis or my_dis < max_dis then
-							total_dis = total_dis + my_dis
+						
+						local should_add_spawngroup = true
+						--log(tostring(my_dis))
+						--log(tostring(min_dis))
+						if min_dis and min_dis > my_dis then
+							should_add_spawngroup = nil
+							--log("piss")
 						end
 						
-						valid_spawn_groups[spawn_group_id(spawn_group)] = spawn_group
-						valid_spawn_group_distances[spawn_group_id(spawn_group)] = my_dis
+						if max_dis and my_dis > max_dis then
+							should_add_spawngroup = nil
+							--log("piss2")
+						end
+						
+						if should_add_spawngroup then
+							--log("confusion")
+							total_dis = total_dis + my_dis
+							valid_spawn_groups[spawn_group_id(spawn_group)] = spawn_group
+							valid_spawn_group_distances[spawn_group_id(spawn_group)] = my_dis
+						end	
 					end
 				end
 			end
@@ -3510,25 +3530,23 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	until #to_search_areas == 0
 
 	local time = TimerManager:game():time()
-	local timer_can_spawn = false
-
-	for id in pairs(valid_spawn_groups) do
-		if not self._spawn_group_timers[id] or self._spawn_group_timers[id] <= time then
-			timer_can_spawn = true
-
-			break
+	local spawn_group_number = #valid_spawn_groups
+	
+	if spawn_group_number and spawn_group_number > 1 then
+		for id in pairs(valid_spawn_groups) do
+			if self._spawn_group_timers[id] and time < self._spawn_group_timers[id] then
+				valid_spawn_groups[id] = nil
+				valid_spawn_group_distances[id] = nil
+			end
 		end
 	end
-
-	if not timer_can_spawn then
-		self._spawn_group_timers = {}
-	end
-
-	for id in pairs(valid_spawn_groups) do
-		if self._spawn_group_timers[id] and time < self._spawn_group_timers[id] then
-			valid_spawn_groups[id] = nil
-			valid_spawn_group_distances[id] = nil
-		end
+	
+	local delays = {5, 10}
+	
+	if spawn_group_number > 3 and spawn_group_number < 6 then
+		delays = {5, 7.5}
+	elseif spawn_group_number < 3 then
+		delays = {2.5, 5}
 	end
 
 	if total_dis == 0 then
@@ -3538,8 +3556,8 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	local total_weight = 0
 	local candidate_groups = {}
 	self._debug_weights = {}
-	local dis_limit = 20000
-
+	local dis_limit = max_dis or 64000000 --80 meters
+	
 	for i, dis in pairs(valid_spawn_group_distances) do
 		local my_wgt = math.lerp(1, 0.2, math.min(1, dis / dis_limit)) * 5
 		local my_spawn_group = valid_spawn_groups[i]
@@ -3556,7 +3574,27 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 		table.insert(self._debug_weights, clone(group))
 	end
 
-	return self:_choose_best_group(candidate_groups, total_weight)
+	return self:_choose_best_group(candidate_groups, total_weight, delays)
+end
+
+function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delays)
+	local rand_wgt = total_weight * math.random()
+	local best_grp, best_grp_type = nil
+
+	for i, candidate in ipairs(best_groups) do
+		rand_wgt = rand_wgt - candidate.wght
+		
+		if rand_wgt <= 0 then
+			self._spawn_group_timers[spawn_group_id(candidate.group)] = TimerManager:game():time() + math.lerp(delays[1], delays[2], math.random())
+			best_grp = candidate.group
+			best_grp_type = candidate.group_type
+			best_grp.delay_t = self._t + best_grp.interval
+
+			break
+		end
+	end
+
+	return best_grp, best_grp_type
 end
 
 function GroupAIStateBesiege:on_cop_jobless(unit)
