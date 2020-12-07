@@ -3585,7 +3585,9 @@ function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delay
 		rand_wgt = rand_wgt - candidate.wght
 		
 		if rand_wgt <= 0 then
-			self._spawn_group_timers[spawn_group_id(candidate.group)] = TimerManager:game():time() + math.lerp(delays[1], delays[2], math.random())
+			if delays then
+				self._spawn_group_timers[spawn_group_id(candidate.group)] = TimerManager:game():time() + math.lerp(delays[1], delays[2], math.random())
+			end
 			best_grp = candidate.group
 			best_grp_type = candidate.group_type
 			best_grp.delay_t = self._t + best_grp.interval
