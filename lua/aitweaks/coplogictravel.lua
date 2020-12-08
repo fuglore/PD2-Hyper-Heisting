@@ -3,13 +3,22 @@ local tmp_vec2 = Vector3()
 local tmp_vec3 = Vector3()
 local cone_top = Vector3()
 local tmp_vec_cone_dir = Vector3()
+local mvec3_not_eq = mvector3.not_equal
+local mvec3_neg = mvector3.negate
 local mvec3_set = mvector3.set
+local mvec3_sub = mvector3.subtract
 local mvec3_add = mvector3.add
+local mvec3_div = mvector3.divide
 local mvec3_mul = mvector3.multiply
+local mvec3_cross = mvector3.cross
+local mvec3_set_z = mvector3.set_z
+local mvec3_set_static = mvector3.set_static
 local mvec3_set_length = mvector3.set_length
 local mvec3_dir = mvector3.direction
+local mvec3_dot = mvector3.dot
 local mvec3_copy = mvector3.copy
 local mvec3_norm = mvector3.normalize
+local mvec3_len = mvector3.length
 local mvec3_dis = mvector3.distance
 local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_step = mvector3.step
@@ -25,6 +34,8 @@ local math_sign = math.sign
 local mrot_y = mrotation.y
 local mrot_z = mrotation.z
 local table_insert = table.insert
+
+
 
 function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	CopLogicBase.enter(data, new_logic_name, enter_params)
@@ -250,12 +261,13 @@ function CopLogicTravel._upd_enemy_detection(data)
 		reaction_func = SpoocLogicAttack.chk_reaction_to_attention_object
 	end
 	
+	local use_optimal_pos_stuff = data.important and not data.unit:base():has_tag("takedown")
 	
 	if use_optimal_pos_stuff then
-		local path_fail_t_chk = data.important and 0.5 or 2
+		local path_fail_t_chk = 2
 		
-		if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
-			if data.important and alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
+		if not my_data.optimal_path_fail_t or data.t - my_data.optimal_path_fail_t > path_fail_t_chk then
+			if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 				local focus_enemy, focus_enemy_angle, focus_enemy_reaction = nil
 				local enemies = {}
 				local enemies_cpy = {}
@@ -273,49 +285,49 @@ function CopLogicTravel._upd_enemy_detection(data)
 				for key, enemy_data in pairs(enemies) do
 					threat_epicenter = threat_epicenter or Vector3()
 
-					mvector3.add(threat_epicenter, enemy_data.m_pos)
+					mvec3_add(threat_epicenter, enemy_data.m_pos)
 
 					nr_threats = nr_threats + 1
 					enemy_data.aimed_at = CopLogicIdle.chk_am_i_aimed_at(data, enemy_data, enemy_data.aimed_at and 0.95 or 0.985)
 				end
 
 				if threat_epicenter then
-					mvector3.divide(threat_epicenter, nr_threats)
+					mvec3_div(threat_epicenter, nr_threats)
 
-					local from_threat = mvector3.copy(threat_epicenter)
+					local from_threat = mvec3_copy(threat_epicenter)
 
-					mvector3.subtract(from_threat, data.m_pos)
-					mvector3.normalize(from_threat)
+					mvec3_sub(from_threat, data.m_pos)
+					mvec3_norm(from_threat)
 
 					local furthest_pt_dist = 0
 		
-				local furthest_line = nil
+					local furthest_line = nil
 
-					if not my_data.threat_epicenter or mvector3.distance(threat_epicenter, my_data.threat_epicenter) > 100 then
-						my_data.threat_epicenter = mvector3.copy(threat_epicenter)
+					if not my_data.threat_epicenter or mvec3_dis(threat_epicenter, my_data.threat_epicenter) > 100 then
+						my_data.threat_epicenter = mvec3_copy(threat_epicenter)
 
 						for key1, enemy_data1 in pairs(enemies) do
 							enemies_cpy[key1] = nil
 
 							for key2, enemy_data2 in pairs(enemies_cpy) do
 								if nr_threats == 2 then
-									local AB = mvector3.copy(enemy_data1.m_pos)
+									local AB = mvec3_copy(enemy_data1.m_pos)
 
-									mvector3.subtract(AB, enemy_data2.m_pos)
-									mvector3.normalize(AB)
+									mvec3_sub(AB, enemy_data2.m_pos)
+									mvec3_norm(AB)
 
-									local PA = mvector3.copy(data.m_pos)
+									local PA = mvec3_copy(data.m_pos)
 
-									mvector3.subtract(PA, enemy_data1.m_pos)
-									mvector3.normalize(PA)
+									mvec3_sub(PA, enemy_data1.m_pos)
+									mvec3_norm(PA)
 
-									local PB = mvector3.copy(data.m_pos)
+									local PB = mvec3_copy(data.m_pos)
 
-									mvector3.subtract(PB, enemy_data2.m_pos)
-									mvector3.normalize(PB)
+									mvec3_sub(PB, enemy_data2.m_pos)
+									mvec3_norm(PB)
 
-									local dot1 = mvector3.dot(AB, PA)
-									local dot2 = mvector3.dot(AB, PB)
+									local dot1 = mvec3_dot(AB, PA)
+									local dot2 = mvec3_dot(AB, PB)
 
 									if dot1 < 0 and dot2 < 0 or dot1 > 0 and dot2 > 0 then
 										break
@@ -330,25 +342,25 @@ function CopLogicTravel._upd_enemy_detection(data)
 								end
 
 								local pt = math.line_intersection(enemy_data1.m_pos, enemy_data2.m_pos, threat_epicenter, data.m_pos)
-								local to_pt = mvector3.copy(threat_epicenter)
+								local to_pt = mvec3_copy(threat_epicenter)
 
-								mvector3.subtract(to_pt, pt)
-								mvector3.normalize(to_pt)
+								mvec3_sub(to_pt, pt)
+								mvec3_norm(to_pt)
 
-								if mvector3.dot(from_threat, to_pt) > 0 then
-									local line = mvector3.copy(enemy_data2.m_pos)
+								if mvec3_dot(from_threat, to_pt) > 0 then
+									local line = mvec3_copy(enemy_data2.m_pos)
 
-									mvector3.subtract(line, enemy_data1.m_pos)
+									mvec3_sub(line, enemy_data1.m_pos)
 
-									local line_len = mvector3.normalize(line)
-									local pt_line = mvector3.copy(pt)
+									local line_len = mvec3_norm(line)
+									local pt_line = mvec3_copy(pt)
 
-									mvector3.subtract(pt_line, enemy_data1.m_pos)
+									mvec3_sub(pt_line, enemy_data1.m_pos)
 
-									local dot = mvector3.dot(line, pt_line)
+									local dot = mvec3_dot(line, pt_line)
 
 									if dot < line_len and dot > 0 then
-										local dist = mvector3.distance(pt, threat_epicenter)
+										local dist = mvec3_dis(pt, threat_epicenter)
 
 										if furthest_pt_dist < dist then
 											furthest_pt_dist = dist
@@ -366,74 +378,74 @@ function CopLogicTravel._upd_enemy_detection(data)
 					local optimal_direction = nil
 
 					if furthest_line then
-						local BA = mvector3.copy(furthest_line[2])
+						local BA = mvec3_copy(furthest_line[2])
 
-						mvector3.subtract(BA, furthest_line[1])
+						mvec3_sub(BA, furthest_line[1])
 
-						local PA = mvector3.copy(furthest_line[1])
+						local PA = mvec3_copy(furthest_line[1])
 
-						mvector3.subtract(PA, data.m_pos)
+						mvec3_sub(PA, data.m_pos)
 
 						local out = nil
 
 						if nr_threats == 2 then
-							mvector3.normalize(BA)
+							mvec3_norm(BA)
 
-							local len = mvector3.dot(BA, PA)
-							local x = mvector3.copy(furthest_line[1])
+							local len = mvec3_dot(BA, PA)
+							local x = mvec3_copy(furthest_line[1])
 
-							mvector3.multiply(BA, len)
-							mvector3.subtract(x, BA)
+							mvec3_mul(BA, len)
+							mvec3_sub(x, BA)
 
-							out = mvector3.copy(data.m_pos)
+							out = mvec3_copy(data.m_pos)
 
-							mvector3.subtract(out, x)
+							mvec3_sub(out, x)
 						else
-							local EA = mvector3.copy(threat_epicenter)
+							local EA = mvec3_copy(threat_epicenter)
 
-							mvector3.subtract(EA, furthest_line[1])
+							mvec3_sub(EA, furthest_line[1])
 
 							local rot_axis = Vector3()
 
-							mvector3.cross(rot_axis, BA, EA)
-							mvector3.set_static(rot_axis, 0, 0, rot_axis.z)
+							mvec3_cross(rot_axis, BA, EA)
+							mvec3_set_static(rot_axis, 0, 0, rot_axis.z)
 
 							out = Vector3()
 
-							mvector3.cross(out, BA, rot_axis)
+							mvec3_cross(out, BA, rot_axis)
 						end
 
-						mvector3.normalize(out)
+						mvec3_norm(out)
 
-						optimal_direction = mvector3.copy(out)
+						optimal_direction = mvec3_copy(out)
 
-						mvector3.multiply(optimal_direction, -1)
-						mvector3.multiply(out, mvector3.dot(out, PA) + 600)
+						mvec3_mul(optimal_direction, -1)
+						mvec3_mul(out, mvec3_dot(out, PA) + 600)
 
-						my_data.optimal_pos = mvector3.copy(data.m_pos)
+						my_data.optimal_pos = mvec3_copy(data.m_pos)
 
-						mvector3.add(my_data.optimal_pos, out)
+						mvec3_add(my_data.optimal_pos, out)
 					else
-						optimal_direction = mvector3.copy(threat_epicenter)
+						optimal_direction = mvec3_copy(threat_epicenter)
 
-						mvector3.subtract(optimal_direction, data.m_pos)
-						mvector3.normalize(optimal_direction)
+						mvec3_sub(optimal_direction, data.m_pos)
+						mvec3_norm(optimal_direction)
 
 						local optimal_length = 0
 
 						for _, enemy in pairs(enemies) do
-							local enemy_dir = mvector3.copy(threat_epicenter)
+							local enemy_dir = mvec3_copy(threat_epicenter)
 
-							mvector3.subtract(enemy_dir, enemy.m_pos)
+							mvec3_sub(enemy_dir, enemy.m_pos)
 
-							local len = mvector3.dot(enemy_dir, optimal_direction)
+							local len = mvec3_dot(enemy_dir, optimal_direction)
 							optimal_length = math.max(len, optimal_length)
 						end
 
-						local optimal_pos = mvector3.copy(optimal_direction)
+						local optimal_pos = mvec3_copy(optimal_direction)
 
-						mvector3.multiply(optimal_pos, -(optimal_length + 600))
-						mvector3.add(optimal_pos, threat_epicenter)
+						mvec3_mul(optimal_pos, -(optimal_length + 600))
+						mvec3_add(optimal_pos, threat_epicenter)
 
 						my_data.optimal_pos = optimal_pos
 					end
@@ -450,9 +462,9 @@ function CopLogicTravel._upd_enemy_detection(data)
 						if not focus_enemy_reaction or focus_enemy_reaction <= reaction then
 							local enemy_dir = tmp_vec1
 
-							mvector3.direction(enemy_dir, data.m_pos, enemy_data.m_pos)
+							mvec3_dir(enemy_dir, data.m_pos, enemy_data.m_pos)
 
-							local angle = mvector3.dot(optimal_direction, enemy_dir)
+							local angle = mvec3_dot(optimal_direction, enemy_dir)
 
 							if data.attention_obj and key == data.attention_obj.u_key then
 								angle = angle + 0.15
@@ -479,8 +491,11 @@ function CopLogicTravel._upd_enemy_detection(data)
 		
 		CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
 		
+		local near_vis_or_verified = nil
+		
 		if new_attention then
 			if new_attention.nearly_visible or new_attention.verified then
+				near_vis_or_verified = true
 				if old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
 					CopLogicAttack._cancel_charge(data, my_data)
 
@@ -492,55 +507,11 @@ function CopLogicTravel._upd_enemy_detection(data)
 		end
 		
 		if use_optimal_pos_stuff and new_attention and new_reaction then
-			local path_fail_t_chk = data.important and 0.5 or 1
-			if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
-				if data.important and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.nav_tracker and not my_data.walking_to_optimal_pos then
+			local path_fail_t_chk = 2
+			if not my_data.optimal_path_fail_t or data.t - my_data.optimal_path_fail_t > path_fail_t_chk then
+				if near_vis_or_verified and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.dis < 1000 and new_attention.nav_tracker and not my_data.walking_to_optimal_pos then
 					if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 						my_data.optimal_pos = CopLogicAttack._find_flank_pos(data, my_data, new_attention.nav_tracker)
-					elseif data.is_suppressed and new_attention.verified then
-						local retreat_pos = CopLogicAttack._find_retreat_position(data, data.m_pos, new_attention.m_pos, new_attention.m_head_pos, new_attention.nav_tracker, 2000, nil)
-						if retreat_pos then
-							my_data.optimal_pos = retreat_pos
-							--log("woo!")
-							--if my_data.optimal_pos then
-							--	local draw_duration = 2
-							--	local line1 = Draw:brush(Color.yellow:with_alpha(0.5), draw_duration)
-							--	line1:cylinder(data.m_pos, my_data.optimal_pos, 2)
-							--end
-						else
-							my_data.optimal_path_fail_t = data.t
-						end
-					elseif data.is_suppressed and not new_attention.verified then
-						local threat_pos = nil
-							
-						if not my_data.cover_test_step then
-							my_data.cover_test_step = 1
-						end
-							
-						if new_attention.last_verified_pos then
-							threat_pos = new_attention.last_verified_pos
-						elseif new_attention.is_person then
-							threat_pos = new_attention.m_head_pos
-						else
-							threat_pos = new_attention.m_pos
-						end
-							
-						local my_tracker = data.unit:movement():nav_tracker()
-						local shoot_from_pos = CopLogicTravel._peek_for_pos_sideways(data, my_data, my_tracker, threat_pos, nil)
-							
-						if shoot_from_pos then
-							my_data.optimal_pos = shoot_from_pos
-							--log("beeftime")
-							--if my_data.optimal_pos then
-							--	local draw_duration = 2
-							--	local line2 = Draw:brush(Color.red:with_alpha(0.5), draw_duration)
-							--	line2:cylinder(data.m_pos, my_data.optimal_pos, 2)
-							--end
-						elseif not data.unit:movement():chk_action_forbidden("walk") then
-							ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
-							my_data.cover_test_step = my_data.cover_test_step + 1
-							my_data.optimal_path_fail_t = data.t
-						end
 					elseif data.tactics and data.tactics.flank then
 						local flank_pos = CopLogicAttack._find_flank_pos(data, my_data, new_attention.nav_tracker)
 						
@@ -577,7 +548,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 	local chosen_attention = focus_enemy or new_attention or nil
 	
 	if my_data.optimal_pos and chosen_attention then
-		mvector3.set_z(my_data.optimal_pos, chosen_attention.m_pos.z)
+		mvec3_set_z(my_data.optimal_pos, chosen_attention.m_pos.z)
 	end
 	
 	local objective = data.objective
@@ -644,11 +615,11 @@ function CopLogicTravel._get_pos_on_wall(from_pos, max_dist, step_offset, is_rec
 	local offset_rot = Rotation(offset)
 	local offset_vec = Vector3(ray_dis, 0, 0)
 
-	mvector3.rotate_with(offset_vec, offset_rot)
+	mvec3_rotate_with(offset_vec, offset_rot)
 
-	local to_pos = mvector3.copy(from_pos)
+	local to_pos = mvec3_copy(from_pos)
 
-	mvector3.add(to_pos, offset_vec)
+	mvec3_add(to_pos, offset_vec)
 
 	local from_tracker = nav_manager:create_nav_tracker(from_pos)
 	local ray_params = {
@@ -664,9 +635,9 @@ function CopLogicTravel._get_pos_on_wall(from_pos, max_dist, step_offset, is_rec
 	local fail_position = nil
 
 	repeat
-		to_pos = mvector3.copy(from_pos)
+		to_pos = mvec3_copy(from_pos)
 
-		mvector3.add(to_pos, offset_vec)
+		mvec3_add(to_pos, offset_vec)
 
 		ray_params.pos_to = to_pos
 		local ray_res = nav_manager:raycast(ray_params)
@@ -689,7 +660,7 @@ function CopLogicTravel._get_pos_on_wall(from_pos, max_dist, step_offset, is_rec
 			end
 		end
 
-		mvector3.rotate_with(offset_vec, step_rot)
+		mvec3_rotate_with(offset_vec, step_rot)
 
 		nr_rays = nr_rays - 1
 	until nr_rays == 0
@@ -725,8 +696,8 @@ function CopLogicTravel._peek_for_pos_sideways(data, my_data, from_tracker, peek
 		end
 	end
 
-	mvector3.set_z(back_vec, 0)
-	mvector3.set_length(back_vec, 75)
+	mvec3_set_z(back_vec, 0)
+	mvec3_set_length(back_vec, 75)
 
 	local back_pos = my_pos + back_vec
 	local ray_params = {
@@ -747,7 +718,7 @@ function CopLogicTravel._peek_for_pos_sideways(data, my_data, from_tracker, peek
 	local ray_softness = 150
 	local stand_ray = World:raycast("ray", ray_params.trace[1] + math.UP * height, enemy_pos, "slot_mask", data.visibility_slotmask, "ray_type", "ai_vision")
 
-	if not stand_ray or mvector3.distance(stand_ray.position, enemy_pos) < ray_softness then
+	if not stand_ray or mvec3_dis(stand_ray.position, enemy_pos) < ray_softness then
 		shoot_from_pos = ray_params.trace[1]
 		found_shoot_from_pos = true
 	end
@@ -758,7 +729,7 @@ function CopLogicTravel._peek_for_pos_sideways(data, my_data, from_tracker, peek
 		local ray_res = managers.navigation:raycast(ray_params)
 		local stand_ray = World:raycast("ray", ray_params.trace[1] + math.UP * height, enemy_pos, "slot_mask", data.visibility_slotmask, "ray_type", "ai_vision")
 
-		if not stand_ray or mvector3.distance(stand_ray.position, enemy_pos) < ray_softness then
+		if not stand_ray or mvec3_dis(stand_ray.position, enemy_pos) < ray_softness then
 			shoot_from_pos = ray_params.trace[1]
 			found_shoot_from_pos = true
 		end
@@ -769,28 +740,28 @@ end
 
 function CopLogicTravel:_reserve_pos_step_clbk(data, test_pos)
 	if not data.step_vector then
-		data.step_vector = mvector3.copy(data.unit_pos)
+		data.step_vector = mvec3_copy(data.unit_pos)
 
-		mvector3.subtract(data.step_vector, test_pos)
+		mvec3_sub(data.step_vector, test_pos)
 
-		data.distance = mvector3.normalize(data.step_vector)
+		data.distance = mvec3_norm(data.step_vector)
 
-		mvector3.set_length(data.step_vector, 25)
+		mvec3_set_length(data.step_vector, 25)
 
 		data.num_steps = 0
 	end
 
-	local step_length = mvector3.length(data.step_vector)
+	local step_length = mvec3_len(data.step_vector)
 
 	if data.distance < step_length or data.num_steps > 4 then
 		return false
 	end
 
-	mvector3.add(test_pos, data.step_vector)
+	mvec3_add(test_pos, data.step_vector)
 
 	data.distance = data.distance - step_length
 
-	mvector3.set_length(data.step_vector, step_length * 2)
+	mvec3_set_length(data.step_vector, step_length * 2)
 
 	data.num_steps = data.num_steps + 1
 
@@ -802,7 +773,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	local t = data.t
 	local unit = data.unit
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	ignore_walks = true --currently disabling optimal_pos out of interest
+	--ignore_walks = true --currently disabling optimal_pos out of interest
 	
 	if not data.unit:base():has_tag("law") then
 		return
@@ -876,8 +847,8 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 		return true
 	end
 	
-	if not ignore_walks then
-		local path_fail_t_chk = data.important and 0.5 or 1
+	if data.important then
+		local path_fail_t_chk = 2
 		if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - t > path_fail_t_chk then
 			if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 				if not action_taken then
@@ -902,7 +873,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 						if ray_res then
 							local vec = data.m_pos - to_pos
 
-							mvector3.normalize(vec)
+							mvec3_norm(vec)
 
 							local fwd = unit:movement():m_fwd()
 							local fwd_dot = fwd:dot(vec)
@@ -924,7 +895,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 
 						local fwd_bump = nil
 						to_pos, fwd_bump = ShieldLogicAttack.chk_wall_distance(data, my_data, to_pos)
-						local do_move = mvector3.distance_sq(to_pos, data.m_pos) > 10000 
+						local do_move = mvec3_dis_sq(to_pos, data.m_pos) > 10000 
 
 						if not do_move then
 							local to_pos_current, fwd_bump_current = ShieldLogicAttack.chk_wall_distance(data, my_data, data.m_pos)
@@ -946,7 +917,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 							else
 								reservation = {
 									radius = 60,
-									position = mvector3.copy(to_pos),
+									position = mvec3_copy(to_pos),
 									filter = data.pos_rsrv_id
 								}
 
@@ -1077,7 +1048,7 @@ function CopLogicTravel._upd_pathing(data, my_data)
 				my_data.optimal_path = path
 			else
 				my_data.optimal_path_fail_t = data.t
-				print("[ShieldLogicAttack._process_pathing_results] optimal path failed")
+				--print("[ShieldLogicAttack._process_pathing_results] optimal path failed")
 			end
 
 			my_data.pathing_to_optimal_pos = nil
@@ -1190,6 +1161,10 @@ function CopLogicTravel.queued_update(data)
 	my_data.objective_outdated = nil
     local delay = CopLogicTravel._upd_enemy_detection(data)
 	
+	if data.internal_data ~= my_data then
+    	return
+    end
+	
 	local focus_enemy = data.attention_obj
 	
 	if not data.is_converted and data.unit:base():has_tag("law") then
@@ -1263,9 +1238,11 @@ function CopLogicTravel.queued_update(data)
 	
 	if data.unit:base():has_tag("law") and my_data.has_advanced_once then
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
+			local ignore_walks = nil
 			if not objective or objective.type == "defend_area" and objective.grp_objective and objective.grp_objective.type ~= "retire" or objective.type == "hunt" then
 				if data.unit:base():has_tag("takedown") then
-					if data.attention_obj.dis > 250 then
+					ignore_walks = true
+					if data.attention_obj.dis < 1000 then
 						if my_data.pathing_to_optimal_pos then
 							-- Nothing
 						elseif my_data.walking_to_optimal_pos then
@@ -1291,8 +1268,9 @@ function CopLogicTravel.queued_update(data)
 				end
 			end
 			
+
 			should_update_combat_movement = nil
-			CopLogicTravel._upd_combat_movement(data)
+			CopLogicTravel._upd_combat_movement(data, ignore_walks)
 				
 			if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
 				CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
@@ -1523,7 +1501,7 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 		end
 	end
 
-	local my_dis = mvector3.distance_sq(my_objective.area.pos, data.m_pos)
+	local my_dis = mvec3_dis_sq(my_objective.area.pos, data.m_pos)
 
 	if my_dis > 4000000 then
 		return true
@@ -1540,7 +1518,7 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 			end
 			
 			if his_objective and his_objective.grp_objective == my_objective.grp_objective and not his_objective.in_place then
-				local his_dis = mvector3.distance_sq(his_objective.area.pos, u_data.m_pos)
+				local his_dis = mvec3_dis_sq(his_objective.area.pos, u_data.m_pos)
 
 				if my_dis < his_dis then
 					return false
@@ -2221,7 +2199,7 @@ function CopLogicTravel._chk_start_action_move_back(data, my_data, focus_enemy, 
 	if can_perform_walking_action then
 	--what the fuck is my code rn tbh
 			
-		local from_pos = mvector3.copy(data.m_pos)
+		local from_pos = mvec3_copy(data.m_pos)
 		local threat_tracker = focus_enemy.nav_tracker
 		local threat_head_pos = focus_enemy.m_head_pos
 		local max_walk_dis = nil
@@ -2335,14 +2313,14 @@ function CopLogicTravel._update_cover(ignore_this, data)
 	local best_cover = my_data.best_cover
 	local m_pos = data.m_pos
 
-	if not my_data.in_cover and nearest_cover and cover_release_dis < mvector3.distance(nearest_cover[1][1], m_pos) then
+	if not my_data.in_cover and nearest_cover and cover_release_dis < mvec3_dis(nearest_cover[1][1], m_pos) then
 		local fucking = managers.navigation:release_cover(nearest_cover[1])
 
 		my_data.nearest_cover = nil
 		nearest_cover = nil
 	end
 
-	if best_cover and cover_release_dis < mvector3.distance(best_cover[1][1], m_pos) then
+	if best_cover and cover_release_dis < mvec3_dis(best_cover[1][1], m_pos) then
 		local fucking = managers.navigation:release_cover(best_cover[1])
 		
 		my_data.best_cover = nil
@@ -2493,7 +2471,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				managers.navigation:release_cover(my_data.moving_to_cover[1])
 
 				if my_data.best_cover then
-					local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
+					local dis = mvec3_dis(my_data.best_cover[1][1], data.unit:movement():m_pos())
 
 					if dis > 100 then
 						managers.navigation:release_cover(my_data.best_cover[1])
@@ -2505,7 +2483,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 			my_data.moving_to_cover = nil
 		elseif my_data.best_cover then
-			local dis = mvector3.distance(my_data.best_cover[1][1], data.unit:movement():m_pos())
+			local dis = mvec3_dis(my_data.best_cover[1][1], data.unit:movement():m_pos())
 
 			if dis > 100 then
 				managers.navigation:release_cover(my_data.best_cover[1])
@@ -2773,7 +2751,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 						break
 					else
 						local pos_to_check = near_pos or search_area.pos
-						local crim_dis = mvector3.distance_sq(pos_to_check, u_data.m_pos)
+						local crim_dis = mvec3_dis_sq(pos_to_check, u_data.m_pos)
 
 						if not closest_crim_dis or crim_dis < closest_crim_dis then
 							threat_pos = u_data.unit:movement():nav_tracker():field_position()
@@ -3235,10 +3213,10 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 			stand_dis = 120
 		else
 			stand_dis = 90
-			local mid_pos = mvector3.copy(revive_u_fwd)
+			local mid_pos = mvec3_copy(revive_u_fwd)
 
-			mvector3.multiply(mid_pos, -20)
-			mvector3.add(mid_pos, revive_u_pos)
+			mvec3_mul(mid_pos, -20)
+			mvec3_add(mid_pos, revive_u_pos)
 
 			ray_params.pos_to = mid_pos
 			local ray_res = managers.navigation:raycast(ray_params)
@@ -3246,26 +3224,26 @@ function CopLogicTravel._determine_destination_occupation(data, objective, path_
 		end
 
 		local rand_side_mul = math_random() > 0.5 and 1 or -1
-		local revive_pos = mvector3.copy(revive_u_right)
+		local revive_pos = mvec3_copy(revive_u_right)
 
-		mvector3.multiply(revive_pos, rand_side_mul * stand_dis)
-		mvector3.add(revive_pos, revive_u_pos)
+		mvec3_mul(revive_pos, rand_side_mul * stand_dis)
+		mvec3_add(revive_pos, revive_u_pos)
 
 		ray_params.pos_to = revive_pos
 		local ray_res = managers.navigation:raycast(ray_params)
 
 		if ray_res then
-			local opposite_pos = mvector3.copy(revive_u_right)
+			local opposite_pos = mvec3_copy(revive_u_right)
 
-			mvector3.multiply(opposite_pos, -rand_side_mul * stand_dis)
-			mvector3.add(opposite_pos, revive_u_pos)
+			mvec3_mul(opposite_pos, -rand_side_mul * stand_dis)
+			mvec3_add(opposite_pos, revive_u_pos)
 
 			ray_params.pos_to = opposite_pos
 			local old_trace = ray_params.trace[1]
 			local opposite_ray_res = managers.navigation:raycast(ray_params)
 
 			if opposite_ray_res then
-				if mvector3.distance(revive_pos, revive_u_pos) < mvector3.distance(ray_params.trace[1], revive_u_pos) then
+				if mvec3_dis(revive_pos, revive_u_pos) < mvec3_dis(ray_params.trace[1], revive_u_pos) then
 					revive_pos = ray_params.trace[1]
 				else
 					revive_pos = old_trace
@@ -3361,7 +3339,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 			local orig_pos = managers.navigation:find_random_position_in_segment(nav_seg)
 			local wall_pos = CopLogicTravel._get_pos_on_wall(orig_pos)
 			
-			if mvector3.not_equal(orig_pos, wall_pos) then
+			if mvec3_not_eq(orig_pos, wall_pos) then
 				to_pos = wall_pos
 				wants_reservation = true
 			else
@@ -3398,7 +3376,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 			local orig_pos = managers.navigation:find_random_position_in_segment(nav_seg)
 			local wall_pos = CopLogicTravel._get_pos_on_wall(orig_pos, 1200)
 			
-			if mvector3.not_equal(orig_pos, wall_pos) then
+			if mvec3_not_eq(orig_pos, wall_pos) then
 				to_pos = wall_pos
 				wants_reservation = true
 			else
@@ -3410,7 +3388,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 	if not reservation and wants_reservation then
 		data.brain:add_pos_rsrv("path", {
 			radius = 60,
-			position = mvector3.copy(to_pos)
+			position = mvec3_copy(to_pos)
 		})
 	end
 
@@ -3491,8 +3469,8 @@ end
 function CopLogicTravel._chk_request_action_turn_to_cover(data, my_data)
 	local fwd = data.unit:movement():m_rot():y()
 
-	mvector3.set(tmp_vec1, my_data.best_cover[1][2])
-	mvector3.negate(tmp_vec1)
+	mvec3_set(tmp_vec1, my_data.best_cover[1][2])
+	mvec3_neg(tmp_vec1)
 
 	local error_spin = tmp_vec1:to_polar_with_reference(fwd, math.UP).spin
 
