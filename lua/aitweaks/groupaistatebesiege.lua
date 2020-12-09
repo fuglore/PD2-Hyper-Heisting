@@ -1003,15 +1003,30 @@ function GroupAIStateBesiege:_begin_new_tasks()
 		end
 	end
 
-	if assault_candidates and self._hunt_mode and self._char_criminals then
-		for criminal_key, criminal_data in pairs(self._char_criminals) do
-			if not criminal_data.status or criminal_data.status == "electrified" then
-				local nav_seg = criminal_data.tracker:nav_segment()
-				local area = self:get_area_from_nav_seg_id(nav_seg)
-				found_areas[area] = true
-				
-				table.insert(to_search_areas, area)
-				table.insert(assault_candidates, area)
+	if assault_candidates then
+		if self._player_criminals and next(self._player_criminals) then
+			for criminal_key, criminal_data in pairs(self._player_criminals) do
+				if not criminal_data.status or criminal_data.status == "electrified" then
+					local nav_seg = criminal_data.tracker:nav_segment()
+					local area = self:get_area_from_nav_seg_id(nav_seg)
+					found_areas[area] = true
+					
+					table.insert(to_search_areas, area)
+					table.insert(assault_candidates, area)
+				end
+			end
+		else
+			if self._char_criminals then
+				for criminal_key, criminal_data in pairs(self._char_criminals) do
+					if not criminal_data.status or criminal_data.status == "electrified" then
+						local nav_seg = criminal_data.tracker:nav_segment()
+						local area = self:get_area_from_nav_seg_id(nav_seg)
+						found_areas[area] = true
+						
+						table.insert(to_search_areas, area)
+						table.insert(assault_candidates, area)
+					end
+				end
 			end
 		end
 	end
@@ -1186,8 +1201,8 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 		assault_task.force = assault_task.force * 1.25
 	end
 	
-	assault_task.use_smoke = true
-	assault_task.use_smoke_timer = 0
+	--assault_task.use_smoke = true
+	--assault_task.use_smoke_timer = 0
 	assault_task.use_spawn_event = true
 	assault_task.force_spawned = 0
 
@@ -1247,8 +1262,8 @@ function GroupAIStateBesiege:set_wave_mode(flag)
 
 		if self._task_data.assault.active then
 			self._task_data.assault.phase = "sustain"
-			self._task_data.use_smoke = true
-			self._task_data.use_smoke_timer = 0
+			--self._task_data.use_smoke = true
+			--self._task_data.use_smoke_timer = 0
 		else
 			self._task_data.assault.next_dispatch_t = self._t
 		end
@@ -1543,7 +1558,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 	
 	if task_data.phase ~= "fade" then
-		if task_data.use_smoke_timer < t then
+		if not task_data.use_smoke_timer or task_data.use_smoke_timer < t then
 			task_data.use_smoke = true
 		end
 	end

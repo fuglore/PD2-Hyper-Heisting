@@ -8,6 +8,8 @@
 	<texture path="core/environments/skies/sky_danger_moonlight/danger_moon_df" />
 	<texture path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight_df" />
 	
+	<texture path="environments/sunset_hell_global_cubemap/cubemap" load="true"/>
+	
 	<!--Base Game Asset Replacements-->
 	<object path="units/payday2/weapons/wpn_npc_smg_mp9/wpn_npc_smg_mp9" force="true"/>
 	<material_config path="units/pd2_dlc_friend/nature/terrain/sfm_backdrop" force="true"/>

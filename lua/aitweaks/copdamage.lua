@@ -1,6 +1,7 @@
 local mvec_1 = Vector3()
 local mvec_2 = Vector3()
 local table_size = table.size
+local table_contains = table.contains
 local world_g = World
 local mvec3_norm = mvector3.normalize
 local mvec3_set = mvector3.set
@@ -13,6 +14,7 @@ local mvec_spread = mvector3.spread
 local mvec3_dot = mvector3.dot
 local mvec3_copy = mvector3.copy
 local mvec3_dis = mvector3.distance
+
 
 function CopDamage:is_immune_to_shield_knockback()
 	if self._immune_to_knockback then

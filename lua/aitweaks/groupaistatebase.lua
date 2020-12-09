@@ -450,7 +450,7 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 			
 		--end
 		
-		if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.active and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
+		if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
 			self._assault_number = self._assault_number + 1
 
 			managers.mission:call_global_event("start_assault")
@@ -521,6 +521,8 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 
 		fail_clbk(unit)
 	end
+	
+	--log("dude dead")
 
 	local e_data = self._police[u_key]
 
@@ -539,7 +541,7 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		end
 	end
 	
-	if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.active and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
+	if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
 		self._assault_number = self._assault_number + 1
 
 		managers.mission:call_global_event("start_assault")
@@ -718,7 +720,7 @@ function GroupAIStateBase:_get_anticipation_duration(anticipation_duration_table
 			return 45
 		end
 	else
-		return anticipation_duration
+		return 5
 	end
 	
 end

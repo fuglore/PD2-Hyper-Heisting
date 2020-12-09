@@ -16,6 +16,7 @@ Hooks:Add("BeardLibPreProcessScriptData", "HHCreateEnvironment", function(PackMa
 			"sky_2335_night_moon",
 			"sky_2100_moon",
 			"sky_1313_cloudy_dark",
+			"sky_2003_dusk_blue",
 			"sky_2003_dusk_blue_high_color_scale",
 			"sky_2335_night_moon"
 			
@@ -35,7 +36,11 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 	
 	local sex = Global.level_data and Global.level_data.level_id
 	
-	BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_day_hh.custom_xml", "custom_xml", "environments/pd2_env_mid_day/pd2_env_mid_day", "environment")
+	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/sunset_hell.custom_xml", "custom_xml", "environments/pd2_env_mid_day/pd2_env_mid_day", "environment")
+	else
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_day_hh.custom_xml", "custom_xml", "environments/pd2_env_mid_day/pd2_env_mid_day", "environment")
+	end
 	
 	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_night/pd2_env_night", "environment")
