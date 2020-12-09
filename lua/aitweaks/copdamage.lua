@@ -800,11 +800,40 @@ function CopDamage:_on_damage_received(damage_info)
 end
 
 function CopDamage:check_medic_heal()
-	if not self._unit:base():has_tag("medic") then
-		local medic = managers.enemy:get_nearby_medic(self._unit)
-
-		return medic and medic:character_damage():heal_unit(self._unit)
+	if self._unit:base():has_tag("medic") then
+		return false
 	end
+
+	local tweak_table_name = self._unit:base()._tweak_table
+
+	if table_contains(tweak_data.medic.disabled_units, tweak_table_name) then
+		return false
+	end
+
+	local mov_ext = self._unit:movement()
+	local team = mov_ext.team and mov_ext:team()
+
+	if team and team.id ~= "law1" then
+		if not team.friends or not team.friends.law1 then
+			return false
+		end
+	end
+
+	local brain_ext = self._unit:brain()
+
+	if brain_ext then
+		if brain_ext.converted then
+			if brain_ext:converted() then
+				return false
+			end
+		elseif brain_ext._logic_data and brain_ext._logic_data.is_converted then
+			return false
+		end
+	end
+
+	local medic = managers.enemy:get_nearby_medic(self._unit)
+
+	return medic and medic:character_damage():heal_unit(self._unit)
 end
 
 function CopDamage:clbk_suppression_decay()
