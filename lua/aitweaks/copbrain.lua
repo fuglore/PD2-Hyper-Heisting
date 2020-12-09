@@ -261,13 +261,29 @@ function CopBrain:clbk_pathing_results(search_id, path)
 end
 
 function CopBrain:convert_to_criminal(mastermind_criminal)
+	if self._alert_listen_key then
+		managers.groupai:state():remove_alert_listener(self._alert_listen_key)
+	else
+		self._alert_listen_key = "CopBrain" .. tostring(self._unit:key())
+	end
+
+	local alert_listen_filter = managers.groupai:state():get_unit_type_filter("combatant")
+	local alert_types = {
+		explosion = true,
+		fire = true,
+		aggression = true,
+		bullet = true
+	}
+
+	managers.groupai:state():add_alert_listener(self._alert_listen_key, callback(self, self, "on_alert"), alert_listen_filter, alert_types, self._unit:movement():m_head_pos())
+
 	self._logic_data.is_converted = true
 	self._logic_data.group = nil
-	
+
 	if self._logic_data.internal_data and self._logic_data.internal_data.coarse_path then
 		self._logic_data.internal_data.coarse_path = nil
 	end
-	
+
 	local mover_col_body = self._unit:body("mover_blocker")
 
 	mover_col_body:set_enabled(false)
@@ -280,15 +296,19 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 	local damage_multiplier = 1
 
 	if alive(mastermind_criminal) then
-		health_multiplier = health_multiplier * (mastermind_criminal:base():upgrade_value("player", "convert_enemies_health_multiplier") or 1)
-		health_multiplier = health_multiplier * (mastermind_criminal:base():upgrade_value("player", "passive_convert_enemies_health_multiplier") or 1)
-		damage_multiplier = damage_multiplier * (mastermind_criminal:base():upgrade_value("player", "convert_enemies_damage_multiplier") or 1)
-		damage_multiplier = damage_multiplier * (mastermind_criminal:base():upgrade_value("player", "passive_convert_enemies_damage_multiplier") or 1)
+		local base_ext = mastermind_criminal:base()
+
+		health_multiplier = health_multiplier * (base_ext:upgrade_value("player", "convert_enemies_health_multiplier") or 1)
+		health_multiplier = health_multiplier * (base_ext:upgrade_value("player", "passive_convert_enemies_health_multiplier") or 1)
+		damage_multiplier = damage_multiplier * (base_ext:upgrade_value("player", "convert_enemies_damage_multiplier") or 1)
+		damage_multiplier = damage_multiplier * (base_ext:upgrade_value("player", "passive_convert_enemies_damage_multiplier") or 1)
 	else
-		health_multiplier = health_multiplier * managers.player:upgrade_value("player", "convert_enemies_health_multiplier", 1)
-		health_multiplier = health_multiplier * managers.player:upgrade_value("player", "passive_convert_enemies_health_multiplier", 1)
-		damage_multiplier = damage_multiplier * managers.player:upgrade_value("player", "convert_enemies_damage_multiplier", 1)
-		damage_multiplier = damage_multiplier * managers.player:upgrade_value("player", "passive_convert_enemies_damage_multiplier", 1)
+		local player_manager = managers.player
+
+		health_multiplier = health_multiplier * player_manager:upgrade_value("player", "convert_enemies_health_multiplier", 1)
+		health_multiplier = health_multiplier * player_manager:upgrade_value("player", "passive_convert_enemies_health_multiplier", 1)
+		damage_multiplier = damage_multiplier * player_manager:upgrade_value("player", "convert_enemies_damage_multiplier", 1)
+		damage_multiplier = damage_multiplier * player_manager:upgrade_value("player", "passive_convert_enemies_damage_multiplier", 1)
 	end
 
 	self._unit:character_damage():convert_to_criminal(health_multiplier)
@@ -297,11 +317,30 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 
 	CopLogicBase._destroy_all_detected_attention_object_data(self._logic_data)
 
-	self._SO_access = managers.navigation:convert_access_flag(tweak_data.character.russian.access)
+	local team_ai_so_access = tweak_data.character.russian.access
+
+	self._SO_access = managers.navigation:convert_access_flag(team_ai_so_access)
 	self._logic_data.SO_access = self._SO_access
-	self._logic_data.SO_access_str = tweak_data.character.russian.access
+	self._logic_data.SO_access_str = team_ai_so_access
 	self._slotmask_enemies = managers.slot:get_mask("enemies")
 	self._logic_data.enemy_slotmask = self._slotmask_enemies
+
+	local char_tweaks = deep_clone(self._unit:base()._char_tweak)
+
+	char_tweaks.suppression = nil
+	char_tweaks.crouch_move = false
+	char_tweaks.allowed_poses = {stand = true}
+	char_tweaks.move_speed = tweak_data.character.presets.move_speed.teamai
+	char_tweaks.access = team_ai_so_access
+	char_tweaks.no_run_start = true
+	char_tweaks.no_run_stop = true
+
+	self._logic_data.char_tweak = char_tweaks
+	self._unit:base()._char_tweak = char_tweaks
+	self._unit:character_damage()._char_tweak = char_tweaks
+	self._unit:movement()._tweak_data = char_tweaks
+	self._unit:movement()._action_common_data.char_tweak = char_tweaks
+
 	local equipped_w_selection = self._unit:inventory():equipped_selection()
 
 	if equipped_w_selection then
@@ -326,21 +365,13 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 	self._unit:movement():set_stance("hos")
 
 	local action_data = {
-		clamp_to_graph = true,
-		type = "act",
+		variant = "stand",
 		body_part = 1,
-		variant = "attached_collar_enter",
-		blocks = {
-			heavy_hurt = -1,
-			hurt = -1,
-			action = -1,
-			light_hurt = -1,
-			walk = -1
-		}
+		type = "act"
 	}
 
 	self._unit:brain():action_request(action_data)
-	self._unit:sound():say("cn1", true, nil)
+	--self._unit:sound():say("cn1", true, nil)
 	managers.network:session():send_to_peers_synched("sync_unit_converted", self._unit)
 end
 
