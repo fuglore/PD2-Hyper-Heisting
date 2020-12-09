@@ -1,67 +1,43 @@
-function MedicDamage:heal_unit(unit, override_cooldown)
-	local t = Application:time()
+local math_random = math.random
 
-	if not override_cooldown then
-		local cooldown = tweak_data.medic.cooldown
-		cooldown = managers.modifiers:modify_value("MedicDamage:CooldownTime", cooldown)
+function MedicDamage:heal_unit(unit, no_cooldown)
+	if not no_cooldown then
+		local t = Application:time()
 
-		if t < self._heal_cooldown_t + cooldown then
-			return false
-		end
+		self._heal_cooldown_t = t
 	end
-
-	local tweak_table = unit:base()._tweak_table
-
-	if table.contains(tweak_data.medic.disabled_units, tweak_table) then
-		return false
-	end
-
-	local team = unit:movement().team and unit:movement():team()
-
-	if team and team.id ~= "law1" then
-		if not team.friends or not team.friends.law1 then
-			return false
-		end
-	end
-
-	if unit:brain() then
-		if unit:brain().converted then
-			if unit:brain():converted() then
-				return false
-			end
-		elseif unit:brain()._logic_data and unit:brain()._logic_data.is_converted then
-			return false
-		end
-	end
-
-	self._heal_cooldown_t = t
 
 	if not self._unit:character_damage():dead() then
 		self._unit:sound():say("heal")
-		
-		if self._unit:contour() then
-			self._unit:contour():add("mark_enemy")
+
+		local contour_ext = self._unit:contour()
+
+		if contour_ext then
+			contour_ext:add("mark_enemy")
 		end
-		
-		if self._unit:base():char_tweak()["custom_voicework"] then
-			local voicelines = _G.voiceline_framework.BufferedSounds[self._unit:base():char_tweak().custom_voicework]
+
+		local base_ext = self._unit:base()
+		local custom_vo = base_ext:char_tweak()["custom_voicework"]
+
+		if custom_vo then
+			local voicelines = _G.voiceline_framework.BufferedSounds[custom_vo]
 
 			if voicelines and voicelines["heal"] then
-				local line_to_use = voicelines.heal[math.random(#voicelines.heal)]
+				local line_to_use = voicelines.heal[math_random(#voicelines.heal)]
 
-				self._unit:base():play_voiceline(line_to_use)
+				base_ext:play_voiceline(line_to_use)
 			end
 		end
-		
-		if self._unit:anim_data() and self._unit:anim_data().act then
-			--nothing
-		else
-			
+
+		local anim_data = self._unit:anim_data()
+		local acting = anim_data and anim_data.act
+
+		if not acting then
 			local redir_res = self._unit:movement():play_redirect("cmd_get_up")
 
 			if redir_res then
 				self._unit:anim_state_machine():set_speed(redir_res, 0.5)
-			end	
+			end
 		end
 	end
 
