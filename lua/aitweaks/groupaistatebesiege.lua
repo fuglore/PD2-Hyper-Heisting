@@ -3,6 +3,8 @@
 --Hooks:PostHook(GroupAIStateBase, "init", "shin_debug", function(self, group_ai_state)
 	--self:set_debug_draw_state(true)
 --end)
+local mvec3_dis_sq = mvector3.distance_sq
+local mvec3_cpy = mvector3.copy
 
 function GroupAIStateBesiege:init(group_ai_state)
 	GroupAIStateBesiege.super.init(self)
@@ -2122,14 +2124,14 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 		local duration = tweak_data.group_ai.smoke_grenade_lifetime
 
 		for u_key, u_data in pairs(group.units) do
-			shooter_pos = mvector3.copy(u_data.m_pos)
+			shooter_pos = mvec3_cpy(u_data.m_pos)
 			shooter_u_data = u_data
 			if u_data.tactics_map and u_data.tactics_map.smoke_grenade then
 				if not detonate_pos or math.random() < 0.5 then
 					local nav_seg_id = u_data.tracker:nav_segment()
 					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
 					if u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "assault_area" or u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "retire" then
-						detonate_pos = mvector3.copy(u_data.group.objective.area.pos)
+						detonate_pos = mvec3_cpy(u_data.group.objective.area.pos)
 					else
 						for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
 							if self._current_target_area and self._current_target_area.nav_segs[neighbour_nav_seg_id] then
@@ -2237,14 +2239,14 @@ function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, deto
 		local duration = tweak_data.group_ai.flash_grenade_lifetime
 
 		for u_key, u_data in pairs(group.units) do
-			shooter_pos = mvector3.copy(u_data.m_pos)
+			shooter_pos = mvec3_cpy(u_data.m_pos)
 			shooter_u_data = u_data
 			if u_data.tactics_map and u_data.tactics_map.flash_grenade then
 				if not detonate_pos then
 					local nav_seg_id = u_data.tracker:nav_segment()
 					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
 					if u_data.group and u_data.group.objective and u_data.group.objective.area and u_data.group.objective.type == "assault_area" then
-						detonate_pos = mvector3.copy(u_data.group.objective.area.pos)
+						detonate_pos = mvec3_cpy(u_data.group.objective.area.pos)
 					else
 						for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
 							if self._current_target_area and self._current_target_area.nav_segs[neighbour_nav_seg_id] then
@@ -2763,7 +2765,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			coarse_path = {
 				{
 					objective_area.pos_nav_seg,
-					mvector3.copy(current_objective.area.pos)
+					mvec3_cpy(current_objective.area.pos)
 				}
 			}
 		}
@@ -3115,7 +3117,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				coarse_path = {
 					{
 						retreat_area.pos_nav_seg,
-						mvector3.copy(retreat_area.pos)
+						mvec3_cpy(retreat_area.pos)
 					}
 				}
 			}
@@ -3437,7 +3439,7 @@ end
 
 function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_groups, target_pos, max_dis, verify_clbk)
 	local all_areas = self._area_data
-	local mvec3_dis_sq = mvector3.distance_sq
+	
 	max_dis = max_dis and max_dis * max_dis
 	local min_dis = nil
 	

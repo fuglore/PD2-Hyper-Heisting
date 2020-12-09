@@ -81,6 +81,8 @@ CopBrain._NET_EVENTS = {
 	seeing_client = 1
 }
 
+local mvec3_set = mvector3.set
+
 function CopBrain:sync_net_event(event_id, peer)
 	local peer_id = peer:id()
 	local peer_unit = managers.criminals:character_unit_by_peer_id(peer_id)
@@ -110,7 +112,7 @@ function CopBrain:sync_net_event(event_id, peer)
 
 		if att_obj_data then
 			if not att_obj_data.client_peaceful_detection then
-				mvector3.set(att_obj_data.verified_pos, att_obj_data.m_head_pos)
+				mvec3_set(att_obj_data.verified_pos, att_obj_data.m_head_pos)
 
 				att_obj_data.verified_dis = mvector3.distance(self._unit:movement():m_head_pos(), att_obj_data.m_head_pos)
 
@@ -155,7 +157,7 @@ function CopBrain:sync_net_event(event_id, peer)
 
 		if att_obj_data then
 			if not att_obj_data.client_casing_suspicion then
-				mvector3.set(att_obj_data.verified_pos, att_obj_data.m_head_pos)
+				mvec3_set(att_obj_data.verified_pos, att_obj_data.m_head_pos)
 
 				att_obj_data.verified_dis = mvector3.distance(self._unit:movement():m_head_pos(), att_obj_data.m_head_pos)
 

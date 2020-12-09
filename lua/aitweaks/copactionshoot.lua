@@ -315,7 +315,7 @@ function CopActionShoot:on_attention(attention, old_attention)
 			self._aim_transition = {
 				duration = 0.333,
 				start_t = t,
-				start_vec = mvector3.copy(self._common_data.look_vec)
+				start_vec = mvec3_copy(self._common_data.look_vec)
 			}
 			self._get_target_pos = self._get_transition_target_pos
 		else

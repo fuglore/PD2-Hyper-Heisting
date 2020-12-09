@@ -1,6 +1,8 @@
 local mvec3_dot = mvector3.dot
 local mvec3_set = mvector3.set
+local mvec3_cpy = mvector3.copy
 local mvec3_sub = mvector3.subtract
+local mvec3_dis = mvector3.distance
 local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_dir = mvector3.direction
 local mvec3_l_sq = mvector3.length_sq
@@ -662,7 +664,7 @@ function GroupAIStateBase:criminal_hurt_drama_armor(unit, attacker)
 	if alive(attacker) then
 		local drama_amount = 0.1
 		local max_dis = drama_data.max_dis_armor
-		local dis_lerp = math.min(1, mvector3.distance(attacker:movement():m_pos(), unit:movement():m_pos()) / drama_data.max_dis_armor)
+		local dis_lerp = math.min(1, mvec3_dis(attacker:movement():m_pos(), unit:movement():m_pos()) / drama_data.max_dis_armor)
 		dis_lerp = math.lerp(1, drama_data.max_dis_mul_armor, dis_lerp)
 		drama_amount = drama_amount * dis_lerp
 	end
@@ -1110,7 +1112,7 @@ function GroupAIStateBase:_determine_objective_for_criminal_AI(unit)
 
 	for pl_key, pl_record in pairs(self._player_criminals) do
 		if pl_record.status ~= "dead" then
-			local my_dis = mvector3.distance(ai_pos, pl_record.m_pos)
+			local my_dis = mvec3_dis(ai_pos, pl_record.m_pos)
 
 			if not closest_dis or my_dis < closest_dis then
 				closest_dis = my_dis
@@ -1204,7 +1206,7 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 	for i_event, event_data in pairs(chatter_type_events.events) do
 		if event_data.expire_t < t then
 			chatter_type_hist[i_event] = nil
-		elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
+		elseif mvec3_dis(unit_pos, event_data.epicenter) < chatter_tweak.radius then
 			if nr_events_in_area == chatter_tweak.max_nr - 1 then
 				return
 			else
@@ -1237,7 +1239,7 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 	chatter_type_events.global_cooldown_t = t + math.lerp(chatter_tweak.duration[1], chatter_tweak.duration[2], math.random())
 	
 	local new_event = {
-		epicenter = mvector3.copy(unit_pos),
+		epicenter = mvec3_cpy(unit_pos),
 		expire_t = chatter_type_hist.cooldown_t
 	}
 	table.insert(chatter_type_events.events, new_event)
@@ -1250,7 +1252,7 @@ end
 function GroupAIStateBase:_try_use_task_spawn_event(t, target_area, task_type, target_pos, force)
 	local max_dis = 8000
 	local min_dis = 1000
-	local mvec3_dis = mvector3.distance
+	local mvec3_dis = mvec3_dis
 	target_pos = target_pos or target_area.pos
 
 	for event_id, event_data in pairs(self._spawn_events) do

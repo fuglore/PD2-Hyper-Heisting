@@ -1359,6 +1359,7 @@ function CharacterTweakData:_presets(tweak_data)
 		0,
 		0
 	}
+	presets.detection.enemymook.ntl.use_uncover_range = nil
 	presets.detection.enemymook.ntl.dis_max = 1500
 	presets.detection.enemymook.ntl.angle_max = 55
 	presets.detection.enemymook.ntl.delay = {
@@ -1372,6 +1373,7 @@ function CharacterTweakData:_presets(tweak_data)
 		0
 	}
 	presets.detection.civilian.cbt.use_uncover_range = true
+	presets.detection.civilian.ntl.use_uncover_range = nil
 	presets.detection.civilian.ntl.dis_max = 1500
 	presets.detection.civilian.ntl.angle_max = 55
 	presets.detection.civilian.ntl.delay = {
@@ -1413,11 +1415,12 @@ function CharacterTweakData:_presets(tweak_data)
 		0,
 		0
 	}
+	presets.detection.enemyspooc.ntl.use_uncover_range = nil
 	presets.detection.enemyspooc.ntl.dis_max = 3000
 	presets.detection.enemyspooc.ntl.angle_max = 55
 	presets.detection.enemyspooc.ntl.delay = {
 		0.7,
-		0.7
+		2
 	}
 	
 	--make normal clone my new preset to keep enemies not currently set here capable of detecting people too

@@ -40,8 +40,8 @@ local mrot_set = mrotation.set_yaw_pitch_roll
 
 local stance_ctl_pts = {
 	0,
-	0.34,
-	0.67,
+	0,
+	1,
 	1
 }
 
@@ -197,7 +197,7 @@ function CopMovement:post_init()
 		nav_tracker = self._nav_tracker,
 		active_actions = self._active_actions,
 		queued_actions = self._queued_actions,
-		look_vec = mvector3.copy(fwd)
+		look_vec = mvec3_cpy(fwd)
 	}
 
 	self:upd_ground_ray()
@@ -650,7 +650,7 @@ function CopMovement:on_suppressed(state)
 					if self._ext_anim.idle then
 						if not self._active_actions[2] or self._active_actions[2]:type() == "idle" then
 							if not self:chk_action_forbidden("act") then
-								if diff_index >= 7 then
+								if diff_index >= 1 then
 									if not self._ext_anim.crouch then
 										local action_desc = {
 											clamp_to_graph = true,

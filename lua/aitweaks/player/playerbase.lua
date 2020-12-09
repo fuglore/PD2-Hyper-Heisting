@@ -7,7 +7,7 @@ function PlayerBase:set_suspicion_multiplier(reason, multiplier)
 		buildup_mul = buildup_mul * mul
 
 		if mul > 1 then
-			range_mul = range_mul * math.sqrt(mul)
+			--range_mul = range_mul * math.sqrt(mul)
 		end
 	end
 
@@ -22,7 +22,7 @@ function PlayerBase:set_detection_multiplier(reason, multiplier)
 
 	for reason, mul in pairs(self._detection_settings.multipliers) do
 		delay_mul = delay_mul * 1 / mul
-		range_mul = range_mul * math.sqrt(mul)
+		--range_mul = range_mul * math.sqrt(mul)
 	end
 
 	self._detection_settings.delay_mul = delay_mul - (managers.groupai:state():chk_guard_delay_deduction() or 1)
@@ -30,8 +30,6 @@ function PlayerBase:set_detection_multiplier(reason, multiplier)
 end
 
 function PlayerBase:update(unit, t, dt)
-	self:set_detection_multiplier(reason, multiplier)
-	self:set_suspicion_multiplier(reason, multiplier)
 	self:update_concealment()
 	if self._wanted_controller_enabled_t then
 		if self._wanted_controller_enabled_t <= 0 then
@@ -70,13 +68,13 @@ function PlayerBase:_setup_suspicion_and_detection_data()
 		self._detection_settings = {
 			multipliers = {},
 			init_delay_mul = 2,
-			init_range_mul = 1
+			init_range_mul = 0.5
 		}
 	elseif difficulty_index == 4 or difficulty_index == 5 then
 		self._detection_settings = {
 			multipliers = {},
 			init_delay_mul = 1.6,
-			init_range_mul = 1
+			init_range_mul = 0.75
 		}
 	elseif difficulty_index == 6 or difficulty_index == 7 then
 		self._detection_settings = {

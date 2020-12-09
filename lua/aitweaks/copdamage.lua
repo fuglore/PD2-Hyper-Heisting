@@ -2,6 +2,17 @@ local mvec_1 = Vector3()
 local mvec_2 = Vector3()
 local table_size = table.size
 local world_g = World
+local mvec3_norm = mvector3.normalize
+local mvec3_set = mvector3.set
+local mvec3_set_z = mvector3.set_z
+local mvec3_sub = mvector3.subtract
+local mvec3_add = mvector3.add
+local mvec3_div = mvector3.divide
+local mvec3_mul = mvector3.multiply
+local mvec_spread = mvector3.spread
+local mvec3_dot = mvector3.dot
+local mvec3_copy = mvector3.copy
+local mvec3_dis = mvector3.distance
 
 function CopDamage:is_immune_to_shield_knockback()
 	if self._immune_to_knockback then
@@ -849,7 +860,7 @@ if PD2THHSHIN and PD2THHSHIN:IsHelmetEnabled() then
 		if not params.skip_push then
 			local true_dir = params.dir
 			local spread = math.random(6, 9)
-			mvector3.spread(true_dir, spread)
+			mvec_spread(true_dir, spread)
 			local dir = math.UP + true_dir
 			--dir = dir:spread(spread)
 			local body = unit:body(0)
@@ -1042,12 +1053,12 @@ function CopDamage:damage_melee(attack_data)
 			if is_civlian then
 				managers.money:civilian_killed()
 			else
-				mvector3.set(mvec_1, self._unit:position())
-				mvector3.subtract(mvec_1, attack_data.attacker_unit:position())
-				mvector3.normalize(mvec_1)
-				mvector3.set(mvec_2, self._unit:rotation():y())
+				mvec3_set(mvec_1, self._unit:position())
+				mvec3_sub(mvec_1, attack_data.attacker_unit:position())
+				mvec3_norm(mvec_1)
+				mvec3_set(mvec_2, self._unit:rotation():y())
 
-				local from_behind = mvector3.dot(mvec_1, mvec_2) >= 0
+				local from_behind = mvec3_dot(mvec_1, mvec_2) >= 0
 
 				if self._unit:movement():cool() and from_behind then
 					snatch_pager = true
@@ -1205,7 +1216,7 @@ function CopDamage:sync_damage_melee(attacker_unit, damage_percent, damage_effec
 	if attacker_unit then
 		attack_dir = self._unit:position() - attacker_unit:position()
 
-		mvector3.normalize(attack_dir)
+		mvec3_norm(attack_dir)
 	else
 		attack_dir = -self._unit:rotation():y()
 	end
@@ -1309,7 +1320,7 @@ function CopDamage:sync_damage_melee(attacker_unit, damage_percent, damage_effec
 
 	attack_data.pos = self._unit:position()
 
-	mvector3.set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
+	mvec3_set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
 
 	if not self._no_blood and damage > 0 then
 		managers.game_play_central:sync_play_impact_flesh(self._unit:movement():m_pos() + Vector3(0, 0, hit_offset_height), attack_dir)
@@ -1415,12 +1426,12 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 
 	--prevent headshots against these units unless shot from the front, used for bulldozers
 	if head and self._unit:base():has_tag("protected") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then
-		mvector3.set(mvec_1, attack_data.col_ray.body:position())
-		mvector3.subtract(mvec_1, attack_data.attacker_unit:position())
-		mvector3.normalize(mvec_1)
-		mvector3.set(mvec_2, self._unit:rotation():y())
+		mvec3_set(mvec_1, attack_data.col_ray.body:position())
+		mvec3_sub(mvec_1, attack_data.attacker_unit:position())
+		mvec3_norm(mvec_1)
+		mvec3_set(mvec_2, self._unit:rotation():y())
 
-		local not_from_the_front = mvector3.dot(mvec_1, mvec_2) >= 0
+		local not_from_the_front = mvec3_dot(mvec_1, mvec_2) >= 0
 
 		if not_from_the_front then
 			head = false
@@ -1428,12 +1439,12 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	end
 	
 	if head and self._unit:base():has_tag("protected_reverse") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then
-		mvector3.set(mvec_1, attack_data.col_ray.body:position())
-		mvector3.subtract(mvec_1, attack_data.attacker_unit:position())
-		mvector3.normalize(mvec_1)
-		mvector3.set(mvec_2, self._unit:rotation():y())
+		mvec3_set(mvec_1, attack_data.col_ray.body:position())
+		mvec3_sub(mvec_1, attack_data.attacker_unit:position())
+		mvec3_norm(mvec_1)
+		mvec3_set(mvec_2, self._unit:rotation():y())
 
-		local not_from_the_front = mvector3.dot(mvec_1, mvec_2) >= 0
+		local not_from_the_front = mvec3_dot(mvec_1, mvec_2) >= 0
 
 		if not not_from_the_front then
 			head = false
@@ -1491,7 +1502,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		damage = damage * self._marked_dmg_mul
 
 		if self._marked_dmg_dist_mul then
-			local dst = mvector3.distance(attack_data.origin, self._unit:position())
+			local dst = mvec3_dis(attack_data.origin, self._unit:position())
 			local spott_dst = tweak_data.upgrades.values.player.marked_inc_dmg_distance[self._marked_dmg_dist_mul]
 
 			if spott_dst[1] < dst then
@@ -1659,7 +1670,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 				self:_AI_comment_death(attack_data.attacker_unit, self._unit, special_comment)
 			end
 
-			distance = mvector3.distance(attack_data.origin, attack_data.col_ray.position)
+			distance = mvec3_dis(attack_data.origin, attack_data.col_ray.position)
 
 			if not attack_data.weapon_unit:base().thrower_unit and attack_data.weapon_unit:base():is_category("shotgun") and distance and distance < ((attack_data.attacker_unit:base() and attack_data.attacker_unit:base().is_husk_player or managers.groupai:state():is_unit_team_AI(attack_data.attacker_unit)) and managers.game_play_central:get_shotgun_push_range() or 500) then
 				shotgun_push = true
@@ -1767,7 +1778,7 @@ function CopDamage:play_offset_effects(index)
 			local obj = self._unit:get_object(Idstring("Head"))
 			obj:m_position(pos)
 		else
-			mvector3.set(pos, self._unit:movement():m_head_pos())
+			mvec3_set(pos, self._unit:movement():m_head_pos())
 		end
 
 	
@@ -1784,7 +1795,7 @@ function CopDamage:play_offset_effects(index)
 			local obj = self._unit:get_object(Idstring("Head"))
 			obj:m_position(pos)
 		else
-			mvector3.set(pos, self._unit:movement():m_head_pos())
+			mvec3_set(pos, self._unit:movement():m_head_pos())
 		end
 	
 		world_g:effect_manager():spawn({
@@ -1812,7 +1823,7 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 	local head = self._head_body_name and not self._unit:in_slot(16) and not self._char_tweak.ignore_headshot and body and body:name() == self._ids_head_body_name
 	local damage = damage_percent * self._HEALTH_INIT_PRECENT
 	local attack_data = {}
-	local hit_pos = mvector3.copy(body:center_of_mass())
+	local hit_pos = mvec3_copy(body:center_of_mass())
 	--local hit_pos = mvector3.copy(self._unit:movement():m_pos())
 
 	--mvector3.set_z(hit_pos, hit_pos.z + hit_offset_height)
@@ -1828,7 +1839,7 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 		local from_pos = attacker_unit:movement().m_detect_pos and attacker_unit:movement():m_detect_pos() or attacker_unit:movement():m_head_pos()
 
 		attack_dir = hit_pos - from_pos
-		distance = mvector3.normalize(attack_dir)
+		distance = mvec3_norm(attack_dir)
 	else
 		attack_dir = self._unit:rotation():y()
 	end
@@ -2123,9 +2134,9 @@ function CopDamage:sync_damage_simple(attacker_unit, damage_percent, i_attack_va
 
 	local damage = damage_percent * self._HEALTH_INIT_PRECENT
 	local attack_data = {}
-	local hit_pos = mvector3.copy(self._unit:movement():m_pos())
+	local hit_pos = mvec3_copy(self._unit:movement():m_pos())
 
-	mvector3.set_z(hit_pos, hit_pos.z + 100)
+	mvec3_set_z(hit_pos, hit_pos.z + 100)
 
 	local variant = CopDamage._ATTACK_VARIANTS[i_attack_variant]
 	attack_data.pos = hit_pos
@@ -2135,7 +2146,7 @@ function CopDamage:sync_damage_simple(attacker_unit, damage_percent, i_attack_va
 
 	if attacker_unit then
 		attack_dir = hit_pos - attacker_unit:movement():m_head_pos()
-		distance = mvector3.normalize(attack_dir)
+		distance = mvec3_norm(attack_dir)
 	else
 		attack_dir = self._unit:rotation():y()
 	end
@@ -2270,7 +2281,7 @@ function CopDamage:sync_damage_stun(attacker_unit, damage_percent, i_attack_vari
 	elseif attacker_unit then
 		attack_dir = self._unit:position() - attacker_unit:position()
 
-		mvector3.normalize(attack_dir)
+		mvec3_norm(attack_dir)
 	else
 		attack_dir = self._unit:rotation():y()
 	end
@@ -2285,7 +2296,7 @@ function CopDamage:sync_damage_stun(attacker_unit, damage_percent, i_attack_vari
 
 	attack_data.pos = self._unit:position()
 
-	mvector3.set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
+	mvec3_set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
 	self:_on_damage_received(attack_data)
 	self:_create_stun_exit_clbk()
 end
@@ -2330,7 +2341,7 @@ function CopDamage:damage_fire(attack_data)
 			end
 
 			if alive(attacking_unit) then
-				local dst = mvector3.distance(attacking_unit:position(), self._unit:position())
+				local dst = mvec3_dis(attacking_unit:position(), self._unit:position())
 				local spott_dst = tweak_data.upgrades.values.player.marked_inc_dmg_distance[self._marked_dmg_dist_mul]
 
 				if spott_dst[1] < dst then
@@ -2484,7 +2495,7 @@ function CopDamage:damage_fire(attack_data)
 		local hit_loc = attack_data.col_ray.hit_position
 
 		if hit_loc and attacker_unit and attacker_unit.position then
-			distance = mvector3.distance(hit_loc, attacker_unit:position())
+			distance = mvec3_dis(hit_loc, attacker_unit:position())
 		end
 
 		local fire_dot_max_distance = 3000
@@ -2631,7 +2642,7 @@ function CopDamage:sync_damage_fire(attacker_unit, damage_percent, start_dot_dan
 	elseif attacker_unit then
 		attack_dir = self._unit:position() - attacker_unit:position()
 
-		mvector3.normalize(attack_dir)
+		mvec3_norm(attack_dir)
 	else
 		attack_dir = self._unit:rotation():y()
 	end
@@ -2685,7 +2696,7 @@ function CopDamage:sync_damage_fire(attacker_unit, damage_percent, start_dot_dan
 
 	attack_data.pos = self._unit:position()
 
-	mvector3.set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
+	mvec3_set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
 	self:_send_sync_fire_attack_result(attack_data)
 	self:_on_damage_received(attack_data)
 end
@@ -2745,7 +2756,7 @@ function CopDamage:damage_explosion(attack_data)
 			end
 
 			if alive(attacking_unit) then
-				local dst = mvector3.distance(attacking_unit:position(), self._unit:position())
+				local dst = mvec3_dis(attacking_unit:position(), self._unit:position())
 				local spott_dst = tweak_data.upgrades.values.player.marked_inc_dmg_distance[self._marked_dmg_dist_mul]
 
 				if spott_dst[1] < dst then
@@ -2985,7 +2996,7 @@ function CopDamage:sync_damage_explosion(attacker_unit, damage_percent, i_attack
 	elseif attacker_unit then
 		attack_dir = self._unit:position() - attacker_unit:position()
 
-		mvector3.normalize(attack_dir)
+		mvec3_norm(attack_dir)
 	else
 		attack_dir = self._unit:rotation():y()
 	end
@@ -3049,15 +3060,15 @@ function CopDamage:sync_damage_explosion(attacker_unit, damage_percent, i_attack
 	end
 
 	if variant ~= "stun" and not self._no_blood and damage > 0 then
-		local hit_pos = mvector3.copy(self._unit:movement():m_pos())
+		local hit_pos = mvec3_copy(self._unit:movement():m_pos())
 
-		mvector3.set_z(hit_pos, hit_pos.z + 100)
+		mvec3_set_z(hit_pos, hit_pos.z + 100)
 		managers.game_play_central:sync_play_impact_flesh(hit_pos, attack_dir)
 	end
 
 	attack_data.pos = self._unit:position()
 
-	mvector3.set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
+	mvec3_set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
 	self:_send_sync_explosion_attack_result(attack_data)
 	self:_on_damage_received(attack_data)
 end
@@ -3481,7 +3492,7 @@ function CopDamage:sync_damage_tase(attacker_unit, damage_percent, variant, deat
 	if attacker_unit then
 		attack_dir = self._unit:position() - attacker_unit:position()
 
-		mvector3.normalize(attack_dir)
+		mvec3_norm(attack_dir)
 	else
 		attack_dir = -self._unit:rotation():y()
 	end
@@ -3489,7 +3500,7 @@ function CopDamage:sync_damage_tase(attacker_unit, damage_percent, variant, deat
 	attack_data.attack_dir = attack_dir
 	attack_data.pos = self._unit:position()
 
-	mvector3.set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
+	mvec3_set_z(attack_data.pos, attack_data.pos.z + math.random() * 180)
 	self:_send_sync_tase_attack_result(attack_data)
 	self:_on_damage_received(attack_data)
 end
