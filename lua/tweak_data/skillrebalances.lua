@@ -29,8 +29,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		
 		self.skills.second_chances[2].upgrades = {"player_pick_lock_easy_speed_multiplier_2", "player_pick_lock_hard"}
 		
-		self.skills.juggernaut[2].upgrades = {"player_armor_multiplier_cooler"}
-		self.skills.juggernaut[1].upgrades = {"player_armor_multiplier", "body_armor6"}
+		self.skills.juggernaut[2].upgrades = {"player_health_increase"}
+		self.skills.juggernaut[1].upgrades = {"player_armor_multiplier_cooler", "body_armor6"}
 				
 		self.skills.overkill[2].upgrades = {"player_overkill_damage_multiplier"}
 		self.skills.overkill[1].upgrades = {"player_killshot_close_panic_chance"}	
@@ -76,7 +76,8 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			},
 			{
 				upgrades = {
-					"first_aid_kit_auto_recovery_1"
+					"first_aid_kit_auto_recovery_1",
+					"first_aid_kit_quantity_increase_2"
 				},
 				cost = self.costs.hightierpro
 			},
@@ -91,12 +92,13 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		self.skills.medic_2x = {
 			{
 				upgrades = {
-					"doctor_bag_amount_increase1"
+					"doctor_bag_quantity"
 				},
 				cost = self.costs.hightier
 			},
 			{
 				upgrades = {
+					"doctor_bag_amount_increase1",
 					"player_antilethal_meds"
 				},
 				cost = self.costs.hightierpro

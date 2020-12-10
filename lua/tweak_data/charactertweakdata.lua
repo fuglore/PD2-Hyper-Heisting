@@ -7857,6 +7857,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		"takedown",
 		"tank",
 		"special",
+		"frontliner",
 		"protected"
 	}
 	self.tank.experience = {}
@@ -8024,6 +8025,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 		"law",
 		"spooc",
 		"special",
+		"backliner",
 		"takedown"
 	}
 	self.spooc.experience = {}
@@ -8167,6 +8169,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 		"law",
 		"shield",
 		"special",
+		"frontliner",
 		"dense"
 	}
 	self.shield.experience = {}
@@ -8234,6 +8237,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.tags = {
 		"law",
 		"medic",
+		"backliner",
 		"special",
 		"dense"
 	}

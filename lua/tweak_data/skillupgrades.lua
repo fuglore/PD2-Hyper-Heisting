@@ -116,7 +116,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		self.values.shape_charge.quantity = {
 			1,
 			5
-		}		
+		}
 		self.values.temporary.overkill_damage_multiplier = {{1.50, 3}}
 		self.values.pistol.damage_addend = {0.5, 1}
 		--[[
@@ -147,6 +147,21 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		self.values.player.melee_knockdown_mul = {2}		
 		self.values.player.pick_lock_easy_speed_multiplier = {0.75, 0.5}	
 		self.values.player.armor_multiplier = {1.3, 1.5}
+		
+		self.values.player.health_increase = {
+			11.5
+		}
+		
+		self.definitions.player_health_increase = {
+			name_id = "menu_player_health_increase",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "health_increase",
+				category = "player"
+			}
+		}
+		
 		--temp resmod anarchist values--
 		self.values.player.armor_grinding = {
 			{

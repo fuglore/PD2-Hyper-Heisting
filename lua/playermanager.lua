@@ -18,6 +18,19 @@ function PlayerManager:_chk_fellow_crimin_proximity(unit)
 	return players_nearby
 end
 
+function PlayerManager:health_skill_addend()
+	local addend = 0
+	addend = addend + self:upgrade_value("team", "crew_add_health", 0)
+	
+	addend = addend + self:upgrade_value("player", "health_increase", 0) --Iron Man'ced, need to figure out a way to make this show up in menus
+
+	if table.contains(self._global.kit.equipment_slots, "thick_skin") then
+		addend = addend + self:upgrade_value("player", "thick_skin", 0)
+	end
+
+	return addend
+end
+
 function PlayerManager:skill_dodge_chance(running, crouching, on_zipline, override_armor, detection_risk)
 	local chance = self:upgrade_value("player", "passive_dodge_chance", 0)
 	local dodge_shot_gain = self:_dodge_shot_gain()

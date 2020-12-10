@@ -1,5 +1,5 @@
 Hooks:PostHook(PlayerTweakData, "init", "hhplayertweakbullshit", function(self, tweak_data)
-	self.damage.HEALTH_INIT = 46
+	self.damage.HEALTH_INIT = 34.5
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		self.put_on_mask_time = 1
 		self.movement_state.stamina.STAMINA_REGEN_RATE = 6

@@ -7,6 +7,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_textures", "bmtsyncshit", function(s
 			global_value = "hyperheist"
 		}
 end)
+
 Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", function(self, tweak_data)
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		--stoic hip flask change
