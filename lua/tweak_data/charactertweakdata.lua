@@ -7951,7 +7951,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_medic.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_medic.tags = {
 		"law",
-		"takedown",
+		"backliner",
 		"tank",
 		"medic",
 		"special",
@@ -7961,6 +7961,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_mini = deep_clone(self.tank)
 	self.tank_mini.tags = {
 		"law",
+		"frontliner",
 		"takedown",
 		"tank",
 		"special",

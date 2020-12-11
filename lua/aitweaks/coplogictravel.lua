@@ -1579,7 +1579,11 @@ function CopLogicTravel.get_protector(data, my_data)
 			elseif unit_damage._HEALTH_INIT > data.unit:character_damage()._HEALTH_INIT then
 				rank = 3
 			else
-				rank = 5
+				if my_data.cowardly then
+					rank = 4
+				else
+					rank = 5
+				end
 			end
 					
 			if rank then
@@ -1591,7 +1595,7 @@ function CopLogicTravel.get_protector(data, my_data)
 		end
 	end
 			
-	if best_protector then
+	if best_protector and best_protector_rank < 5 then
 		return best_protector
 	else
 		my_data.protector_find_fail_t = data.t + 5
