@@ -1277,3 +1277,20 @@ function GroupAIStateBase:_try_use_task_spawn_event(t, target_area, task_type, t
 	end
 end
 
+function GroupAIStateBase:is_area_safe_assault(area)
+	if next(self._player_criminals) then
+		for u_key, u_data in pairs(self._player_criminals) do
+			if area.nav_segs[u_data.tracker:nav_segment()] then
+				return
+			end
+		end
+	else
+		for u_key, u_data in pairs(self._criminals) do
+			if not u_data.is_deployable and area.nav_segs[u_data.tracker:nav_segment()] then
+				return
+			end
+		end
+	end
+
+	return true
+end

@@ -18,7 +18,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	local level = Global.level_data and Global.level_data.level_id
 		
-	local small_map = level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" or level == "dinner" or level == "mallcrasher"
+	local small_map = level == "sah" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" or level == "dinner" or level == "mallcrasher" or level == "four_stores"
 	self._small_map = small_map or nil
 	
 	self._spawn_group_timers = {}
@@ -791,7 +791,7 @@ end
 function GroupAIStateBesiege:chk_anticipation()
 	local assault_task = self._task_data.assault
 	
-	if not assault_task.active or assault_task and assault_task.phase == "anticipation" and assault_task.phase_end_t and assault_task.phase_end_t < self._t then
+	if assault_task and assault_task.phase == "anticipation" and assault_task.phase_end_t and assault_task.phase_end_t < self._t then
 		return true
 	end
 	
@@ -1544,7 +1544,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	local primary_target_area = nil
 	
 	if self._task_data.assault.target_areas then
-		self._current_target_area = self._task_data.assault.target_areas[math.random(#self._task_data.assault.target_areas)]
+		self._current_target_area = self._task_data.assault.target_areas[1]
 		primary_target_area = self._current_target_area
 	end
 
@@ -1552,7 +1552,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 		self._task_data.assault.target_areas = self:_upd_assault_areas()
 		
 		if self._task_data.assault.target_areas then
-			self._current_target_area = self._task_data.assault.target_areas[math.random(#self._task_data.assault.target_areas)]
+			self._current_target_area = self._task_data.assault.target_areas[1]
 			primary_target_area = self._current_target_area
 		end
 	end
@@ -2657,62 +2657,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	end
 
 	local objective_area = self._current_target_area
-
-	if obstructed_area then
-		if phase_is_anticipation then
+	
+	local obstructed_path_index = self:_chk_coarse_path_obstructed(group)
+	
+	if phase_is_anticipation or self._activeassaultbreak then
+		if obstructed_path_index or obstructed_area then
 			pull_back = true
-		else
-			push = true
-		end
-		
-		if tactics_map and tactics_map.flank then
-			flank = true
-		end
-	else
-		local obstructed_path_index = self:_chk_coarse_path_obstructed(group)
-
-		if phase_is_anticipation then
-			--print("obstructed_path_index", obstructed_path_index)
 			
 			if obstructed_path_index then
 				objective_area = self:get_area_from_nav_seg_id(group.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
-				if phase_is_anticipation then
-					pull_back = true
-				end
-			else
-				approach = true
 			end
-		elseif not current_objective.moving_in then
-			local has_criminals_close = nil
-			local criminals_in_my_area = nil
-			
-			for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
-				if next(neighbour_area.criminal.units) then
-					has_criminals_close = true
-
-					break
-				end
-			end
-			
-			if next(current_objective.area.criminal.units) then
-				criminals_in_my_area = true
-			end
-			
-			if self._activeassaultbreak or phase_is_anticipation and criminals_in_my_area then
-				pull_back = true
-			elseif not self._feddensityhigh and not self._activeassaultbreak and phase_is_anticipation and not has_criminals_close then
-				approach = true
-			elseif not phase_is_anticipation and not self._feddensityhigh and not self._activeassaultbreak then
-				--open_fire = true
-				push = true
-				--self:_voice_open_fire_start(group)
-			end
+		else
+			approach = true
 		end
-		
-		if tactics_map and tactics_map.flank then
-			flank = true
-		end
-		
+	else
+		push = true
+	end
+	
+	if tactics_map and tactics_map.flank then
+		flank = true
 	end
 
 	objective_area = objective_area or current_objective.area
@@ -2752,7 +2715,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			for _, area_location in ipairs(to_search_areas) do
 				local search_area = area_location
 				
-				if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) then
+				if next(search_area.criminal.units) then
 					local assault_from_here = true
 					
 					if search_area then
@@ -2901,7 +2864,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		repeat
 			for _, area_location in ipairs(to_search_areas) do
 				local search_area = area_location
-				if self:chk_area_leads_to_enemy(current_objective.area.pos_nav_seg, search_area.pos_nav_seg, true) then
+				if next(search_area.criminal.units) then
 					local assault_from_here = true
 					
 					if search_area then

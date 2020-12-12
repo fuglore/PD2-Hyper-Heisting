@@ -517,7 +517,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 		if use_optimal_pos_stuff and new_attention and new_reaction then
 			local path_fail_t_chk = 2
 			if not my_data.optimal_path_fail_t or data.t - my_data.optimal_path_fail_t > path_fail_t_chk then
-				if near_vis_or_verified and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.dis < 1000 and new_attention.nav_tracker and not my_data.walking_to_optimal_pos then
+				if near_vis_or_verified and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.dis < 2000 and new_attention.nav_tracker and not my_data.walking_to_optimal_pos then
 					if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 						my_data.optimal_pos = CopLogicAttack._find_flank_pos(data, my_data, new_attention.nav_tracker)
 					elseif data.tactics and data.tactics.flank then
