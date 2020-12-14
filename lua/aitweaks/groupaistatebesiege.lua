@@ -2665,14 +2665,14 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			pull_back = true
 			
 			if obstructed_path_index then
-				objective_area = self:get_area_from_nav_seg_id(group.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
+				objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
 			end
 		else
 			approach = true
 		end
 	else
 		if obstructed_path_index then
-			objective_area = self:get_area_from_nav_seg_id(group.coarse_path[math.max(obstructed_path_index, 1)][1]) --aka the area they're obstructed in so that they dont run past criminals
+			objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index, 1)][1]) --aka the area they're obstructed in so that they dont run past criminals
 		end
 		push = true
 	end
