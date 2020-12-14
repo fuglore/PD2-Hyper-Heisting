@@ -285,9 +285,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 				if old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
 					CopLogicAttack._cancel_charge(data, my_data)
 
-					if not data.unit:movement():chk_action_forbidden("walk") then
-						--ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
-					end
+					ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
 				end
 			end
 		end
@@ -312,7 +310,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 							my_data.optimal_path_fail_t = data.t
 						end
 					elseif data.tactics and data.tactics.charge then
-						local charge_pos = CopLogicTravel._get_pos_on_wall(new_attention.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil)
+						local charge_pos = CopLogicTravel._get_pos_on_wall(new_attention.nav_tracker:field_position(), 400, 45, nil)
 						
 						if charge_pos then
 							my_data.optimal_pos = charge_pos
@@ -635,7 +633,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 	
 	if data.important and data.attention_obj.dis < 1000 then
 		local path_fail_t_chk = 2
-		if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - t > path_fail_t_chk then
+		if not my_data.optimal_path_fail_t or t - my_data.optimal_path_fail_t > path_fail_t_chk then
 			if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 				if not action_taken then
 					if my_data.pathing_to_optimal_pos then
@@ -1041,7 +1039,7 @@ function CopLogicTravel.queued_update(data)
 		end
 	
 		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-			local ignore_walks = nil
+			local ignore_walks = my_data.optimal_path_fail_t and data.t - my_data.optimal_path_fail_t < 2
 			if not objective or objective.type == "defend_area" and objective.grp_objective and objective.grp_objective.type ~= "retire" or objective.type == "hunt" then
 				if data.unit:base():has_tag("takedown") then
 					ignore_walks = true

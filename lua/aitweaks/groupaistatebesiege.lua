@@ -2656,7 +2656,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	end
 
-	local objective_area = self._current_target_area
+	local objective_area = obstructed_area or self._current_target_area
 	
 	local obstructed_path_index = self:_chk_coarse_path_obstructed(group)
 	
@@ -2671,14 +2671,15 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			approach = true
 		end
 	else
+		if obstructed_path_index then
+			objective_area = self:get_area_from_nav_seg_id(group.coarse_path[math.max(obstructed_path_index, 1)][1]) --aka the area they're obstructed in so that they dont run past criminals
+		end
 		push = true
 	end
 	
 	if tactics_map and tactics_map.flank then
 		flank = true
 	end
-
-	objective_area = objective_area or current_objective.area
 
 	if open_fire then
 		local grp_objective = {
@@ -2688,7 +2689,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			stance = "hos",
 			open_fire = true,
 			tactic = current_objective.tactic,
-			area = obstructed_area or current_objective.area,
+			area = objective_area,
 			coarse_path = {
 				{
 					objective_area.pos_nav_seg,
@@ -2705,10 +2706,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		local assault_path_uno, assault_path_dos, assault_path_tres, assault_path_quatro = nil
 		local from_seg, to_seg, access_pos, verify_clbk = nil
 		local to_search_areas = {
-			self._current_target_area
+			objective_area
 		}
 		local found_areas = {
-			[self._current_target_area] = "init"
+			[objective_area] = "init"
 		}
 
 		repeat
@@ -2855,10 +2856,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		local assault_path_uno, assault_path_dos, assault_path_tres, assault_path_quatro = nil
 		local from_seg, to_seg, access_pos, verify_clbk = nil
 		local to_search_areas = {
-			self._current_target_area
+			objective_area
 		}
 		local found_areas = {
-			[self._current_target_area] = "init"
+			[objective_area] = "init"
 		}
 
 		repeat

@@ -206,19 +206,6 @@ function CopLogicAttack.update(data)
 
 		return
 	end
-	
-	if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
-		SpoocLogicAttack._upd_spooc_attack(data, my_data)
-	end
-
-	if my_data.spooc_attack then
-		if not my_data.update_queue_id then
-			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
-			CopLogicAttack.queue_update(data, my_data)
-		end
-
-		return
-	end
 
 	if CopLogicIdle._chk_relocate(data) then
 		return
@@ -237,6 +224,19 @@ function CopLogicAttack.update(data)
 		if my_data ~= data.internal_data or not data.attention_obj then
 			return
 		end
+	end
+	
+	if data.unit:base():has_tag("spooc") or data.unit:base()._tweak_table == "shadow_spooc" then
+		SpoocLogicAttack._upd_spooc_attack(data, my_data)
+	end
+
+	if my_data.spooc_attack then
+		if not my_data.update_queue_id then
+			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
+			CopLogicAttack.queue_update(data, my_data)
+		end
+
+		return
 	end
 
 	if REACT_COMBAT <= data.attention_obj.reaction and not my_data.spooc_attack and not my_data.tasing then
@@ -297,7 +297,7 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 
-	if data.important and focus_enemy.verified and not my_data.turning and CopLogicAttack._can_move(data) and not unit:movement():chk_action_forbidden("walk") then
+	if focus_enemy.verified and not my_data.turning and CopLogicAttack._can_move(data) and not unit:movement():chk_action_forbidden("walk") then
 		if not my_data.in_cover or not my_data.in_cover[4] then
 			if data.is_suppressed and data.t - unit:character_damage():last_suppression_t() < 0.7 then
 				action_taken = CopLogicBase.chk_start_action_dodge(data, "scared")
@@ -334,7 +334,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	action_taken = action_taken or data.logic.action_taken(data, my_data) or CopLogicAttack._upd_pose(data, my_data)
 
 	local enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < 2
-	local enemy_visible_softer = focus_enemy.verified_t and t - focus_enemy.verified_t < 15
+	local enemy_visible_softer = focus_enemy.verified_t and t - focus_enemy.verified_t < 5
 	local want_to_take_cover = my_data.want_to_take_cover
 
 	local move_to_cover, want_flank_cover = nil
@@ -439,7 +439,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			end
 		end
 	else
-		if data.unit:base():has_tag("takedown") or Global.game_settings.one_down then
+		if data.unit:base():has_tag("takedown") then
 			if my_data.pathing_to_optimal_pos then
 				-- Nothing
 			elseif my_data.walking_to_optimal_pos then
@@ -491,7 +491,7 @@ function CopLogicAttack._upd_combat_movement(data)
 		elseif not enemy_visible_soft then
 			if data.tactics then
 				if data.tactics.charge or data.tactics.flank then
-					if not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 6 then
+					if not my_data.charge_path_failed_t or data.t - my_data.charge_path_failed_t > 1 then
 						if my_data.charge_path then
 							local path = my_data.charge_path
 							my_data.charge_path = nil
@@ -1366,7 +1366,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	end
 	
 	local path_fail_t_chk = 0.5
-	if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
+	if not my_data.optimal_path_fail_t or data.t - my_data.optimal_path_fail_t > path_fail_t_chk then
 		if data.important and alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 			local focus_enemy, focus_enemy_angle, focus_enemy_reaction = nil
 			local enemies = {}
@@ -1597,10 +1597,13 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 		if my_data ~= data.internal_data then
 			return
 		end
-
+		
+		local near_vis_or_verified = nil
+		
 		if new_attention then
 			if my_data.att_cover_charge_chk or old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
-				if new_attention.verified then
+				if new_attention.nearly_visible or new_attention.verified then
+					near_vis_or_verified = true
 					my_data.att_cover_charge_chk = nil
 
 					CopLogicAttack._cancel_charge(data, my_data)
@@ -1623,9 +1626,9 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 		end
 			
 		if new_attention and new_reaction then
-			local path_fail_t_chk = data.important and 0.5 or 2
-			if not my_data.optimal_path_fail_t or my_data.optimal_path_fail_t - data.t > path_fail_t_chk then
-				if data.important and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.nav_tracker and not my_data.walking_to_optimal_pos then
+			local path_fail_t_chk = 1
+			if not my_data.optimal_path_fail_t or data.t - my_data.optimal_path_fail_t > path_fail_t_chk then
+				if near_vis_or_verified and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.dis < 2000 and new_attention.nav_tracker and not my_data.walking_to_optimal_pos and not my_data.pathing_to_optimal_pos then
 					if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
 						my_data.optimal_pos = CopLogicAttack._find_flank_pos(data, my_data, new_attention.nav_tracker)
 					elseif data.is_suppressed and new_attention.verified then
@@ -1648,30 +1651,37 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 							my_data.cover_test_step = 1
 						end
 							
-						if new_attention.last_verified_pos then
-							threat_pos = new_attention.last_verified_pos
-						elseif new_attention.is_person then
-							threat_pos = new_attention.m_head_pos
-						else
-							threat_pos = new_attention.m_pos
-						end
 							
-						local my_tracker = data.unit:movement():nav_tracker()
-						local shoot_from_pos = CopLogicTravel._peek_for_pos_sideways(data, my_data, my_tracker, threat_pos, nil)
-							
-						if shoot_from_pos then
-							my_data.optimal_pos = shoot_from_pos
-							--log("beeftime")
-							--if my_data.optimal_pos then
-							--	local draw_duration = 2
-							--	local line2 = Draw:brush(Color.red:with_alpha(0.5), draw_duration)
-							--	line2:cylinder(data.m_pos, my_data.optimal_pos, 2)
-							--end
+						if my_data.cover_test_step <= 2 then	
+							if new_attention.last_verified_pos then
+								threat_pos = new_attention.last_verified_pos
+							elseif new_attention.is_person then
+								threat_pos = new_attention.m_head_pos
+							else
+								threat_pos = new_attention.m_pos
+							end
+								
+							local my_tracker = data.unit:movement():nav_tracker()
+							local shoot_from_pos = CopLogicTravel._peek_for_pos_sideways(data, my_data, my_tracker, threat_pos, nil)
+								
+							if shoot_from_pos then
+								my_data.optimal_pos = shoot_from_pos
+								--log("beeftime")
+								--if my_data.optimal_pos then
+								--	local draw_duration = 2
+								--	local line2 = Draw:brush(Color.red:with_alpha(0.5), draw_duration)
+								--	line2:cylinder(data.m_pos, my_data.optimal_pos, 2)
+								--end
+							elseif not data.unit:movement():chk_action_forbidden("walk") then
+								ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
+								my_data.cover_test_step = my_data.cover_test_step + 1
+								my_data.optimal_path_fail_t = data.t
+							end
 						elseif not data.unit:movement():chk_action_forbidden("walk") then
 							ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
 							my_data.cover_test_step = my_data.cover_test_step + 1
 							my_data.optimal_path_fail_t = data.t
-						end
+						end			
 					elseif data.tactics and data.tactics.flank then
 						local flank_pos = CopLogicAttack._find_flank_pos(data, my_data, new_attention.nav_tracker)
 						
@@ -1686,7 +1696,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 							my_data.optimal_path_fail_t = data.t
 						end
 					elseif data.tactics and data.tactics.charge then
-						local charge_pos = CopLogicTravel._get_pos_on_wall(new_attention.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil)
+						local charge_pos = CopLogicTravel._get_pos_on_wall(new_attention.nav_tracker:field_position(), 400, 45, nil)
 						
 						if charge_pos then
 							my_data.optimal_pos = charge_pos
