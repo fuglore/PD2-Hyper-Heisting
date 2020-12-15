@@ -1248,6 +1248,7 @@ function EnemyManager:get_nearby_medic(unit)
 	local t = Application:time()
 	local cooldown = tweak_data.medic.cooldown
 	cooldown = managers.modifiers:modify_value("MedicDamage:CooldownTime", cooldown)
+	local no_cooldown = cooldown <= 0
 
 	local my_head_pos = unit:movement():m_head_pos()
 	local obstruction_mask = managers.slot:get_mask("world_geometry", "vehicles")
@@ -1262,8 +1263,10 @@ function EnemyManager:get_nearby_medic(unit)
 		if enemy:base():has_tag("medic") then
 			local cooldown_t = enemy:character_damage()._heal_cooldown_t
 
-			if cooldown_t and t > cooldown_t + cooldown then
-				local obstructed = not unit:raycast("ray", unit:movement():m_head_pos(), enemy:movement():m_head_pos(), "sphere_cast_radius", 5, "slot_mask", obstruction_mask, "report")
+			if no_cooldown or cooldown_t and t > cooldown_t + cooldown then
+				local obstructed = unit:raycast("ray", unit:movement():m_head_pos(), enemy:movement():m_head_pos(), "sphere_cast_radius", 5, "slot_mask", obstruction_mask, "report") --whoops. no wonder medics were basically useless the past few times ive played...and now they wont be. so i want to hear people complain. i really want to hear it.
+				
+				--SCREAM AND BEG FOR MERCY.
 
 				if not obstructed then
 					return enemy

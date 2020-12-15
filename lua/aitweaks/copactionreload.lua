@@ -247,7 +247,7 @@ function CopActionReload:execute_magnet_storm(t)
 			if pl_movement:is_taser_attack_allowed() then
 				local player_movement_chk = not pl_movement:tased() and pl_movement:current_state_name() == "standard" or pl_movement:current_state_name() == "carry" or pl_movement:current_state_name() == "bipod"
 
-				if player_movement_chk and not self._unit:raycast("ray", self._ext_movement:m_com(), pl_movement:m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 10, "report") then
+				if player_movement_chk and not self._unit:raycast("ray", self._ext_movement:m_com(), pl_movement:m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles"), "sphere_cast_radius", 10, "report") then
 					if pl_movement:current_state_name() == "bipod" then
 						pl_movement._current_state:exit(nil, "tased")
 					end

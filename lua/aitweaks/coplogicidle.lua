@@ -611,9 +611,9 @@ function CopLogicIdle._chk_relocate(data)
 			if next(my_area.criminal.units) then
 				data.objective.in_place = true
 				data.objective.area = my_area
-				data.objective.nav_seg = nil
+				data.objective.nav_seg = next(my_area.nav_segs)
 					
-				return true
+				return
 			elseif area and not next(area.criminal.units) then
 				
 				if current_assault_target_area and area ~= current_assault_target_area and next(current_assault_target_area.criminal.units) then -- this code is so awful i am fully convinced it is self-aware

@@ -260,6 +260,27 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			}
 		}
 		
+		self.skills.nine_lives = {
+			{
+				upgrades = {
+					"player_comeback"
+				},
+				cost = self.costs.hightier
+			},
+			{
+				upgrades = {
+					"player_phoenix_down",
+				},
+				cost = self.costs.hightierpro
+			},
+			name_id = "menu_nine_lives_beta",
+			desc_id = "menu_nine_lives_beta_desc",
+			icon_xy = {
+				5,
+				2
+			}
+		}
+		
 		self.skills.messiah = {
 			{
 				upgrades = {
@@ -269,7 +290,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			},
 			{
 				upgrades = {
-					"player_phoenix_down"
+					"player_additional_lives_1"
 				},
 				cost = self.costs.hightierpro
 			},
