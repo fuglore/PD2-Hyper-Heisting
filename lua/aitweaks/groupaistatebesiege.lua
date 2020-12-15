@@ -2656,7 +2656,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	end
 
-	local objective_area = obstructed_area or self._current_target_area
+	local objective_area = nil
 	
 	local obstructed_path_index = self:_chk_coarse_path_obstructed(group)
 	
@@ -2664,18 +2664,26 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if obstructed_path_index or obstructed_area then
 			pull_back = true
 			
-			if obstructed_path_index then
-				objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
+			if obstructed_path_index then 
+				objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - 2, 1)][1]) --hard pull back
 			end
 		else
 			approach = true
 		end
 	else
 		if obstructed_path_index then
-			objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index, 1)][1]) --aka the area they're obstructed in so that they dont run past criminals
+			objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index, - 1)][1])
+			--log("penis")
+			open_fire = true
+		elseif obstructed_area then
+			objective_area = obstructed_area
+			open_fire = true
+		else
+			push = true
 		end
-		push = true
 	end
+	
+	local objective_area = objective_area or current_objective.area or self._current_assault_area
 	
 	if tactics_map and tactics_map.flank then
 		flank = true
@@ -2693,7 +2701,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			coarse_path = {
 				{
 					objective_area.pos_nav_seg,
-					mvec3_cpy(current_objective.area.pos)
+					mvec3_cpy(objective_area.pos)
 				}
 			}
 		}
@@ -3013,7 +3021,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
 
 			if forwardmost_i_nav_point and type(current_objective.coarse_path) ~= "table" then
-				local nearest_safe_nav_seg_id = current_objective.coarse_path[forwardmost_i_nav_point - 1]
+				local nearest_safe_nav_seg_id = current_objective.coarse_path[forwardmost_i_nav_point - 2]
 				retreat_area = self:get_area_from_nav_seg_id(nearest_safe_nav_seg_id)
 			end
 		end
