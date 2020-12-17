@@ -50,7 +50,7 @@ function CopBase:_chk_spawn_gear()
 
 			self._unit:link(align_obj_name, self._headwear_unit, self._headwear_unit:orientation_object():name())
 		end
-	elseif HOLIDAY_SPIRIT then
+	elseif tweak and tweak.is_christmas_heist then
 		if self._tweak_table == "spooc" or self._tweak_table == "spooc_heavy" then
 			self._headwear_unit = safe_spawn_unit("units/payday2/characters/ene_acc_spook_santa_hat/ene_acc_spook_santa_hat", Vector3(), Rotation())
 		elseif self._tweak_table == "akuma" then

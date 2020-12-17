@@ -6945,7 +6945,7 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 4,
-				r = 800,
+				r = 100,
 				acc = {
 					1,
 					1
@@ -6970,13 +6970,13 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				recoil = {
 					0.3,
-					0.3
+					0.9
 				},
 				mode = {
 					0,
-					0.25,
-					0.5,
-					0.25
+					0,
+					0,
+					1
 				}
 			},
 			{
@@ -6991,10 +6991,10 @@ function CharacterTweakData:_presets(tweak_data)
 					0.8
 				},
 				mode = {
-					0.25,
-					0.25,
+					0,
+					0,
 					0.5,
-					0
+					0.5
 				}
 			},
 			{
