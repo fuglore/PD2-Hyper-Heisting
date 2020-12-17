@@ -1147,6 +1147,68 @@ function TeamAILogicIdle._upd_sneak_spotting(data, my_data)
 	end
 end
 
+function TeamAILogicIdle._check_guard(data, my_data) --copy and paste an entire function just to swap the order of some things around :)
+	local follow_unit = objective.guard_unit
+	local my_nav_seg_id = data.unit:movement():nav_tracker():nav_segment()
+	local my_areas = managers.groupai:state():get_areas_from_nav_seg_id(my_nav_seg_id)
+	local follow_unit_nav_seg_id = follow_unit:movement():nav_tracker():nav_segment()
+	
+	local max_allowed_dis_xy = 500 * 500
+	local max_allowed_dis_z = 200
+
+	local too_far = nil
+
+	if math.abs(data.m_pos.z - follow_unit:movement():m_pos().z) > max_allowed_dis_z then
+		too_far = true
+		--log("no")
+	else	
+		local dis = mvec3_dis_sq(data.m_pos, follow_unit:movement():m_pos())
+
+		if max_allowed_dis_xy < dis then
+			--log("yes")
+			too_far = true
+		end
+	end
+
+	if too_far then
+		return true
+	end
+	
+	if data.unit:raycast("ray", data.unit:movement():m_head_pos(), follow_unit:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", follow_unit, "report") then
+		--log("no los")
+		return true
+	end	
+	
+	if my_nav_seg_id == follow_unit_nav_seg_id then
+		--log("they're in my area")
+		return
+	end
+
+	local is_my_area_dangerous, is_follow_unit_area_dangerous = nil
+
+	for _, area in ipairs(my_areas) do
+		if next(area.police.units) then
+			is_my_area_dangerous = true
+
+			break
+		end
+	end
+
+	local follow_unit_areas = managers.groupai:state():get_areas_from_nav_seg_id(follow_unit_nav_seg_id)
+
+	for _, area in ipairs(follow_unit_areas) do
+		if next(area.police.units) then
+			is_follow_unit_area_dangerous = true
+
+			break
+		end
+	end
+	
+	if not is_my_area_dangerous and is_follow_unit_area_dangerous then
+		return true
+	end
+end
+
 function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 	local follow_unit = objective.follow_unit
 	local my_nav_seg_id = data.unit:movement():nav_tracker():nav_segment()
@@ -1187,7 +1249,7 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 	local is_my_area_dangerous, is_follow_unit_area_dangerous = nil
 
 	for _, area in ipairs(my_areas) do
-		if area.nav_segs[follow_unit_nav_seg_id] then
+		if next(area.police.units) then
 			is_my_area_dangerous = true
 
 			break

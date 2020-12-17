@@ -2674,10 +2674,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if obstructed_path_index then
 			objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index, - 1)][1])
 			--log("penis")
-			open_fire = true
+			push = true --did you know i hate living
 		elseif obstructed_area then
 			objective_area = obstructed_area
-			open_fire = true
+			push = true
 		else
 			push = true
 		end
@@ -3005,7 +3005,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				pose = push and math.random() < 0.5 and "crouch" or "stand",
 				attitude = push and "engage" or "avoid",
 				moving_in = push and true or nil,
-				open_fire = push or nil,
+				--open_fire = push or nil,
 				pushed = push or nil,
 				charge = charge,
 				interrupt_dis = 200

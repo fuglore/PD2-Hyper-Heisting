@@ -84,6 +84,17 @@ function HuskCopBrain:post_init()
 	self._detected_player_att_data = {}
 end
 
+HuskCopBrain._NET_EVENTS.surrender_destroy_all_items = 3
+----
+local sync_net_event_original = HuskCopBrain.sync_net_event
+function HuskCopBrain:sync_net_event(event_id, peer)
+	if event_id ~= self._NET_EVENTS.surrender_destroy_all_items then
+		sync_net_event_original(self, event_id, peer)
+	end
+
+	self._unit:inventory():destroy_all_items()
+end
+
 function HuskCopBrain:enable_weapon_laser()
 	if self._add_laser_t or self._weapon_laser_on then
 		return

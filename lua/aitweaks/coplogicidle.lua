@@ -603,19 +603,11 @@ function CopLogicIdle._chk_relocate(data)
 		local recon_group = data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area"
 		
 		local current_assault_target_area = managers.groupai:state()._task_data.assault.target_areas and managers.groupai:state()._task_data.assault.target_areas[math.random(#managers.groupai:state()._task_data.assault.target_areas)] or nil
-		if data.objective.grp_objective and data.objective.grp_objective.open_fire then
-			return
-		elseif managers.groupai:state():chk_assault_active_atm() and not recon_group and not data.objective.running or Global.game_settings.one_down then
+		
+		if managers.groupai:state():chk_assault_active_atm() and not recon_group and not data.objective.running or Global.game_settings.one_down then
 			local area = data.objective.area
 			
-			if next(my_area.criminal.units) then
-				data.objective.in_place = true
-				data.objective.area = my_area
-				data.objective.nav_seg = next(my_area.nav_segs)
-					
-				return
-			elseif area and not next(area.criminal.units) then
-				
+			if area and not next(area.criminal.units) then
 				if current_assault_target_area and area ~= current_assault_target_area and next(current_assault_target_area.criminal.units) then -- this code is so awful i am fully convinced it is self-aware
 					--log("pog")
 					data.objective.in_place = nil

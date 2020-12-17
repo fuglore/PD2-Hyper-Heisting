@@ -269,8 +269,8 @@ function CopLogicTravel._upd_enemy_detection(data)
 		reaction_func = SpoocLogicAttack.chk_reaction_to_attention_object
 	end
 	
-	local use_optimal_pos_stuff = data.important and not data.unit:base():has_tag("takedown")
-
+	local use_optimal_pos_stuff = not my_data.protector and data.important and not data.unit:base():has_tag("takedown")
+	
 	if get_new_target then
 		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, detected_enemies, reaction_func)
 		local old_att_obj = data.attention_obj
@@ -284,8 +284,10 @@ function CopLogicTravel._upd_enemy_detection(data)
 				near_vis_or_verified = true
 				if old_att_obj and old_att_obj.u_key ~= new_attention.u_key then
 					CopLogicAttack._cancel_charge(data, my_data)
-
-					ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
+					
+					if not my_data.protector then
+						ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
+					end
 				end
 			end
 		end
@@ -331,7 +333,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 	
 	local chosen_attention = focus_enemy or new_attention or nil
 	
-	if my_data.optimal_pos and chosen_attention then
+	if not my_data.optimal_pos and my_data.optimal_pos and chosen_attention then
 		mvec3_set_z(my_data.optimal_pos, chosen_attention.m_pos.z)
 	end
 	
@@ -631,7 +633,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 		return true
 	end
 	
-	if data.important and data.attention_obj.dis < 1000 then
+	if not ignore_walks and not my_data.protector and data.important and data.attention_obj.dis < 1000 then
 		local path_fail_t_chk = 2
 		if not my_data.optimal_path_fail_t or t - my_data.optimal_path_fail_t > path_fail_t_chk then
 			if alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then
@@ -716,26 +718,19 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 				end
 			else
 				if data.unit:base():has_tag("takedown") then
-					if my_data.pathing_to_optimal_pos then
-						-- Nothing
-					elseif my_data.walking_to_optimal_pos then
+					if my_data.pathing_to_optimal_pos or my_data.walking_to_optimal_pos then
 						-- nothing
 					elseif my_data.optimal_path then
-						action_taken = CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
-						do_something_else = nil
+						CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
 					elseif focus_enemy.unit then
 						my_data.pathing_to_optimal_pos = true
-						my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
-						
-						local pos_to = nil
-						local focus_enemy_tracker = data.attention_obj.nav_tracker
-						
-						if focus_enemy_tracker and focus_enemy_tracker:lost() then
-							pos_to = focus_enemy_tracker:field_position()
-						else
-							pos_to = focus_enemy_tracker:position()
-						end
-						
+						my_data.optimal_path_search_id = tostring(data.key) .. "optimal"
+										
+						local focus_enemy_tracker = focus_enemy.nav_tracker		
+						local pos_to = focus_enemy_tracker:field_position()
+											
+						pos_to = CopLogicTravel._get_pos_on_wall(pos_to, 120)
+										
 						data.brain:search_for_path(my_data.optimal_path_search_id, pos_to)
 					end
 				elseif data.tactics then
@@ -751,7 +746,7 @@ function CopLogicTravel._upd_combat_movement(data, ignore_walks)
 					elseif my_data.optimal_pos and focus_enemy.nav_tracker then
 						local to_pos = my_data.optimal_pos
 						my_data.pathing_to_optimal_pos = true
-						my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
+						my_data.optimal_path_search_id = tostring(data.key) .. "optimal"
 						data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
 					end
 				end
@@ -1021,7 +1016,6 @@ function CopLogicTravel.queued_update(data)
 	local should_update_combat_movement = my_data.just_reset_info or nil
 	
 	if data.unit:base():has_tag("law") and my_data.has_advanced_once then
-		
 		if data.group and data.group.size > 1 then
 			if not my_data.protector or not alive(my_data.protector) or my_data.protector:character_damage().dead then
 				my_data.protector = nil --refresh this fucker
@@ -1037,13 +1031,58 @@ function CopLogicTravel.queued_update(data)
 		elseif my_data.protector then
 			my_data.protector = nil
 		end
-	
-		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-			local ignore_walks = my_data.optimal_path_fail_t and data.t - my_data.optimal_path_fail_t < 2
-			if not objective or objective.type == "defend_area" and objective.grp_objective and objective.grp_objective.type ~= "retire" or objective.type == "hunt" then
+		
+		local ignore_walks = my_data.optimal_path_fail_t and data.t - my_data.optimal_path_fail_t < 2
+		if not objective or objective.type == "defend_area" and objective.grp_objective and objective.grp_objective.type ~= "retire" or objective.type == "hunt" then
+			if not data.objective.pos then
+				if my_data.protector then
+					--ignore_walks = true
+					if my_data.pathing_to_optimal_pos then
+						CopLogicTravel._upd_pathing(data, my_data)
+					elseif my_data.optimal_path then
+						CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
+					elseif my_data.walking_to_optimal_pos then
+						
+					elseif not my_data.optimal_pos then
+						local follow_unit = my_data.protector
+						local follow_tracker = follow_unit:movement():nav_tracker()
+						local field_pos = follow_tracker:field_position()
+						local advance_pos = follow_unit:brain() and follow_unit:brain():is_advancing()
+						local follow_unit_pos = advance_pos or field_pos
+						local pos = Vector3()
+											
+						if not alive(data.unit:inventory() and data.unit:inventory()._shield_unit) then --this is probably better than sex.
+							mvec3_set(pos, follow_unit:movement()._m_rot:y())
+							mvec3_mul(pos, math_lerp(-60, -120, math_random()))
+							mvec3_add(pos, follow_unit_pos)
+						else
+							mvec3_set(pos, follow_unit:movement()._m_rot:x())
+							local dir = math_random() < 0.5 and -120 or 120
+							mvec3_mul(pos, dir)
+							mvec3_add(pos, follow_unit_pos)
+						end
+									
+						my_data.optimal_pos = CopLogicTravel._get_pos_on_wall(pos, 60, 180, nil)
+					else
+						my_data.pathing_to_optimal_pos = true
+						my_data.optimal_path_search_id = tostring(data.key) .. "optimal"
+						
+						data.brain:search_for_path(my_data.optimal_path_search_id, my_data.optimal_pos)
+					end
+				
+					if focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and focus_enemy.nav_tracker then
+						should_update_combat_movement = nil
+						CopLogicTravel._upd_combat_movement(data, ignore_walks)
+					
+						if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
+							CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
+						end
+					end
+				end	
+			elseif focus_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction and focus_enemy.nav_tracker then
 				if data.unit:base():has_tag("takedown") then
 					ignore_walks = true
-					if data.attention_obj.dis < 1000 then
+					if focus_enemy.dis < 1000 then
 						if my_data.pathing_to_optimal_pos then
 							-- Nothing
 						elseif my_data.walking_to_optimal_pos then
@@ -1052,29 +1091,25 @@ function CopLogicTravel.queued_update(data)
 							CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
 						elseif focus_enemy.unit then
 							my_data.pathing_to_optimal_pos = true
-							my_data.optimal_path_search_id = tostring(data.unit:key()) .. "optimal"
+							my_data.optimal_path_search_id = tostring(data.key) .. "optimal"
 										
-							local pos_to = nil
-							local focus_enemy_tracker = data.attention_obj.nav_tracker
-										
-							if focus_enemy_tracker and focus_enemy_tracker:lost() then
-								pos_to = focus_enemy_tracker:field_position()
-							else
-								pos_to = focus_enemy_tracker:position()
-							end
-										
+							local focus_enemy_tracker = focus_enemy.nav_tracker		
+							local pos_to = focus_enemy_tracker:field_position()
+												
+							pos_to = CopLogicTravel._get_pos_on_wall(pos_to, 120)
+											
 							data.brain:search_for_path(my_data.optimal_path_search_id, pos_to)
 						end
 					end
 				end
-			end
-			
-
-			should_update_combat_movement = nil
-			CopLogicTravel._upd_combat_movement(data, ignore_walks)
 				
-			if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
-				CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
+
+				should_update_combat_movement = nil
+				CopLogicTravel._upd_combat_movement(data, ignore_walks)
+					
+				if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
+					CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
+				end
 			end
 		end
 	end
@@ -1089,14 +1124,16 @@ function CopLogicTravel.queued_update(data)
     end
 	
 	--Snipers should stop if they have an aggressive reaction to a visible object or player
-	if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
-		if not managers.groupai:state():chk_heat_bonus_retreat() then
-			if not data.tactics or not data.tactics.sniper or data.tactics.sniper and not data.attention_obj.verified or data.tactics.sniper and data.attention_obj.dis > 4000 then
-				CopLogicTravel.upd_advance(data)
+	if not my_data.protector or data.objective.pos then
+		if data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction then
+			if not managers.groupai:state():chk_heat_bonus_retreat() then
+				if not data.tactics or not data.tactics.sniper or data.tactics.sniper and not data.attention_obj.verified or data.tactics.sniper and data.attention_obj.dis > 4000 then
+					CopLogicTravel.upd_advance(data)
+				end
 			end
+		else
+			CopLogicTravel.upd_advance(data)
 		end
-	else
-		CopLogicTravel.upd_advance(data)
 	end
 	
 	if data.internal_data ~= my_data then
@@ -1510,7 +1547,7 @@ function CopLogicTravel._chk_request_action_walk_to_cover(data, my_data)
 end
 
 function CopLogicTravel.queue_update(data, my_data, delay)
-	delay = data.important and 0 or delay or 0.2
+	delay = data.important and 0 or delay or 0
 
 	CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicTravel.queued_update, data, data.t + delay, data.important and true)
 end
@@ -1730,28 +1767,34 @@ function CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data, e
 		local haste = nil
 		local pose = nil
 		
-		--enemies at long distances makes cops run, enemies at shorter distances makes cops walk, keeps pacing in small maps consistent and manageable, while making the cops seem cooler
-		local pose_chk = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
-		local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
-		local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
-		local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
-		local height_difference_penalty = math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0
-		--local testing = true
 		
-		local enemy_visible15m_or_10m_chk = data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj.dis <= 1000
 		
 		if data.unit:movement():cool() then
 			haste = "walk"
-		elseif Global.game_settings.one_down then
-			haste = "run"
-		elseif data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.attention_obj and data.attention_obj.dis > 10000 then 
-			haste = "run"
-		elseif data.is_suppressed and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and enemy_visible15m_or_10m_chk then
-			haste = "walk"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 800 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
-			haste = "run"
-		elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 800 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun then
-			haste = "walk"
+		elseif data.attention_obj then
+			--enemies at long distances makes cops run, enemies at shorter distances makes cops walk, keeps pacing in small maps consistent and manageable, while making the cops seem cooler
+			local pose_chk = not data.char_tweak.allowed_poses or data.char_tweak.allowed_poses.crouch
+			local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
+			local enemy_seen_range_bonus = enemyseeninlast4secs and 500 or 0
+			local enemy_has_height_difference = data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis >= 1200 and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4 and math.abs(data.m_pos.z - data.attention_obj.m_pos.z) > 250
+			local height_difference_penalty = math.abs(data.m_pos.z - data.attention_obj.m_pos.z) < 250 and 400 or 0
+			--local testing = true
+			
+			local enemy_visible15m_or_10m_chk = data.attention_obj.verified and data.attention_obj.dis <= 1500 or data.attention_obj.dis <= 1000
+			
+			if Global.game_settings.one_down then
+				haste = "run"
+			elseif data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.attention_obj and data.attention_obj.dis > 10000 then 
+				haste = "run"
+			elseif data.is_suppressed and data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and enemy_visible15m_or_10m_chk then
+				haste = "walk"
+			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis > 800 + enemy_seen_range_bonus and not data.unit:movement():cool() and not managers.groupai:state():whisper_mode() then
+				haste = "run"
+			elseif data.attention_obj and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis <= 800 + enemy_seen_range_bonus - height_difference_penalty and is_mook and data.tactics and not data.tactics.hitnrun then
+				haste = "walk"
+			else
+				haste = "run"
+			end
 		else
 			haste = "run"
 		end

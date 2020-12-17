@@ -1138,7 +1138,7 @@ function GroupAIStateBase:_determine_objective_for_criminal_AI(unit)
 	if not objective and self:is_ai_trade_possible() then
 		local guard_time = managers.trade:get_guard_hostage_time()
 
-		if guard_time >= 6 then
+		if guard_time >= 3 then
 			local hostage = managers.trade:get_best_hostage(ai_pos)
 			skip_hostage_trade_time_reset = hostage
 
@@ -1155,6 +1155,7 @@ function GroupAIStateBase:_determine_objective_for_criminal_AI(unit)
 						scan = true,
 						type = "free",
 						stance = "hos",
+						guard_unit = hostage.unit,
 						nav_seg = hostage.tracker:nav_segment()
 					}
 				end

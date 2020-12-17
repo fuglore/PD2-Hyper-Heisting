@@ -534,8 +534,33 @@
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_df" />	
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_il" load="true"/>	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_il" load="true"/>
+
+	<!-- ZEAL DOZER EVIL SATAN UWU HATS -->
+
+	<unit path="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa"/>
+	<object path="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa" />
+	<model path="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa" />
+	<texture path="units/pd2_mod_winters/ene_acc_zeal_green_santa/santa_hat_df" />	
 	
+	<unit path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa"/>
+	<object path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa" />
+	<model path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa" />
+	<texture path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/santa_hat_df" />	
+	
+	<unit path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa"/>
+	<object path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa" />
+	<model path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa" />
+	<texture path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/santa_hat_df" />	
+	
+	<unit path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa"/>
+	<object path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa" />
+	<model path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa" />
+	<texture path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/santa_hat_df" />	
 	
 	<!--FUCKING SCI-FI ROBOT GUNS-->	
 	<unit path="units/pd2_dlc_gitgud/weapons/wpn_npc_s553/wpn_npc_s553" load="true"/>
@@ -762,6 +787,8 @@
 	<texture path="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotusbody" load="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotuseye" load="true"/>
 	
+	
+	
 	<unit path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" load="true"/>
 	<unit path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master_husk" load="true"/>	
 	<material_config path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master"/>
@@ -769,6 +796,12 @@
 	<object path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" />
 	<model path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master"/>
+	
+	<unit path="units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal"/>
+	<object path="units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal" />
+	<model path="units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal" />
+	<texture path="units/pd2_mod_winters/ene_acc_lotus_master_petal/petals" />	
 	
 	<unit path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor" load="true"/>
 	<material_config path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>	

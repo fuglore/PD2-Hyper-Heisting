@@ -2,6 +2,11 @@ function CopSound:init(unit)
 	self._unit = unit
 	self._chatter = {}
 	self._speak_expire_t = 0
+	
+	if self._unit:base():char_tweak().spawn_sound_event then
+		self._unit:sound():play(self._unit:base():char_tweak().spawn_sound_event, nil, nil)
+	end
+	
 	unit:base():post_init()
 	self._prefix = self:get_appropriate_unit_sound_prefix()
 end

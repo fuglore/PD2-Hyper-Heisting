@@ -1904,14 +1904,15 @@ function ActionSpooc:get_sound_event(sound)
 	end
 
 	local event = sound_events[sound]
-
-	if self:_use_christmas_sounds() then
-		local christmas_events = {
-			detect_stop = "cloaker_detect_christmas_stop",
-			detect = "cloaker_detect_christmas_mono"
-		}
-		event = christmas_events[sound] or event
-	end
+	
+	--these are too quiet.
+	--if self:_use_christmas_sounds() then 
+	--	local christmas_events = {
+	--		detect_stop = "cloaker_detect_christmas_stop",
+	--		detect = "cloaker_detect_christmas_mono"
+	--	}
+	--	event = christmas_events[sound] or event
+	--end
 
 	return event
 end

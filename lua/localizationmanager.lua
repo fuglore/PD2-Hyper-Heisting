@@ -232,7 +232,7 @@
 		["loading_gameplay_126"] = "If you can't tolerate the game without Captain Winters in it, maybe try Restoration Mod!",
 		["loading_trivia_59"] = "Winters is the coldest season of the year in polar and temperate zones. It occurs after Autumn and before Spring in each year.",
 		["loading_trivia_60"] = "01110111 01101001 01101110 01110100 01100101 01110010 01110011",
-		["loading_trivia_61"] = "winters",
+		["loading_trivia_61"] = "THIS IS THEIR SEASON. YOU WILL NOT ESCAPE.",
 		["loading_trivia_62"] = "Captain Winters is not ",
 		["loading_trivia_93"] = "Dragan absolutely loathes Tasers! Try punching one in the face with your bare hands while playing as him! You won't regret it!",		
 		["loading_hh_title"] = "Hyper Heisting tips",

@@ -86,6 +86,14 @@ function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 
 				return
 			end
+		elseif data.objective.type == "free" and data.objective.guard_unit then
+			if TeamAILogicIdle._check_guard(data, my_data) and not data.unit:movement():chk_action_forbidden("walk") then
+				data.objective.in_place = nil
+
+				TeamAILogicBase._exit(data.unit, "travel")
+
+				return
+			end
 		end
 	end
 
