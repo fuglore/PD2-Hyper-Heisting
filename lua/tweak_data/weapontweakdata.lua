@@ -3625,11 +3625,11 @@ crouching = {
 
 --Hammer 23
 if self.bs23 then 
-self.bs23.stats.damage = 145
+self.bs23.stats.damage = 148
 self.bs23.damage_near = 650
 self.bs23.damage_far = 1120
 self.bs23.AMMO_MAX = 24
-self.bs23.stats_modifiers = {damage = 3}
+self.bs23.stats_modifiers = {damage = 4}
 self.bs23.kick = {
 standing = {
 		4,
