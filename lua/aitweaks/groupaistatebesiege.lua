@@ -3367,7 +3367,7 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 		if managers.skirmish:is_skirmish() or self._small_map then
 			min_dis = 2250000
 		else
-			min_dis = 9000000
+			min_dis = 4000000
 		end
 	end
 	

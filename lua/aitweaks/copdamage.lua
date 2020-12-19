@@ -801,6 +801,12 @@ function CopDamage:_on_damage_received(damage_info)
 	self:_update_debug_ws(damage_info)
 end
 
+local anims = {
+    e_so_release_hostage_left = true,
+    e_so_release_hostage_right = true,
+    e_so_release_hostage_back = true
+}
+
 function CopDamage:check_medic_heal()
 	if self._unit:base():has_tag("medic") then
 		return false
@@ -830,6 +836,17 @@ function CopDamage:check_medic_heal()
 			end
 		elseif brain_ext._logic_data and brain_ext._logic_data.is_converted then
 			return false
+		end
+	end
+	
+	local act_action, was_queued = mov_ext:_get_latest_act_action()
+
+	if act_action then
+		if was_queued or not act_action.host_expired then
+			local variant = act_action.variant
+			if anims[variant] then
+				return false
+			end
 		end
 	end
 

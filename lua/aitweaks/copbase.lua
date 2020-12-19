@@ -58,7 +58,7 @@ function CopBase:_chk_spawn_gear()
 		elseif self._tweak_table == "tank_medic" then
 			local region = tweak_data.levels:get_ai_group_type()
 			
-			if region == "russia" then
+			if region == "russia" or region == "federales" then
 				self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_akan_santa_hat/ene_acc_dozer_akan_santa_hat", Vector3(), Rotation())
 			else
 				self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_zeal_santa_hat/ene_acc_dozer_zeal_santa_hat", Vector3(), Rotation())
@@ -77,9 +77,7 @@ function CopBase:_chk_spawn_gear()
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun"),
 					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun_husk")
 				}
-				
-				
-				
+								
 				for _, dozer in ipairs(non_akan_base) do
 					local unit = unit_name
 					if unit == dozer then
@@ -94,7 +92,7 @@ function CopBase:_chk_spawn_gear()
 				
 			elseif difficulty_index == 8 then
 			
-				--this will look really hard to read if i dont space it out. so i did that. to make it easier to read.
+				--this will look really hard to read if i dont space it out. so i did that. to make it easier to read,  but im still going to struggle with it.
 			
 				if unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2") or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2_husk") then
 				

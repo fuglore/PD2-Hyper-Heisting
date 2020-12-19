@@ -653,7 +653,7 @@ function CopLogicBase.should_duck_on_alert(data, alert_data)
 end
 	
 function CopLogicBase.chk_should_turn(data, my_data)
-	return not my_data.turning and not my_data.has_old_action and not data.unit:movement():chk_action_forbidden("walk") and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos and not my_data.surprised
+	return not my_data.turning and not my_data.has_old_action and not data.unit:movement():chk_action_forbidden("walk") and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos and not my_data.surprised and not my_data.walking_to_optimal_pos and not my_data.advancing
 end
 
 function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_reaction)

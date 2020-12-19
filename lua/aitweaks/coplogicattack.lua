@@ -1986,7 +1986,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 end
 
 function CopLogicAttack.chk_should_turn(data, my_data)
-	return not my_data.turning and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos and not my_data.surprised and not data.unit:movement():chk_action_forbidden("walk")
+	return not my_data.turning and not my_data.has_old_action and not my_data.moving_to_cover and not my_data.walking_to_cover_shoot_pos and not my_data.surprised and not data.unit:movement():chk_action_forbidden("walk") and not my_data.walking_to_optimal_pos
 end
 
 function CopLogicAttack._get_cover_offset_pos(data, cover_data, threat_pos)

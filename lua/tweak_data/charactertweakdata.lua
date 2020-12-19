@@ -10766,6 +10766,8 @@ function CharacterTweakData:character_map()
 			"ene_murkywater_bulldozer_3",
 			"ene_murkywater_bulldozer_4",
 			"ene_murkywater_bulldozer_medic",
+			"ene_murkywater_medic_r870",
+			"ene_murkywater_medic_m4",
 			"ene_murkywater_sniper",							
 			"ene_murky_light_r870",
 			"ene_murky_heavy_r870",

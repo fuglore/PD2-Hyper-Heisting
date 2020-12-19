@@ -3,15 +3,10 @@ function ShieldLogicAttack.queue_update(data, my_data)
 end
 
 function ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
+	my_data.optimal_pos = nil
+	
 	if my_data.optimal_path then
 		my_data.optimal_path = nil
-	elseif my_data.walking_to_optimal_pos then
-		local new_action = {
-			body_part = 2,
-			type = "idle"
-		}
-
-		data.unit:brain():action_request(new_action)
 	elseif my_data.pathing_to_optimal_pos then
 		if data.active_searches[my_data.optimal_path_search_id] then
 			data.unit:brain():abort_detailed_pathing(my_data.optimal_path_search_id)
