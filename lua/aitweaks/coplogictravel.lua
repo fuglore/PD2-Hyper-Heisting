@@ -1068,22 +1068,22 @@ function CopLogicTravel.queued_update(data)
 				if my_data.protector and not data.unit:base():has_tag("takedown") then
 					my_data.protected = true
 					
-					if my_data.optimal_path and not my_data.walking_to_optimal_pos then --check if there was a path previous update that didnt go through
+					if my_data.optimal_path and not my_data.walking_to_optimal_pos then --check if there was a path previous update that didnt go through for some reason, and execute it
 						CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
 					end
 					
-					if my_data.pathing_to_optimal_pos then
+					if my_data.pathing_to_optimal_pos then --if they're currently looking for a path, they need to check this basically every update
 						CopLogicTravel._upd_pathing(data, my_data)
 					elseif not my_data.optimal_pos then
 						
 						local follow_unit = my_data.protector
 						local follow_tracker = follow_unit:movement():nav_tracker()
-						local field_pos = follow_tracker:field_position()
-						local advance_pos = follow_unit:brain() and follow_unit:brain():is_advancing()
-						local follow_unit_pos = advance_pos or field_pos
+						local field_pos = follow_tracker:field_position() --protector unit's current position in the nav field. NEVER USE REAL POSITIONS FOR PATHING. EVER.
+						local advance_pos = follow_unit:brain() and follow_unit:brain():is_advancing() --protector unit's current advancing position if they have one
+						local follow_unit_pos = advance_pos or field_pos --prioritize the protector's destination rather than position, so units always keep up correctly 
 						
-						if not my_data.walking_to_optimal_pos or mvec3_dis(data.pos_rsrv.move_dest.position, follow_unit_pos) > 240 then
-							my_data.optimal_pos = CopLogicTravel._get_pos_on_wall(follow_unit_pos, 180, 180, nil)
+						if not my_data.walking_to_optimal_pos or mvec3_dis(data.pos_rsrv.move_dest.position, follow_unit_pos) > 240 then --if im not currently moving to the protector, or the destination im moving to would be further than 2.4 meters from the protector's current destination/position, acquire a new position to move into, and start pathing
+							my_data.optimal_pos = CopLogicTravel._get_pos_on_wall(follow_unit_pos, 180, 180, nil) --acquire a random area around the follow_unit_pos in a circle
 							
 							local prio = data.logic.get_pathing_prio(data)
 							local to_pos = my_data.optimal_pos
@@ -1091,24 +1091,15 @@ function CopLogicTravel.queued_update(data)
 							my_data.optimal_path_search_id = tostring(data.key) .. "optimal"
 							
 							if my_data.walking_to_optimal_pos then
-								from_pos = data.pos_rsrv.move_dest.position
+								from_pos = data.pos_rsrv.move_dest.position --path ahead of time, if i have a destination im moving to, start pathing from there, and to the new follow_unit_pos
 								data.unit:brain():search_for_path_from_pos(my_data.optimal_path_search_id, from_pos, to_pos, prio)
-								--local draw_duration = 1
-								--local line = Draw:brush(Color.red:with_alpha(0.5), draw_duration)
-								--line:cylinder(from_pos, to_pos, 4)
-								--line:sphere(from_pos, 20)
-								--line:sphere(to_pos, 20)
 							else
 								data.brain:search_for_path(my_data.optimal_path_search_id, to_pos, prio)
-								--local draw_duration = 1
-								--local line = Draw:brush(Color.blue:with_alpha(0.5), draw_duration)
-								--line:cylinder(data.m_pos, to_pos, 4)
-								--line:sphere(data.unit:movement():m_head_pos(), 20)
 							end	
 						end						
 					end
 					
-					if my_data.optimal_path and not my_data.walking_to_optimal_pos then --check it twice in case theres a path now
+					if my_data.optimal_path and not my_data.walking_to_optimal_pos then --check it twice in case theres a path now after executing upd_pathing
 						CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
 					end
 				
@@ -1403,7 +1394,7 @@ function CopLogicTravel.get_protector(data, my_data)
 			unit_base = unit:base()
 			unit_damage = unit:character_damage()
 			
-			if not my_data.frontliner then
+			if not my_data.frontliner and not unit_base:has_tag("backliner") then
 				if unit_base:has_tag("frontliner") then
 					if unit_base:has_tag("shield") then
 						rank = 1

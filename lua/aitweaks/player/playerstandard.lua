@@ -622,7 +622,7 @@ function PlayerStandard:_update_movement(t, dt)
 
 	local ground_z = self:_chk_floor_moving_pos()
 
-	if ground_z and not self._is_jumping then
+	if not self._is_jumping and not self._state_data.in_air and ground_z then
 		if not pos_new then
 			pos_new = mvec_pos_new
 
@@ -1089,10 +1089,6 @@ end
 function PlayerStandard:_activate_mover(mover, velocity)
 	self._unit:activate_mover(mover, velocity)
 	
-	if not self._original_damping_standard then
-		self._original_damping_standard = self._unit:mover():damping() --PLEASE DO NOT CHANGE THIS!!! WILL PROBABLY CAUSE WEIRD BEHAVIOR IN LADDERS!!!
-	end
-
 	if self._state_data.on_ladder then
 		self._unit:mover():set_gravity(Vector3(0, 0, 0))
 		self._unit:mover():set_damping(self._tweak_data.gravity / self._tweak_data.terminal_velocity) --sets how fast the player accelerates downwards in the air, i have no clue what the value for this actually represents since its something like 0.14-ish.
