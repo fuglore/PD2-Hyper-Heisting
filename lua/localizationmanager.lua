@@ -150,6 +150,7 @@
 		["hud_assault_FG_danger42"] = "!!! WE'RE SCREWED, LEG IT !!!",
 		["hud_assault_FG_danger43"] = "!!! YOUR LIGHT FADES AWAY !!!",
 		["hud_assault_FG_danger44"] = "!!! EMBRACE THE DARKNESS !!!",
+		["hud_assault_FG_danger45"] = "!!! UNFORTUNATE BALLSACK !!!",
 		["hud_assault_heat"] = "HEAT BONUS",
 		["hud_heat_common"] = "BREAK TIME!",
 		["hud_heat_1"] = "ANARCHY RULES!",
@@ -439,6 +440,11 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_sprinter_beta"] = "High Vigour",
 			["menu_sprinter_beta_desc"] = "BASIC: ##$basic##\nYour stamina regenerates ##25%## faster.\n\nACE: ##$pro##\nYou gain ##+10## ##Dodge##. ##Dodge## gives you a random chance to ##completely negate damage##.\n\nUpon successfully ##dodging## an attack, regain ##5## stamina.",
+			
+			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nWhen tased, the effect has a ##25%## chance to ##backfire## on the Taser, knocking them back.\n\nACE: ##$pro##\nWhen tased, you are able to ##free yourself from the Taser## by looking at the Taser and pressing your interact key within ##0.25## seconds of getting tased.",
+			
+			--BASIC: When tased, you can now withstand being ##shocked## ##2## more times before you explode with electricity.
+			--ACED: When tased, ##you can now free yourself from the Taser## by completing a ##Quick Time Event##.\n\nPressing the Interact key just as a Taser ##shocks## you three times in a row will free you.\n\nFailing to press the Interact key or pressing it at the wrong time cancels the skill.
 			
 			["menu_jail_diet_beta"] = "Sneakier Bastard",
 			["menu_jail_diet_beta_desc"] = "BASIC: ##$basic##\nYou gain a ##1+## ##Dodge## for every ##1## point of detection risk under ##35## up to ##10%##.\n\nACE: ##$pro##\nUpon ##failing to dodge## an attack, re-roll for the same chance as your current ##Dodge## chance to reduce taken damage from the attack by ##25%##.",

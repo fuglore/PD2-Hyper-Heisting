@@ -201,6 +201,53 @@ function PlayerStandard:_update_running_timers(t)
 	end
 end
 
+function PlayerStandard:_get_total_max_speed()
+	local speed_tweak = self._tweak_data.movement.speed
+	local movement_speed = speed_tweak.RUNNING_MAX * 1.2
+	local speed_state = "run"
+
+	movement_speed = managers.modifiers:modify_value("PlayerStandard:GetMaxWalkSpeed", movement_speed, self._state_data, speed_tweak)
+	local morale_boost_bonus = self._ext_movement:morale_boost()
+	local multiplier = managers.player:movement_speed_multiplier(speed_state, speed_state and morale_boost_bonus and morale_boost_bonus.move_speed_bonus, nil, self._ext_damage:health_ratio())
+	multiplier = multiplier * (self._tweak_data.movement.multiplier[speed_state] or 1)
+	local apply_weapon_penalty = true
+
+	if speed_state == "climb" then
+		multiplier = multiplier * 1.2
+	else
+		multiplier = 1.1
+	end
+
+	if self:_is_meleeing() then
+		local melee_entry = managers.blackmarket:equipped_melee_weapon()
+		apply_weapon_penalty = not tweak_data.blackmarket.melee_weapons[melee_entry].stats.remove_weapon_movement_penalty
+	end
+
+	if alive(self._equipped_unit) and apply_weapon_penalty then
+		multiplier = multiplier * self._equipped_unit:base():movement_penalty()
+	end
+
+	if managers.player:has_activate_temporary_upgrade("temporary", "increased_movement_speed") then
+		multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "increased_movement_speed", 1)
+	end
+	
+	if managers.player:has_category_upgrade("player", "criticalmode") then
+		multiplier = multiplier * 1.25
+	end
+	
+	if self._wave_dash_t and self._running then
+		multiplier = multiplier * 1.5
+	end
+	
+	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
+		multiplier = multiplier * managers.player:upgrade_value("player", "perkdeck_movespeed_mult", 1)
+	end
+	
+	local final_speed = movement_speed * multiplier
+	
+	return final_speed
+end
+
 function PlayerStandard:_get_max_walk_speed(t, force_run)
 	local speed_tweak = self._tweak_data.movement.speed
 	local movement_speed = speed_tweak.STANDARD_MAX
@@ -327,55 +374,6 @@ function PlayerStandard:_check_action_jump(t, input)
 	end
 
 	return new_action
-end
-
-function PlayerStandard:_get_deceleration()
-	local speed_tweak = self._tweak_data.movement.speed
-	local movement_speed = speed_tweak.RUNNING_MAX
-	local speed_state = "run"
-
-	movement_speed = managers.modifiers:modify_value("PlayerStandard:GetMaxWalkSpeed", movement_speed, self._state_data, speed_tweak)
-	local morale_boost_bonus = self._ext_movement:morale_boost()
-	local multiplier = managers.player:movement_speed_multiplier(speed_state, speed_state and morale_boost_bonus and morale_boost_bonus.move_speed_bonus, nil, self._ext_damage:health_ratio())
-	multiplier = multiplier * (self._tweak_data.movement.multiplier[speed_state] or 1)
-	local apply_weapon_penalty = true
-
-	if speed_state == "climb" then
-		multiplier = multiplier * 1.2
-	else
-		multiplier = 1.1
-	end
-
-	if self:_is_meleeing() then
-		local melee_entry = managers.blackmarket:equipped_melee_weapon()
-		apply_weapon_penalty = not tweak_data.blackmarket.melee_weapons[melee_entry].stats.remove_weapon_movement_penalty
-	end
-
-	if alive(self._equipped_unit) and apply_weapon_penalty then
-		multiplier = multiplier * self._equipped_unit:base():movement_penalty()
-	end
-
-	if managers.player:has_activate_temporary_upgrade("temporary", "increased_movement_speed") then
-		multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "increased_movement_speed", 1)
-	end
-	
-	if managers.player:has_category_upgrade("player", "criticalmode") then
-		multiplier = multiplier * 1.25
-	end
-	
-	if self._wave_dash_t and self._running then
-		multiplier = multiplier * 1.5
-	end
-	
-	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
-		multiplier = multiplier * managers.player:upgrade_value("player", "perkdeck_movespeed_mult", 1)
-	end
-	
-	local final_speed = movement_speed * multiplier
-	
-	final_speed = final_speed * 2
-	
-	return final_speed
 end
 
 local mvec_pos_new = Vector3()

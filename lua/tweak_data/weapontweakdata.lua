@@ -2784,11 +2784,11 @@ crouching = {
 --KSP 58
 self.par.AMMO_PICKUP = {6, 14}
 self.par.stats.damage = 59
-self.par.stats.recoil = 13
+self.par.stats.recoil = 12
 self.par.kick = {
 standing = {
-		1.0,
-		2.1,
+		2.0,
+		4.2,
 		-0.6,
 		0.6
 },
@@ -2799,8 +2799,8 @@ steelsight = {
 		0.6
 },
 crouching = {
-		1.0,
-		2.1,
+		1.5,
+		3,
 		-0.6,
 		0.6
 }
@@ -2813,8 +2813,8 @@ self.m60.stats.damage = 79
 self.m60.stats.recoil = 10
 self.m60.kick = {
 standing = {
-		1.0,
-		2.1,
+		2.0,
+		4.2,
 		-0.6,
 		0.6
 },
@@ -2825,8 +2825,8 @@ steelsight = {
 		0.6
 },
 crouching = {
-		1.0,
-		2.1,
+		1.5,
+		3,
 		-0.6,
 		0.6
 }
@@ -2838,8 +2838,8 @@ self.m249.stats.damage = 59
 self.m249.stats.recoil = 9
 self.m249.kick = {
 standing = {
-		1.0,
-		2.1,
+		2.0,
+		4.2,
 		-0.6,
 		0.6
 },
@@ -2850,8 +2850,8 @@ steelsight = {
 		0.6
 },
 crouching = {
-		1.0,
-		2.1,
+		1.5,
+		3,
 		-0.6,
 		0.6
 }
@@ -2864,8 +2864,8 @@ self.mg42.stats.recoil = 9
 self.mg42.stats.spread = 15
 self.mg42.kick = {
 standing = {
-		1.0,
-		2.1,
+		2.0,
+		4.2,
 		-0.6,
 		0.6
 },
@@ -2876,8 +2876,8 @@ steelsight = {
 		0.6
 },
 crouching = {
-		1.0,
-		2.1,
+		1.5,
+		3,
 		-0.6,
 		0.6
 }
@@ -2889,8 +2889,8 @@ self.hk21.stats.damage = 79
 self.hk21.stats.recoil = 10
 self.hk21.kick = {
 standing = {
-		1.0,
-		2.1,
+		2.0,
+		4.2,
 		-0.6,
 		0.6
 },
@@ -2901,21 +2901,21 @@ steelsight = {
 		0.6
 },
 crouching = {
-		1.0,
-		2.1,
+		1.5,
+		3,
 		-0.6,
 		0.6
 }
 }
 
 --RPK
-self.rpk.AMMO_PICKUP = {2, 8}
-self.rpk.stats.damage = 79
+self.rpk.AMMO_PICKUP = {4, 8}
+self.rpk.stats.damage = 59
 self.rpk.stats.recoil = 18
 self.rpk.kick = {
 standing = {
-		1.0,
-		2.1,
+		2.0,
+		4.2,
 		-0.6,
 		0.6
 },
@@ -2926,8 +2926,8 @@ steelsight = {
 		0.6
 },
 crouching = {
-		1.0,
-		2.1,
+		1.5,
+		3,
 		-0.6,
 		0.6
 }

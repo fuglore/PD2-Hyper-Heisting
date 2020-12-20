@@ -723,7 +723,20 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 									my_head_fwd = my_head_fwd or data.unit:movement():m_head_rot():z()
 									local vec_angle = mvec3_angle(my_head_fwd, tmp_vec1)
 
-									if not my_data.detection.use_uncover_range and vec_angle < 55 and settings.uncover_range and dis < settings.uncover_range then
+									if attention_info.unit:base() and attention_info.unit:base().is_local_player then
+										if dis < 100 then
+											angle = 0
+											dis_multiplier = 0
+										elseif vec_angle < my_data.detection.angle_max then
+											local angle_max = math_lerp(180, my_data.detection.angle_max, math_clamp((dis - 150) / 700, 0, 1))
+											angle_multiplier = vec_angle / angle_max
+
+											if angle_multiplier < 1 then
+												angle = vec_angle
+												dis_multiplier = dis_mul
+											end
+										end
+									elseif not my_data.detection.use_uncover_range and vec_angle < 55 and settings.uncover_range and dis < settings.uncover_range then
 										angle = -1
 										dis_multiplier = 0
 									else
@@ -882,7 +895,20 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 									my_head_fwd = my_head_fwd or data.unit:movement():m_head_rot():z()
 									local vec_angle = mvec3_angle(my_head_fwd, tmp_vec1)
 
-									if not my_data.detection.use_uncover_range and vec_angle < 55 and settings.uncover_range and dis < settings.uncover_range then
+									if attention_info.unit:base() and attention_info.unit:base().is_local_player then
+										if dis < 100 then
+											angle = 0
+											dis_multiplier = 0
+										elseif vec_angle < my_data.detection.angle_max then
+											local angle_max = math_lerp(180, my_data.detection.angle_max, math_clamp((dis - 150) / 700, 0, 1))
+											angle_multiplier = vec_angle / angle_max
+
+											if angle_multiplier < 1 then
+												angle = vec_angle
+												dis_multiplier = dis_mul
+											end
+										end
+									elseif not my_data.detection.use_uncover_range and vec_angle < 55 and settings.uncover_range and dis < settings.uncover_range then
 										angle = -1
 										dis_multiplier = 0
 									else

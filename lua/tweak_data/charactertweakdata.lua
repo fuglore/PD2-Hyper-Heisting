@@ -1361,9 +1361,9 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.detection.enemymook.ntl.use_uncover_range = nil
 	presets.detection.enemymook.ntl.dis_max = 1500
-	presets.detection.enemymook.ntl.angle_max = 55
+	presets.detection.enemymook.ntl.angle_max = 60
 	presets.detection.enemymook.ntl.delay = {
-		0.7,
+		0.5,
 		2
 	}
 	presets.detection.civilian.cbt.dis_max = 10000
@@ -1375,9 +1375,9 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.detection.civilian.cbt.use_uncover_range = true
 	presets.detection.civilian.ntl.use_uncover_range = nil
 	presets.detection.civilian.ntl.dis_max = 1500
-	presets.detection.civilian.ntl.angle_max = 55
+	presets.detection.civilian.ntl.angle_max = 60
 	presets.detection.civilian.ntl.delay = {
-		0.7,
+		0.5,
 		2
 	}
 	
@@ -1417,9 +1417,9 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.detection.enemyspooc.ntl.use_uncover_range = nil
 	presets.detection.enemyspooc.ntl.dis_max = 3000
-	presets.detection.enemyspooc.ntl.angle_max = 55
+	presets.detection.enemyspooc.ntl.angle_max = 80
 	presets.detection.enemyspooc.ntl.delay = {
-		0.7,
+		0.5,
 		2
 	}
 	

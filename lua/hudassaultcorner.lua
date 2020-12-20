@@ -328,7 +328,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local cover_line_to_use = "hud_assault_cover"
 	local danger_line_to_use = "hud_assault_danger"
 	local FG_chance = math.random(1, 289)
-	local danger_chance = math.random(1, 45)
+	local danger_chance = math.random(1, 46)
 	local heat_chance = math.random(1, 28)
 	local versusline = "hud_assault_faction_swat"
 	
@@ -403,7 +403,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if danger_chance <= 43 then
+	if danger_chance <= 45 then
 		danger_line_to_use = "hud_assault_FG_danger" .. danger_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
