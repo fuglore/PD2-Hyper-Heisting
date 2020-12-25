@@ -392,8 +392,6 @@ function CopActionShoot:on_attention(attention, old_attention)
 					end
 
 					self._shoot_t = t + aim_delay
-					shoot_hist.focus_start_t = t
-					shoot_hist.focus_delay = self._focus_delay
 
 					if self._can_melee then
 						local melee_delay = math_min(aim_delay, 0.35)
@@ -411,13 +409,15 @@ function CopActionShoot:on_attention(attention, old_attention)
 					end
 				end
 
-				if shoot_hist.unit then
-					if not alive(shoot_hist.unit) or shoot_hist.unit:key() ~= attention.unit:key() then
-						self._played_hivis_glint = nil
-					end
+				if shoot_hist.u_key and shoot_hist.u_key ~= attention.unit:key() then
+					self._played_hivis_glint = nil
+					self._line_of_sight_t = nil
+
+					shoot_hist.focus_start_t = t
+					shoot_hist.focus_delay = self._focus_delay
 				end
 
-				shoot_hist.unit = attention.unit
+				shoot_hist.u_key = attention.unit:key()
 			else
 				if aim_delay_minmax[1] ~= 0 or aim_delay_minmax[2] ~= 0 then
 					if aim_delay_minmax[1] == aim_delay_minmax[2] then
@@ -444,7 +444,7 @@ function CopActionShoot:on_attention(attention, old_attention)
 					focus_start_t = t,
 					focus_delay = self._focus_delay,
 					m_last_pos = mvec3_copy(target_pos),
-					unit = attention.unit
+					u_key = attention.unit:key()
 				}
 				self._shoot_history = shoot_hist
 
@@ -503,13 +503,18 @@ function CopActionShoot:update(t)
 	local vis_state = self._ext_base:lod_stage()
 	vis_state = vis_state or 4
 
-	if not self._autofiring and vis_state ~= 1 then
-		if self._skipped_frames < vis_state * 3 then
-			self._skipped_frames = self._skipped_frames + 1
+	local autofiring = self._autofiring
+	local cannot_autofire_yet = autofiring and self._weapon_base._next_fire_allowed > t
 
-			return
-		else
-			self._skipped_frames = 1
+	if not autofiring or cannot_autofire_yet then
+		if vis_state ~= 1 then
+			if self._skipped_frames < vis_state * 3 then
+				self._skipped_frames = self._skipped_frames + 1
+
+				return
+			else
+				self._skipped_frames = 1
+			end
 		end
 	end
 
@@ -574,7 +579,7 @@ function CopActionShoot:update(t)
 		local do_melee = can_melee and self:check_melee_start(t, attention.unit, target_dis, shoot_from_pos, shooting_local_player) and self:_chk_start_melee(t)
 
 		if do_melee then
-			if self._autofiring then
+			if autofiring then
 				self._weapon_base:stop_autofire()
 
 				self._autofiring = nil
@@ -583,7 +588,7 @@ function CopActionShoot:update(t)
 
 			self._shoot_t = t + 1
 		elseif self._weapon_base:clip_empty() then
-			if self._autofiring then
+			if autofiring then
 				self._weapon_base:stop_autofire()
 				self._ext_movement:play_redirect("up_idle")
 
@@ -601,7 +606,7 @@ function CopActionShoot:update(t)
 
 				self._ext_movement:action_request(reload_action)
 			end
-		elseif self._autofiring then
+		elseif autofiring then
 			if not target_vec or not common_data.allow_fire then
 				self._weapon_base:stop_autofire()
 
@@ -610,6 +615,14 @@ function CopActionShoot:update(t)
 				self._autoshots_fired = nil
 
 				self._ext_movement:play_redirect("up_idle")
+			elseif cannot_autofire_yet then --if the weapon can't even fire, avoid doing all the calculations
+				if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
+					if self._tank_animations then
+						self._ext_movement:play_redirect("recoil_single")
+					else
+						self._ext_movement:play_redirect("recoil_auto")
+					end
+				end
 			else
 				local falloff, i_range = self:_get_shoot_falloff(target_dis, self._falloff)
 				local dmg_buff = self._ext_base:get_total_buff("base_damage") + 1
@@ -618,8 +631,8 @@ function CopActionShoot:update(t)
 				local spread_only = self._spread_only
 				local shoot_hist = self._shoot_history
 				local shooting_husk = self._shooting_husk_unit
-				local simplified_shooting = spread_only or not att_unit or shooting_husk
-				local miss_pos = shoot_hist and not simplified_shooting and self:_get_unit_shoot_pos(t, target_pos, target_dis, falloff, i_range, shooting_local_player)
+				local simplified_shooting = not att_unit or shooting_husk
+				local miss_pos = not spread_only and not simplified_shooting and shoot_hist and self:_get_unit_shoot_pos(t, target_pos, target_dis, falloff, i_range, shooting_local_player)
 
 				if shoot_hist and att_unit then
 					mvec3_set(self._shoot_history.m_last_pos, target_pos)
@@ -630,34 +643,28 @@ function CopActionShoot:update(t)
 				else
 					local spread = self._spread
 
-					if not spread_only then
-						if shooting_husk then
-							spread = spread + math_random(20, 40)
-						elseif spread > 20 then
-							spread = 20
-						end
+					if spread_only and not simplified_shooting then
+						spread = self:_get_modified_spread(t, falloff)
+					elseif shooting_husk then
+						spread = spread + self._miss_dis * math_random() * 0.1
+					elseif spread > 20 then
+						spread = 20
 					end
 
-					local spread_pos = temp_vec2
+					if spread > 0 then
+						local spread_pos = temp_vec2
 
-					mvec3_rand_orth(spread_pos, target_vec)
-					mvec3_set_l(spread_pos, spread)
-					mvec3_add(spread_pos, target_pos)
-					mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+						mvec3_rand_orth(spread_pos, target_vec)
+						mvec3_set_l(spread_pos, spread)
+						mvec3_add(spread_pos, target_pos)
+						mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+					end
 				end
 
 				local fired = self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit)
 
 				if fired then
-					if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
-						if self._tank_animations then
-							self._ext_movement:play_redirect("recoil_single")
-						else
-							self._ext_movement:play_redirect("recoil_auto")
-						end
-					end
-
-					if not self._autofiring or self._autofiring - 1 <= self._autoshots_fired then
+					if not autofiring or autofiring - 1 <= self._autoshots_fired then
 						self._autofiring = nil
 						self._autoshots_fired = nil
 
@@ -673,6 +680,14 @@ function CopActionShoot:update(t)
 
 						self._shoot_t = t + shoot_delay
 					else
+						if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
+							if self._tank_animations then
+								self._ext_movement:play_redirect("recoil_single")
+							else
+								self._ext_movement:play_redirect("recoil_auto")
+							end
+						end
+
 						self._autoshots_fired = self._autoshots_fired + 1
 					end
 				end
@@ -775,7 +790,7 @@ function CopActionShoot:update(t)
 								shoot = true
 							end
 
-							if not self._last_vis_check_status and self._line_of_sight_t and t - self._line_of_sight_t > 1 then
+							if not self._line_of_sight_t or t - self._line_of_sight_t > 1 then
 								if draw_focus_delay_vis_reset then
 									local draw_duration = shooting_husk and 4 or 2
 
@@ -786,6 +801,7 @@ function CopActionShoot:update(t)
 								end
 
 								self._shoot_history.focus_start_t = t
+								self._shoot_history.focus_delay = self._focus_delay
 							end
 
 							self._shoot_history.m_last_pos = mvec3_copy(target_pos)
@@ -816,8 +832,8 @@ function CopActionShoot:update(t)
 				local spread_only = self._spread_only
 				local shoot_hist = self._shoot_history
 				local shooting_husk = self._shooting_husk_unit
-				local simplified_shooting = spread_only or not att_unit or shooting_husk
-				local miss_pos = shoot_hist and not simplified_shooting and self:_get_unit_shoot_pos(t, target_pos, target_dis, falloff, i_range, shooting_local_player)
+				local simplified_shooting = not att_unit or shooting_husk
+				local miss_pos = not spread_only and not simplified_shooting and shoot_hist and self:_get_unit_shoot_pos(t, target_pos, target_dis, falloff, i_range, shooting_local_player)
 
 				if shoot_hist and att_unit then
 					mvec3_set(self._shoot_history.m_last_pos, target_pos)
@@ -828,20 +844,22 @@ function CopActionShoot:update(t)
 				else
 					local spread = self._spread
 
-					if not spread_only then
-						if shooting_husk then
-							spread = spread + math_random(20, 40)
-						elseif spread > 20 then
-							spread = 20
-						end
+					if spread_only and not simplified_shooting then
+						spread = self:_get_modified_spread(t, falloff)
+					elseif shooting_husk then
+						spread = spread + self._miss_dis * math_random() * 0.1
+					elseif spread > 20 then
+						spread = 20
 					end
 
-					local spread_pos = temp_vec2
+					if spread > 0 then
+						local spread_pos = temp_vec2
 
-					mvec3_rand_orth(spread_pos, target_vec)
-					mvec3_set_l(spread_pos, spread)
-					mvec3_add(spread_pos, target_pos)
-					mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+						mvec3_rand_orth(spread_pos, target_vec)
+						mvec3_set_l(spread_pos, spread)
+						mvec3_add(spread_pos, target_pos)
+						mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+					end
 				end
 
 				local firemode = nil
@@ -922,6 +940,80 @@ function CopActionShoot:update(t)
 	if self._ext_anim.base_need_upd then
 		self._ext_movement:upd_m_head_pos()
 	end
+end
+
+function CopActionShoot:_get_modified_spread(t, falloff)
+	local att_unit = self._attention.unit
+	local shoot_hist = self._shoot_history
+	local focus_prog = nil
+
+	if shoot_hist and shoot_hist.focus_delay then
+		local focus_delay = shoot_hist.focus_delay
+		local att_dmg_ext = att_unit:character_damage()
+
+		if att_dmg_ext and att_dmg_ext.focus_delay_mul then
+			focus_delay = att_dmg_ext:focus_delay_mul() * focus_delay
+		end
+
+		if focus_delay > 0 then
+			local time_passed = t - shoot_hist.focus_start_t
+			focus_prog = time_passed / focus_delay
+		end
+
+		if not focus_prog or focus_prog >= 1 then
+			shoot_hist.focus_delay = nil
+			focus_prog = 1
+		end
+	else
+		focus_prog = 1
+	end
+
+	local spread_values = falloff.acc
+	local spread = math_lerp(spread_values[1], spread_values[2], focus_prog)
+	local common_data = self._common_data
+
+	 --spread isn't affected when suppressed, running or dodging in shin mode
+	if not self._is_shin_shootout then
+		if common_data.is_suppressed then
+			spread = spread / 0.5
+		end
+
+		if common_data.ext_anim.run then
+			spread = spread / 0.75
+		end
+
+		local lower_body_action = common_data.active_actions[2]
+
+		if lower_body_action and lower_body_action:type() == "dodge" then
+			spread = spread / lower_body_action:accuracy_multiplier()
+		end
+	end
+
+	local att_anim_data = att_unit:anim_data()
+
+	if att_anim_data and att_anim_data.dodge then
+		spread = spread / 0.5
+	end
+
+	local cs_acc_mul = self._cs_acc_mul
+
+	if cs_acc_mul then
+		spread = spread / cs_acc_mul
+	end
+
+	local dmg_ext = self._unit:character_damage()
+
+	if dmg_ext.accuracy_multiplier then
+		spread = spread / dmg_ext:accuracy_multiplier()
+	end
+
+	if dmg_ext._punk_effect then
+		spread = spread / 3
+	end
+
+	spread = math_clamp(spread, 0, 400)
+
+	return spread
 end
 
 function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shooting_local_player)
@@ -1007,10 +1099,22 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 
 	--log("hit_chance: " .. hit_chance .. "")
 
-	if self:_pseudorandom() > hit_chance then
+	if hit_chance == 0 or hit_chance < 1 and self:_pseudorandom() > hit_chance then
 		local enemy_vec = temp_vec2
 
-		mvec3_set(enemy_vec, pos)
+		if shooting_local_player then
+			mvec3_set(enemy_vec, pos)
+		else
+			local att_mov_ext = att_unit:movement()
+
+			--get center of mass for most NPC units (or sentries/turrets, which is the same as their usual shooting pos)
+			if not att_mov_ext or not att_mov_ext.m_com then
+				mvec3_set(enemy_vec, pos)
+			else
+				mvec3_set(enemy_vec, att_mov_ext:m_com())
+			end
+		end
+
 		mvec3_sub(enemy_vec, self._shoot_from_pos) --proper shooting pos, instead of the unit's m_pos (which is where they're standing on)
 
 		local error_vec = Vector3()
@@ -1019,9 +1123,9 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 		mrot_axis_angle(temp_rot1, enemy_vec, math_random(360))
 		mvec3_rot(error_vec, temp_rot1)
 
-		local miss_min_dis = shooting_local_player and 31 or 185 --(150 here is currently not enough because of leg hitboxes)
-		local cosmetic_dis = focus_prog == 1 and 0 or self._miss_dis * math_random() * (1 - focus_prog)
-		local error_vec_len = miss_min_dis + self._spread + cosmetic_dis
+		local miss_min_dis = shooting_local_player and 31 or 120 --120 for NPCs when using center of mass should be enough
+		local focus_dis = focus_prog == 1 and 0 or self._miss_dis * 0.1 * (1 - focus_prog)
+		local error_vec_len = miss_min_dis + self._spread + focus_dis
 
 		mvec3_set_l(error_vec, error_vec_len)
 		mvec3_add(error_vec, pos)
@@ -1338,7 +1442,8 @@ function CopActionShoot:anim_clbk_melee_strike()
 	if defense_data == "countered" then
 		self._common_data.melee_countered_t = self._timer:time() + 15
 
-		local attack_dir = self._ext_movement:m_com() - character_unit:movement():m_head_pos()
+		local my_com = self._ext_movement:m_com()
+		local attack_dir = my_com - character_unit:movement():m_head_pos()
 		mvec3_norm(attack_dir)
 
 		local counter_data = {
@@ -1348,7 +1453,7 @@ function CopActionShoot:anim_clbk_melee_strike()
 			attacker_unit = character_unit,
 			attack_dir = attack_dir,
 			col_ray = {
-				position = mvec3_copy(self._unit:movement():m_com()),
+				position = mvec3_copy(my_com),
 				body = self._unit:body("body"),
 				ray = attack_dir
 			},
