@@ -13,6 +13,7 @@ local mvec3_rot = mvector3.rotate_with
 local mvec3_rand_orth = mvector3.random_orthogonal
 local mvec3_lerp = mvector3.lerp
 local mvec3_copy = mvector3.copy
+local mvec3_spread = mvector3.spread
 
 local temp_vec2 = Vector3()
 local temp_vec3 = Vector3()
@@ -503,18 +504,15 @@ function CopActionShoot:update(t)
 	local vis_state = self._ext_base:lod_stage()
 	vis_state = vis_state or 4
 
-	local autofiring = self._autofiring
-	local cannot_autofire_yet = autofiring and self._weapon_base._next_fire_allowed > t
+	local cannot_fire_yet = self._weapon_base._next_fire_allowed > t
 
-	if not autofiring or cannot_autofire_yet then
-		if vis_state ~= 1 then
-			if self._skipped_frames < vis_state * 3 then
-				self._skipped_frames = self._skipped_frames + 1
+	if not cannot_fire_yet and vis_state ~= 1 then
+		if self._skipped_frames < vis_state * 3 then
+			self._skipped_frames = self._skipped_frames + 1
 
-				return
-			else
-				self._skipped_frames = 1
-			end
+			return
+		else
+			self._skipped_frames = 1
 		end
 	end
 
@@ -563,6 +561,7 @@ function CopActionShoot:update(t)
 		target_vec = self:_upd_ik(target_vec, fwd_dot, t)
 	end
 
+	local autofiring = self._autofiring
 	local light_hurt_cannot_shoot = ext_anim.upper_body_hurt and self._doom_enemy and true
 
 	if not light_hurt_cannot_shoot and not ext_anim.reload and not ext_anim.equip and not ext_anim.melee then
@@ -615,7 +614,7 @@ function CopActionShoot:update(t)
 				self._autoshots_fired = nil
 
 				self._ext_movement:play_redirect("up_idle")
-			elseif cannot_autofire_yet then --if the weapon can't even fire, avoid doing all the calculations
+			elseif cannot_fire_yet then --if the weapon can't even fire, avoid doing all the calculations
 				if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
 					if self._tank_animations then
 						self._ext_movement:play_redirect("recoil_single")
@@ -652,12 +651,16 @@ function CopActionShoot:update(t)
 					end
 
 					if spread > 0 then
-						local spread_pos = temp_vec2
+						if spread_only then
+							mvec3_spread(target_vec, spread)
+						else
+							local spread_pos = temp_vec2
 
-						mvec3_rand_orth(spread_pos, target_vec)
-						mvec3_set_l(spread_pos, spread)
-						mvec3_add(spread_pos, target_pos)
-						mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+							mvec3_rand_orth(spread_pos, target_vec)
+							mvec3_set_l(spread_pos, spread)
+							mvec3_add(spread_pos, target_pos)
+							mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+						end
 					end
 				end
 
@@ -824,7 +827,9 @@ function CopActionShoot:update(t)
 				end
 			end
 
-			if shoot and self._shoot_t < t then
+			--some of the calculations above still need to be done even if the weapon can't fire yet
+			--hence why we should check for not cannot_fire_yet here, to prevent actual unnecessary calculations
+			if shoot and not cannot_fire_yet and self._shoot_t < t then
 				local falloff, i_range = self:_get_shoot_falloff(target_dis, self._falloff)
 				local dmg_buff = self._ext_base:get_total_buff("base_damage") + 1
 				local dmg_mul = dmg_buff * falloff.dmg_mul
@@ -853,12 +858,16 @@ function CopActionShoot:update(t)
 					end
 
 					if spread > 0 then
-						local spread_pos = temp_vec2
+						if spread_only then
+							mvec3_spread(target_vec, spread)
+						else
+							local spread_pos = temp_vec2
 
-						mvec3_rand_orth(spread_pos, target_vec)
-						mvec3_set_l(spread_pos, spread)
-						mvec3_add(spread_pos, target_pos)
-						mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+							mvec3_rand_orth(spread_pos, target_vec)
+							mvec3_set_l(spread_pos, spread)
+							mvec3_add(spread_pos, target_pos)
+							mvec3_dir(target_vec, shoot_from_pos, spread_pos)
+						end
 					end
 				end
 
@@ -897,11 +906,15 @@ function CopActionShoot:update(t)
 						end
 					end
 
-					self._autoshots_fired = 0
+					local shots_fired = 0
 
-					if self._weapon_base._next_fire_allowed < t and self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit) then
-						self._autoshots_fired = 1
+					--in case something else besides the timer is added to the function to prevent the gun from firing
+					--however if you do something like this, you'd want to do something similar to the cannot_fire_yet checks, to avoid wasting performance
+					if self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit) then
+						shots_fired = 1
 					end
+
+					self._autoshots_fired = shots_fired
 
 					if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
 						if self._tank_animations then
@@ -1098,6 +1111,9 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 	if dmg_ext._punk_effect then
 		hit_chance = hit_chance * 3
 	end
+
+	--to add here later, smoke_shot accuracy modifier
+	--instead of doing it through the weapon's _fire_raycast function
 
 	--log("hit_chance: " .. hit_chance .. "")
 
