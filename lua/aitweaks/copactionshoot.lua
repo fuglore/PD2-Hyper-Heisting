@@ -897,16 +897,18 @@ function CopActionShoot:update(t)
 						end
 					end
 
-					if self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit) then
-						if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
-							if self._tank_animations then
-								self._ext_movement:play_redirect("recoil_single")
-							else
-								self._ext_movement:play_redirect("recoil_auto")
-							end
-						end
+					self._autoshots_fired = 0
 
+					if self._weapon_base._next_fire_allowed < t and self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit) then
 						self._autoshots_fired = 1
+					end
+
+					if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
+						if self._tank_animations then
+							self._ext_movement:play_redirect("recoil_single")
+						else
+							self._ext_movement:play_redirect("recoil_auto")
+						end
 					end
 				elseif self._weapon_base:singleshot(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit) then
 					if not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
