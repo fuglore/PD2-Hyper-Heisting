@@ -1,4 +1,4 @@
-function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread, lmg_spread, mini_spread)
+function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread, lmg_spread, mini_spread) --useless, leave here just in case.
 	--uh oh sisters *melts into dust leaving only my bones behind*
 	local all_rifles = {
 		"m4_npc",
@@ -390,7 +390,7 @@ function WeaponTweakData:_set_normal()
 	self.benelli_npc.CLIP_AMMO_MAX = 3
 	self.blazter_npc.CLIP_AMMO_MAX = 3
 	
-	self:_set_characters_weapon_preset(15, 10, 15, 60) --setting enemy weapon spread
+	--self:_set_characters_weapon_preset(15, 10, 15, 60) --setting enemy weapon spread, unused
 	
 	--Turret tweaks.
 	self.swat_van_turret_module.HEALTH_INIT = 750
@@ -459,7 +459,7 @@ function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
 	self.benelli_npc.CLIP_AMMO_MAX = 3
 	self.blazter_npc.CLIP_AMMO_MAX = 3
 	
-	self:_set_characters_weapon_preset(15, 10, 15, 60) --setting enemy weapon spread
+	--self:_set_characters_weapon_preset(15, 10, 15, 60) --setting enemy weapon spread, unused
 	
 	--Turret tweaks.
 	self.swat_van_turret_module.HEALTH_INIT = 750
@@ -522,7 +522,7 @@ function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried abo
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
-	self:_set_characters_weapon_preset(10, 8, 10, 60) --setting enemy weapon spread
+	--self:_set_characters_weapon_preset(10, 8, 10, 60) --setting enemy weapon spread, unused
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 8
@@ -592,7 +592,7 @@ function WeaponTweakData:_set_overkill_145()
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
-	self:_set_characters_weapon_preset(10, 8, 10, 60) --setting enemy weapon spread
+	--self:_set_characters_weapon_preset(10, 8, 10, 60) --setting enemy weapon spread, unused
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 8
@@ -671,7 +671,7 @@ function WeaponTweakData:_set_easy_wish()
 	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	self.bayou_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	
-	self:_set_characters_weapon_preset(8, 6, 8, 60) --setting enemy weapon spread
+	--self:_set_characters_weapon_preset(8, 6, 8, 60) --setting enemy weapon spread, unsued after court
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 16
@@ -760,7 +760,7 @@ function WeaponTweakData:_set_overkill_290()
 	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	self.bayou_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	
-	self:_set_characters_weapon_preset(8, 6, 8, 20) --setting enemy weapon spread
+	--self:_set_characters_weapon_preset(8, 6, 8, 20) --setting enemy weapon spread, unbased
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 16
@@ -849,7 +849,7 @@ function WeaponTweakData:_set_sm_wish()
 	self.benelli_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	self.bayou_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"
 	
-	self:_set_characters_weapon_preset(4, 2, 4, 10) --setting enemy weapon spread
+	--self:_set_characters_weapon_preset(4, 2, 4, 10) --setting enemy weapon spread, uncringed
 	
 	--sniper tweak
 	self.m14_sniper_npc.suppression = 40 --They'll lock your armor regen down after breaking it for a little while, but can't pierce your armor anymore.

@@ -472,7 +472,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_wolverine_beta_desc"] = "BASIC: ##$basic##\nThe less health you have, the more power you gain.\n\nWhen under ##100%## Health, deal up to ##500%## more melee and saw damage.\n\nWhen under ##50%## Health, you reload all weapons 50% faster.\n\nACE: ##$pro##\nWhen at ##50%## Health or below, the effects of being suppressed by special enemies are less effective and your interaction speed with Medic Bags and First Aid Kits is increased by ##75%##.",
 			
 			["menu_frenzy"] = "Something To Prove",
-			["menu_frenzy_desc"] = "BASIC: ##$basic##\nYou start with ##50%## of your Health and cannot heal above that.\n\n##ALL DAMAGE DEALT## is increased by ##25%##.\n\nACE: ##$pro##\n##You lose 1 down.##\n\nYour movement speed is increased by ##25%##.\n\n##ALL DAMAGE DEALT## is further increased by ##25%##.",
+			["menu_frenzy_desc"] = "BASIC: ##$basic##\nYou start with ##50%## of your Health and cannot heal above that.\n\n##ALL DAMAGE DEALT## is increased by ##25%##.\n\nACE: ##$pro##\n##You lose 1 down.##\n\nYour movement speed is increased by ##25%##.\n\n##ALL DAMAGE DEALT## is further increased by ##25%##.\n\n##Kill all sons of bitches, right?##",
 			
 			-- weapon stuff below	
 			["bm_wp_g3_b_short"] = "Short Barrel",

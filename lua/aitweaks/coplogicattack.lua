@@ -1932,7 +1932,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		data.spooc_attack_timeout_t = TimerManager:game():time() + math_lerp(data.char_tweak.spooc_attack_timeout[1], data.char_tweak.spooc_attack_timeout[2], math_random())
 
 		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math_random() <= data.char_tweak.spooc_attack_use_smoke_chance and not managers.groupai:state():is_smoke_grenade_active() then
-			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math_UP * 10, data.unit:movement():m_head_pos(), math_lerp(15, 30, math_random()), false)
+			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math_up * 10, data.unit:movement():m_head_pos(), math_lerp(15, 30, math_random()), false)
 		end
 		
 		if not data.unit:character_damage():dead() and action:expired() then

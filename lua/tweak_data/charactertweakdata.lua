@@ -3086,16 +3086,16 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	
 	--civil begins here, noteworthy change being increases in attack rate along with less falloff, plus the increase of focus delay minimum starting range
-	presets.weapon.civil.is_pistol = {
+presets.weapon.civil.is_pistol = {
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.25,
+			0.25
 		},
-		focus_delay = 2, --halved focus delay, still a lot, but pistols have good accuracy, so it's fair
-		focus_dis = 500,
+		focus_delay = 1.5,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 0.9, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -3103,40 +3103,22 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 4000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
 			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --increased average damage for vh and ovk, increases immediate threat of enemy fire from pistol cops
-				r = 100,
+				dmg_mul = 3,
+				r = 500,
 				acc = {
-					0.1, --focus delay build up
+					0.2,
 					0.9
 				},
 				recoil = {
 					0.25,
 					0.35
 				},
-				mode = { --tap fire like crazy
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0.1,
-					0.85
-				},
-				recoil = {
-					0.35,
-					0.35
-				},
 				mode = {
 					1,
 					0,
@@ -3145,33 +3127,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --moderate falloff begins, still ok.
+				dmg_mul = 1.5, 
 				r = 1000,
-				acc = {
-					0,
-					0.55
-				},
-				recoil = {
-					0.4,
-					0.5
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1,
-				r = 2000,
 				acc = {
 					0,
 					0.45
 				},
-				recoil = { --reduced from simple, keeps them still moderately effective at this range
-					0.5,
-					0.6
+				recoil = {
+					0.3,
+					0.4
 				},
 				mode = {
 					1,
@@ -3181,33 +3145,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
 				r = 3000,
 				acc = {
 					0,
-					0.2
-				},
-				recoil = {
-					0.6,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
 					0
-				}
-			},
-			{
-				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
-				r = 4000,
-				acc = {
-					0,
-					0.01
 				},
 				recoil = {
-					0.6,
-					1.2
+					0.4,
+					1
 				},
 				mode = {
 					1,
@@ -3220,14 +3166,14 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.25,
+			0.25
 		},
-		focus_delay = 2, --halved focus delay, still a lot, but pistols have good accuracy, so it's fair
-		focus_dis = 500,
+		focus_delay = 1.5,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 0.9, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -3235,40 +3181,22 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 4000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
 			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --increased average damage for vh and ovk, increases immediate threat of enemy fire from pistol cops
-				r = 100,
+				dmg_mul = 3,
+				r = 500,
 				acc = {
-					0.1, --focus delay build up
+					0.2,
 					0.9
 				},
 				recoil = {
 					0.25,
 					0.35
 				},
-				mode = { --tap fire like crazy
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0.1,
-					0.85
-				},
-				recoil = {
-					0.35,
-					0.35
-				},
 				mode = {
 					1,
 					0,
@@ -3277,51 +3205,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --moderate falloff begins, still ok.
+				dmg_mul = 1.5, 
 				r = 1000,
-				acc = {
-					0,
-					0.55
-				},
-				recoil = {
-					0.4,
-					0.5
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1,
-				r = 2000,
 				acc = {
 					0,
 					0.45
 				},
-				recoil = { --reduced from simple, keeps them still moderately effective at this range
-					0.5,
-					0.6
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
-				r = 3000,
-				acc = {
-					0,
-					0.2
-				},
 				recoil = {
-					0.6,
-					1
+					0.3,
+					0.4
 				},
 				mode = {
 					1,
@@ -3332,14 +3224,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
-				r = 4000,
+				r = 3000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					0.6,
-					1.2
+					0.4,
+					1
 				},
 				mode = {
 					1,
@@ -3349,47 +3241,47 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
-	}
+	}	
 	presets.weapon.civil.is_rifle = {
 		aim_delay = {
 			0.35,
 			0.35
 		},
-		focus_delay = 3, --3 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
-		focus_dis = 500, --focus delay starts after 5m
-		spread = 30, --lowered slightly from simple
-		miss_dis = 1,
-		RELOAD_SPEED = 1.25, --lowered slightly from simple
+		focus_delay = 1.25, 
+		focus_dis = 100,
+		spread = 28, 
+		miss_dis = 40, 
+		RELOAD_SPEED = 1,
 		melee_speed = 0.5,
-		melee_dmg = 10, --100 damage on melee, no joke
+		melee_dmg = 10, --100 damage on melee
 		melee_retry_delay = {
 			1,
 			1
 		},
-		tase_distance = 1500, 
+		tase_distance = 1500,
 		aim_delay_tase = {
 			0,
 			0
 		},
 		tase_sphere_cast_radius = 5,
 		range = {
-			optimal = 3000,
-			far = 4000, --longer range style firing patterns begin, enemy movement gets complexer due to the close range being increased
+			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
+			far = 4000, 
 			close = 2000
 		},
-		autofire_rounds = { --autofire rounds match to 8-16, with low recoil to boot, should make hitting players consistent with 10 or more units at range
-			15,
-			20
+		autofire_rounds = { --yes.
+			30,
+			60
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5,
-				r = 100,
+				dmg_mul = 3,
+				r = 400,
 				acc = { 
 					0,
-					0.2
+					0.9
 				},
-				recoil = {
+				recoil = { 
 					0.2,
 					0.2
 				},
@@ -3401,33 +3293,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4,
-				r = 400,
-				acc = { 
-					0,
-					0.2
-				},
-				recoil = {
-					0.2,
-					0.2 
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
 				dmg_mul = 3,
 				r = 800,
 				acc = { 
 					0,
-					0.1
+					0.9
 				},
 				recoil = { 
 					0.25,
-					0.3 --slightly decreased from civil, from 0.35 to 0.3
+					0.3
 				},
 				mode = {
 					0,
@@ -3438,10 +3312,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 2,
-				r = 1500,
+				r = 1200,
 				acc = {
 					0,
-					0.05
+					0.7
 				},
 				recoil = {
 					0.25,
@@ -3456,10 +3330,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1,
-				r = 3000,
+				r = 2000,
 				acc = {
 					0,
-					0.025
+					0.5
 				},
 				recoil = {
 					0.25,
@@ -3480,8 +3354,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				recoil = {
-					1,
-					2
+					0.4,
+					0.6
 				},
 				mode = {
 					0,
@@ -3494,37 +3368,37 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.is_bullpup = presets.weapon.civil.is_rifle
 	presets.weapon.civil.is_shotgun_pump = {
-		aim_delay = { --aim delay changed to match PDTH style aim-delay
-			0.6,
-			0.6
+		aim_delay = {
+			0.4,
+			0.4
 		},
-		focus_delay = 5, --quicker focus delay build from simple, accuracy remains mostly the same
-		focus_dis = 500, --focus delay only starts past 5m, cqc maps become dangerous fun houses while long-range maps encourage players to kite and keep enemies away
+		focus_delay = 2, --focus delay change here.
+		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 0.8, --lowered reload speed
+		RELOAD_SPEED = 1.4, --HOW? ARE THEY JUST PILING ALL THE SHELLS ON THEIR HAND AND JUST SHOVING IT IN THERE LIKE CANDY INTO A BOWL???? either way, quite powerful
 		melee_speed = 0.5,
-		melee_dmg = 10, --100 damage on melee, no joke, keep as is
+		melee_dmg = 15, --100 damage on melee, no joke, keep as is from civil and up
 		melee_retry_delay = {
 			1,
 			1
 		},
 		range = {
-			optimal = 1000,
+			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 800 
+			close = 1200 
 		},
 		FALLOFF = {
 			{
 				dmg_mul = 2,
-				r = 100,
+				r = 400,
 				acc = {
-					0,
-					0.75
+					0.2,
+					1
 				},
-				recoil = {
-					1,
-					1.15
+				recoil = { --slightly lowered recoil from civil, lower end has more variance
+					0.8,
+					1
 				},
 				mode = {
 					1,
@@ -3534,15 +3408,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, 
-				r = 600,
+				dmg_mul = 1.5,
+				r = 800,
 				acc = { 
-					0,
-					0.6
+					0.15,
+					0.9
 				},
-				recoil = {
-					1.15,
-					1.25
+				recoil = { --reduced massively from civil
+					1,
+					1.2
 				},
 				mode = {
 					1,
@@ -3556,11 +3430,11 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 1000,
 				acc = {
 					0,
-					0.3
+					0.75
 				},
 				recoil = {
-					1.2,
-					1.4
+					1.1,
+					1.3
 				},
 				mode = {
 					1,
@@ -3571,14 +3445,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1, 
-				r = 1500,
+				r = 1200,
 				acc = {
 					0,
-					0.1
+					0.25
 				},
-				recoil = {
-					1.6,
-					1.6
+				recoil = { --recoil is ok though, said the slut who is designing this mess
+					1.1,
+					1.3
 				},
 				mode = {
 					1,
@@ -3589,7 +3463,7 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 0,
-				r = 2000,
+				r = 3000,
 				acc = {
 					0,
 					0
@@ -3607,97 +3481,79 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.civil.is_shotgun_mag = { --a mix of both shotgun and rifle, its a jack of all trades!
+	presets.weapon.civil.is_shotgun_mag = {
 		aim_delay = {
-			0.6,
-			0.6
+			0.7,
+			0.7
 		},
-		focus_delay = 3, --shotgun-like focus delay
-		focus_dis = 500, --im sure its unescessary for me to keep commenting this now.
-		spread = 20, --increased spread from regular shotgun
+		focus_delay = 0.7, 
+		focus_dis = 100, --unchanged from civil.
+		spread = 20, 
 		miss_dis = 20,
-		RELOAD_SPEED = 1.25, --saiga only has 7 shots per clip which forces a reload animation once depleted, justifying the rather quick reload
+		RELOAD_SPEED = 1, --whew.
 		melee_speed = 0.5,
-		melee_dmg = 15,
+		melee_dmg = 23,
 		melee_retry_delay = {
 			1,
 			2
 		},
 		range = {
-			optimal = 1500, --halfway point between shotguns and rifles, higher than shotgun, lower than rifle
-			far = 3000,
-			close = 800
+			optimal = 2500, --more run'n gun
+			far = 4000,
+			close = 1500
 		},
-		autofire_rounds = { --autofire rounds
+		autofire_rounds = { --increased from civil, yes, it's terrifying.
 			4,
 			4
 		},
-		--before i start falloff, if you can, go watch that one video of that one terrorist war crime guy eating a cyanide pill mid-trial to express my frustration at overkill simply cloning shotgun_pump for shotgun_mag 
+		--before i start falloff, please be aware that, current fuglore has been without internet for quite a few days now, his decision to work on this is probably motivated more from insanity than because they wants to.
 		FALLOFF = {
 			{
-				dmg_mul = 1.5, --the danger isnt just damage or accuracy, its the fact that its a split between shotgun and rifle in damage, firerate and falloff, saiga starts at 75 damage per hit with this preset, complex will increase its range and autofire rounds!
-				r = 100,
+				dmg_mul = 2,
+				r = 400,
 				acc = {
 					0,
-					0.12
+					0.8
 				},
 				recoil = {
-					0.05,
-					0.1
+					0.4,
+					0.6
 				},
 				mode = {
 					0,
-					3,
-					3,
-					1 --ugh fill me with that lead big boy
-				}
-			},
-			{
-				dmg_mul = 1.5,
-				r = 500,
-				acc = {
 					0,
-					0.12
-				},
-				recoil = {
-					0.1,
-					0.2
-				},
-				mode = {
 					0,
-					3,
-					3,
 					1
 				}
 			},
 			{
-				dmg_mul = 1, --50 damage at this range, its short-ranged like rifles, and yet, technically more powerful
-				r = 1000,
+				dmg_mul = 1.7,
+				r = 800,
 				acc = {
 					0,
-					0.057
+					0.5
 				},
 				recoil = {
-					0.2,
-					0.3
+					0.6,
+					0.8
 				},
 				mode = {
 					0,
-					3,
-					3,
+					0,
+					0,
 					1
 				}
 			},
 			{
-				dmg_mul = 0,
-				r = 1500,
+				dmg_mul = 1, 
+				r = 3000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					1,
-					2
+					0.6,
+					1
 				},
 				mode = {
 					0,
@@ -3708,58 +3564,40 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.civil.is_smg = { --used by hrts, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
+	presets.weapon.civil.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
 		aim_delay = {
 			0.28,
 			0.28
 		},
-		focus_delay = 4,
-		focus_dis = 500, --then again, so was destroying all the spawngroups in housewarming update
-		spread = 15,
-		miss_dis = 20,
-		RELOAD_SPEED = 1.5,
+		focus_delay = 1.5,
+		focus_dis = 100, 
+		spread = 25,
+		miss_dis = 40,
+		RELOAD_SPEED = 1.5, --whew.
 		melee_speed = 0.5,
-		melee_dmg = 10,
+		melee_dmg = 15,
 		melee_retry_delay = {
 			1,
 			1
 		},
 		range = {
-			optimal = 2000,
+			optimal = 3500,
 			far = 4000,
 			close = 1000 --light weight weapon, allows run'n gun, shortened since cloakers exist, will revise later per difficulty
 		},
-		autofire_rounds = { --defined autofire for smgs.
-			16,
-			24
+		autofire_rounds = { --extended mags a ton, pretty hazardous and continuous
+			32,
+			60
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --damage unchanged from simple
-				r = 100,
-				acc = { 
-					0,
-					0.1
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4,
+				dmg_mul = 2,
 				r = 500,
 				acc = {
 					0,
-					0.1
+					0.75
 				},
-				recoil = {
+				recoil = { 
 					0.2,
 					0.2
 				},
@@ -3771,33 +3609,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3,
+				dmg_mul = 1,
 				r = 1000,
 				acc = { --low accuracy compared to rifles, auto-fire makes up for it
 					0,
-					0.05
+					0.5
 				},
 				recoil = {
 					0.2,
 					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 1, --start dropping damage, hard, accuracy hits a low point
-				r = 2000,
-				acc = {
-					0,
-					0.01
-				},
-				recoil = {
-					0.6,
-					1.2
 				},
 				mode = {
 					0,
@@ -3814,8 +3634,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				recoil = {
-					1.5,
-					3
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3826,16 +3646,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.civil.is_revolver = { --might be used later for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops
-		aim_delay = { --aim delay
+	presets.weapon.civil.is_revolver = { --used by punks and beat police
+		aim_delay = {
 			0.4,
 			0.4
 		},
-		focus_delay = 5, --5 second focus delay, justified due to increased accuracy of the weapon along with damage scale
-		focus_dis = 200,
-		spread = 20,
-		miss_dis = 50,
-		RELOAD_SPEED = 1.4, --faster reloads than shotguns
+		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
+		focus_dis = 100,
+		spread = 10,
+		miss_dis = 10,
+		RELOAD_SPEED = 1.4,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -3849,51 +3669,33 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --120 damage start.
-				r = 100,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.8,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.8,
-					1.1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 2.5, --120, range remains excellent
+				dmg_mul = 2,
 				r = 1000,
+				acc = {
+					0,
+					0.9
+				},
+				recoil = {
+					1,
+					1.2
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 2000,
 				acc = {
 					0,
 					0.85
 				},
-				recoil = {
-					0.8,
-					1.1
+				recoil = { --lowered slightly from normal for the higher end, was 1.3, is 1.2
+					1.2,
+					1.4
 				},
 				mode = {
 					1,
@@ -3903,47 +3705,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2.5,
-				r = 2000,
-				acc = {
-					0,
-					0.7
-				},
-				recoil = { --lowered slightly from normal for the higher end, was 1.3, is 1.1
-					1,
-					1.1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1, --40, lower end of the accuracy scale with very little chance to hit anything unless in high numbers (which wont happen anytime soon)
+				dmg_mul = 0,
 				r = 3000,
 				acc = {
 					0,
-					0.2 --slightly increased from simple .15 to .2
-				},
-				recoil = {
-					1,
-					1.3 --slightly decreased from simple
-				},
-				mode = {
-					1,
-					0,
-					0,
 					0
-				}
-			},
-			{
-				dmg_mul = 0.2, --8 damage, acc, recoil and falloff destroy themselves past 4000 no matter what weapon, to keep maps like birth of sky bearable and make open areas less of a pain in the fucking ass 
-				r = 4000,
-				acc = {
-					0,
-					0.01
 				},
 				recoil = {
 					4,
@@ -3958,15 +3724,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.civil.mini = { --only used in crimespree, mostly based on complex with a few tweaks, also, blame overkill for making the minigun dozer look like shit, i really, really want to love it, its design is cool, it's mechanics are awesome, it works to solve lack of movement and encourages smart gameplay for once, and they kinda messed IT ALL UP, BY NOT GIVING IT A PROPER MINIGUN HOLDING ANIMATION BECAUSE YOU CANT GET YOUR PEOPLE TO MAKE NEW 3RD PERSON ANIMATIONS AND YET WE HAD A 3RD PERSON ANIMATIONS UPDATE MONTHS AGO HECK HECK HEEEEEEEEEEEEEEECK
+	presets.weapon.civil.mini = { --my wrath is finally............gone...........
+		spread_only = true,
 		aim_delay = {
-			0.9,
-			0.9
+			0.7,
+			0.7
 		},
-		focus_delay = 3,
+		focus_delay = 2,
 		focus_dis = 100,
-		spread = 80, --bigger spread from anarchy
-		miss_dis = 5, --reduced miss dis to make it easier than complex
+		spread = 60,
+		miss_dis = 10,
 		RELOAD_SPEED = 0.5,
 		melee_speed = 0.5,
 		melee_dmg = 25,
@@ -3975,8 +3742,8 @@ function CharacterTweakData:_presets(tweak_data)
 			2
 		},
 		range = {
-			optimal = 1500,
-			far = 3000,
+			optimal = 1500, --overall short range, but continues shooting often
+			far = 10000,
 			close = 1000
 		},
 		autofire_rounds = { --absolutely in awe of the size of this lad, absolute unit
@@ -3985,33 +3752,15 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5, --100 damage start
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					2.7,
-					2.7
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4, --80
+				dmg_mul = 10, --200 damage start, get the fuck out of its way.
 				r = 1000,
 				acc = {
-					1,
-					1
+					120,
+					60
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -4021,15 +3770,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --60
+				dmg_mul = 5, --80
 				r = 2000,
 				acc = {
-					1,
-					1
+					120,
+					60
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -4040,14 +3789,32 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 2,
-				r = 3000,
+				r = 10000,
 				acc = {
-					0.5,
-					0.5
+					140,
+					80
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 20000,
+				acc = {
+					140,
+					80
+				},
+				recoil = {
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -4057,55 +3824,38 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
-	}	
-	presets.weapon.civil.is_lmg = { --unused at this difficulty outside of crime spree, based on complex
+	}
+	presets.weapon.civil.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
+		spread_only = true,
 		aim_delay = {
-			0.5,
-			0.5
+			0.35,
+			0.35
 		},
-		focus_delay = 0,
-		focus_dis = 200,
-		spread = 40,
-		miss_dis = 1,
-		RELOAD_SPEED = 0.6,
+		focus_delay = 3, 
+		focus_dis = 100,
+		spread = 20,
+		miss_dis = 10,
+		RELOAD_SPEED = 1, --theres 200 ammo in the fucking thing, it'll take time to empty
 		melee_speed = 0.5,
-		melee_dmg = 15,
+		melee_dmg = 20,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
 			far = 4000,
 			close = 1000
 		},
-		autofire_rounds = {20, 180}, --bullet hose, kinda scary, fires in random, long bursts though
+		autofire_rounds = {80, 140}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
-			{
-				dmg_mul = 3, --60, keeps the gun scarier than rifles.
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					1.7,
-					1.7
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
 			{
 				dmg_mul = 3,
 				r = 500,
-				acc = { --lessened accuracy, firerate keeps it scary
-					1,
-					1
+				acc = {
+					40,
+					9
 				},
 				recoil = {
-					1.7,
-					1.7
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4115,15 +3865,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
+				dmg_mul = 3, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					1,
-					1
+					40,
+					9
 				},
 				recoil = {
-					1.7,
-					1.7
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4133,15 +3883,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
+				dmg_mul = 2, 
 				r = 2000,
 				acc = {
-					1,
-					1
+					40,
+					9
 				},
 				recoil = {
-					1.7,
-					1.7
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4151,15 +3901,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1,
+				dmg_mul = 1, 
 				r = 3000,
 				acc = {
-					1,
-					1
+					50,
+					12
 				},
 				recoil = {
-					1.7,
-					1.7
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4172,12 +3922,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0, --range limit reach, gun stops working, higher recoil than rifles to compensate for the full auto
 				r = 4000,
 				acc = {
-					0,
-					0
+					50,
+					12
 				},
 				recoil = {
-					2,
-					3
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4193,14 +3943,14 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	presets.weapon.complex.is_pistol = {
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.25,
+			0.25
 		},
-		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
-		focus_dis = 500,
+		focus_delay = 1,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 1,
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -4208,38 +3958,20 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 4000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
 			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --unchanged from civil
-				r = 100,
+				dmg_mul = 3,
+				r = 500,
 				acc = {
-					0.1,
+					0.2,
 					0.9
 				},
 				recoil = {
 					0.25,
-					0.25
-				},
-				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0.1,
-					0.85
-				},
-				recoil = {
-					0.3,
 					0.35
 				},
 				mode = {
@@ -4250,11 +3982,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --falloff does not begin, save it for 20m, the harsh drop is kept ofc
+				dmg_mul = 2, 
 				r = 1000,
 				acc = {
 					0,
-					0.6 --increased slightly from .55 to .6
+					0.6
 				},
 				recoil = {
 					0.3,
@@ -4268,15 +4000,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1,
+				dmg_mul = 1, --harsh drop slightly reduced, 
 				r = 2000,
 				acc = {
 					0,
 					0.45
 				},
 				recoil = { 
-					0.35,
-					0.4 --reduced from civil by .1, shouldnt matter too much but keeps a certain feeling of noteworthyness
+					0.3,
+					0.45
 				},
 				mode = {
 					1,
@@ -4286,29 +4018,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
 				r = 3000,
 				acc = {
 					0,
-					0.25 --slight increase from .2 to .25, matters, due to fbi gunslingers being quite the nuisance
-				},
-				recoil = {
-					0.35,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
 					0
-				}
-			},
-			{
-				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
-				r = 4000,
-				acc = {
-					0,
-					0.01
 				},
 				recoil = {
 					0.4,
@@ -4325,14 +4039,14 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.complex.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.25,
+			0.25
 		},
-		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
-		focus_dis = 500,
+		focus_delay = 1,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 1,
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -4340,38 +4054,20 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 4000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
 			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --unchanged from civil
-				r = 100,
+				dmg_mul = 3,
+				r = 500,
 				acc = {
-					0.1,
+					0.2,
 					0.9
 				},
 				recoil = {
 					0.25,
-					0.25
-				},
-				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0.1,
-					0.85
-				},
-				recoil = {
-					0.3,
 					0.35
 				},
 				mode = {
@@ -4382,11 +4078,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --falloff does not begin, save it for 20m, the harsh drop is kept ofc
+				dmg_mul = 2, 
 				r = 1000,
 				acc = {
 					0,
-					0.6 --increased slightly from .55 to .6
+					0.6
 				},
 				recoil = {
 					0.3,
@@ -4400,33 +4096,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1,
+				dmg_mul = 1, --harsh drop slightly reduced, 
 				r = 2000,
 				acc = {
 					0,
 					0.45
 				},
 				recoil = { 
-					0.35,
-					0.4 --reduced from civil by .1, shouldnt matter too much but keeps a certain feeling of noteworthyness
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
-				r = 3000,
-				acc = {
-					0,
-					0.25 --slight increase from .2 to .25, matters, due to fbi gunslingers being quite the nuisance
-				},
-				recoil = {
-					0.35,
-					1
+					0.3,
+					0.45
 				},
 				mode = {
 					1,
@@ -4437,10 +4115,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
-				r = 4000,
+				r = 3000,
 				acc = {
 					0,
-					0.01
+					0
 				},
 				recoil = {
 					0.4,
@@ -4454,19 +4132,19 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
-	}
+	}	
 	presets.weapon.complex.is_rifle = {
 		aim_delay = {
 			0.25,
 			0.25
 		},
-		focus_delay = 2, --2 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
-		focus_dis = 500, --focus delay starts after 5m
-		spread = 20, --lowered slightly from civil
-		miss_dis = 5,
-		RELOAD_SPEED = 1.1,
+		focus_delay = 1.25,
+		focus_dis = 100,
+		spread = 20, 
+		miss_dis = 20,
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
-		melee_dmg = 15, --100 damage on melee, no joke
+		melee_dmg = 10, --100 damage on melee
 		melee_retry_delay = {
 			1,
 			1
@@ -4479,22 +4157,22 @@ function CharacterTweakData:_presets(tweak_data)
 		tase_sphere_cast_radius = 5,
 		range = {
 			optimal = 3000,
-			far = 4000, --longer range style firing patterns begin, enemy movement gets complexer due to the close range being increased
+			far = 4000, 
 			close = 2000
 		},
-		autofire_rounds = { --fires massive bursts of 16 to 30 shots, weapontweakdata increases max clip for rifles at mayhem and above
-			16,
-			30
+		autofire_rounds = { --yes.
+			30,
+			60
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5,
-				r = 100,
+				dmg_mul = 4.5,
+				r = 400,
 				acc = { 
 					0,
-					0.2
+					0.9
 				},
-				recoil = {
+				recoil = { 
 					0.2,
 					0.2
 				},
@@ -4506,33 +4184,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4.5,
-				r = 400,
-				acc = { 
-					0,
-					0.2
-				},
-				recoil = {
-					0.2,
-					0.2 
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 800,
 				acc = { 
 					0,
-					0.1
+					0.9
 				},
 				recoil = { 
 					0.25,
-					0.3 --slightly decreased from civil, from 0.35 to 0.3
+					0.3
 				},
 				mode = {
 					0,
@@ -4542,11 +4202,29 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3,
-				r = 1500,
+				dmg_mul = 2,
+				r = 1200,
 				acc = {
 					0,
-					0.05
+					0.7
+				},
+				recoil = {
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 2,
+				r = 2000,
+				acc = {
+					0,
+					0.5
 				},
 				recoil = {
 					0.25,
@@ -4564,7 +4242,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 3000,
 				acc = {
 					0,
-					0.025
+					0.3
 				},
 				recoil = {
 					0.25,
@@ -4585,8 +4263,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				recoil = {
-					1,
-					2
+					0.4,
+					0.6
 				},
 				mode = {
 					0,
@@ -4599,15 +4277,15 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.complex.is_bullpup = presets.weapon.complex.is_rifle
 	presets.weapon.complex.is_shotgun_pump = {
-		aim_delay = { --no aim delay for complex, focus delay increases significantly
-			0.5,
-			0.5
+		aim_delay = {
+			0.4,
+			0.4
 		},
-		focus_delay = 3, --significantly quicker focus delay build from civil, peek first, verify, shoot later
-		focus_dis = 500, --focus delay only starts past 5m, unchanged from civil
+		focus_delay = 2, --focus delay change here.
+		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 1, --lowered reload speed greatly from civil, shit starts getting dangerous
+		RELOAD_SPEED = 1.4, --HOW? ARE THEY JUST PILING ALL THE SHELLS ON THEIR HAND AND JUST SHOVING IT IN THERE LIKE CANDY INTO A BOWL???? either way, quite powerful
 		melee_speed = 0.5,
 		melee_dmg = 15, --100 damage on melee, no joke, keep as is from civil and up
 		melee_retry_delay = {
@@ -4615,17 +4293,17 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 2000, --increased from civil, shotgun types will run'n gun which makes them significantly more hazardous
+			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 1500 
+			close = 1200 
 		},
 		FALLOFF = {
 			{
 				dmg_mul = 3,
-				r = 100,
+				r = 400,
 				acc = {
-					0.1,
-					0.8
+					0.2,
+					1
 				},
 				recoil = { --slightly lowered recoil from civil, lower end has more variance
 					0.8,
@@ -4639,13 +4317,13 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3,
-				r = 600,
-				acc = {
-					0,
-					0.6
+				dmg_mul = 3, --150 damage remains, yes, yes, y e s.
+				r = 800,
+				acc = { 
+					0.15,
+					0.9
 				},
-				recoil = {
+				recoil = { --reduced massively from civil
 					1,
 					1.2
 				},
@@ -4661,29 +4339,11 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 1000,
 				acc = {
 					0,
-					0.4
+					0.75
 				},
 				recoil = {
-					1.2,
-					1.4
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 2, 
-				r = 1500,
-				acc = {
-					0,
-					0.2
-				},
-				recoil = {
-					1.4,
-					1.5
+					1.1,
+					1.3
 				},
 				mode = {
 					1,
@@ -4694,14 +4354,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1, 
-				r = 2000,
+				r = 1500, --max 15m range on Ultra Spicy/Scorching Hot
 				acc = {
 					0,
-					0.175
+					0.25
 				},
 				recoil = { --recoil is ok though, said the slut who is designing this mess
-					1.5,
-					1.5
+					1.1,
+					1.3
 				},
 				mode = {
 					1,
@@ -4730,18 +4390,18 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.is_shotgun_mag = { --a mix of both shotgun and rifle, its a jack of all trades, HAZARDOUS FOR THAT PRECISE REASON.
-		aim_delay = { --no more aim delay on complex.
-			0.5,
-			0.5
+	presets.weapon.complex.is_shotgun_mag = {
+		aim_delay = {
+			0.4,
+			0.4
 		},
-		focus_delay = 4, --focus delay unchanged from civil.
-		focus_dis = 500, --unchanged from civil.
-		spread = 20, --spread unchanged from civil.
+		focus_delay = 0.7, 
+		focus_dis = 100, --unchanged from civil.
+		spread = 20, 
 		miss_dis = 20,
-		RELOAD_SPEED = 1.25, --saiga no longer has 7 shots per clip, but the animation is still justified because this is "complex"
+		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
-		melee_dmg = 20,
+		melee_dmg = 23,
 		melee_retry_delay = {
 			1,
 			2
@@ -4751,18 +4411,18 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 4000,
 			close = 1500
 		},
-		autofire_rounds = { --this difficulty partially increases the saiga mag-capacity, so this gets increased too
-			8,
-			16
+		autofire_rounds = { --increased from complex, yes, it's terrifying.
+			16,
+			32
 		},
-		--before i start falloff, if you can, go watch that one video of that one terrorist war crime guy eating a cyanide pill mid-trial to express my frustration at overkill simply cloning shotgun_pump for shotgun_mag, and yes, if you're reading this so far, this isnt copy paste, i have willingly chosen to let this message be known every time shotgun mag falloff is ever mentioned in this fucking lua file
+		--before i start falloff, please be aware that, current fuglore has been without internet for quite a few days now, his decision to work on this is probably motivated more from insanity than because they wants to.
 		FALLOFF = {
 			{
-				dmg_mul = 2, --anarchy further increases range and autofire rounds, maintain this one easy to comphrehend
-				r = 100,
+				dmg_mul = 2,
+				r = 500,
 				acc = {
 					0,
-					0.12
+					0.8
 				},
 				recoil = {
 					0.05,
@@ -4770,17 +4430,17 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					0,
-					3,
-					3,
-					1 --ugh fill me with that lead big boy
+					0,
+					0,
+					1
 				}
 			},
 			{
-				dmg_mul = 2,
-				r = 500,
+				dmg_mul = 1.7, --80 counts one less hit on ICTV
+				r = 1200,
 				acc = {
 					0,
-					0.12
+					0.5
 				},
 				recoil = {
 					0.05,
@@ -4788,57 +4448,39 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					0,
-					3,
-					3,
+					0,
+					0,
 					1
 				}
 			},
 			{
-				dmg_mul = 1.5, --75 damage
-				r = 1000,
+				dmg_mul = 1,
+				r = 2000,
 				acc = {
 					0,
-					0.07
+					0.25
 				},
 				recoil = {
-					0.1,
-					0.15
-				},
-				mode = {
-					0,
-					3,
-					3,
-					1
-				}
-			},
-			{
-				dmg_mul = 1, --50 damage, lower end of the falloff scale
-				r = 1500,
-				acc = {
-					0,
-					0.05
-				},
-				recoil = {
-					0.1,
+					0.15,
 					0.2
 				},
 				mode = {
 					0,
-					3,
-					3,
+					0,
+					0,
 					1
 				}
 			},
 			{
-				dmg_mul = 0,
-				r = 2000,
+				dmg_mul = 1, 
+				r = 3000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					1,
-					2
+					0.15,
+					0.2
 				},
 				mode = {
 					0,
@@ -4849,16 +4491,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.is_smg = { --used by hrts, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
-		aim_delay = { --aim delay kept, the intent of the weapon is just to build suppression on the player and be generally annoying, its damage isnt worth too much consideration most of the time...MOST of the time.
+	presets.weapon.complex.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
+		aim_delay = {
 			0.28,
 			0.28
 		},
-		focus_delay = 4,
-		focus_dis = 500, 
-		spread = 15,
-		miss_dis = 20,
-		RELOAD_SPEED = 1.5,
+		focus_delay = 1.5,
+		focus_dis = 100, 
+		spread = 25,
+		miss_dis = 30,
+		RELOAD_SPEED = 1.5, --whew.
 		melee_speed = 0.5,
 		melee_dmg = 15,
 		melee_retry_delay = {
@@ -4866,41 +4508,23 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 2000,
+			optimal = 3500,
 			far = 4000,
 			close = 1000 --light weight weapon, allows run'n gun, shortened since cloakers exist, will revise later per difficulty
 		},
-		autofire_rounds = { --defined autofire for smgs, their mag capacity is increased at this difficulty, so auto-fire has to be increased too
-			24,
-			32
+		autofire_rounds = { --extended mags a ton, pretty hazardous and continuous
+			32,
+			60
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --damage unchanged from civil, keep as is.
-				r = 100,
-				acc = { 
-					0,
-					0.1
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 500,
 				acc = {
-					0,
-					0.1
+					0.2,
+					0.75
 				},
-				recoil = {
+				recoil = { 
 					0.2,
 					0.2
 				},
@@ -4912,11 +4536,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3,
+				dmg_mul = 2,
 				r = 1000,
-				acc = { --low accuracy compared to rifles, auto-fire makes up for it
-					0,
-					0.05
+				acc = {
+					0.05,
+					0.6
 				},
 				recoil = {
 					0.2,
@@ -4931,14 +4555,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1, --start dropping damage, hard, accuracy hits a low point
-				r = 2000,
+				r = 1500,
 				acc = {
 					0,
-					0.02
+					0.4
 				},
 				recoil = {
-					0.6,
-					1.2
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -4955,8 +4579,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				recoil = {
-					1.5,
-					3
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -4967,16 +4591,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.is_revolver = { --might be used later for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops, mostly unchanged from civil outside of no aim delay, a little bit of increased range and reduced focus delay
+	presets.weapon.complex.is_revolver = { --used by punks and beat police
 		aim_delay = {
 			0.4,
 			0.4
 		},
-		focus_delay = 4, --4 second focus delay, justified due to increased accuracy of the weapon along with damage scale
-		focus_dis = 200,
-		spread = 20,
-		miss_dis = 50,
-		RELOAD_SPEED = 1.4, --FAST reload.
+		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
+		focus_dis = 100,
+		spread = 10,
+		miss_dis = 10,
+		RELOAD_SPEED = 1.8, --FAST reload.
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -4990,51 +4614,33 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --160 damage start.
-				r = 100,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.8,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 4,
-				r = 500,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.8,
-					1.1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 4, --120, range remains excellent.
+				dmg_mul = 3, --120, range remains excellent.
 				r = 1000,
+				acc = {
+					0,
+					0.9
+				},
+				recoil = {
+					1,
+					1.2
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 2.5,
+				r = 2000,
 				acc = {
 					0,
 					0.85
 				},
-				recoil = {
-					0.8,
-					1.1
+				recoil = { --lowered slightly from normal for the higher end, was 1.3, is 1.2
+					1.2,
+					1.4
 				},
 				mode = {
 					1,
@@ -5044,33 +4650,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --120, great.
-				r = 2000,
-				acc = {
-					0,
-					0.7
-				},
-				recoil = { --lowered slightly from normal for the higher end, was 1.3, is 1
-					1,
-					1.
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 2, --80, lower end of the accuracy scale with very little chance to hit anything unless in high numbers (which wont happen anytime soon)
+				dmg_mul = 1.88, --75, lower end of the accuracy scale with very little chance to hit anything unless in high numbers (which wont happen anytime soon)
 				r = 3000,
 				acc = {
 					0,
-					0.3 --increased from civil from 0.2 to 0.3
+					0.25 --slightly increased from civil from 0.2 to 0.25
 				},
 				recoil = {
-					1,
-					1.1
+					1.4,
+					1.6 
 				},
 				mode = {
 					1,
@@ -5080,11 +4668,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.3, --12 damage, acc, recoil and falloff destroy themselves past 4000 no matter what weapon, to keep maps like birth of sky bearable and make open areas less of a pain in the fucking ass 
+				dmg_mul = 0,
 				r = 4000,
 				acc = {
 					0,
-					0.01
+					0
 				},
 				recoil = {
 					4,
@@ -5099,14 +4687,15 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.mini = { --yes
+	presets.weapon.complex.mini = { --my wrath is finally............gone...........
+		spread_only = true,
 		aim_delay = {
-			0.8,
-			0.8
+			0.7,
+			0.7
 		},
-		focus_delay = 0.7,
+		focus_delay = 2,
 		focus_dis = 100,
-		spread = 80, --weapon is mechanically different from every single other npc weapon in the game, works separate from the acc system
+		spread = 60,
 		miss_dis = 10,
 		RELOAD_SPEED = 0.5,
 		melee_speed = 0.5,
@@ -5117,7 +4706,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		range = {
 			optimal = 1500, --overall short range, but continues shooting often
-			far = 3000,
+			far = 10000,
 			close = 1000
 		},
 		autofire_rounds = { --absolutely in awe of the size of this lad, absolute unit
@@ -5127,32 +4716,14 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 10, --200 damage start, get the fuck out of its way.
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					2.7,
-					2.7
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4, --80
 				r = 1000,
 				acc = {
-					1,
-					1
+					120,
+					60
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -5162,15 +4733,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4 , --80
+				dmg_mul = 5, --80
 				r = 2000,
 				acc = {
-					0.75,
-					0.75
+					120,
+					60
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -5181,14 +4752,32 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 2,
-				r = 3000,
+				r = 10000,
 				acc = {
-					0.5,
-					0.5
+					140,
+					80
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 20000,
+				acc = {
+					140,
+					80
+				},
+				recoil = {
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -5200,15 +4789,16 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.complex.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
+		spread_only = true,
 		aim_delay = {
 			0.35,
 			0.35
 		},
-		focus_delay = 0, --higher than rifles at this preset to show it as a suppressing bullet hose at longer ranges
-		focus_dis = 200,
+		focus_delay = 3, 
+		focus_dis = 100,
 		spread = 20,
-		miss_dis = 5,
-		RELOAD_SPEED = 0.9, --decently long pause after burst
+		miss_dis = 10,
+		RELOAD_SPEED = 1, --theres 200 ammo in the fucking thing, it'll take time to empty
 		melee_speed = 0.5,
 		melee_dmg = 20,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
@@ -5217,36 +4807,18 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 4000,
 			close = 1000
 		},
-		autofire_rounds = {100, 200}, --bullet hose, kinda scary, fires in random, long bursts though
+		autofire_rounds = {80, 140}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
-			{
-				dmg_mul = 3, --60, keeps the gun scarier than rifles.
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					1.4,
-					1.4
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
 			{
 				dmg_mul = 3,
 				r = 500,
-				acc = { --lessened accuracy, firerate keeps it scary
-					1,
-					1
+				acc = {
+					40,
+					9
 				},
 				recoil = {
-					1.4,
-					1.4
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5259,12 +4831,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					1,
-					1
+					40,
+					9
 				},
 				recoil = {
-					1.4,
-					1.4
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5274,15 +4846,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
+				dmg_mul = 2, 
 				r = 2000,
 				acc = {
-					1,
-					1
+					40,
+					9
 				},
 				recoil = {
-					1.4,
-					1.4
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5292,15 +4864,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --increased slightly from complex, 20 to 40
+				dmg_mul = 1, 
 				r = 3000,
 				acc = {
-					1,
-					1
+					50,
+					12
 				},
 				recoil = {
-					1.4,
-					1.4
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5313,12 +4885,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0, --range limit reach, gun stops working, higher recoil than rifles to compensate for the full auto
 				r = 4000,
 				acc = {
-					0,
-					0
+					50,
+					12
 				},
 				recoil = {
-					2,
-					3
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5328,7 +4900,6 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
-	
 	}
 	
 	--anarchy begins here, all damage increased slightly, firing ranges are increased dramatically, and gun damage is mostly flat until a sudden skydive at 40m, minor acc or recoil changes, none of that is particularly as bad as the zeal spawngroups in this difficulty however, which can, and will, tear out your asshole through your mouth
@@ -5338,7 +4909,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0.25,
 			0.25
 		},
-		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
+		focus_delay = 1,
 		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
@@ -5356,29 +4927,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --increased from complex
-				r = 100,
-				acc = {
-					0, --focus delay build up, unchanged from civil
-					0.9
-				},
-				recoil = {
-					0.2,
-					0.25
-				},
-				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
 				dmg_mul = 4,
 				r = 500,
 				acc = {
-					0,
-					0.85
+					0.2,
+					0.9
 				},
 				recoil = {
 					0.25,
@@ -5470,7 +5023,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0.25,
 			0.25
 		},
-		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
+		focus_delay = 1,
 		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
@@ -5488,29 +5041,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --increased from complex
-				r = 100,
-				acc = {
-					0, --focus delay build up, unchanged from civil
-					0.9
-				},
-				recoil = {
-					0.2,
-					0.25
-				},
-				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
 				dmg_mul = 4,
 				r = 500,
 				acc = {
-					0,
-					0.85
+					0.2,
+					0.9
 				},
 				recoil = {
 					0.25,
@@ -5602,13 +5137,13 @@ function CharacterTweakData:_presets(tweak_data)
 			0.25,
 			0.25
 		},
-		focus_delay = 2, --2 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
+		focus_delay = 1.2,
 		focus_dis = 100,
 		spread = 20, 
-		miss_dis = 5, --experimental change, might make damage feel less forced with the reduced accuracy now
+		miss_dis = 10,
 		RELOAD_SPEED = 1.4, --DW style.
 		melee_speed = 0.5,
-		melee_dmg = 15, --100 damage on melee
+		melee_dmg = 15,
 		melee_retry_delay = {
 			1,
 			1
@@ -5631,10 +5166,10 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 6,
-				r = 100,
+				r = 400,
 				acc = { 
-					0,
-					0.4
+					0.3,
+					0.9
 				},
 				recoil = { --increased recoil a tiiiiny bit to make sure it doesn't get too ballistic
 					0.2,
@@ -5648,29 +5183,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5.5, --light damage, recoil and acc falloff begins, really good still, powerful, even
-				r = 400,
-				acc = { 
-					0,
-					0.2
-				},
-				recoil = {
-					0.2,
-					0.2 
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4, --light falloff, just enough to count 5 hits on ICTV armor
+				dmg_mul = 5, --light falloff, just enough to count 5 hits on ICTV armor
 				r = 800,
 				acc = { 
 					0,
-					0.1
+					0.9
 				},
 				recoil = { 
 					0.25,
@@ -5684,11 +5201,65 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --drop damage by 10, player survivability should be a bit higher now at 6 hits
-				r = 1500,
+				dmg_mul = 4,
+				r = 1200,
 				acc = {
 					0,
-					0.05 --acc drops
+					0.7
+				},
+				recoil = {
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 4,
+				r = 2000,
+				acc = {
+					0,
+					0.5
+				},
+				recoil = {
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3, --eat shit.
+				r = 3000,
+				acc = {
+					0,
+					0.3
+				},
+				recoil = {
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3,
+				r = 4000,
+				acc = {
+					0,
+					0.1
 				},
 				recoil = {
 					0.25,
@@ -5703,14 +5274,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 0, --young man, theres no need to get downed, i said, young man, get the fuck off the ground, because, young man, there are cops all around, and the FUCK. ING. DRILL. IS. JAMMED UP.
-				r = 4000,
+				r = 5000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					1,
-					2
+					0.4,
+					0.6
 				},
 				mode = {
 					0,
@@ -5746,7 +5317,7 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 3,
-				r = 100,
+				r = 400,
 				acc = {
 					0.2,
 					1
@@ -5764,10 +5335,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 3, --150 damage remains, yes, yes, y e s.
-				r = 600,
-				acc = { --unchanged, they're too powerful for higher accuracy at this point, changing this would have negative effects
-					0,
-					0.75
+				r = 800,
+				acc = { 
+					0.15,
+					0.9
 				},
 				recoil = { --reduced massively from civil
 					1,
@@ -5785,7 +5356,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 1000,
 				acc = {
 					0,
-					0.5
+					0.75
 				},
 				recoil = {
 					1.1,
@@ -5803,7 +5374,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 1500,
 				acc = {
 					0,
-					0.25
+					0.5
 				},
 				recoil = {
 					1.1,
@@ -5821,7 +5392,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = {
 					0,
-					0.175
+					0.25
 				},
 				recoil = { --recoil is ok though, said the slut who is designing this mess
 					1.1,
@@ -5859,9 +5430,9 @@ function CharacterTweakData:_presets(tweak_data)
 			0.4,
 			0.4
 		},
-		focus_delay = 1.5, --reduced from 2 to 1.5, dozers are priority, you'll see them coming.
+		focus_delay = 0.7,
 		focus_dis = 100, --unchanged from civil.
-		spread = 20, --spread unchanged from civil.
+		spread = 20, 
 		miss_dis = 20,
 		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
@@ -5879,32 +5450,14 @@ function CharacterTweakData:_presets(tweak_data)
 			16,
 			32
 		},
-		--before i start falloff, please be aware that, current fuglore has been without internet for quite a few days now, his decision to work on this is probably motivated more from insanity than because he wants to.
+		--before i start falloff, please be aware that, current fuglore has been without internet for quite a few days now, his decision to work on this is probably motivated more from insanity than because they wants to.
 		FALLOFF = {
-			{
-				dmg_mul = 2, --damage unchanged, focus is on increasing frequency of fire and range.
-				r = 100,
-				acc = {
-					0,
-					0.12
-				},
-				recoil = {
-					0.05,
-					0.05
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1 --ugh fill me with that lead big boy
-				}
-			},
 			{
 				dmg_mul = 2,
 				r = 500,
 				acc = {
 					0,
-					0.12
+					0.8
 				},
 				recoil = {
 					0.05,
@@ -5919,10 +5472,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1.7, --80 counts one less hit on ICTV
-				r = 1000,
+				r = 2000,
 				acc = {
 					0,
-					0.11
+					0.5
 				},
 				recoil = {
 					0.05,
@@ -5937,10 +5490,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1,
-				r = 2000,
+				r = 2500,
 				acc = {
 					0,
-					0.08
+					0.25
 				},
 				recoil = {
 					0.15,
@@ -5954,15 +5507,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, 
-				r = 2500,
+				dmg_mul = 1, 
+				r = 3000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					4,
-					4.2
+					0.15,
+					0.2
 				},
 				mode = {
 					0,
@@ -5978,9 +5531,9 @@ function CharacterTweakData:_presets(tweak_data)
 			0.28,
 			0.28
 		},
-		focus_delay = 2,
+		focus_delay = 1,
 		focus_dis = 100, 
-		spread = 15,
+		spread = 20,
 		miss_dis = 20,
 		RELOAD_SPEED = 2, --whew.
 		melee_speed = 0.5,
@@ -6000,29 +5553,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --damage unchanged from civil, keep as is.
-				r = 100,
-				acc = { 
-					0,
-					0.15
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
 				dmg_mul = 4,
 				r = 500,
 				acc = {
-					0,
-					0.15
+					0.2,
+					0.75
 				},
 				recoil = { 
 					0.2,
@@ -6039,8 +5574,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 1000,
 				acc = { --low accuracy compared to rifles, auto-fire makes up for it
-					0,
-					0.1
+					0.05,
+					0.6
 				},
 				recoil = {
 					0.2,
@@ -6058,7 +5593,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = {
 					0,
-					0.04
+					0.4
 				},
 				recoil = {
 					0.2,
@@ -6091,15 +5626,15 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.anarchy.is_revolver = { --used for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops, gains reasonable reduction in recoil to make it more dangerous
+	presets.weapon.anarchy.is_revolver = { --used for by punks, and beat police
 		aim_delay = {
 			0.4,
 			0.4
 		},
 		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
 		focus_dis = 100,
-		spread = 20,
-		miss_dis = 50,
+		spread = 10,
+		miss_dis = 10,
 		RELOAD_SPEED = 1.8, --FAST reload.
 		melee_speed = 0.5,
 		melee_dmg = 10,
@@ -6114,42 +5649,6 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --120 damage start.
-				r = 100,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.64,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.64,
-					1.05
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
 				dmg_mul = 3, --120, range remains excellent.
 				r = 1000,
 				acc = {
@@ -6157,8 +5656,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.7,
-					1.1
+					0.64,
+					1
 				},
 				mode = {
 					1,
@@ -6224,13 +5723,14 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.mini = { --my wrath is finally............gone...........
+		spread_only = true,
 		aim_delay = {
 			0.7,
 			0.7
 		},
-		focus_delay = 0.7,
+		focus_delay = 1.25,
 		focus_dis = 100,
-		spread = 60, --weapon is mechanically different from every single other npc weapon in the game, works separate from the acc system
+		spread = 60,
 		miss_dis = 10,
 		RELOAD_SPEED = 0.5,
 		melee_speed = 0.5,
@@ -6241,7 +5741,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		range = {
 			optimal = 1500, --overall short range, but continues shooting often
-			far = 3000,
+			far = 10000,
 			close = 1000
 		},
 		autofire_rounds = { --absolutely in awe of the size of this lad, absolute unit
@@ -6251,28 +5751,10 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 10, --200 damage start, get the fuck out of its way.
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					2,
-					2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 5, --100
 				r = 1000,
 				acc = {
-					1,
-					1
+					50,
+					30
 				},
 				recoil = {
 					2,
@@ -6286,11 +5768,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4 , --80
+				dmg_mul = 5, --80
 				r = 2000,
 				acc = {
-					1,
-					1
+					80,
+					50
 				},
 				recoil = {
 					2,
@@ -6304,11 +5786,29 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2,
-				r = 3000,
+				dmg_mul = 5,
+				r = 10000, --satan said he was a big fan of this idea. i agreed.
 				acc = {
-					1,
+					90,
+					60
+				},
+				recoil = {
+					2,
+					2
+				},
+				mode = {
+					0,
+					0,
+					0,
 					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 20000,
+				acc = {
+					90,
+					60
 				},
 				recoil = {
 					2,
@@ -6324,11 +5824,12 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
+		spread_only = true,
 		aim_delay = {
 			0.35,
 			0.35
 		},
-		focus_delay = 0, --higher than rifles, set to 3.
+		focus_delay = 3, 
 		focus_dis = 100,
 		spread = 20,
 		miss_dis = 10,
@@ -6347,8 +5848,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --60, keeps the gun scarier than rifles.
 				r = 100,
 				acc = {
-					1,
-					1
+					20,
+					3
 				},
 				recoil = {
 					0.8,
@@ -6364,9 +5865,9 @@ function CharacterTweakData:_presets(tweak_data)
 			{
 				dmg_mul = 3,
 				r = 500,
-				acc = { --lessened accuracy, firerate keeps it scary
-					1,
-					1
+				acc = {
+					20,
+					3
 				},
 				recoil = {
 					0.8,
@@ -6383,8 +5884,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					1,
-					1
+					20,
+					3
 				},
 				recoil = {
 					0.8,
@@ -6401,8 +5902,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
 				r = 2000,
 				acc = {
-					1,
-					1
+					20,
+					6
 				},
 				recoil = {
 					0.8,
@@ -6416,11 +5917,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --increased slightly from complex, 20 to 40
+				dmg_mul = 2,
 				r = 3000,
 				acc = {
-					1,
-					1
+					30,
+					9
 				},
 				recoil = {
 					0.8,
@@ -6437,8 +5938,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0, --range limit reach, gun stops working, higher recoil than rifles to compensate for the full auto
 				r = 4000,
 				acc = {
-					0,
-					0
+					30,
+					12
 				},
 				recoil = {
 					2,
@@ -6461,10 +5962,10 @@ function CharacterTweakData:_presets(tweak_data)
 			0.28,
 			0.28
 		},
-		focus_delay = 2, --focus delay.
+		focus_delay = 0.7, --focus delay.
 		focus_dis = 500,
-		spread = 25,
-		miss_dis = 10,
+		spread = 10,
+		miss_dis = 5,
 		RELOAD_SPEED = 2.1, --Fast reloads.
 		melee_speed = 0.75,
 		melee_dmg = 22,
@@ -6593,10 +6094,10 @@ function CharacterTweakData:_presets(tweak_data)
 			0.28,
 			0.28
 		},
-		focus_delay = 2, --focus delay.
+		focus_delay = 0.7, --focus delay.
 		focus_dis = 500,
-		spread = 25,
-		miss_dis = 10,
+		spread = 10,
+		miss_dis = 5,
 		RELOAD_SPEED = 2.1, --Fast reloads.
 		melee_speed = 0.75,
 		melee_dmg = 22,
@@ -6727,8 +6228,8 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 0.7,
 		focus_dis = 500, --focus delay starts after 5m
-		spread = 20, 
-		miss_dis = 10, --experimental change, might make damage feel less forced with the reduced accuracy now
+		spread = 10, 
+		miss_dis = 0,
 		RELOAD_SPEED = 1.8, --DW style.
 		melee_speed = 0.75,
 		melee_dmg = 22, --100 damage on melee
@@ -6753,29 +6254,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 7.5, --75 damage for vet boyes
-				r = 100,
-				acc = { 
-					0,
-					0.8
-				},
-				recoil = { --increased recoil a tiiiiny bit to make sure it doesn't get too ballistic
-					0.2,
-					0.2
-				},
-				mode = { --full auto
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
 				dmg_mul = 7.5,
 				r = 500,
 				acc = {
-					0,
-					0.8
+					0.2,
+					1
 				},
 				recoil = {
 					0.2,
@@ -6843,15 +6326,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, --young man, theres no need to get downed, i said, young man, get the fuck off the ground, because, young man, there are cops all around, and the FUCK. ING. DRILL. IS. JAMMED UP.
+				dmg_mul = 0,
 				r = 4000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					1,
-					2
+					0.25,
+					0.35
 				},
 				mode = {
 					1,

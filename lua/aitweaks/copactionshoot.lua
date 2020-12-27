@@ -987,14 +987,10 @@ function CopActionShoot:_get_modified_spread(t, falloff)
 	local spread = math_lerp(spread_values[1], spread_values[2], focus_prog)
 	local common_data = self._common_data
 
-	 --spread isn't affected when suppressed, running or dodging in shin mode
+	 --spread isn't affected when suppressed, or dodging in shin mode
 	if not self._is_shin_shootout then
 		if common_data.is_suppressed then
-			spread = spread / 0.5
-		end
-
-		if common_data.ext_anim.run then
-			spread = spread / 0.75
+			spread = spread / 0.8
 		end
 
 		local lower_body_action = common_data.active_actions[2]
@@ -1004,10 +1000,22 @@ function CopActionShoot:_get_modified_spread(t, falloff)
 		end
 	end
 
-	local att_anim_data = att_unit:anim_data()
+	local att_mov_ext = att_unit:movement()
+	
+	if shooting_local_player then
+		if not att_mov_ext:running() then
+			spread = spread / 1.2
+		end
+	else
+		local att_anim_data = att_unit:anim_data()
 
-	if att_anim_data and att_anim_data.dodge then
-		spread = spread / 0.5
+		if att_anim_data then
+			if att_anim_data.dodge then
+				spread = spread / 0.8
+			elseif not att_anim_data.run then
+				spread = spread / 1.2
+			end
+		end
 	end
 
 	local cs_acc_mul = self._cs_acc_mul
@@ -1076,11 +1084,7 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 	 --accuracy isn't affected when suppressed, running or dodging in shin mode
 	if not self._is_shin_shootout then
 		if common_data.is_suppressed then
-			hit_chance = hit_chance * 0.5
-		end
-
-		if common_data.ext_anim.run then
-			hit_chance = hit_chance * 0.75
+			hit_chance = hit_chance * 0.8
 		end
 
 		local lower_body_action = common_data.active_actions[2]
@@ -1089,11 +1093,23 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 			hit_chance = hit_chance * lower_body_action:accuracy_multiplier()
 		end
 	end
+	
+	local att_mov_ext = att_unit:movement()
+	
+	if shooting_local_player then
+		if not att_mov_ext:running() then
+			hit_chance = hit_chance * 1.2
+		end
+	else
+		local att_anim_data = att_unit:anim_data()
 
-	local att_anim_data = att_unit:anim_data()
-
-	if att_anim_data and att_anim_data.dodge then
-		hit_chance = hit_chance * 0.5
+		if att_anim_data then
+			if att_anim_data.dodge then
+				hit_chance = hit_chance * 0.8
+			elseif not att_anim_data.run then
+				hit_chance = hit_chance * 1.2
+			end
+		end
 	end
 
 	local cs_acc_mul = self._cs_acc_mul
@@ -1123,8 +1139,6 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 		if shooting_local_player then
 			mvec3_set(enemy_vec, pos)
 		else
-			local att_mov_ext = att_unit:movement()
-
 			--get center of mass for most NPC units (or sentries/turrets, which is the same as their usual shooting pos)
 			if not att_mov_ext or not att_mov_ext.m_com then
 				mvec3_set(enemy_vec, pos)

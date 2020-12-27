@@ -3,6 +3,7 @@
 --Hooks:PostHook(GroupAIStateBase, "init", "shin_debug", function(self, group_ai_state)
 	--self:set_debug_draw_state(true)
 --end)
+
 local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_cpy = mvector3.copy
 

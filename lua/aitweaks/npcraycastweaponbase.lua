@@ -144,12 +144,6 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 		result.guaranteed_miss = miss
 
 		mvector3.spread(direction, math.rand(unpack(extra_spread)))
-	else
-		local true_spread = self:_get_spread(user_unit)
-
-		if true_spread > 1 then
-			mvector3.spread(direction, true_spread)
-		end
 	end
 
 	mvector3.set(mvec_to, direction)
