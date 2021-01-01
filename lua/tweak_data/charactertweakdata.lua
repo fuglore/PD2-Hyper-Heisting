@@ -7945,7 +7945,13 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 		self.gangster_ninja.speech_prefix_count = 2
 	end		
 	self.gangster_ninja.challenges = {type = "gangster"}
-	table.insert(self._enemy_list, "gangster_ninja")		
+	table.insert(self._enemy_list, "gangster_ninja")
+	
+	self.fbi_girl = deep_clone(self.fbi) --replaces cop_female, these spawns are extremely scripted and semi-rare so it feels right to make them all ninjas
+	self.fbi_girl.speech_prefix_p1 = "fl"
+	self.fbi_girl.speech_prefix_p2 = "n"
+	self.fbi_girl.speech_prefix_count = 1
+	table.insert(self._enemy_list, "fbi_girl")
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(self, presets) --TODO: Nothing right now.
@@ -8557,12 +8563,13 @@ function CharacterTweakData:_set_normal()
 	--FBI tweak
 	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.move_speed = self.presets.move_speed.civil_consistency
+	self.fbi_girl.weapon = self.presets.weapon.complex
+	self.fbi_girl.move_speed = self.presets.move_speed.civil_consistency
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency	
 	self.fbi_pager.weapon = self.presets.weapon.complex
 	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency	
 	--Cop health tweak
-	self.cop_female.HEALTH_INIT = 16
 	self.security.HEALTH_INIT = 16
 	self.security_undominatable.HEALTH_INIT = 16	
 	self.mute_security_undominatable.HEALTH_INIT = 16
@@ -8724,12 +8731,13 @@ function CharacterTweakData:_set_hard()
 	--FBI tweak
 	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.move_speed = self.presets.move_speed.civil_consistency
+	self.fbi_girl.weapon = self.presets.weapon.complex
+	self.fbi_girl.move_speed = self.presets.move_speed.civil_consistency
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency
 	self.fbi_pager.weapon = self.presets.weapon.complex
 	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency		
 	--Cop health tweak
-	self.cop_female.HEALTH_INIT = 16
 	self.security.HEALTH_INIT = 16
 	self.security_undominatable.HEALTH_INIT = 16	
 	self.mute_security_undominatable.HEALTH_INIT = 16
@@ -8901,6 +8909,9 @@ function CharacterTweakData:_set_overkill()
 	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.dodge = self.presets.dodge.heavy_complex
 	self.fbi.move_speed = self.presets.move_speed.complex_consistency
+	self.fbi_girl.weapon = self.presets.weapon.complex
+	self.fbi_girl.dodge = self.presets.dodge.heavy_complex
+	self.fbi_girl.move_speed = self.presets.move_speed.complex_consistency
 	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency	
@@ -8925,7 +8936,6 @@ function CharacterTweakData:_set_overkill()
 	self.taser.move_speed = self.presets.move_speed.civil_consistency
 	self.medic.move_speed = self.presets.move_speed.civil_consistency
 	--security health
-	self.cop_female.HEALTH_INIT = 16
 	self.security.HEALTH_INIT = 16
 	self.security_undominatable.HEALTH_INIT = 16	
 	self.mute_security_undominatable.HEALTH_INIT = 16
@@ -9089,7 +9099,6 @@ function CharacterTweakData:_set_overkill_145()
 		end
 	end
 	
-	self.cop_female.HEALTH_INIT = 16
 	self.security.HEALTH_INIT = 16
 	self.security_undominatable.HEALTH_INIT = 16	
 	self.mute_security_undominatable.HEALTH_INIT = 16
@@ -9104,6 +9113,9 @@ function CharacterTweakData:_set_overkill_145()
 		self.fbi.dodge = self.presets.dodge.ninja_complex
 		self.fbi.weapon = self.presets.weapon.fbigod
 		self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+		self.fbi_girl.weapon = self.presets.weapon.fbigod
+		self.fbi_girl.dodge = self.presets.dodge.ninja_complex
+		self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
 		self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
 		self.gangster_ninja.weapon = self.presets.weapon.fbigod
 		self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9256,6 +9268,9 @@ function CharacterTweakData:_set_overkill_145()
 		self.fbi.weapon = self.presets.weapon.complex
 		self.fbi.dodge = self.presets.dodge.heavy_complex
 		self.fbi.move_speed = self.presets.move_speed.complex_consistency
+		self.fbi_girl.weapon = self.presets.weapon.complex
+		self.fbi_girl.dodge = self.presets.dodge.heavy_complex
+		self.fbi_girl.move_speed = self.presets.move_speed.complex_consistency
 		self.gangster_ninja.weapon = self.presets.weapon.complex
 		self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
 		self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency
@@ -9328,8 +9343,7 @@ function CharacterTweakData:_set_easy_wish()
 	self.security_undominatable.no_arrest = true		
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.mute_security_undominatable.no_arrest = true
-	self.cop_female.HEALTH_INIT = 16
-	self.cop_female.no_arrest = true
+	self.fbi_girl.no_arrest = true
 	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
@@ -9338,6 +9352,9 @@ function CharacterTweakData:_set_easy_wish()
 	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_girl.weapon = self.presets.weapon.anarchy
+	self.fbi_girl.dodge = self.presets.dodge.athletic_complex
+	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
 	self.gangster_ninja.weapon = self.presets.weapon.anarchy
 	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9536,8 +9553,7 @@ function CharacterTweakData:_set_overkill_290()
 	self.security_undominatable.no_arrest = true		
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.mute_security_undominatable.no_arrest = true
-	self.cop_female.HEALTH_INIT = 16
-	self.cop_female.no_arrest = true
+	self.fbi_girl.no_arrest = true
 	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
@@ -9550,6 +9566,9 @@ function CharacterTweakData:_set_overkill_290()
 	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_girl.weapon = self.presets.weapon.anarchy
+	self.fbi_girl.dodge = self.presets.dodge.athletic_complex
+	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
 	self.gangster_ninja.weapon = self.presets.weapon.anarchy
 	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9748,8 +9767,7 @@ function CharacterTweakData:_set_sm_wish()
 	self.security_undominatable.no_arrest = true		
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.mute_security_undominatable.no_arrest = true
-	self.cop_female.HEALTH_INIT = 16
-	self.cop_female.no_arrest = true
+	self.fbi_girl.no_arrest = true
 	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
@@ -9759,6 +9777,9 @@ function CharacterTweakData:_set_sm_wish()
 	self.fbi.dodge = self.presets.dodge.ninja_complex
 	self.fbi.weapon = self.presets.weapon.fbigod
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_girl.weapon = self.presets.weapon.fbigod
+	self.fbi_girl.dodge = self.presets.dodge.ninja_complex
+	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
 	self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
 	self.gangster_ninja.weapon = self.presets.weapon.fbigod
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
@@ -10361,6 +10382,8 @@ end
 
 function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.fbi.HEALTH_INIT = self.fbi.HEALTH_INIT * hp_mul
+	self.cop_female.HEALTH_INIT = self.cop_female.HEALTH_INIT * hp_mul
+	self.fbi_girl.HEALTH_INIT = self.fbi_girl.HEALTH_INIT * hp_mul
 	self.gangster_ninja.HEALTH_INIT = self.gangster_ninja.HEALTH_INIT * hp_mul
 	self.fbi_pager.HEALTH_INIT = self.fbi_pager.HEALTH_INIT * hp_mul
 	self.swat.HEALTH_INIT = self.swat.HEALTH_INIT * hp_mul
@@ -10412,6 +10435,12 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	if self.cop.headshot_dmg_mul then
 		self.cop.headshot_dmg_mul = self.cop.headshot_dmg_mul * hs_mul
 	end
+	
+	if self.cop_female.headshot_dmg_mul then
+		self.cop_female.headshot_dmg_mul = self.cop_female.headshot_dmg_mul * hs_mul
+	end
+	
+	self.fbi_girl.headshot_dmg_mul = self.fbi_girl.headshot_dmg_mul * hs_mul
 
 	if self.fbi.headshot_dmg_mul then
 		self.fbi.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul

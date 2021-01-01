@@ -22,6 +22,10 @@ function CopBase:init(unit)
 			end
 		end
 	end
+	
+	if self._tweak_table == "cop_female" then
+		self._tweak_table = "fbi_girl"
+	end
 
 	self._char_tweak = tweak_data.character[self._tweak_table]
 	

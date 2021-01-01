@@ -498,7 +498,7 @@ function CopDamage:die(attack_data)
 end
 
 function CopDamage:build_suppression(amount, panic_chance, was_saw)
-	if self._dead or not self._char_tweak.suppression or self._punk_effect then
+	if self._dead or not self._char_tweak.suppression or self._punk_effect or self._unit:brain():is_converted_chk() then
 		return
 	end
 
@@ -3667,15 +3667,3 @@ function CopDamage:_AI_comment_death(unit, killed_unit, special_comment)
 		unit:sound():say("g36x_any", true)
 	end
 end
-
-Hooks:PostHook(CopDamage, "damage_bullet", "shin_damagebullet", function(self, attack_data)
-	
-	--if attack_data.weapon_unit and attack_data.weapon_unit:base().is_category and attack_data.weapon_unit:base():is_category("saw") then
-	--	managers.groupai:state():_voice_saw() --THAT MADMAN HAS A FUCKIN' SAW
-	--end
-		
-	if attack_data.attacker_unit:base().sentry_gun and not self:is_friendly_fire(attack_data.attacker_unit) then
-		managers.groupai:state():_voice_sentry() --FUCKING SCI-FI ROBOT GUNS
-	end
-
-end)
