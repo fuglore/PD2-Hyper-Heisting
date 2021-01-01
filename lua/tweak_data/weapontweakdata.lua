@@ -95,6 +95,9 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.blazter_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"
 	self.blazter_npc.r_trail = true
 	
+	--idk where to put this lol--
+	self.beretta92_npc.has_suppressor = "suppressed_b"	
+	
 	--shotgun reload stuff
 	self.r870_npc.hold = "rifle"
 	self.r870_npc.reload = "looped"
