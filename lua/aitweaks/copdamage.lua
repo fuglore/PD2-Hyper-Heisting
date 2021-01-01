@@ -498,7 +498,7 @@ function CopDamage:die(attack_data)
 end
 
 function CopDamage:build_suppression(amount, panic_chance, was_saw)
-	if self._dead or not self._char_tweak.suppression or self._punk_effect or self._unit:brain():is_converted_chk() then
+	if self._dead or not self._char_tweak.suppression or self._punk_effect or self._unit:in_slot(16) then
 		return
 	end
 
