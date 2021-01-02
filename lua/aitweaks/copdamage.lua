@@ -727,7 +727,7 @@ function CopDamage:_on_damage_received(damage_info)
 			end
 			
 			if damage_info.variant == "melee" then
-				hurtlevel_mult = hurtlevel_mult - 0.1
+				hurtlevel_mult = hurtlevel_mult - 0.25
 			end
 			
 			if self._hurt_level then

@@ -1901,7 +1901,15 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		--local testing = true
 		
 		if data.unit:movement():cool() then
-			haste = "walk"
+			if objective.investigating then
+				if objective.haste then
+					haste = objective.haste
+				else
+					haste = "walk"
+				end
+			else
+				haste = "walk"
+			end
 		elseif data.attention_obj then
 			local enemyseeninlast4secs = data.attention_obj and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 4
 			local enemy_seen_range_bonus = enemyseeninlast4secs and 600 or 0
