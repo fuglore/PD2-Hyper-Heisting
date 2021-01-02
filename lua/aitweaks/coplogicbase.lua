@@ -719,7 +719,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 							dis_mul = dis / max_dis
 
 							if dis_mul < 1 then
-								if settings.notice_requires_FOV then
+								if not is_detection_persistent and settings.notice_requires_FOV then
 									my_head_fwd = my_head_fwd or data.unit:movement():m_head_rot():z()
 									local vec_angle = mvec3_angle(my_head_fwd, tmp_vec1)
 
@@ -891,7 +891,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 							dis_mul = dis / max_dis
 
 							if dis_mul < 1 then
-								if settings.notice_requires_FOV then
+								if not is_detection_persistent and settings.notice_requires_FOV then
 									my_head_fwd = my_head_fwd or data.unit:movement():m_head_rot():z()
 									local vec_angle = mvec3_angle(my_head_fwd, tmp_vec1)
 
@@ -940,33 +940,37 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 							end
 						end
 					end
+					
+					if not is_detection_persistent then
+						local delta_prog = nil
+						local dt = t - attention_info.prev_notice_chk_t
+						
+						if noticable then
+							if angle == -1 then
+								delta_prog = 1
+							else
+								local min_delay = my_data.detection.delay[1]
+								local max_delay = my_data.detection.delay[2]
+								local angle_mul_mod = 0.25 * math_min(angle / my_data.detection.angle_max, 1)
+								local dis_mul_mod = 0.75 * dis_multiplier
+								local notice_delay_mul = settings.notice_delay_mul or 1
 
-					local delta_prog = nil
-					local dt = t - attention_info.prev_notice_chk_t
+								if settings.detection and settings.detection.delay_mul then
+									notice_delay_mul = notice_delay_mul * settings.detection.delay_mul
+								end
 
-					if noticable then
-						if angle == -1 then
-							delta_prog = 1
-						else
-							local min_delay = my_data.detection.delay[1]
-							local max_delay = my_data.detection.delay[2]
-							local angle_mul_mod = 0.25 * math_min(angle / my_data.detection.angle_max, 1)
-							local dis_mul_mod = 0.75 * dis_multiplier
-							local notice_delay_mul = settings.notice_delay_mul or 1
-
-							if settings.detection and settings.detection.delay_mul then
-								notice_delay_mul = notice_delay_mul * settings.detection.delay_mul
+								local notice_delay_modified = math_lerp(min_delay * notice_delay_mul, max_delay, dis_mul_mod + angle_mul_mod)
+								delta_prog = notice_delay_modified > 0 and dt / notice_delay_modified or 1
 							end
-
-							local notice_delay_modified = math_lerp(min_delay * notice_delay_mul, max_delay, dis_mul_mod + angle_mul_mod)
-							delta_prog = notice_delay_modified > 0 and dt / notice_delay_modified or 1
+						else
+							delta_prog = dt * -0.125
 						end
-					else
-						delta_prog = dt * -0.125
+		
+						attention_info.notice_progress = attention_info.notice_progress + delta_prog
+					elseif noticeable then
+						attention_info.notice_progress = 2
 					end
-
-					attention_info.notice_progress = attention_info.notice_progress + delta_prog
-
+					
 					if attention_info.notice_progress > 1 then
 						attention_info.notice_progress = nil
 						attention_info.prev_notice_chk_t = nil

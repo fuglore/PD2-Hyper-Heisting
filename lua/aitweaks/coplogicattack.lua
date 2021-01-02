@@ -2351,6 +2351,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	local focus_enemy = data.attention_obj
 	local running = data.unit:movement()._active_actions[2] and data.unit:movement()._active_actions[2]:type() == "walk" and data.unit:movement()._active_actions[2]:haste() == "run"
 	local tase = focus_enemy and focus_enemy.reaction >= AIAttentionObject.REACT_SPECIAL_ATTACK
+	local aggressor = not data.unit:base():has_tag("law") or data.unit:in_slot(16)
 
 	if focus_enemy then
 		if tase and data.unit:base():has_tag("taser") then
@@ -2409,7 +2410,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 							shoot = true
 						elseif focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 2 then
 							shoot = true
-						elseif not data.unit:base():has_tag("law") and focus_enemy.verified_dis < firing_range or data.unit:base():has_tag("law") and focus_enemy.aimed_at and focus_enemy.verified_dis <= 1500 then
+						elseif aggressor and focus_enemy.verified_dis < firing_range or data.unit:base():has_tag("law") and focus_enemy.aimed_at and focus_enemy.verified_dis <= 1500 then
 							shoot = true
 						end
 						

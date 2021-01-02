@@ -613,7 +613,7 @@ function CopLogicIntimidated._add_delayed_rescue_SO(data, my_data)
 	if my_data.delayed_clbks and my_data.delayed_clbks[my_data.delayed_rescue_SO_id] then
 		managers.enemy:reschedule_delayed_clbk(my_data.delayed_rescue_SO_id, TimerManager:game():time() + 2)
 	else
-		if my_data.rescuer then
+		if my_data.rescuer and alive(my_data.rescuer) and my_data.rescuer:brain() then
 			local objective = my_data.rescuer:brain():objective()
 			local rescuer = my_data.rescuer
 			my_data.rescuer = nil
@@ -733,7 +733,7 @@ function CopLogicIntimidated.rescue_SO_verification(ignore_this, data, unit)
 end
 
 function CopLogicIntimidated._unregister_rescue_SO(data, my_data)
-	if my_data.rescuer then
+	if my_data.rescuer and alive(my_data.rescuer) and my_data.rescuer:brain() then
 		local objective = my_data.rescuer:brain():objective()
 		local rescuer = my_data.rescuer
 		my_data.rescuer = nil
