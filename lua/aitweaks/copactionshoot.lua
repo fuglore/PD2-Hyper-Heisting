@@ -29,6 +29,7 @@ local math_up = math.UP
 local mrot_axis_angle = mrotation.set_axis_angle
 local temp_rot1 = Rotation()
 
+local draw_target_vec_firing = nil
 local draw_melee_sphere_rays = nil
 local draw_aim_delay_vis_proc = nil
 local draw_fire_line_ray = nil
@@ -291,7 +292,10 @@ function CopActionShoot:on_exit()
 
 	if self._autofiring then
 		self._weapon_base:stop_autofire()
-		self._ext_movement:play_redirect("up_idle")
+
+		if self._ext_anim.recoil then
+			self._ext_movement:play_redirect("up_idle")
+		end
 	end
 
 	if self._shooting_player and alive(self._attention.unit) then
@@ -302,6 +306,17 @@ end
 function CopActionShoot:on_attention(attention, old_attention)
 	if self._shooting_player and old_attention and alive(old_attention.unit) then
 		old_attention.unit:movement():on_targetted_for_attack(false, self._common_data.unit)
+	end
+
+	if self._autofiring then
+		self._weapon_base:stop_autofire()
+
+		if self._ext_anim.recoil then
+			self._ext_movement:play_redirect("up_idle")
+		end
+
+		self._autofiring = nil
+		self._autoshots_fired = nil
 	end
 
 	self._shooting_player = nil
@@ -398,6 +413,8 @@ function CopActionShoot:on_attention(attention, old_attention)
 						local melee_delay = math_min(aim_delay, 0.35)
 						self._melee_start_allowed_t = t + melee_delay
 					end
+				elseif self._can_melee and not self._melee_start_allowed_t then
+					self._melee_start_allowed_t = t
 				end
 
 				shoot_hist.m_last_pos = mvec3_copy(target_pos)
@@ -506,7 +523,7 @@ function CopActionShoot:update(t)
 
 	local cannot_fire_yet = self._weapon_base._next_fire_allowed > t
 
-	if not cannot_fire_yet and vis_state ~= 1 then
+	if cannot_fire_yet and vis_state ~= 1 then
 		if self._skipped_frames < vis_state * 3 then
 			self._skipped_frames = self._skipped_frames + 1
 
@@ -589,7 +606,10 @@ function CopActionShoot:update(t)
 		elseif self._weapon_base:clip_empty() then
 			if autofiring then
 				self._weapon_base:stop_autofire()
-				self._ext_movement:play_redirect("up_idle")
+
+				if ext_anim.recoil then
+					self._ext_movement:play_redirect("up_idle")
+				end
 
 				self._autofiring = nil
 				self._autoshots_fired = nil
@@ -613,7 +633,9 @@ function CopActionShoot:update(t)
 				self._autofiring = nil
 				self._autoshots_fired = nil
 
-				self._ext_movement:play_redirect("up_idle")
+				if ext_anim.recoil then
+					self._ext_movement:play_redirect("up_idle")
+				end
 			elseif cannot_fire_yet then --if the weapon can't even fire, avoid doing all the calculations
 				if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
 					if self._tank_animations then
@@ -667,12 +689,20 @@ function CopActionShoot:update(t)
 				local fired = self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit)
 
 				if fired then
+					if draw_target_vec_firing then
+						local line = Draw:brush(Color.green:with_alpha(1), 0.1)
+						line:cylinder(shoot_from_pos, shoot_from_pos + target_vec * target_dis, 5)
+					end
+
 					if not autofiring or autofiring - 1 <= self._autoshots_fired then
 						self._autofiring = nil
 						self._autoshots_fired = nil
 
 						self._weapon_base:stop_autofire()
-						self._ext_movement:play_redirect("up_idle")
+
+						if ext_anim.recoil then
+							self._ext_movement:play_redirect("up_idle")
+						end
 
 						local dis_lerp = math_min(1, target_dis / falloff.r)
 						local shoot_delay = math_lerp(falloff.recoil[1], falloff.recoil[2], dis_lerp)
@@ -912,6 +942,11 @@ function CopActionShoot:update(t)
 					--however if you do something like this, you'd want to do something similar to the cannot_fire_yet checks, to avoid wasting performance
 					if self._weapon_base:trigger_held(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit) then
 						shots_fired = 1
+
+						if draw_target_vec_firing then
+							local line = Draw:brush(Color.green:with_alpha(1), 0.1)
+							line:cylinder(shoot_from_pos, shoot_from_pos + target_vec * target_dis, 5)
+						end
 					end
 
 					self._autoshots_fired = shots_fired
@@ -924,6 +959,11 @@ function CopActionShoot:update(t)
 						end
 					end
 				elseif self._weapon_base:singleshot(shoot_from_pos, target_vec, dmg_mul, shooting_local_player, nil, nil, nil, att_unit) then
+					if draw_target_vec_firing then
+						local line = Draw:brush(Color.green:with_alpha(1), 0.1)
+						line:cylinder(shoot_from_pos, shoot_from_pos + target_vec * target_dis, 5)
+					end
+
 					if not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
 						self._ext_movement:play_redirect("recoil_single")
 					end
