@@ -1897,9 +1897,6 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		
 	--this is a mess, but it should keep enemy movement tacticool overall, by having them prefer slower apporoaches at close ranges
 	if can_perform_walking_action then
-		
-		--local testing = true
-		
 		if data.unit:movement():cool() then
 			if objective.investigating then
 				if objective.haste then

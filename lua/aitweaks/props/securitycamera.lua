@@ -140,8 +140,8 @@ function SecurityCamera:_sound_the_alarm(attention_info)
 		if attention_info.nav_tracker then
 			pos = attention_info.nav_tracker:field_position()
 		else
-			unit_pos = attention_info.unit:position()
-			local temp_tracker = managers.navigation:create_nav_tracker(pos, false)
+			local unit_pos = attention_info.unit:position()
+			local temp_tracker = managers.navigation:create_nav_tracker(unit_pos, false)
 			pos = temp_tracker:field_position()
 
 			managers.navigation:destroy_nav_tracker(temp_tracker)	
