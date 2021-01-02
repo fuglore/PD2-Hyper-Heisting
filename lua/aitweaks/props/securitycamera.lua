@@ -180,10 +180,6 @@ function SecurityCamera:_register_investigate_SO(pos) --Ahah! I've spotted you!
 	if not Network:is_server() or not managers.navigation:is_data_ready() then
 		return
 	end
-	
-	if self._destroyed or self._destroying or not alive(self._unit) or managers.groupai:state():enemy_weapons_hot() or not managers.groupai:state():whisper_mode() then
-		return
-	end
 
 	local SO_category = "enemies"
 	local SO_filter = managers.navigation:convert_SO_AI_group_to_access(SO_category)
@@ -411,4 +407,54 @@ function SecurityCamera:set_detection_enabled(state, settings, mission_element)
 	end
 
 	managers.groupai:state():register_security_camera(self._unit, state)
+end
+
+function SecurityCamera:generate_cooldown(amount)
+	local mission_script_element = self._mission_script_element
+
+	self:set_detection_enabled(false)
+	managers.statistics:camera_destroyed()
+	
+	if self._continue_detecting_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._continue_detecting_clbk_id)
+
+		self._continue_detecting_clbk_id = nil
+	end
+
+	if mission_script_element then
+		mission_script_element:on_destroyed(self._unit)
+	end
+
+	if self._access_camera_mission_element then
+		self._access_camera_mission_element:access_camera_operation_destroy()
+	end
+
+	self._destroyed = true
+end
+
+
+function SecurityCamera:destroy(unit)
+	table.delete(SecurityCamera.cameras, self._unit)
+	
+	self:_unregister_investigate_SO()
+	
+	self._destroying = true
+
+	self:set_detection_enabled(false)
+
+	if self._continue_detecting_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._continue_detecting_clbk_id)
+
+		self._continue_detecting_clbk_id = nil
+	end
+
+	if self._tape_loop_expired_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._tape_loop_expired_clbk_id)
+
+		self._tape_loop_expired_clbk_id = nil
+	end
+
+	if SecurityCamera.active_tape_loop_unit and SecurityCamera.active_tape_loop_unit == self._unit then
+		SecurityCamera.active_tape_loop_unit = nil
+	end
 end
