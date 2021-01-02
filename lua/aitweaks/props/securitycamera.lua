@@ -180,6 +180,10 @@ function SecurityCamera:_register_investigate_SO(pos) --Ahah! I've spotted you!
 	if not Network:is_server() or not managers.navigation:is_data_ready() then
 		return
 	end
+	
+	if self._destroyed or self._destroying or not alive(self._unit) or managers.groupai:state():enemy_weapons_hot() or not managers.groupai:state():whisper_mode() then
+		return
+	end
 
 	local SO_category = "enemies"
 	local SO_filter = managers.navigation:convert_SO_AI_group_to_access(SO_category)
