@@ -261,7 +261,11 @@ end
 
 function SecurityCamera:on_investigate_SO_administered(receiver_unit)
 	if alive(receiver_unit) and receiver_unit:brain() and receiver_unit:brain():objective() then
-		self._investigate_SO_data.old_objective = receiver_unit:brain():objective()
+		local objective = receiver_unit:brain():objective()
+		
+		if objective.type == "free" and not objective.investigating then
+			self._investigate_SO_data.old_objective = objective
+		end
 	end
 	
 	self._investigate_SO_data.receiver_unit = receiver_unit

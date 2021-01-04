@@ -1717,8 +1717,9 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	if data.path_fail_t and data.t < data.path_fail_t + 2 then
 		return
 	end
-
-	if data.is_suppressed then
+	
+		
+	if data.objective and data.objective.investigating and new_objective.investigating then
 		return
 	end
 
@@ -2507,6 +2508,9 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 		
+		if not aim and data.char_tweak.always_face_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction then
+			aim = true
+		end
 		
 		if focus_enemy.is_person and AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and not data.unit:in_slot(16) and not data.is_converted and data.tactics and data.tactics.harass then
 			if focus_enemy.is_local_player then
@@ -2529,23 +2533,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 				end
 			end
 		end
-
-		if not aim and data.char_tweak.always_face_enemy and AIAttentionObject.REACT_COMBAT <= focus_enemy.reaction then
-			aim = true
-		end
-
-		if data.logic.chk_should_turn(data, my_data) then
-			local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
-			local enemy_pos = nil
-
-			if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification < 3 then
-				enemy_pos = focus_enemy.m_pos
-			else
-				enemy_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
-			end
-
-			CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
-		end
 	end
 	
 	local is_moving = my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover or data.unit:anim_data().run or data.unit:anim_data().move
@@ -2559,11 +2546,18 @@ function CopLogicAttack._upd_aim(data, my_data)
 	end
 
 	if aim or shoot then
-		if focus_enemy.verified or focus_enemy.nearly_visible then
+		local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
+		
+		if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification < 3 then
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)
 
 				my_data.attention_unit = focus_enemy.u_key
+			end
+			
+			if data.logic.chk_should_turn(data, my_data) then
+				local enemy_pos = focus_enemy.m_pos
+				CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
 			end
 		else
 			local look_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
@@ -2577,6 +2571,10 @@ function CopLogicAttack._upd_aim(data, my_data)
 				CopLogicBase._set_attention_on_pos(data, mvec3_cpy(look_pos))
 
 				my_data.attention_unit = mvec3_cpy(look_pos)
+			end
+			
+			if data.logic.chk_should_turn(data, my_data) then
+				CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, look_pos)
 			end
 		end
 		
