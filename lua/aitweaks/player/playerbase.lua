@@ -67,25 +67,25 @@ function PlayerBase:_setup_suspicion_and_detection_data()
 	if difficulty_index <= 3 then
 		self._detection_settings = {
 			multipliers = {},
-			init_delay_mul = 1.5,
+			init_delay_mul = 1,
 			init_range_mul = 0.5
 		}
 	elseif difficulty_index == 4 or difficulty_index == 5 then
 		self._detection_settings = {
 			multipliers = {},
-			init_delay_mul = 1.25,
+			init_delay_mul = 0.75,
 			init_range_mul = 0.75
 		}
 	elseif difficulty_index == 6 or difficulty_index == 7 then
 		self._detection_settings = {
 			multipliers = {},
-			init_delay_mul = 1,
+			init_delay_mul = 0.5,
 			init_range_mul = 1
 		}
 	else 
 		self._detection_settings = {
 			multipliers = {},
-			init_delay_mul = 0.5,
+			init_delay_mul = 0.25,
 			init_range_mul = 1
 		}
 	end
