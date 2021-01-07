@@ -1639,7 +1639,7 @@ function CopActionHurt:_upd_tase_shooting(t)
 			local falloff, i_range = CopActionShoot._get_shoot_falloff(self, target_dis, self._falloff)
 			local dmg_buff = self._ext_base:get_total_buff("base_damage")
 			local dmg_mul = (1 + dmg_buff) * falloff.dmg_mul
-			local new_target_pos = self._shoot_history and CopActionShoot._get_unit_shoot_pos(self, t, target_pos, target_dis, falloff, i_range, autotarget)
+			local new_target_pos = self._shoot_history and self._attention.unit and CopActionShoot._get_unit_shoot_pos(self, t, target_pos, target_dis, falloff, i_range, autotarget)
 
 			if new_target_pos then
 				target_pos = new_target_pos
@@ -1717,7 +1717,7 @@ function CopActionHurt:_upd_tase_shooting(t)
 				self._autoshots_fired = 0
 			else
 				local spread = self._spread
-				local new_target_pos = self._shoot_history and CopActionShoot._get_unit_shoot_pos(self, t, target_pos, target_dis, falloff, i_range, autotarget)
+				local new_target_pos = self._shoot_history and self._attention.unit and CopActionShoot._get_unit_shoot_pos(self, t, target_pos, target_dis, falloff, i_range, autotarget)
 
 				if new_target_pos then
 					target_pos = new_target_pos
@@ -1897,7 +1897,7 @@ function CopActionHurt:_upd_bleedout(t)
 					local falloff, i_range = CopActionShoot._get_shoot_falloff(self, target_dis, self._falloff)
 					local dmg_buff = self._ext_base:get_total_buff("base_damage")
 					local dmg_mul = (1 + dmg_buff) * falloff.dmg_mul
-					local new_target_pos = self._shoot_history and CopActionShoot._get_unit_shoot_pos(self, t, target_pos, target_dis, falloff, i_range, autotarget)
+					local new_target_pos = self._shoot_history and self._attention.unit and CopActionShoot._get_unit_shoot_pos(self, t, target_pos, target_dis, falloff, i_range, autotarget)
 
 					if new_target_pos then
 						target_pos = new_target_pos
@@ -2042,7 +2042,7 @@ function CopActionHurt:_upd_bleedout(t)
 						self._autoshots_fired = 0
 					else
 						local spread = self._spread
-						local new_target_pos = self._shoot_history and CopActionShoot._get_unit_shoot_pos(self, t, target_pos, target_dis, falloff, i_range, autotarget)
+						local new_target_pos = self._shoot_history and self._attention.unit and CopActionShoot._get_unit_shoot_pos(self, t, target_pos, target_dis, falloff, i_range, autotarget)
 
 						if new_target_pos then
 							target_pos = new_target_pos
