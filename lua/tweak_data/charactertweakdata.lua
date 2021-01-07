@@ -7318,18 +7318,18 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 	for _, cname in ipairs(common_units) do
 		self[cname].crumble_chance = common_chance
 		self[cname].allow_pass_out = true
-		self[cname].damage.fire_damage_mul = 4
+		self[cname].damage.fire_damage_mul = 24
 	end
 	
 	for _, lname in ipairs(light_units) do
 		self[lname].crumble_chance = light_swat_chance
 		self[lname].allow_pass_out = true
-		self[lname].damage.fire_damage_mul = 4
+		self[lname].damage.fire_damage_mul = 16
 	end
 	
 	for _, hname in ipairs(heavy_units) do
 		self[hname].crumble_chance = heavy_swat_chance
-		self[hname].damage.fire_damage_mul = 3
+		self[hname].damage.fire_damage_mul = 8
 	end
 end
 
@@ -7517,7 +7517,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.detection = presets.detection.enemyspooc
 	self.spooc.HEALTH_INIT = 20
 	self.spooc.headshot_dmg_mul = 6
-	self.spooc.damage.fire_damage_mul = 4
+	self.spooc.damage.fire_damage_mul = 8
 	self.spooc.move_speed = presets.move_speed.lightning_constant
 	self.spooc.no_retreat = nil
 	self.spooc.no_arrest = true
@@ -7696,7 +7696,6 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.chatter = presets.enemy_chatter.shield
 	self.shield.announce_incomming = "incomming_shield"
 	self.shield.steal_loot = nil
-	self.shield.use_animation_on_fire_damage = false
 
 	table.insert(self._enemy_list, "shield")
 	
@@ -7749,7 +7748,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 			min_duration = 8
 		}
 	}
-	self.medic.damage.fire_damage_mul = 4
+	self.medic.damage.fire_damage_mul = 8
 	self.medic.chatter = presets.enemy_chatter.medic
 	self.medic.experience.cable_tie = "tie_swat"
 	self.medic.speech_prefix_p1 = self._prefix_data_p1.medic()
@@ -7776,7 +7775,7 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.HEALTH_INIT = 25
 	self.taser.headshot_dmg_mul = 2
 	self.taser.damage.doom_hurt_type = "doom"
-	self.taser.damage.fire_damage_mul = 0.5
+	self.taser.damage.fire_damage_mul = 0.25
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.taser.move_speed = presets.move_speed.civil_consistency
 	self.taser.suppression = presets.suppression.stalwart_nil

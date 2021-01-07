@@ -2399,7 +2399,7 @@ function CopDamage:damage_fire(attack_data)
 		end
 	end
 	
-	if self._unit:base():char_tweak().fire_damage_mul then
+	if self._unit:base():char_tweak().fire_damage_mul and attack_data.use_damage_mul and not attack_data.is_fire_dot_damage then
 		damage = damage * self._unit:base():char_tweak().fire_damage_mul
 	end
 
@@ -2444,7 +2444,7 @@ function CopDamage:damage_fire(attack_data)
 		local result_type = nil
 		
 		if self._char_tweak.damage.doom_hurt_type then
-			result_type = self:determine_doom_hurt_type(attack_data, self._char_tweak.damage.doom_hurt_type == "doomzer" or nil)
+			result_type = self:determine_doom_hurt_type(attack_data)
 		elseif attack_data.variant == "stun" then
 			result_type = "hurt_sick"
 		else
@@ -2547,7 +2547,7 @@ function CopDamage:damage_fire(attack_data)
 		end
 
 		local fire_dot_max_distance = 3000
-		local fire_dot_trigger_chance = 30
+		local fire_dot_trigger_chance = 15
 		local dot_damage = fire_dot_data and fire_dot_data.dot_damage or 25
 
 		if fire_dot_data then
@@ -2557,12 +2557,12 @@ function CopDamage:damage_fire(attack_data)
 			if attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:base()._grenade_entry == "molotov" or attack_data.is_molotov then
 				--grenade, DoT unchanged
 			elseif alive(attack_data.weapon_unit) and attack_data.weapon_unit:base()._name_id ~= nil and tweak_data.weapon[attack_data.weapon_unit:base()._name_id] ~= nil and tweak_data.weapon[attack_data.weapon_unit:base()._name_id].fire_dot_data ~= nil then
-				dot_damage = (damage / dot_damage) * 100 --flamethrower, scale DoT damage depending on the total damage dealt through direct (impact) fire damage
+				dot_damage = (damage / dot_damage) * 200 --flamethrower, scale DoT damage depending on the total damage dealt through direct (impact) fire damage
 				--usual dot_damage is 30
 			elseif alive(attack_data.weapon_unit) and attack_data.weapon_unit:base()._parts then
 				for part_id, part in pairs(attack_data.weapon_unit:base()._parts) do
 					if tweak_data.weapon.factory.parts[part_id].custom_stats and tweak_data.weapon.factory.parts[part_id].custom_stats.fire_dot_data then
-						dot_damage = dot_damage * damage * 0.05 --Dragon's Breath rounds, scale DoT damage depending on the total damage dealt through direct (impact) fire damage
+						dot_damage = dot_damage * damage * 0.01 --Dragon's Breath rounds, scale DoT damage depending on the total damage dealt through direct (impact) fire damage
 						--usual dot_damage is 10
 					end
 				end
@@ -2574,8 +2574,12 @@ function CopDamage:damage_fire(attack_data)
 
 		if flammable and not attack_data.is_fire_dot_damage and distance < fire_dot_max_distance and start_dot_damage_roll <= fire_dot_trigger_chance then
 			managers.fire:add_doted_enemy(self._unit, TimerManager:game():time(), attack_data.weapon_unit, fire_dot_data.dot_length, dot_damage, attack_data.attacker_unit, attack_data.is_molotov)
-
-			start_dot_dance_antimation = true
+			
+			local can_do_fire_dance = char_tweak.use_animation_on_fire_damage ~= false
+			
+			if attack_data.result.type == "fire_hurt" and can_do_fire_dance then --i already calculate the result before this
+				start_dot_dance_antimation = true
+			end
 		end
 
 		if fire_dot_data then

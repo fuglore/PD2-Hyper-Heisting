@@ -436,7 +436,7 @@ function ActionSpooc:_upd_strike_first_frame(t)
 	end
 
 	if redir_result then
-		self._unit:anim_state_machine():set_speed(redir_result, 1.5)
+		self._unit:anim_state_machine():set_speed(redir_result, 1.75)
 		self._ext_movement:spawn_wanted_items()
 		if PD2THHSHIN and PD2THHSHIN:GlintEnabled() then
 			if not self._played_glint then

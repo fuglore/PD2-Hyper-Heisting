@@ -424,7 +424,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_nine_lives_beta_desc"] = "BASIC: ##$basic##\nAfter being revived, you knock down all cops within ##4 meters##.\n\nACE: ##$pro##\nYou are now protected from ##lethal damage## for ##1.5## seconds after being revived.\n\n##I live...again.##",
 			
 			["menu_feign_death"] = "Dark Metamorphosis",
-			["menu_feign_death_desc"] = "BASIC: ##$basic##\nUpon killing an enemy, regenerate ##1## Health.\n\nACE: ##$pro##\nThe regeneration is increased to ##2.5## Health.\n\n##...But enough talk! Have at you!##",
+			["menu_feign_death_desc"] = "BASIC: ##$basic##\nUpon killing an enemy with ##4 meters## of yourself, regenerate ##5## Health.\n\nACE: ##$pro##\nThe regeneration is increased to ##10## Health.\n\n##...But enough talk! Have at you!##",
 			
 			["menu_pistol_beta_messiah"] = "Resurrection",
 			["menu_pistol_beta_messiah_desc"] = "BASIC: ##$basic##\nWhile in bleedout, you can revive yourself if you kill an enemy.  This can only happen every ##120## seconds.\n\nACE: ##$pro##\nYou gain the ability to get downed ##1## more time before going into custody.\n\n##The mark of my divinity shall scar thy DNA.##",

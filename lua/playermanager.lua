@@ -326,11 +326,19 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		end
 	end
 	
-	if damage_ext then
-		if self:has_category_upgrade("player", "dark_metamorphosis_aced") then
-			damage_ext:restore_health(0.25, true)
-		elseif self:has_category_upgrade("player", "dark_metamorphosis_basic") then
-			damage_ext:restore_health(0.1, true)
+	local dist_sq = mvector3.distance_sq(player_unit:movement():m_pos(), killed_unit:movement():m_pos())
+	
+	if dist_sq < 160000 then
+		local obstruction_slotmask = managers.slot:get_mask("world_geometry", "vehicles")
+		local killed_pos = killed_unit:movement():m_pos()
+		local player_pos = player_unit:movement():m_pos()
+		local obstructed = killed_unit:raycast("ray", player_pos, killed_pos, "slot_mask", obstruction_slotmask, "report")
+		if not obstructed then
+			if self:has_category_upgrade("player", "dark_metamorphosis_aced") then
+				damage_ext:restore_health(1, true)
+			elseif self:has_category_upgrade("player", "dark_metamorphosis_basic") then
+				damage_ext:restore_health(0.5, true)
+			end
 		end
 	end
 
@@ -339,7 +347,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	end
 
 	local regen_armor_bonus = self:upgrade_value("player", "killshot_regen_armor_bonus", 0)
-	local dist_sq = mvector3.distance_sq(player_unit:movement():m_pos(), killed_unit:movement():m_pos())
+	
 	local close_combat_sq = tweak_data.upgrades.close_combat_distance * tweak_data.upgrades.close_combat_distance
 
 	if dist_sq <= close_combat_sq then

@@ -84,7 +84,7 @@ function NewFlamethrowerBase:_fire_raycast(user_unit, from_pos, direction, dmg_m
 	end
 
 	for _, col_ray in pairs(hit_enemies) do --clean way to deal damage to each enemy once per fired shot
-		self._bullet_class:on_collision(col_ray, self._unit, user_unit, damage)
+		self._bullet_class:on_collision(col_ray, self._unit, user_unit, damage, nil, true)
 
 		if draw_debug_spheres then
 			local draw_duration = 1
