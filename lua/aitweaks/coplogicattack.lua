@@ -1718,11 +1718,6 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 		return
 	end
 	
-		
-	if data.objective and data.objective.investigating and new_objective.investigating then
-		return
-	end
-
 	local att_obj = data.attention_obj
 
 	if not att_obj or att_obj.reaction < REACT_AIM then
@@ -1731,6 +1726,10 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 
 	if not new_objective or new_objective.type == "free" then
 		return true
+	end
+	
+	if data.objective and data.objective.investigating and new_objective.investigating then
+		return
 	end
 
 	if new_objective then
