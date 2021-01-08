@@ -36,7 +36,7 @@
 		["hud_assault_FG_cover34"] = "WHITE VANS SPOTTED",
 		["hud_assault_FG_cover35"] = "NO SWAMP SHARKS INCLUDED",
 		["hud_assault_FG_cover36"] = "OH MY GOD WE'RE DOOOOOMED",
-		["hud_assault_FG_cover37"] = "VERY DANGEROUS", --a need for speed reference :)
+		["hud_assault_FG_cover37"] = "VERY DANGEROUS", --w
 		["hud_assault_FG_cover38"] = "RANDOM CHIMP EVENT",
 		["hud_assault_FG_cover39"] = "ENEMY COUNT; A LOT",
 		["hud_assault_FG_cover40"] = "HI?",
@@ -89,6 +89,7 @@
 		["hud_assault_FG_cover87"] = "WELCOME TO VIOLENCE",
 		["hud_assault_FG_cover88"] = "DOSH, GRAB IT WHILE YA CAN LADS",
 		["hud_assault_FG_cover89"] = "NONSTOP HORDE VIOLENCE",
+		["hud_assault_FB_cover90"] = "NODE AND NEXUS, FEED UPON THIS LIFE!",
 		["hud_assault_faction_federales"] = "VS. LOS FEDERALES",
 		["hud_assault_faction_swat"] = "VS. SWAT TEAM",
 		["hud_assault_faction_sharedswat"] = "VS. SWAT TEAM & MURKYWATER BATTALION",		
