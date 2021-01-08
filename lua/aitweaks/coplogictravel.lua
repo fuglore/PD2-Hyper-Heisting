@@ -60,6 +60,10 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	if data.unit:base():has_tag("frontliner") then
 		my_data.frontliner = true
 	end
+	
+	if data.unit:base():has_tag("loner") then
+		my_data.loner = true
+	end
 
 	if old_internal_data then
 		my_data.turning = old_internal_data.turning
@@ -1037,7 +1041,7 @@ function CopLogicTravel.queued_update(data)
 	if not data.unit:base():has_tag("law") or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) or data.unit:movement():cool() then
 		--nothing
 	elseif data.unit:base():has_tag("law") and my_data.has_advanced_once then
-		if not my_data.frontliner then
+		if not my_data.frontliner and not my_data.loner then
 			if data.group and data.group.size > 1 then
 				if not my_data.protector or not alive(my_data.protector) or my_data.protector:character_damage().dead then
 					my_data.protector = nil --refresh this fucker
