@@ -537,7 +537,10 @@ function GroupAIStateBesiege:update(t, dt)
 						end
 						
 					end
-					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					
+					if not Global.game_settings.single_player then
+						LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					end
 					--log("assaultbreakon")
 				end
 				
@@ -557,7 +560,9 @@ function GroupAIStateBesiege:update(t, dt)
 					end
 					
 					self._said_heat_bonus_dialog = nil
-					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					if not Global.game_settings.single_player then
+						LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					end
 					--log("assaultbreakreset")
 				end
 			else
@@ -565,7 +570,9 @@ function GroupAIStateBesiege:update(t, dt)
 					self._activeassaultbreak = nil
 					self._activeassaultnextbreak_t = nil
 					self._stopassaultbreak_t = nil
-					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					if not Global.game_settings.single_player then
+						LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					end
 				end
 			end
 		end

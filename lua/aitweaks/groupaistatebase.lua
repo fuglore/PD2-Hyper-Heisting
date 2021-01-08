@@ -206,6 +206,69 @@ function GroupAIStateBase:update(t, dt)
 	self:upd_team_AI_distance()
 end
 
+function GroupAIStateBase:save(save_data)
+	local my_save_data = {}
+	save_data.group_ai = my_save_data
+	my_save_data.control_value = self._control_value
+	my_save_data._assault_mode = self._assault_mode
+	my_save_data._hunt_mode = self._hunt_mode
+	my_save_data._fake_assault_mode = self._fake_assault_mode
+	my_save_data._whisper_mode = self._whisper_mode
+	my_save_data._bain_state = self._bain_state
+	my_save_data._point_of_no_return_timer = self._point_of_no_return_timer
+	my_save_data._point_of_no_return_id = self._point_of_no_return_id
+	my_save_data._police_called = self._police_called
+	my_save_data._enemy_weapons_hot = self._enemy_weapons_hot
+	my_save_data._activeassaultbreak = self._activeassaultbreak
+	my_save_data._enemy_speed_mul = self._enemy_speed_mul
+
+	if self._hostage_headcount > 0 then
+		my_save_data.hostage_headcount = self._hostage_headcount
+	end
+
+	my_save_data.teams = self._teams
+	my_save_data.endscreen_variant = self._endscreen_variant
+	my_save_data.assault_number = self._assault_number
+	my_save_data.nr_successful_alarm_pager_bluffs = self._nr_successful_alarm_pager_bluffs
+end
+
+function GroupAIStateBase:load(load_data)
+	local my_load_data = load_data.group_ai
+	self._control_value = my_load_data.control_value
+
+	self:_calculate_difficulty_ratio()
+
+	self._hunt_mode = my_load_data._hunt_mode
+	self._assault_number = my_load_data.assault_number
+	
+	self._activeassaultbreak = my_load_data._activeassaultbreak
+	self._enemy_speed_mul = my_load_data._enemy_speed_mul
+	
+	self:sync_assault_mode(my_load_data._assault_mode)
+	self:set_fake_assault_mode(my_load_data._fake_assault_mode)
+	self:set_whisper_mode(my_load_data._whisper_mode)
+	self:set_bain_state(my_load_data._bain_state)
+	self:set_point_of_no_return_timer(my_load_data._point_of_no_return_timer, my_load_data._point_of_no_return_id)
+
+	if my_load_data.hostage_headcount then
+		self:sync_hostage_headcount(my_load_data.hostage_headcount)
+	end
+
+	self._police_called = my_load_data._police_called
+	self._enemy_weapons_hot = my_load_data._enemy_weapons_hot
+
+	if self._enemy_weapons_hot then
+		managers.enemy:set_corpse_disposal_enabled(true)
+	end
+
+	self._teams = my_load_data.teams
+	self._endscreen_variant = my_load_data.endscreen_variant
+	self._nr_successful_alarm_pager_bluffs = my_load_data.nr_successful_alarm_pager_bluffs
+
+	self:_call_listeners("team_def")
+	self:set_damage_reduction_buff_hud()
+end
+
 function GroupAIStateBase:set_point_of_no_return_timer(time, point_of_no_return_id)
 	if time == nil or setup:has_queued_exec() then
 		return
