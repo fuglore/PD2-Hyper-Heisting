@@ -1393,7 +1393,9 @@ function GroupAIStateBesiege:_upd_assault_task()
 					self._enemy_speed_mul = self._enemy_speed_mul + 0.1
 				end
 				
-				LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
+				if not Global.game_settings.single_player then
+					LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring(self._enemy_speed_mul))
+				end
 			end
 
 			task_data.phase = "build"

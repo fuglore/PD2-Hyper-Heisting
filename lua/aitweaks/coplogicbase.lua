@@ -669,11 +669,13 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	local vis_mask = data.visibility_slotmask
 	local is_cool = data.cool
 	local player_importance_wgt = data.unit:in_slot(managers.slot:get_mask("enemies")) and {}
-
+	
 	local groupai_state_manager = managers.groupai:state()
 	local all_attention_objects = groupai_state_manager:get_AI_attention_objects_by_filter(data.SO_access_str, data.team)
 	local is_detection_persistent = groupai_state_manager:is_detection_persistent()
-
+	local notice_instant = nil
+	
+	
 	if not my_data.detection then
 		local is_cool = data.unit:movement():cool()
 
@@ -749,7 +751,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 										end
 									end
 								else
-									angle = 0
+									angle = -1
 									dis_multiplier = dis_mul
 								end
 							end
@@ -921,7 +923,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 										end
 									end
 								else
-									angle = 0
+									angle = -1
 									dis_multiplier = dis_mul
 								end
 							end
@@ -968,10 +970,10 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 		
 						attention_info.notice_progress = attention_info.notice_progress + delta_prog
 					elseif noticeable then
-						attention_info.notice_progress = 2
+						notice_instant = true
 					end
 					
-					if attention_info.notice_progress > 1 then
+					if notice_instant or attention_info.notice_progress > 1 then
 						attention_info.notice_progress = nil
 						attention_info.prev_notice_chk_t = nil
 						attention_info.identified = true
@@ -1030,7 +1032,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 							end
 
 							if dis < max_dis * 1.2 then
-								local in_FOV = not settings.notice_requires_FOV or data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask)
+								local in_FOV = is_detection_persistent or not settings.notice_requires_FOV or data.enemy_slotmask and attention_info.unit:in_slot(data.enemy_slotmask)
 
 								if not in_FOV then
 									mvec3_dir(tmp_vec1, my_pos, attention_pos)

@@ -709,6 +709,99 @@ function FlameBulletBase:give_fire_damage(col_ray, weapon_unit, user_unit, damag
 	return defense_data
 end
 
+local mvec_from_pos = Vector3()
+
+function RaycastWeaponBase:_check_alert(rays, fire_pos, direction, user_unit)
+	local group_ai = managers.groupai:state()
+	
+	if self._stealth_alert and not group_ai:whisper_mode() then --after the game goes loud, set the alert to be AT LEAST 20m wide
+		self._alert_size = 2000
+		self._stealth_alert = nil
+	end
+	
+	local t = TimerManager:game():time()
+	local exp_t = t + 1.5
+	local mvec3_dis = mvector3.distance_sq
+	local all_alerts = self._alert_events
+	local alert_rad = self._alert_size / 4
+	local from_pos = mvec_from_pos
+	local tolerance = 250000
+
+	mvector3.set(from_pos, direction)
+	mvector3.multiply(from_pos, -alert_rad)
+	mvector3.add(from_pos, fire_pos)
+
+	for i = #all_alerts, 1, -1 do
+		if all_alerts[i][3] < t then
+			table.remove(all_alerts, i)
+		end
+	end
+
+	if #rays > 0 then
+		for _, ray in ipairs(rays) do
+			local event_pos = ray.position
+
+			for i = #all_alerts, 1, -1 do
+				if mvec3_dis(all_alerts[i][1], event_pos) < tolerance and mvec3_dis(all_alerts[i][2], from_pos) < tolerance then
+					event_pos = nil
+
+					break
+				end
+			end
+
+			if event_pos then
+				table.insert(all_alerts, {
+					event_pos,
+					from_pos,
+					exp_t
+				})
+
+				local new_alert = {
+					"bullet",
+					event_pos,
+					alert_rad,
+					self._setup.alert_filter,
+					user_unit,
+					from_pos
+				}
+
+				group_ai:propagate_alert(new_alert)
+			end
+		end
+	end
+
+	local fire_alerts = self._alert_fires
+	local cached = false
+
+	for i = #fire_alerts, 1, -1 do
+		if fire_alerts[i][2] < t then
+			table.remove(fire_alerts, i)
+		elseif mvec3_dis(fire_alerts[i][1], fire_pos) < tolerance then
+			cached = true
+
+			break
+		end
+	end
+
+	if not cached then
+		table.insert(fire_alerts, {
+			fire_pos,
+			exp_t
+		})
+
+		local new_alert = {
+			"bullet",
+			fire_pos,
+			self._alert_size,
+			self._setup.alert_filter,
+			user_unit,
+			from_pos
+		}
+
+		group_ai:propagate_alert(new_alert)
+	end
+end
+
 if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 
 	function RaycastWeaponBase:fire(from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)

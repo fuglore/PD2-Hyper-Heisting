@@ -2384,31 +2384,31 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 				if aim == nil then
 					if AIAttentionObject.REACT_SHOOT <= focus_enemy.reaction then
+						local attack_players = my_data.attitude == "engage" or managers.groupai:state():chk_assault_active_atm()
+						
 						local last_sup_t = data.unit:character_damage():last_suppression_t()
+						
+						if attack_players then
+							if focus_enemy.verified_dis < firing_range then
+								shoot = true
+							elseif last_sup_t then
+								local sup_t_ver = 7 
 
-						if last_sup_t then
-							local sup_t_ver = 7 
-
-							if running then
-								sup_t_ver = sup_t_ver * 0.3
-							end
-
-							if not focus_enemy.verified then
-								if focus_enemy.vis_ray and firing_range < focus_enemy.vis_ray.distance then
+								if running then
 									sup_t_ver = sup_t_ver * 0.5
-								else
-									sup_t_ver = sup_t_ver * 0.2
+								end
+
+								if not focus_enemy.verified then
+									sup_t_ver = sup_t_ver * 0.5
+								end
+
+								if data.t - last_sup_t < sup_t_ver then
+									shoot = true
 								end
 							end
-
-							if data.t - last_sup_t < sup_t_ver then
-								shoot = true
-							end
 						end
-
-						if data.internal_data.weapon_range and focus_enemy.verified_dis < firing_range and managers.groupai:state():chk_assault_active_atm() then
-							shoot = true
-						elseif focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 2 then
+						
+						if focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 2 then
 							shoot = true
 						elseif aggressor and focus_enemy.verified_dis < firing_range or data.unit:base():has_tag("law") and focus_enemy.aimed_at and focus_enemy.verified_dis <= 1500 then
 							shoot = true
@@ -2516,7 +2516,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 				local time_since_verify = data.attention_obj.verified_t and data.t - data.attention_obj.verified_t
 				local e_movement_state = focus_enemy.unit:movement():current_state()
 				
-				if e_movement_state:_is_reloading() and time_since_verify and time_since_verify < 2 then
+				if e_movement_state:_is_reloading() and time_since_verify and time_since_verify < 1 then
 					if not data.unit:in_slot(16) and data.char_tweak.chatter.reload then
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "reload")
 					end
@@ -2525,7 +2525,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 				local e_anim_data = focus_enemy.unit:anim_data()
 				local time_since_verify = data.attention_obj.verified_t and data.t - data.attention_obj.verified_t
 
-				if e_anim_data.reload and time_since_verify and time_since_verify < 2 then
+				if e_anim_data.reload and time_since_verify and time_since_verify < 1 then
 					if not data.unit:in_slot(16) and data.char_tweak.chatter.reload then
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "reload")
 					end			
