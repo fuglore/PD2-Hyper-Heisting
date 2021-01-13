@@ -129,7 +129,6 @@ function BouncerNade:_get_next_beep_time()
 	return self:timer() / beep_speed[1] * beep_speed[2]
 end
 
--- Lines 110-112
 function BouncerNade:activate(position, duration)
 	self:_activate(0, 0, position, duration)
 end

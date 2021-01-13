@@ -2303,6 +2303,12 @@ function CopLogicTravel.action_complete_clbk(data, action)
 
 				CopLogicAttack._upd_aim(data, my_data)
 				data.logic._upd_stance_and_pose(data, data.internal_data)
+				
+				if not my_data.protector or not alive(my_data.protector) or my_data.protector:character_damage().dead then
+					my_data.protector = nil --refresh this fucker
+					my_data.protected = nil
+				end
+				
 				if my_data.protected and my_data.optimal_path then
 					CopLogicTravel._chk_request_action_walk_to_optimal_pos(data, my_data)
 					
