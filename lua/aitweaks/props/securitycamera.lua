@@ -95,12 +95,20 @@ function SecurityCamera:_upd_suspicion(t)
 end
 
 function SecurityCamera:_upd_sound(unit, t)
-	if self._alarm_sound then
+	if not self._detected_attention_objects then --if the camera is disabled, dont bother
 		return
 	end
 
-	local suspicion_level = self._suspicion
+	if self._destroyed then
+		return
+	end
 
+	if self._alarm_sound then
+		return
+	end
+	
+	local suspicion_level = self._suspicion
+	
 	for u_key, attention_info in pairs(self._detected_attention_objects) do
 		if AIAttentionObject.REACT_SCARED <= attention_info.reaction then
 			if attention_info.identified then
