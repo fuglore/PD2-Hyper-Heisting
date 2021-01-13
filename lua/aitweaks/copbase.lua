@@ -44,91 +44,94 @@ end
 function CopBase:_chk_spawn_gear()
 	local tweak = managers.job:current_level_data()
 	local unit_name = self._unit:name()
-	local HOLIDAY_SPIRIT = true
-	if self._tweak_table == "akuma" then
-		self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal", Vector3(), Rotation())
-		
-		if self._headwear_unit then
-			local align_obj_name = Idstring("Head")
-			local align_obj = self._unit:get_object(align_obj_name)
-
-			self._unit:link(align_obj_name, self._headwear_unit, self._headwear_unit:orientation_object():name())
-		end
-	elseif tweak and tweak.is_christmas_heist then
-		if self._tweak_table == "spooc" or self._tweak_table == "spooc_heavy" then
-			self._headwear_unit = safe_spawn_unit("units/payday2/characters/ene_acc_spook_santa_hat/ene_acc_spook_santa_hat", Vector3(), Rotation())
-		elseif self._tweak_table == "akuma" then
+	local HOLIDAY_SPIRIT = nil --overkill's fucking stinky so im gonna start manually activating this myself
+	
+	if HOLIDAY_SPIRIT then
+		if self._tweak_table == "akuma" then
 			self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal", Vector3(), Rotation())
-		elseif self._tweak_table == "tank_medic" then
-			local region = tweak_data.levels:get_ai_group_type()
 			
-			if region == "russia" or region == "federales" then
-				self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_akan_santa_hat/ene_acc_dozer_akan_santa_hat", Vector3(), Rotation())
-			else
-				self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_zeal_santa_hat/ene_acc_dozer_zeal_santa_hat", Vector3(), Rotation())
+			if self._headwear_unit then
+				local align_obj_name = Idstring("Head")
+				local align_obj = self._unit:get_object(align_obj_name)
+
+				self._unit:link(align_obj_name, self._headwear_unit, self._headwear_unit:orientation_object():name())
 			end
-			
-		elseif self._tweak_table == "tank" or self._tweak_table == "tank_mini" then
-			local region = tweak_data.levels:get_ai_group_type()
-			local difficulty_index = tweak_data:difficulty_to_index(Global and Global.game_settings and Global.game_settings.difficulty or "overkill")
-			
-			if region == "russia" then
-				self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_akan_santa_hat/ene_acc_dozer_akan_santa_hat", Vector3(), Rotation())
-			elseif region == "federales" then
-				local non_akan_base = {
-					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"),
-					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249_husk"),
-					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun"),
-					Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun_husk")
-				}
-								
-				for _, dozer in ipairs(non_akan_base) do
-					local unit = unit_name
-					if unit == dozer then
-						-- log(self._tweak_table)                			
-						self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_santa_hat/ene_acc_dozer_santa_hat", Vector3(), Rotation())
-					end
-				end
+		elseif tweak and tweak.is_christmas_heist then
+			if self._tweak_table == "spooc" or self._tweak_table == "spooc_heavy" then
+				self._headwear_unit = safe_spawn_unit("units/payday2/characters/ene_acc_spook_santa_hat/ene_acc_spook_santa_hat", Vector3(), Rotation())
+			elseif self._tweak_table == "akuma" then
+				self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal", Vector3(), Rotation())
+			elseif self._tweak_table == "tank_medic" then
+				local region = tweak_data.levels:get_ai_group_type()
 				
-				if not self._headwear_unit then
+				if region == "russia" or region == "federales" then
 					self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_akan_santa_hat/ene_acc_dozer_akan_santa_hat", Vector3(), Rotation())
-				end
-				
-			elseif difficulty_index == 8 then
-			
-				--this will look really hard to read if i dont space it out. so i did that. to make it easier to read,  but im still going to struggle with it.
-			
-				if unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2") or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2_husk") then
-				
-					self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa", Vector3(), Rotation())
-					
-				elseif unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3") or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3_husk") then
-				
-					self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa", Vector3(), Rotation())
-					
-				elseif unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer") or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer") then
-				
-					self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa", Vector3(), Rotation())
-					
-				elseif unit_name == Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun") or unit_name == Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_husk") then
-				
-					self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa", Vector3(), Rotation())
-					
 				else
-				
 					self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_zeal_santa_hat/ene_acc_dozer_zeal_santa_hat", Vector3(), Rotation())
-					
 				end
-			else
-				self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_santa_hat/ene_acc_dozer_santa_hat", Vector3(), Rotation())
+				
+			elseif self._tweak_table == "tank" or self._tweak_table == "tank_mini" then
+				local region = tweak_data.levels:get_ai_group_type()
+				local difficulty_index = tweak_data:difficulty_to_index(Global and Global.game_settings and Global.game_settings.difficulty or "overkill")
+				
+				if region == "russia" then
+					self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_akan_santa_hat/ene_acc_dozer_akan_santa_hat", Vector3(), Rotation())
+				elseif region == "federales" then
+					local non_akan_base = {
+						Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249"),
+						Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_m249/ene_swat_dozer_policia_federale_m249_husk"),
+						Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun"),
+						Idstring("units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun_husk")
+					}
+									
+					for _, dozer in ipairs(non_akan_base) do
+						local unit = unit_name
+						if unit == dozer then
+							-- log(self._tweak_table)                			
+							self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_santa_hat/ene_acc_dozer_santa_hat", Vector3(), Rotation())
+						end
+					end
+					
+					if not self._headwear_unit then
+						self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_akan_santa_hat/ene_acc_dozer_akan_santa_hat", Vector3(), Rotation())
+					end
+					
+				elseif difficulty_index == 8 then
+				
+					--this will look really hard to read if i dont space it out. so i did that. to make it easier to read,  but im still going to struggle with it.
+				
+					if unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2") or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2_husk") then
+					
+						self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa", Vector3(), Rotation())
+						
+					elseif unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3") or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3_husk") then
+					
+						self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa", Vector3(), Rotation())
+						
+					elseif unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer") or unit_name == Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer") then
+					
+						self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa", Vector3(), Rotation())
+						
+					elseif unit_name == Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun") or unit_name == Idstring("units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_husk") then
+					
+						self._headwear_unit = safe_spawn_unit("units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa", Vector3(), Rotation())
+						
+					else
+					
+						self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_zeal_santa_hat/ene_acc_dozer_zeal_santa_hat", Vector3(), Rotation())
+						
+					end
+				else
+					self._headwear_unit = safe_spawn_unit("units/pd2_dlc_xm20/characters/ene_acc_dozer_santa_hat/ene_acc_dozer_santa_hat", Vector3(), Rotation())
+				end
 			end
-		end
 
-		if self._headwear_unit then
-			local align_obj_name = Idstring("Head")
-			local align_obj = self._unit:get_object(align_obj_name)
+			if self._headwear_unit then
+				local align_obj_name = Idstring("Head")
+				local align_obj = self._unit:get_object(align_obj_name)
 
-			self._unit:link(align_obj_name, self._headwear_unit, self._headwear_unit:orientation_object():name())
+				self._unit:link(align_obj_name, self._headwear_unit, self._headwear_unit:orientation_object():name())
+			end
 		end
 	end
 end
