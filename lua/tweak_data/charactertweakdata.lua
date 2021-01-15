@@ -7952,6 +7952,8 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi_girl.speech_prefix_p2 = "n"
 	self.fbi_girl.speech_prefix_count = 1
 	table.insert(self._enemy_list, "fbi_girl")
+	
+	self.cop_female = deep_clone(self.fbi_girl) --re-clone, therefore, preserving unit functionality
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(self, presets) --TODO: Nothing right now.

@@ -1,3 +1,28 @@
+local ids_lod = Idstring("lod")
+local ids_lod1 = Idstring("lod1")
+local ids_ik_aim = Idstring("ik_aim")
+CopBase = CopBase or class(UnitBase)
+CopBase._anim_lods = {
+	{
+		2,
+		500,
+		100,
+		5000
+	},
+	{
+		2,
+		0,
+		100,
+		1
+	},
+	{
+		3,
+		0,
+		100,
+		1
+	}
+}
+
 local old_init = CopBase.init
 
 function CopBase:init(unit)
@@ -39,6 +64,62 @@ function CopBase:init(unit)
 	self:play_voiceline(nil, nil)
 	
 	old_init(self, unit)
+end
+
+function CopBase:set_visibility_state(stage)
+	local state = stage and true
+
+	if not state and not self._allow_invisible then
+		state = true
+		stage = 3
+	end
+
+	if self._lod_stage == stage then
+		return
+	end
+
+	local inventory = self._unit:inventory()
+	local weapon = inventory and inventory.get_weapon and inventory:get_weapon()
+
+	if weapon then
+		weapon:base():set_flashlight_light_lod_enabled(stage ~= 2 and not not stage)
+	end
+
+	if self._visibility_state ~= state then
+		local unit = self._unit
+
+		if inventory then
+			inventory:set_visibility_state(state)
+		end
+
+		unit:set_visible(state)
+
+		if self._headwear_unit then
+			self._headwear_unit:set_visible(state)
+		end
+
+		if state or self._ext_anim.can_freeze and self._ext_anim.upper_body_empty then
+			unit:set_animatable_enabled(ids_lod, state)
+			unit:set_animatable_enabled(ids_ik_aim, state)
+		end
+
+		self._visibility_state = state
+	end
+
+	if state then
+		self:set_anim_lod(stage)
+		self._unit:movement():enable_update(true)
+
+		if stage == 1 then
+			self._unit:set_animatable_enabled(ids_lod1, true)
+		elseif self._lod_stage == 1 then
+			self._unit:set_animatable_enabled(ids_lod1, false)
+		end
+	end
+
+	self._lod_stage = stage
+
+	self:chk_freeze_anims()
 end
 
 function CopBase:_chk_spawn_gear()

@@ -186,7 +186,57 @@ function GroupAIStateBase:get_assault_hud_state()
 	
 end
 
+--[[local draw_color = {
+    [1] = Color.green:with_alpha(0.5),
+    [2] = Color.blue:with_alpha(0.5),
+    [3] = Color.yellow:with_alpha(0.5),
+    [4] = Color.red:with_alpha(0.5)
+}
+
+local math_DOWN = math.DOWN
+local pairs_g = pairs]]
+
 function GroupAIStateBase:update(t, dt)
+    --[[local cam_pos = nil
+    local player = managers.player:player_unit()
+
+    if player then
+        cam_pos = player:movement():m_head_pos()
+    elseif managers.viewport:get_current_camera() then
+        cam_pos = managers.viewport:get_current_camera_position()
+    end
+
+    if cam_pos then
+        local from_pos = cam_pos + math_DOWN * 50
+
+        for key, data in pairs_g(self._police) do
+            local unit = data.unit
+            local ext_base = unit:base()
+            local vis_state = ext_base:lod_stage() or 4
+
+            local brush = Draw:brush(draw_color[vis_state], 0.1)
+            brush:cylinder(from_pos, unit:movement():m_com(), 1)
+        end
+
+        for key, data in pairs_g(managers.enemy:all_civilians()) do
+            local unit = data.unit
+            local ext_base = unit:base()
+            local vis_state = ext_base:lod_stage() or 4
+
+            local brush = Draw:brush(draw_color[vis_state], 0.1)
+            brush:cylinder(from_pos, unit:movement():m_com(), 1)
+        end
+
+        for key, data in pairs_g(self._ai_criminals) do
+            local unit = data.unit
+            local ext_base = unit:base()
+            local vis_state = ext_base:lod_stage() or 4
+
+            local brush = Draw:brush(draw_color[vis_state], 0.1)
+            brush:cylinder(from_pos, unit:movement():m_com(), 1)
+        end
+    end]]
+	
 	self._t = t
 
 	self:_upd_criminal_suspicion_progress()
@@ -203,7 +253,7 @@ function GroupAIStateBase:update(t, dt)
 	end
 
 	self:_upd_debug_draw_attentions()
-	self:upd_team_AI_distance()
+	self:upd_team_AI_distance()	
 end
 
 function GroupAIStateBase:save(save_data)

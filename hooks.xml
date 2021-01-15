@@ -176,6 +176,7 @@
 	<group :script_path="aitweaks/civilians/" :hook_id="units/civilians/">
 		<post :script_path="civilianlogictravel.lua" :hook_id="logics/civilianlogictravel"/>
 		<post :script_path="civilianlogicflee.lua" :hook_id="logics/civilianlogicflee"/>
+		<post :script_path="civilianbase.lua" :hook_id="civilianbase"/>
 	</group>
 	
 	<group :script_path="custompros/" :hook_id="units/weapons/">
