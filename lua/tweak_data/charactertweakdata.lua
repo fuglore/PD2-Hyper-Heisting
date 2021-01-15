@@ -7901,7 +7901,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.steal_loot = true
 	self.fbi_pager = deep_clone(self.fbi)
 	local level = Global.level_data and Global.level_data.level_id
-	if level == "kosugi" then
+	if level == "kosugi" or "kosugi_hh" then
 		-- log("wow")
 		self.fbi_pager.access = "security"
 	else

@@ -72,20 +72,13 @@
 	
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	
-	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
+	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/>
 	
 	<mission path="levels/narratives/locke/vit/world/world" force="true" unload="true"/>
 	
 	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/>
 	
-	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
-	
-	<!--Shadow Raid BS-->
-	<mission path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> 
-	<!--commented out for now because weirdness, i just want to get this pushed-->
-	<!--continent path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> 
-	<cover_data path="levels/narratives/bain/shadow_raid/cover_data" force="true" unload="true"/>
-	<nav_data path="levels/narratives/bain/shadow_raid/nav_manager_data" force="true" unload="true"/-->
+	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/>
 	
 	<mission path="levels/narratives/butcher/friend/world/world" force="true" unload="true"/> <!--Removes the shitty spawn van escape from Scarface. -->
 	
