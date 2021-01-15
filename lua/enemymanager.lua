@@ -306,11 +306,14 @@ end
 function EnemyManager:_create_unit_gfx_lod_data(unit)
 	local lod_entries = self._gfx_lod_data.entries
 
-	lod_entries.units[#lod_entries.units] = unit
-	lod_entries.states[#lod_entries.states] = 1
-	lod_entries.move_ext[#lod_entries.move_ext] = unit:movement()
-	lod_entries.trackers[#lod_entries.trackers] = unit:movement():nav_tracker()
-	lod_entries.com[#lod_entries.com] = unit:movement():m_com()
+	lod_entries.units[#lod_entries.units + 1] = unit
+	lod_entries.states[#lod_entries.states + 1] = 1
+
+	local mov_ext = unit:movement()
+
+	lod_entries.move_ext[#lod_entries.move_ext + 1] = mov_ext
+	lod_entries.trackers[#lod_entries.trackers + 1] = mov_ext:nav_tracker()
+	lod_entries.com[#lod_entries.com + 1] = mov_ext:m_com()
 end
 
 function EnemyManager:set_gfx_lod_enabled(state)
