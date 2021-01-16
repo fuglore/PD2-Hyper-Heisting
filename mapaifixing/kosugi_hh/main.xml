@@ -1,5 +1,5 @@
 <table name="kosugi_hh">
-	<level ai_group_type="america" brief_id="heist_kosugi_briefing" briefing_dialog="Play_pln_ko1_brf_01" cube="cube_apply_heist_bank" ghost_bonus="0.05" ghost_required="true" name_id="heist_kosugi_hl" id="kosugi_hh" intro_event="Play_pln_ko1_intro_01" max_bags="30" music="ghost" music_ext_start="suspense_1">
+	<level ai_group_type="america" brief_id="heist_kosugi_briefing" briefing_dialog="Play_pln_ko1_brf_01" cube="cube_apply_heist_bank" ghost_bonus="0.05" ghost_required="true" id="kosugi_hh" intro_event="Play_pln_ko1_intro_01" max_bags="30" music="ghost" music_ext_start="suspense_1" name_id="heist_kosugi_hl">
 		<add file="levels/kosugi_hh/add.xml"/>
 		<assets/>
 		<include directory="levels/kosugi_hh">
@@ -57,7 +57,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative brief_id="heist_kosugi_crimenet" briefing_event="pln_ko1_cbf_01" contact="bain" icon="guis/dlcs/bro/textures/pd2/crimenet/shadowraid" name_id="heist_kosugi_hl" id="kosugi" jc="30" load_screen="guis/dlcs/pic/textures/loading/job_shadow_raid" region="brazil">
+	<narrative brief_id="heist_kosugi_crimenet" briefing_event="pln_ko1_cbf_01" contact="bain" icon="guis/dlcs/bro/textures/pd2/crimenet/shadowraid" id="kosugi" jc="30" load_screen="guis/dlcs/pic/textures/loading/job_shadow_raid" name_id="heist_kosugi_hl" region="brazil">
 		<chain>
 			<table level_id="kosugi_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
