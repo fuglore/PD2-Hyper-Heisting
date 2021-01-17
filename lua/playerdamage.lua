@@ -31,7 +31,7 @@ Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	end
 	
 	self._unit = unit
-	self._max_health_reduction = managers.player:upgrade_value("player", "max_health_reduction", 1)
+	self._max_health_reduction = managers.player:upgrade_value("player", "max_health_reduction", 1) * managers.player:upgrade_value("player", "perk_max_health_reduction", 1)
 	self._healing_reduction = managers.player:upgrade_value("player", "healing_reduction", 1)
 	self._revives = Application:digest_value(0, true)
 	self._uppers_elapsed = 0

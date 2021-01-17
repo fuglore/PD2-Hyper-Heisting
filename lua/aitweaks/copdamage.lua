@@ -1592,7 +1592,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		})
 	end
 	
-	if self._unit:movement():cool() and diff_index and diff_index <= 5 then
+	if head and diff_index <= 5 and self._unit:movement():cool() then
 		damage = self._HEALTH_INIT
 	else
 		if self._char_tweak.DAMAGE_CLAMP_BULLET and not attack_data.weapon_unit:base()._can_shoot_through_wall then

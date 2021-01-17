@@ -14,7 +14,7 @@ function ElementSpawnEnemyGroup:spawn_groups()
 	end
 	
 	for name, name2 in pairs(self._values.preferred_spawn_groups) do
-		if name2 == "tac_swat_rifle" or name2 == "tac_bull_rush" then
+		if name2 == "tac_swat_rifle" or name2 == "tac_swat_rifle_flank" or name2 == "tac_bull_rush" then --check for three vanilla enemy groups that might get inserted into the spawngroups, these three are frequent enough in both official maps and custom maps to basically work 90% of the time
 			--log("fuck yes")
 			has_regular_enemies = true
 		end

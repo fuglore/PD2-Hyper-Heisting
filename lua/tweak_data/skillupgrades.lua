@@ -698,4 +698,17 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			1.35,
 			2
 		}
+		
+		self.values.player.perk_max_health_reduction = { --grinder health reduction, multiplicative ontop of other health reductions
+			0.5
+		}
+		self.definitions.player_perk_max_health_reduction = {
+			name_id = "menu_perk_max_health_reduction",
+			category = "feature",
+			upgrade = {
+				value = 1,
+				upgrade = "perk_max_health_reduction",
+				category = "player"
+			}
+		}
 end)

@@ -449,7 +449,7 @@ function ElementSpawnEnemyDummy:init(...)
 	end
 											
 	self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
-	self._unit_name = self._values.enemy
+	--self._unit_name = self._values.enemy
 	self._values.enemy = nil
 	self._units = {}
 	self._events = {}
@@ -463,9 +463,9 @@ function ElementSpawnEnemyDummy:produce(params)
 
 	local unit = nil
 	
-	if self._unit_name then
-		log("spawned: " .. self._unit_name .. "")
-	end
+	--if self._unit_name then
+		--log("spawned: " .. self._unit_name .. "")
+	--end
 
 	if params and params.name then
 		unit = safe_spawn_unit(params.name, self:get_orientation())

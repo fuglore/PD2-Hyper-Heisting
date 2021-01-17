@@ -329,8 +329,8 @@ end
 Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 	
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-		LocalizationManager:add_localized_strings({
-			--Anarchist--
+		LocalizationManager:add_localized_strings({		
+			--Anarchist
 			["menu_deck15_1_desc"] = "Instead of fully regenerating armor when out of combat, The Anarchist will periodically regenerate armor at a rate equivalent to ##8## armor per second. Heavier armor regenerates more armor per tick, but has a longer delay between ticks.\n\nNote: Skills and perks that increases the armor recovery rate are disabled when using this perk deck.",
 			["menu_deck15_3_desc"] = "##50%## of your health is converted into ##50%## armor.",
 			["menu_deck15_5_desc"] = "##50%## of your health is converted into ##75%## armor.",
@@ -373,6 +373,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_deck10_3_desc"] = "When you pick up ammo, you trigger an ammo pickup for ##50%## of normal pickup to other players in your team.\n\nCannot occur more than once every ##5## seconds.\n\nYou gain ##10%## more health.",
 
 			["menu_deck10_5_desc"] = "When you get healed from picking up ammo packs, your teammates also get healed for ##50%## of the amount.\n\nYou gain ##5%## more health.",
+			
+			--Grinder
+			["menu_deck11_1_desc"] = "You start with ##50%## of your Health and cannot heal above that.\n\nDamaging an enemy heals ##1## life points every ##0.3## seconds for ##3## seconds.\n\nThis effect stacks but cannot occur more than once every ##1.5## seconds, and only while wearing the ##Two-Piece Suit## or ##Lightweight Ballistic Vest##.\n\nNOTE: The health limit stacks with ##Something To Prove##.",
 			
 			["menu_deck11_3_desc"] = "Damaging an enemy now heals ##2## life points every ##0.3## seconds for ##3## seconds.\n\nYou gain ##10%## more health.",
 			

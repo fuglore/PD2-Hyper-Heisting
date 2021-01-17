@@ -435,6 +435,11 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 				6
 			}
 		}
+	
+	self.specializations[11][1].upgrades = { --grinder nerf
+		"player_damage_to_hot_1",
+		"player_perk_max_health_reduction"
+	}
 		
 	self.trees = {
 		{
