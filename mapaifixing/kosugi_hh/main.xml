@@ -3,10 +3,10 @@
 		<add file="levels/kosugi_hh/add.xml"/>
 		<assets/>
 		<include directory="levels/kosugi_hh">
+			<file file="nav_manager_data.nav_data" type="binary"/>
 			<file file="world.world" type="binary"/>
 			<file file="continents.continents" type="binary"/>
 			<file file="mission.mission" type="binary"/>
-			<file file="nav_manager_data.nav_data" type="binary"/>
 			<file file="world_sounds.world_sounds" type="binary"/>
 			<file file="world_cameras.world_cameras" type="binary"/>
 			<file file="pc_only/pc_only.continent" type="binary"/>
@@ -34,6 +34,7 @@
 			<value_node value="levels/narratives/bain/shadow_raid/world/world"/>
 			<value_node value="levels/narratives/bain/shadow_raid/mt_temp/mt_temp"/>
 			<value_node value="levels/narratives/bain/shadow_raid/editor_only/editor_only"/>
+			<value_node value="packages/narr_kosugi"/>
 		</packages>
 		<preplanning min_zoom="0.4" mission_briefing_texture="guis/textures/pd2/pre_planning/mission_briefing_shadowraid" total_budget="10">
 			<table map_size="2" map_x="-0.6" map_y="-0.6" name_id="menu_pp_shadow_raid_loc_a" rotation="0" texture="guis/textures/pd2/pre_planning/shadow_raid_1" x1="-5650" x2="6850" y1="-7850" y2="4650">
