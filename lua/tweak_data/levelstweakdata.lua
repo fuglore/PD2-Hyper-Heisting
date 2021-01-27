@@ -52,17 +52,13 @@ function LevelsTweakData:init()
 	
 	self.hvh.package = {"packages/zombieassets", "packages/narr_hvh"}
 	
-	if self.nmh_hyper then
-		self.nmh_hyper.package = {"packages/dlcs/nmh/job_nmh", "packages/murkyassets"}
-	end
-	
 	--fix missing ganster vo, ty rino
 	self.short2_stage1.package = {"packages/job_short2_stage1", "levels/narratives/dentist/mia/stage2/world_sounds"}
 	self.nightclub.package = {"packages/vlad_nightclub", "levels/narratives/dentist/mia/stage2/world_sounds"}
 	self.spa.package = {"packages/job_spa", "levels/narratives/dentist/mia/stage2/world_sounds"}
 	self.friend.package = {"levels/narratives/h_alex_must_die/stage_1/world_sounds", "packages/lvl_friend"}
 	self.cane.package = {"packages/cane", "levels/narratives/e_welcome_to_the_jungle/stage_1/world_sounds"}
-	
+
 	--halloween heists (designed to have the zombie faction disabled in crime spree)
 	if Global.game_settings and not Global.game_settings.incsmission then
 		self.haunted.package = {

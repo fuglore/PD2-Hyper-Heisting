@@ -124,7 +124,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			}
 		}
 		self.values.player.escape_taser = { --TEMP until i get QTE working
-			0.25
+			0.4
 		}
 		
 		self.values.temporary.overkill_damage_multiplier = {{1.50, 3}}

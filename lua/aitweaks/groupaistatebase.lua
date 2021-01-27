@@ -242,14 +242,17 @@ function GroupAIStateBase:update(t, dt)
 	self:_upd_criminal_suspicion_progress()
 	self:_claculate_drama_value()
 	--self:_draw_current_logics()
-	if Network:is_server() then
-		local new_value = self._police_force * 0.15 * table.size(self:all_player_criminals())
-
-		self._nr_important_cops = new_value
-	end
 	
 	if self._draw_drama then
 		self:_debug_draw_drama(t)
+	end
+	
+	if not Global.game_settings.single_player then
+		if Network:is_server() then
+			local new_value = 8 / table.size(self:all_player_criminals()) 
+
+			self._nr_important_cops = new_value
+		end
 	end
 
 	self:_upd_debug_draw_attentions()

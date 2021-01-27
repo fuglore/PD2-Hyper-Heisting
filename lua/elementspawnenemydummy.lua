@@ -162,7 +162,7 @@
 			["units/payday2/characters/ene_swat_1/ene_swat_1"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",
 			["units/payday2/characters/ene_swat_2/ene_swat_2"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",
 			["units/payday2/characters/ene_shield_1/ene_shield_1"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",
-			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",
+			["units/payday2/characters/ene_shield_2/ene_shield_2"] = "units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld",
 			["units/payday2/characters/ene_city_shield/ene_city_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",		
 			["units/payday2/characters/ene_cop_1/ene_cop_1"] = "units/pd2_mod_psc/characters/ene_murky_punk_c45/ene_murky_punk_c45",
 			["units/payday2/characters/ene_cop_2/ene_cop_2"] = "units/pd2_mod_psc/characters/ene_murky_punk_bronco/ene_murky_punk_bronco",
@@ -176,7 +176,7 @@
 			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper",
 			["units/payday2/characters/ene_sniper_2/ene_sniper_2"] = "units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper",
 			--go to hell ugly pricks!!!!! You're all fucking DEAD you ugly pricks!!! DEAD!!!!!!
-			["units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield/ene_murky_shield",	
+			["units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld",	
 			["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",									
 			["units/pd2_dlc_bph/characters/ene_murkywater_light/ene_murkywater_light"] = "units/pd2_mod_psc/characters/ene_murky_light_rifle/ene_murky_light_rifle",	
 			["units/pd2_dlc_bph/characters/ene_murkywater_light_r870/ene_murkywater_light_r870"] = "units/pd2_mod_psc/characters/ene_murky_light_r870/ene_murky_light_r870",										
@@ -242,26 +242,43 @@
 			["units/pd2_dlc_bph/characters/ene_murkywater_medic_r870/ene_murkywater_medic_r870"] = "units/pd2_dlc_drm/characters/ene_medic_heavy_r870/ene_medic_heavy_r870"															
 		}
 	local sniper_fed = {
-			["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
-		}
-
-	local federales = {
-			["units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"] = "units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco"
-		}
+		["units/payday2/characters/ene_sniper_1/ene_sniper_1"] = "units/payday2/characters/ene_sniper_2/ene_sniper_2"
+	}
+	
+	local bex_fix = {
+		["units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"] = "units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco",
+		
+		--rifles
+		["units/pd2_dlc_bex/characters/ene_swat_policia_federale_fbi/ene_swat_policia_federale_fbi"] = "units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale",
+		["units/pd2_dlc_bex/characters/ene_swat_policia_federale_city/ene_swat_policia_federale_city"] = "units/pd2_dlc_bex/characters/ene_swat_policia_federale/ene_swat_policia_federale",
+		
+		--shotgunners
+		["units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870/ene_swat_policia_federale_r870"] = "units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh",
+		["units/pd2_dlc_bex/characters/ene_swat_policia_federale_city_r870/ene_swat_policia_federale_city_r870"] = "units/pd2_dlc_bex/characters/ene_swat_policia_federale_r870_hh/ene_swat_policia_federale_r870_hh",
+		
+		--heavy shotgunner
+		["units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870/ene_swat_heavy_policia_federale_fbi_r870"] = "units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh",
+		
+		--medicinal twinks
+		["units/pd2_dlc_bex/characters/ene_swat_medic_policia_federale/ene_swat_medic_policia_federale"] = "units/pd2_dlc_bex/characters/ene_medic_federale_rifle_hh/ene_medic_federale_rifle_hh",
+		["units/pd2_dlc_bex/characters/ene_swat_medic_policia_federale_r870/ene_swat_medic_policia_federale_r870"] = "units/pd2_dlc_bex/characters/ene_medic_federale_r870_hh/ene_medic_federale_r870_hh"
+	}
 
 	local federales_low_diff = {
-			["units/pd2_dlc_bex/characters/ene_policia_01/ene_policia_01"] = "units/pd2_dlc_bex/characters/ene_policia_punk_bronco/ene_policia_punk_bronco",
-			["units/pd2_dlc_pex/characters/ene_male_office_cop_03/ene_male_office_cop_03"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_02/ene_male_office_cop_02",
-			["units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_01/ene_male_office_cop_01"
-		}	
+		["units/pd2_dlc_pex/characters/ene_male_office_cop_03/ene_male_office_cop_03"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_02/ene_male_office_cop_02",
+		["units/pd2_dlc_pex/characters/ene_male_office_cop_04/ene_male_office_cop_04"] = "units/pd2_dlc_pex/characters/ene_male_office_cop_01/ene_male_office_cop_01"
+	}
+	
 	local murky_fuckers = {
-		--fix for crash in BOS and other murky heists
+		--fix for crash in BOS and america heists with murkies in them
 		["units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_4"] = "units/pd2_mod_psc/characters/ene_murkywater_bulldozer_2/ene_murkywater_bulldozer_2",	
 		["units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3"] = "units/pd2_mod_psc/characters/ene_murkywater_bulldozer_3/ene_murkywater_bulldozer_3",						
 		["units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4"] = "units/pd2_mod_psc/characters/ene_murkywater_bulldozer_4/ene_murkywater_bulldozer_4",	
 		["units/pd2_dlc_bph/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1"] = "units/pd2_mod_psc/characters/ene_murkywater_bulldozer_1/ene_murkywater_bulldozer_1",
+		["units/pd2_dlc_bph/characters/ene_murkywater_sniper/ene_murkywater_sniper"] = "units/pd2_mod_psc/characters/ene_murkywater_sniper/ene_murkywater_sniper",
 		["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",
-		["units/pd2_dlc_bph/characters/ene_murkywater_cloaker/ene_murkywater_cloaker"] = "units/pd2_mod_psc/characters/ene_murky_cloaker/ene_murky_cloaker",
+		["units/pd2_dlc_bph/characters/ene_murkywater_medic/ene_murkywater_medic"] = "units/pd2_mod_psc/characters/ene_murkywater_medic/ene_murkywater_medic",
+		["units/pd2_dlc_bph/characters/ene_murkywater_shield/ene_murkywater_shield"] = "units/pd2_mod_psc/characters/ene_murky_shield_ld/ene_murky_shield_ld",
 		["units/pd2_dlc_bph/characters/ene_murkywater_tazer/ene_murkywater_tazer"] = "units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer"
 	}
 
@@ -416,15 +433,13 @@ function ElementSpawnEnemyDummy:init(...)
 		end
 	end
 
-	if ai_type == "federales" then
-		if difficulty_index <= 6 then
-			if federales_low_diff[self._values.enemy] then
-				self._values.enemy = federales_low_diff[self._values.enemy]
-			end
-		else
-			if federales[self._values.enemy] then
-				self._values.enemy = federales[self._values.enemy]
-			end
+	if bex_fix[self._values.enemy] then --previous method for this was horrible, this is smarter
+		self._values.enemy = bex_fix[self._values.enemy]
+	end
+		
+	if difficulty_index <= 6 then
+		if federales_low_diff[self._values.enemy] then
+			self._values.enemy = federales_low_diff[self._values.enemy]
 		end
 	end
 
@@ -463,9 +478,9 @@ function ElementSpawnEnemyDummy:produce(params)
 
 	local unit = nil
 	
-	--if self._unit_name then
-		--log("spawned: " .. self._unit_name .. "")
-	--end
+	--[[if self._unit_name then
+		log("spawned: " .. self._unit_name .. "")
+	end]]
 
 	if params and params.name then
 		unit = safe_spawn_unit(params.name, self:get_orientation())

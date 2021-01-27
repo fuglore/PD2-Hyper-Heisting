@@ -188,8 +188,9 @@ function CopLogicAttack.update(data)
 		end
 		
 		if not my_data.update_queue_id then
+			data.brain:set_update_enabled_state(false)
+
 			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
-			CopLogicBase._report_detections(data.detected_attention_objects)
 			CopLogicAttack.queue_update(data, my_data)
 		end
 
@@ -199,8 +200,9 @@ function CopLogicAttack.update(data)
 	if my_data.spooc_attack then
 		
 		if not my_data.update_queue_id then
+			data.brain:set_update_enabled_state(false)
+
 			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
-			CopLogicBase._report_detections(data.detected_attention_objects)
 			CopLogicAttack.queue_update(data, my_data)
 		end
 
@@ -232,7 +234,10 @@ function CopLogicAttack.update(data)
 
 	if my_data.spooc_attack then
 		if not my_data.update_queue_id then
+			data.brain:set_update_enabled_state(false)
+
 			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
+			
 			CopLogicAttack.queue_update(data, my_data)
 		end
 
@@ -247,10 +252,6 @@ function CopLogicAttack.update(data)
 		if managers.groupai:state():is_smoke_grenade_active() and data.attention_obj.dis < 3000 then
 			CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
 		end
-	end
-	
-	if my_data ~= data.internal_data then
-		return
 	end
 
 	if data.team.id == "criminal1" then
@@ -369,8 +370,10 @@ function CopLogicAttack._upd_combat_movement(data)
 	local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
 	local reloadingretreatmovementqualify = ammo / ammo_max < 0.2 and data.tactics and data.tactics.reloadingretreat and focus_enemy and focus_enemy.verified
 	
-	if not action_taken and want_to_take_cover and not best_cover or not action_taken and hitnrunmovementqualify and not pantsdownchk or not action_taken and eliterangedfiremovementqualify and not pantsdownchk or not action_taken and spoocavoidancemovementqualify and not pantsdownchk or not action_taken and reloadingretreatmovementqualify or not action_taken and data.unit:base()._tweak_table == "chavez_boss" then
-		action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil)
+	if not action_taken then
+		if want_to_take_cover and not best_cover or hitnrunmovementqualify and not pantsdownchk or eliterangedfiremovementqualify and not pantsdownchk or spoocavoidancemovementqualify and not pantsdownchk or reloadingretreatmovementqualify or data.unit:base()._tweak_table == "chavez_boss" then
+			action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, nil)
+		end
 	end
 
 	if not action_taken then
@@ -649,7 +652,7 @@ end
 function CopLogicAttack.queued_update(data)
 	local my_data = data.internal_data
 	data.t = TimerManager:game():time()
-
+	
 	CopLogicAttack.update(data)
 
 	if data.internal_data == my_data then
@@ -1225,7 +1228,6 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	local min_reaction = not managers.groupai:state():whisper_mode() and REACT_AIM
 	
 	local delay = CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
-	local detected_enemies = data.detected_attention_objects
 	local tasing = my_data.tasing
 	local tased_u_key = tasing and tasing.target_u_key
 	local tase_in_effect = nil
@@ -1258,7 +1260,7 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	end
 		
 	if get_new_target then
-		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, detected_enemies, reaction_func)
+		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, reaction_func)
 		local old_att_obj = data.attention_obj
 	
 		CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
@@ -2002,7 +2004,7 @@ function CopLogicAttack.queue_update(data, my_data)
 		return
 	end
 	
-	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, true)
+	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, data.important and true)
 end
 
 function CopLogicAttack._get_expected_attention_position(data, my_data)
@@ -2559,12 +2561,20 @@ function CopLogicAttack._upd_aim(data, my_data)
 				CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
 			end
 		else
-			local look_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
+			local look_pos = nil
+			local coarse_path = my_data.coarse_path
+			local nav_index = my_data.coarse_path_index
+			
+			if coarse_path and nav_index and #coarse_path >= nav_index + 1 then
+				local total_nav_points = #coarse_path
+				local index = nav_index + 1
+				local seg = coarse_path[index][1]
+				look_pos = managers.navigation:find_random_position_in_segment(seg)
+			end
 
-			--[[if look_pos then
-				local line = Draw:brush(Color.blue:with_alpha(0.5), 0.1)
-				line:cylinder(data.unit:movement():m_head_pos(), look_pos, 5)
-			end]]
+			if not look_pos then
+				look_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
+			end
 
 			if my_data.attention_unit ~= look_pos then
 				CopLogicBase._set_attention_on_pos(data, mvec3_cpy(look_pos))

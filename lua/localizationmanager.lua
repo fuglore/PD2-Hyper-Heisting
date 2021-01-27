@@ -445,7 +445,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_sprinter_beta"] = "High Vigour",
 			["menu_sprinter_beta_desc"] = "BASIC: ##$basic##\nYour stamina regenerates ##25%## faster.\n\nACE: ##$pro##\nYou gain ##+10## ##Dodge##. ##Dodge## gives you a random chance to ##completely negate damage##.\n\nUpon successfully ##dodging## an attack, regain ##5## stamina.",
 			
-			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nWhen tased, the effect has a ##25%## chance to ##backfire## on the Taser, knocking them back.\n\nACE: ##$pro##\nWhen tased, you are able to ##free yourself from the Taser## by looking at the Taser and pressing your interact key within ##0.25## seconds of getting tased.",
+			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nWhen tased, the effect has a ##25%## chance to ##backfire## on the Taser, knocking them back.\n\nACE: ##$pro##\nWhen tased, you are able to ##free yourself from the Taser## by looking at the Taser and pressing your interact key within ##0.4## seconds of getting tased.",
 			
 			--BASIC: When tased, you can now withstand being ##shocked## ##2## more times before you explode with electricity.
 			--ACED: When tased, ##you can now free yourself from the Taser## by completing a ##Quick Time Event##.\n\nPressing the Interact key just as a Taser ##shocks## you three times in a row will free you.\n\nFailing to press the Interact key or pressing it at the wrong time cancels the skill.
@@ -473,7 +473,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_steroids_beta_desc"] = "BASIC: ##$basic##\nYour melee attacks deal ##100%## more damage and you swing your melee weapons ##100%## faster.\n\nACE: ##$pro##\nYou cannot be staggered by enemies while ##charging your melee or swinging it.##\n\n##Groovy.##",
 			
 			["menu_wolverine_beta"] = "Unstoppable",
-			["menu_wolverine_beta_desc"] = "BASIC: ##$basic##\nThe less health you have, the more power you gain.\n\nWhen under ##100%## Health, deal up to ##500%## more melee and saw damage.\n\nWhen under ##50%## Health, you reload all weapons 50% faster.\n\nACE: ##$pro##\nWhen at ##50%## Health or below, the effects of being suppressed by special enemies are less effective and your interaction speed with Medic Bags and First Aid Kits is increased by ##75%##.",
+			["menu_wolverine_beta_desc"] = "BASIC: ##$basic##\nThe less health you have, the more power you gain.\n\nWhen under ##100%## Health, deal up to ##500%## more melee and saw damage.\n\nWhen under ##50%## Health, you reload all weapons ##50%## faster.\n\nACE: ##$pro##\nWhen at ##50%## Health or below, the effects of being suppressed by special enemies are less effective and your interaction speed with Medic Bags and First Aid Kits is increased by ##75%##.",
 			
 			["menu_frenzy"] = "Something To Prove",
 			["menu_frenzy_desc"] = "BASIC: ##$basic##\nYou start with ##50%## of your Health and cannot heal above that.\n\n##ALL DAMAGE DEALT## is increased by ##25%##.\n\nACE: ##$pro##\n##You lose 1 down.##\n\nYour movement speed is increased by ##25%##.\n\n##ALL DAMAGE DEALT## is further increased by ##25%##.\n\n##Kill all sons of bitches, right?##",

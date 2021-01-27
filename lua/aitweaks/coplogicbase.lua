@@ -806,13 +806,6 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 	local delay = is_cool and 0 or 2
 	
-	if not is_cool then	
-		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
-			delay = 0
-		elseif data.important then
-			delay = 0
-		end
-	end
 	
 	for u_key, attention_info in pairs(detected_obj) do
 		local can_detect = true
@@ -1084,8 +1077,8 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 							if is_detection_persistent and attention_info.criminal_record then
 								attention_info.release_t = nil
 								
-								delay = math_min(0.2, delay)
-								attention_info.next_verify_t = math_min(0.2, attention_info.next_verify_t)
+								delay = math_min(0.25, delay)
+								attention_info.next_verify_t = math_min(0.25, attention_info.next_verify_t)
 
 								mvec3_set(attention_info.verified_pos, attention_pos)
 
@@ -1202,6 +1195,15 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	if player_importance_wgt then
 		managers.groupai:state():set_importance_weight(data.key, player_importance_wgt)
 	end
+	
+	if not is_cool then	
+		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
+			delay = 0
+		elseif data.important then
+			delay = 0
+		end
+	end
+	
 
 	return delay
 end
@@ -1379,10 +1381,6 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 			return true, false
 		end
 	end
-
-	if objective.interrupt_suppression and data.is_suppressed then
-		return true, true
-	end
 	
 	local health_ratio = data.unit:character_damage():health_ratio()
 	local is_dead = data.unit:character_damage():dead() or health_ratio <= 0
@@ -1391,7 +1389,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 		return true, true
 	end
 
-	local strictness_mul = strictness and 1 - strictness
+	local strictness_mul = 1
 
 	if objective.interrupt_health then
 		if health_ratio < 1 then
@@ -1609,10 +1607,6 @@ function CopLogicBase._get_logic_state_from_reaction(data, reaction)
 
 	if reaction == nil and focus_enemy then
 		reaction = focus_enemy.reaction
-	end
-	
-	if not managers.groupai:state():whisper_mode() then
-		return "attack"
 	end
 	
 	if data.unit:in_slot(16) or data.is_converted then
@@ -1977,20 +1971,6 @@ function CopLogicBase.queue_task(internal_data, id, func, data, exec_t, asap)
 		internal_data.queued_tasks = {
 			[id] = true
 		}
-	end
-	
-	if data.unit then
-		if not managers.groupai:state():whisper_mode() then
-			if data.unit:base():has_tag("special") or data.important then
-				asap = true
-				if exec_t and exec_t > data.t then
-					exec_t = data.t
-				end
-			elseif data.is_converted or data.unit:in_slot(16) or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.unit:in_slot(managers.slot:get_mask("criminals")) then
-				exec_t = data.t
-				asap = true
-			end
-		end
 	end
 
 	managers.enemy:queue_task(id, func, data, exec_t, callback(CopLogicBase, CopLogicBase, "on_queued_task", internal_data), asap)

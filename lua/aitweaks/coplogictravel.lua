@@ -245,7 +245,6 @@ function CopLogicTravel._upd_enemy_detection(data)
 		min_reaction = AIAttentionObject.REACT_AIM
 	end
 	local delay = CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
-	local detected_enemies = data.detected_attention_objects
 	local tasing = my_data.tasing
 	local tased_u_key = tasing and tasing.target_u_key
 	local tase_in_effect = nil
@@ -276,7 +275,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 	local use_optimal_pos_stuff = not my_data.protector and data.important and not data.unit:base():has_tag("takedown")
 	
 	if get_new_target then
-		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, detected_enemies, reaction_func)
+		local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, reaction_func)
 		local old_att_obj = data.attention_obj
 		
 		CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
@@ -358,7 +357,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 				CopLogicBase._exit(data.unit, wanted_state)
 			end
 
-			CopLogicBase._report_detections(detected_enemies)
+			CopLogicBase._report_detections(data.detected_attention_objects)
 
 			return delay
 		end
@@ -366,7 +365,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 
 	if my_data == data.internal_data then
 		if data.cool and new_reaction == AIAttentionObject.REACT_SUSPICIOUS and CopLogicBase._upd_suspicion(data, my_data, new_attention) then
-			CopLogicBase._report_detections(detected_enemies)
+			CopLogicBase._report_detections(data.detected_attention_objects)
 
 			return delay
 		elseif new_reaction and new_reaction <= AIAttentionObject.REACT_SCARED then
@@ -380,7 +379,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 		CopLogicAttack._upd_aim(data, my_data)
 	end
 
-	CopLogicBase._report_detections(detected_enemies)
+	CopLogicBase._report_detections(data.detected_attention_objects)
 
 	if new_attention and data.char_tweak.chatter.entrance and not data.entrance and new_attention.criminal_record and AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.dis < 1200 then
 		data.unit:sound():say(data.brain.entrance_chatter_cue or "entrance", true, nil)
@@ -1181,21 +1180,7 @@ function CopLogicTravel.queued_update(data)
 	if data.internal_data ~= my_data then
 		return
 	end
-	
-	if data.important then
-		data.logic._upd_stance_and_pose(data, data.internal_data, objective)
-	end
-	
-	if data.internal_data ~= my_data then
-		return
-	end
-	    
-    if not delay then
-    	debug_pause_unit(data.unit, "crap!!!", inspect(data))	
-    
-    	delay = 0.35
-    end
-	
+
 	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
 	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter
 	
@@ -1568,9 +1553,11 @@ function CopLogicTravel._chk_request_action_walk_to_cover(data, my_data)
 end
 
 function CopLogicTravel.queue_update(data, my_data, delay)
-	delay = data.important and 0 or delay or 0
-
-	CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicTravel.queued_update, data, data.t + delay, data.important and true)
+	if not delay then
+		CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicTravel.queued_update, data, data.t, true)
+	else 
+		CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicTravel.queued_update, data, data.t + delay, data.important and true)
+	end
 end
 
 function CopLogicTravel._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, speed)
