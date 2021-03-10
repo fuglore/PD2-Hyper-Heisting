@@ -1266,13 +1266,7 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 		end
 	end
 	
-	if objective.taserrescue then
-		if not is_my_area_dangerous and is_follow_unit_area_dangerous then
-			return true
-		end
-	else
-		if is_my_area_dangerous and not is_follow_unit_area_dangerous then
-			return true
-		end
+	if is_my_area_dangerous and not is_follow_unit_area_dangerous then
+		return true
 	end
 end

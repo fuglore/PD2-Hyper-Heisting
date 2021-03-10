@@ -148,6 +148,7 @@
 		<post :script_path="coplogicidle.lua" :hook_id="cop/logics/coplogicidle"/>
 		<post :script_path="coplogicintimidated.lua" :hook_id="cop/logics/coplogicintimidated"/>
 		<post :script_path="coplogictravel.lua" :hook_id="cop/logics/coplogictravel"/>
+		<post :script_path="coplogicinactive.lua" :hook_id="cop/logics/coplogicinactive"/>
 		<post :script_path="coplogicattack.lua" :hook_id="cop/logics/coplogicattack"/>
 		<post :script_path="coplogicbase.lua" :hook_id="cop/logics/coplogicbase"/>
 		<post :script_path="coplogicsniper.lua" :hook_id="cop/logics/coplogicsniper"/>

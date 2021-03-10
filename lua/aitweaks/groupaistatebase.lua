@@ -35,6 +35,7 @@ function GroupAIStateBase:_init_misc_data(...)
 		max_dis = drama_tweak.max_dis,
 		dis_mul = drama_tweak.max_dis_mul
 	}
+	self._nr_important_cops = 8
 	self._special_unit_types = self._special_unit_types or {}
 	self._special_unit_types['fbi'] = true
 	self._special_unit_types['fbi_xc45'] = true
@@ -75,6 +76,7 @@ function GroupAIStateBase:on_simulation_started(...)
 		max_dis = drama_tweak.max_dis,
 		dis_mul = drama_tweak.max_dis_mul
 	}
+	self._nr_important_cops = 8
 	self._special_unit_types = self._special_unit_types or {}
 	self._special_unit_types['fbi'] = true
 	self._special_unit_types['fbi_xc45'] = true
@@ -247,13 +249,14 @@ function GroupAIStateBase:update(t, dt)
 		self:_debug_draw_drama(t)
 	end
 	
-	if not Global.game_settings.single_player then
-		if Network:is_server() then
+	if Network:is_server() then
+		if not Global.game_settings.single_player then
 			local new_value = 8 / table.size(self:all_player_criminals()) 
 
 			self._nr_important_cops = new_value
 		end
 	end
+	
 
 	self:_upd_debug_draw_attentions()
 	self:upd_team_AI_distance()	

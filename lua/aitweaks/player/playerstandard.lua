@@ -457,7 +457,7 @@ function PlayerStandard:_update_movement(t, dt)
 	end
 	
 	local acceleration = WALK_SPEED_MAX * 8
-	local decceleration = acceleration * 1.25
+	local decceleration = acceleration * 0.5
 	
 	if self._state_data.in_air then
 		--acceleration = 700
@@ -517,8 +517,7 @@ function PlayerStandard:_update_movement(t, dt)
 		mvector3.set(mvec_move_dir_normalized, self._move_dir)
 		mvector3.normalize(mvec_move_dir_normalized)
 
-		local wanted_walk_speed = WALK_SPEED_MAX * math.min(1, self._move_dir:length())
-		
+		local wanted_walk_speed = WALK_SPEED_MAX * math.min(1, self._move_dir:length())		
 		local achieved_walk_vel = mvec_achieved_walk_vel
 		
 		if self._running and self._wave_dash_t and not self.is_sliding then

@@ -2785,7 +2785,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"flash_grenade",
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		swat_rifle_flank_civil = {
@@ -2802,7 +2802,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"ranged_fire",
 			"smoke_grenade",
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		swat_rifle_complex = {
@@ -2817,7 +2817,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"flash_grenade",
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		swat_rifle_flank_complex = {
@@ -2836,7 +2836,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"elite_ranged_fire",
 			"smoke_grenade",
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		swat_rifle = {
@@ -2853,7 +2853,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"flash_grenade",
 			"provide_support",
 			"harass",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		swat_rifle_flank = {
@@ -2872,7 +2872,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"elite_ranged_fire",
 			"smoke_grenade",
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		sniper_direct = {
@@ -2906,7 +2906,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		swat_shotgun_rush_complex = {
@@ -2923,7 +2923,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		swat_shotgun_rush = {
@@ -2942,7 +2942,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"flash_grenade", --pushers use flashes
 			"provide_support",
 			"harass",
-			"lonewolf",
+			--"lonewolf",
 			"groupany"
 		},
 		swat_shotgun_flank_civil = {
@@ -2974,7 +2974,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"groupany",
 			"hitnrun" --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
 		},
@@ -2993,7 +2993,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
 			"provide_support",
-			"lonewolf",
+			--"lonewolf",
 			"hitnrun", --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
 			"groupany"
 		},
@@ -3031,7 +3031,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"charge",
 			"hitnrun", --they'll charge, barrage and back off
 			"provide_support",
-			"tunnel"
+			--"tunnel"
 		},
 		tazer_flanking = {
 			"shield_cover",
@@ -3039,15 +3039,15 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade",
-			"tunnel"		 
+			--"tunnel"		 
 		},
 		tazer_flanking_independant = {
 			"hunter",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade",
-			"lonewolf",
-			"tunnel"		 
+			--"lonewolf",
+			--"tunnel"		 
 		},
 		tazer_charge = {
 			"deathguard",
@@ -3062,7 +3062,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"flash_grenade", --use flashes
 			"provide_coverfire",
 			"shield_cover", --if he spawns with a shield, he'll get covered so he can bust your fucking ass
-			"tunnel"
+			--"tunnel"
 		},
 		tank_rush_independant = {
 			"deathguard",
@@ -3070,29 +3070,28 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"flash_grenade", --use flashes
 			"provide_coverfire",
 			"shield_cover", --if he spawns with a shield, he'll get covered so he can bust your fucking ass
-			"lonewolf",
-			"tunnel"
+			--"lonewolf",
+			--"tunnel"
 		},
 		spooc = {
 			"shield_cover",
 			"flank",
 			"smoke_grenade",
-			"lonewolf",
-			"spooctargeting"			
+			--"lonewolf",
+			--"spooctargeting"			
 		},
 		spoocaggressive = {
 			"shield_cover",
 			"charge",
 			"flash_grenade",
-			"lonewolf",
-			"spooctargeting"
+			--"spooctargeting"
 		},
 		spoocelite = {
 			"hunter",
 			"shield_cover",
 			"flank",
 			"smoke_grenade",
-			"lonewolf",
+			--"lonewolf",
 			"harass"
 		},
 		spoocaggressiveelite = {
@@ -3100,7 +3099,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover",
 			"charge",
 			"flash_grenade",
-			"lonewolf",
+			--"lonewolf",
 			"harass"		
 		},
 		spooccreep = {
@@ -3108,7 +3107,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"shield_cover",
 			"charge",
 			"spoocavoidance",
-			"lonewolf",
+			--"lonewolf",
 			"harass"
 		}
 	}

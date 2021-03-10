@@ -76,12 +76,12 @@ function CopLogicIntimidated.enter(data, new_logic_name, enter_params)
 	local body_part = nil
 
 	if my_data.shooting or data.unit:anim_data().reload then
-		if my_data.turning or my_data.advancing then
+		if my_data.turning then
 			body_part = 1
 		else
 			body_part = 3
 		end
-	elseif my_data.turning or my_data.advancing then
+	elseif my_data.turning then
 		body_part = 2
 	end
 
@@ -160,7 +160,7 @@ function CopLogicIntimidated.exit(data, new_logic_name, enter_params)
 		data.unit:base():set_slot(data.unit, 12)
 		data.brain:set_update_enabled_state(true)
 
-		if my_data.set_convert_interact then
+		if my_data.set_convert_interact then ----check this
 			data.unit:interaction():set_active(false, true, false)
 		end
 	end
@@ -264,6 +264,7 @@ function CopLogicIntimidated.action_complete_clbk(data, action)
 end
 
 function CopLogicIntimidated.update(data)
+	--data.t = TimerManager:game():time()
 	local anim_data = data.unit:anim_data()
 
 	if anim_data.hands_tied then
@@ -276,7 +277,7 @@ function CopLogicIntimidated.update(data)
 		end
 
 		return
-	elseif anim_data.surrender or anim_data.hands_up or anim_data.hands_back then
+	elseif anim_data.surrender then--or anim_data.hands_up or anim_data.hands_back then
 		return
 	end
 
@@ -295,22 +296,28 @@ function CopLogicIntimidated.on_intimidated(data, amount, aggressor_unit)
 	local sur_break_time = data.char_tweak.surrender_break_time
 
 	if sur_break_time then
+		local sur_time = nil
+
 		if sur_break_time[1] == sur_break_time[2] then
-			my_data.surrender_break_t = TimerManager:game():time() + sur_break_time[1]
+			sur_time = TimerManager:game():time() + sur_break_time[1]
 		else
-			my_data.surrender_break_t = TimerManager:game():time() + math_random(sur_break_time[1], sur_break_time[2])
+			sur_time = TimerManager:game():time() + math_random(sur_break_time[1], sur_break_time[2])
+		end
+
+		if not my_data.surrender_break_t or my_data.surrender_break_t < sur_time then
+			my_data.surrender_break_t = sur_time
 		end
 	end
 
 	local anim_data = data.unit:anim_data()
 
-	if not anim_data.idle then
-		if not anim_data.surrender and not anim_data.hands_up and not anim_data.hands_back and data.unit:movement():chk_action_forbidden("walk") then
+	--if not anim_data.idle then ----nav_links get interrupted mid-animation still, fix
+		if not anim_data.surrender and --[[not anim_data.hands_up and not anim_data.hands_back and]] data.unit:movement():chk_action_forbidden("walk") then
 			return
 		end
-	end
+	--end
 
-	local anim, blocks = nil
+	local anim, blocks, align_sync, clamp_to_graph = nil
 
 	if anim_data.hands_up then
 		anim = "hands_back"
@@ -337,6 +344,7 @@ function CopLogicIntimidated.on_intimidated(data, amount, aggressor_unit)
 			anim = "tied_all_in_one"
 		else
 			anim = "hands_up"
+			clamp_to_graph = true
 		end
 
 		blocks = {
@@ -347,10 +355,13 @@ function CopLogicIntimidated.on_intimidated(data, amount, aggressor_unit)
 			light_hurt = -1,
 			walk = -1
 		}
+
+		align_sync = true
 	end
 
 	local action_data = {
-		clamp_to_graph = true,
+		clamp_to_graph = clamp_to_graph,
+		align_sync = align_sync,
 		type = "act",
 		body_part = 1,
 		variant = anim,
@@ -398,7 +409,12 @@ function CopLogicIntimidated._register_harassment_SO(data, my_data)
 			}
 		}
 	}
-	--this is basically impossible to use rn due to current anims but if we get custom anims id love to make this work...
+	--"e_nl_kick_enter",
+	--"e_nl_kick_enter_special",
+	--"e_nl_up_4m_wall_kick",
+	--"e_so_try_kick_door",
+	--"e_so_low_kicks",
+	--"e_so_container_kick",
 	local so_descriptor = {
 		interval = 5,
 		search_dis_sq = 2250000,
@@ -515,7 +531,7 @@ function CopLogicIntimidated._do_tied(data, aggressor_unit)
 
 	data.brain:set_update_enabled_state(false)
 	data.unit:inventory():destroy_all_items()
-	managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.surrender_destroy_all_items) 
+	managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.surrender_destroy_all_items) ----
 
 	data.brain:rem_pos_rsrv("stand")
 
@@ -531,7 +547,7 @@ function CopLogicIntimidated._do_tied(data, aggressor_unit)
 		my_data.nearest_cover = nil
 	end
 
-	CopLogicIntimidated._chk_begin_alarm_pager(data)
+	--CopLogicIntimidated._chk_begin_alarm_pager(data)
 
 	if not data.brain:is_pager_started() and not managers.groupai:state():whisper_mode() then
 		my_data.set_convert_interact = true
@@ -611,9 +627,9 @@ function CopLogicIntimidated._add_delayed_rescue_SO(data, my_data)
 	end
 
 	if my_data.delayed_clbks and my_data.delayed_clbks[my_data.delayed_rescue_SO_id] then
-		managers.enemy:reschedule_delayed_clbk(my_data.delayed_rescue_SO_id, TimerManager:game():time() + 2)
+		managers.enemy:reschedule_delayed_clbk(my_data.delayed_rescue_SO_id, TimerManager:game():time() + 10)
 	else
-		if my_data.rescuer and alive(my_data.rescuer) and my_data.rescuer:brain() then
+		if my_data.rescuer then
 			local objective = my_data.rescuer:brain():objective()
 			local rescuer = my_data.rescuer
 			my_data.rescuer = nil
@@ -627,7 +643,7 @@ function CopLogicIntimidated._add_delayed_rescue_SO(data, my_data)
 
 		my_data.delayed_rescue_SO_id = "rescue" .. tostring_g(data.unit:key())
 
-		CopLogicBase.add_delayed_clbk(my_data, my_data.delayed_rescue_SO_id, callback(CopLogicIntimidated, CopLogicIntimidated, "register_rescue_SO", data), TimerManager:game():time() + 2)
+		CopLogicBase.add_delayed_clbk(my_data, my_data.delayed_rescue_SO_id, callback(CopLogicIntimidated, CopLogicIntimidated, "register_rescue_SO", data), TimerManager:game():time() + 10)
 	end
 end
 
@@ -654,31 +670,13 @@ function CopLogicIntimidated.register_rescue_SO(ignore_this, data)
 		},
 		action_duration = tweak_data.interaction.free.timer
 	}
-	
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)	
-	
-	local interrupt_health, interrupt_dis = nil
-	
-	if not Global.game_settings.one_down then
-		if diff_index < 4 then
-			interrupt_health = 0.75
-			interrupt_dis = 700
-		elseif diff_index < 6 then
-			interrupt_health = 0.5
-			interrupt_dis = 200
-		else
-			interrupt_health = 0.3
-			interrupt_dis = nil
-		end
-	end
-	
 	local objective = {
-		interrupt_health = interrupt_health,
+		interrupt_health = 0.85,
 		stance = "hos",
 		type = "act",
 		scan = true,
 		destroy_clbk_key = false,
-		interrupt_dis = interrupt_dis,
+		interrupt_dis = 700,
 		follow_unit = data.unit,
 		pos = mvec3_cpy(objective_pos),
 		nav_seg = data.unit:movement():nav_tracker():nav_segment(),
@@ -696,23 +694,9 @@ function CopLogicIntimidated.register_rescue_SO(ignore_this, data)
 		action_duration = tweak_data.interaction.free.timer,
 		followup_objective = followup_objective
 	}
-	
-	local interval = nil
-	
-	if Global.game_settings.one_down then
-		interval = 0.1
-	else
-		if diff_index < 6 then
-			interval = 6
-		else
-			interval = 4
-		end
-	end
-	
-	
 	local so_descriptor = {
-		interval = interval,
-		search_dis_sq = 4000000,
+		interval = 10,
+		search_dis_sq = 1000000,
 		AI_group = "enemies",
 		base_chance = 1,
 		chance_inc = 0,
@@ -729,11 +713,11 @@ function CopLogicIntimidated.register_rescue_SO(ignore_this, data)
 end
 
 function CopLogicIntimidated.rescue_SO_verification(ignore_this, data, unit)
-	return unit:base():char_tweak().rescue_hostages and not unit:movement():cool() and not data.team.foes[unit:movement():team().id]
+	return unit:base():char_tweak().rescue_hostages and not unit:movement():cool() and not data.team.foes[unit:movement():team().id] ----add act action check
 end
 
 function CopLogicIntimidated._unregister_rescue_SO(data, my_data)
-	if my_data.rescuer and alive(my_data.rescuer) and my_data.rescuer:brain() then
+	if my_data.rescuer then
 		local objective = my_data.rescuer:brain():objective()
 		local rescuer = my_data.rescuer
 		my_data.rescuer = nil
@@ -792,6 +776,14 @@ function CopLogicIntimidated.on_rescue_SO_completed(ignore_this, data, good_pig)
 		data.unit:brain():action_request(new_action)
 	end
 
+	--[[local objective = data.objective
+
+	if objective then
+		if objective.nav_seg or objective.type == "follow" then
+			objective.in_place = true
+		end
+	end]]
+
 	local my_data = data.internal_data
 
 	data.brain:set_objective(nil)
@@ -822,6 +814,7 @@ function CopLogicIntimidated._start_action_hands_up(data)
 	local anim_name = managers.groupai:state():whisper_mode() and "tied_all_in_one" or "hands_up"
 	local action_data = {
 		clamp_to_graph = true,
+		align_sync = true,
 		type = "act",
 		body_part = 1,
 		variant = anim_name,
