@@ -331,13 +331,14 @@ function PlayerDamage:damage_melee(attack_data)
 	
 	local player_unit = managers.player:player_unit()
 	local cur_state = self._unit:movement():current_state_name()
+	
 	if attack_data then
 		local next_allowed_dmg_t = type(self._next_allowed_dmg_t) == "number" and self._next_allowed_dmg_t or Application:digest_value(self._next_allowed_dmg_t, false)
 		local t = managers.player:player_timer():time()
 		local dmg_is_allowed = next_allowed_dmg_t and next_allowed_dmg_t > t
 		
 		--enemies were meleeing players and taking their guns away during invincibility frames and thats no bueno
-		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and dmg_is_allowed then
+		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "bipod" and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and dmg_is_allowed then
 			-- log("balls")				
 			if alive(player_unit) then
 				local melee_stun_t = 0.4

@@ -222,11 +222,21 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 
 			if group_pos_screen.z > 0 then
 				if not gui_text then
+					local move_type = "nothing"
+					
+					if group.objective.moving_in then
+						move_type = "moving_in"
+					elseif group.objective.moving_out then
+						move_type = "moving_out"
+					elseif group.objective.open_fire then
+						move_type = "open_fire"
+					end
+					
 					gui_text = panel:text({
 						name = "text",
 						font_size = 24,
 						layer = 2,
-						text = group.team.id .. ":" .. group_id .. ":" .. group.objective.type,
+						text = group.team.id .. ":" .. group_id .. ":" .. group.objective.type .. ":" .. move_type,
 						font = tweak_data.hud.medium_font,
 						color = draw_data.group_id_color
 					})
@@ -1590,9 +1600,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	end
 	
-	if self._task_data.assault.target_areas then
-		self:_assign_enemy_groups_to_assault(task_data.phase)
-	end
+	self:_assign_enemy_groups_to_assault(task_data.phase)
 end
 
 function GroupAIStateBesiege:is_smoke_grenade_active() --this functions differently, check for if use_smoke IS a thing instead
@@ -1762,28 +1770,26 @@ end
 
 function GroupAIStateBesiege:_upd_groups()
 	for group_id, group in pairs(self._groups) do
-		if group.has_spawned or group.objective and group.objective.type == "retire" then --make sure the group has fully spawned (or if its intent is to not even spawn) before giving the enemies objectives
-			self:_verify_group_objective(group)
+		self:_verify_group_objective(group)
 
-			for u_key, u_data in pairs(group.units) do
-				local brain = u_data.unit:brain()
-				local current_objective = brain:objective()
-				local noobjordefaultorgrpobjchkandnoretry = not current_objective or current_objective.is_default or current_objective.grp_objective and current_objective.grp_objective ~= group.objective and not current_objective.grp_objective.no_retry
-				local notfollowingorfollowingaliveunit = not group.objective.follow_unit or alive(group.objective.follow_unit)
+		for u_key, u_data in pairs(group.units) do
+			local brain = u_data.unit:brain()
+			local current_objective = brain:objective()
+			local noobjordefaultorgrpobjchkandnoretry = not current_objective or current_objective.is_default or current_objective.grp_objective and current_objective.grp_objective ~= group.objective and not current_objective.grp_objective.no_retry
+			local notfollowingorfollowingaliveunit = not group.objective.follow_unit or alive(group.objective.follow_unit)
 
-				if noobjordefaultorgrpobjchkandnoretry and notfollowingorfollowingaliveunit then
-					local objective = self._create_objective_from_group_objective(group.objective, u_data.unit)
+			if noobjordefaultorgrpobjchkandnoretry and notfollowingorfollowingaliveunit then
+				local objective = self._create_objective_from_group_objective(group.objective, u_data.unit)
 					
-					if objective then
-						if brain:is_available_for_assignment(objective) then
-							self:set_enemy_assigned(objective.area or group.objective.area, u_key)
+				if objective then
+					if brain:is_available_for_assignment(objective) then
+						self:set_enemy_assigned(objective.area or group.objective.area, u_key)
 
-							if objective.element then
-								objective.element:clbk_objective_administered(u_data.unit)
-							end
-
-							u_data.unit:brain():set_objective(objective)
+						if objective.element then
+							objective.element:clbk_objective_administered(u_data.unit)
 						end
+
+						u_data.unit:brain():set_objective(objective)
 					end
 				end
 			end
@@ -1792,8 +1798,13 @@ function GroupAIStateBesiege:_upd_groups()
 end
 
 function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
+	local bad_types = {
+		recon_area = true,
+		retire = true
+	}
+	
 	for group_id, group in pairs(self._groups) do
-		if group.has_spawned and group.objective.type == "assault_area" then
+		if not bad_types[group.objective_type] then
 			if group.objective.moving_out or group.objective.moving_in then
 				local done_moving = nil
 
@@ -1820,7 +1831,7 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 				end
 			end
 
-			if not group.objective.moving_in then
+			if not group.objective.moving_in or group.is_chasing then
 				self:_set_assault_objective_to_group(group, phase)
 			end
 		end
@@ -1907,11 +1918,7 @@ function GroupAIStateBase:is_nav_seg_safe_charge(nav_seg)
 end
 
 function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
-	if not group.has_spawned then
-		return
-	end
-
-	local phase_is_anticipation = phase == "anticipation" or self._activeassaultbreak
+	local phase_is_anticipation = self._activeassaultbreak or self:chk_anticipation()
 	local current_objective = group.objective
 	local approach, open_fire, push, pull_back, charge = nil
 	local obstructed_area = self:_chk_group_areas_tresspassed(group)
@@ -1925,7 +1932,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	end
 	
-	if not phase_is_anticipation then
+	if not phase_is_anticipation and not current_objective.moving_in then
 		if group_leader_u_data and group_leader_u_data.tactics then
 			tactics_map = {}
 
@@ -2049,45 +2056,55 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	local objective_area = nil
 
 	if obstructed_area then
-		if current_objective.moving_out then
-			if phase_is_anticipation then
-				pull_back = true
-			else
-				open_fire = true
-			end
-		elseif not current_objective.pushed or charge and not current_objective.charge or not self._last_killed_cop_t or self._t - self._last_killed_cop_t > 4 then
-			push = true
+		if phase_is_anticipation then
+			pull_back = true
 		else
 			open_fire = true
 		end
 	else
-		if not current_objective.moving_out then
-			local has_criminals_close = nil
+		local has_criminals_close = nil
 
-			if next(current_objective.area.criminal.units) then
-				has_criminals_close = true
-			else
-				for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
-					if next(neighbour_area.criminal.units) then
-						has_criminals_close = true
+		if next(current_objective.area.criminal.units) then
+			has_criminals_close = true
+		else
+			for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
+				if next(neighbour_area.criminal.units) then
+					has_criminals_close = true
 
-						break
+					break
+				end
+				
+				if phase_is_anticipation then
+					if neighbour_area.neighbours then
+						for alt_area_id, alt_area in pairs(neighbour_area.neighbours) do
+							if next(alt_area.criminal.units) then
+								has_criminals_close = true
+								
+								break
+							end
+						end
 					end
 				end
+				
+				if has_criminals_close then
+					break
+				end
 			end
+		end
 		
-			if phase_is_anticipation then
-				if current_objective.open_fire then
-					pull_back = true
-				else
-					approach = true
-				end
+		if phase_is_anticipation then
+			if current_objective.open_fire then
+				pull_back = true
+			elseif has_criminals_close then
+				--nothing
 			else
-				if not has_criminals_close then
-					approach = true
-				else
-					push = true
-				end
+				approach = true
+			end
+		else
+			if not has_criminals_close and not current_objective.moving_out then
+				approach = true
+			elseif not current_objective.moving_in then
+				push = true
 			end
 		end
 	end

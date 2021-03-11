@@ -39,7 +39,7 @@ local math_sign = math.sign
 
 local table_insert = table.insert
 
-local deep_clone_g = deep_clone
+local clone_g = clone
 
 local REACT_AIM = AIAttentionObject.REACT_AIM
 local REACT_COMBAT = AIAttentionObject.REACT_COMBAT
@@ -118,12 +118,10 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	end
 
 	my_data.attitude = objective and objective.attitude or "avoid"
-	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range
-
+	my_data.weapon_range = clone_g(data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range)
+	
 	if data.tactics then
 		if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
-			my_data.weapon_range = deep_clone_g(my_data.weapon_range)
-
 			my_data.weapon_range.close = my_data.weapon_range.close * 2
 			my_data.weapon_range.optimal = my_data.weapon_range.optimal * 1.5
 		end

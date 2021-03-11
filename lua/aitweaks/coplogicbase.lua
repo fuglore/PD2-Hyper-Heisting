@@ -1323,6 +1323,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 		}
 			
 		if objective.type == "defend_area" and objective.grp_objective and not bad_types[objective.grp_objective.type] then
+			local group_obj = objective.grp_objective
 			local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
 			local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
 				
@@ -1332,7 +1333,12 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 				
 			if REACT_COMBAT <= attention.reaction then
 				local dis = data.unit:base()._engagement_range or data.internal_data.weapon_range and data.internal_data.weapon_range.close or 500
-				local visible_softer = attention.verified_t and data.t - attention.verified_t < 7
+				
+				if group_obj.moving_out then
+					dis = dis * 0.3
+				end
+				
+				local visible_softer = attention.verified_t and data.t - attention.verified_t < 4
 				if visible_softer and attention.dis <= dis then
 					return true, true
 				end
