@@ -1,10 +1,26 @@
 --Added a bunch of chatter stuff with permission from Rino, along with a few tweaks to keep things consistent
 
+local mvec3_set = mvector3.set
+local mvec3_set_z = mvector3.set_z
+local mvec3_set_zero = mvector3.set_zero
+local mvec3_step = mvector3.step
+local mvec3_lerp = mvector3.lerp
+local mvec3_add = mvector3.add
+local mvec3_divide = mvector3.divide
 local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_cpy = mvector3.copy
+local tmp_vec1 = Vector3()
+local tmp_vec2 = Vector3()
+local tmp_vec3 = Vector3()
+
+local math_up = math.UP
 local math_lerp = math.lerp
 local math_random = math.random
 local math_clamp = math.clamp
+
+local pairs_g = pairs
+local next_g = next
+
 local table_insert = table.insert
 local table_remove = table.remove
 
@@ -41,22 +57,19 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._MAX_SIMULTANEOUS_SPAWNS = 3
 end
 
-function GroupAIStateBesiege:_draw_enemy_activity(t)
-	local draw_data = self._AI_draw_data
-	local brush_area = draw_data.brush_area
-	local area_normal = -math.UP
-	local logic_name_texts = draw_data.logic_name_texts
-	local group_id_texts = draw_data.group_id_texts
-	local panel = draw_data.panel
+function GroupAIStateBesiege:_draw_enemy_activity_client(t)
 	local camera = managers.viewport:get_current_camera()
 
 	if not camera then
 		return
 	end
 
+	local draw_data = self._AI_draw_data
+	local logic_name_texts = draw_data.logic_name_texts --not really logics since client
+	local panel = draw_data.panel
 	local ws = draw_data.workspace
-	local mid_pos1 = Vector3()
-	local mid_pos2 = Vector3()
+	local mid_pos1 = tmp_vec1
+	local mid_pos2 = tmp_vec2
 	local focus_enemy_pen = draw_data.pen_focus_enemy
 	local focus_player_brush = draw_data.brush_focus_player
 	local suppr_period = 0.4
@@ -68,11 +81,234 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 
 	draw_data.brush_suppressed:set_color(Color(math_lerp(0.2, 0.5, suppr_t), 0.85, 0.9, 0.2))
 
-	for area_id, area in pairs(self._area_data) do
-		if table.size(area.police.units) > 0 then
+	local groups = {
+		{
+			group = self._police,
+			color = Color(1, 1, 0, 0)
+		},
+		{
+			group = managers.enemy:all_civilians(),
+			color = Color(1, 0.75, 0.75, 0.75)
+		},
+		{
+			group = self._ai_criminals,
+			color = Color(1, 0, 1, 0)
+		}
+	}
+
+	local res_x = RenderSettings.resolution.x
+	local res_y = RenderSettings.resolution.y
+
+	for i = 1, #groups do
+		local group_data = groups[i]
+
+		for u_key, u_data in pairs_g(group_data.group) do
+			local logic_name_text = logic_name_texts[u_key]
+			local unit = u_data.unit
+			local ext_mov = unit:movement()
+			local team = ext_mov:team()
+			local text_str = team and team.id or "no_team"
+
+			--[[local anim_machine = unit:anim_state_machine()
+
+			if anim_machine then
+				local base_seg_state = anim_machine:segment_state(Idstring("base"))
+
+				if base_seg_state then
+					local idx = anim_machine:state_name_to_index(base_seg_state)
+					text_str = text_str .. ":base_anim_idx( " .. tostring(idx) .. " )"
+				end
+
+				local upper_body_seg_state = anim_machine:segment_state(Idstring("upper_body"))
+
+				if upper_body_seg_state then
+					local idx = anim_machine:state_name_to_index(upper_body_seg_state)
+					text_str = text_str .. ":upp_bdy_anim_idx( " .. tostring(idx) .. " )"
+				end
+			end]]
+
+			local active_actions = ext_mov._active_actions
+
+			if active_actions then
+				local full_body = active_actions[1]
+
+				if full_body then
+					text_str = text_str .. ":action[1]( " .. full_body:type() .. " )"
+				end
+
+				local lower_body = active_actions[2]
+
+				if lower_body then
+					text_str = text_str .. ":action[2]( " .. lower_body:type() .. " )"
+				end
+
+				local upper_body = active_actions[3]
+
+				if upper_body then
+					text_str = text_str .. ":action[3]( " .. upper_body:type() .. " )"
+				end
+
+				local superficial = active_actions[4]
+
+				if superficial then
+					text_str = text_str .. ":action[4]( " .. superficial:type() .. " )"
+				end
+			end
+
+			local queued_actions = ext_mov._queued_actions
+
+			if queued_actions then
+				for idx = 1, #queued_actions do
+					local q_action = queued_actions[idx]
+
+					if q_action then
+						local action_type = q_action.type or "unknown"
+
+						text_str = text_str .. ":queued_action[1]( " .. action_type .. " )"
+					end
+				end
+			end
+
+			if logic_name_text then
+				logic_name_text:set_text(text_str)
+			else
+				logic_name_text = panel:text({
+					name = "text",
+					font_size = 20,
+					layer = 1,
+					text = text_str,
+					font = tweak_data.hud.medium_font,
+					color = group_data.color
+				})
+				logic_name_texts[u_key] = logic_name_text
+			end
+
+			local my_head_pos = mid_pos1
+			local m_head_pos = ext_mov:m_head_pos()
+
+			mvec3_set(my_head_pos, m_head_pos)
+			mvec3_set_z(my_head_pos, my_head_pos.z + 30)
+
+			local my_head_pos_screen = camera:world_to_screen(my_head_pos)
+
+			if my_head_pos_screen.z > 0 then
+				local screen_x = (my_head_pos_screen.x + 1) * 0.5 * res_x
+				local screen_y = (my_head_pos_screen.y + 1) * 0.5 * res_y
+
+				logic_name_text:set_x(screen_x)
+				logic_name_text:set_y(screen_y)
+
+				if not logic_name_text:visible() then
+					logic_name_text:show()
+				end
+			elseif logic_name_text:visible() then
+				logic_name_text:hide()
+			end
+
+			local mov_common_data = ext_mov._common_data
+
+			if mov_common_data and mov_common_data.is_suppressed then
+				mvec3_set(mid_pos1, ext_mov:m_pos())
+				mvec3_set_z(mid_pos1, mid_pos1.z + 220)
+				draw_data.brush_suppressed:cylinder(ext_mov:m_pos(), mid_pos1, 35)
+			end
+
+			local attention = ext_mov:attention()
+
+			if attention then
+				mvec3_set(my_head_pos, m_head_pos)
+
+				local att_unit, e_pos = nil
+				local att_handler = attention.handler
+
+				if att_handler then
+					e_pos = att_handler:get_attention_m_pos()
+				else
+					att_unit = attention.unit
+
+					if att_unit then
+						local att_ext_mov = att_unit:movement()
+
+						e_pos = att_ext_mov and att_ext_mov:m_head_pos() or att_unit:position()
+					else
+						e_pos = attention.pos
+					end
+				end
+
+				mvec3_step(mid_pos2, my_head_pos, e_pos, 300)
+				mvec3_lerp(mid_pos1, my_head_pos, mid_pos2, t % 0.5)
+				mvec3_step(mid_pos2, mid_pos1, e_pos, 50)
+				focus_enemy_pen:line(mid_pos1, mid_pos2)
+
+				att_unit = att_unit or attention.unit
+
+				if att_unit then
+					local att_base = att_unit:base()
+
+					if att_base and att_base.is_local_player then
+						focus_player_brush:sphere(my_head_pos, 20)
+					end
+				end
+			end
+		end
+	end
+
+	for u_key, gui_text in pairs_g(logic_name_texts) do
+		local keep = nil
+
+		for i = 1, #groups do
+			local group_data = groups[i]
+
+			if group_data.group[u_key] then
+				keep = true
+
+				break
+			end
+		end
+
+		if not keep then
+			panel:remove(gui_text)
+
+			logic_name_texts[u_key] = nil
+		end
+	end
+end
+
+function GroupAIStateBesiege:_draw_enemy_activity(t)
+	local camera = managers.viewport:get_current_camera()
+
+	if not camera then
+		return
+	end
+
+	local draw_data = self._AI_draw_data
+	local brush_area = draw_data.brush_area
+	local area_normal = -math_up
+	local logic_name_texts = draw_data.logic_name_texts
+	local group_id_texts = draw_data.group_id_texts
+	local panel = draw_data.panel
+	local ws = draw_data.workspace
+	local mid_pos1 = tmp_vec1
+	local mid_pos2 = tmp_vec2
+	local focus_enemy_pen = draw_data.pen_focus_enemy
+	local focus_player_brush = draw_data.brush_focus_player
+	local suppr_period = 0.4
+	local suppr_t = t % suppr_period
+
+	if suppr_t > suppr_period * 0.5 then
+		suppr_t = suppr_period - suppr_t
+	end
+
+	draw_data.brush_suppressed:set_color(Color(math_lerp(0.2, 0.5, suppr_t), 0.85, 0.9, 0.2))
+
+	for area_id, area in pairs_g(self._area_data) do
+		if next_g(area.police.units) then
 			brush_area:half_sphere(area.pos, 22, area_normal)
 		end
 	end
+
+	local res_x = RenderSettings.resolution.x
+	local res_y = RenderSettings.resolution.y
 
 	local function _f_draw_logic_name(u_key, l_data, draw_color)
 		local logic_name_text = logic_name_texts[u_key]
@@ -90,31 +326,51 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 			text_str = text_str .. ":" .. l_data.spawned_in_phase
 		end
 
-		local anim_machine = l_data.unit:anim_state_machine()
+		local unit = l_data.unit
+		--[[local anim_machine = unit:anim_state_machine()
 
 		if anim_machine then
 			local base_seg_state = anim_machine:segment_state(Idstring("base"))
 
-			if base_seg_state and base_seg_state.s then
-				text_str = text_str .. ":animation( " .. base_seg_state:s() .. " )"
-			end
-		end
-
-		if l_data.unit:movement()._active_actions then
-			if l_data.unit:movement()._active_actions[1] then
-				text_str = text_str .. ":action[1]( " .. l_data.unit:movement()._active_actions[1]:type() .. " )"
+			if base_seg_state then
+				local idx = anim_machine:state_name_to_index(base_seg_state)
+				text_str = text_str .. ":base_anim_idx( " .. tostring(idx) .. " )"
 			end
 
-			if l_data.unit:movement()._active_actions[2] then
-				text_str = text_str .. ":action[2]( " .. l_data.unit:movement()._active_actions[2]:type() .. " )"
+			local upper_body_seg_state = anim_machine:segment_state(Idstring("upper_body"))
+
+			if upper_body_seg_state then
+				local idx = anim_machine:state_name_to_index(upper_body_seg_state)
+				text_str = text_str .. ":upp_bdy_anim_idx( " .. tostring(idx) .. " )"
+			end
+		end]]
+
+		local ext_mov = unit:movement()
+		local active_actions = ext_mov._active_actions
+
+		if active_actions then
+			local full_body = active_actions[1]
+
+			if full_body then
+				text_str = text_str .. ":action[1]( " .. full_body:type() .. " )"
 			end
 
-			if l_data.unit:movement()._active_actions[3] then
-				text_str = text_str .. ":action[3]( " .. l_data.unit:movement()._active_actions[3]:type() .. " )"
+			local lower_body = active_actions[2]
+
+			if lower_body then
+				text_str = text_str .. ":action[2]( " .. lower_body:type() .. " )"
 			end
 
-			if l_data.unit:movement()._active_actions[4] then
-				text_str = text_str .. ":action[4]( " .. l_data.unit:movement()._active_actions[4]:type() .. " )"
+			local upper_body = active_actions[3]
+
+			if upper_body then
+				text_str = text_str .. ":action[3]( " .. upper_body:type() .. " )"
+			end
+
+			local superficial = active_actions[4]
+
+			if superficial then
+				text_str = text_str .. ":action[4]( " .. superficial:type() .. " )"
 			end
 		end
 
@@ -134,14 +390,14 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 
 		local my_head_pos = mid_pos1
 
-		mvector3.set(my_head_pos, l_data.unit:movement():m_head_pos())
-		mvector3.set_z(my_head_pos, my_head_pos.z + 30)
+		mvec3_set(my_head_pos, ext_mov:m_head_pos())
+		mvec3_set_z(my_head_pos, my_head_pos.z + 30)
 
 		local my_head_pos_screen = camera:world_to_screen(my_head_pos)
 
 		if my_head_pos_screen.z > 0 then
-			local screen_x = (my_head_pos_screen.x + 1) * 0.5 * RenderSettings.resolution.x
-			local screen_y = (my_head_pos_screen.y + 1) * 0.5 * RenderSettings.resolution.y
+			local screen_x = (my_head_pos_screen.x + 1) * 0.5 * res_x
+			local screen_y = (my_head_pos_screen.y + 1) * 0.5 * res_y
 
 			logic_name_text:set_x(screen_x)
 			logic_name_text:set_y(screen_y)
@@ -154,80 +410,92 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 		end
 	end
 
-	local function _f_draw_obj_pos(unit)
-		local brush = nil
-		local objective = unit:brain():objective()
-		local objective_type = objective and objective.type
+	local brush_to_use = {
+		guard = "brush_guard",
+		defend_area = "brush_defend",
+		free = "brush_free",
+		follow = "brush_free",
+		surrender = "brush_free",
+		act = "brush_act"
+	}
 
-		if objective_type == "guard" then
-			brush = draw_data.brush_guard
-		elseif objective_type == "defend_area" then
-			brush = draw_data.brush_defend
-		elseif objective_type == "free" or objective_type == "follow" or objective_type == "surrender" then
-			brush = draw_data.brush_free
-		elseif objective_type == "act" then
-			brush = draw_data.brush_act
-		else
-			brush = draw_data.brush_misc
-		end
+	local function _f_draw_obj_pos(unit)
+		local ext_brain = unit:brain()
+		local objective = ext_brain:objective()
+		local objective_type = objective and objective.type
+		local brush = brush_to_use[objective_type]
+		brush = brush and draw_data[brush] or draw_data.brush_misc
 
 		local obj_pos = nil
 
 		if objective then
 			if objective.pos then
 				obj_pos = objective.pos
-			elseif objective.follow_unit then
-				obj_pos = objective.follow_unit:movement():m_head_pos()
+			else
+				local follow_unit = objective.follow_unit
 
-				if objective.follow_unit:base().is_local_player then
-					obj_pos = obj_pos + math.UP * -30
+				if follow_unit then
+					obj_pos = follow_unit:movement():m_head_pos()
+
+					if follow_unit:base().is_local_player then
+						obj_pos = obj_pos + math_up * -30
+					end
+				elseif objective.nav_seg then
+					obj_pos = managers.navigation._nav_segments[objective.nav_seg].pos
+				elseif objective.area then
+					obj_pos = objective.area.pos
 				end
-			elseif objective.nav_seg then
-				obj_pos = managers.navigation._nav_segments[objective.nav_seg].pos
-			elseif objective.area then
-				obj_pos = objective.area.pos
 			end
 		end
 
+		local ext_mov = nil
+
 		if obj_pos then
-			local u_pos = unit:movement():m_com()
+			ext_mov = unit:movement()
+
+			local u_pos = ext_mov:m_com()
 
 			brush:cylinder(u_pos, obj_pos, 4, 3)
 			brush:sphere(u_pos, 24)
 		end
 
-		if unit:brain()._logic_data.is_suppressed then
-			mvector3.set(mid_pos1, unit:movement():m_pos())
-			mvector3.set_z(mid_pos1, mid_pos1.z + 220)
-			draw_data.brush_suppressed:cylinder(unit:movement():m_pos(), mid_pos1, 35)
+		if ext_brain._logic_data.is_suppressed then
+			ext_mov = ext_mov or unit:movement()
+
+			mvec3_set(mid_pos1, ext_mov:m_pos())
+			mvec3_set_z(mid_pos1, mid_pos1.z + 220)
+			draw_data.brush_suppressed:cylinder(ext_mov:m_pos(), mid_pos1, 35)
 		end
 	end
 
-	local group_center = Vector3()
+	local my_groups = self._groups
+	local group_center = tmp_vec3
 
-	for group_id, group in pairs(self._groups) do
-		local nr_units = 0
+	for group_id, group in pairs_g(my_groups) do
+		local units_com = {}
 
-		for u_key, u_data in pairs(group.units) do
-			nr_units = nr_units + 1
+		for u_key, u_data in pairs_g(group.units) do
+			local m_com = u_data.unit:movement():m_com()
 
-			mvector3.add(group_center, u_data.unit:movement():m_com())
+			units_com[#units_com + 1] = m_com
+
+			mvec3_add(group_center, m_com)
 		end
 
-		if nr_units > 0 then
-			mvector3.divide(group_center, nr_units)
+		if #units_com > 0 then
+			mvec3_divide(group_center, units_com)
 
 			local gui_text = group_id_texts[group_id]
 			local group_pos_screen = camera:world_to_screen(group_center)
 
 			if group_pos_screen.z > 0 then
 				if not gui_text then
-					local move_type = "nothing"
+					local move_type = "none"
 					
-					if group.objective.moving_in then
-						move_type = "moving_in"
-					elseif group.objective.moving_out then
+					if group.objective.moving_out then
 						move_type = "moving_out"
+					elseif group.objective.moving_in then
+						move_type = "moving_in"
 					elseif group.objective.open_fire then
 						move_type = "open_fire"
 					end
@@ -236,15 +504,15 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 						name = "text",
 						font_size = 24,
 						layer = 2,
-						text = group.team.id .. ":" .. group_id .. ":" .. group.objective.type .. ":" .. move_type,
+						text = group.team.id .. ":" .. group_id .. ":" .. group.objective.type,
 						font = tweak_data.hud.medium_font,
 						color = draw_data.group_id_color
 					})
 					group_id_texts[group_id] = gui_text
 				end
 
-				local screen_x = (group_pos_screen.x + 1) * 0.5 * RenderSettings.resolution.x
-				local screen_y = (group_pos_screen.y + 1) * 0.5 * RenderSettings.resolution.y
+				local screen_x = (group_pos_screen.x + 1) * 0.5 * res_x
+				local screen_y = (group_pos_screen.y + 1) * 0.5 * res_y
 
 				gui_text:set_x(screen_x)
 				gui_text:set_y(screen_y)
@@ -256,28 +524,35 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 				gui_text:hide()
 			end
 
-			for u_key, u_data in pairs(group.units) do
-				draw_data.pen_group:line(group_center, u_data.unit:movement():m_com())
+			for i = 1, #units_com do
+				local m_com = units_com[i]
+
+				draw_data.pen_group:line(group_center, m_com)
 			end
 		end
 
-		mvector3.set_zero(group_center)
+		mvec3_set_zero(group_center)
 	end
 
-	local function _f_draw_attention_on_player(l_data)
-		if l_data.attention_obj then
-			local my_head_pos = l_data.unit:movement():m_head_pos()
-			local e_pos = l_data.attention_obj.m_head_pos
-			local dis = mvector3.distance(my_head_pos, e_pos)
+	local function _f_draw_attention(l_data)
+		local current_focus = l_data.attention_obj
 
-			mvector3.step(mid_pos2, my_head_pos, e_pos, 300)
-			mvector3.lerp(mid_pos1, my_head_pos, mid_pos2, t % 0.5)
-			mvector3.step(mid_pos2, mid_pos1, e_pos, 50)
-			focus_enemy_pen:line(mid_pos1, mid_pos2)
+		if not current_focus then
+			return
+		end
 
-			if l_data.attention_obj.unit:base() and l_data.attention_obj.unit:base().is_local_player then
-				focus_player_brush:sphere(my_head_pos, 20)
-			end
+		local my_head_pos = l_data.unit:movement():m_head_pos()
+		local e_pos = l_data.attention_obj.m_head_pos
+
+		mvec3_step(mid_pos2, my_head_pos, e_pos, 300)
+		mvec3_lerp(mid_pos1, my_head_pos, mid_pos2, t % 0.5)
+		mvec3_step(mid_pos2, mid_pos1, e_pos, 50)
+		focus_enemy_pen:line(mid_pos1, mid_pos2)
+
+		local focus_base_ext = current_focus.unit:base()
+
+		if focus_base_ext and focus_base_ext.is_local_player then
+			focus_player_brush:sphere(my_head_pos, 20)
 		end
 	end
 
@@ -296,23 +571,27 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 		}
 	}
 
-	for _, group_data in ipairs(groups) do
-		for u_key, u_data in pairs(group_data.group) do
+	for i = 1, #groups do
+		local group_data = groups[i]
+
+		for u_key, u_data in pairs_g(group_data.group) do
 			_f_draw_obj_pos(u_data.unit)
 
 			if camera then
 				local l_data = u_data.unit:brain()._logic_data
 
 				_f_draw_logic_name(u_key, l_data, group_data.color)
-				_f_draw_attention_on_player(l_data)
+				_f_draw_attention(l_data)
 			end
 		end
 	end
 
-	for u_key, gui_text in pairs(logic_name_texts) do
+	for u_key, gui_text in pairs_g(logic_name_texts) do
 		local keep = nil
 
-		for _, group_data in ipairs(groups) do
+		for i = 1, #groups do
+			local group_data = groups[i]
+
 			if group_data.group[u_key] then
 				keep = true
 
@@ -327,8 +606,8 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 		end
 	end
 
-	for group_id, gui_text in pairs(group_id_texts) do
-		if not self._groups[group_id] then
+	for group_id, gui_text in pairs_g(group_id_texts) do
+		if not my_groups[group_id] then
 			panel:remove(gui_text)
 
 			group_id_texts[group_id] = nil
@@ -371,7 +650,7 @@ function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		self._police_upd_task_queued = true
 
-		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t, nil, true) --please dont let your own algorithms implode like that, ovk, thanks
+		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t, nil, nil) --please dont let your own algorithms implode like that, ovk, thanks
 	end
 end
 
@@ -812,7 +1091,7 @@ end
 function GroupAIStateBesiege:chk_anticipation()
 	local assault_task = self._task_data.assault
 	
-	if assault_task and assault_task.phase == "anticipation" and assault_task.phase_end_t and assault_task.phase_end_t < self._t then
+	if assault_task and assault_task.phase == "anticipation" and assault_task.phase_end_t and assault_task.phase_end_t > self._t then
 		return true
 	end
 	
@@ -1551,13 +1830,15 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	local low_carnage = self:_count_criminals_engaged_force(4) <= 16
 	
-	if low_carnage or self._drama_data.amount <= self._drama_data.low_p then
+	if low_carnage or self._drama_data.amount <= self._drama_data.low_p or self._mass_reveal_t < t then
 		if not self._next_reveal_t or self._next_reveal_t < t then
 			for criminal_key, criminal_data in pairs(self._criminals) do
 				self:criminal_spotted(criminal_data.unit)
 			end
 			
 			self._next_reveal_t = t + 0.5
+			
+			self._mass_reveal_t = t + 4
 		end
 	end
 	
@@ -2063,9 +2344,11 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	else
 		local has_criminals_close = nil
+		local has_criminals_in_area = nil
 
 		if next(current_objective.area.criminal.units) then
 			has_criminals_close = true
+			has_criminals_in_area = true
 		else
 			for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
 				if next(neighbour_area.criminal.units) then
@@ -2093,17 +2376,17 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 		
 		if phase_is_anticipation then
-			if current_objective.open_fire then
+			if current_objective.open_fire or has_criminals_in_area then
 				pull_back = true
 			elseif has_criminals_close then
 				--nothing
-			else
+			elseif not current_objective.moving_out then
 				approach = true
 			end
 		else
 			if not has_criminals_close and not current_objective.moving_out then
 				approach = true
-			elseif not current_objective.moving_in then
+			elseif not current_objective.open_fire then
 				push = true
 			end
 		end
@@ -2142,6 +2425,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			type = "assault_area",
 			stance = "hos",
 			open_fire = true,
+			in_place = true,
 			tactic = current_objective.tactic,
 			area = area,
 			coarse_path = {
@@ -2156,8 +2440,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		self:_voice_open_fire_start(group)
 	elseif approach or push then
 		local verify_clbk = nil
+		
 		local assault_area, alternate_assault_area, alternate_assault_area_from, assault_path, alternate_assault_path, area_to_go_to = nil
-		objective_area = task_data.target_areas[1]
 		
 		if flank then
 			verify_clbk = approach and callback(self, self, "is_nav_seg_populated_and_safe") or callback(self, self, "is_nav_seg_populated")
@@ -2177,18 +2461,19 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 			if next(search_area.criminal.units) then
 				local assault_from_here = true
-				area_to_go_to = search_area
-				
+			
 				if approach then	
 					if phase_is_anticipation or flank then
 						local approach_found = nil
 						for other_area_id, other_area in pairs(search_area.neighbours) do
-							if other_area.neighours then
+							if other_area.neighbours then
 								for alt_area_id, alt_area in pairs(other_area.neighbours) do
-									if self:is_area_safe_assault(alt_area) then
-										area_to_go_to = alt_area
-										approach_found = true
-										break
+									if alt_area_id ~= search_area.id and alt_area_id ~= other_area.id then
+										if flank and self:is_area_populated_and_safe(alt_area) or self:is_area_safe_charge(alt_area) then
+											area_to_go_to = alt_area
+											approach_found = true
+											break
+										end
 									end
 								end
 							end
@@ -2197,26 +2482,30 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 								break
 							end
 								
-							if self:is_area_safe_assault(other_area) then
+							if flank and self:is_area_populated_and_safe(other_area) or self:is_area_safe_charge(other_area) then
 								area_to_go_to = other_area
 								break
 							end
 						end
 					else
 						for other_area_id, other_area in pairs(search_area.neighbours) do
-							if self:is_area_safe_assault(other_area) then
+							if flank and self:is_area_populated_and_safe(other_area) or self:is_area_safe_charge(other_area) then
 								area_to_go_to = other_area
 								break
-							elseif other_area.neighours then
+							elseif other_area.neighbours then
 								for alt_area_id, alt_area in pairs(other_area.neighbours) do
-									if self:is_area_safe_assault(alt_area) then
-										area_to_go_to = alt_area
-										break
+									if alt_area_id ~= search_area.id and alt_area_id ~= other_area.id then
+										if flank and self:is_area_populated_and_safe(alt_area) or self:is_area_safe_charge(alt_area) then
+											area_to_go_to = alt_area
+											break
+										end
 									end
 								end
 							end
 						end
 					end
+				else
+					area_to_go_to = search_area
 				end
 					
 				

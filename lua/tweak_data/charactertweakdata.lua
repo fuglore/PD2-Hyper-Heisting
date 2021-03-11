@@ -3103,9 +3103,9 @@ presets.weapon.civil.is_pistol = {
 			1
 		},
 		range = {
-			optimal = 4000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
@@ -3181,9 +3181,9 @@ presets.weapon.civil.is_pistol = {
 			1
 		},
 		range = {
-			optimal = 4000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
@@ -3267,7 +3267,7 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
 			far = 4000, 
-			close = 2000
+			close = 1600
 		},
 		autofire_rounds = { --yes.
 			30,
@@ -3500,7 +3500,7 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2500, --more run'n gun
 			far = 4000,
-			close = 1500
+			close = 1400
 		},
 		autofire_rounds = { --increased from civil, yes, it's terrifying.
 			4,
@@ -3958,9 +3958,9 @@ presets.weapon.civil.is_pistol = {
 			1
 		},
 		range = {
-			optimal = 4000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
@@ -4054,9 +4054,9 @@ presets.weapon.civil.is_pistol = {
 			1
 		},
 		range = {
-			optimal = 4000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
@@ -4158,7 +4158,7 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 3000,
 			far = 4000, 
-			close = 2000
+			close = 1600
 		},
 		autofire_rounds = { --yes.
 			30,
@@ -4409,7 +4409,7 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2500, --more run'n gun
 			far = 4000,
-			close = 1500
+			close = 1400
 		},
 		autofire_rounds = { --increased from complex, yes, it's terrifying.
 			16,
@@ -4921,9 +4921,9 @@ presets.weapon.civil.is_pistol = {
 			1
 		},
 		range = {
-			optimal = 4000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
@@ -5037,7 +5037,7 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 4000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
@@ -5157,7 +5157,7 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
 			far = 4000, 
-			close = 2000
+			close = 1600
 		},
 		autofire_rounds = { --yes.
 			30,
@@ -5444,7 +5444,7 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2500, --more run'n gun
 			far = 4000,
-			close = 1500
+			close = 1400
 		},
 		autofire_rounds = { --increased from complex, yes, it's terrifying.
 			16,
@@ -5974,9 +5974,9 @@ presets.weapon.civil.is_pistol = {
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
@@ -6246,7 +6246,7 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
 			far = 4000, 
-			close = 2000
+			close = 1600
 		},
 		autofire_rounds = { --yes.
 			30,
