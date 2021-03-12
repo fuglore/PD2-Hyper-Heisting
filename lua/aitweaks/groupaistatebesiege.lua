@@ -2355,6 +2355,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if current_objective.moving_out then
 			if not current_objective.open_fire then
 				open_fire = true
+			elseif phase_is_anticipation then
+				pull_back = true
 			end
 		elseif not current_objective.pushed or charge and not current_objective.charge then
 			push = true
@@ -2537,19 +2539,23 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	elseif pull_back then
 		local retreat_area, do_not_retreat = nil
 
-		for u_key, u_data in pairs(group.units) do
-			local nav_seg_id = u_data.tracker:nav_segment()
+		if not next(objective_area.criminal.units) then
+			retreat_area = objective_area
+		else
+			for u_key, u_data in pairs(group.units) do
+				local nav_seg_id = u_data.tracker:nav_segment()
 
-			if current_objective.area.nav_segs[nav_seg_id] then
-				retreat_area = current_objective.area
+				if current_objective.area.nav_segs[nav_seg_id] then
+					retreat_area = current_objective.area
 
-				break
-			end
+					break
+				end
 
-			if self:is_nav_seg_safe(nav_seg_id) then
-				retreat_area = self:get_area_from_nav_seg_id(nav_seg_id)
+				if self:is_nav_seg_safe(nav_seg_id) then
+					retreat_area = self:get_area_from_nav_seg_id(nav_seg_id)
 
-				break
+					break
+				end
 			end
 		end
 
@@ -2557,8 +2563,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
 
 			if forwardmost_i_nav_point then
-				local nearest_safe_nav_seg_id = current_objective.coarse_path(forwardmost_i_nav_point)
-				retreat_area = self:get_area_from_nav_seg_id(nearest_safe_nav_seg_id)
+				local nearest_safe_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(forwardmost_i_nav_point - 1, 1)][1])
+				retreat_area = nearest_safe_area
 			end
 		end
 
@@ -2584,7 +2590,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	end
 end
-
 
 function GroupAIStateBesiege._create_objective_from_group_objective(grp_objective, receiving_unit)
 	local objective = {
