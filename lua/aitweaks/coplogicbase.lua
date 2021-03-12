@@ -1295,7 +1295,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 		end
 	end
 	
-	if attention and REACT_COMBAT <= attention.reaction then
+	--[[if attention and REACT_COMBAT <= attention.reaction then
 		local good_types = {
 			free = true,
 			defend_area = true
@@ -1308,7 +1308,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 			defend_area = true
 		}
 			
-		if good_types[objective.type] and grp_objective_valid then
+		if good_types[objective.type] then
 			if not objective.grp_objective or good_grp_types[objective.grp_objective.type] then 
 				local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
 				local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
@@ -1331,7 +1331,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 				end
 			end
 		end
-	end
+	end]]
 
 	if objective.interrupt_dis then
 		attention = attention or data.attention_obj
