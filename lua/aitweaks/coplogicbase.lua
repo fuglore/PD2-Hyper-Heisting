@@ -850,15 +850,6 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	if player_importance_wgt then
 		managers.groupai:state():set_importance_weight(data.key, player_importance_wgt)
 	end
-	
-	if not is_cool then	
-		if data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.is_converted or data.unit:in_slot(16) or data.unit:in_slot(managers.slot:get_mask("criminals")) then
-			delay = 0
-		elseif data.important then
-			delay = 0
-		end
-	end
-	
 
 	return delay
 end
@@ -1203,13 +1194,7 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 
 			new_att_obj.acquire_t = data.t
 		end
-
-		local tactics = data.tactics
-
-		if tactics and tactics.tunnel then
-			data.tunnel_focus = new_reaction >= REACT_COMBAT and new_att_obj.u_key or nil
-		end
-
+		
 		--[[if contact_chatter_time_ok then
 			if data.char_tweak.chatter.contact or data.unit:base().has_tag and data.unit:base():has_tag("spooc") then
 				if new_att_obj.is_person and new_att_obj.verified and REACT_SHOOT <= new_reaction then
@@ -1226,12 +1211,6 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 			end
 		end
 	elseif old_att_obj then
-		local tactics = data.tactics
-
-		if tactics and tactics.tunnel then
-			data.tunnel_focus = nil
-		end
-
 		if old_att_obj.criminal_record then
 			managers.groupai:state():on_enemy_disengaging(data.unit, old_att_obj.u_key)
 		end
@@ -1317,30 +1296,38 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	end
 	
 	if attention and REACT_COMBAT <= attention.reaction then
-		local bad_types = {
+		local good_types = {
+			free = true,
+			defend_area = true
+		}
+		
+		local good_grp_types = {
 			recon_area = true,
-			retire = true
+			assault_area = true,
+			reenforce_area = true,
+			defend_area = true
 		}
 			
-		if objective.type == "defend_area" and objective.grp_objective and not bad_types[objective.grp_objective.type] then
-			local group_obj = objective.grp_objective
-			local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
-			local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
+		if good_types[objective.type] and grp_objective_valid then
+			if not objective.grp_objective or good_grp_types[objective.grp_objective.type] then 
+				local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
+				local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
 				
-			if next(my_area.criminal.units) then
-				return true, true
-			end
-				
-			if REACT_COMBAT <= attention.reaction then
-				local dis = data.unit:base()._engagement_range or data.internal_data.weapon_range and data.internal_data.weapon_range.close or 500
-				
-				if group_obj.moving_out then
-					dis = dis * 0.3
+				if objective.area and objective.area.nav_segs[my_nav_seg] and next(objective.area.criminal.units) then
+					return true, false
 				end
 				
-				local visible_softer = attention.verified_t and data.t - attention.verified_t < 4
-				if visible_softer and attention.dis <= dis then
-					return true, true
+				if REACT_COMBAT <= attention.reaction then
+					local dis = data.unit:base()._engagement_range or data.internal_data.weapon_range and data.internal_data.weapon_range.close or 500
+					local my_data = data.internal_data
+					if not my_data.attitude or my_data.attitude ~= "engage" then
+						dis = dis * 0.5
+					end
+					
+					local visible_softer = attention.verified_t and data.t - attention.verified_t < 7
+					if visible_softer and attention.dis <= dis then
+						return true, false
+					end
 				end
 			end
 		end

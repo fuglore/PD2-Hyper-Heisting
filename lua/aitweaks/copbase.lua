@@ -2,27 +2,6 @@ local ids_lod = Idstring("lod")
 local ids_lod1 = Idstring("lod1")
 local ids_ik_aim = Idstring("ik_aim")
 CopBase = CopBase or class(UnitBase)
-CopBase._anim_lods = {
-	{
-		2,
-		500,
-		100,
-		5000
-	},
-	{
-		2,
-		0,
-		100,
-		1
-	},
-	{
-		3,
-		0,
-		100,
-		1
-	}
-}
-
 local old_init = CopBase.init
 
 function CopBase:init(unit)
