@@ -1321,7 +1321,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 					local grp_objective = objective.grp_objective
 					local dis = data.unit:base()._engagement_range or data.internal_data.weapon_range and data.internal_data.weapon_range.close or 500
 					local my_data = data.internal_data
-					if not grp_objective.open_fire then
+					if grp_objective and not grp_objective.open_fire then
 						dis = dis * 0.5
 					end
 					
