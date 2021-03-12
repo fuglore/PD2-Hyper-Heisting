@@ -2353,10 +2353,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 	if obstructed_area then
 		if current_objective.moving_out then
-			if not current_objective.open_fire then
-				open_fire = true
-			elseif phase_is_anticipation then
+			if phase_is_anticipation then
 				pull_back = true
+			elseif not current_objective.open_fire then
+				open_fire = true
 			end
 		elseif not current_objective.pushed or charge and not current_objective.charge then
 			push = true

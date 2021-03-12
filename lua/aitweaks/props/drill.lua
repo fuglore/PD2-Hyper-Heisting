@@ -17,7 +17,7 @@ function Drill:_register_sabotage_SO()
 		stance = "hos",
 		type = "defend_area",
 		interrupt_health = 1,
-		interrupt_dis = 500,
+		interrupt_dis = -1,
 		nav_seg = self._nav_tracker:nav_segment(),
 		area = self._SO_area
 	}
@@ -33,7 +33,7 @@ function Drill:_register_sabotage_SO()
 		fail_clbk = callback(self, self, "on_sabotage_SO_failed"),
 		complete_clbk = callback(self, self, "on_sabotage_SO_completed"),
 		action_start_clbk = callback(self, self, "on_sabotage_SO_started"),
-		--followup_objective = followup_objective,
+		followup_objective = followup_objective,
 		action = {
 			align_sync = true,
 			type = "act",

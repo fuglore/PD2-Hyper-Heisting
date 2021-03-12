@@ -1295,20 +1295,20 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 		end
 	end
 	
-	--[[if attention and REACT_COMBAT <= attention.reaction then
+	if attention and REACT_COMBAT <= attention.reaction then
 		local good_types = {
 			free = true,
 			defend_area = true
 		}
-		
-		local good_grp_types = {
-			recon_area = true,
-			assault_area = true,
-			reenforce_area = true,
-			defend_area = true
-		}
 			
 		if good_types[objective.type] then
+			local good_grp_types = {
+				recon_area = true,
+				assault_area = true,
+				reenforce_area = true,
+				defend_area = true
+			}
+			
 			if not objective.grp_objective or good_grp_types[objective.grp_objective.type] then 
 				local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
 				local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
@@ -1318,9 +1318,10 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 				end
 				
 				if REACT_COMBAT <= attention.reaction then
+					local grp_objective = objective.grp_objective
 					local dis = data.unit:base()._engagement_range or data.internal_data.weapon_range and data.internal_data.weapon_range.close or 500
 					local my_data = data.internal_data
-					if not my_data.attitude or my_data.attitude ~= "engage" then
+					if not grp_objective.open_fire then
 						dis = dis * 0.5
 					end
 					
@@ -1331,7 +1332,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 				end
 			end
 		end
-	end]]
+	end
 
 	if objective.interrupt_dis then
 		attention = attention or data.attention_obj
