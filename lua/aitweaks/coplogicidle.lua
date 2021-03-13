@@ -45,6 +45,8 @@ local table_insert = table.insert
 local table_remove = table.remove
 --local table_contains = table.contains
 
+local clone_g = clone
+
 local REACT_IDLE = AIAttentionObject.REACT_IDLE
 local REACT_CURIOUS = AIAttentionObject.REACT_CURIOUS
 local REACT_AIM = AIAttentionObject.REACT_AIM
@@ -153,7 +155,14 @@ function CopLogicIdle.enter(data, new_logic_name, enter_params)
 		my_data.scan = true
 	end
 
-	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range
+	my_data.weapon_range = clone_g(data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range)
+	
+	if data.tactics then
+		if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
+			my_data.weapon_range.close = my_data.weapon_range.close * 2
+			my_data.weapon_range.optimal = my_data.weapon_range.optimal * 1.5
+		end
+	end
 
 	local key_str = tostring(data.key)
 
