@@ -2218,7 +2218,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		return
 	end
 
-	local phase_is_anticipation = self:chk_anticipation()
+	local phase_is_anticipation = self._activeassaultbreak or self:chk_anticipation()
 	local current_objective = group.objective
 	local approach, open_fire, push, pull_back, charge = nil
 	local obstructed_area = self:_chk_group_areas_tresspassed(group)
@@ -2404,6 +2404,15 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			end
 		end
 	end
+	
+	if not phase_is_anticipation and not current_objective.open_fire then
+		open_fire = nil
+		pull_back = nil
+		approach = nil
+		push = true
+		group.is_chasing = true
+	end
+		
 
 	objective_area = objective_area or current_objective.area
 

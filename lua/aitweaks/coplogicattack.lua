@@ -301,20 +301,6 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 
-	local remove_stay_out_time = nil
-
-	if my_data.stay_out_time then
-		if focus_enemy.verified or not my_data.at_cover_shoot_pos or action_taken or want_to_take_cover then
-			remove_stay_out_time = true
-		end
-	end
-
-	if remove_stay_out_time then
-		my_data.stay_out_time = nil
-	elseif not my_data.stay_out_time and not focus_enemy.verified and my_data.at_cover_shoot_pos and not action_taken then
-		my_data.stay_out_time = t + 7
-	end
-
 	local move_to_cover, want_flank_cover = nil
 	local valid_harass = nil
 	
@@ -343,9 +329,9 @@ function CopLogicAttack._upd_combat_movement(data)
 	if not action_taken then
 		if want_to_take_cover then
 			move_to_cover = true
-		elseif not focus_enemy.verified then
+		else
 			if tactics then			
-				if my_data.attitude == "engage" or valid_harass then
+				if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.moving_in or valid_harass then
 					if not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then
 						if my_data.charge_path then
 							local path = my_data.charge_path
@@ -500,9 +486,7 @@ function CopLogicAttack._upd_combat_movement(data)
 						end
 					elseif not my_data.walking_to_cover_shoot_pos then
 						if my_data.at_cover_shoot_pos then
-							if my_data.stay_out_time < t then
-								move_to_cover = true
-							end
+							move_to_cover = true
 						else
 							move_to_cover = true
 							want_flank_cover = true
