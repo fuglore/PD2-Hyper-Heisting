@@ -517,6 +517,10 @@ function CopLogicIdle.damage_clbk(data, damage_info)
 	if data.tactics and data.tactics.sneaky then
 		data.coward_t = t
 	end
+	
+	if data.important or data.is_converted or data.unit:in_slot(16) then
+		CopLogicBase.chk_start_action_dodge(data, "hit")
+	end
 end
 
 function CopLogicIdle.on_alert(data, alert_data)

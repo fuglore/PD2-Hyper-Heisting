@@ -1051,7 +1051,7 @@ function CopActionShoot:_get_modified_spread(t, falloff)
 
 		if att_anim_data then
 			if att_anim_data.dodge then
-				spread = spread / 0.8
+				spread = spread * 10
 			elseif not att_anim_data.run then
 				spread = spread / 1.2
 			end
@@ -1145,7 +1145,7 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 
 		if att_anim_data then
 			if att_anim_data.dodge then
-				hit_chance = hit_chance * 0.8
+				hit_chance = hit_chance * 0
 			elseif not att_anim_data.run then
 				hit_chance = hit_chance * 1.2
 			end
