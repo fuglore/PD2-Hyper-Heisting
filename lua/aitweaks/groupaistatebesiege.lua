@@ -674,13 +674,13 @@ function GroupAIStateBesiege:_queue_police_upd_task()
 end
 
 function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
-	for group_id, group in pairs(self._groups) do
+	for group_id, group in pairs_g(self._groups) do
 		local grp_objective = group.objective
 		if group.has_spawned and grp_objective.type == "assault_area" then
 			if grp_objective.moving_out then
 				local done_moving = nil
 
-				for u_key, u_data in pairs(group.units) do
+				for u_key, u_data in pairs_g(group.units) do
 					local objective = u_data.unit:brain():objective()
 
 					if objective then
@@ -822,7 +822,7 @@ function GroupAIStateBesiege:update(t, dt)
 						if not self._said_heat_bonus_dialog then
 							self:play_heat_bonus_dialog()
 							
-							for key, data in pairs(self._police) do
+							for key, data in pairs_g(self._police) do
 								local dmg_ext = data.unit:character_damage()
 
 								if dmg_ext and dmg_ext.build_suppression then
@@ -1015,9 +1015,9 @@ function GroupAIStateBesiege:_upd_assault_areas(current_area)
 	local found_areas = {}
 	local to_search_areas = {}
 
-	for area_id, area in pairs(all_areas) do
+	for area_id, area in pairs_g(all_areas) do
 		if area.spawn_points then
-			for _, sp_data in pairs(area.spawn_points) do
+			for _, sp_data in pairs_g(area.spawn_points) do
 				if sp_data.delay_t <= t and not all_nav_segs[sp_data.nav_seg].disabled then
 					table_insert(to_search_areas, area)
 
@@ -1029,7 +1029,7 @@ function GroupAIStateBesiege:_upd_assault_areas(current_area)
 		end
 
 		if not found_areas[area_id] and area.spawn_groups then
-			for _, sp_data in pairs(area.spawn_groups) do
+			for _, sp_data in pairs_g(area.spawn_groups) do
 				if sp_data.delay_t <= t and not all_nav_segs[sp_data.nav_seg].disabled then
 					table_insert(to_search_areas, area)
 
@@ -1046,13 +1046,13 @@ function GroupAIStateBesiege:_upd_assault_areas(current_area)
 	end
 
 	if assault_candidates and self._char_criminals then
-		for criminal_key, criminal_data in pairs(self._char_criminals) do
+		for criminal_key, criminal_data in pairs_g(self._char_criminals) do
 			if criminal_key and not criminal_data.status then
 				local nav_seg = criminal_data.tracker:nav_segment()
 				local area = self:get_area_from_nav_seg_id(nav_seg)
 				found_areas[area] = true
 				
-				for _, nbr in pairs(area.neighbours) do
+				for _, nbr in pairs_g(area.neighbours) do
 					found_areas[nbr] = true
 				end
 
@@ -1071,7 +1071,7 @@ function GroupAIStateBesiege:_upd_assault_areas(current_area)
 		local nr_criminals = table.size(area.criminal.units)
 
 		if assault_candidates and self._player_criminals then
-			for criminal_key, _ in pairs(area.criminal.units) do
+			for criminal_key, _ in pairs_g(area.criminal.units) do
 				if criminal_key and self._player_criminals[criminal_key] then
 					if not self._player_criminals[criminal_key].is_deployable then
 						table_insert(assault_candidates, area)
@@ -1083,7 +1083,7 @@ function GroupAIStateBesiege:_upd_assault_areas(current_area)
 		end
 
 		if nr_criminals == 0 then
-			for neighbour_area_id, neighbour_area in pairs(area.neighbours) do
+			for neighbour_area_id, neighbour_area in pairs_g(area.neighbours) do
 				if not found_areas[neighbour_area_id] then
 					table_insert(to_search_areas, neighbour_area)
 
@@ -1135,9 +1135,9 @@ function GroupAIStateBesiege:_begin_new_tasks()
 	local found_areas = {}
 	local to_search_areas = {}
 
-	for area_id, area in pairs(all_areas) do
+	for area_id, area in pairs_g(all_areas) do
 		if area.spawn_points then
-			for _, sp_data in pairs(area.spawn_points) do
+			for _, sp_data in pairs_g(area.spawn_points) do
 				if sp_data.delay_t <= t and not all_nav_segs[sp_data.nav_seg].disabled then
 					table_insert(to_search_areas, area)
 
@@ -1149,7 +1149,7 @@ function GroupAIStateBesiege:_begin_new_tasks()
 		end
 
 		if not found_areas[area_id] and area.spawn_groups then
-			for _, sp_data in pairs(area.spawn_groups) do
+			for _, sp_data in pairs_g(area.spawn_groups) do
 				if sp_data.delay_t <= t and not all_nav_segs[sp_data.nav_seg].disabled then
 					table_insert(to_search_areas, area)
 
@@ -1166,7 +1166,7 @@ function GroupAIStateBesiege:_begin_new_tasks()
 	end
 
 	if assault_candidates and self._char_criminals then
-		for criminal_key, criminal_data in pairs(self._char_criminals) do
+		for criminal_key, criminal_data in pairs_g(self._char_criminals) do
 			if criminal_key and not criminal_data.status then
 				local nav_seg = criminal_data.tracker:nav_segment()
 				local area = self:get_area_from_nav_seg_id(nav_seg)
@@ -1758,7 +1758,7 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 	if type(spawn_group_desc.amount) == "number" then
 		wanted_nr_units = spawn_group_desc.amount
 	else
-		wanted_nr_units = math.random(spawn_group_desc.amount[1], spawn_group_desc.amount[2])
+		wanted_nr_units = math_random(spawn_group_desc.amount[1], spawn_group_desc.amount[2])
 	end
 
 	local valid_unit_types = {}
@@ -1791,7 +1791,8 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 		end
 	end
 
-	for _, sp_data in ipairs(spawn_group.spawn_pts) do
+	for i = 1, #spawn_group.spawn_pts do
+		local sp_data = spawn_group.spawn_pts[i]
 		sp_data.delay_t = self._t + math.rand(0.5)
 	end
 
@@ -1845,7 +1846,7 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 	end
 
 	while wanted_nr_units > 0 and #valid_unit_types ~= 0 do
-		local rand_wght = math.random() * total_wgt
+		local rand_wght = math_random() * total_wgt
 		local rand_i = 1
 		local rand_entry = nil
 
@@ -2006,7 +2007,8 @@ function GroupAIStateBesiege:_verify_group_objective(group)
 	local nav_segments = managers.navigation._nav_segments
 
 	if coarse_path then
-		for i_node, node in ipairs(coarse_path) do
+		for i = 1, #coarse_path do
+			node = coarse_path[i]
 			local nav_seg_id = node[1]
 
 			if nav_segments[nav_seg_id].disabled then
@@ -2166,7 +2168,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	if group_leader_u_data and group_leader_u_data.tactics then
 		tactics_map = {}
 
-		for _, tactic_name in ipairs(group_leader_u_data.tactics) do
+		for i = 1, #group_leader_u_data.tactics do
+			tactic_name = group_leader_u_data.tactics[i]
 			tactics_map[tactic_name] = true
 		end
 
@@ -2175,7 +2178,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 		
 		if not phase_is_anticipation and not current_objective.moving_in then
-			for i_tactic, tactic_name in ipairs(group_leader_u_data.tactics) do
+			for i = 1, #group_leader_u_data.tactics do
+				tactic_name = group_leader_u_data.tactics[i]
 				if tactic_name == "hunter" then
 					local closest_crim_u_data, closest_crim_dis_sq = nil
 					local crim_dis_sq_chk = not closest_crim_dis_sq or closest_crim_dis_sq > closest_u_dis_sq
@@ -2418,37 +2422,38 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					end
 				end
 
-				if not push and tactics_map and tactics_map.flank then
-					local assault_from_area = found_areas[search_area]
+				if not push then
+					if tactics_map and tactics_map.flank or math_random() < 0.5 then
+						local assault_from_area = found_areas[search_area]
 
-					if assault_from_area ~= "init" then
-						local cop_units = assault_from_area.police.units
+						if assault_from_area ~= "init" then
+							local cop_units = assault_from_area.police.units
 
-						for u_key, u_data in pairs(cop_units) do
-							if u_data.group and u_data.group ~= group and u_data.group.objective.type == "assault_area" then
-								assault_from_here = false
+							for u_key, u_data in pairs(cop_units) do
+								if u_data.group and u_data.group ~= group and u_data.group.objective.type == "assault_area" then
+									assault_from_here = false
 
-								if not alternate_assault_area or math.random() < 0.5 then
-									local search_params = {
-										id = "GroupAI_assault",
-										from_seg = current_objective.area.pos_nav_seg,
-										to_seg = search_area.pos_nav_seg,
-										access_pos = self._get_group_acces_mask(group),
-										verify_clbk = approach and callback(self, self, "is_nav_seg_safe")
-									}
-									alternate_assault_path = managers.navigation:search_coarse(search_params)
+									if not alternate_assault_area or math_random() < 0.5 then
+										local search_params = {
+											id = "GroupAI_assault",
+											from_seg = current_objective.area.pos_nav_seg,
+											to_seg = search_area.pos_nav_seg,
+											access_pos = self._get_group_acces_mask(group)
+										}
+										alternate_assault_path = managers.navigation:search_coarse(search_params)
 
-									if alternate_assault_path then
-										self:_merge_coarse_path_by_area(alternate_assault_path)
+										if alternate_assault_path then
+											self:_merge_coarse_path_by_area(alternate_assault_path)
 
-										alternate_assault_area = search_area
-										alternate_assault_area_from = assault_from_area
+											alternate_assault_area = search_area
+											alternate_assault_area_from = assault_from_area
+										end
 									end
+
+									found_areas[search_area] = nil
+
+									break
 								end
-
-								found_areas[search_area] = nil
-
-								break
 							end
 						end
 					end
@@ -2459,8 +2464,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 						id = "GroupAI_assault",
 						from_seg = current_objective.area.pos_nav_seg,
 						to_seg = search_area.pos_nav_seg,
-						access_pos = self._get_group_acces_mask(group),
-						verify_clbk = approach and callback(self, self, "is_nav_seg_safe")
+						access_pos = self._get_group_acces_mask(group)
 					}
 					assault_path = managers.navigation:search_coarse(search_params)
 
@@ -2505,7 +2509,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					end
 				end
 
-				local first_chk = math.random() < 0.5 and self._chk_group_use_flash_grenade or self._chk_group_use_smoke_grenade
+				local first_chk = math_random() < 0.5 and self._chk_group_use_flash_grenade or self._chk_group_use_smoke_grenade
 				local second_chk = first_chk == self._chk_group_use_flash_grenade and self._chk_group_use_smoke_grenade or self._chk_group_use_flash_grenade
 				used_grenade = first_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
 				used_grenade = used_grenade or second_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
@@ -2618,7 +2622,7 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 						local area = self:get_area_from_nav_seg_id(neighbour_nav_seg_id)
 
 						if target_area.nav_segs[neighbour_nav_seg_id] or next(area.criminal.units) then
-							local random_door_id = door_list[math.random(#door_list)]
+							local random_door_id = door_list[math_random(#door_list)]
 
 							if type(random_door_id) == "number" then
 								detonate_pos = managers.navigation._room_doors[random_door_id].center
@@ -2666,7 +2670,7 @@ function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, deto
 					
 					for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
 						if target_area.nav_segs[neighbour_nav_seg_id] then
-							local random_door_id = door_list[math.random(#door_list)]
+							local random_door_id = door_list[math_random(#door_list)]
 
 							if type(random_door_id) == "number" then
 								detonate_pos = managers.navigation._room_doors[random_door_id].center
@@ -3088,7 +3092,8 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 		local spawn_groups = search_area.spawn_groups
 
 		if spawn_groups then
-			for _, spawn_group in ipairs(spawn_groups) do
+			for i = 1, #spawn_groups do
+				local spawn_group = spawn_groups[i]
 				if spawn_group.delay_t <= t and (not verify_clbk or verify_clbk(spawn_group)) then
 					local dis_id = make_dis_id(spawn_group.nav_seg, target_area.pos_nav_seg)
 
@@ -3206,9 +3211,9 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 		return
 	end
 
-	for _, group in ipairs(candidate_groups) do
+	--[[for _, group in ipairs(candidate_groups) do
 		table_insert(self._debug_weights, clone(group))
-	end
+	end]]
 
 	return self:_choose_best_group(candidate_groups, total_weight, delays)
 end
@@ -3217,7 +3222,8 @@ function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delay
 	local rand_wgt = total_weight * math_random()
 	local best_grp, best_grp_type = nil
 
-	for i, candidate in ipairs(best_groups) do
+	for i = 1, #best_groups do
+		local candidate = best_groups[i]
 		rand_wgt = rand_wgt - candidate.wght
 		
 		if rand_wgt <= 0 then

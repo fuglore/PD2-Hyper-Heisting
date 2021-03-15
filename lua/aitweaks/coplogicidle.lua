@@ -532,7 +532,11 @@ function CopLogicIdle.damage_clbk(data, damage_info)
 	end
 	
 	if data.important or data.is_converted or data.unit:in_slot(16) then
-		CopLogicBase.chk_start_action_dodge(data, "hit")
+		local my_data = data.internal_data
+		
+		if not my_data.tasing and not my_data.spooc_attack then
+			CopLogicBase.chk_start_action_dodge(data, "hit")
+		end
 	end
 end
 
