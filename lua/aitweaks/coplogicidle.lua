@@ -252,6 +252,10 @@ function CopLogicIdle.queued_update(data)
 
 		return
 	end
+	
+	if data.objective and data.objective.area then
+		CopLogicIdle._chk_objective_needs_travel(data, data.objective)
+	end
 
 	if data.is_converted then
 		if not data.objective or data.objective.type == "free" then
@@ -1131,8 +1135,15 @@ function CopLogicIdle.is_available_for_assignment(data, objective)
 
 	data.t = TimerManager:game():time()
 
-	if my_data.exiting or data.path_fail_t and data.t < data.path_fail_t + 6 then
+	if my_data.exiting then
 		return
+	end
+	
+	if data.path_fail_t then
+		local fail_t_chk = data.important and 1 or 3
+		if data.t < data.path_fail_t + fail_t_chk then
+			return
+		end
 	end
 
 	return true

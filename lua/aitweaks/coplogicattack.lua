@@ -1995,8 +1995,11 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 
 	data.t = TimerManager:game():time()
 
-	if data.path_fail_t and data.t < data.path_fail_t + 6 then
-		return
+	if data.path_fail_t then
+		local fail_t_chk = data.important and 1 or 3
+		if data.t < data.path_fail_t + fail_t_chk then
+			return
+		end
 	end
 
 	local att_obj = data.attention_obj
@@ -2421,7 +2424,13 @@ end
 function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
 	if not data.unit:movement():chk_action_forbidden("walk") then
 		local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
-
+		
+		if data.objective and data.objective.area then
+			if wanted_state == "idle" and CopLogicIdle._chk_objective_needs_travel(data, data.objective) then
+				wanted_state = "travel"
+			end
+		end
+		
 		if wanted_state ~= data.name then
 			local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, nil)
 

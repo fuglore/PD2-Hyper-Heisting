@@ -17,6 +17,7 @@ local math_up = math.UP
 local math_lerp = math.lerp
 local math_random = math.random
 local math_clamp = math.clamp
+local math_max = math.max
 
 local pairs_g = pairs
 local next_g = next
@@ -379,7 +380,7 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 		else
 			logic_name_text = panel:text({
 				name = "text",
-				font_size = 20,
+				font_size = 12,
 				layer = 1,
 				text = text_str,
 				font = tweak_data.hud.medium_font,
@@ -498,10 +499,10 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 				if group_objective then
 					if group.is_chasing then
 						move_type = ":" .. "chasing"
-					elseif group_objective.moving_out then
-						move_type = ":" .. "moving_out"
 					elseif group_objective.moving_in then
 						move_type = ":" .. "moving_in"
+					elseif group_objective.moving_out then
+						move_type = ":" .. "moving_out"
 					elseif group_objective.open_fire then
 						move_type = ":" .. "open_fire"
 					end
@@ -518,7 +519,7 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 				if not gui_text then
 					gui_text = panel:text({
 						name = "text",
-						font_size = 24,
+						font_size = 12,
 						layer = 2,
 						text = group.team.id .. ":" .. group_id .. ":" .. group.objective.type .. move_type .. phase,
 						font = tweak_data.hud.medium_font,
@@ -595,12 +596,12 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 		for u_key, u_data in pairs_g(group_data.group) do
 			_f_draw_obj_pos(u_data.unit)
 
-			if camera then
+			--[[if camera then
 				local l_data = u_data.unit:brain()._logic_data
 
 				_f_draw_logic_name(u_key, l_data, group_data.color)
 				_f_draw_attention(l_data)
-			end
+			end]]
 		end
 	end
 
@@ -667,65 +668,48 @@ end
 function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		self._police_upd_task_queued = true
-
-		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t, nil, true) --please dont let your own algorithms implode like that, ovk, thanks
+		
+		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + 0.2, nil, true)
 	end
 end
 
-function GroupAIStateBesiege:assign_enemy_to_group_ai(unit, team_id)
-	local u_tracker = unit:movement():nav_tracker()
-	local seg = u_tracker:nav_segment()
-	local area = self:get_area_from_nav_seg_id(seg)
-	local current_unit_type = tweak_data.levels:get_ai_group_type()
-	local u_name = unit:name()
-	local u_category = nil
+function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
+	for group_id, group in pairs(self._groups) do
+		local grp_objective = group.objective
+		if group.has_spawned and grp_objective.type == "assault_area" then
+			if grp_objective.moving_out then
+				local done_moving = nil
 
-	for cat_name, category in pairs(tweak_data.group_ai.unit_categories) do
-		local units = category.unit_types[current_unit_type]
-		
-		if not units then
-			log("woah, "  .. units .. " is a nil value!")
-			units = category.unit_types.america
-		end
+				for u_key, u_data in pairs(group.units) do
+					local objective = u_data.unit:brain():objective()
 
-		for _, test_u_name in ipairs(units) do
-			if u_name == test_u_name then
-				u_category = cat_name
+					if objective then
+						if objective.grp_objective ~= grp_objective then
+							-- Nothing
+						elseif not objective.in_place then
+							done_moving = false
+						elseif done_moving == nil then
+							done_moving = true
+							
+							break
+						end
+					end
+				end
 
-				break
+				if done_moving == true then
+					grp_objective.moving_out = nil
+					group.in_place_t = self._t
+					grp_objective.moving_in = nil
+
+					self:_voice_move_complete(group)
+				end
+			end
+			
+			if not grp_objective.moving_in then
+				self:_set_assault_objective_to_group(group, phase)
 			end
 		end
 	end
-
-	local group_desc = {
-		size = 1,
-		type = u_category or "custom"
-	}
-	local group = self:_create_group(group_desc)
-	group.team = self._teams[team_id]
-	local grp_objective = nil
-	local objective = unit:brain():objective()
-	local grp_obj_type = self._task_data.assault.active and "assault_area" or "recon_area"
-
-	if objective then
-		grp_objective = {
-			type = grp_obj_type,
-			area = objective.area or objective.nav_seg and self:get_area_from_nav_seg_id(objective.nav_seg) or area
-		}
-		objective.grp_objective = grp_objective
-	else
-		grp_objective = {
-			type = grp_obj_type,
-			area = area
-		}
-	end
-
-	grp_objective.moving_out = false
-	group.objective = grp_objective
-	group.has_spawned = true
-
-	self:_add_group_member(group, unit:key())
-	self:set_enemy_assigned(area, unit:key())
 end
 
 function GroupAIStateBesiege:update(t, dt)
@@ -936,145 +920,6 @@ function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
 	end
 	
 	return origfunc2(self, special_type, ...)
-end
-
-function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, ai_task)
-	local spawn_group_desc = tweak_data.group_ai.enemy_spawn_groups[spawn_group_type]
-	local wanted_nr_units = nil
-
-	if type(spawn_group_desc.amount) == "number" then
-		wanted_nr_units = spawn_group_desc.amount
-	else
-		wanted_nr_units = math_random(spawn_group_desc.amount[1], spawn_group_desc.amount[2])
-	end
-
-	local valid_unit_types = {}
-
-	self._extract_group_desc_structure(spawn_group_desc.spawn, valid_unit_types)
-
-	local unit_categories = tweak_data.group_ai.unit_categories
-	local total_wgt = 0
-	local i = 1
- 
-	while i <= #valid_unit_types do
-		local spawn_entry = valid_unit_types[i]
-		local cat_data = unit_categories[spawn_entry.unit]
-
-		if not cat_data then
-			debug_pause("[GroupAIStateBesiege:_spawn_in_group] unit category doesn't exist:", spawn_entry.unit)
-
-			return
-		end
-
-		local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
-
-		if cat_data.special_type and not cat_data.is_captain and spawn_limit <= self:_get_special_unit_type_count(cat_data.special_type) then
-			spawn_group.delay_t = self._t + 2.5 --try again in like 2 seconds or so nerd
-
-			return
-		else
-			total_wgt = total_wgt + spawn_entry.freq
-			i = i + 1
-		end
-	end
-
-	for _, sp_data in ipairs(spawn_group.spawn_pts) do
-		sp_data.delay_t = self._t + math.rand(0.5)
-	end
-
-	local spawn_task = {
-		objective = not grp_objective.element and self._create_objective_from_group_objective(grp_objective),
-		units_remaining = {},
-		spawn_group = spawn_group,
-		spawn_group_type = spawn_group_type,
-		ai_task = ai_task
-	}
-
-	table_insert(self._spawning_groups, spawn_task)
-
-	local function _add_unit_type_to_spawn_task(i, spawn_entry)
-		local spawn_amount_mine = 1 + (spawn_task.units_remaining[spawn_entry.unit] and spawn_task.units_remaining[spawn_entry.unit].amount or 0)
-		spawn_task.units_remaining[spawn_entry.unit] = {
-			amount = spawn_amount_mine,
-			spawn_entry = spawn_entry
-		}
-		wanted_nr_units = wanted_nr_units - 1
-
-		if spawn_entry.amount_min then
-			spawn_entry.amount_min = spawn_entry.amount_min - 1
-		end
-
-		if spawn_entry.amount_max then
-			spawn_entry.amount_max = spawn_entry.amount_max - 1
-
-			if spawn_entry.amount_max == 0 then
-				table_remove(valid_unit_types, i)
-
-				total_wgt = total_wgt - spawn_entry.freq
-
-				return true
-			end
-		end
-	end
-
-	local i = 1
-
-	while i <= #valid_unit_types do
-		local spawn_entry = valid_unit_types[i]
-
-		if i <= #valid_unit_types and wanted_nr_units > 0 and spawn_entry.amount_min and spawn_entry.amount_min > 0 and (not spawn_entry.amount_max or spawn_entry.amount_max > 0) then
-			if not _add_unit_type_to_spawn_task(i, spawn_entry) then
-				i = i + 1
-			end
-		else
-			i = i + 1
-		end
-	end
-
-	while wanted_nr_units > 0 and #valid_unit_types ~= 0 do
-		local rand_wght = math_random() * total_wgt
-		local rand_i = 1
-		local rand_entry = nil
-
-		repeat
-			rand_entry = valid_unit_types[rand_i]
-			rand_wght = rand_wght - rand_entry.freq
-
-			if rand_wght <= 0 then
-				break
-			else
-				rand_i = rand_i + 1
-			end
-		until false
-
-		local cat_data = unit_categories[rand_entry.unit]
-		local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
-
-		if cat_data.special_type and not cat_data.is_captain and spawn_limit <= self:_get_special_unit_type_count(cat_data.special_type) then
-			table_remove(valid_unit_types, rand_i)
-
-			total_wgt = total_wgt - rand_entry.freq
-		else
-			_add_unit_type_to_spawn_task(rand_i, rand_entry)
-		end
-	end
-
-	local group_desc = {
-		size = 0,
-		type = spawn_group_type
-	}
-
-	for u_name, spawn_info in pairs(spawn_task.units_remaining) do
-		group_desc.size = group_desc.size + spawn_info.amount
-	end
-
-	local group = self:_create_group(group_desc)
-	group.objective = grp_objective
-	group.objective.moving_out = true
-	group.team = self._teams[spawn_group.team_id or tweak_data.levels:get_default_team_ID("combatant")]
-	spawn_task.group = group
-
-	return group
 end
 
 function GroupAIStateBesiege:chk_assault_number()
@@ -1902,6 +1747,169 @@ function GroupAIStateBesiege:_upd_assault_task()
 	self:_assign_enemy_groups_to_assault(task_data.phase)
 end
 
+function GroupAIStateBesiege:_get_special_unit_type_count(special_type)
+	if not self._special_units[special_type] then
+		return 0
+	end
+
+	return table.size(self._special_units[special_type])
+end
+
+function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, ai_task)
+	local spawn_group_desc = tweak_data.group_ai.enemy_spawn_groups[spawn_group_type]
+	local wanted_nr_units = nil
+
+	if type(spawn_group_desc.amount) == "number" then
+		wanted_nr_units = spawn_group_desc.amount
+	else
+		wanted_nr_units = math.random(spawn_group_desc.amount[1], spawn_group_desc.amount[2])
+	end
+
+	local valid_unit_types = {}
+
+	self._extract_group_desc_structure(spawn_group_desc.spawn, valid_unit_types)
+
+	local unit_categories = tweak_data.group_ai.unit_categories
+	local total_wgt = 0
+	local i = 1
+
+	while i <= #valid_unit_types do
+		local spawn_entry = valid_unit_types[i]
+		local cat_data = unit_categories[spawn_entry.unit]
+
+		if not cat_data then
+			debug_pause("[GroupAIStateBesiege:_spawn_in_group] unit category doesn't exist:", spawn_entry.unit)
+
+			return
+		end
+
+		local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
+
+		if cat_data.special_type and not cat_data.is_captain and spawn_limit < self:_get_special_unit_type_count(cat_data.special_type) + (spawn_entry.amount_min or 0) then
+			spawn_group.delay_t = self._t + 10
+
+			return
+		else
+			total_wgt = total_wgt + spawn_entry.freq
+			i = i + 1
+		end
+	end
+
+	for _, sp_data in ipairs(spawn_group.spawn_pts) do
+		sp_data.delay_t = self._t + math.rand(0.5)
+	end
+
+	local spawn_task = {
+		objective = not grp_objective.element and self._create_objective_from_group_objective(grp_objective),
+		units_remaining = {},
+		spawn_group = spawn_group,
+		spawn_group_type = spawn_group_type,
+		ai_task = ai_task
+	}
+
+	table.insert(self._spawning_groups, spawn_task)
+
+	local function _add_unit_type_to_spawn_task(i, spawn_entry)
+		local spawn_amount_mine = 1 + (spawn_task.units_remaining[spawn_entry.unit] and spawn_task.units_remaining[spawn_entry.unit].amount or 0)
+		spawn_task.units_remaining[spawn_entry.unit] = {
+			amount = spawn_amount_mine,
+			spawn_entry = spawn_entry
+		}
+		wanted_nr_units = wanted_nr_units - 1
+
+		if spawn_entry.amount_min then
+			spawn_entry.amount_min = spawn_entry.amount_min - 1
+		end
+
+		if spawn_entry.amount_max then
+			spawn_entry.amount_max = spawn_entry.amount_max - 1
+
+			if spawn_entry.amount_max == 0 then
+				table.remove(valid_unit_types, i)
+
+				total_wgt = total_wgt - spawn_entry.freq
+
+				return true
+			end
+		end
+	end
+
+	local i = 1
+
+	while i <= #valid_unit_types do
+		local spawn_entry = valid_unit_types[i]
+
+		if i <= #valid_unit_types and wanted_nr_units > 0 and spawn_entry.amount_min and spawn_entry.amount_min > 0 and (not spawn_entry.amount_max or spawn_entry.amount_max > 0) then
+			if not _add_unit_type_to_spawn_task(i, spawn_entry) then
+				i = i + 1
+			end
+		else
+			i = i + 1
+		end
+	end
+
+	while wanted_nr_units > 0 and #valid_unit_types ~= 0 do
+		local rand_wght = math.random() * total_wgt
+		local rand_i = 1
+		local rand_entry = nil
+
+		repeat
+			rand_entry = valid_unit_types[rand_i]
+			rand_wght = rand_wght - rand_entry.freq
+
+			if rand_wght <= 0 then
+				break
+			else
+				rand_i = rand_i + 1
+			end
+		until false
+
+		local cat_data = unit_categories[rand_entry.unit]
+		local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
+
+		if cat_data.special_type and not cat_data.is_captain and spawn_limit <= self:_get_special_unit_type_count(cat_data.special_type) then
+			table.remove(valid_unit_types, rand_i)
+
+			total_wgt = total_wgt - rand_entry.freq
+		else
+			_add_unit_type_to_spawn_task(rand_i, rand_entry)
+		end
+	end
+
+	local group_desc = {
+		size = 0,
+		type = spawn_group_type
+	}
+
+	for u_name, spawn_info in pairs(spawn_task.units_remaining) do
+		group_desc.size = group_desc.size + spawn_info.amount
+	end
+
+	local group = self:_create_group(group_desc)
+	
+	if grp_objective.area and not grp_objective.coarse_path then
+		local search_params = {
+			id = "GroupAI_spawn",
+			from_seg = spawn_group.area.pos_nav_seg,
+			to_seg = grp_objective.area.pos_nav_seg,
+			access_pos = self._get_group_acces_mask(group)
+		}
+		local coarse_path = managers.navigation:search_coarse(search_params)
+		
+		if coarse_path then
+			grp_objective.coarse_path = coarse_path
+		else
+			grp_objective.coarse_path = {{spawn_group.area.pos_nav_seg, spawn_group.area.pos}}
+		end
+	end
+	
+	self:_set_objective_to_enemy_group(group, grp_objective)
+	group.team = self._teams[spawn_group.team_id or tweak_data.levels:get_default_team_ID("combatant")]
+	spawn_task.group = group
+
+	return group
+end
+
 function GroupAIStateBesiege:is_smoke_grenade_active() --this functions differently, check for if use_smoke IS a thing instead
 	if not self._task_data.assault.use_smoke then
 		return
@@ -2067,73 +2075,6 @@ function GroupAIStateBesiege:_verify_group_objective(group)
 	end
 end
 
-function GroupAIStateBesiege:_upd_groups()
-	for group_id, group in pairs(self._groups) do
-		self:_verify_group_objective(group)
-
-		for u_key, u_data in pairs(group.units) do
-			local brain = u_data.unit:brain()
-			local current_objective = brain:objective()
-			local noobjordefaultorgrpobjchkandnoretry = not current_objective or current_objective.is_default or current_objective.grp_objective and current_objective.grp_objective ~= group.objective and not current_objective.grp_objective.no_retry
-			local notfollowingorfollowingaliveunit = not group.objective.follow_unit or alive(group.objective.follow_unit)
-
-			if noobjordefaultorgrpobjchkandnoretry and notfollowingorfollowingaliveunit then
-				local objective = self._create_objective_from_group_objective(group.objective, u_data.unit)
-					
-				if objective then
-					if brain:is_available_for_assignment(objective) then
-						self:set_enemy_assigned(objective.area or group.objective.area, u_key)
-
-						if objective.element then
-							objective.element:clbk_objective_administered(u_data.unit)
-						end
-
-						u_data.unit:brain():set_objective(objective)
-					end
-				end
-			end
-		end
-	end
-end
-
-function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
-	for group_id, group in pairs(self._groups) do
-		if group.has_spawned and group.objective.type == "assault_area" then
-			if group.objective.moving_out then
-				local done_moving = nil
-
-				for u_key, u_data in pairs(group.units) do
-					local objective = u_data.unit:brain():objective()
-
-					if objective then
-						if objective.grp_objective ~= group.objective then
-							-- Nothing
-						elseif not objective.in_place then
-							done_moving = false
-						elseif done_moving == nil then
-							done_moving = true
-							
-							break
-						end
-					end
-				end
-
-				if done_moving == true then
-					group.objective.moving_out = nil
-					group.in_place_t = self._t
-					group.objective.moving_in = nil
-
-					self:_voice_move_complete(group)
-				end
-			end
-
-			if not group.objective.moving_in then
-				self:_set_assault_objective_to_group(group, phase)
-			end
-		end
-	end
-end
-
 function GroupAIStateBesiege:is_area_populated(area)
 	for u_key, u_data in pairs(self._police) do
 		if not u_data.is_deployable and u_data.tactics_map and not u_data.tactics_map.flank and area.nav_segs[u_data.tracker:nav_segment()] then
@@ -2236,7 +2177,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			current_objective.tactic = nil
 		end
 		
-		if not phase_is_anticipation and not current_objective.tactic then
+		if not phase_is_anticipation and not current_objective.moving_in then
 			for i_tactic, tactic_name in ipairs(group_leader_u_data.tactics) do
 				if tactic_name == "hunter" then
 					local closest_crim_u_data, closest_crim_dis_sq = nil
@@ -2273,6 +2214,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 								attitude = "engage",
 								tactic = "hunter",
 								moving_in = true,
+								open_fire = true,
 								follow_unit = closest_crim_u_data.unit,
 								area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
 								coarse_path = coarse_path
@@ -2325,6 +2267,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 								type = "assault_area",
 								attitude = "engage",
 								tactic = "deathguard",
+								open_fire = true,
 								moving_in = true,
 								follow_unit = closest_crim_u_data.unit,
 								area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
@@ -2338,82 +2281,100 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							return
 						end
 					end
-				elseif tactic_name == "charge" and not current_objective.moving_out and group.in_place_t then
-					if self._t - group.in_place_t > 7 or self._t - group.in_place_t > 3.5 and next(current_objective.area.criminal.units) then
-						if group.is_chasing and not current_objective.charge then
-							charge = true
-						end
-					end
 				end
 			end
 		end
 	end
 
 	local objective_area = nil
-
+	
 	if obstructed_area then
-		if current_objective.moving_out then
-			if phase_is_anticipation then
-				pull_back = true
-			elseif not current_objective.open_fire then
-				open_fire = true
-			end
-		elseif not current_objective.pushed or charge and not current_objective.charge then
-			push = true
+		if phase_is_anticipation then
+			pull_back = true
+		elseif not current_objective.open_fire or current_objective.area.id ~= obstructed_area.id then
+			open_fire = true
 		end
 	else
-		local obstructed_path_index = self:_chk_coarse_path_obstructed(group)
-
-		if obstructed_path_index then
-			if phase_is_anticipation then
-				objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
-				pull_back = true
-			else
-				local obstructed_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[obstructed_path_index][1])
+		local obstructed_path_index = nil
+		local forwardmost_i_nav_point = nil
+		
+		if not group.is_chasing and group.objective.coarse_path then
+			obstructed_path_index = self:_chk_coarse_path_obstructed(group)
+		end
 				
-				if objective_area.id ~= obstructed_area.id then
-					objective_area = obstructed_area
+		if current_objective.moving_out then
+			if current_objective.moving_in and not current_objective.tactic then --not currently used, but just in case i figure out the performance impact is not as bad in some mods as it is in others
+				if not tactics_map or not tactics_map.charge then
+					if not next(current_objective.area.police.units) then
+						approach = true
+					end
+				end
+			elseif not phase_is_anticipation and next(current_objective.area.criminal.units) then
+				if next(current_objective.area.police.units) then
 					push = true
 				end
+			elseif obstructed_path_index then
+				if not phase_is_anticipation then
+					objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index, 1)][1])	
+					if next(objective_area.police.units) then
+						push = true
+					end
+				else
+					objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
+					pull_back = true
+				end
 			end
-		elseif not current_objective.moving_out then
+		else
+			local has_criminals_closer = nil
 			local has_criminals_close = nil
-
-			if not current_objective.moving_out then
+			
+			if next(current_objective.area.criminal.units) then
+				has_criminals_closer = true
+			else
 				for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
-					if next(neighbour_area.criminal.units) then
-						has_criminals_close = true
-
+					if next(neighbour_area.criminal.units) then					
+						has_criminals_close = neighbour_area
 						break
 					end
 				end
 			end
-
-			if charge then
-				push = true
-			elseif not has_criminals_close or not group.in_place_t then
+			
+			if not has_criminals_close or not group.in_place_t then
 				approach = true
-			elseif not phase_is_anticipation and not current_objective.open_fire then
-				open_fire = true
-			elseif not phase_is_anticipation and group.in_place_t then
-				if group.is_chasing or not tactics_map or not tactics_map.ranged_fire or self._t - group.in_place_t > 3.5 then
-					push = true
+			elseif not phase_is_anticipation then
+				if not has_criminals_closer then
+					objective_area = has_criminals_close
+					if tactics_map and tactics_map.charge then
+						charge = true
+						push = true
+					elseif next(has_criminals_close.police.units) then
+						push = true
+					elseif not group.in_place_t then
+						push = true
+					else
+						local move_t = 2
+						local deduction = not self._last_killed_cop_t and 6 or self._t - self._last_killed_cop_t
+						
+						if tactics_map then
+							if tactics_map.ranged_fire or tactics_map.elite_ranged_fire then
+								move_t = move_t + 2
+							end
+							
+							if tactics_map.flank then
+								move_t = move_t + 2
+							end
+						end
+						
+						move_t = math_max(0, move_t - deduction)
+						if self._t - group.in_place_t > move_t then
+							push = true
+						end
+					end
 				end
-			elseif phase_is_anticipation and current_objective.open_fire then
-				pull_back = true
 			end
 		end
 	end
 	
-	if not phase_is_anticipation and not current_objective.open_fire then
-		open_fire = nil
-		pull_back = nil
-		approach = nil
-		push = true
-		group.is_chasing = true
-	end
-		
-
 	objective_area = objective_area or current_objective.area
 
 	if open_fire then
@@ -2423,16 +2384,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			type = "assault_area",
 			stance = "hos",
 			open_fire = true,
+			no_move_out = true,
 			tactic = current_objective.tactic,
-			area = obstructed_area or current_objective.area,
-			coarse_path = {
-				{
-					objective_area.pos_nav_seg,
-					mvector3.copy(current_objective.area.pos)
-				}
-			}
+			area = obstructed_area or current_objective.area
 		}
-
+		
+		group.in_place_t = self._t
+		group.is_chasing = nil
 		self:_set_objective_to_enemy_group(group, grp_objective)
 		self:_voice_open_fire_start(group)
 	elseif approach or push then
@@ -2443,12 +2401,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		local found_areas = {
 			[objective_area] = "init"
 		}
+		
+		local chargers = tactics_map and tactics_map.charge
 
 		repeat
 			local search_area = table.remove(to_search_areas, 1)
 
 			if next(search_area.criminal.units) then
 				local assault_from_here = true
+				
+				if not phase_is_anticipation and approach then
+					if chargers and not next(search_area.police.units) then
+						approach = nil
+						push = true
+						charge = true
+					elseif Global.game_settings.one_down or next(search_area.police.units) then
+						approach = nil
+						push = true
+					end
+				end
 
 				if not push and tactics_map and tactics_map.flank then
 					local assault_from_area = found_areas[search_area]
@@ -2496,7 +2467,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					}
 					assault_path = managers.navigation:search_coarse(search_params)
 
-					if assault_path then
+					if assault_path then				
 						self:_merge_coarse_path_by_area(assault_path)
 
 						assault_area = search_area
@@ -2524,6 +2495,27 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if assault_area and assault_path then
 			local assault_area = push and assault_area or found_areas[assault_area] == "init" and objective_area or found_areas[assault_area]
 
+			local used_grenade = nil
+
+			if push and current_objective.area.neighbours[assault_area] then
+				local detonate_pos = nil
+
+				if charge then
+					for c_key, c_data in pairs(assault_area.criminal.units) do
+						detonate_pos = assault_area.pos
+
+						break
+					end
+				end
+
+				local first_chk = math.random() < 0.5 and self._chk_group_use_flash_grenade or self._chk_group_use_smoke_grenade
+				local second_chk = first_chk == self._chk_group_use_flash_grenade and self._chk_group_use_smoke_grenade or self._chk_group_use_flash_grenade
+				used_grenade = first_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
+				used_grenade = used_grenade or second_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
+
+				self:_voice_move_in_start(group)
+			end
+
 			if #assault_path > 2 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
 				table.remove(assault_path)
 			end
@@ -2533,7 +2525,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				stance = "hos",
 				area = assault_area,
 				coarse_path = assault_path,
-				pose = push and "crouch" or "stand",
+				pose = push and "stand" or "crouch",
 				attitude = push and "engage" or "avoid",
 				moving_in = push and true or nil,
 				open_fire = push or nil,
@@ -2541,7 +2533,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				charge = charge,
 				interrupt_dis = charge and 0 or nil
 			}
-			group.is_chasing = group.is_chasing or push
+			--group.is_chasing = group.is_chasing or push
 
 			self:_set_objective_to_enemy_group(group, grp_objective)
 		end
@@ -2578,24 +2570,132 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 
 		if retreat_area then
+			local search_params = nil
+			local retreat_path = nil
+			
+			if group_leader_u_data then
+				search_params = {
+					id = "GroupAI_pullback",
+					from_tracker = group_leader_u_data.unit:movement():nav_tracker(),
+					to_seg = retreat_area.pos_nav_seg,
+					access_pos = self._get_group_acces_mask(group)
+				}
+				
+				retreat_path = managers.navigation:search_coarse(search_params)
+			end
+			
+
 			local new_grp_objective = {
 				attitude = "avoid",
 				stance = "hos",
 				pose = "crouch",
 				type = "assault_area",
 				area = retreat_area,
-				coarse_path = {
-					{
-						retreat_area.pos_nav_seg,
-						mvector3.copy(retreat_area.pos)
-					}
-				}
+				coarse_path = retreat_path or {{retreat_area.pos_nav_seg, mvec3_cpy(retreat_area.pos)}}
 			}
 			group.is_chasing = nil
 
 			self:_set_objective_to_enemy_group(group, new_grp_objective)
 
 			return
+		end
+	end
+end
+
+function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, detonate_pos, target_area)
+	if task_data.use_smoke then
+		local shooter_pos, shooter_u_data = nil
+		local duration = tweak_data.group_ai.smoke_grenade_lifetime
+
+		for u_key, u_data in pairs(group.units) do
+			if u_data.tactics_map and u_data.tactics_map.smoke_grenade then
+				if not detonate_pos then
+					local nav_seg_id = u_data.tracker:nav_segment()
+					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
+					
+					if not target_area then
+						target_area = task_data.target_areas[1]
+					end
+					
+					for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
+						local area = self:get_area_from_nav_seg_id(neighbour_nav_seg_id)
+
+						if target_area.nav_segs[neighbour_nav_seg_id] or next(area.criminal.units) then
+							local random_door_id = door_list[math.random(#door_list)]
+
+							if type(random_door_id) == "number" then
+								detonate_pos = managers.navigation._room_doors[random_door_id].center
+							else
+								detonate_pos = random_door_id:script_data().element:nav_link_end_pos()
+							end
+
+							shooter_pos = mvector3.copy(u_data.m_pos)
+							shooter_u_data = u_data
+
+							break
+						end
+					end
+				end
+
+				if detonate_pos and shooter_u_data then
+					self:detonate_smoke_grenade(detonate_pos, shooter_pos, duration, false)
+					self:apply_grenade_cooldown(nil)
+
+					if shooter_u_data.char_tweak.chatter.smoke and not shooter_u_data.unit:sound():speaking(self._t) then
+						self:chk_say_enemy_chatter(shooter_u_data.unit, shooter_u_data.m_pos, "smoke")
+					end
+
+					return true
+				end
+			end
+		end
+	end
+end
+
+function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, detonate_pos, target_area)
+	if task_data.use_smoke then
+		local shooter_pos, shooter_u_data = nil
+		local duration = tweak_data.group_ai.flash_grenade_lifetime
+
+		for u_key, u_data in pairs(group.units) do
+			if u_data.tactics_map and u_data.tactics_map.flash_grenade then
+				if not detonate_pos then
+					local nav_seg_id = u_data.tracker:nav_segment()
+					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
+					
+					if not target_area then
+						target_area = task_data.target_areas[1]
+					end
+					
+					for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
+						if target_area.nav_segs[neighbour_nav_seg_id] then
+							local random_door_id = door_list[math.random(#door_list)]
+
+							if type(random_door_id) == "number" then
+								detonate_pos = managers.navigation._room_doors[random_door_id].center
+							else
+								detonate_pos = random_door_id:script_data().element:nav_link_end_pos()
+							end
+
+							shooter_pos = mvector3.copy(u_data.m_pos)
+							shooter_u_data = u_data
+
+							break
+						end
+					end
+				end
+
+				if detonate_pos and shooter_u_data then
+					self:detonate_smoke_grenade(detonate_pos, shooter_pos, duration, true)
+					self:apply_grenade_cooldown(true)
+
+					if shooter_u_data.char_tweak.chatter.flash_grenade and not shooter_u_data.unit:sound():speaking(self._t) then
+						self:chk_say_enemy_chatter(shooter_u_data.unit, shooter_u_data.m_pos, "flash_grenade")
+					end
+
+					return true
+				end
+			end
 		end
 	end
 end
@@ -2642,7 +2742,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.pose = "stand"
 		objective.scan = true
 		objective.interrupt_dis = 200
-		objective.interrupt_suppression = true
+		objective.interrupt_suppression = nil
 	elseif grp_objective.type == "create_phalanx" then
 		objective.type = "phalanx"
 		objective.stance = "hos"
@@ -2949,179 +3049,6 @@ function GroupAIStateBesiege:_upd_regroup_task()
 	end
 end
 
-function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last)
-	local nr_units_spawned = 0
-	local produce_data = {
-		name = true,
-		spawn_ai = {}
-	}
-	local group_ai_tweak = tweak_data.group_ai
-	local spawn_points = spawn_task.spawn_group.spawn_pts
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	--local spawn_delay_min = 3
-	local spawn_delay = 6
-	local spawn_delay_max = 12
-	
-	if Global.game_settings and Global.game_settings.one_down then --have fun assholes
-		--spawn_delay_min = 0
-		spawn_delay = 0.5
-		spawn_delay_max = 5
-	elseif diff_index > 5 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-		--spawn_delay_min = 2
-		spawn_delay = 2
-		spawn_delay_max = 7.5
-	end
-	
-	local function _try_spawn_unit(u_type_name, spawn_entry)
-		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
-			return
-		end
-
-		if self._activeassaultbreak then
-			return
-		end
-
-		local hopeless = true
-		local current_unit_type = tweak_data.levels:get_ai_group_type()
-
-		for _, sp_data in ipairs(spawn_points) do
-			local category = group_ai_tweak.unit_categories[u_type_name]
-			local stop_please = sp_data.accessibility == "any" or category.access[sp_data.accessibility]
-			local please_stop = not sp_data.amount or sp_data.amount > 0
-			
-			if stop_please and please_stop and sp_data.mission_element:enabled() then
-				if sp_data.delay_t < self._t or stop_please then
-					local units = category.unit_types[current_unit_type]
-					produce_data.name = units[math_random(#units)]
-					produce_data.name = managers.modifiers:modify_value("GroupAIStateBesiege:SpawningUnit", produce_data.name)
-					local spawned_unit = sp_data.mission_element:produce(produce_data)
-				
-					local objective = nil
-					
-					if spawned_unit then
-						local u_key = spawned_unit:key()
-						
-						hopeless = nil
-						if spawn_task.objective then
-							objective = self.clone_objective(spawn_task.objective)
-						else
-							objective = spawn_task.group.objective.element:get_random_SO(spawned_unit)
-
-							if not objective then
-								spawned_unit:set_slot(0)
-
-								return true
-							end
-
-							objective.grp_objective = spawn_task.group.objective
-						end
-
-						local u_data = self._police[u_key]
-
-						self:set_enemy_assigned(objective.area, u_key)
-
-						if spawn_entry.tactics then
-							u_data.tactics = spawn_entry.tactics
-							u_data.tactics_map = {}
-
-							for _, tactic_name in ipairs(u_data.tactics) do
-								u_data.tactics_map[tactic_name] = true
-							end
-						end
-
-						spawned_unit:brain():set_spawn_entry(spawn_entry, u_data.tactics_map)
-
-						u_data.rank = spawn_entry.rank
-
-						self:_add_group_member(spawn_task.group, u_key)
-
-						if spawned_unit:brain():is_available_for_assignment(objective) then
-							if objective.element then
-								objective.element:clbk_objective_administered(spawned_unit)
-							end
-
-							spawned_unit:brain():set_objective(objective)
-						else
-							spawned_unit:brain():set_followup_objective(objective)
-						end
-
-						nr_units_spawned = nr_units_spawned + 1
-						
-						sp_data.delay_t = self._t + 1
-
-						if spawn_task.ai_task then
-							spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
-							spawned_unit:brain()._logic_data.spawned_in_phase = spawn_task.ai_task.phase
-						end	
-
-						if sp_data.amount then
-							sp_data.amount = sp_data.amount - 1
-						end
-
-						return true
-					else
-						hopeless = true
-					end
-				end
-			end
-		end
-
-		if hopeless then
-			--log("crabsicles!")
-			--debug_pause("[GroupAIStateBesiege:_upd_group_spawning] spawn group", spawn_task.spawn_group.id, "failed to spawn unit", u_type_name)
-
-			return true
-		end
-	end	
-
-	for u_type_name, spawn_info in pairs(spawn_task.units_remaining) do
-		for i = spawn_info.amount, 1, -1 do
-			local success = _try_spawn_unit(u_type_name, spawn_info.spawn_entry)
-
-			if success then
-				if group_ai_tweak.unit_categories[u_type_name].special and group_ai_tweak.unit_categories[u_type_name].special ~= "ninja" and group_ai_tweak.unit_categories[u_type_name].special ~= "shield" and group_ai_tweak.unit_categories[u_type_name].special ~= "medic" then
-					if group_ai_tweak.unit_categories[u_type_name].special == "tank" then
-						spawn_delay = spawn_delay + 1
-					else
-						spawn_delay = spawn_delay + 0.5
-					end
-				elseif u_type_name == "punk_group" then
-					--nothing 
-				else
-					spawn_delay = spawn_delay + 0.25 
-				end
-				spawn_info.amount = spawn_info.amount - 1
-			end
-
-			break
-		end
-	end
-
-	local complete = true
-
-	for u_type_name, spawn_info in pairs(spawn_task.units_remaining) do
-		if spawn_info.amount > 0 then
-			complete = false
-			break
-		end
-	end
-	
-	spawn_delay = math.min(spawn_delay, spawn_delay_max)
-	if managers.skirmish:is_skirmish() then
-		spawn_delay = spawn_delay * 0.5
-	end
-	if complete then
-		spawn_task.group.has_spawned = true
-		spawn_task.spawn_group.delay_t = self._t + spawn_delay
-		self:_voice_groupentry(spawn_task.group)
-		table.remove(self._spawning_groups, use_last and #self._spawning_groups or 1)
-
-		if spawn_task.group.size <= 0 then
-			self._groups[spawn_task.group.id] = nil
-		end
-	end
-end
-
 local function make_dis_id(from, to)
 	local f = from < to and from or to
 	local t = to < from and from or to
@@ -3309,56 +3236,4 @@ function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delay
 	end
 
 	return best_grp, best_grp_type
-end
-
-function GroupAIStateBesiege:on_cop_jobless(unit)
-	local u_key = unit:key()
-
-	if not self._police[u_key].assigned_area then
-		return
-	end
-
-	local nav_seg = unit:movement():nav_tracker():nav_segment()
-	local new_occupation = self:find_occupation_in_area(nav_seg)
-	local area = self:get_area_from_nav_seg_id(nav_seg)
-	local force_factor = area.factors.force
-	local demand = force_factor and force_factor.force
-	local nr_police = table.size(area.police.units)
-	local undershot = demand and demand - nr_police
-
-	if undershot and undershot > 0 then
-		local new_objective = {
-			type = "defend_area",
-			interrupt_health = 0.75,
-			is_default = true,
-			stance = "hos",
-			in_place = true,
-			scan = true,
-			interrupt_dis = 700,
-			attitude = "avoid",
-			nav_seg = nav_seg
-		}
-
-		self:set_enemy_assigned(self._area_data[nav_seg], u_key)
-		unit:brain():set_objective(new_objective)
-
-		return true
-	end
-
-	if not area.is_safe then
-		local new_objective = {
-			stance = "hos",
-			scan = true,
-			in_place = true,
-			type = "free",
-			is_default = true,
-			attitude = "avoid",
-			nav_seg = nav_seg
-		}
-
-		self:set_enemy_assigned(self._area_data[nav_seg], u_key)
-		unit:brain():set_objective(new_objective)
-
-		return true
-	end
 end
