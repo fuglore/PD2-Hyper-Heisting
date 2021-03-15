@@ -1707,8 +1707,10 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	if self._task_data.assault.target_areas and primary_target_area and nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh or self._task_data.assault.target_areas and primary_target_area and self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil
+		local phase = task_data.phase
+		local anticipation = self:chk_anticipation()
 
-		if task_data.use_spawn_event and task_data.phase ~= "anticipation" or task_data.use_spawn_event and self._hunt_mode then
+		if task_data.use_spawn_event and not anticipation or task_data.use_spawn_event and self._hunt_mode then
 			task_data.use_spawn_event = false
 
 			if self:_try_use_task_spawn_event(t, primary_target_area, "assault") then
@@ -1725,17 +1727,11 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 				if spawn_group then
 					local grp_objective = {
-						attitude = "avoid",
+						attitude = anticipation and "avoid" or "engage",
 						stance = "hos",
-						pose = "stand",
+						pose = anticipation and "crouch" or "stand",
 						type = "assault_area",
-						area = spawn_group.area,
-						coarse_path = {
-							{
-								spawn_group.area.pos_nav_seg,
-								spawn_group.area.pos
-							}
-						}
+						area = primary_target_area
 					}
 
 					self:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, task_data)
@@ -1888,10 +1884,11 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 	local group = self:_create_group(group_desc)
 	
 	if grp_objective.area and not grp_objective.coarse_path then
+		local end_nav_seg = managers.navigation:get_nav_seg_from_pos(grp_objective.area.pos, true)
 		local search_params = {
 			id = "GroupAI_spawn",
-			from_seg = spawn_group.area.pos_nav_seg,
-			to_seg = grp_objective.area.pos_nav_seg,
+			from_seg = spawn_group.nav_seg,
+			to_seg = end_nav_seg,
 			access_pos = self._get_group_acces_mask(group)
 		}
 		local coarse_path = managers.navigation:search_coarse(search_params)
@@ -1899,7 +1896,7 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 		if coarse_path then
 			grp_objective.coarse_path = coarse_path
 		else
-			grp_objective.coarse_path = {{spawn_group.area.pos_nav_seg, spawn_group.area.pos}}
+			grp_objective.coarse_path = {{spawn_group.nav_seg, spawn_group.area.pos}}
 		end
 	end
 	
