@@ -682,12 +682,19 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 
 				for u_key, u_data in pairs_g(group.units) do
 					local objective = u_data.unit:brain():objective()
+					local move
 
 					if objective then
 						if objective.grp_objective ~= grp_objective then
 							-- Nothing
 						elseif not objective.in_place then
-							done_moving = false
+							if objective.area.nav_segs[u_data.unit:movement():nav_tracker():nav_segment()] then
+								done_moving = true --due to how enemy pathing works, it'd be unescessary to check for all units in the group here.
+								
+								break
+							else
+								done_moving = false
+							end
 						elseif done_moving == nil then
 							done_moving = true
 							
@@ -2061,17 +2068,11 @@ function GroupAIStateBesiege:_verify_group_objective(group)
 		return
 	end
 	
-	if group.objective then
-		group.objective.moving_out = nil
-		group.objective.type = grp_objective.type
-		group.objective.area = new_area
-	else
-		group.objective = {
-			moving_out = nil,
-			type = grp_objective.type,
-			area = new_area
-		}
-	end
+	group.objective = {
+		moving_out = nil,
+		type = grp_objective.type,
+		area = new_area
+	}
 end
 
 function GroupAIStateBesiege:is_area_populated(area)
@@ -2289,10 +2290,36 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 	local objective_area = nil
 	
+	local diff_index = Global.game_settings.one_down and 8 or managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	
 	if obstructed_area then
-		if phase_is_anticipation then
+		
+		--if one of the group members walk into a criminal then, if the phase is anticipation, they'll retreat backwards, otherwise, stand their ground and start shooting.
+		--this will most likely always instantly kick in if the group has finished charging into an area.
+	
+		if phase_is_anticipation then 
 			pull_back = true
-		elseif not current_objective.open_fire or current_objective.area.id ~= obstructed_area.id then
+		elseif Global.game_settings.one_down and current_objective.area.id ~= obstructed_area.id or not current_objective.charge then --if anyone is camping in a specific spot, try to path to them	
+			if diff_index > 7 or Global.game_settings.one_down then
+				push = true
+				if not current_objective.charge then
+					charge = true
+				end
+			else
+				local move_t = 4
+			
+				if diff_index > 6 then
+					move_t = 1
+				elseif diff_index > 3 then
+					move_t = 2
+				end
+				
+				if group.in_place_t and self._t - group.in_place_t > move_t then
+					push = true
+					charge = true
+				end
+			end
+		elseif not current_objective.open_fire or current_objective.area.id ~= obstructed_area.id then --have to check for this here or open_fire might not get set.
 			open_fire = true
 		end
 	else
@@ -2306,21 +2333,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if current_objective.moving_out then
 			if current_objective.moving_in and not current_objective.tactic then --not currently used, but just in case i figure out the performance impact is not as bad in some mods as it is in others
 				if not tactics_map or not tactics_map.charge then
-					if not next(current_objective.area.police.units) then
+					if not next(current_objective.area.police.units) then --if im charging, but the area suddenly has no police in it, and im not a charge group, then wait a bit
 						approach = true
 					end
 				end
 			elseif not phase_is_anticipation and next(current_objective.area.criminal.units) then
-				if next(current_objective.area.police.units) then
+				if next(current_objective.area.police.units) then --if im *just* approaching, but theres other enemies in the area heading to, charge 
 					push = true
 				end
-			elseif obstructed_path_index then
+			elseif obstructed_path_index then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
 				if not phase_is_anticipation then
 					objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index, 1)][1])	
-					if next(objective_area.police.units) then
+					if diff_index > 6 or next(objective_area.police.units) then --if the obstructed area has other units in it during the assault (on lower diffs), push.
 						push = true
+					else
+						objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
+						pull_back = true
 					end
 				else
+					--anticipation makes cops stop one area early. so they don't get too rushy without an assault happening.
 					objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
 					pull_back = true
 				end
@@ -2330,6 +2361,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local has_criminals_close = nil
 			
 			if next(current_objective.area.criminal.units) then
+				has_criminals_close = true
 				has_criminals_closer = true
 			else
 				for area_id, neighbour_area in pairs(current_objective.area.neighbours) do
@@ -2340,17 +2372,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 			
-			if not has_criminals_close or not group.in_place_t then
+			if phase_is_anticipation and current_objective.open_fire then
+				pull_back = true
+			elseif not has_criminals_close or not group.in_place_t then
 				approach = true
 			elseif not phase_is_anticipation then
 				if not has_criminals_closer then
 					objective_area = has_criminals_close
-					if tactics_map and tactics_map.charge then
+					
+					--the general idea here is that groups will generally try to wait until other groups have headed into the area
+					--by pushing in one big pile, you make sure to punish players camping and not trying to keep the cops away, without making them too rushy.
+					
+					if next(has_criminals_close.police.units) then
+						push = true
+					elseif tactics_map and tactics_map.charge then
+						push = true
 						charge = true
-						push = true
-					elseif next(has_criminals_close.police.units) then
-						push = true
 					elseif not group.in_place_t then
+						push = true
+					elseif Global.game_settings.one_down then
 						push = true
 					else
 						local move_t = 2
@@ -2366,11 +2406,24 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							end
 						end
 						
+						if diff_index > 6 then
+							move_t = move_t - 2
+						end
+						
 						move_t = math_max(0, move_t - deduction)
-						if self._t - group.in_place_t > move_t then
+						if move_t <= 0 or self._t - group.in_place_t > move_t then
 							push = true
 						end
 					end
+					
+					if push and tactics_map and tactics_map.charge then
+						charge = true
+					end
+				elseif current_objective.coarse_path then
+					--this shouldnt happen under most circumstances, but might be an edge case, so im making sure.
+					--in case the group was moving_out/moving_in and doesn't get obstructed_area, but theres criminals in the area they're in, use open_fire
+					--to wipe the coarse path.
+					open_fire = true
 				end
 			end
 		end
@@ -2526,7 +2579,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				stance = "hos",
 				area = assault_area,
 				coarse_path = assault_path,
-				pose = push and "stand" or "crouch",
+				pose = "stand",
 				attitude = push and "engage" or "avoid",
 				moving_in = push and true or nil,
 				open_fire = push or nil,
