@@ -280,7 +280,7 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 
-	action_taken = action_taken or data.logic.action_taken(data, my_data) or CopLogicAttack._upd_pose(data, my_data)
+	action_taken = action_taken or data.logic.action_taken(data, my_data)
 	
 	local tactics = data.tactics
 	local soft_t = 2
@@ -330,130 +330,128 @@ function CopLogicAttack._upd_combat_movement(data)
 		if want_to_take_cover then
 			move_to_cover = true
 		else
-			if tactics then			
-				if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.charge or valid_harass then
-					if not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then
-						if my_data.charge_path then
-							local path = my_data.charge_path
-							my_data.charge_path = nil
-							
-							--if valid_harass then
-							--	log("cum")
-							--end
-							
-							action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
-						elseif not my_data.charge_path_search_id and focus_enemy.nav_tracker then
-							if tactics.flank then
-								my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, my_data.weapon_range.close) --charge to a position that would put the unit in a flanking position, not a flanking path
-							else
-								my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.close, 45, nil, data.pos_rsrv_id)
+			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.charge or valid_harass then
+				if not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then
+					if my_data.charge_path then
+						local path = my_data.charge_path
+						my_data.charge_path = nil
+						
+						--if valid_harass then
+						--	log("cum")
+						--end
+						
+						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
+					elseif not my_data.charge_path_search_id and focus_enemy.nav_tracker then
+						if not tactics or tactics.flank then
+							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, my_data.weapon_range.close) --charge to a position that would put the unit in a flanking position, not a flanking path
+						else
+							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), 600, nil, nil, data.pos_rsrv_id)
+						end
+
+						--my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.optimal, 45, nil, data.pos_rsrv_id)
+
+						if my_data.charge_pos then
+							local my_pos = data.unit:movement():nav_tracker():field_position()
+							local unobstructed_line = nil
+
+							if math_abs(my_pos.z - my_data.charge_pos.z) < 40 then
+								local ray_params = {
+									allow_entry = false,
+									pos_from = my_pos,
+									pos_to = my_data.charge_pos
+								}
+
+								if not managers.navigation:raycast(ray_params) then
+									unobstructed_line = true
+								end
 							end
 
-							--my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.optimal, 45, nil, data.pos_rsrv_id)
+							if unobstructed_line then
+								local path = {
+									mvec3_cpy(my_pos),
+									my_data.charge_pos
+								}
 
-							if my_data.charge_pos then
-								local my_pos = data.unit:movement():nav_tracker():field_position()
-								local unobstructed_line = nil
+								--[[local line = Draw:brush(Color.blue:with_alpha(0.5), 5)
+								line:cylinder(my_pos, my_data.charge_pos, 25)]]
 
-								if math_abs(my_pos.z - my_data.charge_pos.z) < 40 then
-									local ray_params = {
-										allow_entry = false,
-										pos_from = my_pos,
-										pos_to = my_data.charge_pos
-									}
-
-									if not managers.navigation:raycast(ray_params) then
-										unobstructed_line = true
-									end
-								end
-
-								if unobstructed_line then
-									local path = {
-										mvec3_cpy(my_pos),
-										my_data.charge_pos
-									}
-
-									--[[local line = Draw:brush(Color.blue:with_alpha(0.5), 5)
-									line:cylinder(my_pos, my_data.charge_pos, 25)]]
-
-									action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
-								else
-									data.brain:add_pos_rsrv("path", {
-										radius = 60,
-										position = mvec3_cpy(my_data.charge_pos)
-									})
-
-									my_data.charge_path_search_id = "charge" .. tostring(data.key)
-
-									data.brain:search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
-								end
+								action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
 							else
-								--debug_pause_unit(unit, "failed to find charge_pos", unit)
+								data.brain:add_pos_rsrv("path", {
+									radius = 60,
+									position = mvec3_cpy(my_data.charge_pos)
+								})
 
-								my_data.charge_path_failed_t = t
+								my_data.charge_path_search_id = "charge" .. tostring(data.key)
+
+								data.brain:search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
 							end
+						else
+							--debug_pause_unit(unit, "failed to find charge_pos", unit)
+
+							my_data.charge_path_failed_t = t
 						end
 					end
-				elseif my_data.flank_cover and my_data.flank_cover.failed then
-					want_flank_cover = true
+				end
+			elseif my_data.flank_cover and my_data.flank_cover.failed then
+				want_flank_cover = true
 
-					if not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then --not gonna bother renaming and adding stuff to be used as flank_path as well, so I'm sharing the name even though they're kinda different
-						my_data.flank_cover = nil
+				if not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then --not gonna bother renaming and adding stuff to be used as flank_path as well, so I'm sharing the name even though they're kinda different
+					my_data.flank_cover = nil
 
-						if my_data.charge_path then
-							local path = my_data.charge_path
-							my_data.charge_path = nil
+					if my_data.charge_path then
+						local path = my_data.charge_path
+						my_data.charge_path = nil
 
-							action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
-						elseif not my_data.charge_path_search_id and focus_enemy.nav_tracker then
-							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, my_data.weapon_range.optimal) --charge to a position that would put the unit in a flanking position, not really a flanking path
+						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
+					elseif not my_data.charge_path_search_id and focus_enemy.nav_tracker then
+						my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, my_data.weapon_range.optimal) --charge to a position that would put the unit in a flanking position, not really a flanking path
 
-							if my_data.charge_pos then
-								local my_pos = data.unit:movement():nav_tracker():field_position()
-								local unobstructed_line = nil
+						if my_data.charge_pos then
+							local my_pos = data.unit:movement():nav_tracker():field_position()
+							local unobstructed_line = nil
 
-								if math_abs(my_pos.z - my_data.charge_pos.z) < 40 then
-									local ray_params = {
-										allow_entry = false,
-										pos_from = my_pos,
-										pos_to = my_data.charge_pos
-									}
+							if math_abs(my_pos.z - my_data.charge_pos.z) < 40 then
+								local ray_params = {
+									allow_entry = false,
+									pos_from = my_pos,
+									pos_to = my_data.charge_pos
+								}
 
-									if not managers.navigation:raycast(ray_params) then
-										unobstructed_line = true
-									end
+								if not managers.navigation:raycast(ray_params) then
+									unobstructed_line = true
 								end
-
-								if unobstructed_line then
-									local path = {
-										mvec3_cpy(my_pos),
-										my_data.charge_pos
-									}
-
-									--[[local line = Draw:brush(Color.blue:with_alpha(0.5), 5)
-									line:cylinder(my_pos, my_data.charge_pos, 25)]]
-
-									action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
-								else
-									data.brain:add_pos_rsrv("path", {
-										radius = 60,
-										position = mvec3_cpy(my_data.charge_pos)
-									})
-
-									my_data.charge_path_search_id = "charge" .. tostring(data.key)
-
-									data.brain:search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
-								end
-							else
-								--debug_pause_unit(unit, "failed to find charge_pos", unit)
-
-								want_flank_cover = nil
-								my_data.charge_path_failed_t = t
 							end
+
+							if unobstructed_line then
+								local path = {
+									mvec3_cpy(my_pos),
+									my_data.charge_pos
+								}
+
+								--[[local line = Draw:brush(Color.blue:with_alpha(0.5), 5)
+								line:cylinder(my_pos, my_data.charge_pos, 25)]]
+
+								action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
+							else
+								data.brain:add_pos_rsrv("path", {
+									radius = 60,
+									position = mvec3_cpy(my_data.charge_pos)
+								})
+
+								my_data.charge_path_search_id = "charge" .. tostring(data.key)
+
+								data.brain:search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
+							end
+						else
+							--debug_pause_unit(unit, "failed to find charge_pos", unit)
+
+							want_flank_cover = nil
+							my_data.charge_path_failed_t = t
 						end
 					end
-				end			
-			end
+				end
+			end			
 			
 			if not action_taken then
 				local in_cover = my_data.in_cover
@@ -573,6 +571,8 @@ function CopLogicAttack._upd_combat_movement(data)
 			action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, my_data.attitude == "engage" and not data.is_suppressed)
 		end
 	end
+	
+	action_taken = action_taken or CopLogicAttack._upd_pose(data, my_data)
 end
 
 function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, vis_required) --keep testing, modify, might want to revert back to vanilla
@@ -969,7 +969,39 @@ function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_dat
 	CopLogicAttack._cancel_charge(data, my_data)
 	CopLogicAttack._correct_path_start_pos(data, path)
 
-	local pose = data.is_suppressed and "crouch" or "stand"
+	local haste = nil
+	local pose = nil
+	local i = 1
+	local travel_dis = 0
+	local run_dis = 400
+	local stand_dis = 800
+	
+	if data.unit:base().has_tag and data.unit:base():has_tag("tank") then
+		run_dis = run_dis * 2
+	end
+	
+	repeat
+		if path[i + 1] then
+			travel_dis = travel_dis + mvec3_dis(path[i], path[i + 1])
+			i = i + 1
+		else
+			break
+		end
+	until travel_dis > stand_dis or i >= #path
+	
+	if travel_dis > run_dis then
+		haste = "run"
+	end
+	
+	if travel_dis > stand_dis then
+		pose = "stand"
+	else
+		pose = data.unit:anim_data().crouch and "crouch"
+	end
+
+	haste = haste or "walk"
+	pose = pose or data.is_suppressed and "crouch" or "stand"
+
 	local end_pose = pose
 
 	if pose == "crouch" and not data.char_tweak.crouch_move then
@@ -1534,6 +1566,9 @@ function CopLogicAttack.action_complete_clbk(data, action)
 
 		if action:expired() and not CopLogicBase.chk_start_action_dodge(data, "hit") then
 			data.logic._upd_aim(data, my_data)
+			if data.important then
+				CopLogicAttack._upd_pose(data, my_data)
+			end
 		end
 	elseif action_type == "dodge" then
 		local timeout = action:timeout()
@@ -1546,6 +1581,9 @@ function CopLogicAttack.action_complete_clbk(data, action)
 
 		if action:expired() then
 			data.logic._upd_aim(data, my_data)
+			if data.important then
+				CopLogicAttack._upd_pose(data, my_data)
+			end
 		end
 	end
 end

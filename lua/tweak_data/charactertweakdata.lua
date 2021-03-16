@@ -7892,26 +7892,25 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.speech_prefix_p2 = "n"
 	self.fbi.speech_prefix_count = 4
 	self.fbi.silent_priority_shout = "f37"
-	self.fbi.access = "fbi"
 	self.fbi.melee_weapon = "fists"
 	self.fbi.dodge = presets.dodge.athletic
 	self.fbi.deathguard = true
-	self.fbi.no_arrest = true
+	self.fbi.no_arrest = nil
 	self.fbi.chatter = presets.enemy_chatter.swat
 	self.fbi.steal_loot = true
-	if level == "kosugi" or "kosugi_hh" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("wow")
 		self.fbi.access = "security"
 	else
-		self.fbi.access = "fbi"	
+		self.fbi.access = "spooc"	
 	end		
 	self.fbi_pager = deep_clone(self.fbi)
 	local level = Global.level_data and Global.level_data.level_id
-	if level == "kosugi" or "kosugi_hh" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("wow")
 		self.fbi_pager.access = "security"
 	else
-		self.fbi_pager.access = "fbi"	
+		self.fbi_pager.access = "spooc"	
 	end				
 	self.fbi_pager.has_alarm_pager = true
 	table.insert(self._enemy_list, "fbi_pager")
@@ -7992,7 +7991,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.speech_prefix_count = 4
 	self.heavy_swat.melee_weapon = "fists"
 	local level = Global.level_data and Global.level_data.level_id
-	if level == "kosugi" or "kosugi_hh" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("damn daniel")
 		self.heavy_swat.access = "security"
 	else
@@ -8044,7 +8043,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.silent_priority_shout = "f37"
 
 	local level = Global.level_data and Global.level_data.level_id
-	if level == "kosugi" or "kosugi_hh" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("damn daniel")
 		self.fbi_swat.access = "security"
 	else
@@ -8096,7 +8095,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.speech_prefix_p2 = "n"
 	self.fbi_heavy_swat.speech_prefix_count = 4
 	local level = Global.level_data and Global.level_data.level_id	
-	if level == "kosugi" or "kosugi_hh" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("damn daniel")
 		self.fbi_heavy_swat.access = "security"
 	else
@@ -8330,7 +8329,7 @@ end)
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
 	self.cop.HEALTH_INIT = 15
 	self.cop.headshot_dmg_mul = 16
-	if level == "kosugi" or "kosugi_hh" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		self.cop.access = "security"
 	else
 		self.cop.access = "swat"
@@ -8349,7 +8348,7 @@ Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, pre
 		"punk_rage"
 	}
 	
-	if level == "kosugi" or "kosugi_hh" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		self.cop_moss.access = "security"
 	else
 		self.cop_moss.access = "swat"

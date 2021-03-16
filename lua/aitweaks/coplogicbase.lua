@@ -1295,7 +1295,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 		end
 	end
 	
-	if attention and REACT_COMBAT <= attention.reaction then
+	if not objective.running and attention and REACT_COMBAT <= attention.reaction then
 		local good_types = {
 			free = true,
 			defend_area = true

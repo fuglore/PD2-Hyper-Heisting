@@ -712,9 +712,7 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 				end
 			end
 			
-			if not grp_objective.moving_in then
-				self:_set_assault_objective_to_group(group, phase)
-			end
+			self:_set_assault_objective_to_group(group, phase)
 		end
 	end
 end
@@ -1694,11 +1692,12 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 	self:detonate_queued_smoke_grenades()
 	
-	local enemy_count = self:_count_police_force("assault")
+	local enemy_count = self:_count_police_force("assault")	
+	
 	local nr_wanted = task_data.force - self:_count_police_force("assault")
 	--local enemies_wanted = task_data.force * 0.25
 	
-	local low_carnage = self:_count_criminals_engaged_force(4) <= 16
+	local low_carnage = self:_count_criminals_engaged_force(4) <= 8
 	
 	if low_carnage or self._drama_data.amount <= self._drama_data.low_p or self._mass_reveal_t < t then
 		if not self._next_reveal_t or self._next_reveal_t < t then
@@ -1802,6 +1801,23 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 		local sp_data = spawn_group.spawn_pts[i]
 		sp_data.delay_t = self._t + math.rand(0.5)
 	end
+	
+	if grp_objective.area and not grp_objective.coarse_path then
+		local end_nav_seg = managers.navigation:get_nav_seg_from_pos(grp_objective.area.pos, true)
+		local search_params = {
+			id = "GroupAI_spawn",
+			from_seg = spawn_group.nav_seg,
+			to_seg = end_nav_seg,
+			access_pos = "swat"
+		}
+		local coarse_path = managers.navigation:search_coarse(search_params)
+		
+		if coarse_path then
+			grp_objective.coarse_path = coarse_path
+		else
+			grp_objective.coarse_path = {{spawn_group.nav_seg, spawn_group.area.pos}}
+		end
+	end
 
 	local spawn_task = {
 		objective = not grp_objective.element and self._create_objective_from_group_objective(grp_objective),
@@ -1890,23 +1906,6 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 	end
 
 	local group = self:_create_group(group_desc)
-	
-	if grp_objective.area and not grp_objective.coarse_path then
-		local end_nav_seg = managers.navigation:get_nav_seg_from_pos(grp_objective.area.pos, true)
-		local search_params = {
-			id = "GroupAI_spawn",
-			from_seg = spawn_group.nav_seg,
-			to_seg = end_nav_seg,
-			access_pos = self._get_group_acces_mask(group)
-		}
-		local coarse_path = managers.navigation:search_coarse(search_params)
-		
-		if coarse_path then
-			grp_objective.coarse_path = coarse_path
-		else
-			grp_objective.coarse_path = {{spawn_group.nav_seg, spawn_group.area.pos}}
-		end
-	end
 	
 	self:_set_objective_to_enemy_group(group, grp_objective)
 	group.team = self._teams[spawn_group.team_id or tweak_data.levels:get_default_team_ID("combatant")]
@@ -2299,30 +2298,27 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	
 		if phase_is_anticipation then 
 			pull_back = true
-		elseif Global.game_settings.one_down and current_objective.area.id ~= obstructed_area.id or not current_objective.charge then --if anyone is camping in a specific spot, try to path to them	
-			if diff_index > 7 or Global.game_settings.one_down then
+		elseif not current_objective.charge then --if anyone is camping in a specific spot, try to path to them	
+			if diff_index > 6 or group.in_place_t and self._t - group.in_place_t > 4 then
 				push = true
-				if not current_objective.charge then
-					charge = true
-				end
-			else
-				local move_t = 4
-			
-				if diff_index > 6 then
-					move_t = 1
-				elseif diff_index > 3 then
-					move_t = 2
-				end
-				
-				if group.in_place_t and self._t - group.in_place_t > move_t then
-					push = true
-					charge = true
-				end
+				charge = true
 			end
-		elseif not current_objective.open_fire or current_objective.area.id ~= obstructed_area.id then --have to check for this here or open_fire might not get set.
+		elseif diff_index < 7 and current_objective.charge then --if we just charged in the same area, wait a bit before allowing us to keep charging
+			if group.in_place_t and self._t - group.in_place_t > 4 then
+				open_fire = true
+			end
+		elseif not current_objective.open_fire or current_objective.area.id ~= obstructed_area.id then --have to check for this here or open_fire might not get set, make sure once groups are in an obstructed area, they try to path into players frequently
 			open_fire = true
 		end
-	else
+	elseif group.objective.moving_in and not current_objective.tactic then
+		if not next(current_objective.area.criminal.units) then
+			approach = true
+		elseif not tactics_map or not tactics_map.charge then
+			if not next(current_objective.area.police.units) then --if im charging, but the area suddenly has no police in it, and im not a charge group, then wait a bit
+				approach = true
+			end
+		end
+	elseif not current_objective.moving_in then
 		local obstructed_path_index = nil
 		local forwardmost_i_nav_point = nil
 		
@@ -2331,14 +2327,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 				
 		if current_objective.moving_out then
-			if current_objective.moving_in and not current_objective.tactic then --not currently used, but just in case i figure out the performance impact is not as bad in some mods as it is in others
-				if not tactics_map or not tactics_map.charge then
-					if not next(current_objective.area.police.units) then --if im charging, but the area suddenly has no police in it, and im not a charge group, then wait a bit
-						approach = true
-					end
-				end
-			elseif not phase_is_anticipation and next(current_objective.area.criminal.units) then
-				if next(current_objective.area.police.units) then --if im *just* approaching, but theres other enemies in the area heading to, charge 
+			if not phase_is_anticipation and next(current_objective.area.criminal.units) then
+				if next(current_objective.area.police.units) then --if im *just* approaching, but theres other enemies in the area heading to, or 
 					push = true
 				end
 			elseif obstructed_path_index then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
@@ -2382,18 +2372,17 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					
 					--the general idea here is that groups will generally try to wait until other groups have headed into the area
 					--by pushing in one big pile, you make sure to punish players camping and not trying to keep the cops away, without making them too rushy.
-					
-					if next(has_criminals_close.police.units) then
+					if not group.in_place_t or Global.game_settings.one_down then
+						push = true
+					elseif #current_objective.area.police.units > 8 then
+						push = true
+					elseif next(has_criminals_close.police.units) then
 						push = true
 					elseif tactics_map and tactics_map.charge then
 						push = true
 						charge = true
-					elseif not group.in_place_t then
-						push = true
-					elseif Global.game_settings.one_down then
-						push = true
 					else
-						local move_t = 2
+						local move_t = 4
 						local deduction = not self._last_killed_cop_t and 6 or self._t - self._last_killed_cop_t
 						
 						if tactics_map then
@@ -2457,12 +2446,18 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		}
 		
 		local chargers = tactics_map and tactics_map.charge
-
+		local needs_coarse_path = nil
+		
 		repeat
 			local search_area = table.remove(to_search_areas, 1)
-
+			local needs_coarse_path = nil
+			
 			if next(search_area.criminal.units) then
 				local assault_from_here = true
+				
+				if search_area.id ~= current_objective.area.id then
+					needs_coarse_path = true
+				end
 				
 				if not phase_is_anticipation and approach then
 					if chargers and not next(search_area.police.units) then
@@ -2485,22 +2480,28 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							for u_key, u_data in pairs(cop_units) do
 								if u_data.group and u_data.group ~= group and u_data.group.objective.type == "assault_area" then
 									assault_from_here = false
-
+									
 									if not alternate_assault_area or math_random() < 0.5 then
-										local search_params = {
-											id = "GroupAI_assault",
-											from_seg = current_objective.area.pos_nav_seg,
-											to_seg = search_area.pos_nav_seg,
-											access_pos = self._get_group_acces_mask(group)
-										}
-										alternate_assault_path = managers.navigation:search_coarse(search_params)
+										if needs_coarse_path then
+											local search_params = {
+												id = "GroupAI_assault",
+												from_seg = current_objective.area.pos_nav_seg,
+												to_seg = search_area.pos_nav_seg,
+												access_pos = self._get_group_acces_mask(group)
+											}
+											alternate_assault_path = managers.navigation:search_coarse(search_params)
+											
+											if alternate_assault_path then
+												self:_merge_coarse_path_by_area(alternate_assault_path)
 
-										if alternate_assault_path then
-											self:_merge_coarse_path_by_area(alternate_assault_path)
-
+												alternate_assault_area = search_area
+												alternate_assault_area_from = assault_from_area
+											end
+										else
 											alternate_assault_area = search_area
 											alternate_assault_area_from = assault_from_area
 										end
+
 									end
 
 									found_areas[search_area] = nil
@@ -2513,20 +2514,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 
 				if assault_from_here then
-					local search_params = {
-						id = "GroupAI_assault",
-						from_seg = current_objective.area.pos_nav_seg,
-						to_seg = search_area.pos_nav_seg,
-						access_pos = self._get_group_acces_mask(group)
-					}
-					assault_path = managers.navigation:search_coarse(search_params)
-
-					if assault_path then				
-						self:_merge_coarse_path_by_area(assault_path)
-
+					
+					if not needs_coarse_path then
 						assault_area = search_area
+					else
+						local search_params = {
+							id = "GroupAI_assault",
+							from_seg = current_objective.area.pos_nav_seg,
+							to_seg = search_area.pos_nav_seg,
+							access_pos = self._get_group_acces_mask(group)
+						}
+						assault_path = managers.navigation:search_coarse(search_params)
 
-						break
+						if assault_path then				
+							self:_merge_coarse_path_by_area(assault_path)
+
+							assault_area = search_area
+
+							break
+						end
 					end
 				end
 			else
@@ -2543,34 +2549,38 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if not assault_area and alternate_assault_area then
 			assault_area = alternate_assault_area
 			found_areas[assault_area] = alternate_assault_area_from
-			assault_path = alternate_assault_path
+			if needs_coarse_path then
+				assault_path = alternate_assault_path
+			end
 		end
 
-		if assault_area and assault_path then
+		if not needs_coarse_path and assault_area or assault_area and assault_path then
 			local assault_area = push and assault_area or found_areas[assault_area] == "init" and objective_area or found_areas[assault_area]
 
 			local used_grenade = nil
 
-			if push and current_objective.area.neighbours[assault_area] then
-				local detonate_pos = nil
+			if push then
+				if current_objective.area.id == assault_area.id or current_objective.area.neighbours[assault_area] then
+					local detonate_pos = nil
 
-				if charge then
-					for c_key, c_data in pairs(assault_area.criminal.units) do
-						detonate_pos = assault_area.pos
+					if charge then
+						for c_key, c_data in pairs(assault_area.criminal.units) do
+							detonate_pos = assault_area.pos
 
-						break
+							break
+						end
 					end
+
+					local first_chk = math_random() < 0.5 and self._chk_group_use_flash_grenade or self._chk_group_use_smoke_grenade
+					local second_chk = first_chk == self._chk_group_use_flash_grenade and self._chk_group_use_smoke_grenade or self._chk_group_use_flash_grenade
+					used_grenade = first_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
+					used_grenade = used_grenade or second_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
+
+					self:_voice_move_in_start(group)
 				end
-
-				local first_chk = math_random() < 0.5 and self._chk_group_use_flash_grenade or self._chk_group_use_smoke_grenade
-				local second_chk = first_chk == self._chk_group_use_flash_grenade and self._chk_group_use_smoke_grenade or self._chk_group_use_flash_grenade
-				used_grenade = first_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
-				used_grenade = used_grenade or second_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
-
-				self:_voice_move_in_start(group)
 			end
-
-			if #assault_path > 2 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
+			
+			if assault_path and #assault_path > 2 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
 				table.remove(assault_path)
 			end
 
@@ -2578,7 +2588,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				type = "assault_area",
 				stance = "hos",
 				area = assault_area,
-				coarse_path = assault_path,
+				coarse_path = needs_coarse_path and assault_path or nil,
 				pose = "stand",
 				attitude = push and "engage" or "avoid",
 				moving_in = push and true or nil,
@@ -2645,6 +2655,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				pose = "crouch",
 				type = "assault_area",
 				area = retreat_area,
+				running = true,
 				coarse_path = retreat_path or {{retreat_area.pos_nav_seg, mvec3_cpy(retreat_area.pos)}}
 			}
 			group.is_chasing = nil
@@ -2795,7 +2806,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.stance = "hos"
 		objective.pose = "stand"
 		objective.scan = true
-		objective.interrupt_dis = 200
+		objective.interrupt_dis = nil
 		objective.interrupt_suppression = nil
 	elseif grp_objective.type == "create_phalanx" then
 		objective.type = "phalanx"
@@ -2830,6 +2841,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 	objective.hostagejob = grp_objective.hostagejob or nil
 	
 	if not objective.running then
+		objective.interrupt_dis = nil
 		objective.running = grp_objective.running or nil
 	end
 

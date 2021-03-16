@@ -135,7 +135,7 @@ function CopLogicIdle.enter(data, new_logic_name, enter_params)
 
 			return
 		end]]
-
+	
 		my_data.scan = objective.scan
 
 		----almost got this working properly
@@ -154,6 +154,8 @@ function CopLogicIdle.enter(data, new_logic_name, enter_params)
 	else
 		my_data.scan = true
 	end
+	
+	my_data.attitude = objective and objective.attitude or "avoid"
 
 	my_data.weapon_range = clone_g(data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range)
 	
@@ -745,7 +747,7 @@ function CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, st
 		return math_min(att_reaction, REACT_AIM)
 	elseif record.being_arrested then
 		return math_min(att_reaction, REACT_AIM)
-	elseif not record.status and CopLogicBase._can_arrest(data) and data.t > record.arrest_timeout then
+	elseif not record.status and not data.internal_data.attitude == "engage" and CopLogicBase._can_arrest(data) and data.t > record.arrest_timeout then
 		if not record.assault_t or attention_data.unit:base():arrest_settings().aggression_timeout < data.t - record.assault_t then
 			local under_threat = nil
 
