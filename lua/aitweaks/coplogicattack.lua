@@ -2462,13 +2462,7 @@ end
 function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
 	if not data.unit:movement():chk_action_forbidden("walk") then
 		local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
-		
-		if data.objective and data.objective.area then
-			if wanted_state == "idle" and CopLogicIdle._chk_objective_needs_travel(data, data.objective) then
-				wanted_state = "travel"
-			end
-		end
-		
+				
 		if wanted_state ~= data.name then
 			local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, nil)
 

@@ -1730,14 +1730,34 @@ function GroupAIStateBesiege:_upd_assault_task()
 			else
 				--local max_dis = self._small_map and 4000 or 8000
 				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, nil)
-
+				local area_to_approach = nil
+				
+				for area_id, neighbour_area in pairs(primary_target_area.neighbours) do
+					if not next(neighbour_area.police.units) then					
+						area_to_approach = neighbour_area
+						break
+					end
+				end
+				
+				if not area_to_approach then
+					local chance = 0.25
+					for area_id, neighbour_area in pairs(primary_target_area.neighbours) do
+						if math_random() <= chance then
+							area_to_approach = neighbour_area
+							break
+						else
+							chance = chance + 0.25
+						end
+					end
+				end
+				
 				if spawn_group then
 					local grp_objective = {
 						attitude = anticipation and "avoid" or "engage",
 						stance = "hos",
 						pose = anticipation and "crouch" or "stand",
 						type = "assault_area",
-						area = primary_target_area
+						area = area_to_approach or primary_target_area
 					}
 
 					self:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, task_data)
@@ -1808,12 +1828,16 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 			id = "GroupAI_spawn",
 			from_seg = spawn_group.nav_seg,
 			to_seg = end_nav_seg,
-			access_pos = "swat"
+			access_pos = "swat",
+			long_path = math_random() < 0.5 and true
 		}
 		local coarse_path = managers.navigation:search_coarse(search_params)
 		
 		if coarse_path then
+			--log("pog???")
 			grp_objective.coarse_path = coarse_path
+			grp_objective.area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1])
+			
 		else
 			grp_objective.coarse_path = {{spawn_group.nav_seg, spawn_group.area.pos}}
 		end
@@ -2487,11 +2511,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 												id = "GroupAI_assault",
 												from_seg = current_objective.area.pos_nav_seg,
 												to_seg = search_area.pos_nav_seg,
-												access_pos = self._get_group_acces_mask(group)
+												access_pos = self._get_group_acces_mask(group),
+												long_path = true
 											}
 											alternate_assault_path = managers.navigation:search_coarse(search_params)
 											
 											if alternate_assault_path then
+												--log("pog")
 												self:_merge_coarse_path_by_area(alternate_assault_path)
 
 												alternate_assault_area = search_area
@@ -2522,11 +2548,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							id = "GroupAI_assault",
 							from_seg = current_objective.area.pos_nav_seg,
 							to_seg = search_area.pos_nav_seg,
-							access_pos = self._get_group_acces_mask(group)
+							access_pos = self._get_group_acces_mask(group),
+							long_path = tactics_map and tactics_map.flank and true or nil
 						}
 						assault_path = managers.navigation:search_coarse(search_params)
 
-						if assault_path then				
+						if assault_path then
+							--log("YOOOOOOOOOOOOOOOOOOOOOOOOO")
 							self:_merge_coarse_path_by_area(assault_path)
 
 							assault_area = search_area

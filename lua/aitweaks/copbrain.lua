@@ -67,6 +67,24 @@ function CopBrain:post_init()
 	old_init(self)
 end
 
+local next_g = next
+local pairs_g = pairs
+local type_g = type
+
+local on_nav_link_unregistered_original = CopBrain.on_nav_link_unregistered
+function CopBrain:on_nav_link_unregistered(element_id)
+	on_nav_link_unregistered_original(self, element_id)
+
+	if next_g(self._logic_data.active_searches) then
+		for search_id, search_type in pairs_g(self._logic_data.active_searches) do
+			if search_type ~= 2 then
+				self._nav_links_to_check = self._nav_links_to_check or {}
+				self._nav_links_to_check[search_id] = element_id
+			end
+		end
+	end
+end
+
 CopBrain._NET_EVENTS = {
 	stopped_seeing_client_peaceful = 11,
 	detected_client_peaceful_verified = 10,

@@ -702,7 +702,42 @@ function CrimeSpreeTweakData:init_missions(tweak_data)
 				icon = "csm_fwb",
 				add = 12,
 				level = tweak_data.narrative.stages.red2
-			}
+			},
+			{
+				stage_id = "bex",
+				id = "bex",
+				icon = "csm_bex",
+				add = 20,
+				level = tweak_data.narrative.stages.bex			
+			},
+			{
+				stage_id = "sah",
+				id = "sah",
+				icon = "csm_sah",
+				add = 15,
+				level = tweak_data.narrative.stages.sah			
+			},
+			{
+				stage_id = "tag",
+				id = "tag",
+				icon = "csm_tag",
+				add = 12,
+				level = tweak_data.narrative.stages.tag			
+			},
+			{
+				stage_id = "arena",
+				id = "arena",
+				icon = "csm_arena",
+				add = 20,
+				level = tweak_data.narrative.stages.arena			
+			},
+			{
+				stage_id = "pex",
+				id = "pex",
+				icon = "csm_pex",
+				add = 15,
+				level = tweak_data.narrative.stages.pex			
+			},
 		}, 
 		{ --loud short/medium
 			{
