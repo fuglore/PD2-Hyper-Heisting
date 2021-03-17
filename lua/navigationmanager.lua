@@ -14,6 +14,7 @@ local mvec3_set_l = mvector3.set_length
 local mvec3_dot = mvector3.dot
 local mvec3_cross = mvector3.cross
 local mvec3_dis = mvector3.distance
+local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_rot = mvector3.rotate_with
 local math_abs = math.abs
 local math_max = math.max
@@ -311,8 +312,7 @@ function NavigationManager:_sort_nav_segs_after_pos(to_pos, i_seg, ignore_seg, v
 				if type(i_door) == "number" then
 					local door = all_doors[i_door]
 					local door_pos = door.center
-					local weight = mvec3_dis(door_pos, to_pos)
-					weight = weight * weight
+					local weight = mvec3_dis_sq(door_pos, to_pos)
 
 					if found_segs then
 						if found_segs[neighbour_seg_id] then
@@ -348,16 +348,13 @@ function NavigationManager:_sort_nav_segs_after_pos(to_pos, i_seg, ignore_seg, v
 					debug_pause("[NavigationManager:_sort_nav_segs_after_pos] dead nav_link! between NavSegments", i_seg, "-", neighbour_seg_id)
 				elseif not i_door:is_obstructed() and i_door:delay_time() < TimerManager:game():time() and i_door:check_access(access_pos, access_neg) then
 					local end_pos = i_door:script_data().element:nav_link_end_pos()
-					local my_weight = mvec3_dis(end_pos, to_pos)
+					local my_weight = mvec3_dis_sq(end_pos, to_pos)
 					
 					if long_path then
-						my_weight = my_weight * 1.1 --prioritize cool navlinks slightly
+						my_weight = my_weight * 1.1 --prioritize slightly
 					else
-						my_weight = my_weight * 0.9 --prioritize cool navlinks slightly
+						my_weight = my_weight * 0.9 --prioritize slightly
 					end
-					
-					my_weight = my_weight * my_weight
-					
 
 					if found_segs then
 						if found_segs[neighbour_seg_id] then

@@ -1739,14 +1739,14 @@ function GroupAIStateBesiege:_upd_assault_task()
 					end
 				end
 				
-				if not area_to_approach then
-					local chance = 0.25
+				if not area_to_approach and #primary_target_area.neighbours > 0 then
+					local chance = 1 / #primary_target_area.neighbours
 					for area_id, neighbour_area in pairs(primary_target_area.neighbours) do
 						if math_random() <= chance then
 							area_to_approach = neighbour_area
 							break
 						else
-							chance = chance + 0.25
+							chance = chance + chance
 						end
 					end
 				end
