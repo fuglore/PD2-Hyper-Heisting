@@ -7866,7 +7866,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 		"dense"
 	}
 	self.fbi.experience = {}
-	self.fbi.weapon = presets.weapon.complex
+	self.fbi.weapon = presets.weapon.fbigod
 	self.fbi.detection = presets.detection.enemymook
 	self.fbi.no_fumbling = true
 	self.fbi.no_suppression_reaction = true
@@ -8579,13 +8579,9 @@ function CharacterTweakData:_set_normal()
 	self.sniper.weapon.is_rifle.focus_delay = 6
 	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
-	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_girl.weapon = self.presets.weapon.complex
 	self.fbi_girl.move_speed = self.presets.move_speed.civil_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency	
-	self.fbi_pager.weapon = self.presets.weapon.complex
 	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency	
 	--Cop health tweak
 	self.security.HEALTH_INIT = 16
@@ -8747,13 +8743,9 @@ function CharacterTweakData:_set_hard()
 	self.sniper.weapon.is_rifle.focus_delay = 6
 	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
-	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_girl.weapon = self.presets.weapon.complex
 	self.fbi_girl.move_speed = self.presets.move_speed.civil_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_pager.weapon = self.presets.weapon.complex
 	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency		
 	--Cop health tweak
 	self.security.HEALTH_INIT = 16
@@ -8924,19 +8916,14 @@ function CharacterTweakData:_set_overkill()
 	end
 	
 	--fbi setup.
-	self.fbi.weapon = self.presets.weapon.complex
 	self.fbi.dodge = self.presets.dodge.heavy_complex
 	self.fbi.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_girl.weapon = self.presets.weapon.complex
 	self.fbi_girl.dodge = self.presets.dodge.heavy_complex
 	self.fbi_girl.move_speed = self.presets.move_speed.complex_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.complex
 	self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency	
-	self.fbi_pager.weapon = self.presets.weapon.complex
 	self.fbi_pager.dodge = self.presets.dodge.heavy_complex
 	self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency	
-	self.fbi_xc45.weapon = self.presets.weapon.complex
 	self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
 	--sniper setup.
@@ -9129,19 +9116,15 @@ function CharacterTweakData:_set_overkill_145()
 		--fbi setup
 		
 		self.fbi.dodge = self.presets.dodge.ninja_complex
-		self.fbi.weapon = self.presets.weapon.fbigod
 		self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
-		self.fbi_girl.weapon = self.presets.weapon.fbigod
 		self.fbi_girl.dodge = self.presets.dodge.ninja_complex
 		self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
 		self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
-		self.gangster_ninja.weapon = self.presets.weapon.fbigod
 		self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
 		self.fbi_pager.dodge = self.presets.dodge.ninja_complex
 		self.fbi_pager.weapon = self.presets.weapon.fbigod
 		self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 		self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
-		self.fbi_xc45.weapon = self.presets.weapon.fbigod
 		self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 		--sniper setup
 		self.sniper.weapon.is_rifle.focus_delay = 1.5
@@ -9283,20 +9266,15 @@ function CharacterTweakData:_set_overkill_145()
 		self.concussion_multiplier = 1
 	else
 		--fbi setup.
-		self.fbi.weapon = self.presets.weapon.complex
 		self.fbi.dodge = self.presets.dodge.heavy_complex
 		self.fbi.move_speed = self.presets.move_speed.complex_consistency
-		self.fbi_girl.weapon = self.presets.weapon.complex
 		self.fbi_girl.dodge = self.presets.dodge.heavy_complex
 		self.fbi_girl.move_speed = self.presets.move_speed.complex_consistency
-		self.gangster_ninja.weapon = self.presets.weapon.complex
 		self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
 		self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency
-		self.fbi_pager.weapon = self.presets.weapon.complex
 		self.fbi_pager.dodge = self.presets.dodge.heavy_complex
 		self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency
 		self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
-		self.fbi_xc45.weapon = self.presets.weapon.complex
 		self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
 		--sniper setup.
 		self.sniper.weapon.is_rifle.focus_delay = 2
@@ -9367,19 +9345,14 @@ function CharacterTweakData:_set_easy_wish()
 	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
 	--fbi setup
-	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_girl.weapon = self.presets.weapon.anarchy
 	self.fbi_girl.dodge = self.presets.dodge.athletic_complex
 	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.anarchy
 	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_pager.weapon = self.presets.weapon.anarchy
 	self.fbi_pager.dodge = self.presets.dodge.athletic_complex
 	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_xc45.weapon = self.presets.weapon.anarchy
 	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--sniper setup
@@ -9581,19 +9554,14 @@ function CharacterTweakData:_set_overkill_290()
 	self.sniper.weapon.is_rifle.focus_delay = 2
 	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
 	--fbi setup
-	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_girl.weapon = self.presets.weapon.anarchy
 	self.fbi_girl.dodge = self.presets.dodge.athletic_complex
 	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.anarchy
 	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_pager.weapon = self.presets.weapon.anarchy
 	self.fbi_pager.dodge = self.presets.dodge.athletic_complex
 	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_xc45.weapon = self.presets.weapon.anarchy
 	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--MFR has radio static in this difficulty.
@@ -9793,19 +9761,14 @@ function CharacterTweakData:_set_sm_wish()
 	
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.ninja_complex
-	self.fbi.weapon = self.presets.weapon.fbigod
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_girl.weapon = self.presets.weapon.fbigod
 	self.fbi_girl.dodge = self.presets.dodge.ninja_complex
 	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
 	self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
-	self.gangster_ninja.weapon = self.presets.weapon.fbigod
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
 	self.fbi_pager.dodge = self.presets.dodge.ninja_complex
-	self.fbi_pager.weapon = self.presets.weapon.fbigod
 	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 	self.fbi_xc45.weapon = self.presets.weapon.fbigod
-	self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--sniper setup
 	self.sniper.weapon.is_rifle.focus_delay = 1.5

@@ -46,23 +46,14 @@ function Drill:_register_sabotage_SO()
 			}
 		}
 	}
-	local search_dis_sq = nil
-	
-	if Global.game_settings.one_down then
-		search_dis_sq = 16000000 --people dont deserve to have fun if they play this.
-	else
-		search_dis_sq = 4000000
-	end
-	
+
 	local so_descriptor = {
-		interval = 0,
-		search_dis_sq = search_dis_sq,
+		interval = 2,
 		AI_group = "enemies",
 		base_chance = 1,
 		chance_inc = 0,
 		usage_amount = 1,
 		objective = objective,
-		search_pos = field_pos,
 		verification_clbk = callback(self, self, "clbk_sabotage_SO_verification"),
 		access = managers.navigation:convert_access_filter_to_number({
 			"gangster",
