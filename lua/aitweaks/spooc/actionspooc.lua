@@ -1636,7 +1636,7 @@ function ActionSpooc.chk_can_start_flying_strike(unit, target_unit)
 
 	local target_dis = mvec3_len(target_vec)
 	
-	local dis = 1000
+	local dis = 1500
 	
 	if managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") then
 		dis = 2000

@@ -360,7 +360,7 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 	self._logic_data.objective_complete_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_criminal_objective_complete")
 	self._logic_data.objective_failed_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_criminal_objective_failed")
 
-	managers.groupai:state():on_criminal_jobless(self._unit)
+	managers.groupai:state():_determine_objective_for_criminal_AI(self._unit)
 	self._unit:base():set_slot(self._unit, 16)
 	self._unit:movement():set_stance("hos")
 
@@ -373,61 +373,6 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 	self._unit:brain():action_request(action_data)
 	--self._unit:sound():say("cn1", true, nil)
 	managers.network:session():send_to_peers_synched("sync_unit_converted", self._unit)
-end
-
-function CopBrain:search_for_path_to_unit(search_id, other_unit, access_neg)
-	local enemy_tracker = other_unit:movement():nav_tracker()
-	local pos_to = enemy_tracker:field_position()
-	local params = {
-		tracker_from = self._unit:movement():nav_tracker(),
-		pos_to = pos_to,
-		tracker_to = enemy_tracker,
-		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
-		id = search_id,
-		access_pos = self._SO_access,
-		access_neg = access_neg
-	}
-	self._logic_data.active_searches[search_id] = true
-
-	managers.navigation:search_pos_to_pos(params)
-
-	return true
-end
-
-function CopBrain:search_for_path_to_cover(search_id, cover, offset_pos, access_neg)
-	local params = {
-		tracker_from = self._unit:movement():nav_tracker(),
-		tracker_to = cover[3],
-		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
-		id = search_id,
-		access_pos = self._SO_access,
-		access_neg = access_neg
-	}
-	self._logic_data.active_searches[search_id] = true
-
-	managers.navigation:search_pos_to_pos(params)
-
-	return true
-end
-
-function CopBrain:search_for_coarse_path(search_id, to_seg, verify_clbk, access_neg)
-	local params = {
-		from_tracker = self._unit:movement():nav_tracker(),
-		to_seg = to_seg,
-		access = {
-			"walk"
-		},
-		id = search_id,
-		results_clbk = callback(self, self, "clbk_coarse_pathing_results", search_id),
-		verify_clbk = verify_clbk,
-		access_pos = self._logic_data.char_tweak.access,
-		access_neg = access_neg
-	}
-	self._logic_data.active_searches[search_id] = 2
-
-	managers.navigation:search_coarse(params)
-
-	return true
 end
 
 function CopBrain:on_alarm_pager_interaction(status, player)

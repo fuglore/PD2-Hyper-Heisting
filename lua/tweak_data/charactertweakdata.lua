@@ -7828,7 +7828,7 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.weapon = presets.weapon.simple
 	self.swat.detection = presets.detection.enemymook
 	self.swat.HEALTH_INIT = 10
-	self.swat.headshot_dmg_mul = 6
+	self.swat.headshot_dmg_mul = 4
 	self.swat.ecm_vulnerability = 1
 	self.swat.ecm_hurts = {
 		ears = {
@@ -8018,7 +8018,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.weapon = presets.weapon.civil
 	self.fbi_swat.detection = presets.detection.enemymook
 	self.fbi_swat.HEALTH_INIT = 10
-	self.fbi_swat.headshot_dmg_mul = 6
+	self.fbi_swat.headshot_dmg_mul = 4
 	self.fbi_swat.ecm_vulnerability = 1
 	self.fbi_swat.ecm_hurts = {
 		ears = {
@@ -8120,7 +8120,7 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	self.city_swat.weapon = presets.weapon.civil
 	self.city_swat.detection = presets.detection.enemymook
 	self.city_swat.HEALTH_INIT = 10
-	self.city_swat.headshot_dmg_mul = 6	
+	self.city_swat.headshot_dmg_mul = 4	
 	self.city_swat.ecm_vulnerability = 1
 	self.city_swat.ecm_hurts = {
 		ears = {
@@ -8327,7 +8327,7 @@ Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", 
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
-	self.cop.HEALTH_INIT = 15
+	self.cop.HEALTH_INIT = 16
 	self.cop.headshot_dmg_mul = 16
 	if level == "kosugi" or level == "kosugi_hh" then
 		self.cop.access = "security"
@@ -8588,7 +8588,6 @@ function CharacterTweakData:_set_normal()
 	self.security_undominatable.HEALTH_INIT = 16	
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.security_mex.HEALTH_INIT = 16
-	self.cop.HEALTH_INIT = 16
 	self.gensec.HEALTH_INIT = 16
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
 		0.35,
@@ -8752,7 +8751,6 @@ function CharacterTweakData:_set_hard()
 	self.security_undominatable.HEALTH_INIT = 16	
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.security_mex.HEALTH_INIT = 16
-	self.cop.HEALTH_INIT = 16
 	self.gensec.HEALTH_INIT = 16
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
 		0.35,
@@ -8945,7 +8943,6 @@ function CharacterTweakData:_set_overkill()
 	self.security_undominatable.HEALTH_INIT = 16	
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.security_mex.HEALTH_INIT = 16
-	self.cop.HEALTH_INIT = 16
 	self.gensec.HEALTH_INIT = 16
 	self.flashbang_multiplier = 1
 	self.concussion_multiplier = 1
@@ -9108,7 +9105,6 @@ function CharacterTweakData:_set_overkill_145()
 	self.security_undominatable.HEALTH_INIT = 16	
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.security_mex.HEALTH_INIT = 16
-	self.cop.HEALTH_INIT = 16
 	self.gensec.HEALTH_INIT = 16
 
 	
@@ -9340,7 +9336,6 @@ function CharacterTweakData:_set_easy_wish()
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.mute_security_undominatable.no_arrest = true
 	self.fbi_girl.no_arrest = true
-	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
@@ -9545,7 +9540,6 @@ function CharacterTweakData:_set_overkill_290()
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.mute_security_undominatable.no_arrest = true
 	self.fbi_girl.no_arrest = true
-	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
@@ -9754,7 +9748,6 @@ function CharacterTweakData:_set_sm_wish()
 	self.mute_security_undominatable.HEALTH_INIT = 16
 	self.mute_security_undominatable.no_arrest = true
 	self.fbi_girl.no_arrest = true
-	self.cop.HEALTH_INIT = 16
 	self.cop.no_arrest = true
 	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true

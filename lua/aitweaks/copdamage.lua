@@ -2,6 +2,8 @@ local mvec_1 = Vector3()
 local mvec_2 = Vector3()
 local table_size = table.size
 local table_contains = table.contains
+local math_min = math.min
+local math_max = math.max
 local world_g = World
 local mvec3_norm = mvector3.normalize
 local mvec3_set = mvector3.set
@@ -263,6 +265,11 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		elseif light or light2 then
 			hurtlevel_mult = 0.25
 			time_mult = time_mult + 1
+		end
+		
+		if self._unit:in_slot(16) then
+			hurtlevel_mult = math_max(hurtlevel_mult * 2, 3)
+			time_mult = math_min(time_mult / 2, 1)
 		end
 		
 		if damage_info.variant == "melee" then

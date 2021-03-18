@@ -30,6 +30,10 @@ function CopBase:init(unit)
 	if self._tweak_table == "cop_female" then
 		self._tweak_table = "fbi_girl"
 	end
+	
+	if self._tweak_table == "spooc" or self._tweak_table == "spooc_heavy" then
+		self._engagement_range = 1500
+	end
 
 	self._char_tweak = tweak_data.character[self._tweak_table]
 	

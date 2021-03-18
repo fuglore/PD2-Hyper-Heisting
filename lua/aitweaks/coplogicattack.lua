@@ -226,7 +226,7 @@ function CopLogicAttack.update(data)
 		end
 	end
 
-	if not data.logic.action_taken then
+	if not data.logic.action_taken(data, my_data) then
 		CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 	end
 
@@ -2038,6 +2038,10 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 		if data.t < data.path_fail_t + fail_t_chk then
 			return
 		end
+	end
+	
+	if data.is_converted then
+		return
 	end
 
 	local att_obj = data.attention_obj

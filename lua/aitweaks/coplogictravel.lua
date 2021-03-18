@@ -465,8 +465,35 @@ function CopLogicTravel._upd_enemy_detection(data)
 
 	local objective = data.objective
 	local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
+	
+	if data.is_converted or data.unit:in_slot(16) then
+		if allow_trans then
+			if obj_failed or not objective or objective.type ~= "follow" then
+				local wanted_state = CopLogicBase._get_logic_state_from_reaction(data)
 
-	if allow_trans then
+				if wanted_state and wanted_state ~= data.name then
+					if obj_failed then
+						data.objective_failed_clbk(data.unit, data.objective)
+
+						if my_data ~= data.internal_data then
+							CopLogicBase._report_detections(data.detected_attention_objects)
+
+							return delay
+						end
+					end
+
+					if not objective or objective.is_default then ----check
+						--debug_pause_unit(data.unit, "[CopLogicTravel._upd_enemy_detection] exiting without discarding objective", data.unit, inspect(objective))
+
+						CopLogicBase._exit(data.unit, wanted_state)
+						CopLogicBase._report_detections(data.detected_attention_objects)
+
+						return delay
+					end
+				end
+			end
+		end
+	elseif allow_trans then
 		local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
 
 		if wanted_state and wanted_state ~= data.name then
