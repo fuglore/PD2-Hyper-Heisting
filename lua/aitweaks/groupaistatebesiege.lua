@@ -1731,29 +1731,17 @@ function GroupAIStateBesiege:_upd_assault_task()
 				--local max_dis = self._small_map and 4000 or 8000
 				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, nil)
 				local area_to_approach = nil
-				
-				for area_id, neighbour_area in pairs(primary_target_area.neighbours) do
-					if not next(neighbour_area.police.units) then					
-						area_to_approach = neighbour_area
-						break
+			
+				if primary_target_area.neighbours then
+					local areas = {}
+					local i = 1
+					--sorround and lockdown the current target area with the power of RNG!
+					for area_id, neighbour_area in pairs_g(primary_target_area.neighbours) do
+						areas[i] = neighbour_area
+						i = i + 1
 					end
-				end
-				
-				if not area_to_approach and #primary_target_area.neighbours > 0 then
-					local chance_add = 1 / #primary_target_area.neighbours
-					local chance = 0
-					for area_id, neighbour_area in pairs(primary_target_area.neighbours) do
-						if chance == 0 then
-							chance = chance + chance_add
-						end
-						
-						if math_random() <= chance then
-							area_to_approach = neighbour_area
-							break
-						else
-							chance = chance + chance_add
-						end
-					end
+					
+					area_to_approach = areas[math_random(#areas)]
 				end
 				
 				if spawn_group then
