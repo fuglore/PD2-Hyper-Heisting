@@ -15,11 +15,9 @@ function Drill:_register_sabotage_SO()
 		attitude = "avoid",
 		scan = true,
 		stance = "hos",
-		type = "defend_area",
+		type = "free",
 		interrupt_health = 1,
-		interrupt_dis = -1,
-		nav_seg = self._nav_tracker:nav_segment(),
-		area = self._SO_area
+		interrupt_dis = -1
 	}
 	local objective = {
 		type = "act",
