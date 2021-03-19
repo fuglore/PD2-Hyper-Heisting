@@ -177,11 +177,15 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 
 	my_data.path_safely = not data.cool and data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area"
 	my_data.path_ahead = data.cool or objective.path_ahead or data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player")
-
 	local key_str = tostring(data.key)
-	my_data.upd_task_key = "CopLogicTravel.queued_update" .. key_str
-
-	CopLogicTravel.queue_update(data, my_data)
+	
+	if not data.is_converted then
+		my_data.upd_task_key = "CopLogicTravel.queued_update" .. key_str
+		CopLogicTravel.queue_update(data, my_data)
+	else
+		my_data.detection_task_key = "CopLogicTravel.queued_detection_update" .. key_str
+		CopLogicTravel.queue_detection_update(data, my_data)
+	end
 
 	my_data.cover_update_task_key = "CopLogicTravel._update_cover" .. key_str
 
@@ -226,7 +230,9 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 		})
 	end
 
-	data.brain:set_update_enabled_state(false)
+	if not data.is_converted then
+		data.brain:set_update_enabled_state(false)
+	end
 
 	local path_style = objective.path_style
 
@@ -1469,6 +1475,33 @@ function CopLogicTravel._get_pos_on_wall(from_pos, max_dist, step_offset, is_rec
 	end
 
 	return from_pos
+end
+
+function CopLogicTravel.queue_detection_update(data, my_data, delay)
+	if not delay then
+		delay = 0
+	end
+	
+	CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicTravel.queued_detection_update, data, data.t + delay, data.important and true)
+end
+
+function CopLogicTravel.queued_detection_update(data)
+	local my_data = data.internal_data
+	local delay = CopLogicTravel._upd_enemy_detection(data)
+	
+	if my_data ~= data.internal_data then
+		return
+	end
+	
+	CopLogicTravel.queue_detection_update(data, my_data, delay)
+end
+
+function CopLogicTravel.update(data)
+	data.t = TimerManager:game():time()
+	local my_data = data.internal_data
+	my_data.close_to_criminal = nil
+
+	CopLogicTravel.upd_advance(data)
 end
 
 function CopLogicTravel.queue_update(data, my_data, delay)

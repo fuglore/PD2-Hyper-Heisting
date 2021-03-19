@@ -2311,9 +2311,11 @@ function CopLogicIdle.on_intimidated(data, amount, aggressor_unit)
 		if aggressor_unit:base().is_local_player then
 			aggressor_can_intimidate = managers.player:has_category_upgrade("player", required_skill)
 			aggressor_intimidation_mul = aggressor_intimidation_mul * managers.player:upgrade_value("player", "empowered_intimidation_mul", 1) * managers.player:upgrade_value("player", "intimidation_multiplier", 1)
-		else
+		elseif aggressor_unit:base().is_husk_player then
 			aggressor_can_intimidate = aggressor_unit:base():upgrade_value("player", required_skill)
 			aggressor_intimidation_mul = aggressor_intimidation_mul * (aggressor_unit:base():upgrade_value("player", "empowered_intimidation_mul") or 1) * (aggressor_unit:base():upgrade_value("player", "intimidation_multiplier") or 1)
+		elseif not i_am_special then
+			aggressor_can_intimidate = true
 		end
 
 		if aggressor_can_intimidate then
@@ -2328,7 +2330,7 @@ function CopLogicIdle.on_intimidated(data, amount, aggressor_unit)
 					dont_surrender = true
 					--log("chance was " .. hold_chance .. "!")
 				end
-				if hold_chance >= 1 or dont_surrender then
+				if dont_surrender or hold_chance >= 1 then
 					-- Nothing
 				else
 					local rand_nr = math.random()

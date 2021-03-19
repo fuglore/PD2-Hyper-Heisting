@@ -326,7 +326,13 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 	self._logic_data.enemy_slotmask = self._slotmask_enemies
 
 	local char_tweaks = deep_clone(self._unit:base()._char_tweak)
-
+	
+	if self._unit:base():has_tag("fbi") then
+		char_tweaks.weapon = tweak_data.character.presets.weapon.fbigod
+	else
+		char_tweaks.weapon = tweak_data.character.presets.weapon.anarchy
+	end
+	
 	char_tweaks.suppression = nil
 	char_tweaks.crouch_move = false
 	char_tweaks.allowed_poses = {stand = true}
@@ -354,13 +360,12 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 	local weapon_unit = self._unit:inventory():equipped_unit()
 
 	weapon_unit:base():add_damage_multiplier(damage_multiplier)
-	self:set_objective(nil)
-	self:set_logic("idle", nil)
-
 	self._logic_data.objective_complete_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_criminal_objective_complete")
 	self._logic_data.objective_failed_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_criminal_objective_failed")
-
-	managers.groupai:state():_determine_objective_for_criminal_AI(self._unit)
+	local objective = managers.groupai:state():_determine_objective_for_criminal_AI(self._unit)
+	self:set_objective(objective)
+	self:set_logic("idle", nil)
+	
 	self._unit:base():set_slot(self._unit, 16)
 	self._unit:movement():set_stance("hos")
 

@@ -7861,7 +7861,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi = deep_clone(presets.base)
 	self.fbi.tags = {
 		"law",
-		"loner",
+		"fbi",
 		"takedown",
 		"dense"
 	}
