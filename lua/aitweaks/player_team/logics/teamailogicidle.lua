@@ -118,36 +118,20 @@ function TeamAILogicIdle.enter(data, new_logic_name, enter_params)
 
 				CopLogicBase.add_delayed_clbk(my_data, my_data.revive_complete_clbk_id, callback(TeamAILogicIdle, TeamAILogicIdle, "clbk_revive_complete", data), revive_t)
 
-				local voiceline = "s09b" --usual bot revive line (should be used for players when they have 3/4 downs left)
+				local voiceline = math_random() < 0.25 and "s09a" or "s09b"
 
 				if revive_unit:base().is_local_player then
 					if not revive_unit:character_damage():arrested() then
 						if revive_unit:movement():current_state_name() == "incapacitated" then --tased/cloaked
 							voiceline = "s08x_sin" --"let me help you up"
-						else
-							local revives = revive_unit:character_damage():get_revives()
-
-							if revives == 2 then --2 downs left
-								voiceline = "s09a" --"you're really fucked up"
-							elseif revives == 1 then --1 down left
-								voiceline = "s09c" --usual bot revive line + last down warning
-							end
 						end
 
 						data.unit:sound():say(voiceline, true)
 					end
 				elseif revive_unit:base().is_husk_player then
-					if not revive_unit:character_damage():arrested() then --can't check for lives in vanilla, add code for this if you want to
+					if not revive_unit:character_damage():arrested() then
 						if revive_unit:movement():current_state_name() == "incapacitated" then
 							voiceline = "s08x_sin" --"let me help you up"
-						else
-							local revives = revive_unit:character_damage():get_revives()
-
-							if revives == 2 then --2 downs left
-								voiceline = "s09a" --"you're really fucked up"
-							elseif revives == 1 then --1 down left
-								voiceline = "s09c" --usual bot revive line + last down warning
-							end
 						end
 
 						data.unit:sound():say(voiceline, true)

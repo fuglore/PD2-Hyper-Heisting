@@ -321,8 +321,8 @@ end
 if PD2THHSHIN and PD2THHSHIN:SkullDiffEnabled() then
 	Hooks:Add("LocalizationManagerPostInit", "HH_SKULLS", function(loc)
 		LocalizationManager:add_localized_strings({			
-			["menu_difficulty_normal"] = "SIMPLE",
-			["menu_difficulty_hard"] = "SWEET",
+			["menu_difficulty_normal"] = "SWEET",
+			["menu_difficulty_hard"] = "SOFT",
 			["menu_difficulty_very_hard"] = "MILD",
 			["menu_difficulty_overkill"] = "SPICY",
 			["menu_difficulty_easy_wish"] = "ULTRA SPICY",

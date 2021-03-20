@@ -32,7 +32,7 @@ function CopBase:init(unit)
 	end
 	
 	if self._tweak_table == "spooc" or self._tweak_table == "spooc_heavy" then
-		self._engagement_range = 1500
+		self._engagement_range = 2000
 	end
 
 	self._char_tweak = tweak_data.character[self._tweak_table]
