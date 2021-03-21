@@ -327,7 +327,7 @@ function ElementSpawnEnemyDummy:init(...)
 	}
 	
 	if ai_type == "america" then
-		if difficulty_index == 8 and table.contains(intense_heists, Global.level_data.level_id) then  --this only gets set during init so parentheses can't be too bad, right
+		if difficulty_index == 8 and table.contains(intense_heists, Global.level_data.level_id) then
 			if sm_wish_intense[self._values.enemy] then
 				self._values.enemy = sm_wish_intense[self._values.enemy]
 			end
@@ -462,7 +462,7 @@ function ElementSpawnEnemyDummy:init(...)
 		
 		self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 	end
-											
+
 	self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
 	--self._unit_name = self._values.enemy
 	self._values.enemy = nil
@@ -483,7 +483,187 @@ function ElementSpawnEnemyDummy:produce(params)
 	end]]
 
 	if params and params.name then
-		unit = safe_spawn_unit(params.name, self:get_orientation())
+		local ai_type = tweak_data.levels:get_ai_group_type()
+		local difficulty = Global.game_settings and Global.game_settings.difficulty or "normal"
+		local difficulty_index = tweak_data:difficulty_to_index(difficulty)
+		local job = Global.level_data and Global.level_data.level_id
+		local name = params.name
+		
+		local intense_heists = { --oof yike moment 
+			"wwh_hh",
+			"dah",
+			"glace"
+		}
+					
+		local nypd_heists = { 
+			"spa",
+			"dah",
+			"red2",
+			"brb",
+			"run",
+			"flat",
+			"flat_hh",
+			"dinner",
+			"nmh_hyper",
+			"glace"
+		}
+		
+		local fbi_overwrites = { 
+			"firestarter_1",
+			"firestarter_2",
+			"alex_3",
+			"hox_2",
+			"hox_3",
+			"watchdogs2"
+		}
+
+		local lapd_heists = { 
+			"rvd1",
+			"rvd2",
+			"jolly",
+			"friend",
+			"pal",
+			"kenaz"
+		}
+		
+		if ai_type == "america" then
+			if difficulty_index == 8 and table.contains(intense_heists, Global.level_data.level_id) then  --this only gets set during init so parentheses can't be too bad, right
+				if sm_wish_intense[name] then
+					name = sm_wish_intense[name]
+				end
+					
+				name = sm_wish_intense[name] or name	
+			elseif Global.game_settings and managers.modifiers and managers.modifiers:check_boolean("oopsallheavies") then
+				if enemy_annoying[name] then
+					name = enemy_annoying[name]
+				end
+				
+				name = enemy_annoying[name] or name
+			else
+				if difficulty_index == 8 then --GenSec over FBI
+					-- log("redpilled")
+					if sm_wish[name] then
+						name = sm_wish[name]
+					end
+					
+					name = sm_wish[name] or name
+				elseif difficulty_index >= 6 then
+					if overkill_290_and_easywish[name] then
+						name = overkill_290_and_easywish[name]
+					end
+					
+					name = overkill_290_and_easywish[name] or name				
+				end
+				
+				if difficulty_index <= 3 then
+					if sniper[name] then
+						name = sniper[name]
+					end
+							
+					name = sniper[name] or name
+					--Eff Bee Eye Snipar			
+				elseif difficulty_index <= 5 then
+					-- log("snipers replaced with fbi!")				
+					if sniper_fed[name] then
+						name = sniper_fed[name]
+					end
+							
+					name = sniper_fed[name] or name
+					--BONESAW IS READY, COME ON MY FACE BROTHER
+				elseif difficulty_index <= 7 then
+					if sniper_cumsec[name] then
+						name = sniper_cumsec[name]
+					end
+							
+					name = sniper_cumsec[name] or name			
+					--Sulu Carkdownz? Replasement Snipar? Real?
+				elseif difficulty_index == 8 then
+					if sniper_zulu_crackdown_XD[name] then
+						name = sniper_zulu_crackdown_XD[name]
+					end
+						
+					name = sniper_zulu_crackdown_XD[name] or name	
+				end
+			end
+		
+		--NYPD Cops Spawn Overwrite
+			if table.contains(nypd_heists, Global.level_data.level_id) then  
+				 if nypd_beatpricks[name] then
+					name = nypd_beatpricks[name]
+				 end
+				 
+				 name = nypd_beatpricks[name] or name
+			end
+
+			--LAPD Cops Spawn Overwrite
+			if table.contains(lapd_heists, Global.level_data.level_id) then  
+				 if lapd_beatpricks[name] then
+					name = lapd_beatpricks[name]
+				 end
+				 
+				 name = lapd_beatpricks[name] or name
+			end				
+		end
+		if ai_type == "shared" then
+			if difficulty_index == 8 and job ~= "dinner" then
+				if murkywetew_highdiff[name] then
+					name = murkywetew_highdiff[name]
+				end
+			elseif job == "dinner" and difficulty_index == 8 then
+				if sm_wish[name] then
+					name = sm_wish[name]
+				end		
+			elseif difficulty_index >= 6 then
+				if overkill_290_and_easywish[name] then
+					name = overkill_290_and_easywish[name]
+				end
+			end
+		end		
+
+		if ai_type == "murkywater" then
+			if difficulty_index == 8 then --Murkywater over everyone else
+				if murkywetew_highdiff[name] then
+					name = murkywetew_highdiff[name]
+				end
+			elseif difficulty_index < 8 then
+				if murkywetew[name] then
+					name = murkywetew[name]
+				end
+			end
+		end
+
+		if bex_fix[name] then --previous method for this was horrible, this is smarter
+			name = bex_fix[name]
+		end
+			
+		if difficulty_index <= 6 then
+			if federales_low_diff[name] then
+				name = federales_low_diff[name]
+			end
+		end
+
+		if ai_type == "zombie" then
+			if zombies[name] then
+				name = zombies[name]
+			end
+			
+			name = zombies[name] or name
+		end
+
+		if murky_fuckers[name]then --fix crashes due to bph units
+			name = murky_fuckers[name]
+		end
+		
+		if table.contains(fbi_overwrites, Global.level_data.level_id) then  --FBI-related heists
+			if overkill_290_and_easywish[name] then
+				name = overkill_290_and_easywish[name]
+			end
+			
+			name = overkill_290_and_easywish[name] or name
+		end
+	
+	
+		unit = safe_spawn_unit(name, self:get_orientation())
 		local spawn_ai = self:_create_spawn_AI_parametric(params.stance, params.objective, self._values)
 
 		unit:brain():set_spawn_ai(spawn_ai)

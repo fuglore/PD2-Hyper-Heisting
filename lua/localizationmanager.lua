@@ -294,7 +294,8 @@
 		["menu_risk_special"] = "Plain challenging, keeps your attention. A warm, summer day.",
 		["menu_risk_easy_wish"] = "Demands focus. Getting hot in here!",
 		["menu_risk_elite"] = "More units rolling in! More heat around the corner!",
-		["menu_risk_sm_wish"] = "There is no escaping the flames! FIGHT!"
+		["menu_risk_sm_wish"] = "There is no escaping the flames! FIGHT!",
+		["menu_hh_mutator_incomp"] = "This mutator is incompatible with Hyper Heisting...! Sadly!",
 	})
 end)
 

@@ -40,6 +40,12 @@
 	
 	<post :script_path="menunodegui.lua" :hook_id="managers/menu/menunodegui"/>
 	
+	<!--mutator compatibility stuff-->
+	<post :script_path="menu/mutatorscategorypage.lua" :hook_id="managers/menu/pages/mutatorscategorypage"/> <!--notice for incompatible mutators-->
+	<post :script_path="mutators/mutatorsmanager.lua" :hook_id="managers/mutatorsmanager"/>
+	<post :script_path="mutators/mutatorenemyreplacer.lua" :hook_id="mutators/mutatorenemyreplacer"/>
+	
+	
 	<post :script_path="networkmatchmakingsteam.lua" :hook_id="network/matchmaking/networkmatchmakingsteam"/>
 	<!-- <post :script_path="basenetworksession.lua" :hook_id="network/base/basenetworksession"/> -->
 	<post :script_path="networkpeer.lua" :hook_id="network/base/networkpeer"/>
