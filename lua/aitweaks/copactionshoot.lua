@@ -103,7 +103,7 @@ function CopActionShoot:init(action_desc, common_data)
 	self._timer = TimerManager:game()
 
 	local suppressive = weap_base.suppression and weap_base.suppression >= 2 or nil
-	self._fireline_t = suppressive and 2 or 0.7
+	self._fireline_t = suppressive and 1 or 0.5
 
 	if char_tweak.use_lotus_effect then
 		self._use_mindcontrol = true
@@ -779,7 +779,7 @@ function CopActionShoot:update(t)
 						local fire_line_is_obstructed = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")
 
 						if fire_line_is_obstructed then
-							if not self._line_of_sight_t or t - self._line_of_sight_t > 3 then
+							if not self._line_of_sight_t or t - self._line_of_sight_t > self._fireline_t then
 								if draw_aim_delay_vis_proc then
 									local draw_duration = shooting_husk and 4 or 2
 

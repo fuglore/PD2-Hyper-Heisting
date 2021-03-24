@@ -282,9 +282,9 @@ function HuskCopBrain:update_local_player_detection(t)
 								local vec_angle = mvec3_angle(my_head_fwd, tmp_vec1)
 								
 								if attention_info.unit:base() and attention_info.unit:base().is_local_player then
-									if dis < 100 then
+									if dis < 120 then
 										angle = 0
-										dis_multiplier = 0
+										dis_multiplier = dis_mul
 									elseif vec_angle < detection.angle_max then
 										local angle_max = math_lerp(180, detection.angle_max, math_clamp((dis - 150) / 700, 0, 1))
 										angle_multiplier = vec_angle / angle_max
@@ -367,7 +367,7 @@ function HuskCopBrain:update_local_player_detection(t)
 							local vec_angle = mvec3_angle(my_head_fwd, tmp_vec1)
 
 							if attention_info.unit:base() and attention_info.unit:base().is_local_player then
-								if dis < 100 then
+								if dis < 120 then
 									angle = 0
 									dis_multiplier = 0
 								elseif vec_angle < detection.angle_max then

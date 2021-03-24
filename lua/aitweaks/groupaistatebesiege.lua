@@ -737,132 +737,111 @@ function GroupAIStateBesiege:update(t, dt)
 	if Network:is_server() then
 		self:_queue_police_upd_task()
 		
-		if self._task_data then
-			local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-			local fliptheswitch = Global.game_settings and Global.game_settings.one_down or self._danger_state or nil
-			
-			if self._downcountleniency > 5 then
-				self._downcountleniency = 5
-			end
-			
+		if self._task_data then			
 			self:_claculate_drama_value()
 			
-			local activedrama = self._drama_data.amount >= tweak_data.drama.consistentcombat
-			local highdrama = self._drama_data.amount == tweak_data.drama.peak
+			local fliptheswitch = Global.game_settings and Global.game_settings.one_down or self._danger_state or nil
 			
-			local level = Global.level_data and Global.level_data.level_id
-			
-			local small_map = self._small_map
-			
-			if not self._enemies_killed_sustain_guaranteed_break then
-				local value = 64
-						
-				if self._force_pool then
-					if small_map then
-						value = self._force_pool / 2
-					else
-						value = self._force_pool / 3
-					end
-				end
-						
-				if small_map then
-					self._enemies_killed_sustain_guaranteed_break = value
-				else
-					self._enemies_killed_sustain_guaranteed_break = value
-				end
-			end
-			
-			--local testing = true
-			local task_data = self._task_data.assault
-			
-			if task_data and task_data.phase ~= "anticipation" then  
-				if not self._activeassaultnextbreak_t then
-					if testing then
-						self._activeassaultnextbreak_t = self._t + 15
-						--log("quit being a jerk and work")
-					elseif small_map then
-						self._activeassaultnextbreak_t = self._t + 30
-					else
-						self._activeassaultnextbreak_t = self._t + 60
-					end
-									
-					if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
-						--log("breaksetforDW")
+			if fliptheswitch then
+				if self._activeassaultbreak then
+					self._activeassaultbreak = nil
+					self._activeassaultnextbreak_t = nil
+					self._stopassaultbreak_t = nil
+					if not Global.game_settings.single_player then
+						LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
 					end
 				end
 			else
-				if self._activeassaultbreak then
-					self._activeassaultbreak = nil
-					LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+				if not self._activeassaultnextbreak_t then
+					self._activeassaultnextbreak_t = 0
 				end
-				self._activeassaultnextbreak_t = nil
-				self._stopassaultbreak_t = nil
-			end
+				
+				local level = Global.level_data and Global.level_data.level_id
 			
-			if fliptheswitch then
-				--Nothing
-			else	
-				if self._task_data.assault and self._task_data.assault.phase == "sustain" then		
-					if not self._activeassaultbreak and self._current_assault_state == "normal" and self._activeassaultnextbreak_t and self._activeassaultnextbreak_t < self._t and self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and not self._stopassaultbreak_t then
-						self._stopassaultbreak_t = self._t + 20
-						self._activeassaultbreak = true
-						--self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
-						local value = 64
-						
-						if self._force_pool then
-							if small_map then
-								value = self._force_pool / 2
-							else
-								value = self._force_pool / 2
-							end
-						end
-						
-						if small_map then
-							self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
-						else
-							self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
-						end
-						
-						if not self._said_heat_bonus_dialog then
-							self:play_heat_bonus_dialog()
+				local small_map = self._small_map
+				
+				if self._force_pool and not self._enemies_killed_sustain_guaranteed_break then
+					local value = nil
 							
-							for key, data in pairs_g(self._police) do
-								local dmg_ext = data.unit:character_damage()
-
-								if dmg_ext and dmg_ext.build_suppression then
-									dmg_ext:build_suppression(nil, -1)
+					if self._force_pool then
+						if small_map then
+							value = self._force_pool / 2
+						else
+							value = self._force_pool / 3
+						end
+					end
+							
+					if small_map then
+						self._enemies_killed_sustain_guaranteed_break = value
+					else
+						self._enemies_killed_sustain_guaranteed_break = value
+					end
+				end
+				local task_data = self._task_data.assault
+				local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+				
+				if task_data and task_data.phase == "sustain" or self._hunt_mode then		
+					if not self._activeassaultbreak and self._current_assault_state ~= "heat" and self._activeassaultnextbreak_t and self._enemies_killed_sustain_guaranteed_break then
+						if self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t then
+							self._stopassaultbreak_t = self._t + 20
+							self._activeassaultbreak = true
+							--self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
+							local value = 64
+							
+							if self._force_pool then
+								if small_map then
+									value = self._force_pool / 2
+								else
+									value = self._force_pool / 2
 								end
 							end
 							
-						end
-						
-						if not Global.game_settings.single_player then
-							LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
-						end
-						--log("assaultbreakon")
-					end
-					
-					if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
-						self._stopassaultbreak_t = nil
-						self._activeassaultbreak = nil
-						
-						if small_map then
-							self._activeassaultnextbreak_t = self._t + 30
-						else
-							self._activeassaultnextbreak_t = self._t + 30
-						end
+							if small_map then
+								self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
+							else
+								self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain + value
+							end
+							
+							if not self._said_heat_bonus_dialog then
+								self:play_heat_bonus_dialog()
 								
-						if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
-							--log("breaksetforDW")
+								for key, data in pairs_g(self._police) do
+									local dmg_ext = data.unit:character_damage()
+
+									if dmg_ext and dmg_ext.build_suppression then
+										dmg_ext:build_suppression(nil, -1)
+									end
+								end
+								
+							end
+							
+							if not Global.game_settings.single_player then
+								LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+							end
+							--log("assaultbreakon")
 						end
 						
-						self._said_heat_bonus_dialog = nil
-						if not Global.game_settings.single_player then
-							LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+						if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+							self._stopassaultbreak_t = nil
+							self._activeassaultbreak = nil
+							
+							if small_map then
+								self._activeassaultnextbreak_t = self._t + 30
+							else
+								self._activeassaultnextbreak_t = self._t + 30
+							end
+									
+							if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+								self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
+								--log("breaksetforDW")
+							end
+							
+							self._said_heat_bonus_dialog = nil
+							if not Global.game_settings.single_player then
+								LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+							end
+							--log("assaultbreakreset")
 						end
-						--log("assaultbreakreset")
 					end
 				else
 					if self._activeassaultbreak then
@@ -3234,8 +3213,8 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	end
 	
 	if self._small_map then --higher delays on small maps
-		delays[1] = delays[1] * 2
-		delays[2] = delays[2] * 2
+		delays[1] = delays[1] * 1.25
+		delays[2] = delays[2] * 1.25
 	end
 	
 	if Global.game_settings.one_down then --LET'S GIVE INTO PAAAAAAIN

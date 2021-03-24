@@ -7,7 +7,7 @@ function PlayerBase:set_suspicion_multiplier(reason, multiplier)
 		buildup_mul = buildup_mul * mul
 
 		if mul > 1 then
-			--range_mul = range_mul * math.sqrt(mul)
+			range_mul = range_mul * math.sqrt(mul)
 		end
 	end
 
@@ -22,29 +22,11 @@ function PlayerBase:set_detection_multiplier(reason, multiplier)
 
 	for reason, mul in pairs(self._detection_settings.multipliers) do
 		delay_mul = delay_mul * 1 / mul
-		--range_mul = range_mul * math.sqrt(mul)
+		range_mul = range_mul * math.sqrt(mul)
 	end
 
-	self._detection_settings.delay_mul = delay_mul - (managers.groupai:state():chk_guard_delay_deduction() or 1)
+	self._detection_settings.delay_mul = delay_mul - (managers.groupai:state():chk_guard_delay_deduction() or 0)
 	self._detection_settings.range_mul = range_mul 
-end
-
-function PlayerBase:update(unit, t, dt)
-	self:update_concealment()
-	if self._wanted_controller_enabled_t then
-		if self._wanted_controller_enabled_t <= 0 then
-			if self._wanted_controller_enabled then
-				self._controller:set_enabled(true)
-
-				self._wanted_controller_enabled = nil
-				self._wanted_controller_enabled_t = nil
-			end
-
-			self._unit:set_extension_update_enabled(Idstring("base"), false)
-		else
-			self._wanted_controller_enabled_t = self._wanted_controller_enabled_t - 1
-		end
-	end
 end
 
 function PlayerBase:_setup_suspicion_and_detection_data()

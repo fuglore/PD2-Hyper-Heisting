@@ -34,6 +34,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
 	self._last_killed_cop_t = 0
+	self._heat_bonus_clbk_id = "GroupAIStateBase:HEATBONUS"
 	self._current_assault_state = "normal"
 	local drama_tweak = tweak_data.drama
 	self._drama_data = {
@@ -185,19 +186,34 @@ function GroupAIStateBase:get_assault_hud_state()
 	if self._activeassaultbreak then
 		self._current_assault_state = "heat"
 		
+		if not self._celebrated_heat then
+			self._celebrated_heat = true
+			
+			local params = {heat = 0}
+			
+			managers.enemy:add_delayed_clbk(self._heat_bonus_clbk_id, callback(self, self, "chk_celebrate_heat", params), TimerManager:game():time() + math_lerp(1, 2, math_random()))
+		end
+			
+		
 		if self._commented_on_danger then
 			self._commented_on_danger = nil
+		end
+		
+		if self._danger_state and self._danger_state ~= "forced" then
+			self._danger_state = nil
 		end
 	elseif nr_people < 3 or nr_people_alive < nr_people then
 		local lastcrimstanding = nr_people_alive < 2
 		
 		if lastcrimstanding then
+			self._danger_state = true
 			self._current_assault_state = "lastcrimstanding"
-			if not self._commented_on_danger then
-				self:chk_random_drama_comment()
+			if not self._commented_on_danger or self._commented_on_danger < 2 then
+				self:chk_random_drama_comment(true)
 			end
 		else
 			if nr_people_alive < 3 then
+				self._danger_state = true
 				self._current_assault_state = "danger"
 				if not self._commented_on_danger then
 					self:chk_random_drama_comment()
@@ -210,6 +226,15 @@ function GroupAIStateBase:get_assault_hud_state()
 		if self._commented_on_danger then
 			self._commented_on_danger = nil
 		end
+		
+		if self._danger_state and self._danger_state ~= "forced" then
+			self._danger_state = nil
+		end
+		
+		if self._celebrated_heat then
+			self._celebrated_heat = nil
+		end
+		
 	end
 	
 end
@@ -360,7 +385,7 @@ function GroupAIStateBase:set_point_of_no_return_timer(time, point_of_no_return_
 	
 	if level and level == "bph" then
 		self._hunt_mode = true
-		self._danger_state = true
+		self._danger_state = "forced"
 		
 		if not Global.game_settings or not Global.game_settings.one_down then
 			return
@@ -404,23 +429,76 @@ function GroupAIStateBase:_check_assault_panic_chatter()
 	return
 end
 
-function GroupAIStateBase:chk_random_drama_comment()
+function GroupAIStateBase:chk_celebrate_heat(params)
+	if params.heat < 4 then
+		local random_comments = {
+			"v46",
+			"v17",
+			"v18"
+		}
+		
+		local random_comment = random_comments[math_random(#random_comments)]
+		
+		if params.heat < 1 then
+			managers.player:speak("v46", false, nil)
+		else
+			local valid_crims = {}
+			local lucky_talker = nil
+			local last_chosen_ukey = params.last_spoke_ukey
+			for u_key, u_data in pairs(self._criminals) do
+				if not last_chosen_ukey or last_chosen_ukey ~= u_key then
+					if not u_data.is_deployable and not u_data.unit:base().is_local_player and alive(u_data.unit) and not u_data.unit:movement():downed() and not u_data.unit:sound():speaking() then
+						valid_crims[#valid_crims + 1] = u_data.unit
+					end
+				end
+			end
+			
+			lucky_talker = valid_crims[math_random(#valid_crims)]
+			
+			if lucky_talker and alive(lucky_talker) then
+				lucky_talker:sound():say(random_comment, nil, true)
+				params.last_spoke_ukey = lucky_talker:key()		
+			end
+		end
+		
+		params.heat = params.heat + 1
+		managers.enemy:add_delayed_clbk(self._heat_bonus_clbk_id, callback(self, self, "chk_celebrate_heat", params), TimerManager:game():time() + math_lerp(0.7, 2, math_random()))
+	end
+end
+
+function GroupAIStateBase:chk_random_drama_comment(lastcrimstanding)
+	if not self._criminals or #self._criminals <= 0 then
+		return
+	end
 	local random_comments = {
 		"g68",
+		"g60",
 		"g69",
 		"g29",
 		"g16"
 	}
 	
 	local random_comment = random_comments[math_random(#random_comments)]
-
-	if math_random() < 0.5 then
-		managers.groupai:state():teammate_comment(nil, random_comment, nil, false, nil, true)
-	else
-		managers.player:speak(random_comment, false, nil)
+	
+	local valid_crims = {}
+	
+	for u_key, u_data in pairs(self._criminals) do
+		if not u_data.is_deployable and alive(u_data.unit) and not u_data.unit:movement():downed() and not u_data.unit:sound():speaking() then
+			valid_crims[#valid_crims + 1] = u_data.unit
+		end
+	end
+			
+	lucky_talker = valid_crims[math_random(#valid_crims)]
+			
+	if lucky_talker and alive(lucky_talker) then
+		lucky_talker:sound():say(random_comment, nil, true)
 	end
 	
-	self._commented_on_danger = true
+	if lastcrimstanding then
+		self._commented_on_danger = 2
+	else
+		self._commented_on_danger = 1
+	end
 end
 
 function GroupAIStateBase:play_heat_bonus_dialog()
@@ -719,8 +797,10 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 			self._last_killed_cop_t = self._t
 		end
 		
-		if dead and self._task_data and self._task_data.assault and self._task_data.assault.phase == "sustain" and self._task_data.assault.active then
-			self._enemies_killed_sustain = self._enemies_killed_sustain + 1
+		if dead and self._task_data and self._task_data.assault and self._task_data.assault.active then
+			if self._hunt_mode or self._task_data.assault.phase == "sustain" then
+				self._enemies_killed_sustain = self._enemies_killed_sustain + 1
+			end
 		end
 	end
 	

@@ -1333,28 +1333,28 @@ function CharacterTweakData:_presets(tweak_data)
 		ntl = {}
 	}
 	presets.detection.enemymook.idle.dis_max = 10000
-	presets.detection.enemymook.idle.angle_max = 360
+	presets.detection.enemymook.idle.angle_max = 110
 	presets.detection.enemymook.idle.delay = {
 		0,
 		0
 	}
 	presets.detection.enemymook.idle.use_uncover_range = true
 	presets.detection.enemymook.combat.dis_max = 10000
-	presets.detection.enemymook.combat.angle_max = 360
+	presets.detection.enemymook.combat.angle_max = 110
 	presets.detection.enemymook.combat.delay = {
 		0,
 		0
 	}
 	presets.detection.enemymook.combat.use_uncover_range = true
 	presets.detection.enemymook.recon.dis_max = 10000
-	presets.detection.enemymook.recon.angle_max = 360
+	presets.detection.enemymook.recon.angle_max = 110
 	presets.detection.enemymook.recon.delay = {
 		0,
 		0
 	}
 	presets.detection.enemymook.recon.use_uncover_range = true
 	presets.detection.enemymook.guard.dis_max = 10000
-	presets.detection.enemymook.guard.angle_max = 360
+	presets.detection.enemymook.guard.angle_max = 110
 	presets.detection.enemymook.guard.delay = {
 		0,
 		0
@@ -1367,7 +1367,7 @@ function CharacterTweakData:_presets(tweak_data)
 		2
 	}
 	presets.detection.civilian.cbt.dis_max = 10000
-	presets.detection.civilian.cbt.angle_max = 360
+	presets.detection.civilian.cbt.angle_max = 110
 	presets.detection.civilian.cbt.delay = {
 		0,
 		0
@@ -1389,28 +1389,28 @@ function CharacterTweakData:_presets(tweak_data)
 		ntl = {}
 	}
 	presets.detection.enemyspooc.idle.dis_max = 10000
-	presets.detection.enemyspooc.idle.angle_max = 360
+	presets.detection.enemyspooc.idle.angle_max = 110
 	presets.detection.enemyspooc.idle.delay = {
 		0,
 		0
 	}
 	presets.detection.enemyspooc.idle.use_uncover_range = true
 	presets.detection.enemyspooc.combat.dis_max = 10000
-	presets.detection.enemyspooc.combat.angle_max = 360
+	presets.detection.enemyspooc.combat.angle_max = 110
 	presets.detection.enemyspooc.combat.delay = {
 		0,
 		0
 	}
 	presets.detection.enemyspooc.combat.use_uncover_range = true
 	presets.detection.enemyspooc.recon.dis_max = 10000
-	presets.detection.enemyspooc.recon.angle_max = 360
+	presets.detection.enemyspooc.recon.angle_max = 110
 	presets.detection.enemyspooc.recon.delay = {
 		0,
 		0
 	}
 	presets.detection.enemyspooc.recon.use_uncover_range = true
 	presets.detection.enemyspooc.guard.dis_max = 10000
-	presets.detection.enemyspooc.guard.angle_max = 360
+	presets.detection.enemyspooc.guard.angle_max = 110
 	presets.detection.enemyspooc.guard.delay = {
 		0,
 		0
@@ -8440,7 +8440,7 @@ end)
 --difficulty tweaks begin here.
 
 function CharacterTweakData:_set_normal()
-	self:_multiply_all_hp(2, 1.5)
+	self:_multiply_all_hp(2, 1)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.5, 0.3, 0.9)
 
@@ -8602,7 +8602,7 @@ end
 --HARD setup begins here, landmark (POW)
 
 function CharacterTweakData:_set_hard()
-	self:_multiply_all_hp(2, 1.5)
+	self:_multiply_all_hp(2, 1)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.5, 0.3, 0.9)
 	
@@ -8764,7 +8764,7 @@ end
 
 --VH setup, landmark (DOG)
 function CharacterTweakData:_set_overkill()
-	self:_multiply_all_hp(4, 1.5)
+	self:_multiply_all_hp(4, 1)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
@@ -8951,7 +8951,7 @@ end
 --OVK setup, landmark (QBY)
 
 function CharacterTweakData:_set_overkill_145()	
-	self:_multiply_all_hp(4, 1.5)
+	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
 	self.tank_mini.HEALTH_INIT = 4000
