@@ -760,6 +760,8 @@ function GroupAIStateBase:reset_heat_bonus()
 		end
 	end
 	
+	self._said_heat_bonus_dialog = nil
+	
 	local task_data = self._task_data.assault
 	
 	if self._activeassaultnextbreak_t then
