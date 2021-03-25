@@ -44,6 +44,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._graph_distance_cache = {}
 	self._enemy_speed_mul = 1
 	self._had_hostages = nil
+	self._downs_during_assault = 0
 	self._feddensityhigh = nil	
 	self._feddensityhighfrequency = 1
 	self._downleniency = 1
@@ -740,22 +741,18 @@ function GroupAIStateBesiege:update(t, dt)
 		if self._task_data then			
 			self:_claculate_drama_value()
 			
-			local fliptheswitch = Global.game_settings and Global.game_settings.one_down or self._danger_state or nil
-			
-			if fliptheswitch then
-				if self._activeassaultbreak then
-					self._activeassaultbreak = nil
-					self._activeassaultnextbreak_t = nil
-					self._stopassaultbreak_t = nil
-					if not Global.game_settings.single_player then
-						LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
-					end
+			if Global.game_settings and Global.game_settings.one_down then
+				--nothing
+			elseif self._danger_state then
+				if not self._reset_heat_bonus then
+					self:reset_heat_bonus()
+					self._reset_heat_bonus = true
 				end
 			else
-				if not self._activeassaultnextbreak_t then
-					self._activeassaultnextbreak_t = 0
+				if self._reset_heat_bonus then
+					self._reset_heat_bonus = nil
 				end
-				
+					
 				local level = Global.level_data and Global.level_data.level_id
 			
 				local small_map = self._small_map
@@ -777,10 +774,46 @@ function GroupAIStateBesiege:update(t, dt)
 						self._enemies_killed_sustain_guaranteed_break = value
 					end
 				end
+
 				local task_data = self._task_data.assault
 				local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 				
-				if task_data and task_data.phase == "sustain" or self._hunt_mode then		
+				if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
+					self._stopassaultbreak_t = nil
+					self._activeassaultbreak = nil
+					
+					if small_map then
+						self._activeassaultnextbreak_t = self._t + 30
+					else
+						self._activeassaultnextbreak_t = self._t + 30
+					end
+							
+					if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+						self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
+						--log("breaksetforDW")
+					end
+					
+					self._said_heat_bonus_dialog = nil
+					if not Global.game_settings.single_player then
+						LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+					end
+					--log("assaultbreakreset")
+				end
+				
+				if not self._activeassaultnextbreak_t then
+					if self._hunt_mode then
+						self._activeassaultnextbreak_t = self._t + 30
+						
+						if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+							self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
+							--log("breaksetforDW")
+						end
+					else
+						self._activeassaultnextbreak_t = self._t
+					end
+				end
+				
+				if task_data and task_data.phase == "sustain" or self._hunt_mode then
 					if not self._activeassaultbreak and self._current_assault_state ~= "heat" and self._activeassaultnextbreak_t and self._enemies_killed_sustain_guaranteed_break then
 						if self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t then
 							self._stopassaultbreak_t = self._t + 20
@@ -792,7 +825,7 @@ function GroupAIStateBesiege:update(t, dt)
 								if small_map then
 									value = self._force_pool / 2
 								else
-									value = self._force_pool / 2
+									value = self._force_pool / 3
 								end
 							end
 							
@@ -805,6 +838,8 @@ function GroupAIStateBesiege:update(t, dt)
 							if not self._said_heat_bonus_dialog then
 								self:play_heat_bonus_dialog()
 								
+								managers.hud:show_heat_bonus_hints()
+								
 								for key, data in pairs_g(self._police) do
 									local dmg_ext = data.unit:character_damage()
 
@@ -813,34 +848,34 @@ function GroupAIStateBesiege:update(t, dt)
 									end
 								end
 								
+								local pm = managers.player
+						
+								if pm then
+									if pm:player_unit() and alive(pm:player_unit()) then
+										local player = pm:player_unit()
+										local dmg_ext = player:character_damage()
+										
+										if not dmg_ext:dead() then
+											if not dmg_ext:need_revive() and not dmg_ext:is_berserker() then
+												dmg_ext:restore_health(0.5) --50% health restored on heat bonus
+											end
+											
+											local inventory = player:inventory()
+										
+											if inventory then						
+												for i, weapon in pairs(inventory:available_selections()) do
+													weapon.unit:base():add_ratio_plus_ammo(0.5)
+												end
+											end
+										end
+									end
+								end
 							end
 							
 							if not Global.game_settings.single_player then
 								LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
 							end
 							--log("assaultbreakon")
-						end
-						
-						if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
-							self._stopassaultbreak_t = nil
-							self._activeassaultbreak = nil
-							
-							if small_map then
-								self._activeassaultnextbreak_t = self._t + 30
-							else
-								self._activeassaultnextbreak_t = self._t + 30
-							end
-									
-							if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-								self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
-								--log("breaksetforDW")
-							end
-							
-							self._said_heat_bonus_dialog = nil
-							if not Global.game_settings.single_player then
-								LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
-							end
-							--log("assaultbreakreset")
 						end
 					end
 				else
@@ -1776,7 +1811,7 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 		local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
 
 		if cat_data.special_type and not cat_data.is_captain and spawn_limit < self:_get_special_unit_type_count(cat_data.special_type) + (spawn_entry.amount_min or 0) then
-			spawn_group.delay_t = self._t + 10
+			spawn_group.delay_t = self._t + 2
 
 			return
 		else
@@ -1791,13 +1826,33 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 	end
 	
 	if grp_objective.area and not grp_objective.coarse_path then
+		local long_path = nil
+		
+		local flank_groups = {
+			recon_squad_A = true,
+			recon_squad_B = true,
+			recon_squad_C = true,
+			recon_squad_D = true,
+			tac_swat_shotgun_flank = true,
+			tac_swat_rifle_flank = true,
+			tac_tazer_flanking = true
+		}
+		
+		if spawn_group_type == "FBI_spoocs" then
+			if math_random() < 0.5 then
+				long_path = true
+			end
+		elseif flank_groups[spawn_group_type] then
+			long_path = true
+		end
+		
 		local end_nav_seg = managers.navigation:get_nav_seg_from_pos(grp_objective.area.pos, true)
 		local search_params = {
 			id = "GroupAI_spawn",
 			from_seg = spawn_group.nav_seg,
 			to_seg = end_nav_seg,
 			access_pos = "swat",
-			long_path = math_random() < 0.5 and true
+			long_path = long_path
 		}
 		local coarse_path = managers.navigation:search_coarse(search_params)
 		
@@ -2301,8 +2356,14 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			end
 		end
 	elseif group.objective.moving_in and not current_objective.tactic then
-		if not next(current_objective.area.criminal.units) then --if theres suddenly no criminals in the area, start approaching instead
-			approach = true
+		if phase_is_anticipation then
+			pull_back = true
+		elseif not next(current_objective.area.criminal.units) then --if theres suddenly no criminals in the area, start approaching instead
+			if not phase_is_anticipation and diff_index > 6 then
+				push = true
+			else
+				approach = true
+			end
 		end
 	elseif not current_objective.moving_in then
 		local obstructed_path_index = nil
@@ -2313,8 +2374,14 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 				
 		if current_objective.moving_out then
-			if diff_index < 7 and obstructed_path_index then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
-				objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - 1, 1)][1])
+			if phase_is_anticipation and obstructed_path_index or diff_index < 7 and obstructed_path_index then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
+				local reduct = 1
+				
+				if phase_is_anticipation then
+					reduct = 2
+				end
+				
+				objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - reduct, 1)][1])
 				pull_back = true
 			end
 		else
@@ -2325,17 +2392,33 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				has_criminals_close = true
 				has_criminals_closer = true
 			else
-				for area_id, neighbour_area in pairs_g(current_objective.area.neighbours) do
-					if next(neighbour_area.criminal.units) then					
-						has_criminals_close = neighbour_area
-						break
+				if phase_is_anticipation then
+					for area_id, neighbour_area in pairs_g(current_objective.area.neighbours) do
+						if next(neighbour_area.criminal.units) then					
+							has_criminals_close = neighbour_area
+							break
+						else
+							for alt_area_id, alt_area in pairs_g(neighbour_area.neighbours) do
+								if next(alt_area.criminal.units) then
+									has_criminals_close = alt_area
+									break
+								end
+							end
+						end
+					end
+				else
+					for area_id, neighbour_area in pairs_g(current_objective.area.neighbours) do
+						if next(neighbour_area.criminal.units) then					
+							has_criminals_close = neighbour_area
+							break
+						end
 					end
 				end
 			end
 			
 			if phase_is_anticipation and current_objective.open_fire then
 				pull_back = true
-			elseif not has_criminals_close then
+			elseif phase_is_anticipation and not has_criminals_close or diff_index < 7 and not has_criminals_close then
 				approach = true
 			elseif not phase_is_anticipation then
 				if not has_criminals_closer then
@@ -2513,11 +2596,12 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local used_grenade = nil
 			
 			if approach and assault_path and next(assault_area.criminal.units) then
-				local safe_area = self:get_area_from_nav_seg_id(assault_path[math_max(#assault_path - 1, 1)][1])
+				local safe_i = phase_is_anticipation and 2 or 1
+				local safe_area = self:get_area_from_nav_seg_id(assault_path[math_max(#assault_path - safe_i, 1)][1])
 				
 				if safe_area then
 					local new_path = {}
-					for i = 1, #assault_path - 1 do
+					for i = 1, #assault_path - safe_i do
 						new_path[i] = assault_path[i]
 					end
 					
@@ -2525,20 +2609,9 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					assault_area = safe_area
 				end
 			end
-				
 			
 			if push then
 				if current_objective.area.id == assault_area.id or current_objective.area.neighbours[assault_area] then
-					local detonate_pos = nil
-
-					if charge then
-						for c_key, c_data in pairs_g(assault_area.criminal.units) do
-							detonate_pos = assault_area.pos
-
-							break
-						end
-					end
-
 					local first_chk = math_random() < 0.5 and self._chk_group_use_flash_grenade or self._chk_group_use_smoke_grenade
 					local second_chk = first_chk == self._chk_group_use_flash_grenade and self._chk_group_use_smoke_grenade or self._chk_group_use_flash_grenade
 					used_grenade = first_chk(self, group, self._task_data.assault, detonate_pos, assault_area)
@@ -2562,7 +2635,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				moving_in = push and true or nil,
 				open_fire = push or nil,
 				pushed = push or nil,
-				charge = charge,
+				charge = push,
 				interrupt_dis = nil
 			}
 			--group.is_chasing = group.is_chasing or push
@@ -2596,7 +2669,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
 
 			if forwardmost_i_nav_point then
-				local nearest_safe_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(forwardmost_i_nav_point - 1, 1)][1])
+				local safe_i = phase_is_anticipation and 2 or 1
+				local nearest_safe_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(forwardmost_i_nav_point - safe_i, 1)][1])
 				retreat_area = nearest_safe_area
 			end
 		end
@@ -3039,6 +3113,25 @@ function GroupAIStateBesiege:_end_regroup_task()
 		
 		if self._downs_during_assault > 5 then
 			self._assault_was_hell = true
+		end
+		
+		local pm = managers.player
+						
+		if pm then
+			if pm:player_unit() and alive(pm:player_unit()) then
+				local player = pm:player_unit()
+				local dmg_ext = player:character_damage()
+				
+				if not dmg_ext:dead() then
+					if not dmg_ext:need_revive() then --if your team didnt revive you in the first place, go eat a medic bag
+						dmg_ext:replenish() 
+					end
+				end
+			end
+		end
+		
+		if not Global.game_settings.single_player then
+			LuaNetworking:SendToPeers("shin_sync_post_assault_replenish")
 		end
 
 		managers.mission:call_global_event("end_assault_late")

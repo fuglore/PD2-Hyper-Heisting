@@ -30,6 +30,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._next_allowed_enemykill_drama_t = nil
 	self._in_mexico = nil
 	self._downleniency = 1
+	self._downs_during_assault = 0
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
@@ -72,6 +73,7 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._next_allowed_enemykill_drama_t = nil
 	self._in_mexico = nil
 	self._downleniency = 1
+	self._downs_during_assault = 0
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
@@ -433,7 +435,6 @@ function GroupAIStateBase:chk_celebrate_heat(params)
 	if params.heat < 4 then
 		local random_comments = {
 			"v46",
-			"v17",
 			"v18"
 		}
 		
@@ -455,7 +456,7 @@ function GroupAIStateBase:chk_celebrate_heat(params)
 			
 			lucky_talker = valid_crims[math_random(#valid_crims)]
 			
-			if lucky_talker and alive(lucky_talker) then
+			if lucky_talker then
 				lucky_talker:sound():say(random_comment, nil, true)
 				params.last_spoke_ukey = lucky_talker:key()		
 			end
@@ -490,7 +491,7 @@ function GroupAIStateBase:chk_random_drama_comment(lastcrimstanding)
 			
 	lucky_talker = valid_crims[math_random(#valid_crims)]
 			
-	if lucky_talker and alive(lucky_talker) then
+	if lucky_talker then
 		lucky_talker:sound():say(random_comment, nil, true)
 	end
 	
@@ -652,7 +653,7 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 	
 		--if criminal and criminal:character_damage() and criminal:character_damage()._akuma_effect then
 			
-		--end
+		--end	
 		
 		if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
 			self._assault_number = self._assault_number + 1
@@ -681,22 +682,108 @@ function GroupAIStateBase:on_criminal_neutralized(unit)
 			managers.trade:set_trade_countdown(false)
 		end
 		
-		self._downs_during_assault = self._downs_during_assault + 1
-		if self._downcountleniency and self._downcountleniency < 5 then
-			self._downcountleniency = self._downcountleniency + 1
-		end
-		
-		if self._downleniency and self._downleniency > 0.5 then 
-			self._downleniency = self._downleniency - 0.1
-			--log("down leniency increased")
-		end
-
 		for key, data in pairs_g(self._police) do
 			data.unit:brain():on_criminal_neutralized(criminal_key, unit)
 		end
 
 		self:_add_drama(self._drama_data.actions.criminal_dead)
 		self:check_gameover_conditions()
+	end
+end
+
+function GroupAIStateBase:on_criminal_disabled(unit, custom_status)
+	local criminal_key = unit:key()
+	local record = self._criminals[criminal_key]
+
+	if not record then
+		return
+	end
+
+	record.disabled_t = self._t
+	record.status = custom_status or "disabled"
+
+	if Network:is_server() then
+		if not custom_status or custom_status ~= "electrified" then
+			self._downs_during_assault = self._downs_during_assault + 1
+
+			for key, data in pairs(self._police) do
+				data.unit:brain():on_criminal_neutralized(criminal_key)
+			end
+
+			self:_add_drama(self._drama_data.actions.criminal_disabled)
+			
+			if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
+				self._assault_number = self._assault_number + 1
+
+				managers.mission:call_global_event("start_assault")
+				managers.hud:start_assault(self._assault_number)
+				managers.groupai:dispatch_event("start_assault", self._assault_number)
+
+				for group_id, group in pairs_g(self._groups) do
+					for u_key, u_data in pairs_g(group.units) do
+						u_data.unit:sound():say("att", true)
+					end
+				end
+				
+				if managers.modifiers:check_boolean("itmightrain") then
+					self._enemy_speed_mul = self._enemy_speed_mul + 0.1
+				end
+						
+				LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring_g(self._enemy_speed_mul))
+
+				self._task_data.assault.phase = "build"
+				self._task_data.assault.phase_end_t = self._t + self._tweak_data.assault.build_duration
+				self._task_data.assault.is_hesitating = nil
+
+				self:set_assault_mode(true)
+				managers.trade:set_trade_countdown(false)
+			end
+					
+			if Global.game_settings and Global.game_settings.one_down then
+				--no
+			elseif self._next_heatbonus_reset and self._downs_during_assault == self._next_heatbonus_reset or self._downs_during_assault == 2 then
+				self:reset_heat_bonus()
+				
+				self._next_heatbonus_reset = self._downs_during_assault + 2
+			end
+		end
+		self:check_gameover_conditions()
+	end
+end
+
+function GroupAIStateBase:reset_heat_bonus()
+	if self._activeassaultbreak then
+		self._activeassaultbreak = nil
+		self._stopassaultbreak_t = nil
+		if not Global.game_settings.single_player then
+			LuaNetworking:SendToPeers("shin_sync_hud_assault_color",tostring(self._activeassaultbreak))
+		end
+	end
+	
+	local task_data = self._task_data.assault
+	
+	if self._activeassaultnextbreak_t then
+		self._activeassaultnextbreak_t = self._t + 30
+		
+		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		
+		if diff_index > 6 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+			self._activeassaultnextbreak_t = self._activeassaultnextbreak_t + 30
+		end
+		
+		local small_map = self._small_map
+			
+		if self._force_pool then
+			if small_map then
+				value = self._force_pool / 2
+			else
+				value = self._force_pool / 3
+			end
+		end
+		
+		if self._enemies_killed_sustain_guaranteed_break then
+			self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain_guaranteed_break + value
+		end
 	end
 end
 

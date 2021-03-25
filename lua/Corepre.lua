@@ -164,12 +164,61 @@ if not _G.voiceline_framework then
 end
 
 Hooks:Add("NetworkReceivedData", "shin_receive_network_data", function(sender, message, data)
-	if managers and managers.groupai then
+
+	if message == "shin_sync_post_assault_replenish" then
+		local pm = managers.player
+						
+		if pm then
+			if pm:player_unit() and alive(pm:player_unit()) then
+				local player = pm:player_unit()
+				local dmg_ext = player:character_damage()
+				
+				if not dmg_ext:dead() then
+					if not dmg_ext:need_revive() then --if your team didnt revive you in the first place, go eat a medic bag
+						dmg_ext:replenish() 
+					end
+				end
+			end
+		end
+	end
+
+	if managers and managers.groupai then	
 		if message == "shin_sync_hud_assault_color" then 
 			if sender == 1 then
 				if data == "true" then
 					managers.groupai:state()._activeassaultbreak = true
 					managers.groupai:state():play_heat_bonus_dialog()
+					managers.hud:show_heat_bonus_hints()
+					
+					local pm = managers.player
+						
+					if pm then
+						if pm:player_unit() and alive(pm:player_unit()) then
+							local player = pm:player_unit()
+							local dmg_ext = player:character_damage()
+							
+							if not dmg_ext:dead() then
+								if not dmg_ext:need_revive() and not dmg_ext:is_berserker() then
+									dmg_ext:restore_health(0.5) --50% health restored on heat bonus
+								end
+								
+								local inventory = player:inventory()
+							
+								if inventory then
+									local available_selections = {}
+
+									for i, weapon in pairs(inventory:available_selections()) do
+										available_selections[#available_selections] = weapon
+									end
+									
+									for i = 1, #available_selections do
+										local weapon = available_selections[i]
+										weapon.unit:base():add_ammo_from_bag(0.5) --3 instead of 2 in case theres 
+									end
+								end
+							end
+						end
+					end					
 				elseif data == "nil" then 
 				   managers.groupai:state()._activeassaultbreak = nil
 				   managers.groupai:state()._said_heat_bonus_dialog = nil

@@ -213,7 +213,7 @@ function CharacterTweakData:_presets(tweak_data)
         }
     }
 	
-	--Dodge presets begin here.
+	--Dodge presets begin here. ----LOOK INTO THE FUCKING VARIATION_DATA CRASH POS STUPID GODDAMN THING
 	presets.dodge.heavy_complex = {
 		speed = 1.3,
 		occasions = {
@@ -225,7 +225,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 1,
+						chance = 0.5,
 						shoot_chance = 1,
 						shoot_accuracy = 1,
 						timeout = {
@@ -234,14 +234,14 @@ function CharacterTweakData:_presets(tweak_data)
 						}
 					},
 					roll = {
-						chance = 1,
+						chance = 0.25,
 						timeout = {
 							1,
 							2
 						}
 					},
 					dive = {
-						chance = 1,
+						chance = 0.25,
 						shoot_chance = 1,
 						shoot_accuracy = 0.9,
 						timeout = {
@@ -259,14 +259,14 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					roll = {
-						chance = 1,
+						chance = 0.25,
 						timeout = {
 							0.7,
 							1
 						}
 					},
-					dive = {
-						chance = 2,
+					side_step = {
+						chance = 0.75,
 						shoot_chance = 1,
 						shoot_accuracy = 0.9,
 						timeout = {
@@ -284,7 +284,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 1,
+						chance = 0.33,
 						shoot_chance = 0.8,
 						shoot_accuracy = 0.6,
 						timeout = {
@@ -293,14 +293,14 @@ function CharacterTweakData:_presets(tweak_data)
 						}
 					},
 					roll = {
-						chance = 1,
+						chance = 0.33,
 						timeout = {
 							1,
 							2
 						}
 					},
 					dive = {
-						chance = 1,
+						chance = 0.33,
 						shoot_chance = 0.6,
 						shoot_accuracy = 0.4,
 						timeout = {
@@ -323,7 +323,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 1,
+						chance = 0.33,
 						shoot_chance = 1,
 						shoot_accuracy = 1,
 						timeout = {
@@ -332,14 +332,14 @@ function CharacterTweakData:_presets(tweak_data)
 						}
 					},
 					roll = {
-						chance = 2,
+						chance = 0.34,
 						timeout = {
 							0.5,
 							0.5
 						}
 					},
 					dive = {
-						chance = 2,
+						chance = 0.33,
 						shoot_chance = 1,
 						shoot_accuracy = 0.9,
 						timeout = {
@@ -357,14 +357,14 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					roll = {
-						chance = 2,
+						chance = 0.6,
 						timeout = {
 							0.5,
 							0.5
 						}
 					},
 					dive = {
-						chance = 1,
+						chance = 0.4,
 						shoot_chance = 1,
 						shoot_accuracy = 1,
 						timeout = {
@@ -382,7 +382,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 1,
+						chance = 0.34,
 						shoot_chance = 1,
 						shoot_accuracy = 0.6,
 						timeout = {
@@ -391,14 +391,14 @@ function CharacterTweakData:_presets(tweak_data)
 						}
 					},
 					roll = {
-						chance = 1,
+						chance = 0.33,
 						timeout = {
 							0.5,
 							0.5
 						}
 					},
 					dive = {
-						chance = 2,
+						chance = 0.33,
 						shoot_chance = 1,
 						shoot_accuracy = 0.6,
 						timeout = {
@@ -420,8 +420,8 @@ function CharacterTweakData:_presets(tweak_data)
 						0
 					},
 					variations = {
-							dive = {
-							chance = 1,
+						dive = {
+							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -430,7 +430,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						roll = {
-							chance = 1,
+							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -439,7 +439,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						wheel = {
-							chance = 2,
+							chance = 0.34,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -456,8 +456,8 @@ function CharacterTweakData:_presets(tweak_data)
 						0
 					},
 					variations = {
-							dive = {
-							chance = 1,
+						dive = {
+							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -466,7 +466,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						roll = {
-							chance = 1,
+							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -475,7 +475,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						wheel = {
-							chance = 2,
+							chance = 0.34,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -493,7 +493,7 @@ function CharacterTweakData:_presets(tweak_data)
 					},
 					variations = {
 						dive = {
-							chance = 1,
+							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -502,7 +502,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						roll = {
-							chance = 1,
+							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -511,7 +511,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						wheel = {
-							chance = 3,
+							chance = 0.34,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -523,6 +523,22 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
+	
+	for preset_name, preset_data in pairs(presets.dodge) do
+		for reason_name, reason_data in pairs(preset_data.occasions) do
+			local total_w = 0
+
+			for variation_name, variation_data in pairs(reason_data.variations) do
+				total_w = total_w + variation_data.chance
+			end
+
+			if total_w > 0 then
+				for variation_name, variation_data in pairs(reason_data.variations) do
+					variation_data.chance = variation_data.chance / total_w
+				end
+			end
+		end
+	end
 	
 	--custom shield move speed presets, escalates with difficulty as it should, starting from normal-based speeds to very_fast
 	presets.move_speed.shield_sim = {
@@ -3372,7 +3388,7 @@ presets.weapon.civil.is_pistol = {
 			0.4,
 			0.4
 		},
-		focus_delay = 2, --focus delay change here.
+		focus_delay = 1.5, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
@@ -3569,7 +3585,7 @@ presets.weapon.civil.is_pistol = {
 			0.28,
 			0.28
 		},
-		focus_delay = 1.5,
+		focus_delay = 1.2,
 		focus_dis = 100, 
 		spread = 25,
 		miss_dis = 40,
@@ -4281,7 +4297,7 @@ presets.weapon.civil.is_pistol = {
 			0.4,
 			0.4
 		},
-		focus_delay = 2, --focus delay change here.
+		focus_delay = 1, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
@@ -4496,7 +4512,7 @@ presets.weapon.civil.is_pistol = {
 			0.28,
 			0.28
 		},
-		focus_delay = 1.5,
+		focus_delay = 1.1,
 		focus_dis = 100, 
 		spread = 25,
 		miss_dis = 30,
@@ -5137,7 +5153,7 @@ presets.weapon.civil.is_pistol = {
 			0.25,
 			0.25
 		},
-		focus_delay = 1.2,
+		focus_delay = 1,
 		focus_dis = 100,
 		spread = 20, 
 		miss_dis = 10,
@@ -5298,7 +5314,7 @@ presets.weapon.civil.is_pistol = {
 			0.4,
 			0.4
 		},
-		focus_delay = 2, --focus delay change here.
+		focus_delay = 0.4, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
@@ -6227,7 +6243,7 @@ presets.weapon.civil.is_pistol = {
 			0.28
 		},
 		focus_delay = 0.7,
-		focus_dis = 500, --focus delay starts after 5m
+		focus_dis = 500, --focus displacement punishment starts after 5m
 		spread = 10, 
 		miss_dis = 0,
 		RELOAD_SPEED = 1.8, --DW style.

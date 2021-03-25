@@ -391,12 +391,6 @@ function PlayerStandard:_check_action_duck(t, input)
 		end
 	elseif input.btn_duck_press and not self._unit:base():stats_screen_visible() then
 		if not self._state_data.ducking then
-			if self._running then
-				self.is_sliding = true
-				if self._wave_dash_t then
-					self.is_wave_dash_slide = true
-				end
-			end
 			self:_start_action_ducking(t)
 		elseif self._state_data.ducking then
 			self:_end_action_ducking(t)
@@ -410,10 +404,6 @@ function PlayerStandard:_end_action_ducking(t, skip_can_stand_check)
 	end
 
 	self._state_data.ducking = false
-	self.is_sliding = nil
-	self._slide_acceleration = nil
-	self.is_wave_dash_slide = nil
-	self.wave_slide_acceleration = nil
 	self:_stance_entered()
 	self:_update_crosshair_offset()
 
@@ -456,37 +446,9 @@ function PlayerStandard:_update_movement(t, dt)
 		end
 	end
 	
-	local acceleration = WALK_SPEED_MAX * 8
-	local decceleration = acceleration * 0.5
+	local acceleration = self:_get_max_walk_speed(t, true) * 8
+	local decceleration = acceleration * 0.7
 	
-	if self._state_data.in_air then
-		--acceleration = 700
-		--decceleration = acceleration * 1.25
-	elseif self._state_data.ducking and self.is_sliding then
-		if math.abs(self._last_velocity_xy:length()) > WALK_SPEED_MAX then
-			if self.is_wave_dash_slide then
-				if not self.wave_slide_acceleration then
-					self.wave_slide_acceleration = math.abs(self._last_velocity_xy:length()) + WALK_SPEED_MAX
-				end
-				decceleration = self.wave_slide_acceleration * 0.9
-				acceleration = decceleration * 0.75
-				--log("wave")
-			else
-				if not self._slide_acceleration then
-					self._slide_acceleration = math.abs(self._last_velocity_xy:length()) + WALK_SPEED_MAX
-				end
-				decceleration = self._slide_acceleration * 0.8
-				acceleration = decceleration * 0.75
-				--log("wave'nt")
-			end
-		else
-			self.is_sliding = nil
-			self._slide_acceleration = nil
-			self.is_wave_dash_slide = nil
-			self.wave_slide_acceleration = nil
-		end
-	end
-
 	if self._state_data.on_zipline and self._state_data.zipline_data.position then
 		local speed = mvector3.length(self._state_data.zipline_data.position - self._pos) / dt / 500
 		pos_new = mvec_pos_new
@@ -520,7 +482,7 @@ function PlayerStandard:_update_movement(t, dt)
 		local wanted_walk_speed = WALK_SPEED_MAX * math.min(1, self._move_dir:length())		
 		local achieved_walk_vel = mvec_achieved_walk_vel
 		
-		if self._running and self._wave_dash_t and not self.is_sliding then
+		if self._running and self._wave_dash_t then
 			acceleration = acceleration + wanted_walk_speed
 			decceleration = decceleration + wanted_walk_speed
 		end
@@ -563,7 +525,7 @@ function PlayerStandard:_update_movement(t, dt)
 		end
 
 		if mvector3.is_zero(self._last_velocity_xy) then
-			mvector3.set_length(achieved_walk_vel, math.max(achieved_walk_vel:length(), 1))
+			mvector3.set_length(achieved_walk_vel, math.max(achieved_walk_vel:length(), 100))
 		end
 
 		pos_new = mvec_pos_new
@@ -596,10 +558,6 @@ function PlayerStandard:_update_movement(t, dt)
 		self._target_headbob = 0
 		self._moving = false
 		
-		self.is_sliding = nil
-		self._slide_acceleration = nil
-		self.is_wave_dash_slide = nil
-		self.wave_slide_acceleration = nil
 		--log("current speed is " .. math.abs(self._last_velocity_xy:length()) .. "!")
 
 		self:_update_crosshair_offset()

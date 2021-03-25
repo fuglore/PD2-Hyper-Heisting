@@ -10,16 +10,28 @@ end
 
 function CrimeSpreeManager:get_acc_mult()
 	--log("fudge")
+	if not self:in_progress() then
+		return 1
+	end
+	
 	return self._copaccmult
 end
 
 function CrimeSpreeManager:get_turn_spd_add()
 	--log("fudge2")
+	if not self:in_progress() then
+		return 0
+	end
+	
 	return self._copturnadd
 end
 
 function CrimeSpreeManager:get_cop_det_mult()
 	--log("fudge3")
+	if not self:in_progress() then
+		return 0
+	end
+	
 	return self._copdetmult
 end
 

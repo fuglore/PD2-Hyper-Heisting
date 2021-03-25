@@ -1294,7 +1294,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 			defend_area = true
 		}
 			
-		if good_types[objective.type] then
+		if good_types[objective.type] and not objective.pos then
 			local good_grp_types = {
 				recon_area = true,
 				assault_area = true,

@@ -519,6 +519,30 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 	return result
 end
 
+function RaycastWeaponBase:add_ratio_plus_ammo(ammo_ratio_increase)
+	local function _add_ammo(ammo_base, ammo_ratio_increase)
+		if ammo_base:get_ammo_max() == ammo_base:get_ammo_total() then
+			return
+		end
+
+		local ammo_max = ammo_base:get_ammo_max()
+		local ammo_to_add = ammo_max * ammo_ratio_increase
+		local ammo_total = ammo_base:get_ammo_total()
+		ammo_total = math.ceil(ammo_total + ammo_to_add)
+		ammo_total = math.clamp(ammo_total, 0, ammo_max)
+
+		ammo_base:set_ammo_total(ammo_total)
+	end
+
+	_add_ammo(self, ammo_ratio_increase)
+
+	for _, gadget in ipairs(self:get_all_override_weapon_gadgets()) do
+		if gadget and gadget.ammo_base then
+			_add_ammo(gadget:ammo_base(), ammo_ratio_increase)
+		end
+	end
+end
+
 function RaycastWeaponBase:_suppress_units(from_pos, direction, distance, slotmask, user_unit, suppr_mul)
 	local tmp_to = Vector3()
 

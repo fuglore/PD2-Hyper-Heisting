@@ -60,7 +60,7 @@ function LevelsTweakData:init()
 	self.cane.package = {"packages/cane", "levels/narratives/e_welcome_to_the_jungle/stage_1/world_sounds"}
 
 	--halloween heists (designed to have the zombie faction disabled in crime spree)
-	if Global.game_settings and not Global.game_settings.incsmission then
+	if not managers.crime_spree or not managers.crime_spree:in_progress() then
 		self.haunted.package = {
 			"packages/zombieassets",
 			"packages/narr_haunted", 
