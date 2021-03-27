@@ -576,7 +576,7 @@ function CopLogicAttack._upd_combat_movement(data)
 end
 
 function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, vis_required) --keep testing, modify, might want to revert back to vanilla
-	if not focus_enemy or not focus_enemy.verified or not CopLogicAttack._can_move(data) then
+	if not focus_enemy or not CopLogicAttack._can_move(data) then
 		return
 	end
 
@@ -888,6 +888,10 @@ function CopLogicAttack._cancel_walking_to_cover(data, my_data, skip_action)
 end
 
 function CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
+	if not CopLogicAttack._can_move(data) then
+		return
+	end
+	
 	CopLogicAttack._correct_path_start_pos(data, my_data.cover_path)
 	
 	local haste = nil
@@ -965,6 +969,10 @@ function CopLogicAttack._correct_path_start_pos(data, path)
 end
 
 function CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, speed)
+	if not CopLogicAttack._can_move(data) then
+		return
+	end
+	
 	CopLogicAttack._cancel_cover_pathing(data, my_data)
 	CopLogicAttack._cancel_charge(data, my_data)
 	CopLogicAttack._correct_path_start_pos(data, path)
@@ -2169,7 +2177,9 @@ function CopLogicAttack._set_nearest_cover(my_data, cover_data)
 end
 
 function CopLogicAttack._can_move(data)
-	return not data.objective or not data.objective.pos or not data.objective.in_place
+	if not data.unit:movement():chk_action_forbidden("walk") then
+		return not data.objective or not data.objective.pos or not data.objective.in_place
+	end
 end
 
 function CopLogicAttack.on_new_objective(data, old_objective)

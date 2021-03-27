@@ -3187,6 +3187,7 @@ local function spawn_group_id(spawn_group)
 end
 
 function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_groups, target_pos, max_dis, verify_clbk)
+	do return end
 	local all_areas = self._area_data
 	
 	max_dis = max_dis and max_dis * max_dis

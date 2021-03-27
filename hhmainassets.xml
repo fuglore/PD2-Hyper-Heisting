@@ -20,7 +20,25 @@
 	<texture path="guis/textures/game_small_logo" force="true"/>
 	<texture path="guis/textures/menu_title_screen" force="true"/>
 	
+	<!--head hitbox sizes for ninjas and other enemy types-->
+	<object path="units/payday2/characters/ene_fbi_1/ene_fbi_1" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_2/ene_fbi_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_3/ene_fbi_3" force="true"/>
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1" force="true"/>
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_hvh_2/ene_fbi_hvh_2" force="true"/>
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3" force="true"/>
 	
+	<object path="units/payday2/characters/ene_fbi_boss_1/ene_fbi_boss_1" force="true"/>
+	
+	<object path="units/payday2/characters/ene_fbi_female_1/ene_fbi_female_1" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_female_4/ene_fbi_female_4" force="true"/>
+	
+	<object path="units/payday2/characters/ene_fbi_office_1/ene_fbi_office_1" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4" force="true"/>
 	
 	<!-- HH SWAT TIER REWORK-->
 	<material_config path="units/payday2/characters/ene_swat_1/ene_swat_1" force="true"/>
