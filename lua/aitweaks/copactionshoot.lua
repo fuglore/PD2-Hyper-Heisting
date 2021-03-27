@@ -101,9 +101,13 @@ function CopActionShoot:init(action_desc, common_data)
 	self._shoot_t = 0
 	self._melee_timeout_t = 0
 	self._timer = TimerManager:game()
-
-	local suppressive = weap_base.suppression and weap_base.suppression >= 2 or nil
-	self._fireline_t = suppressive and 1 or 0.5
+	
+	self._fireline_t = weapon_usage_tweak.fireline_t
+	
+	if not self._fireline_t then
+		local suppressive = weap_base.suppression and weap_base.suppression >= 2 or nil
+		self._fireline_t = suppressive and 1 or 0.5
+	end
 
 	if char_tweak.use_lotus_effect then
 		self._use_mindcontrol = true
@@ -705,7 +709,7 @@ function CopActionShoot:update(t)
 						end
 
 						local dis_lerp = math_min(1, target_dis / falloff.r)
-						local shoot_delay = math_lerp(falloff.recoil[1], falloff.recoil[2], dis_lerp)
+						local shoot_delay = math_lerp(falloff.recoil[1], falloff.recoil[2], dis_lerp) --autofire does pauses based on distance
 
 						if self._unit:character_damage()._punk_effect then
 							shoot_delay = shoot_delay * 0.25
@@ -823,7 +827,7 @@ function CopActionShoot:update(t)
 								shoot = true
 							end
 
-							if not self._line_of_sight_t or t - self._line_of_sight_t > 1 then
+							if not self._line_of_sight_t or t - self._line_of_sight_t > self._fireline_t then
 								if draw_focus_delay_vis_reset then
 									local draw_duration = shooting_husk and 4 or 2
 
@@ -979,8 +983,7 @@ function CopActionShoot:update(t)
 						recoil_2 = falloff.recoil[2]
 					end
 
-					local dis_lerp = math_min(1, target_dis / falloff.r)
-					local shoot_delay = math_lerp(recoil_1, recoil_2, dis_lerp)
+					local shoot_delay = math_lerp(recoil_1, recoil_2, math_random())
 
 					if self._unit:character_damage()._punk_effect then
 						shoot_delay = shoot_delay * 0.25

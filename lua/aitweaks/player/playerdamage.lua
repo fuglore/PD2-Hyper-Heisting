@@ -1377,7 +1377,7 @@ function PlayerDamage:build_suppression(amount)
 	self._last_received_sup = amount
 	self._next_allowed_sup_t = managers.player:player_timer():time() + self._dmg_interval
 	
-	local decay_t = 0.1 * math.min(amount, 15)
+	local decay_t = 0.15 * math.min(amount, 15)
 	
 	if self._akuma_effect then
 		decay_t = decay_t + 2

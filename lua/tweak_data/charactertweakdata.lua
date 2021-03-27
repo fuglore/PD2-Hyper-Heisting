@@ -3388,7 +3388,7 @@ presets.weapon.civil.is_pistol = {
 			0.4,
 			0.4
 		},
-		focus_delay = 1.5, --focus delay change here.
+		focus_delay = 1.25, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
@@ -3409,7 +3409,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 2,
 				r = 400,
 				acc = {
-					0.2,
+					0.6,
 					1
 				},
 				recoil = { --slightly lowered recoil from civil, lower end has more variance
@@ -3427,7 +3427,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 1.5,
 				r = 800,
 				acc = { 
-					0.15,
+					0.2,
 					0.9
 				},
 				recoil = { --reduced massively from civil
@@ -3497,53 +3497,54 @@ presets.weapon.civil.is_pistol = {
 			}
 		}
 	}
-	presets.weapon.civil.is_shotgun_mag = {
+	presets.weapon.civil.is_shotgun_mag = { --yeehaw
 		aim_delay = {
-			0.7,
-			0.7
+			0,
+			0
 		},
-		focus_delay = 0.7, 
+		focus_delay = 1.4,
 		focus_dis = 100, --unchanged from civil.
 		spread = 20, 
 		miss_dis = 20,
-		RELOAD_SPEED = 1, --whew.
+		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
 		melee_dmg = 23,
+		fireline_t = 0.35, --how long it takes for enemies to reset their focus and aim delay.
 		melee_retry_delay = {
 			1,
 			2
 		},
 		range = {
-			optimal = 2500, --more run'n gun
+			optimal = 2500,
 			far = 4000,
-			close = 1400
+			close = 1000
 		},
-		autofire_rounds = { --increased from civil, yes, it's terrifying.
-			4,
-			4
+		autofire_rounds = { --not used anymore
+			16,
+			32
 		},
-		--before i start falloff, please be aware that, current fuglore has been without internet for quite a few days now, his decision to work on this is probably motivated more from insanity than because they wants to.
+		--wow remember when i thought i was a he that shit was wack lol
 		FALLOFF = {
 			{
 				dmg_mul = 2,
 				r = 400,
 				acc = {
 					0,
-					0.8
+					0.9
 				},
 				recoil = {
 					0.4,
-					0.6
+					0.5
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
-				dmg_mul = 1.7,
+				dmg_mul = 1.7, --80 counts one less hit on ICTV
 				r = 800,
 				acc = {
 					0,
@@ -3554,10 +3555,28 @@ presets.weapon.civil.is_pistol = {
 					0.8
 				},
 				mode = {
+					1,
 					0,
 					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 1500,
+				acc = {
 					0,
-					1
+					0.25
+				},
+				recoil = {
+					0.7,
+					1.4
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
 				}
 			},
 			{
@@ -3568,14 +3587,14 @@ presets.weapon.civil.is_pistol = {
 					0
 				},
 				recoil = {
-					0.6,
-					1
+					1.05,
+					1.75
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			}
 		}
@@ -4318,7 +4337,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 3,
 				r = 400,
 				acc = {
-					0.2,
+					0.9,
 					1
 				},
 				recoil = { --slightly lowered recoil from civil, lower end has more variance
@@ -4336,7 +4355,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 3, --150 damage remains, yes, yes, y e s.
 				r = 800,
 				acc = { 
-					0.15,
+					0.3,
 					0.9
 				},
 				recoil = { --reduced massively from civil
@@ -4354,7 +4373,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 2,
 				r = 1000,
 				acc = {
-					0,
+					0.1,
 					0.75
 				},
 				recoil = {
@@ -4406,67 +4425,68 @@ presets.weapon.civil.is_pistol = {
 			}
 		}
 	}
-	presets.weapon.complex.is_shotgun_mag = {
+	presets.weapon.complex.is_shotgun_mag = { --yeehaw
 		aim_delay = {
-			0.4,
-			0.4
+			0,
+			0
 		},
-		focus_delay = 0.7, 
+		focus_delay = 1.05,
 		focus_dis = 100, --unchanged from civil.
 		spread = 20, 
 		miss_dis = 20,
 		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
 		melee_dmg = 23,
+		fireline_t = 0.35, --how long it takes for enemies to reset their focus and aim delay.
 		melee_retry_delay = {
 			1,
 			2
 		},
 		range = {
-			optimal = 2500, --more run'n gun
+			optimal = 2500,
 			far = 4000,
-			close = 1400
+			close = 1000
 		},
-		autofire_rounds = { --increased from complex, yes, it's terrifying.
+		autofire_rounds = { --not used anymore
 			16,
 			32
 		},
-		--before i start falloff, please be aware that, current fuglore has been without internet for quite a few days now, his decision to work on this is probably motivated more from insanity than because they wants to.
+		--wow remember when i thought i was a he that shit was wack lol
 		FALLOFF = {
 			{
 				dmg_mul = 2,
-				r = 500,
+				r = 400,
 				acc = {
-					0,
-					0.8
+					0.25,
+					0.9
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.4,
+					0.5
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
 				dmg_mul = 1.7, --80 counts one less hit on ICTV
-				r = 1200,
+				r = 1000,
 				acc = {
-					0,
+					0.1,
 					0.5
 				},
 				recoil = {
-					0.05,
-					0.1
+					0.6,
+					0.7
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
@@ -4477,14 +4497,14 @@ presets.weapon.civil.is_pistol = {
 					0.25
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.7,
+					1.4
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
@@ -4495,14 +4515,14 @@ presets.weapon.civil.is_pistol = {
 					0
 				},
 				recoil = {
-					0.15,
-					0.2
+					1.05,
+					1.75
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			}
 		}
@@ -5314,7 +5334,7 @@ presets.weapon.civil.is_pistol = {
 			0.4,
 			0.4
 		},
-		focus_delay = 0.4, --focus delay change here.
+		focus_delay = 0.8, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
@@ -5335,7 +5355,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 3,
 				r = 400,
 				acc = {
-					0.2,
+					0.9,
 					1
 				},
 				recoil = { --slightly lowered recoil from civil, lower end has more variance
@@ -5353,7 +5373,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 3, --150 damage remains, yes, yes, y e s.
 				r = 800,
 				acc = { 
-					0.15,
+					0.3,
 					0.9
 				},
 				recoil = { --reduced massively from civil
@@ -5371,7 +5391,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 2, --100 damage, lower end of the falloff scale for shotgunners, should remain mostly unchanged acc and damage-wise as increasing their range has negative effects on gameplay and causes too many "who just destroyed all my armor in one shot" situations 
 				r = 1000,
 				acc = {
-					0,
+					0.15,
 					0.75
 				},
 				recoil = {
@@ -5389,7 +5409,7 @@ presets.weapon.civil.is_pistol = {
 				dmg_mul = 2, 
 				r = 1500,
 				acc = {
-					0,
+					0.05,
 					0.5
 				},
 				recoil = {
@@ -5443,16 +5463,17 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.anarchy.is_shotgun_mag = { --JUGGERNAUT RHGHGHGHGHG
 		aim_delay = {
-			0.4,
-			0.4
+			0,
+			0
 		},
 		focus_delay = 0.7,
 		focus_dis = 100, --unchanged from civil.
 		spread = 20, 
-		miss_dis = 20,
+		miss_dis = 80,
 		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
 		melee_dmg = 23,
+		fireline_t = 0.35, --how long it takes for enemies to reset their focus and aim delay.
 		melee_retry_delay = {
 			1,
 			2
@@ -5460,48 +5481,48 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2500, --more run'n gun
 			far = 4000,
-			close = 1400
+			close = 1500
 		},
-		autofire_rounds = { --increased from complex, yes, it's terrifying.
+		autofire_rounds = { --not used anymore
 			16,
 			32
 		},
-		--before i start falloff, please be aware that, current fuglore has been without internet for quite a few days now, his decision to work on this is probably motivated more from insanity than because they wants to.
+		--wow remember when i thought i was a he that shit was wack lol
 		FALLOFF = {
 			{
 				dmg_mul = 2,
-				r = 500,
+				r = 600,
 				acc = {
-					0,
-					0.8
+					0.25,
+					0.9
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.36,
+					0.36
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
 				dmg_mul = 1.7, --80 counts one less hit on ICTV
-				r = 2000,
+				r = 1200,
 				acc = {
-					0,
+					0.1,
 					0.5
 				},
 				recoil = {
-					0.05,
-					0.1
+					0.36,
+					1.05
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
@@ -5512,14 +5533,14 @@ presets.weapon.civil.is_pistol = {
 					0.25
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.6,
+					1.4
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
@@ -5530,14 +5551,14 @@ presets.weapon.civil.is_pistol = {
 					0
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.6,
+					1.75
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			}
 		}

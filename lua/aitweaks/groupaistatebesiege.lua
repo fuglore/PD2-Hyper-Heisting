@@ -3131,7 +3131,7 @@ function GroupAIStateBesiege:_end_regroup_task()
 		end
 		
 		if not Global.game_settings.single_player then
-			LuaNetworking:SendToPeers("shin_sync_post_assault_replenish")
+			LuaNetworking:SendToPeers("shin_sync_post_assault_replenish", "")
 		end
 
 		managers.mission:call_global_event("end_assault_late")
@@ -3341,6 +3341,33 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	end]]
 
 	return self:_choose_best_group(candidate_groups, total_weight, delays)
+end
+
+function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types, allowed_groups, weight)
+	local total_weight = 0
+
+	for _, group_type in ipairs(group_types) do
+		if tweak_data.group_ai.enemy_spawn_groups[group_type] then
+			local cat_weights = allowed_groups[group_type]
+
+			if cat_weights then
+				local cat_weight = cat_weights[1]
+				local mod_weight = cat_weight
+
+				table.insert(best_groups, {
+					group = group,
+					group_type = group_type,
+					wght = mod_weight,
+					cat_weight = cat_weight,
+					dis_weight = cat_weight
+				})
+
+				total_weight = total_weight + mod_weight
+			end
+		end
+	end
+
+	return total_weight
 end
 
 function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delays)

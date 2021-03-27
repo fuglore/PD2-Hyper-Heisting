@@ -155,7 +155,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.mp5_npc.suppression = 2.5
 	self.ump_npc.suppression = 2.5
 	self.mp9_npc.suppression = 2.5
-	self.saiga_npc.suppression = 1
+	self.saiga_npc.suppression = 2.5
 	self.r870_npc.suppression = 5
 	self.blazter_npc.suppression = 5
 	self.silserbu_npc.suppression = 5

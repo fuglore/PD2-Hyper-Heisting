@@ -1,16 +1,24 @@
-function ElementSpawnEnemyGroup:spawn_groups()
-	local opt = {}
+function ElementSpawnEnemyGroup:_finalize_values()
+	local values = self._values
+
+	if values.team == "default" then
+		values.team = nil
+	end
 	
 	local has_regular_enemies = nil
 	
+	local preferreds = {}
+	
 	if not self._values.preferred_spawn_groups then --prevents a crash.
+		self._values.preferred_spawn_groups = {}
+		
 		for cat_name, team in pairs(tweak_data.group_ai.enemy_spawn_groups) do
 			if cat_name ~= "Phalanx" then
-				table.insert(opt, cat_name)
+				table.insert(self._values.preferred_spawn_groups, cat_name)
 			end
 		end
 		
-		return opt
+		return
 	end
 	
 	for name, name2 in pairs(self._values.preferred_spawn_groups) do
@@ -21,15 +29,14 @@ function ElementSpawnEnemyGroup:spawn_groups()
 	end
 	
 	if not has_regular_enemies then
-		--log("i hate this")
-		return self._values.preferred_spawn_groups
+		
 	else
 		for cat_name, team in pairs(tweak_data.group_ai.enemy_spawn_groups) do
 			if cat_name ~= "Phalanx" then
-				table.insert(opt, cat_name)
+				table.insert(preferreds, cat_name)
 			end
 		end
 		
-		return opt
+		self._values.preferred_spawn_groups = preferreds
 	end
 end

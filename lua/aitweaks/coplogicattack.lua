@@ -330,7 +330,7 @@ function CopLogicAttack._upd_combat_movement(data)
 		if want_to_take_cover then
 			move_to_cover = true
 		else
-			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.moving_in or valid_harass then
+			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.moving_in or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown")then
 				if not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then
 					if my_data.charge_path then
 						local path = my_data.charge_path
@@ -1762,7 +1762,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	if aim or shoot then
 		local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
 		
-		if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification < 2 then
+		if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification <= 3 then
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)
 
@@ -1800,24 +1800,52 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 
-		if not my_data.shooting and not my_data.spooc_attack and not data.unit:anim_data().reload and not data.unit:movement():chk_action_forbidden("action") then
-			local shoot_action = {
-				body_part = 3,
-				type = "shoot"
-			}
+		if not my_data.spooc_attack and not data.unit:anim_data().reload and not data.unit:movement():chk_action_forbidden("action") then
+			if not my_data.shooting then
+				local shoot_action = {
+					body_part = 3,
+					type = "shoot"
+				}
 
-			if data.brain:action_request(shoot_action) then
-				my_data.shooting = true
+				if data.brain:action_request(shoot_action) then
+					my_data.shooting = true
+				end
+			elseif not shoot then
+				local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
+
+				if ammo / ammo_max < 0.75 then
+					local new_action = {
+						body_part = 3,
+						type = "reload",
+						idle_reload = true
+					}
+
+					data.brain:action_request(new_action)
+				end
 			end
 		end
 	else
-		if my_data.shooting and not data.unit:anim_data().reload then
-			local new_action = {
-				body_part = 3,
-				type = "idle"
-			}
+		if not data.unit:anim_data().reload then
+			if my_data.shooting then
+				local new_action = {
+					body_part = 3,
+					type = "idle"
+				}
 
-			data.brain:action_request(new_action)
+				data.brain:action_request(new_action)
+			elseif not data.unit:movement():chk_action_forbidden("action") then
+				local ammo_max, ammo = data.unit:inventory():equipped_unit():base():ammo_info()
+
+				if ammo / ammo_max < 0.75 then
+					local new_action = {
+						body_part = 3,
+						type = "reload",
+						idle_reload = true
+					}
+
+					data.brain:action_request(new_action)
+				end
+			end
 		end
 
 		if my_data.attention_unit then

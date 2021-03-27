@@ -31,7 +31,13 @@ function CopBase:init(unit)
 		self._tweak_table = "fbi_girl"
 	end
 	
-	if self._tweak_table == "spooc" or self._tweak_table == "spooc_heavy" then
+	local twentymeter_engage = {
+		spooc = true,
+		spooc_heavy = true,
+		tank = true
+	}
+	
+	if twentymeter_engage[self._tweak_table] then
 		self._engagement_range = 2000
 	end
 
