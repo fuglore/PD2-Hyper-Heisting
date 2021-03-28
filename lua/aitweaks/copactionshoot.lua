@@ -642,9 +642,7 @@ function CopActionShoot:update(t)
 				end
 			elseif cannot_fire_yet then --if the weapon can't even fire, avoid doing all the calculations
 				if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
-					if self._tank_animations then
-						self._ext_movement:play_redirect("recoil_single")
-					else
+					if not self._tank_animations then
 						self._ext_movement:play_redirect("recoil_auto")
 					end
 				end
@@ -697,6 +695,8 @@ function CopActionShoot:update(t)
 						local line = Draw:brush(Color.green:with_alpha(1), 0.1)
 						line:cylinder(shoot_from_pos, shoot_from_pos + target_vec * target_dis, 5)
 					end
+					
+					autofiring = self._autofiring
 
 					if not autofiring or autofiring - 1 <= self._autoshots_fired then
 						self._autofiring = nil
@@ -718,9 +718,7 @@ function CopActionShoot:update(t)
 						self._shoot_t = t + shoot_delay
 					else
 						if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
-							if self._tank_animations then
-								self._ext_movement:play_redirect("recoil_single")
-							else
+							if not self._tank_animations then
 								self._ext_movement:play_redirect("recoil_auto")
 							end
 						end
@@ -956,9 +954,7 @@ function CopActionShoot:update(t)
 					self._autoshots_fired = shots_fired
 
 					if not ext_anim.recoil and not ext_anim.base_no_recoil and not ext_anim.move and vis_state == 1 then
-						if self._tank_animations then
-							self._ext_movement:play_redirect("recoil_single")
-						else
+						if not self._tank_animations then
 							self._ext_movement:play_redirect("recoil_auto")
 						end
 					end
