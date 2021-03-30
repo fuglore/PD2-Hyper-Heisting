@@ -142,11 +142,11 @@ function CoreEnvironmentControllerManager:set_blurzone(id, mode, pos, radius, he
 			blurzone.height = height
 
 			if mode == 2 then
-				blurzone.opacity = 1
+				blurzone.opacity = 0.25
 				blurzone.mode = 1
 				blurzone.update = self.blurzone_flash_in_line_of_sight
 			elseif mode == 3 then
-				blurzone.opacity = 1
+				blurzone.opacity = 0.25
 				blurzone.mode = 1
 				blurzone.update = self.blurzone_flash_in
 			else
@@ -166,7 +166,7 @@ function CoreEnvironmentControllerManager:set_blurzone(id, mode, pos, radius, he
 			blurzone.pos = blurzone.pos or pos
 			blurzone.radius = blurzone.radius or radius
 			blurzone.height = blurzone.height or height
-			blurzone.opacity = 0.4
+			blurzone.opacity = 0.25
 			blurzone.update = self.blurzone_fade_out
 
 			if blurzone.height > 0 then
@@ -181,10 +181,11 @@ function CoreEnvironmentControllerManager:set_blurzone(id, mode, pos, radius, he
 end
 
 function CoreEnvironmentControllerManager:blurzone_fade_in(self, t, dt, camera_pos, blurzone)
+	dt = dt / 2
 	blurzone.opacity = blurzone.opacity + dt
 
-	if blurzone.opacity > 0.4 then
-		blurzone.opacity = 0.4
+	if blurzone.opacity > 0.25 then
+		blurzone.opacity = 0.25
 		blurzone.update = self.blurzone_fade_idle
 	end
 

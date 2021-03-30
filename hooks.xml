@@ -85,6 +85,8 @@
 	<post :script_path="aitweaks/player/playerfatal.lua" :hook_id="units/beings/player/states/playerfatal"/>
 	<post :script_path="aitweaks/player/playercarry.lua" :hook_id="units/beings/player/states/playercarry"/>
 	<post :script_path="aitweaks/playertased.lua" :hook_id="units/beings/player/states/playertased"/>
+	<post :script_path="aitweaks/player/playercamera.lua" :hook_id="units/beings/player/playercamera"/>
+	<post :script_path="aitweaks/player/feedbackmanager.lua" :hook_id="managers/feedbackmanager"/>
 	<post :script_path="aitweaks/player_team/teamaidamage.lua" :hook_id="units/player_team/teamaidamage"/>
 	<post :script_path="aitweaks/player_team/huskteamaidamage.lua" :hook_id="units/player_team/huskteamaidamage"/>
 	<post :script_path="aitweaks/player_team/huskteamaimovement.lua" :hook_id="units/player_team/huskteamaimovement"/>

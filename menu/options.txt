@@ -45,6 +45,18 @@
 			"value" : "toggle_suppression"
 		},
 		{
+			"type" : "slider",
+			"id" : "shin_screenshakemult",
+			"title" : "shin_screenshakemult_title",
+			"description" : "shin_screenshakemult_desc",
+			"callback" : "callback_shin_screenshakemult",
+			"min" : "0.25",
+			"max" : "3",
+			"step" : "0.05",
+			"show_value" : "false",
+			"value" : "screenshakemult"
+		},
+		{
 			"type" : "toggle",
 			"id" : "shin_toggle_blurzonereduction",
 			"title" : "shin_toggle_blurzonereduction_title",

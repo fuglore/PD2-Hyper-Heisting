@@ -12,6 +12,7 @@ PD2THHSHIN.settings = {
 	toggle_highpriorityglint = false,
 	toggle_suppression = false,
 	toggle_blurzonereduction = true,
+	screenshakemult = 1,
 	first_launch = true
 }
 PD2THHSHIN.session_settings = {} --leave empty; generated on load

@@ -936,37 +936,65 @@ function PlayerDamage:damage_bullet(attack_data)
 		},
 		attacker_unit = attack_data.attacker_unit
 	}
+	
+	local shake_multiplier = nil
 
-	if self:is_friendly_fire(attack_data.attacker_unit) then
+	if self:is_friendly_fire(attack_data.attacker_unit) then		
 		return
-	elseif self._god_mode then
-		if attack_data.damage > 0 then
-			self:_send_damage_drama(attack_data, attack_data.damage)
+	else
+		if not attack_data.is_taser_shock then
+			shake_multiplier = math.clamp(attack_data.damage, 1, 20) * 0.025		
 		end
-
-		self:_call_listeners(damage_info)
-
-		return
-	elseif self._invulnerable or self._mission_damage_blockers.invulnerable then
-		self:_call_listeners(damage_info)
-
-		return
-	elseif self:incapacitated() then
-		return
-	elseif self._unit:movement():current_state().immortal then
-		return
-	elseif not attack_data.is_taser_shock and self._revive_miss and math.random() < self._revive_miss then
-		self:play_whizby(attack_data.col_ray.position)
-
-		return
-	elseif attack_data.damage < 0.011 then
-		self:play_whizby(attack_data.col_ray.position)
 		
-		return
-	elseif not attack_data.is_taser_shock and self:_chk_dmg_too_soon(attack_data.damage) then
-		self:play_whizby(attack_data.col_ray.position)
+		if self._invulnerable or self._mission_damage_blockers.invulnerable then
+			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
 		
-		return
+			self:_call_listeners(damage_info)
+
+			return
+		elseif self:incapacitated() then
+			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+		
+			return
+		elseif self._unit:movement():current_state().immortal then
+			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+		
+			return
+		elseif not attack_data.is_taser_shock and self._revive_miss and math.random() < self._revive_miss then
+			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+		
+			self:play_whizby(attack_data.col_ray.position)
+
+			return
+		elseif attack_data.damage < 0.011 then
+			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+		
+			self:play_whizby(attack_data.col_ray.position)
+			
+			return
+		elseif not attack_data.is_taser_shock and self:_chk_dmg_too_soon(attack_data.damage) then
+			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+		
+			self:play_whizby(attack_data.col_ray.position)
+			
+			return
+		elseif self._god_mode then
+			if not _G.IS_VR then
+				managers.rumble:play("damage_bullet")
+			end
+		
+			if attack_data.damage > 0 then
+				self:_send_damage_drama(attack_data, attack_data.damage)
+			end
+			
+			shake_multiplier = shake_multiplier * 4
+			
+			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+
+			self:_call_listeners(damage_info)
+
+			return
+		end
 	end
 	
 	local pm = managers.player
@@ -1057,6 +1085,8 @@ function PlayerDamage:damage_bullet(attack_data)
 	self:_hit_direction(attack_data.attacker_unit:position())
 	
 	if not attack_data.is_taser_shock then
+		shake_multiplier = shake_multiplier * 4
+		
 		self._last_received_dmg = attack_data.damage
 
 		local dodge_roll = math.random()
@@ -1127,14 +1157,6 @@ function PlayerDamage:damage_bullet(attack_data)
 	
 	if not attack_data.is_taser_shock then
 
-		local shake_armor_multiplier = pm:body_armor_value("damage_shake") * pm:upgrade_value("player", "damage_shake_multiplier", 1)
-		local gui_shake_number = tweak_data.gui.armor_damage_shake_base / shake_armor_multiplier
-		gui_shake_number = gui_shake_number + pm:upgrade_value("player", "damage_shake_addend", 0)
-		shake_armor_multiplier = tweak_data.gui.armor_damage_shake_base / gui_shake_number
-		local shake_multiplier = math.clamp(attack_data.damage, 0.2, 2) * shake_armor_multiplier
-		
-		self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
-
 		if not _G.IS_VR then
 			managers.rumble:play("damage_bullet")
 		end
@@ -1199,6 +1221,9 @@ function PlayerDamage:damage_bullet(attack_data)
 			end
 		end
 	end
+	
+	shake_multiplier = shake_multiplier + math_lerp(1, 0, self:armor_ratio())
+	self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
 
 	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
 	self:_call_listeners(damage_info)
@@ -1233,7 +1258,7 @@ function PlayerDamage:_calc_armor_damage(attack_data)
 		health_subtracted = health_subtracted - self:get_real_armor()
 		
 		self:_damage_screen()
-		SoundDevice:set_rtpc("shield_status", self:armor_ratio() * 100)
+		SoundDevice:set_rtpc("shield_status", self:armor_ratio())
 		self:_send_set_armor()
 
 		if self:get_real_armor() <= 0 then

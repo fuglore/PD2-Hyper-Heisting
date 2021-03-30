@@ -76,6 +76,10 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 		end
 	end
 	
+	MenuCallbackHandler.callback_shin_screenshakemult = function(self,item)
+		PD2THHSHIN.settings.screenshakemult = tonumber(item:value())
+	end
+	
 	MenuCallbackHandler.callback_shin_albanian_content_enable = function(self,item) --toggle
 		PD2THHSHIN:ChangeSetting("enable_albanian_content",item:value() == "on")
 		PD2THHSHIN.show_popup = true		
