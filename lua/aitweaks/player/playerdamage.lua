@@ -1222,8 +1222,10 @@ function PlayerDamage:damage_bullet(attack_data)
 		end
 	end
 	
-	shake_multiplier = shake_multiplier + math_lerp(1, 0, self:armor_ratio())
-	self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+	if shake_multiplier then
+		shake_multiplier = shake_multiplier + math_lerp(1, 0, self:armor_ratio())
+		self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
+	end
 
 	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
 	self:_call_listeners(damage_info)
