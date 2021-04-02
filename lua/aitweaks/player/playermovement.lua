@@ -186,7 +186,7 @@ function PlayerMovement:update_stamina(t, dt, ignore_running)
 				regen = regen * 1.25
 			end
 			
-			self:add_stamina(dt * tweak_data.player.movement_state.stamina.STAMINA_REGEN_RATE)
+			self:add_stamina(dt * regen)
 		end
 	end
 
