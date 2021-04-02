@@ -262,39 +262,42 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 		
 		self.values.player.soldiersyringe_basic = { --Trooper's Syringe Basic
-			true
+			1
 		}
 		self.definitions.player_soldiersyringe_basic = {
-			name_id = "menu_soldiersyringe_basic",
+			name_id = "menu_player_soldiersyringe_basic",
 			category = "feature",
 			upgrade = {
 				value = 1,
 				upgrade = "soldiersyringe_basic",
+				synced = true,
 				category = "player"
 			}
 		}
 		
 		self.values.player.soldiersyringe_aced = { --Trooper's Syringe Aced
-			true
+			1
 		}
 		self.definitions.player_soldiersyringe_aced = {
-			name_id = "menu_soldiersyringe_aced",
+			name_id = "menu_player_soldiersyringe_aced",
 			category = "feature",
 			upgrade = {
 				value = 1,
 				upgrade = "soldiersyringe_aced",
+				synced = true,
 				category = "player"
 			}
 		}
 		
 		self.values.player.antilethal_meds = {
-			true
+			1
 		}
 		self.definitions.player_antilethal_meds = {
 			name_id = "menu_antilethal_meds",
 			category = "feature",
 			upgrade = {
 				value = 1,
+				synced = true,
 				upgrade = "antilethal_meds",
 				category = "player"
 			}
@@ -334,6 +337,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			category = "feature",
 			upgrade = {
 				value = 1,
+				synced = true,
 				upgrade = "fineredmist_basic",
 				category = "player"
 			}
@@ -347,6 +351,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			category = "feature",
 			upgrade = {
 				value = 1,
+				synced = true,
 				upgrade = "fineredmist_aced",
 				category = "player"
 			}

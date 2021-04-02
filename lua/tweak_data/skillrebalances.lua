@@ -4,6 +4,7 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		table.insert(self.default_upgrades, "player_pick_lock_easy_speed_multiplier_1")
 		table.insert(self.default_upgrades, "player_can_free_run")
 		table.insert(self.default_upgrades, "player_run_and_reload")
+		table.insert(self.default_upgrades, "first_aid_kit_deploy_time_multiplier")
 		--table.insert(self.default_upgrades, "first_aid_kit_deploy_time_multiplier") WIP
 		
 		self.skills.spotter_teamwork = {
@@ -45,16 +46,16 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 
 		self.skills.oppressor.icon_xy = {2.03, 11.9}
 		
-		--[[self.skills.tea_time = { WIP
+		self.skills.tea_time = { 
 			{
 				upgrades = {
-					"soldiersyringe_basic"
+					"player_soldiersyringe_basic"
 				},
 				cost = self.costs.default
 			},
 			{
 				upgrades = {
-					"soldiersyringe_aced"
+					"player_soldiersyringe_aced"
 				},
 				cost = self.costs.pro
 			},
@@ -65,7 +66,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 				11
 			}
 		}
-		]]--
 		
 		self.skills.tea_cookies = {
 			{
@@ -92,13 +92,12 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		self.skills.medic_2x = {
 			{
 				upgrades = {
-					"doctor_bag_quantity"
+					"doctor_bag_amount_increase1"
 				},
 				cost = self.costs.hightier
 			},
 			{
 				upgrades = {
-					"doctor_bag_amount_increase1",
 					"player_antilethal_meds"
 				},
 				cost = self.costs.hightierpro
@@ -350,7 +349,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		self.skills.sprinter = {
 			{
 				upgrades = {
-					"player_stamina_regen_timer_multiplier",
 					"player_stamina_regen_multiplier"
 				},
 				cost = self.costs.default

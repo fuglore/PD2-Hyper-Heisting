@@ -1,3 +1,26 @@
+function PlayerBase:init(unit)
+	UnitBase.init(self, unit, false)
+
+	self._unit = unit
+
+	self:_setup_suspicion_and_detection_data()
+	self:_setup_hud()
+
+	self._id = managers.player:player_id(self._unit)
+	self._rumble_pos_callback = callback(self, self, "get_rumble_position")
+
+	self:_setup_controller()
+	self._unit:set_extension_update_enabled(Idstring("base"), false)
+
+	self._stats_screen_visible = false
+
+	managers.game_play_central:restart_portal_effects()
+
+	self:sync_unit_upgrades()
+
+	managers.job:set_memory("mad_3", true)
+end
+
 function PlayerBase:set_suspicion_multiplier(reason, multiplier)
 	self._suspicion_settings.multipliers[reason] = multiplier
 	local buildup_mul = self._suspicion_settings.init_buildup_mul

@@ -1767,3 +1767,21 @@ function PlayerDamage:revive(silent)
 		managers.player:activate_temporary_upgrade("temporary", "reload_weapon_faster")
 	end
 end
+
+function PlayerDamage:restore_health(health_restored, is_static, chk_health_ratio)
+	if chk_health_ratio and managers.player:is_damage_health_ratio_active(self:health_ratio()) then
+		return false
+	end
+	
+	if managers.player:has_category_upgrade("player", "antilethal_meds") then
+		health_restored = health_restored * 2
+	end
+
+	if is_static then
+		return self:change_health(health_restored * self._healing_reduction)
+	else
+		local max_health = self:_max_health()
+
+		return self:change_health(max_health * health_restored * self._healing_reduction)
+	end
+end

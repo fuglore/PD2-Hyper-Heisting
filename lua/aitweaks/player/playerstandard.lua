@@ -267,9 +267,9 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 		speed_state = nil
 	elseif self._running or force_run then
 		if self._unit:movement():is_above_stamina_threshold() then
-			movement_speed = speed_tweak.RUNNING_MAX * 1.2 --dont tell anyone c;
-		else
 			movement_speed = speed_tweak.RUNNING_MAX
+		else
+			movement_speed = speed_tweak.RUNNING_MAX * 0.75
 		end
 		
 		speed_state = "run"

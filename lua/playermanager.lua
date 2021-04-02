@@ -326,12 +326,10 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		end
 	end
 	
-	
-	
 	if self:has_category_upgrade("player", "dark_metamorphosis_aced") then
-		damage_ext:restore_health(1, true)
-	elseif self:has_category_upgrade("player", "dark_metamorphosis_basic") then
 		damage_ext:restore_health(0.5, true)
+	elseif self:has_category_upgrade("player", "dark_metamorphosis_basic") then
+		damage_ext:restore_health(0.25, true)
 	end
 
 	if self._on_killshot_t and t < self._on_killshot_t then
@@ -432,25 +430,50 @@ function PlayerManager:update(t, dt)
 		end
 	end
 	
-	if self:has_category_upgrade("player", "pop_pop") then
-		self:upd_pop_pop(t)
-	end
 	
-	if self._magic_bullet_aced_t and self._magic_bullet_aced_t < t then
-		self._magic_bullet_aced_t = nil
-	end
-	
-	if self._max_messiah_charges > 0 then
-		if self._messiah_charges < self._max_messiah_charges then
-			if not self._messiah_recharge_t then
-				self._messiah_recharge_t = t + 120
-			elseif self._messiah_recharge_t < t then
-				self:_on_messiah_recharge_event()
+	if alive(self:player_unit()) then
+		if self:has_category_upgrade("player", "pop_pop") then
+			self:upd_pop_pop(t)
+		end
+		
+		if self._magic_bullet_aced_t then
+			if self._magic_bullet_aced_t < t then
+				self._magic_bullet_aced_t = nil
+			end
+		end
+		
+		if self._syringe_t then
+			if self._syringe_t < t then
+				self._syringe_stam = nil
+				self._syringe_t = nil
+			end
+		end
+		
+		if self._max_messiah_charges > 0 then
+			if self._messiah_charges < self._max_messiah_charges then
+				if not self._messiah_recharge_t then
+					self._messiah_recharge_t = t + 120
+				elseif self._messiah_recharge_t < t then
+					self:_on_messiah_recharge_event()
+				end
 			end
 		end
 	end
 
 	self:update_smoke_screens(t, dt)
+end
+
+function PlayerManager:activate_heal_upgrades(token, syringebasic, syringeaced)
+	if not self._docbag_token then
+		local player_unit = self:player_unit()
+		player_unit:character_damage():activate_docbag_token()
+	end
+	
+	if syringebasic then
+		local t = Application:time()
+		self._syringe_t = t + 15
+		self._syringe_stam = syringeaced 
+	end
 end
 
 function PlayerManager:upd_pop_pop(t)

@@ -1,6 +1,63 @@
 DoctorBagBase.amount_upgrade_lvl_shift = 2
 DoctorBagBase.damage_reduce_lvl_shift = 4
 
+function DoctorBagBase.spawn(pos, rot, bits, peer_id)
+	local unit_name = "units/payday2/equipment/gen_equipment_medicbag/gen_equipment_medicbag"
+	local unit = World:spawn_unit(Idstring(unit_name), pos, rot)
+
+	managers.network:session():send_to_peers_synched("sync_equipment_setup", unit, bits, peer_id or 0)
+	
+	unit:base():setup(bits, peer_id)
+
+	return unit
+end
+
+function DoctorBagBase:sync_setup(bits, peer_id)
+	if self._validate_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._validate_clbk_id)
+
+		self._validate_clbk_id = nil
+	end
+
+	managers.player:verify_equipment(peer_id, "doctor_bag")
+	self:setup(bits, peer_id)
+end
+
+function DoctorBagBase:setup(bits, peer_id)
+	local amount_upgrade_lvl, dmg_reduction_lvl = self:_get_upgrade_levels(bits)
+	self._damage_reduction_upgrade = dmg_reduction_lvl ~= 0
+	self._amount = tweak_data.upgrades.doctor_bag_base + managers.player:upgrade_value_by_level("doctor_bag", "amount_increase", amount_upgrade_lvl)
+	
+	local peer = managers.network:session():peer(peer_id)
+	
+	if peer and alive(peer:unit()) then
+		local unit = peer:unit()
+		self._doctorbag_token = unit:base():upgrade_value("player", "antilethal_meds")
+		self._syringe_basic = unit:base():upgrade_value("player", "soldiersyringe_basic")
+		self._syringe_aced = unit:base():upgrade_value("player", "soldiersyringe_aced")
+	end
+
+	self:_set_visual_stage()
+
+	if Network:is_server() and self._is_attachable then
+		local from_pos = self._unit:position() + self._unit:rotation():z() * 10
+		local to_pos = self._unit:position() + self._unit:rotation():z() * -10
+		local ray = self._unit:raycast("ray", from_pos, to_pos, "slot_mask", managers.slot:get_mask("world_geometry"))
+
+		if ray then
+			self._attached_data = {
+				body = ray.body,
+				position = ray.body:position(),
+				rotation = ray.body:rotation(),
+				index = 1,
+				max_index = 3
+			}
+
+			self._unit:set_extension_update_enabled(Idstring("base"), true)
+		end
+	end
+end
+
 function DoctorBagBase:init(unit)
 	UnitBase.init(self, unit, false)
 
@@ -38,8 +95,8 @@ function DoctorBagBase:_take(unit)
 
 	unit:character_damage():recover_health()
 	
-	if managers.player:player_unit() and managers.player:player_unit() == unit and managers.player:has_category_upgrade("player", "antilethal_meds") then --temp, gonna make this depend on the medic bag owner
-		unit:character_damage():activate_docbag_token()
+	if managers.player:player_unit() and managers.player:player_unit() == unit then
+		managers.player:activate_heal_upgrades(self._doctorbag_token, self._syringe_basic, self._syringe_aced)		
 	end
 
 	local rally_skill_data = unit:movement():rally_skill_data()

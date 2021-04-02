@@ -88,6 +88,9 @@ function BaseInteractionExt:_get_timer()
 
 	if self.tweak_data ~= "corpse_alarm_pager" then
 		multiplier = multiplier * managers.player:crew_ability_upgrade_value("crew_interact", 1)
+		if managers.player._syringe_t then
+			multiplier = multiplier * 0.5
+		end
 	end
 
 	if self._tweak_data.upgrade_timer_multiplier then

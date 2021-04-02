@@ -8,6 +8,10 @@ function NewRaycastWeaponBase:reload_speed_multiplier()
 	if managers.player._melee_reload_speed_active then
 		multiplier = multiplier - managers.player._reload_speed_bonus
 	end
+	
+	if managers.player._syringe_t then
+		multiplier = multiplier - 0.5
+	end
 
 	for _, category in ipairs(self:weapon_tweak_data().categories) do
 		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "reload_speed_multiplier", 1)
