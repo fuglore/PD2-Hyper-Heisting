@@ -3402,7 +3402,8 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 1200 
+			close = 1200,
+			aggressive = 600
 		},
 		FALLOFF = {
 			{
@@ -3517,7 +3518,8 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2500,
 			far = 4000,
-			close = 1000
+			close = 1000,
+			aggressive = 400
 		},
 		autofire_rounds = { --not used anymore
 			16,
@@ -3877,7 +3879,8 @@ presets.weapon.civil.is_pistol = {
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
 			far = 4000,
-			close = 1000
+			close = 1000,
+			aggressive = 500
 		},
 		autofire_rounds = {80, 140}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
@@ -4330,7 +4333,8 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 1200 
+			close = 1200,
+			aggressive = 600
 		},
 		FALLOFF = {
 			{
@@ -4445,7 +4449,8 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2500,
 			far = 4000,
-			close = 1000
+			close = 1000,
+			aggressive = 400
 		},
 		autofire_rounds = { --not used anymore
 			16,
@@ -4841,7 +4846,8 @@ presets.weapon.civil.is_pistol = {
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
 			far = 4000,
-			close = 1000
+			close = 1000,
+			aggressive = 500
 		},
 		autofire_rounds = {80, 140}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
@@ -5348,7 +5354,8 @@ presets.weapon.civil.is_pistol = {
 		range = {
 			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 1200 
+			close = 1200,
+			aggressive = 600 --makes it so shotgun enemies approach players extremely close if possible
 		},
 		FALLOFF = {
 			{
@@ -5479,9 +5486,10 @@ presets.weapon.civil.is_pistol = {
 			2
 		},
 		range = {
-			optimal = 2500, --more run'n gun
+			optimal = 2500,
 			far = 4000,
-			close = 1500
+			close = 1000,
+			aggressive = 400
 		},
 		autofire_rounds = { --not used anymore
 			16,
@@ -5877,7 +5885,8 @@ presets.weapon.civil.is_pistol = {
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
 			far = 4000,
-			close = 1000
+			close = 1000,
+			aggressive = 500
 		},
 		autofire_rounds = {100, 200}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {

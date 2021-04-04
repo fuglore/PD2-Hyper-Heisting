@@ -122,6 +122,11 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	
 	if data.tactics then
 		if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
+			
+			if my_data.weapon_range.aggressive then
+				my_data.weapon_range.aggressive = my_data.weapon_range.aggressive * 1.5
+			end
+			
 			my_data.weapon_range.close = my_data.weapon_range.close * 2
 			my_data.weapon_range.optimal = my_data.weapon_range.optimal * 1.5
 		end
@@ -283,6 +288,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	action_taken = action_taken or data.logic.action_taken(data, my_data)
 	
 	local tactics = data.tactics
+	local engage_range = my_data.weapon_range.aggressive or my_data.weapon_range.close
 	local soft_t = 2
 	local softer_t = 4
 	
@@ -331,7 +337,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			move_to_cover = true
 		else
 			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.moving_in or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown")then
-				if not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then
+				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then
 					if my_data.charge_path then
 						local path = my_data.charge_path
 						my_data.charge_path = nil
@@ -345,7 +351,7 @@ function CopLogicAttack._upd_combat_movement(data)
 						if not tactics or tactics.flank then
 							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, my_data.weapon_range.close) --charge to a position that would put the unit in a flanking position, not a flanking path
 						else
-							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), 600, nil, nil, data.pos_rsrv_id)
+							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.close, nil, nil, data.pos_rsrv_id)
 						end
 
 						--my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.optimal, 45, nil, data.pos_rsrv_id)
@@ -1093,18 +1099,19 @@ function CopLogicAttack._update_cover(data)
 		end
 
 		if find_new_cover then
+			local weapon_ranges = my_data.weapon_range
 			local threat_pos = focus_enemy.nav_tracker:field_position()
 
 			if data.objective and data.objective.type == "follow" then
 				local near_pos = data.objective.follow_unit:movement():nav_tracker():field_position() --small clarification, follow_unit and focus_enemy can easily not be the same thing -- also using field_position if possible for valid navigation purposes
 
-				if not best_cover or not CopLogicAttack._verify_follow_cover(best_cover[1], near_pos, threat_pos, 200, my_data.weapon_range.far) then
+				if not best_cover or not CopLogicAttack._verify_follow_cover(best_cover[1], near_pos, threat_pos, 200, weapon_ranges.far) then
 					local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
 					local max_near_dis = data.objective.distance and data.objective.distance * 0.9 or nil
 					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, max_near_dis, near_pos, threat_pos)
 
 					if found_cover then
-						if not best_cover or CopLogicAttack._verify_follow_cover(found_cover, near_pos, threat_pos, 200, my_data.weapon_range.far) then
+						if not best_cover or CopLogicAttack._verify_follow_cover(found_cover, near_pos, threat_pos, 200, weapon_ranges.far) then
 							local better_cover = {
 								found_cover
 							}
@@ -1130,6 +1137,8 @@ function CopLogicAttack._update_cover(data)
 				end
 			else
 				local want_to_take_cover = my_data.want_to_take_cover
+				local range = weapon_ranges.aggressive or weapon_ranges.close
+				local long_range = range < weapon_ranges.close and weapon_ranges.close or weapon_ranges.optimal
 				local flank_cover = my_data.flank_cover --unit wants a flanking cover position
 				local min_dis, max_dis = nil
 				local dis_mul = 0.2
@@ -1148,25 +1157,26 @@ function CopLogicAttack._update_cover(data)
 					elseif want_to_take_cover == "spoocavoidance" or want_to_take_cover == "coward" then
 						dis_mul = dis_mul + 1
 					end
-				end
-				
-				if data.tactics then
-					if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
-						dis_mul = dis_mul + 0.6
-					end	
 					
-					if data.tactics.charge then
-						dis_mul = dis_mul - 0.35
-					end
-					
-					if data.tactics.aggressor then
-						dis_mul = dis_mul * 0.2
+					if data.tactics then
+						if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
+							dis_mul = dis_mul + 0.6
+						end	
 					end
 				end
+			
 				
-				local min_dis = my_data.weapon_range.close * dis_mul
+				if not data.tactics or data.tactics.aggressor then
+					dis_mul = dis_mul * 0.2
+				end
+				
+				if data.tactics and data.tactics.charge then
+					dis_mul = dis_mul - 0.35
+				end
+				
+				local min_dis = range * dis_mul
 
-				min_dis = math_min(min_dis - 200, my_data.weapon_range.optimal)
+				min_dis = math_min(min_dis - 200, weapon_ranges.optimal)
 				
 				local best_cover_bad_dis = nil
 				
@@ -1185,11 +1195,7 @@ function CopLogicAttack._update_cover(data)
 
 					local optimal_dis = my_vec:length()
 
-					if want_to_take_cover then
-						max_dis = my_data.weapon_range.optimal
-					else
-						max_dis = my_data.weapon_range.close
-					end
+					max_dis = math_min(weapon_ranges.close * dis_mul, weapon_ranges.close)
 
 					local my_side_pos = threat_pos + my_vec
 
@@ -1224,11 +1230,21 @@ function CopLogicAttack._update_cover(data)
 
 					local search_nav_seg = nil
 
-					if data.objective and data.objective.type == "defend_area" then
-						search_nav_seg = data.objective.area and data.objective.area.nav_segs or data.objective.nav_seg
-					end
+					--[[if data.objective and data.objective.type == "defend_area" then
+						local all_nav_segs = managers.navigation._nav_segments
+						local nav_seg_id = data.unit:movement():nav_tracker():nav_segment()
+						local my_nav_seg = all_nav_segs[nav_seg_id]
+						
+						if data.objective.area and data.objective.area.nav_segs[nav_seg_id] then
+							search_nav_seg = data.objective.area and data.objective.area.nav_segs
+						elseif data.objective.nav_seg == nav_seg_id or my_nav_seg.neighbours[data.objective.nav_seg] then
+							search_nav_seg = data.objective.nav_seg
+						else
+							search_nav_seg = nav_seg_id
+						end
+					end]]
 					
-					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, nil, cone_angle, nil, search_nav_seg, nil, data.pos_rsrv_id)
+					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, nil, cone_angle, nil, nil, nil, data.pos_rsrv_id)
 					
 					--log(tostring(i))
 					
@@ -1359,12 +1375,11 @@ function CopLogicAttack._process_pathing_results(data, my_data)
 		if path ~= "failed" then
 			my_data.charge_path = path
 			my_data.charge_path_failed_t = nil
-		--else
-			--print("[CopLogicAttack._process_pathing_results] charge path failed", data.unit)
+		else
+			my_data.charge_path_failed_t = data.t
 		end
 
 		my_data.charge_path_search_id = nil
-		my_data.charge_path_failed_t = data.t
 	end
 
 	path = pathing_results[my_data.expected_pos_path_search_id]
@@ -2079,11 +2094,26 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 	if data.is_converted then
 		return
 	end
+	
+	if new_objective and data.objective and data.objective.grp_objective then
+		local cur_grp_objective = data.objective.grp_objective
+		local new_grp_objective = new_objective.grp_objective
+		
+		if cur_grp_objective.type == "retire" and new_objective.type == "act" then
+			return
+		elseif new_grp_objective and new_grp_objective.type == "retire" and data.objective.type == "act" then
+			return
+		end
+	end
 
 	local att_obj = data.attention_obj
 
 	if not att_obj or att_obj.reaction < REACT_AIM then
 		return true
+	end
+	
+	if data.important and my_data.charge_path_search_id then
+		return
 	end
 
 	if not new_objective or new_objective.type == "free" then

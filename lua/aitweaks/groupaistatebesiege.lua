@@ -1291,6 +1291,7 @@ end
 
 function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	local assault_task = self._task_data.assault
+	self._skip_phase = nil
 	assault_task.active = true
 	assault_task.next_dispatch_t = nil
 	assault_task.target_areas = assault_areas or self:_upd_assault_areas(nil)
@@ -1450,6 +1451,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 	
 	if not task_data.active then
+		self._skip_phase = nil
 		return
 	end
 
@@ -1505,8 +1507,10 @@ function GroupAIStateBesiege:_upd_assault_task()
 			--fade
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
-		elseif task_data.phase_end_t < t and self._drama_data.amount >= tweak_data.drama.assaultstart or self._drama_data.zone == "high" and not low_carnage or self._hunt_mode then --if drama is high and there are 5 or more enemies engaging all players, start the assault and drop the bass
+		elseif task_data.phase_end_t < t and self._drama_data.amount >= tweak_data.drama.assaultstart or self._drama_data.zone == "high" and not low_carnage or self._hunt_mode or self._skip_phase then --if drama is high and there are 5 or more enemies engaging all players, start the assault and drop the bass
 			self._assault_number = self._assault_number + 1
+			
+			self._skip_phase = nil
 
 			managers.mission:call_global_event("start_assault")
 			managers.hud:start_assault(self._assault_number)
@@ -1556,11 +1560,13 @@ function GroupAIStateBesiege:_upd_assault_task()
 					end					   
 				end	
 			end
-		elseif task_data.phase_end_t < t or self._drama_data.zone == "high" then
+		elseif task_data.phase_end_t < t or self._drama_data.zone == "high" or self._skip_phase then
 			local sustain_duration = math_lerp(self:_get_difficulty_dependent_value(self._tweak_data.assault.sustain_duration_min), self:_get_difficulty_dependent_value(self._tweak_data.assault.sustain_duration_max), math_random()) * self:_get_balancing_multiplier(self._tweak_data.assault.sustain_duration_balance_mul) * assault_number_sustain_t_mul
 			
+			self._skip_phase = nil
+			
 			managers.modifiers:run_func("OnEnterSustainPhase", sustain_duration)
-
+		
 			self._task_data.assault.phase = "sustain"
 			self._task_data.assault.phase_end_t = t
 		end
@@ -1583,7 +1589,8 @@ function GroupAIStateBesiege:_upd_assault_task()
 						end					   
 					end	
 				end	
-		elseif self._task_data.assault.phase_end_t < t and self._enemies_killed_sustain >= enemykillcountchk and not self._hunt_mode then
+		elseif self._task_data.assault.phase_end_t < t and self._enemies_killed_sustain >= enemykillcountchk and not self._hunt_mode or self._skip_phase and not self._hunt_mode then
+			self._skip_phase = nil
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
 			local time = self._t
@@ -1619,7 +1626,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			local taking_too_long = t > task_data.phase_end_t + enemies_defeated_time_limit
 			local fade_time_over = t > task_data.phase_end_t 
 			--self:_assign_assault_groups_to_retire()
-			if enemies_defeated and fade_time_over or taking_too_long then
+			if enemies_defeated and fade_time_over or taking_too_long or self._skip_phase then
 				if not task_data.said_retreat then
 					self._task_data.assault.said_retreat = true
 
@@ -1637,7 +1644,10 @@ function GroupAIStateBesiege:_upd_assault_task()
 							end					   
 						end	
 					end
-				elseif task_data.phase_end_t < t and not self._feddensityhigh then
+					
+					self._skip_phase = nil
+					
+				elseif self._skip_phase or task_data.phase_end_t < t and not self._feddensityhigh then
 					local drama_pass = self._drama_data.amount < tweak_data.drama.assault_fade_end --if there is no active fighting going on
 					local engagement_pass = self:_count_criminals_engaged_force(4) < 5 --if theres less than 5 enemies engaging all players
 					local taking_too_long = t > task_data.phase_end_t + drama_engagement_time_limit
@@ -1654,7 +1664,8 @@ function GroupAIStateBesiege:_upd_assault_task()
 						--log("i cant believe they kited cops fuglore would never do this im literally shaking and crying right now")
 					--end
 					
-					if drama_pass and engagement_pass and t > task_data.phase_end_t or taking_too_long then
+					if self._skip_phase or drama_pass and engagement_pass and t > task_data.phase_end_t or taking_too_long then
+						self._skip_phase = nil
 						end_assault = true
 					end
 				end
@@ -2206,6 +2217,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	end
 
 	local phase_is_anticipation = self._activeassaultbreak or self:chk_anticipation()
+	local phase_is_sustain = phase == "sustain"
 	local current_objective = group.objective
 	local approach, open_fire, push, pull_back, charge = nil
 	local obstructed_area = self:_chk_group_areas_tresspassed(group)
@@ -2348,7 +2360,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		else
 			objective_area = obstructed_area
 			
-			if diff_index > 6 or group.in_place_t and self._t - group.in_place_t > 4 then --if we're in the destination and we have stayed still for longe than 4 seconds, if anyone is camping in a specific spot, try to path to them
+			if group.in_place_t and self._t - group.in_place_t > 2 then --if we're in the destination and we have stayed still for longer than 2 seconds, if anyone is camping in a specific spot, try to path to them
 				push = true
 				charge = true
 			elseif not current_objective.open_fire or current_objective.area.id ~= obstructed_area.id then --have to check for this here or open_fire might not get set
@@ -2359,7 +2371,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if phase_is_anticipation then
 			pull_back = true
 		elseif not next(current_objective.area.criminal.units) then --if theres suddenly no criminals in the area, start approaching instead
-			if not phase_is_anticipation and diff_index > 6 then
+			if self._hunt_mode or phase_is_sustain or not phase_is_anticipation and diff_index > 6 then
 				push = true
 			else
 				approach = true
@@ -2374,15 +2386,19 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 				
 		if current_objective.moving_out then
-			if phase_is_anticipation and obstructed_path_index or diff_index < 7 and obstructed_path_index then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
-				local reduct = 1
-				
-				if phase_is_anticipation then
-					reduct = 2
+			if not phase_is_sustain and not self._hunt_mode then
+				if phase_is_anticipation and obstructed_path_index or diff_index < 7 and obstructed_path_index then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
+					local reduct = 1
+					
+					if phase_is_anticipation then
+						reduct = 2
+					end
+					
+					objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - reduct, 1)][1])
+					pull_back = true
 				end
-				
-				objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - reduct, 1)][1])
-				pull_back = true
+			else
+				push = true
 			end
 		else
 			local has_criminals_closer = nil
@@ -2418,6 +2434,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			
 			if phase_is_anticipation and current_objective.open_fire then
 				pull_back = true
+			elseif self._hunt_mode or phase_is_sustain then
+				push = true
 			elseif phase_is_anticipation and not has_criminals_close or diff_index < 7 and not has_criminals_close then
 				approach = true
 			elseif not phase_is_anticipation then

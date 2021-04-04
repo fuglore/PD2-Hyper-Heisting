@@ -1401,6 +1401,13 @@ function PlayerDamage:build_suppression(amount)
 		amount = amount * 0.5
 	end
 	
+	local pm = managers.player
+	local current_state = pm:get_current_state()
+	
+	if current_state and current_state:_interacting() then
+		amount = amount * managers.player:upgrade_value("player", "coolheaded_basic", 1)
+	end
+	
 	self._last_received_sup = amount
 	self._next_allowed_sup_t = managers.player:player_timer():time() + self._dmg_interval
 	

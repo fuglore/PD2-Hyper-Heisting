@@ -161,6 +161,11 @@ function CopLogicIdle.enter(data, new_logic_name, enter_params)
 	
 	if data.tactics then
 		if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
+			
+			if my_data.weapon_range.aggressive then
+				my_data.weapon_range.aggressive = my_data.weapon_range.aggressive * 1.5
+			end
+			
 			my_data.weapon_range.close = my_data.weapon_range.close * 2
 			my_data.weapon_range.optimal = my_data.weapon_range.optimal * 1.5
 		end
@@ -313,7 +318,7 @@ function CopLogicIdle._upd_enemy_detection(data)
 		local objective = data.objective
 		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
 
-		if allow_trans then
+		if objective and objective.type == "act" and allow_trans and obj_failed or allow_trans then
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data)
 
 			if wanted_state and wanted_state ~= data.name then
@@ -539,10 +544,12 @@ function CopLogicIdle.damage_clbk(data, damage_info)
 	end
 	
 	if data.important or data.is_converted or data.unit:in_slot(16) then
-		local my_data = data.internal_data
-		
-		if not my_data.tasing and not my_data.spooc_attack then
-			CopLogicBase.chk_start_action_dodge(data, "hit")
+		if not data.unit:movement():chk_action_forbidden("walk") then
+			local my_data = data.internal_data
+			
+			if not my_data.tasing and not my_data.spooc_attack then
+				CopLogicBase.chk_start_action_dodge(data, "hit")
+			end
 		end
 	end
 end
@@ -1128,11 +1135,15 @@ function CopLogicIdle.action_complete_clbk(data, action)
 end
 
 function CopLogicIdle.is_available_for_assignment(data, objective)
+	local my_data = data.internal_data
+
+	if my_data.exiting then
+		return
+	end
+	
 	if objective and objective.forced then
 		return true
 	end
-
-	local my_data = data.internal_data
 
 	if data.objective and data.objective.action then
 		if my_data.action_started then
@@ -1143,12 +1154,19 @@ function CopLogicIdle.is_available_for_assignment(data, objective)
 			return
 		end
 	end
-
-	data.t = TimerManager:game():time()
-
-	if my_data.exiting then
-		return
+	
+	if objective and data.objective and data.objective.grp_objective then
+		local cur_grp_objective = data.objective.grp_objective
+		local new_grp_objective = objective.grp_objective
+		
+		if cur_grp_objective.type == "retire" and objective.type == "act" then
+			return
+		elseif new_grp_objective and new_grp_objective.type == "retire" and data.objective.type == "act" then
+			return
+		end
 	end
+	
+	data.t = TimerManager:game():time()
 	
 	if data.path_fail_t then
 		local fail_t_chk = data.important and 1 or 3

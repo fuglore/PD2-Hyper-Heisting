@@ -5,7 +5,6 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		table.insert(self.default_upgrades, "player_can_free_run")
 		table.insert(self.default_upgrades, "player_run_and_reload")
 		table.insert(self.default_upgrades, "first_aid_kit_deploy_time_multiplier")
-		--table.insert(self.default_upgrades, "first_aid_kit_deploy_time_multiplier") WIP
 		
 		self.skills.spotter_teamwork = {
 			{
@@ -149,6 +148,27 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			icon_xy = {
 				6,
 				11
+			}
+		}
+		
+		self.skills.show_of_force = { --Cool Headed
+			{
+				upgrades = {
+					"player_coolheaded_basic"
+				},
+				cost = self.costs.default
+			},
+			{
+				upgrades = {
+					"player_interacting_damage_multiplier"
+				},
+				cost = self.costs.pro
+			},
+			name_id = "menu_show_of_force_beta",
+			desc_id = "menu_show_of_force_beta_desc",
+			icon_xy = {
+				8,
+				9
 			}
 		}
 	
@@ -667,11 +687,11 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			background_texture = "guis/textures/pd2/skilltree/bg_mastermind",
 			tiers = {
 				{
-					"sprinter"
+					"thick_skin"
 				},
 				{
 					"awareness",
-					"thick_skin"
+					"sprinter"
 				},
 				{
 					"dire_need",

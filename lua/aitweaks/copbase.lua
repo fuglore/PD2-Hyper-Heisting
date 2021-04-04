@@ -1,6 +1,14 @@
-local ids_lod = Idstring("lod")
-local ids_lod1 = Idstring("lod1")
-local ids_ik_aim = Idstring("ik_aim")
+local alive_g = _G.alive
+local ids_func = _G.Idstring
+local pairs_g = pairs
+local ids_unit = ids_func("unit")
+local ids_unit = ids_func("unit")
+local ids_lod = ids_func("lod")
+local ids_lod1 = ids_func("lod1")
+local ids_ik_aim = ids_func("ik_aim")
+local ids_r_toe = ids_func("RightToeBase")
+local ids_l_toe = ids_func("LeftToeBase")
+
 CopBase = CopBase or class(UnitBase)
 local old_init = CopBase.init
 
@@ -207,16 +215,19 @@ function CopBase:_chk_spawn_gear()
 end
 
 function CopBase:pre_destroy(unit)
-	if alive(self._headwear_unit) then
-		self._headwear_unit:set_slot(0)
+	UnitBase.pre_destroy(self, unit)
+
+	local headwear = self._headwear_unit
+
+	if alive_g(headwear) then
+		headwear:set_slot(0)
 	end
-	
-	unit:character_damage():kill_punk_visual_effect()
+
 	unit:brain():pre_destroy(unit)
 	self._ext_movement:pre_destroy()
 	self._unit:inventory():pre_destroy()
-	UnitBase.pre_destroy(self, unit)
 end
+
 
 function CopBase:default_weapon_name()
 	local default_weapon_id = self._default_weapon_id

@@ -25,7 +25,7 @@
 						<param key="fog_far_low_color" value="0.15686275064945 0.15294118225574 0.15294118225574"/>
 						<param key="ambient_falloff_scale" value="0.10000000149012"/>
 						<param key="sky_bottom_color_scale" value="0.80000001192093"/>
-						<param key="ambient_color_scale" value="0.14"/>
+						<param key="ambient_color_scale" value="0.36"/>
 						<param key="ambient_color" value="0.2352941185236 0.20392157137394 0.26627452254295"/>
 						<param key="fog_max_range" value="241935"/>
 						<param key="bloom_threshold" value="0.55000001192093"/>

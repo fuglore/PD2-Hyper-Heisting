@@ -170,6 +170,11 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	
 	if data.tactics then
 		if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
+			
+			if my_data.weapon_range.aggressive then
+				my_data.weapon_range.aggressive = my_data.weapon_range.aggressive * 1.5
+			end
+			
 			my_data.weapon_range.close = my_data.weapon_range.close * 2
 			my_data.weapon_range.optimal = my_data.weapon_range.optimal * 1.5
 		end
@@ -473,7 +478,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 	local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
 	
 	if not objective or objective.type ~= "follow" then
-		if allow_trans then
+		if objective and objective.type == "act" and allow_trans and obj_failed or allow_trans then
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
 
 			if wanted_state and wanted_state ~= data.name then
@@ -1052,6 +1057,12 @@ end
 end]]
 
 function CopLogicTravel.is_available_for_assignment(data, new_objective)
+	local my_data = data.internal_data
+
+	if my_data.exiting then
+		return
+	end
+
 	if new_objective and new_objective.forced then
 		return true
 	elseif data.objective and data.objective.type == "act" then
@@ -1260,7 +1271,8 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 		occupation = {
 			type = "act",
 			seg = objective.nav_seg,
-			pos = objective.pos
+			pos = objective.pos,
+			pos_is_precise = true
 		}
 	elseif objective.type == "follow" then
 		local my_data = data.internal_data
@@ -1994,9 +2006,9 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	local optimal_threat_dis, threat_pos = nil
 
 	if data.objective and data.objective.attitude == "engage" then
-		optimal_threat_dis = data.internal_data.weapon_range.optimal
+		optimal_threat_dis = data.internal_data.weapon_range.aggressive or data.internal_data.weapon_range.close
 	else
-		optimal_threat_dis = data.internal_data.weapon_range.far
+		optimal_threat_dis = data.internal_data.weapon_range.optimal
 	end
 
 	near_pos = near_pos or search_area.pos

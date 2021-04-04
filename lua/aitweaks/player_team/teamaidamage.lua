@@ -171,18 +171,20 @@ function TeamAIDamage:update(unit, t, dt)
 			self._next_shock_t = t + 0.75
 		else
 			if self._num_shocks >= 4 then
-				local attack_data = {
-					attacker_unit = self._taser_unit,
-					pos = self._unit:movement():m_pos(),
-					is_taser_shock = true,
-					armor_piercing = true,
-					damage = 1
-				}
-				self._num_shocks = nil
-				self._next_shock_t = nil
 				self._unit:movement():play_taser_boom()
-				self._unit:movement():on_tase_ended()
-				self._unit:character_damage():damage_bullet(attack_data)
+				if Network:is_server() then
+					local attack_data = {
+						attacker_unit = self._taser_unit,
+						pos = self._unit:movement():m_pos(),
+						is_taser_shock = true,
+						armor_piercing = true,
+						damage = 1
+					}
+					self._num_shocks = nil
+					self._next_shock_t = nil
+					self._unit:movement():on_tase_ended()
+					self._unit:character_damage():damage_bullet(attack_data)
+				end
 				self._taser_unit = nil
 			elseif self._next_shock_t < t then
 				self._num_shocks = self._num_shocks + 1
