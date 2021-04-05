@@ -2095,14 +2095,16 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 		return
 	end
 	
-	if new_objective and data.objective and data.objective.grp_objective then
-		local cur_grp_objective = data.objective.grp_objective
-		local new_grp_objective = new_objective.grp_objective
-		
-		if cur_grp_objective.type == "retire" and new_objective.type == "act" then
-			return
-		elseif new_grp_objective and new_grp_objective.type == "retire" and data.objective.type == "act" then
-			return
+	if not data.cool then
+		if new_objective and data.objective and data.objective.grp_objective then
+			local cur_grp_objective = data.objective.grp_objective
+			local new_grp_objective = new_objective.grp_objective
+			
+			if cur_grp_objective.type == "retire" and new_objective.type == "act" then
+				return
+			elseif new_grp_objective and new_grp_objective.type == "retire" and data.objective.type == "act" then
+				return
+			end
 		end
 	end
 

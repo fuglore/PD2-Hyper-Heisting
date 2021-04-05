@@ -317,8 +317,15 @@ function CopLogicIdle._upd_enemy_detection(data)
 	if new_reaction and REACT_SURPRISED <= new_reaction then
 		local objective = data.objective
 		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
+		local can_transition = allow_trans
+		
+		if not data.cool then
+			if objective and objective.type == "act" then
+				can_transition = allow_trans and obj_failed
+			end
+		end
 
-		if objective and objective.type == "act" and allow_trans and obj_failed or allow_trans then
+		if can_transition then
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data)
 
 			if wanted_state and wanted_state ~= data.name then
@@ -1155,14 +1162,16 @@ function CopLogicIdle.is_available_for_assignment(data, objective)
 		end
 	end
 	
-	if objective and data.objective and data.objective.grp_objective then
-		local cur_grp_objective = data.objective.grp_objective
-		local new_grp_objective = objective.grp_objective
-		
-		if cur_grp_objective.type == "retire" and objective.type == "act" then
-			return
-		elseif new_grp_objective and new_grp_objective.type == "retire" and data.objective.type == "act" then
-			return
+	if not data.cool and not my_data.action_started then 
+		if objective and data.objective and data.objective.grp_objective then
+			local cur_grp_objective = data.objective.grp_objective
+			local new_grp_objective = objective.grp_objective
+			
+			if cur_grp_objective.type == "retire" and objective.type == "act" then
+				return
+			elseif new_grp_objective and new_grp_objective.type == "retire" and data.objective.type == "act" then
+				return
+			end
 		end
 	end
 	
