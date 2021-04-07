@@ -2548,7 +2548,7 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	if pose == "crouch" then
 		if not data.char_tweak.crouch_move then
 			pose = "stand"
-		elseif not data.is_suppressed and not CopLogicTravel._chk_close_to_criminal(data, my_data) then
+		elseif not data.is_suppressed then
 			pose = "stand"
 		end
 	end

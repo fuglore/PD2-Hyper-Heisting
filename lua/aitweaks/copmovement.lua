@@ -1597,20 +1597,24 @@ function CopMovement:set_hostage_speed_modifier(enable)
 end
 
 function CopMovement:speed_modifier()
-	local final_modifier = 1
+	local speed_modifier = not self:cool() and self._tweak_data.speed_mul or 1
+	local add_modifier = 1
+	
 	local carry_modifier = self._carry_speed_modifier
 
 	if carry_modifier then
-		final_modifier = final_modifier * carry_modifier
+		add_modifier = add_modifier * carry_modifier
 	end
 
 	local hostage_modifier = self._hostage_speed_modifier
 
 	if hostage_modifier then
-		final_modifier = final_modifier * hostage_modifier
+		add_modifier = add_modifier * hostage_modifier
 	end
+	
+	add_modifier = add_modifier - 1
 
-	return final_modifier
+	return speed_modifier + add_modifier
 end
 
 local original_save = CopMovement.save

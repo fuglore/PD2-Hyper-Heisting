@@ -133,29 +133,7 @@ function TaserLogicAttack._upd_enemy_detection(data)
 	if tase_in_effect then
 		return
 	elseif tasing then
-		local under_multiple_fire = nil
-		local und_mul_fire_amount = nil
-		local alert_chk_t = data.t - 1.2
-
-		for key, enemy_data in pairs(data.detected_attention_objects) do
-			if key ~= tasing.target_u_key and enemy_data.dmg_t and alert_chk_t < enemy_data.dmg_t then
-				if not und_mul_fire_amount then
-					und_mul_fire_amount = 1
-				else
-					und_mul_fire_amount = und_mul_fire_amount + 1
-				end
-
-				if und_mul_fire_amount > 2 then
-					under_multiple_fire = true
-
-					break
-				end
-			end
-		end
-
-		if under_multiple_fire then
-			find_new_focus_enemy = true
-		end
+		return
 	else
 		find_new_focus_enemy = true
 	end

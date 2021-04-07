@@ -539,247 +539,8 @@ function CharacterTweakData:_presets(tweak_data)
 			end
 		end
 	end
-	
-	--custom shield move speed presets, escalates with difficulty as it should, starting from normal-based speeds to very_fast
-	presets.move_speed.shield_sim = {
-		stand = {
-			walk = {
-				ntl = {
-					strafe = 120,
-					fwd = 150,
-					bwd = 100
-				},
-				hos = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				},
-				cbt = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				}
-			},
-			run = {
-				hos = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
-				},
-				cbt = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
-				}
-			}
-		},
-		crouch = {
-			walk = {
-				hos = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				},
-				cbt = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				}
-			},
-			run = {
-				hos = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
-				},
-				cbt = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
-				}
-			}
-		}
-	}
-	presets.move_speed.shield_civ = {
-		stand = {
-			walk = {
-				ntl = {
-					strafe = 120,
-					fwd = 150,
-					bwd = 100
-				},
-				hos = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
-				},
-				cbt = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
-				}
-			},
-			run = {
-				hos = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
-				},
-				cbt = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
-				}
-			}
-		},
-		crouch = {
-			walk = {
-				hos = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
-				},
-				cbt = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
-				}
-			},
-			run = {
-				hos = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
-				},
-				cbt = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
-				}
-			}
-		}
-	}
-	presets.move_speed.shield_com = {
-		stand = {
-			walk = {
-				ntl = {
-					strafe = 120,
-					fwd = 150,
-					bwd = 100
-				},
-				hos = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
-				},
-				cbt = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
-				}
-			},
-			run = {
-				hos = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
-				},
-				cbt = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
-				}
-			}
-		},
-		crouch = {
-			walk = {
-				hos = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
-				},
-				cbt = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
-				}
-			},
-			run = {
-				hos = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
-				},
-				cbt = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
-				}
-			}
-		}
-	}
-	presets.move_speed.shield_anarch = {
-		stand = {
-			walk = {
-				ntl = {
-					strafe = 120,
-					fwd = 150,
-					bwd = 100
-				},
-				hos = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
-				},
-				cbt = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
-				}
-			},
-			run = {
-				hos = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
-				},
-				cbt = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
-				}
-			}
-		},
-		crouch = {
-			walk = {
-				hos = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
-				},
-				cbt = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
-				}
-			},
-			run = {
-				hos = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
-				},
-				cbt = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
-				}
-			}
-		}
-	}	
-	
 		
-	--Custom move speedds start here to keep enemy approaches and movement consistent.
+	--Custom move speeds start here to keep enemy approaches and movement consistent.
 	presets.move_speed.simple_consistency = {
 		stand = {
 			walk = {
@@ -789,57 +550,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 100
 				},
 				hos = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 285,
+					fwd = 285,
+					bwd = 285
 				},
 				cbt = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 285,
+					fwd = 285,
+					bwd = 285
 				}
 			},
 			run = {
 				hos = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
+					strafe = 670,
+					fwd = 670,
+					bwd = 670
 				},
 				cbt = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
+					strafe = 670,
+					fwd = 670,
+					bwd = 670
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 210,
-					fwd = 210,
-					bwd = 210
+					strafe = 255,
+					fwd = 255,
+					bwd = 255
 				},
 				cbt = {
-					strafe = 210,
-					fwd = 210,
-					bwd = 210
+					strafe = 255,
+					fwd = 255,
+					bwd = 255
 				}
 			},
 			run = {
 				hos = {
-					strafe = 250,
-					fwd = 250,
-					bwd = 250
+					strafe = 357,
+					fwd = 357,
+					bwd = 357
 				},
 				cbt = {
-					strafe = 250,
-					fwd = 250,
-					bwd = 250
+					strafe = 357,
+					fwd = 357,
+					bwd = 357
 				}
 			}
 		}
 	}
-	-- 15% faster
+	--1.1x mul
 	presets.move_speed.civil_consistency = {
 		stand = {
 			walk = {
@@ -849,57 +610,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 100
 				},
 				hos = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
+					strafe = 313,
+					fwd = 313,
+					bwd = 313
 				},
 				cbt = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
+					strafe = 313,
+					fwd = 313,
+					bwd = 313
 				}
 			},
 			run = {
 				hos = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
+					strafe = 737,
+					fwd = 737,
+					bwd = 737
 				},
 				cbt = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
+					strafe = 737,
+					fwd = 737,
+					bwd = 737
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 242,
-					fwd = 242,
-					bwd = 242
+					strafe = 280,
+					fwd = 280,
+					bwd = 280
 				},
 				cbt = {
-					strafe = 242,
-					fwd = 242,
-					bwd = 242
+					strafe = 280,
+					fwd = 280,
+					bwd = 280
 				}
 			},
 			run = {
 				hos = {
-					strafe = 288,
-					fwd = 288,
-					bwd = 288
+					strafe = 393,
+					fwd = 393,
+					bwd = 393
 				},
 				cbt = {
-					strafe = 288,
-					fwd = 288,
-					bwd = 288
+					strafe = 393,
+					fwd = 393,
+					bwd = 393
 				}
 			}
 		}
 	}
-	--20% faster
+	--1.15x mul
 	presets.move_speed.complex_consistency = {
 		stand = {
 			walk = {
@@ -909,57 +670,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 100
 				},
 				hos = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
+					strafe = 327,
+					fwd = 327,
+					bwd = 327
 				},
 				cbt = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
+					strafe = 327,
+					fwd = 327,
+					bwd = 327
 				}
 			},
 			run = {
 				hos = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
+					strafe = 770,
+					fwd = 770,
+					bwd = 770
 				},
 				cbt = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
+					strafe = 770,
+					fwd = 770,
+					bwd = 770
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 252,
-					fwd = 252,
-					bwd = 252
+					strafe = 293,
+					fwd = 293,
+					bwd = 293
 				},
 				cbt = {
-					strafe = 252,
-					fwd = 252,
-					bwd = 252
+					strafe = 293,
+					fwd = 293,
+					bwd = 293
 				}
 			},
 			run = {
 				hos = {
-					strafe = 300,
-					fwd = 300,
-					bwd = 300
+					strafe = 410,
+					fwd = 410,
+					bwd = 410
 				},
 				cbt = {
-					strafe = 300,
-					fwd = 300,
-					bwd = 300
+					strafe = 410,
+					fwd = 410,
+					bwd = 410
 				}
 			}
 		}
 	}
-	--25% faster, climax
+	--1.2x mul
 	presets.move_speed.anarchy_consistency = {
 		stand = {
 			walk = {
@@ -969,56 +730,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 100
 				},
 				hos = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
+					strafe = 342,
+					fwd = 342,
+					bwd = 342
 				},
 				cbt = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
+					strafe = 342,
+					fwd = 342,
+					bwd = 342
 				}
 			},
 			run = {
 				hos = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
+					strafe = 804,
+					fwd = 804,
+					bwd = 804
 				},
 				cbt = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
+					strafe = 804,
+					fwd = 804,
+					bwd = 804
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 262,
-					fwd = 262,
-					bwd = 262
+					strafe = 306,
+					fwd = 306,
+					bwd = 306
 				},
 				cbt = {
-					strafe = 262,
-					fwd = 262,
-					bwd = 262
+					strafe = 306,
+					fwd = 306,
+					bwd = 306
 				}
 			},
 			run = {
 				hos = {
-					strafe = 312,
-					fwd = 312,
-					bwd = 312
+					strafe = 428,
+					fwd = 428,
+					bwd = 428
 				},
 				cbt = {
-					strafe = 312,
-					fwd = 312,
-					bwd = 312
+					strafe = 428,
+					fwd = 428,
+					bwd = 428
 				}
 			}
 		}
 	}
+	
 	--preset for dozers
 	presets.move_speed.slow_consistency = {
 		stand = {
@@ -1281,14 +1043,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 727,
-					fwd = 727,
-					bwd = 727
+					strafe = 862.50,
+					fwd = 862.50,
+					bwd = 862.50
 				},
 				cbt = {
-					strafe = 727,
-					fwd = 727,
-					bwd = 727
+					strafe = 862.50,
+					fwd = 862.50,
+					bwd = 862.50
 				}
 			}
 		},
@@ -1319,10 +1081,15 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+		
+	--making base-game presets clone my new set of movespeed presets
+	presets.move_speed.slow = deep_clone(presets.move_speed.slow_consistency)
+	presets.move_speed.very_slow = deep_clone(presets.move_speed.mini_consistency)
+	presets.move_speed.normal = deep_clone(presets.move_speed.simple_consistency)
+	presets.move_speed.fast = deep_clone(presets.move_speed.simple_consistency)
+	presets.move_speed.very_fast = deep_clone(presets.move_speed.civil_consistency)
 	
 	--prevents Application has crashed: C++ exception[string "core/lib/utils/coretable.lua"]:32: bad argument #1 to 'pairs' (table expected, got nil)
-	
-	
 	for speed_preset_name, poses in pairs(presets.move_speed) do
 		for pose, hastes in pairs(poses) do
 			hastes.run.ntl = hastes.run.hos
@@ -1332,13 +1099,6 @@ function CharacterTweakData:_presets(tweak_data)
 		poses.stand.run.ntl = poses.stand.run.hos
 		poses.panic = poses.stand
 	end
-	
-	--making base-game presets clone my new set of movespeed presets
-	presets.move_speed.slow = deep_clone(presets.move_speed.slow_consistency)
-	presets.move_speed.very_slow = deep_clone(presets.move_speed.mini_consistency)
-	presets.move_speed.normal = deep_clone(presets.move_speed.simple_consistency)
-	presets.move_speed.fast = deep_clone(presets.move_speed.civil_consistency)
-	presets.move_speed.very_fast = deep_clone(presets.move_speed.complex_consistency)
 	
 	--detection preset for regular enemies so they are fully capable of identifying players during loud	
 	presets.detection.enemymook = { 
@@ -4346,7 +4106,7 @@ presets.weapon.civil.is_pistol = {
 				},
 				recoil = { --slightly lowered recoil from civil, lower end has more variance
 					0.8,
-					1
+					0.9
 				},
 				mode = {
 					1,
@@ -4363,8 +4123,8 @@ presets.weapon.civil.is_pistol = {
 					0.9
 				},
 				recoil = { --reduced massively from civil
-					1,
-					1.2
+					0.9,
+					1
 				},
 				mode = {
 					1,
@@ -4381,7 +4141,7 @@ presets.weapon.civil.is_pistol = {
 					0.75
 				},
 				recoil = {
-					1.1,
+					1,
 					1.3
 				},
 				mode = {
@@ -4398,7 +4158,7 @@ presets.weapon.civil.is_pistol = {
 					0,
 					0.25
 				},
-				recoil = { --recoil is ok though, said the slut who is designing this mess
+				recoil = {
 					1.1,
 					1.3
 				},
@@ -5365,9 +5125,9 @@ presets.weapon.civil.is_pistol = {
 					0.9,
 					1
 				},
-				recoil = { --slightly lowered recoil from civil, lower end has more variance
-					0.8,
-					1
+				recoil = {
+					0.65,
+					0.8
 				},
 				mode = {
 					1,
@@ -5383,9 +5143,9 @@ presets.weapon.civil.is_pistol = {
 					0.3,
 					0.9
 				},
-				recoil = { --reduced massively from civil
-					1,
-					1.2
+				recoil = {
+					0.7,
+					0.9
 				},
 				mode = {
 					1,
@@ -5402,8 +5162,8 @@ presets.weapon.civil.is_pistol = {
 					0.75
 				},
 				recoil = {
-					1.1,
-					1.3
+					0.8,
+					1
 				},
 				mode = {
 					1,
@@ -5420,8 +5180,8 @@ presets.weapon.civil.is_pistol = {
 					0.5
 				},
 				recoil = {
-					1.1,
-					1.3
+					0.9,
+					1.1
 				},
 				mode = {
 					1,
@@ -5437,8 +5197,8 @@ presets.weapon.civil.is_pistol = {
 					0,
 					0.25
 				},
-				recoil = { --recoil is ok though, said the slut who is designing this mess
-					1.1,
+				recoil = {
+					1,
 					1.3
 				},
 				mode = {
@@ -7707,6 +7467,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.detection = presets.detection.enemymook
 	self.shield.HEALTH_INIT = 14
 	self.shield.headshot_dmg_mul = 6
+	self.shield.speed_mul = 0.85
 	self.shield.allowed_stances = {
 		cbt = true
 	}
@@ -7715,7 +7476,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	}
 	self.shield.cannot_throw_grenades = true
 	self.shield.always_face_enemy = true
-	self.shield.move_speed = presets.move_speed.shield_sim
+	self.shield.move_speed = presets.move_speed.simple_consistency
 	self.shield.no_run_start = true
 	self.shield.no_run_stop = true
 	self.shield.no_retreat = nil
@@ -7746,6 +7507,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	table.insert(self._enemy_list, "shield")
 	
 	self.akuma = deep_clone(self.shield)
+	self.akuma.speed_mul = 1.1
 	self.akuma.weapon = presets.weapon.akuma
 	self.akuma.move_speed = presets.move_speed.lightning_constant
 	self.akuma.use_lotus_effect = true
@@ -7782,7 +7544,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.no_suppression_reaction = true
 	self.medic.no_retreat = nil
 	self.medic.surrender = presets.surrender.special
-	self.medic.move_speed = presets.move_speed.civil_consistency
+	self.medic.move_speed = presets.move_speed.simple_consistency
 	self.medic.surrender_break_time = {
 		7,
 		12
@@ -7820,10 +7582,11 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	self.taser.detection = presets.detection.enemymook
 	self.taser.HEALTH_INIT = 25
 	self.taser.headshot_dmg_mul = 2
+	self.taser.speed_mul = 0.9
 	self.taser.damage.doom_hurt_type = "doom"
 	self.taser.damage.fire_damage_mul = 0.25
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
-	self.taser.move_speed = presets.move_speed.civil_consistency
+	self.taser.move_speed = presets.move_speed.simple_consistency
 	self.taser.suppression = presets.suppression.stalwart_nil
 	self.taser.no_fumbling = true
 	self.taser.no_suppression_reaction = true
@@ -7919,7 +7682,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.no_retreat = nil
 	self.fbi.HEALTH_INIT = 16
 	self.fbi.headshot_dmg_mul = 9
-	self.fbi.move_speed = presets.move_speed.civil_consistency
+	self.fbi.move_speed = presets.move_speed.simple_consistency
 	self.fbi.damage.no_suppression_crouch = true
 	self.fbi.suppression = presets.suppression.stalwart_nil
 	self.fbi.surrender = presets.surrender.special
@@ -8017,6 +7780,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.weapon = presets.weapon.simple
 	self.heavy_swat.detection = presets.detection.enemymook
 	self.heavy_swat.HEALTH_INIT = 20
+	self.heavy_swat.speed_mul = 0.9
 	self.heavy_swat.headshot_dmg_mul = 4
 	self.heavy_swat.ecm_vulnerability = 1
 	self.heavy_swat.ecm_hurts = {
@@ -8107,7 +7871,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	}
 	self.armored_swat.HEALTH_INIT = 200
 	self.armored_swat.headshot_dmg_mul = 12
-	self.armored_swat.move_speed = presets.move_speed.civil_consistency
+	self.armored_swat.move_speed = presets.move_speed.simple_consistency
 	self.armored_swat.damage.doom_hurt_type = "doom"
 	self.armored_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
 	self.armored_swat.surrender = presets.surrender.hard
@@ -8123,6 +7887,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.weapon = presets.weapon.civil
 	self.fbi_heavy_swat.detection = presets.detection.enemymook
 	self.fbi_heavy_swat.HEALTH_INIT = 20
+	self.fbi_heavy_swat.speed_mul = 0.9
 	self.fbi_heavy_swat.headshot_dmg_mul = 4
 	self.fbi_heavy_swat.ecm_vulnerability = 1
 	self.fbi_heavy_swat.ecm_hurts = {
@@ -8258,6 +8023,7 @@ Hooks:PostHook(CharacterTweakData, "_init_gangster", "hhpost_gangster", function
 	self.gangster.HEALTH_INIT = 6
 	self.gangster.headshot_dmg_mul = 12
 	self.gangster.ecm_vulnerability = 0
+	self.gangster.speed_mul = 0.7
 	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
 		self.gangster.speech_prefix_p1 = "rt"
 		self.gangster.speech_prefix_p2 = nil
@@ -8290,6 +8056,7 @@ Hooks:PostHook(CharacterTweakData, "_init_mobster", "hhpost_mobster", function(s
 	self.mobster.HEALTH_INIT = 6
 	self.mobster.headshot_dmg_mul = 12
 	self.mobster.ecm_vulnerability = 0
+	self.mobster.speed_mul = 0.7
 	self.mobster.speech_prefix_p1 = "rt"
 	self.mobster.speech_prefix_p2 = nil
 	self.mobster.speech_prefix_count = 2
@@ -8310,6 +8077,7 @@ Hooks:PostHook(CharacterTweakData, "_init_biker", "hhpost_biker", function(self,
 	self.biker.speech_prefix_p2 = nil
 	self.biker.speech_prefix_count = 2	
 	self.biker.ecm_vulnerability = 0
+	self.biker.speed_mul = 0.7
 	self.biker.chatter = {
 		aggressive = true,
 		retreat = true,
@@ -8333,6 +8101,7 @@ Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", functi
 	self.bolivian.speech_prefix_p2 = nil
 	self.bolivian.speech_prefix_count = 2
 	self.bolivian.ecm_vulnerability = 0
+	self.bolivian.speed_mul = 0.7
 	self.bolivian.chatter = {
 		aggressive = true,
 		retreat = true,
@@ -8347,6 +8116,7 @@ Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", functi
 	self.bolivian_indoors.speech_prefix_p2 = nil
 	self.bolivian_indoors.speech_prefix_count = 2
 	self.bolivian_indoors.ecm_vulnerability = 0
+	self.bolivian_indoors.speed_mul = 0.7
 	self.bolivian_indoors.chatter = {
 		aggressive = true,
 		retreat = true,
@@ -8366,7 +8136,7 @@ Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", functi
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", function(self, presets)
-	self.old_hoxton_mission.move_speed = presets.move_speed.very_fast
+	self.old_hoxton_mission.move_speed = presets.move_speed.teamai
 	self.old_hoxton_mission.crouch_move = false
 	self.old_hoxton_mission.suppression = presets.suppression.stalwart_nil
 	self.old_hoxton_mission.weapon = deep_clone(presets.weapon.fbigod)
@@ -8381,6 +8151,7 @@ Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, pre
 		self.cop.access = "swat"
 	end
 	self.cop.ecm_vulnerability = 1
+	self.cop.speed_mul = 0.85
 	self.cop.ecm_hurts = {
 		ears = {
 			max_duration = 2,
@@ -8414,6 +8185,7 @@ end)
 
 Hooks:PostHook(CharacterTweakData, "_init_gensec", "hhpost_gensec", function(self, presets)
 	self.gensec.HEALTH_INIT = 6
+	self.gensec.speed_mul = 0.85
 	self.gensec.headshot_dmg_mul = 16
 	self.gensec.chatter = presets.enemy_chatter.security
 	self.gensec.ecm_hurts = {
@@ -8427,6 +8199,7 @@ end)
 Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(self, presets)
 	self.security.HEALTH_INIT = 6
 	self.security.headshot_dmg_mul = 16
+	self.security.speed_mul = 0.85
 	self.security.chatter = presets.enemy_chatter.security
 	self.security.ecm_hurts = {
 		ears = {
@@ -8437,6 +8210,7 @@ Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(s
 	-- if i fucked something i'm going to kill
 	self.security_undominatable.HEALTH_INIT = 6
 	self.security_undominatable.headshot_dmg_mul = 16
+	self.security_undominatable.speed_mul = 0.85
 	self.security_undominatable.chatter = presets.enemy_chatter.security
 	self.security_undominatable.ecm_hurts = {
 		ears = {
@@ -8446,6 +8220,7 @@ Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(s
 	}
 	self.mute_security_undominatable.HEALTH_INIT = 6
 	self.mute_security_undominatable.headshot_dmg_mul = 16
+	self.mute_security_undominatable.speed_mul = 0.85
 	self.mute_security_undominatable.chatter = presets.enemy_chatter.security
 	self.mute_security_undominatable.ecm_hurts = {
 		ears = {
@@ -8456,6 +8231,7 @@ Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(s
 	-- why
 	self.security_mex.HEALTH_INIT = 6
 	self.security_mex.headshot_dmg_mul = 16
+	self.security_mex.speed_mul = 0.85
 	self.security_mex.chatter = presets.enemy_chatter.security
 	self.security_mex.ecm_hurts = {
 		ears = {
@@ -8586,9 +8362,9 @@ function CharacterTweakData:_set_normal()
 	self.mobster_boss.HEALTH_INIT = 600
 	self.biker_boss.HEALTH_INIT = 600
 	self.chavez_boss.HEALTH_INIT = 600
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 1000
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8625,10 +8401,14 @@ function CharacterTweakData:_set_normal()
 	self.sniper.weapon.is_rifle.focus_delay = 6
 	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
-	self.fbi.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_girl.move_speed = self.presets.move_speed.civil_consistency
-	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency	
-	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency	
+	self.fbi.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi.speed_mul = 1.1
+	self.fbi_girl.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_girl.speed_mul = 1.1
+	self.gangster_ninja.move_speed = self.presets.move_speed.simple_consistency
+	self.gangster_ninja.speed_mul = 1.1	
+	self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_pager.speed_mul = 1.1
 	--Cop health tweak
 	self.security.HEALTH_INIT = 16
 	self.security_undominatable.HEALTH_INIT = 16	
@@ -8748,9 +8528,9 @@ function CharacterTweakData:_set_hard()
 	self.mobster_boss.HEALTH_INIT = 600
 	self.biker_boss.HEALTH_INIT = 600
 	self.chavez_boss.HEALTH_INIT = 600
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 1000
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8788,10 +8568,14 @@ function CharacterTweakData:_set_hard()
 	self.sniper.weapon.is_rifle.focus_delay = 6
 	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
-	self.fbi.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_girl.move_speed = self.presets.move_speed.civil_consistency
-	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency		
+	self.fbi.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi.speed_mul = 1.1
+	self.fbi_girl.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_girl.speed_mul = 1.1
+	self.gangster_ninja.move_speed = self.presets.move_speed.simple_consistency
+	self.gangster_ninja.speed_mul = 1.1	
+	self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_pager.speed_mul = 1.1	
 	--Cop health tweak
 	self.security.HEALTH_INIT = 16
 	self.security_undominatable.HEALTH_INIT = 16	
@@ -8918,9 +8702,9 @@ function CharacterTweakData:_set_overkill()
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 800
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
 	
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 1000
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8960,30 +8744,30 @@ function CharacterTweakData:_set_overkill()
 	end
 	
 	--fbi setup.
-	self.fbi.dodge = self.presets.dodge.heavy_complex
-	self.fbi.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_girl.dodge = self.presets.dodge.heavy_complex
-	self.fbi_girl.move_speed = self.presets.move_speed.complex_consistency
-	self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
-	self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency	
-	self.fbi_pager.dodge = self.presets.dodge.heavy_complex
-	self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency	
-	self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
-	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
+	self.fbi.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi.speed_mul = 1.1
+	self.fbi_xc45.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_xc45.speed_mul = 1.1	
+	self.fbi_girl.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_girl.speed_mul = 1.1
+	self.gangster_ninja.move_speed = self.presets.move_speed.simple_consistency
+	self.gangster_ninja.speed_mul = 1.1	
+	self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_pager.speed_mul = 1.1
 	--sniper setup.
 	self.sniper.weapon.is_rifle.focus_delay = 2
 	self.armored_sniper.weapon.is_rifle.focus_delay = 2
 	--Shield speed setup
-	self.shield.move_speed = self.presets.move_speed.shield_civ
+	self.shield.move_speed = self.presets.move_speed.simple_consistency
 	--Movespeed setups.
-	self.swat.move_speed = self.presets.move_speed.civil_consistency
-	self.city_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
+	self.swat.move_speed = self.presets.move_speed.simple_consistency
+	self.city_swat.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_swat.move_speed = self.presets.move_speed.simple_consistency
+	self.heavy_swat.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_heavy_swat.move_speed = self.presets.move_speed.simple_consistency
 	--special movespeed
-	self.taser.move_speed = self.presets.move_speed.civil_consistency
-	self.medic.move_speed = self.presets.move_speed.civil_consistency
+	self.taser.move_speed = self.presets.move_speed.simple_consistency
+	self.medic.move_speed = self.presets.move_speed.simple_consistency
 	--security health
 	self.security.HEALTH_INIT = 16
 	self.security_undominatable.HEALTH_INIT = 16	
@@ -9106,9 +8890,9 @@ function CharacterTweakData:_set_overkill_145()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 1000
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9295,7 +9079,7 @@ function CharacterTweakData:_set_overkill_145()
 		--special movespeed
 		self.taser.move_speed = self.presets.move_speed.anarchy_consistency
 		self.medic.move_speed = self.presets.move_speed.anarchy_consistency
-		self.shield.move_speed = self.presets.move_speed.shield_anarch
+		self.shield.move_speed = self.presets.move_speed.anarchy_consistency
 		--dodge setup.
 		self.swat.dodge = self.presets.dodge.athletic_complex
 		self.fbi_swat.dodge = self.presets.dodge.athletic_complex
@@ -9308,31 +9092,31 @@ function CharacterTweakData:_set_overkill_145()
 		self.concussion_multiplier = 1
 	else
 		--fbi setup.
-		self.fbi.dodge = self.presets.dodge.heavy_complex
-		self.fbi.move_speed = self.presets.move_speed.complex_consistency
-		self.fbi_girl.dodge = self.presets.dodge.heavy_complex
-		self.fbi_girl.move_speed = self.presets.move_speed.complex_consistency
-		self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
-		self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency
-		self.fbi_pager.dodge = self.presets.dodge.heavy_complex
-		self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency
-		self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
-		self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
+		self.fbi.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi.speed_mul = 1.1
+		self.fbi_xc45.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_xc45.speed_mul = 1.1	
+		self.fbi_girl.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_girl.speed_mul = 1.1
+		self.gangster_ninja.move_speed = self.presets.move_speed.simple_consistency
+		self.gangster_ninja.speed_mul = 1.1	
+		self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_pager.speed_mul = 1.1
 		--sniper setup.
 		self.sniper.weapon.is_rifle.focus_delay = 2
 		self.armored_sniper.weapon.is_rifle.focus_delay = 2
 		--Shield speed setup
-		self.shield.move_speed = self.presets.move_speed.shield_civ
+		self.shield.move_speed = self.presets.move_speed.simple_consistency
 		--Movespeed setups.
-		self.swat.move_speed = self.presets.move_speed.civil_consistency
-		self.city_swat.move_speed = self.presets.move_speed.civil_consistency
-		self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
-		self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
-		self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
-		self.armored_sniper.move_speed = self.presets.move_speed.civil_consistency		
+		self.swat.move_speed = self.presets.move_speed.simple_consistency
+		self.city_swat.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_swat.move_speed = self.presets.move_speed.simple_consistency
+		self.heavy_swat.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_heavy_swat.move_speed = self.presets.move_speed.simple_consistency
+		self.armored_sniper.move_speed = self.presets.move_speed.simple_consistency		
 		--special movespeed
-		self.taser.move_speed = self.presets.move_speed.civil_consistency
-		self.medic.move_speed = self.presets.move_speed.civil_consistency
+		self.taser.move_speed = self.presets.move_speed.simple_consistency
+		self.medic.move_speed = self.presets.move_speed.simple_consistency
 		self.flashbang_multiplier = 1.25
 		self.concussion_multiplier = 1
 	end
@@ -9356,9 +9140,9 @@ function CharacterTweakData:_set_easy_wish()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 1000
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9387,15 +9171,15 @@ function CharacterTweakData:_set_easy_wish()
 	self.gensec.no_arrest = true
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.athletic_complex
-	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi.move_speed = self.presets.move_speed.complex_consistency
 	self.fbi_girl.dodge = self.presets.dodge.athletic_complex
-	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_girl.move_speed = self.presets.move_speed.complex_consistency
 	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
-	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
+	self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency
 	self.fbi_pager.dodge = self.presets.dodge.athletic_complex
-	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency
 	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
-	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
 	--sniper setup
 	self.sniper.weapon.is_rifle.focus_delay = 2
 	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
@@ -9428,15 +9212,15 @@ function CharacterTweakData:_set_easy_wish()
 		end
 	end
 	--Movespeed setups.
-	self.swat.move_speed = self.presets.move_speed.complex_consistency
-	self.city_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.heavy_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_heavy_swat.move_speed = self.presets.move_speed.complex_consistency
+	self.swat.move_speed = self.presets.move_speed.civil_consistency
+	self.city_swat.move_speed = self.presets.move_speed.civil_consistency
+	self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
+	self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
+	self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
 	--special movespeed
-	self.taser.move_speed = self.presets.move_speed.complex_consistency
-	self.medic.move_speed = self.presets.move_speed.complex_consistency
-	self.shield.move_speed = self.presets.move_speed.shield_com
+	self.taser.move_speed = self.presets.move_speed.civil_consistency
+	self.medic.move_speed = self.presets.move_speed.civil_consistency
+	self.shield.move_speed = self.presets.move_speed.civil_consistency
 	--dodge setups.
 	self.swat.dodge = self.presets.dodge.heavy_complex
 	self.fbi_swat.dodge = self.presets.dodge.heavy_complex
@@ -9559,9 +9343,9 @@ function CharacterTweakData:_set_overkill_290()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 1000
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9642,7 +9426,7 @@ function CharacterTweakData:_set_overkill_290()
 	--special movespeed
 	self.taser.move_speed = self.presets.move_speed.complex_consistency
 	self.medic.move_speed = self.presets.move_speed.complex_consistency
-	self.shield.move_speed = self.presets.move_speed.shield_com
+	self.shield.move_speed = self.presets.move_speed.complex_consistency
 	--dodge setups.
 	self.swat.dodge = self.presets.dodge.heavy_complex
 	self.fbi_swat.dodge = self.presets.dodge.heavy_complex
@@ -9767,9 +9551,9 @@ function CharacterTweakData:_set_sm_wish()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 1000
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("anarchy")
@@ -9950,7 +9734,7 @@ function CharacterTweakData:_set_sm_wish()
 	--special movespeed
 	self.taser.move_speed = self.presets.move_speed.anarchy_consistency
 	self.medic.move_speed = self.presets.move_speed.anarchy_consistency
-	self.shield.move_speed = self.presets.move_speed.shield_anarch
+	self.shield.move_speed = self.presets.move_speed.anarchy_consistency
 	--dodge setup.
 	self.swat.dodge = self.presets.dodge.athletic_complex
 	self.fbi_swat.dodge = self.presets.dodge.athletic_complex
