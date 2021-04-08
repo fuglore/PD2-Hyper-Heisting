@@ -213,9 +213,324 @@ function CharacterTweakData:_presets(tweak_data)
         }
     }
 	
-	--Dodge presets begin here. ----LOOK INTO THE FUCKING VARIATION_DATA CRASH POS STUPID GODDAMN THING
+	--Dodge presets begin here.
+	presets.dodge = {
+		poor = {
+			speed = 0.8,
+			occasions = {
+				scared = {
+					chance = 0.5,
+					check_timeout = {
+						1,
+						2
+					},
+					variations = {
+						side_step = {
+							chance = 1,
+							timeout = {
+								2,
+								3
+							}
+						}
+					}
+				}
+			}
+		},
+		average = {
+			speed = 0.9,
+			occasions = {
+				scared = {
+					chance = 0.4,
+					check_timeout = {
+						4,
+						7
+					},
+					variations = {
+						side_step = {
+							chance = 1,
+							timeout = {
+								5,
+								8
+							}
+						}
+					}
+				},
+				hit = {
+					chance = 0.5,
+					check_timeout = {
+						1,
+						2
+					},
+					variations = {
+						side_step = {
+							chance = 1,
+							timeout = {
+								2,
+								3
+							}
+						}
+					}
+				}
+			}
+		},
+		heavy = {
+			speed = 1,
+			occasions = {
+				hit = {
+					chance = 0.75,
+					check_timeout = {
+						0,
+						0
+					},
+					variations = {
+						side_step = {
+							chance = 7,
+							shoot_chance = 0.8,
+							shoot_accuracy = 0.5,
+							timeout = {
+								0,
+								7
+							}
+						},
+						roll = {
+							chance = 3,
+							timeout = {
+								8,
+								10
+							}
+						}
+					}
+				},
+				preemptive = {
+					chance = 0.1,
+					check_timeout = {
+						1,
+						7
+					},
+					variations = {
+						side_step = {
+							chance = 1,
+							shoot_chance = 1,
+							shoot_accuracy = 0.7,
+							timeout = {
+								1,
+								7
+							}
+						}
+					}
+				},
+				scared = {
+					chance = 0.8,
+					check_timeout = {
+						1,
+						2
+					},
+					variations = {
+						side_step = {
+							chance = 5,
+							shoot_chance = 0.5,
+							shoot_accuracy = 0.4,
+							timeout = {
+								1,
+								2
+							}
+						},
+						dive = {
+							chance = 1,
+							timeout = {
+								8,
+								10
+							}
+						}
+					}
+				}
+			}
+		},
+		athletic = {
+			speed = 1.2,
+			occasions = {
+				hit = {
+					chance = 0.9,
+					check_timeout = {
+						0,
+						0
+					},
+					variations = {
+						side_step = {
+							chance = 5,
+							shoot_chance = 0.8,
+							shoot_accuracy = 0.5,
+							timeout = {
+								1,
+								3
+							}
+						},
+						roll = {
+							chance = 1,
+							timeout = {
+								3,
+								4
+							}
+						}
+					}
+				},
+				preemptive = {
+					chance = 0.35,
+					check_timeout = {
+						2,
+						3
+					},
+					variations = {
+						side_step = {
+							chance = 3,
+							shoot_chance = 1,
+							shoot_accuracy = 0.7,
+							timeout = {
+								1,
+								2
+							}
+						},
+						roll = {
+							chance = 1,
+							timeout = {
+								3,
+								4
+							}
+						}
+					}
+				},
+				scared = {
+					chance = 0.4,
+					check_timeout = {
+						1,
+						2
+					},
+					variations = {
+						side_step = {
+							chance = 6,
+							shoot_chance = 0.5,
+							shoot_accuracy = 0.4,
+							timeout = {
+								1,
+								2
+							}
+						},
+						dive = {
+							chance = 4,
+							timeout = {
+								3,
+								5
+							}
+						}
+					}
+				}
+			}
+		},
+		ninja = {
+			speed = 1.3,
+			occasions = {
+				hit = {
+					chance = 0.9,
+					check_timeout = {
+						0,
+						3
+					},
+					variations = {
+						side_step = {
+							chance = 3,
+							shoot_chance = 1,
+							shoot_accuracy = 0.7,
+							timeout = {
+								1,
+								2
+							}
+						},
+						roll = {
+							chance = 1,
+							timeout = {
+								1.2,
+								2
+							}
+						},
+						wheel = {
+							chance = 2,
+							timeout = {
+								1.2,
+								2
+							}
+						}
+					}
+				},
+				preemptive = {
+					chance = 0.6,
+					check_timeout = {
+						0,
+						3
+					},
+					variations = {
+						side_step = {
+							chance = 3,
+							shoot_chance = 1,
+							shoot_accuracy = 0.8,
+							timeout = {
+								1,
+								2
+							}
+						},
+						roll = {
+							chance = 1,
+							timeout = {
+								1.2,
+								2
+							}
+						},
+						wheel = {
+							chance = 2,
+							timeout = {
+								1.2,
+								2
+							}
+						}
+					}
+				},
+				scared = {
+					chance = 0.9,
+					check_timeout = {
+						0,
+						3
+					},
+					variations = {
+						side_step = {
+							chance = 0.33,
+							shoot_chance = 0.8,
+							shoot_accuracy = 0.6,
+							timeout = {
+								1,
+								2
+							}
+						},
+						roll = {
+							chance = 0.34,
+							timeout = {
+								1.2,
+								2
+							}
+						},
+						wheel = {
+							chance = 0.33,
+							timeout = {
+								1.2,
+								2
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	presets.dodge.heavy_complex = {
-		speed = 1.3,
+		speed = 1.2,
 		occasions = {
 			hit = {
 				chance = 1,
@@ -233,20 +548,18 @@ function CharacterTweakData:_presets(tweak_data)
 							2
 						}
 					},
-					roll = {
+					dive = {
 						chance = 0.25,
 						timeout = {
 							1,
 							2
 						}
 					},
-					dive = {
+					roll = {
 						chance = 0.25,
-						shoot_chance = 1,
-						shoot_accuracy = 0.9,
 						timeout = {
-							2,
-							3
+							1,
+							2
 						}
 					}
 				}
@@ -259,14 +572,14 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					roll = {
-						chance = 0.25,
+						chance = 0.5,
 						timeout = {
 							0.7,
 							1
 						}
 					},
 					side_step = {
-						chance = 0.75,
+						chance = 0.5,
 						shoot_chance = 1,
 						shoot_accuracy = 0.9,
 						timeout = {
@@ -283,29 +596,18 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				variations = {
-					side_step = {
-						chance = 0.33,
-						shoot_chance = 0.8,
-						shoot_accuracy = 0.6,
+					dive = {
+						chance = 0.5,
 						timeout = {
-							1,
+							2,
 							2
 						}
 					},
 					roll = {
-						chance = 0.33,
+						chance = 0.5,
 						timeout = {
 							1,
 							2
-						}
-					},
-					dive = {
-						chance = 0.33,
-						shoot_chance = 0.6,
-						shoot_accuracy = 0.4,
-						timeout = {
-							2,
-							3
 						}
 					}
 				}
@@ -313,7 +615,7 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.dodge.athletic_complex = {
-		speed = 1.5,
+		speed = 1.4,
 		occasions = {
 			hit = {
 				chance = 1,
@@ -323,7 +625,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 0.33,
+						chance = 0.5,
 						shoot_chance = 1,
 						shoot_accuracy = 1,
 						timeout = {
@@ -332,16 +634,7 @@ function CharacterTweakData:_presets(tweak_data)
 						}
 					},
 					roll = {
-						chance = 0.34,
-						timeout = {
-							0.5,
-							0.5
-						}
-					},
-					dive = {
-						chance = 0.33,
-						shoot_chance = 1,
-						shoot_accuracy = 0.9,
+						chance = 0.5,
 						timeout = {
 							0.5,
 							0.5
@@ -356,15 +649,8 @@ function CharacterTweakData:_presets(tweak_data)
 					2
 				},
 				variations = {
-					roll = {
-						chance = 0.6,
-						timeout = {
-							0.5,
-							0.5
-						}
-					},
-					dive = {
-						chance = 0.4,
+					side_step = {
+						chance = 1,
 						shoot_chance = 1,
 						shoot_accuracy = 1,
 						timeout = {
@@ -382,7 +668,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 0.34,
+						chance = 0.4,
 						shoot_chance = 1,
 						shoot_accuracy = 0.6,
 						timeout = {
@@ -391,16 +677,7 @@ function CharacterTweakData:_presets(tweak_data)
 						}
 					},
 					roll = {
-						chance = 0.33,
-						timeout = {
-							0.5,
-							0.5
-						}
-					},
-					dive = {
-						chance = 0.33,
-						shoot_chance = 1,
-						shoot_accuracy = 0.6,
+						chance = 0.6,
 						timeout = {
 							0.5,
 							0.5
@@ -411,7 +688,7 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.dodge.ninja_complex = {
-			speed = 2,
+			speed = 1.6,
 			occasions = {
 				hit = {
 					chance = 1,
@@ -420,17 +697,8 @@ function CharacterTweakData:_presets(tweak_data)
 						0
 					},
 					variations = {
-						dive = {
-							chance = 0.33,
-							shoot_chance = 1,
-							shoot_accuracy = 1,
-							timeout = {
-								0.5,
-								0.5
-							}
-						},
 						roll = {
-							chance = 0.33,
+							chance = 0.5,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -439,7 +707,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						wheel = {
-							chance = 0.34,
+							chance = 0.5,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -456,7 +724,7 @@ function CharacterTweakData:_presets(tweak_data)
 						0
 					},
 					variations = {
-						dive = {
+						side_step = {
 							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
@@ -492,26 +760,8 @@ function CharacterTweakData:_presets(tweak_data)
 						0
 					},
 					variations = {
-						dive = {
-							chance = 0.33,
-							shoot_chance = 1,
-							shoot_accuracy = 1,
-							timeout = {
-								0.5,
-								0.5
-							}
-						},
-						roll = {
-							chance = 0.33,
-							shoot_chance = 1,
-							shoot_accuracy = 1,
-							timeout = {
-								0.5,
-								0.5
-							}
-						},
 						wheel = {
-							chance = 0.34,
+							chance = 1,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {

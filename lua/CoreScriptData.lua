@@ -60,6 +60,8 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
 	end
 	
+	BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_night/pd2_berry_outdoor_night", "environment")
+	
 	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		if sex == "friend" then
 			BeardLib:ReplaceScriptData(mod_path .. "scriptdata/shitfaceenvironment.custom_xml", "custom_xml", "environments/pd2_friend/pd2_friend", "environment")
