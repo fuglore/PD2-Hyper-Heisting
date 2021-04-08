@@ -42,7 +42,7 @@ function CopActionDodge:init(action_desc, common_data)
 	local body_part = action_desc.body_part
 	self._body_part = body_part
 
-	local variation = "dive" or action_desc.variation
+	local variation = action_desc.variation
 	local speed = action_desc.speed
 	speed = speed > 1.6 and 1.6 or speed --hard clamp as otherwise the animations just completely break, thanks OVK lmao
 	if variation == "dive" then
