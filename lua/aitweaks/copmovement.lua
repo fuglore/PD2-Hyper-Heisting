@@ -507,6 +507,8 @@ function CopMovement:sync_action_dodge_start(body_part, var, side, rot, speed, s
 	if self._ext_damage:dead() then
 		return
 	end
+	
+	shoot_acc = shoot_acc / 10
 
 	local action_data = {
 		type = "dodge",
