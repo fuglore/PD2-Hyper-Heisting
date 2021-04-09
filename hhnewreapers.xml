@@ -180,6 +180,9 @@
 	<texture path="units/pd2_dlc_mad/characters/ene_akan_medic_ak47_ass/ene_akan_medic_head_df" force="true"/>
 	
 	<!-- new textures -->
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/moss_punk" />	
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/smg_punk" />	
+	<texture path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/bronco_punk" />	
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/k63_nm" />
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/k63_shot_df" />
 	<texture path="units/pd2_dlc_mad/characters/shared_textures/k63_rifle_df" />	

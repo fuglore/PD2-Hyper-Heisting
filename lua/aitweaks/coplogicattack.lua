@@ -402,7 +402,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			elseif my_data.flank_cover and my_data.flank_cover.failed then
 				want_flank_cover = true
 
-				if not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then --not gonna bother renaming and adding stuff to be used as flank_path as well, so I'm sharing the name even though they're kinda different
+				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then --not gonna bother renaming and adding stuff to be used as flank_path as well, so I'm sharing the name even though they're kinda different
 					my_data.flank_cover = nil
 
 					if my_data.charge_path then
@@ -516,7 +516,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 
 	if not action_taken then
-		if not my_data.cover_path_failed_t or t - my_data.cover_path_failed_t > 2 then
+		if data.important or not my_data.cover_path_failed_t or t - my_data.cover_path_failed_t > 2 then
 			local best_cover = my_data.best_cover
 
 			if best_cover and not my_data.processing_cover_path and not my_data.cover_path and not my_data.charge_path_search_id then
@@ -1923,7 +1923,6 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 					elseif data.unit:base():has_tag("shield") then
 						local shield_knock_cooldown = math.random(3, 6)
 						if not my_data.shield_knock_cooldown or my_data.shield_knock_cooldown < data.t then
-							local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)	
 							my_data.shield_knock_cooldown = data.t + shield_knock_cooldown
 									
 							if data.unit:base()._tweak_table == "phalanx_minion" or data.unit:base()._tweak_table == "phalanx_minion_assault" then
@@ -2145,7 +2144,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 			return "spoocavoidance"
 		elseif data.tactics.reloadingretreat and data.unit:anim_data().reload then
 			return "reload"
-		elseif data.tactics.elite_ranged_fire and data.attention_obj.verified_dis < my_data.weapon_range.optimal * 0.5 then
+		elseif data.tactics.elite_ranged_fire and data.attention_obj.verified_dis < my_data.weapon_range.close * 0.5 then
 			return "eliterangedfire"
 		elseif data.tactics.hitnrun and data.attention_obj.verified_dis < 1000 then
 			return "hitnrun"
@@ -2158,8 +2157,16 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		return true
 	end
 	
-	if my_data.moving_to_cover or data.attention_obj.dmg_t and data.t - data.attention_obj.dmg_t < 2 then
+	if my_data.moving_to_cover then 
 		return true
+	end
+
+	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	
+	if diff_index < 7 then
+		if data.attention_obj.dmg_t and data.t - data.attention_obj.dmg_t < 1 then
+			return true
+		end
 	end
 	
 	if data.is_suppressed then
