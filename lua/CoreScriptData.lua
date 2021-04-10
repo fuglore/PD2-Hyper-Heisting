@@ -60,7 +60,21 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
 	end
 	
-	BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_night/pd2_berry_outdoor_night", "environment")
+	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/finalsectionpbr.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_night/pd2_berry_outdoor_night", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/pbrconnectionanarchy.custom_xml", "custom_xml", "environments/pd2_berry_connection/pd2_berry_connection", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/pbrundergroundanarchy.custom_xml", "custom_xml", "environments/pd2_berry_underground/pd2_berry_underground", "environment")
+		
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_final_top_part/pd2_berry_outdoor_final_top_part", "environment")	
+	else
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_night/pd2_berry_outdoor_night", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/pbrconnectionhh.custom_xml", "custom_xml", "environments/pd2_berry_connection/pd2_berry_connection", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/pbrundergroundhh.custom_xml", "custom_xml", "environments/pd2_berry_underground/pd2_berry_underground", "environment")
+		
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/finalsectionpbr.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_final_top_part/pd2_berry_outdoor_final_top_part", "environment")
+		
+	end
+	
 	
 	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		if sex == "friend" then
