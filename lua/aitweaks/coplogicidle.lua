@@ -1721,6 +1721,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 
 	local near_threshold = data.internal_data.weapon_range.optimal
 	local too_close_threshold = data.internal_data.weapon_range.close
+	local takedown = data.unit:base():has_tag("takedown") or data.internal_data.weapon_range.aggressive
 	local tactics = data.tactics
 	local harasser = tactics and tactics.harass
 	local spoocavoider = tactics and tactics.spoocavoidance
@@ -1784,7 +1785,11 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 
 						if attention_data.is_local_player then
 							local cur_state = att_unit:movement():current_state()
-
+							
+							if takedown then
+								weight_mul = weight_mul + 0.5
+							end
+							
 							if not cur_state._moving and cur_state:ducking() then
 								weight_mul = weight_mul * managers.player:upgrade_value("player", "stand_still_crouch_camouflage_bonus", 1)
 							end
@@ -1810,6 +1815,10 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 								if anim_data and anim_data.reload then
 									valid_harass = true
 								end
+							end
+							
+							if takedown then
+								weight_mul = weight_mul + 0.5
 							end
 
 							if att_base_ext and att_base_ext.upgrade_value then
@@ -1866,9 +1875,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						if has_damaged then
 							target_priority_slot = target_priority_slot - 2
 						else
-							local has_alerted = alert_dt < 3.5
-
-							if has_alerted then
+							if aimed_at then
 								target_priority_slot = target_priority_slot - 1
 							end
 						end
@@ -2062,10 +2069,12 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 
 						if not best_target then
 							best = true
-						elseif target_priority_slot < best_target_priority_slot then
-							best = true
-						elseif target_priority_slot == best_target_priority_slot and target_priority < best_target_priority then
-							best = true
+						elseif reaction >= best_target_reaction then
+							if target_priority_slot < best_target_priority_slot then
+								best = true
+							elseif target_priority_slot == best_target_priority_slot and target_priority < best_target_priority then
+								best = true
+							end
 						end
 
 						if best then

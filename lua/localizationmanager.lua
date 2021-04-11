@@ -287,21 +287,33 @@
 		["pattern_truthrunes_title"] = "Truth Runes",				
 		["menu_l_global_value_hyperheist"] = "This is a Hyper Heisting item!",
 		["menu_l_global_value_hyperheisting_desc"] = "This is a Hyper Heisting item!",		
-		["shin_options_title"] = "Hyper Heisting Options!",		
+		
+		["shin_options_title"] = "Hyper Heisting Options!",	
+		
 		["shin_toggle_helmet_title"] = "Extreme Helmet Popping!",
 		["shin_toggle_helmet_desc"] = "Enhances the force and power of flying helmets, and changes its calculations to give that feeling of extra oomph!",
+		
 		["shin_toggle_hhassault_title"] = "Stylish Assault Corner!",
 		["shin_toggle_hhassault_desc"] = "Enhances the [POLICE ASSAULT IN PROGRESS] hud area by adding extra flavor! (Such as entirely unique assault text based on the faction you are fighting against!) NOTE: Requires restarting the heist if changed mid-game!",
+		
 		["shin_toggle_hhskulldiff_title"] = "Extreme Difficulty Names!",
 		["shin_toggle_hhskulldiff_desc"] = "Changes the difficulty names to suit Hyper Heisting's style!",
+		
 		["shin_toggle_blurzonereduction_title"] = "Less Blurry Blurzones!",
 		["shin_toggle_blurzonereduction_desc"] = "Gently reduces the blurring effect of things such as the Cook Off Methlab in order to stop them from getting in the way of gameplay!",
+		
 		["shin_toggle_highpriorityglint_title"] = "High Priority Tells!",
 		["shin_toggle_highpriorityglint_desc"] = "Adds a glint to high priority enemies when they're about to fire, and plays a *ding!* when they're within 3 meters to let you know your goose is cooked! (Note: All of this only applies if they're targeting you!)",
+		
 		["shin_toggle_suppression_title"] = "Extreme Visible Suppression!",
 		["shin_toggle_suppression_desc"] = "Adds a unique visual effect to your screen for when you are being suppressed by enemies! (Looks more fancy if you have Chromatic Aberration on!)",
+		
 		["shin_screenshakemult_title"] = "Screenshake Intensity",
 		["shin_screenshakemult_desc"] = "Allows you to manually set how intense screenshake effects are! You can lower it if you're prone to motion sickness! NOTE: Lowering the screenshake can make the game feel a lot less impactful!",
+		
+		["shin_toggle_noweirddof_title"] = "Disable Enviromental Depth Of Field!",
+		["shin_toggle_noweirddof_desc"] = "Removes the Depth Of Field from backgrounds and the skybox allowing for them to look much clearer! NOTE: Works with the aiming Depth Of Field!",
+		
 		["shin_albanian_content_enable_title"] = "enable albanian joke content",
 		["shin_enable_albanian_content_title"] = "enable albanian joke content",
 		["shin_albanian_content_enable_desc"] = "nable abanian përmbajtje (WARNING: You probably shouldn't enable this!)",		

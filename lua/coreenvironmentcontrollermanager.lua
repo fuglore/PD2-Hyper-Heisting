@@ -1,4 +1,94 @@
+local HH = PD2THHSHIN
 local flashbang_test_offset = Vector3(0, 0, 150)
+
+local ids_dof_near_plane = Idstring("near_plane")
+local ids_dof_far_plane = Idstring("far_plane")
+local ids_dof_settings = Idstring("settings")
+local mvec1 = Vector3()
+local mvec2 = Vector3()
+
+function CoreEnvironmentControllerManager:_update_dof(t, dt)
+	local mvec_set = mvector3.set_static
+	local mvec = mvec1
+
+	if self._dof_override then
+		if self._dof_override_transition_params then
+			local params = self._dof_override_transition_params
+			params.time = math.max(0, params.time - dt)
+			local lerp_v = math.bezier({
+				0,
+				0,
+				1,
+				1
+			}, 1 - params.time / params.total_t)
+			self._dof_override_near = math.lerp(params.start.near, params.stop.near, lerp_v)
+			self._dof_override_near_pad = math.lerp(params.start.near_pad, params.stop.near_pad, lerp_v)
+			self._dof_override_far = math.lerp(params.start.far, params.stop.far, lerp_v)
+			self._dof_override_far_pad = math.lerp(params.start.far_pad, params.stop.far_pad, lerp_v)
+
+			if params.time == 0 then
+				self._dof_override_transition_params = nil
+			end
+		end
+
+		mvec_set(mvec, self._dof_override_near, self._dof_override_near + self._dof_override_near_pad, 0)
+		self._material:set_variable(ids_dof_near_plane, mvec)
+		mvec_set(mvec, self._dof_override_far - self._dof_override_far_pad, self._dof_override_far, 1)
+		self._material:set_variable(ids_dof_far_plane, mvec)
+	else
+		local dof_settings = self._dof_tweaks[self._current_dof_setting]
+		local no_weird_dof = HH.settings.toggle_noweirddof == true
+		
+		if dof_settings.use_no_dof == true then
+			if no_weird_dof then
+				mvec_set(mvec, 0, 0, 0)
+				self._material:set_variable(ids_dof_near_plane, mvec)
+				mvec_set(mvec, 0, 0, 0)
+				self._material:set_variable(ids_dof_far_plane, mvec)
+			else
+				mvec_set(mvec, 0, 0, 0)
+				self._material:set_variable(ids_dof_near_plane, mvec)
+				mvec_set(mvec, 10000, 10000, 1)
+				self._material:set_variable(ids_dof_far_plane, mvec)
+			end
+		elseif self._in_steelsight then
+			dof_settings = dof_settings.steelsight
+			local dof_plane_v = math.clamp(self._current_dof_distance / 5000, 0, 1)
+			self._near_plane_x = math.lerp(500, dof_settings.near_plane_x, dof_plane_v)
+			self._near_plane_y = math.lerp(20, dof_settings.near_plane_y, dof_plane_v)
+			self._far_plane_x = math.lerp(100, dof_settings.far_plane_x, dof_plane_v)
+			self._far_plane_y = math.lerp(500, dof_settings.far_plane_y, dof_plane_v)
+
+			mvec_set(mvec, math.max(self._current_dof_distance - self._near_plane_x, 5), self._near_plane_y, 0)
+			self._material:set_variable(ids_dof_near_plane, mvec)
+			mvec_set(mvec, self._current_dof_distance + self._far_plane_x, self._far_plane_y, 1)
+			self._material:set_variable(ids_dof_far_plane, mvec)
+		elseif no_weird_dof then
+			local dof_speed = math.min(10 * dt, 1)
+			self._near_plane_x = math.lerp(self._near_plane_x, 0, dof_speed)
+			self._near_plane_y = math.lerp(self._near_plane_y, 0, dof_speed)
+			self._far_plane_x = math.lerp(self._far_plane_x, 0, dof_speed)
+			self._far_plane_y = math.lerp(self._far_plane_y, 0, dof_speed)
+
+			mvec_set(mvec, self._near_plane_x, self._near_plane_y, 0)
+			self._material:set_variable(ids_dof_near_plane, mvec)
+			mvec_set(mvec, self._far_plane_x, self._far_plane_y, 0)
+			self._material:set_variable(ids_dof_far_plane, mvec)
+		else
+			dof_settings = dof_settings.other
+			local dof_speed = math.min(10 * dt, 1)
+			self._near_plane_x = math.lerp(self._near_plane_x, dof_settings.near_plane_x, dof_speed)
+			self._near_plane_y = math.lerp(self._near_plane_y, dof_settings.near_plane_y, dof_speed)
+			self._far_plane_x = math.lerp(self._far_plane_x, dof_settings.far_plane_x, dof_speed)
+			self._far_plane_y = math.lerp(self._far_plane_y, dof_settings.far_plane_y, dof_speed)
+
+			mvec_set(mvec, self._near_plane_x, self._near_plane_y, 0)
+			self._material:set_variable(ids_dof_near_plane, mvec)
+			mvec_set(mvec, self._far_plane_x, self._far_plane_y, 1)
+			self._material:set_variable(ids_dof_far_plane, mvec)
+		end
+	end
+end
 
 function CoreEnvironmentControllerManager:set_flashbang(flashbang_pos, line_of_sight, travel_dis, linear_dis, duration)
 	local flash = self:test_line_of_sight(flashbang_pos + flashbang_test_offset, 200, 1000, 3000, true)
@@ -121,7 +211,7 @@ function CoreEnvironmentControllerManager:set_chromatic_value_lerp(lerp_value)
 	end
 end
 
-if PD2THHSHIN and PD2THHSHIN:BlurzoneEnabled() then
+if HH and HH:BlurzoneEnabled() then
 
 function CoreEnvironmentControllerManager:set_blurzone(id, mode, pos, radius, height, delete_after_fadeout)
 	local blurzone = self._blurzones[id]

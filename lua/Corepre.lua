@@ -13,6 +13,7 @@ PD2THHSHIN.settings = {
 	toggle_suppression = false,
 	toggle_blurzonereduction = true,
 	screenshakemult = 1,
+	toggle_noweirddof = false,
 	first_launch = true
 }
 PD2THHSHIN.session_settings = {} --leave empty; generated on load
@@ -31,6 +32,10 @@ end
 
 function PD2THHSHIN:SkullDiffEnabled()
 	return self:GetSessionSetting("toggle_hhskulldiff")
+end
+
+function PD2THHSHIN:DofEnabled()
+	return self:GetSessionSetting("toggle_noweirddof")
 end
 
 function PD2THHSHIN:BlurzoneEnabled()

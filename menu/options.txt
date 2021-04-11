@@ -66,6 +66,14 @@
 		},
 		{
 			"type" : "toggle",
+			"id" : "shin_toggle_noweirddof",
+			"title" : "shin_toggle_noweirddof_title",
+			"description" : "shin_toggle_noweirddof_desc",
+			"callback" : "callback_shin_toggle_noweirddof",
+			"value" : "toggle_noweirddof"
+		},
+		{
+			"type" : "toggle",
 			"id" : "shin_enable_albanian_content",
 			"title" : "shin_albanian_content_enable_title",
 			"description" : "shin_albanian_content_enable_desc",

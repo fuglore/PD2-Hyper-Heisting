@@ -56,6 +56,10 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 		PD2THHSHIN:ChangeSetting("toggle_hhskulldiff",item:value() == "on")
 	end
 	
+	MenuCallbackHandler.callback_shin_toggle_noweirddof = function(self,item) --toggle
+		PD2THHSHIN:ChangeSetting("toggle_noweirddof",item:value() == "on")
+	end
+	
 	MenuCallbackHandler.callback_shin_toggle_blurzonereduction = function(self,item) --toggle
 		PD2THHSHIN:ChangeSetting("toggle_blurzonereduction",item:value() == "on")
 	end
