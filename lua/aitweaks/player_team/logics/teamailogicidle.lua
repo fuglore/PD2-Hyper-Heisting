@@ -234,7 +234,7 @@ function TeamAILogicIdle.update(data)
 end
 
 function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
-	if data.is_cool then
+	if managers.groupai:state():whisper_mode() then
 		return
 	end
 
@@ -297,13 +297,15 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 		return true
 	end
 	
-	local slot_mask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
-	local raycast = data.unit:raycast("ray", movement_ext:m_head_pos(), follow_unit_mov_ext:m_head_pos(), "slot_mask", slot_mask, "ignore_unit", follow_unit, "report")
-	
-	if raycast then
-		--log("no los")
-		return true
-	end	
+	if not data.attention_obj or not data.attention_obj.verified and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT then
+		local slot_mask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
+		local raycast = data.unit:raycast("ray", movement_ext:m_head_pos(), follow_unit_mov_ext:m_head_pos(), "slot_mask", slot_mask, "ignore_unit", follow_unit, "report")
+		
+		if raycast then
+			--log("no los")
+			return true
+		end
+	end
 end
 
 function TeamAILogicIdle.on_long_dis_interacted(data, other_unit, secondary)
