@@ -1868,6 +1868,8 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 		local coarse_path = managers.navigation:search_coarse(search_params)
 		
 		if coarse_path then
+			coarse_path = managers.navigation:shorten_coarse_through_dis(coarse_path)
+		
 			--log("pog???")
 			grp_objective.coarse_path = coarse_path
 			grp_objective.area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1])
@@ -2641,6 +2643,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			
 			if assault_path and #assault_path > 2 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
 				table_remove(assault_path)
+			end
+			
+			if assault_path then
+				assault_path = managers.navigation:shorten_coarse_through_dis(assault_path)
 			end
 
 			local grp_objective = {

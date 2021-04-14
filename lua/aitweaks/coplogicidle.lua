@@ -317,15 +317,8 @@ function CopLogicIdle._upd_enemy_detection(data)
 	if new_reaction and REACT_SURPRISED <= new_reaction then
 		local objective = data.objective
 		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
-		local can_transition = allow_trans
-		
-		if not data.cool then
-			if objective and objective.type == "act" then
-				can_transition = allow_trans and obj_failed
-			end
-		end
 
-		if can_transition then
+		if allow_trans then
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data)
 
 			if wanted_state and wanted_state ~= data.name then

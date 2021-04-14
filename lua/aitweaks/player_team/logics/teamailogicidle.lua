@@ -234,7 +234,7 @@ function TeamAILogicIdle.update(data)
 end
 
 function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
-	if managers.groupai:state():whisper_mode() then
+	if data.cool and managers.groupai:state():whisper_mode() then
 		return
 	end
 

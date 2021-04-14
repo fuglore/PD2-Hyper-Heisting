@@ -477,17 +477,8 @@ function CopLogicTravel._upd_enemy_detection(data)
 	local objective = data.objective
 	local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
 	
-	if not objective or objective.type ~= "follow" then
-		
-		local can_transition = allow_trans
-		
-		if not data.cool then
-			if objective and objective.type == "act" then
-				can_transition = allow_trans and obj_failed
-			end
-		end
-
-		if can_transition then
+	if not objective or objective.type ~= "follow" then		
+		if allow_trans then
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
 
 			if wanted_state and wanted_state ~= data.name then
@@ -603,6 +594,12 @@ function CopLogicTravel._upd_pathing(data, my_data)
 			my_data.processing_coarse_path = nil
 
 			if path ~= "failed" then
+				local should_shorten = data.objective.type ~= "follow" and not my_data.path_safely and not data.objective.pos or nil
+				
+				if should_shorten then
+					path = managers.navigation:shorten_coarse_through_dis(path)
+				end
+			
 				my_data.coarse_path = path
 				my_data.coarse_path_index = 1
 				data.path_fail_t = nil
@@ -1406,6 +1403,10 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 			seg = objective.nav_seg,
 			pos = objective.pos
 		}
+	end
+	
+	if objective.followup_SO or objective.action then
+		occupation.pos_is_precise = true
 	end
 
 	return occupation
@@ -2282,8 +2283,9 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 				wants_reservation = true
 			else
 				to_pos = new_occupation.pos
-
-				if to_pos then
+				wants_reservation = true
+				
+				if to_pos and not new_occupation.pos_is_precise then
 					local pos_rsrv_id = data.pos_rsrv_id
 					local rsrv_desc = {
 						position = to_pos,
@@ -2294,8 +2296,6 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 					if not managers.navigation:is_pos_free(rsrv_desc) then
 						to_pos = CopLogicTravel._get_pos_on_wall(to_pos, 700, nil, nil, pos_rsrv_id)
 					end
-
-					wants_reservation = true
 				end
 			end
 		end

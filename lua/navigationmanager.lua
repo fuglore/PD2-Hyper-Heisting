@@ -21,6 +21,7 @@ local math_max = math.max
 local math_clamp = math.clamp
 local math_ceil = math.ceil
 local math_floor = math.floor
+local math_up = math.UP
 local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 NavigationManager = NavigationManager or class()
@@ -70,35 +71,71 @@ NavigationManager.ACCESS_FLAGS = {
 }
 NavigationManager.ACCESS_FLAGS_OLD = {}
 
-function NavigationManager:release_cover(cover)
-	local reserved = cover[self.COVER_RESERVED]
-	
-	if not reserved then
-		log("cover invalid!!! but probably not reserved!!!")
-		return true
+function NavigationManager:shorten_coarse_through_dis(path)
+	if #path < 3 then
+		return path
 	end
 	
-	if reserved == 1 then
-		cover[self.COVER_RESERVED] = nil
+	local i = 1
+	local all_nav_segs = self._nav_segments
+	local done = nil
+	
+	log("indexes before: " .. tostring(#path) .. "")
+	local line1 = Draw:brush(Color.red:with_alpha(0.5), 5)
+	
+	while not done do 
+		if path[i + 1] and i + 1 < #path then
+			local i_seg_pos_1 = all_nav_segs[path[i][1]].pos
+			local i_seg_pos_2 = all_nav_segs[path[i + 1][1]].pos
+			
+			if math_abs(i_seg_pos_1.z - i_seg_pos_2.z) < 185 then 
+				local travel_dis = mvec3_dis(i_seg_pos_1, i_seg_pos_2)
+				
+				if travel_dis < 800 then
+					local new_path = {}
+					
+					for path_i = 1, #path do
+						if path_i ~= i + 1	then
+							new_path[#new_path + 1] = path[path_i]
+						end
+					end
+					path = deep_clone(new_path)			
+				elseif math_abs(i_seg_pos_1.z - i_seg_pos_2.z) < 93 then 
+					local ray_params = {
+						allow_entry = false,
+						pos_from = i_seg_pos_1,
+						pos_to = i_seg_pos_2
+					}
 
-		self:unreserve_pos(cover[self.COVER_RESERVATION])
-	else
-		cover[self.COVER_RESERVED] = reserved - 1
-	end
-end
-
-function NavigationManager:find_cover_from_literally_anything(search_params)
-	if not search_params then
-		return
+					if not self:raycast(ray_params) then
+						local new_path = {}
+						line1:cylinder(i_seg_pos_2, i_seg_pos_2 + math_up * 185, 20)
+						for path_i = 1, #path do
+							if path_i ~= i + 1	then
+								new_path[#new_path + 1] = path[path_i]
+							end
+						end
+						path = deep_clone(new_path)
+					end
+				end
+			end
+			
+			i = i + 1
+		else
+			done = true
+		end
 	end
 	
-	if type(search_params.in_nav_seg) == "table" then
-		search_params.in_nav_seg = self._convert_nav_seg_map_to_vec(search_params.in_nav_seg)
+	log("indexes after: " .. tostring(#path) .. "")
+	
+	local line2 = Draw:brush(Color.blue:with_alpha(0.5), 5)
+	
+	for path_i = 1, #path do
+		local seg_pos = all_nav_segs[path[path_i][1]].pos
+		line2:cylinder(seg_pos, seg_pos + math_up * 185, 20)
 	end
 	
-	--log("cum")
-
-	return self._quad_field:find_cover(search_params)
+	return path
 end
 
 function NavigationManager:search_coarse(params)
