@@ -80,8 +80,8 @@ function NavigationManager:shorten_coarse_through_dis(path)
 	local all_nav_segs = self._nav_segments
 	local done = nil
 	
-	log("indexes before: " .. tostring(#path) .. "")
-	local line1 = Draw:brush(Color.red:with_alpha(0.5), 5)
+	--log("indexes before: " .. tostring(#path) .. "")
+	--local line1 = Draw:brush(Color.red:with_alpha(0.5), 5)
 	
 	while not done do 
 		if path[i + 1] and i + 1 < #path then
@@ -109,7 +109,7 @@ function NavigationManager:shorten_coarse_through_dis(path)
 
 					if not self:raycast(ray_params) then
 						local new_path = {}
-						line1:cylinder(i_seg_pos_2, i_seg_pos_2 + math_up * 185, 20)
+						--line1:cylinder(i_seg_pos_2, i_seg_pos_2 + math_up * 185, 20)
 						for path_i = 1, #path do
 							if path_i ~= i + 1	then
 								new_path[#new_path + 1] = path[path_i]
@@ -126,14 +126,14 @@ function NavigationManager:shorten_coarse_through_dis(path)
 		end
 	end
 	
-	log("indexes after: " .. tostring(#path) .. "")
+	--log("indexes after: " .. tostring(#path) .. "")
 	
-	local line2 = Draw:brush(Color.blue:with_alpha(0.5), 5)
+	--local line2 = Draw:brush(Color.blue:with_alpha(0.5), 5)
 	
-	for path_i = 1, #path do
-		local seg_pos = all_nav_segs[path[path_i][1]].pos
-		line2:cylinder(seg_pos, seg_pos + math_up * 185, 20)
-	end
+	--for path_i = 1, #path do
+	--	local seg_pos = all_nav_segs[path[path_i][1]].pos
+	--	line2:cylinder(seg_pos, seg_pos + math_up * 185, 20)
+	--end
 	
 	return path
 end
