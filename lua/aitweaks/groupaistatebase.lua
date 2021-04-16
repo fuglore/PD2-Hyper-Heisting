@@ -50,21 +50,62 @@ function GroupAIStateBase:_init_misc_data(...)
 		dis_mul = drama_tweak.max_dis_mul
 	}
 	self._nr_important_cops = 8
-	self._special_unit_types = self._special_unit_types or {}
-	self._special_unit_types['fbi'] = true
-	self._special_unit_types['fbi_xc45'] = true
-	self._special_unit_types['tank_mini'] = true
-	self._special_unit_types['sniper'] = true
-	self._special_unit_types['armored_sniper'] = true
-	self._special_unit_types['assault_sniper'] = true
-	self._special_unit_types['tank_hw'] = true
-	self._special_unit_types['tank_medic'] = true
-	self._special_unit_types['tank_ftsu'] = true
-	self._special_unit_types['spooc_heavy'] = true
-	self._special_unit_types['akuma'] = true
-	self._special_unit_types['phalanx_minion'] = true
+	self._special_unit_types = {
+		shield = true,
+		medic = true,
+		taser = true,
+		tank = true,
+		spooc = true,
+		fbi = true
+	}
+	
 	self._rolled_dramatalk_chance = nil
 end
+
+function GroupAIStateBase:on_enemy_registered(unit)
+	if self._anticipated_police_force > 0 then
+		self._anticipated_police_force = self._anticipated_police_force - 1
+	else
+		self._police_force = self._police_force + 1
+	end
+
+	local unit_tags = unit:base()._char_tweak.tags or {unit:base()._tweak_table}
+	
+	for i = 1, #unit_tags do
+		if self._special_unit_types[unit_tags[i]] then
+			self:register_special_unit(unit:key(), unit_tags[i])
+		end
+	end
+	
+	if Network:is_client() then
+		unit:movement():set_team(self._teams[tweak_data.levels:get_default_team_ID(unit:base():char_tweak().access == "gangster" and "gangster" or "combatant")])
+	end
+end
+
+function GroupAIStateBase:is_enemy_special(unit)
+	if not unit:base() then
+		return false
+	end
+
+	local unit_tags = unit:base()._char_tweak.tags or {unit:base()._tweak_table}
+	local category = nil
+	
+	for i = 1, #unit_tags do
+		category = self._special_units[unit_tags[i]]
+		
+		if category then
+			break
+		end
+	end
+	
+
+	if not category then
+		return false
+	end
+
+	return category[unit:key()]
+end
+
 
 local origfunc2 = GroupAIStateBase.on_simulation_started
 function GroupAIStateBase:on_simulation_started(...)
@@ -92,19 +133,14 @@ function GroupAIStateBase:on_simulation_started(...)
 		dis_mul = drama_tweak.max_dis_mul
 	}
 	self._nr_important_cops = 8
-	self._special_unit_types = self._special_unit_types or {}
-	self._special_unit_types['fbi'] = true
-	self._special_unit_types['fbi_xc45'] = true
-	self._special_unit_types['tank_mini'] = true
-	self._special_unit_types['sniper'] = true	
-	self._special_unit_types['armored_sniper'] = true
-	self._special_unit_types['assault_sniper'] = true	
-	self._special_unit_types['tank_hw'] = true
-	self._special_unit_types['tank_medic'] = true
-	self._special_unit_types['tank_ftsu'] = true
-	self._special_unit_types['spooc_heavy'] = true
-	self._special_unit_types['akuma'] = true
-	self._special_unit_types['phalanx_minion'] = true
+	self._special_unit_types = {
+		shield = true,
+		medic = true,
+		taser = true,
+		tank = true,
+		spooc = true,
+		fbi = true
+	}
 	self._rolled_dramatalk_chance = nil
 end
 
@@ -869,11 +905,13 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 	for crim_key, record in pairs_g(self._ai_criminals) do
 		record.unit:brain():on_cop_neutralized(u_key)
 	end
-
-	local unit_type = unit:base()._tweak_table
-
-	if self._special_unit_types[unit_type] then
-		self:unregister_special_unit(u_key, unit_type)
+	
+	local unit_tags = unit:base()._char_tweak.tags or {unit:base()._tweak_table}
+	
+	for i = 1, #unit_tags do
+		if self._special_unit_types[unit_tags[i]] then
+			self:unregister_special_unit(u_key, unit_tags[i])
+		end
 	end
 
 	local dead = unit:character_damage():dead()

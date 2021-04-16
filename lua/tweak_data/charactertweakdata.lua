@@ -1864,34 +1864,16 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.rhythmsniper.is_rifle.autofire_rounds = nil	
 	presets.weapon.rhythmsniper.is_rifle.focus_delay = 2  
 	presets.weapon.rhythmsniper.is_rifle.aim_delay = {
-		0.3,
-		0.3
+		0.4,
+		0.4
 	}
 	presets.weapon.rhythmsniper.is_rifle.FALLOFF = {
-		{
-			dmg_mul = 2.5,
-			r = 700,
-			acc = {
-				0,
-				1
-			},
-			recoil = {
-				0.8,
-				0.8
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
 		{
 			dmg_mul = 2.5,
 			r = 3500,
 			acc = {
 				0,
-				0.75
+				1
 			},
 			recoil = {
 				0.8,
@@ -1909,7 +1891,7 @@ function CharacterTweakData:_presets(tweak_data)
 			r = 6000,
 			acc = {
 				0,
-				0.3
+				0.75
 			},
 			recoil = {
 				0.8,
@@ -1923,11 +1905,11 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		},
 		{
-			dmg_mul = 1,
-			r = 9000,
+			dmg_mul = 2.5,
+			r = 10000,
 			acc = {
 				0,
-				0.1
+				0.5
 			},
 			recoil = {
 				0.8,
@@ -8647,9 +8629,6 @@ function CharacterTweakData:_set_normal()
 		end
 	end
 	
-	--Sniper tweak
-	self.sniper.weapon.is_rifle.focus_delay = 6
-	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
 	self.fbi.move_speed = self.presets.move_speed.simple_consistency
 	self.fbi.speed_mul = 1.1
@@ -8814,9 +8793,6 @@ function CharacterTweakData:_set_hard()
 		end
 	end
 	
-	--Sniper tweak
-	self.sniper.weapon.is_rifle.focus_delay = 6
-	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
 	self.fbi.move_speed = self.presets.move_speed.simple_consistency
 	self.fbi.speed_mul = 1.1
@@ -9004,9 +8980,6 @@ function CharacterTweakData:_set_overkill()
 	self.gangster_ninja.speed_mul = 1.1	
 	self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
 	self.fbi_pager.speed_mul = 1.1
-	--sniper setup.
-	self.sniper.weapon.is_rifle.focus_delay = 2
-	self.armored_sniper.weapon.is_rifle.focus_delay = 2
 	--Shield speed setup
 	self.shield.move_speed = self.presets.move_speed.simple_consistency
 	--Movespeed setups.
@@ -9202,123 +9175,6 @@ function CharacterTweakData:_set_overkill_145()
 		self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 		self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 		self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
-		--sniper setup
-		self.sniper.weapon.is_rifle.focus_delay = 1.5
-		self.sniper.weapon.is_rifle.aim_delay = {0, 0}
-		self.sniper.weapon.is_rifle.FALLOFF = {
-			{
-				dmg_mul = 3.75,
-				r = 700,
-				acc = {
-					0,
-					1
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3.75,
-				r = 3500,
-				acc = {
-					0,
-					0.75
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3.75,
-				r = 6000,
-				acc = {
-					0,
-					0.5
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			}
-		}
-		self.armored_sniper.weapon.is_rifle.focus_delay = 1.5
-		self.armored_sniper.weapon.is_rifle.aim_delay = {0, 0}
-		self.armored_sniper.weapon.is_rifle.FALLOFF = {
-			{
-				dmg_mul = 3.75,
-				r = 700,
-				acc = {
-					0,
-					1
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3.75,
-				r = 3500,
-				acc = {
-					0,
-					0.75
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3.75,
-				r = 6000,
-				acc = {
-					0,
-					0.5
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			}
-		}		
 		--Movespeed setups.
 		self.swat.move_speed = self.presets.move_speed.anarchy_consistency
 		self.city_swat.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9352,9 +9208,6 @@ function CharacterTweakData:_set_overkill_145()
 		self.gangster_ninja.speed_mul = 1.1	
 		self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
 		self.fbi_pager.speed_mul = 1.1
-		--sniper setup.
-		self.sniper.weapon.is_rifle.focus_delay = 2
-		self.armored_sniper.weapon.is_rifle.focus_delay = 2
 		--Shield speed setup
 		self.shield.move_speed = self.presets.move_speed.simple_consistency
 		--Movespeed setups.
@@ -9430,9 +9283,7 @@ function CharacterTweakData:_set_easy_wish()
 	self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency
 	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
-	--sniper setup
-	self.sniper.weapon.is_rifle.focus_delay = 2
-	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
+
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
 		if faction == "federales" then
@@ -9624,9 +9475,6 @@ function CharacterTweakData:_set_overkill_290()
 	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
 	
-	--sniper stuff
-	self.sniper.weapon.is_rifle.focus_delay = 2
-	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
@@ -9843,83 +9691,6 @@ function CharacterTweakData:_set_sm_wish()
 	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 	self.fbi_xc45.weapon = self.presets.weapon.fbigod
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
-	--sniper setup
-	self.sniper.weapon.is_rifle.focus_delay = 1.5
-	self.sniper.weapon.is_rifle.aim_delay = {0.64, 0.64}
-	self.sniper.weapon.is_rifle.FALLOFF = {
-		{
-			dmg_mul = 3.75,
-			r = 700,
-			acc = {
-				0,
-				1
-			},
-			recoil = {
-				0.64,
-				0.64
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 3.75,
-			r = 3500,
-			acc = {
-				0,
-				0.75
-			},
-			recoil = {
-				0.64,
-				0.64
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 3.75,
-			r = 6000,
-			acc = {
-				0,
-				0.3
-			},
-			recoil = {
-				0.64,
-				0.64
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 1,
-			r = 9000,
-			acc = {
-				0,
-				0.1
-			},
-			recoil = {
-				0.64,
-				0.64
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		}
-	}
 
 	--Anti-Fire DOT setup
 	self.taser.DAMAGE_CLAMP_FIREDOT = 5 --Tasers and Shields need significant resistance to fire.

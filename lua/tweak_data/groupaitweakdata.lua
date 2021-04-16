@@ -491,7 +491,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 2,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 12
+			fbi = 12
 		}
 	elseif difficulty_index <= 2 then
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
@@ -519,7 +519,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 1,
 			sniper = 3,			
 			spooc = 1,
-			ninja = 4
+			fbi = 4
 		}
 	elseif difficulty_index == 5 then
 		self.special_unit_spawn_limits = { --overkill enables two spoocs, adds another taser, escalate the game meaningfully every difficulty by increasing complexity
@@ -529,7 +529,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			sniper = 3,						
 			tank = 2,
 			spooc = 1,
-			ninja = 4
+			fbi = 4
 		}
 	elseif difficulty_index == 6 then
 		self.special_unit_spawn_limits = { --begin coordinated spawngroups to heighten gameplay complexity, start pushing the boundaries, no big special limit change here outside of the cloakers, medics and shields, its fine though
@@ -539,7 +539,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 2,
 			sniper = 3,						
 			spooc = 1,
-			ninja = 6
+			fbi = 6
 		}
 	elseif difficulty_index == 7 then
 		self.special_unit_spawn_limits = { --setting medic limit to six allows for survivability within common enemy spawngroups since special enemies are now paired commonly with medics to keep them alive consistently
@@ -549,7 +549,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			sniper = 3,						
 			tank = 2,
 			spooc = 2,
-			ninja = 8
+			fbi = 8
 		}
 	elseif difficulty_index == 8 then
 		self.special_unit_spawn_limits = { --game reaches boiling point, 2 dozers, 4-5 tasers, 8-10 medics, 3-4 cloakers and 8-10 shields.
@@ -559,7 +559,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 2,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 12
+			fbi = 12
 		}
 	else
 		self.special_unit_spawn_limits = {
@@ -569,7 +569,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 			tank = 2,
 			sniper = 3,						
 			spooc = 3,
-			ninja = 12
+			fbi = 12
 		}
 	end
 
@@ -1505,7 +1505,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 	
 	if difficulty_index < 6 then
 		self.unit_categories.FBI_suit_M4_MP5 = {
-			special_type = "ninja",
+			special_type = "fbi",
 			unit_types = {
 				america = {
 					Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
@@ -1538,7 +1538,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	elseif difficulty_index == 6 or difficulty_index == 7 then
 		self.unit_categories.FBI_suit_M4_MP5 = {
-			special_type = "ninja",
+			special_type = "fbi",
 			unit_types = {
 				america = {
 					Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45"),
@@ -1571,7 +1571,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	else
 		self.unit_categories.FBI_suit_M4_MP5 = {
-			special_type = "ninja",
+			special_type = "fbi",
 			unit_types = {
 				america = {
 					Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_m4/ene_zeal_fbigod_m4"),

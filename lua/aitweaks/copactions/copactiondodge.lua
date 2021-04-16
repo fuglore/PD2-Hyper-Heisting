@@ -1,19 +1,47 @@
-CopActionDodge._DODGE_VAR_DISTANCES = {
-	side_step = 130,
-	dive = 300,
-	roll = 250,
-	wheel = 300
+CopActionDodge._dodge_anim_distances = {
+	hos = {
+		side_step = {
+			fwd = 210,
+			bwd = 65,
+			l = 180,
+			r = 120
+		},
+		dive = {
+			fwd = 275,
+			bwd = 280,
+			l = 240,
+			r = 275
+		},
+		roll = {
+			fwd = 240,
+			bwd = 240,
+			l = 245,
+			r = 250
+		},
+		wheel = {
+			fwd = 300,
+			bwd = 240,
+			l = 215,
+			r = 215
+		}
+	},
+	cbt = {
+		side_step = {
+			fwd = 130,
+			bwd = 35,
+			l = 100,
+			r = 75
+		}
+	}
 }
 
-CopActionDodge._DODGE_ANIM_T_CLAMP = {
-	side_step = 0.5,
-	dive = 0.77,
-	roll = 0.6,
-	wheel = 0.5
-}
+CopActionDodge._dodge_anim_distances.cbt.dive = CopActionDodge._dodge_anim_distances.hos.dive
+CopActionDodge._dodge_anim_distances.cbt.roll = CopActionDodge._dodge_anim_distances.hos.roll
+CopActionDodge._dodge_anim_distances.cbt.wheel = CopActionDodge._dodge_anim_distances.hos.wheel
 
 local mvec3_cpy = mvector3.copy
 
+local mrot_set = mrotation.set_yaw_pitch_roll
 local mrot_lookat = mrotation.set_look_at
 local tmp_rot = Rotation()
 
@@ -45,11 +73,7 @@ function CopActionDodge:init(action_desc, common_data)
 	local variation = action_desc.variation
 	local speed = action_desc.speed
 	speed = speed > 1.6 and 1.6 or speed --hard clamp as otherwise the animations just completely break, thanks OVK lmao
-	if variation == "dive" then
-		speed = speed + 0.4
-	end
 	self._speed = speed
-	self._t_clamp = self._DODGE_ANIM_T_CLAMP[variation] / speed
 
 	local side = action_desc.side
 	local direction = action_desc.direction
@@ -58,6 +82,14 @@ function CopActionDodge:init(action_desc, common_data)
 
 	local machine = common_data.machine
 	self._machine = machine
+	local shoot_accuracy = action_desc.shoot_accuracy
+		
+	if Network:is_server() then
+		local upper_body_action = self._ext_movement._active_actions[3]
+		if upper_body_action then 
+			self._ext_movement:set_stance_by_code(2, true)
+		end
+	end
 
 	machine:set_parameter(redir_res, variation, 1)
 	machine:set_parameter(redir_res, side, 1)
@@ -70,7 +102,7 @@ function CopActionDodge:init(action_desc, common_data)
 
 	self:_determine_rotation_transition(side, direction, variation)
 
-	local shoot_accuracy = action_desc.shoot_accuracy
+	self._set_new_pos = CopActionWalk._set_new_pos
 
 	if Network:is_server() then
 		self._is_server = true
@@ -87,7 +119,10 @@ function CopActionDodge:init(action_desc, common_data)
 
 		local var_index = self._get_variation_index(variation)
 		local side_index = self._get_side_index(side)
-		local sync_yaw = self._end_rot:yaw()
+
+		mrot_lookat(tmp_rot, direction, math_up)
+
+		local sync_yaw = tmp_rot:yaw()
 		local sync_acc = shoot_accuracy * 10 --accuracy multiplier is synced to clients as an integer clamped between 0 and 10
 
 		common_data.ext_network:send("action_dodge_start", body_part, var_index, side_index, sync_yaw, speed, sync_acc)
@@ -99,35 +134,7 @@ function CopActionDodge:init(action_desc, common_data)
 
 	ext_mov:enable_update()
 
-	self:on_attention(common_data.attention)
-
-	--self:_create_debug_ws()
-
 	return true
-end
-
-function CopActionDodge:on_attention(attention)
-	if attention then
-		local att_handler = attention.handler
-
-		if att_handler then
-			self._attention_pos = att_handler:get_ground_m_pos()
-		else
-			local att_unit = attention.unit
-
-			if att_unit then
-				local att_mov_ext = att_unit:movement()
-
-				self._attention_pos = att_mov_ext and att_mov_ext:m_pos() or att_unit:position()
-			else
-				self._attention_pos = attention.pos or nil
-			end
-		end
-	else
-		self._attention_pos = nil
-	end
-
-	self._attention = attention
 end
 
 function CopActionDodge:on_exit()
@@ -141,10 +148,15 @@ function CopActionDodge:on_exit()
 	end
 
 	if expired then
+		if self._is_server then
+			local upper_body_action = self._ext_movement._active_actions[3]
+			if upper_body_action then 
+				self._ext_movement:set_stance_by_code(3, true)
+			end
+		end
+		
 		CopActionWalk._chk_correct_pose(self)
 	end
-
-	self:_remove_debug_gui()
 end
 
 function CopActionDodge:update(t)
@@ -153,46 +165,35 @@ function CopActionDodge:update(t)
 
 	if not ext_anim.dodge then
 		self._expired = true
+		self.update = self["_upd_empty"]
 
 		self._last_pos = self._end_pos
 
-		CopActionWalk._set_new_pos(self, dt)
+		self._set_new_pos(self, dt)
+
+		if ext_anim.base_need_upd then
+			self._ext_movement:upd_m_head_pos()
+		end
 
 		return
 	end
 
 	local ext_mov = self._ext_movement
 	local seg_rel_t = self._machine:segment_relative_time(ids_base)
-	local seg_rel_t_clamp = math_clamp((seg_rel_t - self._anim_start_t) / self._t_clamp, 0, 1)
-	self._last_pos = math_lerp(self._start_pos, self._end_pos, seg_rel_t_clamp)
+	local prev_last_pos = self._last_pos or self._start_pos
+	local dis_speed = self._speed
+	dis_speed = dis_speed < 1 and 1 or dis_speed
 
-	CopActionWalk._set_new_pos(self, dt)
+	self._last_pos = self._anim_displacement_f(self._start_pos, self._end_pos, seg_rel_t, dis_speed)
 
-	--self:_update_debug_ws(seg_rel_t, seg_rel_t_clamp)
-
-	if seg_rel_t_clamp < 0.3 or seg_rel_t_clamp > 0.8 then
-		local att_pos = self._attention_pos
-
-		if att_pos then
-			local common_data = self._common_data
-			local delta_lerp = dt * 2
-			delta_lerp = delta_lerp > 1 and 1 or delta_lerp
-
-			local face_fwd = att_pos - common_data.pos
-			face_fwd = face_fwd:with_z(0):normalized()
-
-			local new_rot = tmp_rot
-			mrot_lookat(new_rot, face_fwd, math_up)
-
-			new_rot = common_data.rot:slerp(new_rot, delta_lerp)
-
-			ext_mov:set_rotation(new_rot)
-		end
-	end
+	self._set_new_pos(self, dt)
 
 	if ext_anim.base_need_upd then
 		ext_mov:upd_m_head_pos()
 	end
+end
+
+function CopActionDodge:upd_empty(t)
 end
 
 local cannot_block_list = {
@@ -241,13 +242,173 @@ function CopActionDodge._get_side_index(side_name)
 	end
 end
 
+local displacement_functions = {
+	hos = {
+		side_step = {
+			fwd = function (p1, p2, t, speed)
+				local t_min = 0.2 / speed
+				local t_max = 0.37 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			bwd = function (p1, p2, t, speed)
+				local t_min = 0.2 / speed
+				local t_max = 0.22 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			l = function (p1, p2, t, speed)
+				local t_min = 0.2 / speed
+				local t_max = 0.43 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			r = function (p1, p2, t, speed)
+				local t_min = 0.27 / speed
+				local t_max = 0.36 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end
+		},
+		dive = {
+			fwd = function (p1, p2, t, speed)
+				local t_min = 0.11 / speed
+				local t_max = 0.23 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			bwd = function (p1, p2, t, speed)
+				local t_min = 0.15 / speed
+				local t_max = 0.23 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			l = function (p1, p2, t, speed)
+				local t_min = 0.1 / speed
+				local t_max = 0.31 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			r = function (p1, p2, t, speed)
+				local t_min = 0.08 / speed
+				local t_max = 0.2 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end
+		},
+		roll = {
+			fwd = function (p1, p2, t, speed)
+				local t_min = 0.1 / speed
+				local t_max = 0.47 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			bwd = function (p1, p2, t, speed)
+				local t_min = 0.15 / speed
+				local t_max = 0.49 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			l = function (p1, p2, t, speed)
+				local t_min = 0.15 / speed
+				local t_max = 0.49 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			r = function (p1, p2, t, speed)
+				local t_min = 0.15 / speed
+				local t_max = 0.49 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end
+		},
+		wheel = {
+			fwd = function (p1, p2, t, speed)
+				local t_min = 0.08 / speed
+				local t_max = 0.5 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			bwd = function (p1, p2, t, speed)
+				local t_min = 0.15 / speed
+				local t_max = 0.52 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			l = function (p1, p2, t, speed)
+				local t_min = 0.12 / speed
+				local t_max = 0.47 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			r = function (p1, p2, t, speed)
+				local t_min = 0.12 / speed
+				local t_max = 0.47 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end
+		}
+	},
+	cbt = {
+		side_step = {
+			fwd = function (p1, p2, t, speed)
+				local t_min = 0.2 / speed
+				local t_max = 0.27 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			bwd = function (p1, p2, t, speed)
+				local t_min = 0.16 / speed
+				local t_max = 0.12 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			l = function (p1, p2, t, speed)
+				local t_min = 0.2 / speed
+				local t_max = 0.26 / speed
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end,
+			r = function (p1, p2, t, speed)
+				local t_min = 0.24 / speed
+				local t_max = t_min
+				local t_clamp = (math_clamp(t - t_min, 0, t_max) / t_max)
+
+				return math_lerp(p1, p2, t_clamp)
+			end
+		}
+	}
+}
+
+displacement_functions.cbt.dive = displacement_functions.hos.dive
+displacement_functions.cbt.roll = displacement_functions.hos.roll
+displacement_functions.cbt.wheel = displacement_functions.hos.wheel
+
 function CopActionDodge:_determine_rotation_transition(wanted_side, direction, variation)
 	local common_data = self._common_data
 	local cur_pos = common_data.pos
-	local end_rot = Rotation(direction, math_up)
-	self._end_rot = end_rot
-
-	local needed_dis = CopActionDodge._determine_needed_distance(variation)
+	local stance = common_data.stance.name
+	local needed_dis = CopActionDodge._determine_needed_distance(stance, variation, wanted_side)
+	needed_dis = needed_dis * self._speed
 	local ray_params = {
 		allow_entry = false,
 		trace = true,
@@ -262,79 +423,19 @@ function CopActionDodge:_determine_rotation_transition(wanted_side, direction, v
 		ray_params.tracker_from = my_tracker
 	end
 
-	local nav_ray = managers.navigation:raycast(ray_params)
+	managers.navigation:raycast(ray_params)
 
 	self._start_pos = mvec3_cpy(cur_pos)
 	self._end_pos = ray_params.trace[1]
-	self._anim_start_t = self._machine:segment_relative_time(ids_base)
+	self._anim_displacement_f = displacement_functions[stance][variation][wanted_side]
 end
 
 function CopActionDodge:accuracy_multiplier()
 	return self._shoot_accuracy
 end
 
-function CopActionDodge._determine_needed_distance(var)
-	return CopActionDodge._DODGE_VAR_DISTANCES[var]
-end
+function CopActionDodge._determine_needed_distance(stance, var, side)
+	stance = stance or "hos"
 
-function CopActionDodge:_create_debug_ws()
-	self._gui = World:newgui()
-	local obj = self._unit:get_object(Idstring("Head"))
-	self._ws = self._gui:create_linked_workspace(100, 100, obj, obj:position() + obj:rotation():y() * 25, obj:rotation():x() * 50, obj:rotation():y() * 50)
-
-	self._ws:set_billboard(self._ws.BILLBOARD_BOTH)
-	self._ws:panel():text({
-		name = "seg_t",
-		vertical = "top",
-		visible = true,
-		font_size = 30,
-		align = "left",
-		font = "fonts/font_medium_shadow_mf",
-		y = 0,
-		render_template = "OverlayVertexColorTextured",
-		layer = 1,
-		text = "nil",
-		color = Color.white
-	})
-	self._ws:panel():text({
-		name = "clamp_seg_t",
-		vertical = "top",
-		visible = true,
-		font_size = 30,
-		align = "left",
-		font = "fonts/font_medium_shadow_mf",
-		y = 30,
-		render_template = "OverlayVertexColorTextured",
-		layer = 1,
-		text = "nil",
-		color = Color.green
-	})
-end
-
-function CopActionDodge:_update_debug_ws(t, clamp_t)
-	if alive(self._ws) then
-		self._ws:panel():child("seg_t"):set_text(tostring(t))
-		self._ws:panel():child("clamp_seg_t"):set_text(tostring(clamp_t))
-	end
-
-	if t then
-		local line1 = Draw:brush(Color.blue:with_alpha(t), 0.1)
-		line1:cylinder(self._start_pos, self._end_pos, 15)
-
-		local line2 = Draw:brush(Color.red:with_alpha(t), 0.1)
-		line2:cylinder(self._ext_movement:m_head_pos(), self._end_pos, 15)
-	end
-end
-
-function CopActionDodge:_remove_debug_gui()
-	if alive(self._gui) and alive(self._ws) then
-		self._gui:destroy_workspace(self._ws)
-
-		self._ws = nil
-		self._gui = nil
-	end
-end
-
-function CopActionDodge:on_destroy()
-	self:_remove_debug_gui()
+	return CopActionDodge._dodge_anim_distances[stance][var][side]
 end

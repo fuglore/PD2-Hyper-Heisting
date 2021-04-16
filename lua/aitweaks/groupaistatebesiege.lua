@@ -1319,7 +1319,23 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	
 	self:_check_drama_low_p()
 	
-	if assault_task.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
+	if managers.skirmish:is_skirmish() then
+		local force_table = {
+			40,
+			48,
+			64,
+			64,
+			64,
+			64,
+			64,
+			68,
+			72,
+			84
+		}
+		local wave = math_clamp(managers.skirmish:current_wave_number(), 1, #force_table)
+		local force_to_use = force_table[wave]
+		assault_task.force = force_to_use * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul)
+	elseif assault_task.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
 		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
 	elseif self._assault_number == 2 then
 		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.85 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))

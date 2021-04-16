@@ -351,15 +351,15 @@ function SkirmishTweakData:_init_wave_phase_durations(tweak_data)
 		30
 	}
 	skirmish_data.assault.force_balance_mul = {
-		1.5,
-		3,
-		4,
-		4
+		0.3,
+		0.5,
+		1,
+		1
 	}	
 	skirmish_data.assault.force = {
-		16,
-		16,
-		16
+		1,
+		1,
+		1
 	}
 	skirmish_data.assault.force_pool_balance_mul = {
 		0.32,
