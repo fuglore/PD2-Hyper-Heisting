@@ -1862,7 +1862,8 @@ function CharacterTweakData:_presets(tweak_data)
 	--Custom sniper preset to make them work differently, they work as a mini turret of sorts, dealing big damage with good accuracy, standing in their line of fire isn't wise as they'll suppress the shit out of you and take off armor very quickly.
 	presets.weapon.rhythmsniper = deep_clone(presets.weapon.sniper)
 	presets.weapon.rhythmsniper.is_rifle.autofire_rounds = nil	
-	presets.weapon.rhythmsniper.is_rifle.focus_delay = 2  
+	presets.weapon.rhythmsniper.is_rifle.focus_delay = 2
+	presets.weapon.rhythmsniper.is_rifle.fireline_t = 3 --how long it takes for enemies to reset their focus and aim delay.
 	presets.weapon.rhythmsniper.is_rifle.aim_delay = {
 		0.4,
 		0.4
