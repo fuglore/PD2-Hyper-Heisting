@@ -236,7 +236,7 @@ function PlayerStandard:_get_total_max_speed()
 	end
 	
 	if self._wave_dash_t and self._running then
-		multiplier = multiplier * 1.5
+		multiplier = multiplier * 1.25
 	end
 	
 	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then

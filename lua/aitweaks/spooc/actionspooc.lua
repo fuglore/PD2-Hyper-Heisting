@@ -2295,8 +2295,9 @@ function ActionSpooc.chk_can_start_flying_strike(unit, target_unit)
 	target_vec = target_vec:with_z(0)
 
 	local target_dis = target_vec:length()
-
-	if target_dis > 600 then
+	local max_dist = managers.modifiers and managers.modifiers:check_boolean("woahtheyjomp") and 2000 or 1500 
+	
+	if target_dis > max_dist then
 		return
 	end
 
@@ -2403,6 +2404,23 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 
 	if not self._stroke_t then
 		self:_check_sounds_and_lights_state(true)
+	end
+	
+	if PD2THHSHIN and PD2THHSHIN:GlintEnabled() then
+		if not self._played_glint then
+			local local_player_unit = managers.player:player_unit()
+			
+			if alive(local_player_unit) and self._target_unit == local_player_unit then
+				local ilovethisfuckingeffectlol = World:effect_manager():spawn({
+					effect = Idstring("effects/pd2_mod_hh/particles/character/marauderspooc_glint"),
+					parent = self._unit:get_object(Idstring("Head"))
+				})
+								
+				if ilovethisfuckingeffectlol then
+					self._played_glint = true
+				end
+			end
+		end
 	end
 
 	self._flying_geometry_mask = managers.slot:get_mask("world_geometry")

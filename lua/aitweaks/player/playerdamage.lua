@@ -942,9 +942,8 @@ function PlayerDamage:damage_bullet(attack_data)
 	if self:is_friendly_fire(attack_data.attacker_unit) then		
 		return
 	else
-		if not attack_data.is_taser_shock then
-			shake_multiplier = math.clamp(attack_data.damage, 1, 20) * 0.025		
-		end
+		
+		shake_multiplier = math.clamp(attack_data.damage, 1, 20) * 0.025		
 		
 		if self._invulnerable or self._mission_damage_blockers.invulnerable then
 			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
@@ -1775,11 +1774,82 @@ function PlayerDamage:revive(silent)
 	end
 end
 
+function PlayerDamage:_upd_health_regen(t, dt)
+	if self._health_regen_update_timer then
+		self._health_regen_update_timer = self._health_regen_update_timer - dt
+
+		if self._health_regen_update_timer <= 0 then
+			self._health_regen_update_timer = nil
+		end
+	end
+
+	if not self._health_regen_update_timer then
+		local max_health = self:_max_health()
+
+		if self:get_real_health() < max_health then
+			local health_regen = managers.player:health_regen()
+			local fixed_health_regen = managers.player:fixed_health_regen(self:health_ratio())
+			
+			if health_regen > 0 then
+				self:restore_health(health_regen, false)
+			end
+			
+			if fixed_health_regen > 0 then
+				self:restore_health(managers.player:fixed_health_regen(self:health_ratio()), true)
+			end
+
+			self._health_regen_update_timer = 5
+		end
+	end
+
+
+	if #self._damage_to_hot_stack > 0 then
+		local restore_hp_func = self.restore_health
+		local regen_rate = managers.player:upgrade_value("player", "damage_to_hot", 0)
+
+		repeat
+			local DTH_data = self._damage_to_hot_stack
+			local nr_DTH = #DTH_data
+			local next_doh = DTH_data[1]
+			local done = not next_doh or t < next_doh.next_tick
+
+			if not done then
+				restore_hp_func(self, regen_rate, true)
+
+				next_doh.ticks_left = next_doh.ticks_left - 1
+
+				if next_doh.ticks_left == 0 then
+					local new_table = {}
+					
+					if #nr_DTH > 1 then
+						for i = 2, #nr_DTH do
+							new_table[#new_table + 1] = DTH_data
+						end
+						
+						self._damage_to_hot_stack = new_table
+					else
+						self._damage_to_hot_stack = {}
+						
+						break
+					end
+				else
+					local next_tick_add = self._doh_data.tick_time or 1
+					next_doh.next_tick = next_doh.next_tick + next_tick_add
+				end
+
+				table.sort(self._damage_to_hot_stack, function (x, y)
+					return x.next_tick < y.next_tick
+				end)
+			end
+		until done
+	end
+end
+
 function PlayerDamage:restore_health(health_restored, is_static, chk_health_ratio)
 	if chk_health_ratio and managers.player:is_damage_health_ratio_active(self:health_ratio()) then
 		return false
 	end
-	
+
 	if managers.player:has_category_upgrade("player", "antilethal_meds") then
 		health_restored = health_restored * 2
 	end
