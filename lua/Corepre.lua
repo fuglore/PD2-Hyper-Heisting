@@ -11,11 +11,13 @@ PD2THHSHIN.settings = {
 	toggle_hhskulldiff = false,
 	toggle_highpriorityglint = true,
 	toggle_suppression = true,
+	toggle_health_effect = true,
 	toggle_blurzonereduction = true,
 	screenshakemult = 1,
 	toggle_noweirddof = false,
 	first_launch = true
 }
+
 PD2THHSHIN.session_settings = {} --leave empty; generated on load
 PD2THHSHIN.show_popup = nil
 

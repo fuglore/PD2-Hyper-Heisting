@@ -840,6 +840,8 @@
 	<texture path="units/lights/pd2_hh_flashlight_proj/flashlight_player" load="true" />
 	<effect path="effects/particles/weapons/flashlight/flashlight" force="true"/>
 	<effect path="effects/particles/weapons/flashlight/flashlight_mp9" load="true"/>
+	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/hurt_screen" />
+	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/hurt_screen_df" load="true"/>
 	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties" />
 	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/floaties_df" load="true" />
 	<effect path="effects/pd2_mod_hh/particles/character/gore_explosion"/>

@@ -7,6 +7,10 @@ local ids_dof_settings = Idstring("settings")
 local mvec1 = Vector3()
 local mvec2 = Vector3()
 
+Hooks:PostHook(CoreEnvironmentControllerManager, "init", "hhpost_env", function(self)
+	self._effect_manager = World:effect_manager()
+end)
+
 function CoreEnvironmentControllerManager:_update_dof(t, dt)
 	local mvec_set = mvector3.set_static
 	local mvec = mvec1
@@ -161,15 +165,42 @@ function CoreEnvironmentControllerManager:_update_dof(t, dt)
 	end
 end
 
+local hurt_screen_ids = Idstring("effects/pd2_mod_hh/particles/character/playerscreen/hurt_screen")
+local pain_ids = Idstring("pain")
+local pain_flash_ids = Idstring("painflash")
+local opacity_ids = Idstring("opacity")
+
+function CoreEnvironmentControllerManager:start_player_hurt_screen()
+	if not self._hurt_effect then
+		self._hurt_effect = self._effect_manager:spawn({
+			effect = hurt_screen_ids,
+			position = Vector3(),
+			rotation = Rotation()
+		})
+		local value = self._health_effect_value
+		local pain = math.lerp(255, 0, value)
+		local painflash = math.lerp(255, 0, value + value)
+		
+		self._effect_manager:set_simulator_var_float(self._hurt_effect, pain_ids, opacity_ids, opacity_ids, pain)
+		self._effect_manager:set_simulator_var_float(self._hurt_effect, pain_flash_ids, opacity_ids, opacity_ids, painflash)
+	end
+end
+
+function CoreEnvironmentControllerManager:kill_player_hurt_screen()
+	if self._hurt_effect then
+		self._effect_manager:kill(self._hurt_effect)
+		self._hurt_effect = nil
+	end
+end
+
 function CoreEnvironmentControllerManager:update(t, dt)
 	self:_update_values(t, dt)
 	self:set_post_composite(t, dt)
 	
 	if self._concussion_effect and self._current_concussion <= 0.8 then
-		World:effect_manager():fade_kill(self._concussion_effect)
+		self._effect_manager:fade_kill(self._concussion_effect)
 		self._concussion_effect = nil
 	end
-		
 end
 
 local ids_radial_pos = Idstring("radial_pos")
@@ -344,11 +375,24 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 	self._health_effect_value_diff = math.max(self._health_effect_value_diff - dt * 0.5, 0)
 
 	self._lut_modifier_material:set_variable(ids_LUT_settings_a, Vector3(math.clamp(self._health_effect_value_diff * 1.3 * (1 + hurt_mod * 1.3), 0, 1.2), 0, math.min(blur_zone_val + self._HE_blinding, 1)))
+	
+	if self._hurt_effect then
+		local value = self._health_effect_value
+		local pain = math.lerp(255, 0, value)
+		local painflash = math.lerp(255, 0, value + value)
+		
+		self._effect_manager:set_simulator_var_float(self._hurt_effect, pain_ids, opacity_ids, opacity_ids, pain)
+		self._effect_manager:set_simulator_var_float(self._hurt_effect, pain_flash_ids, opacity_ids, opacity_ids, painflash)
+	end
 
 	local last_life = 0
 
 	if self._last_life then
-		last_life = math.clamp((hurt_mod - 0.5) * 2, 0, 1)
+		if self._hurt_effect then
+			last_life = math.clamp((hurt_mod - 0.5) * 2, 0, 0.75)
+		else
+			last_life = math.clamp((hurt_mod - 0.5) * 2, 0, 1)
+		end
 	end
 
 	self._lut_modifier_material:set_variable(ids_LUT_settings_b, Vector3(last_life, flash_2 + math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15, 0))
@@ -378,14 +422,14 @@ function CoreEnvironmentControllerManager:set_flashbang(flashbang_pos, line_of_s
 	
 	if self._current_concussion > 1 and not self._concussion_effect then
 		--log("fuck")
-		self._concussion_effect = World:effect_manager():spawn({
+		self._concussion_effect = self._effect_manager:spawn({
 			effect = Idstring("effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties"),
 			position = Vector3(),
 			rotation = Rotation()
 		})
 	end
 	
-	World:effect_manager():spawn({
+	self._effect_manager:spawn({
 		effect = Idstring("effects/particles/explosions/explosion_grenade"),
 		position = flashbang_pos,
 		normal = Vector3(0, 0, 1)

@@ -45,6 +45,14 @@
 			"value" : "toggle_suppression"
 		},
 		{
+			"type" : "toggle",
+			"id" : "shin_toggle_health_effect",
+			"title" : "shin_toggle_health_effect_title",
+			"description" : "shin_toggle_health_effect_desc",
+			"callback" : "callback_shin_toggle_health_effect",
+			"value" : "toggle_health_effect"
+		},
+		{
 			"type" : "slider",
 			"id" : "shin_screenshakemult",
 			"title" : "shin_screenshakemult_title",

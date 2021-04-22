@@ -1073,6 +1073,10 @@ crouching = {
 }
 }
 
+-- AK Gen 21 Tactical
+self.vityaz.AMMO_MAX = 120
+self.vityaz.AMMO_PICKUP = {2, 4}
+
 -- Para
 self.olympic.CLIP_AMMO_MAX = 30
 self.olympic.AMMO_MAX = 120  

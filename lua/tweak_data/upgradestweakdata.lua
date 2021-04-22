@@ -713,8 +713,21 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	}
 	self.values.player.pick_up_ammo_multiplier = {
-		1.35,
+		1, --walk-in close pickup boost removal
 		2
+	}
+	
+	self.values.player.perk_received_suppression_mul = { 
+		0.5
+	}
+	self.definitions.weapon_passive_headshot_damage_multiplier = {
+		name_id = "menu_weapon_headshot_damage_multiplier",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "perk_received_suppression_mul",
+			category = "player"
+		}
 	}
 	
 	self.values.player.perk_max_health_reduction = { --grinder health reduction, multiplicative ontop of other health reductions

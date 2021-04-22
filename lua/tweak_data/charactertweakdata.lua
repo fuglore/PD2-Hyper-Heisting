@@ -7555,7 +7555,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.weapon = deep_clone(presets.weapon.civil)
 	self.spooc.detection = presets.detection.enemyspooc
 	self.spooc.HEALTH_INIT = 20
-	self.spooc.headshot_dmg_mul = 6
+	self.spooc.headshot_dmg_mul = 7
 	self.spooc.damage.fire_damage_mul = 8
 	self.spooc.move_speed = presets.move_speed.lightning_constant
 	self.spooc.no_retreat = nil
@@ -7870,7 +7870,7 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.weapon = presets.weapon.simple
 	self.swat.detection = presets.detection.enemymook
 	self.swat.HEALTH_INIT = 10
-	self.swat.headshot_dmg_mul = 4
+	self.swat.headshot_dmg_mul = 7
 	self.swat.ecm_vulnerability = 1
 	self.swat.ecm_hurts = {
 		ears = {
@@ -8061,7 +8061,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.weapon = presets.weapon.civil
 	self.fbi_swat.detection = presets.detection.enemymook
 	self.fbi_swat.HEALTH_INIT = 10
-	self.fbi_swat.headshot_dmg_mul = 4
+	self.fbi_swat.headshot_dmg_mul = 7
 	self.fbi_swat.ecm_vulnerability = 1
 	self.fbi_swat.ecm_hurts = {
 		ears = {
@@ -8164,7 +8164,7 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	self.city_swat.weapon = presets.weapon.civil
 	self.city_swat.detection = presets.detection.enemymook
 	self.city_swat.HEALTH_INIT = 10
-	self.city_swat.headshot_dmg_mul = 4	
+	self.city_swat.headshot_dmg_mul = 7
 	self.city_swat.ecm_vulnerability = 1
 	self.city_swat.ecm_hurts = {
 		ears = {

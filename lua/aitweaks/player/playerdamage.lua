@@ -12,6 +12,7 @@ local math_lerp = math.lerp
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_rot1 = Rotation()
+local HH = PD2THHSHIN
 
 PlayerDamage._UPPERS_COOLDOWN = 60
 
@@ -72,7 +73,11 @@ Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	self._dire_need = managers.player:has_category_upgrade("player", "armor_depleted_stagger_shot")
 	self._has_damage_speed = managers.player:has_inactivate_temporary_upgrade("temporary", "damage_speed_multiplier")
 	self._has_damage_speed_team = managers.player:upgrade_value("player", "team_damage_speed_multiplier_send", 0) ~= 0
-
+	
+	if HH.settings.toggle_health_effect == true then
+		managers.environment_controller:start_player_hurt_screen()
+	end
+	
 	local function revive_player()
 		self:revive(true)
 	end
@@ -1259,7 +1264,7 @@ function PlayerDamage:_calc_armor_damage(attack_data)
 		health_subtracted = health_subtracted - self:get_real_armor()
 		
 		self:_damage_screen()
-		SoundDevice:set_rtpc("shield_status", self:armor_ratio())
+		SoundDevice:set_rtpc("shield_status", self:armor_ratio() * 100)
 		self:_send_set_armor()
 
 		if self:get_real_armor() <= 0 then
@@ -1392,8 +1397,10 @@ function PlayerDamage:build_suppression(amount)
 	if morale_boost_bonus then
 		amount = amount * morale_boost_bonus.suppression_resistance
 	end
+	
+	local mul = tweak_data.player.suppression.receive_mul * managers.player:upgrade_value("player", "perk_received_suppression_mul", 1)
 
-	amount = amount * tweak_data.player.suppression.receive_mul
+	amount = amount * mul
 	data.value = math.min(tweak_data.player.suppression.max_value, (data.value or 0) + amount * tweak_data.player.suppression.receive_mul)
 	
 	if managers.player:has_category_upgrade("player", "strong_spirit") and self:health_ratio() <= 0.5 then
@@ -1462,7 +1469,7 @@ function PlayerDamage:_upd_suppression(t, dt)
 			if data.value <= 0 then
 				data.value = nil
 				data.decay_start_t = nil
-				if PD2THHSHIN:SupEnabled() then
+				if HH:SupEnabled() then
 					managers.environment_controller:set_chromatic_value_lerp(0)
 					managers.environment_controller:set_contrast_value_lerp(0)
 				end
@@ -1470,7 +1477,7 @@ function PlayerDamage:_upd_suppression(t, dt)
 		elseif data.value == tweak_data.player.suppression.max_value and self._regenerate_timer then
 			self._listener_holder:call("suppression_max")
 		end
-		if PD2THHSHIN:SupEnabled() then
+		if HH:SupEnabled() then
 			if data.value then
 				managers.environment_controller:set_chromatic_value_lerp(self:suppression_ratio())
 				managers.environment_controller:set_contrast_value_lerp(self:suppression_ratio())
@@ -1639,13 +1646,9 @@ function PlayerDamage:update(unit, t, dt)
 
 	if not self._downed_timer and self._downed_progression then
 		self._downed_progression = math.max(0, self._downed_progression - dt * 50)
-		local blur = self._downed_progression
-		
-		if PD2THHSHIN:BlurzoneEnabled() then
-			blur = blur * 0.5
-		end
-		
+
 		if not _G.IS_VR then
+			local blur = HH:BlurzoneEnabled() and self._downed_progression * 0.3 or self._downed_progression
 			managers.environment_controller:set_downed_value(blur)
 		end
 
@@ -1690,10 +1693,10 @@ function PlayerDamage:update(unit, t, dt)
 		end
 	end
 	
-	if PD2THHSHIN.need_to_reset_visuals then
+	if HH.need_to_reset_visuals then
 		managers.environment_controller:set_chromatic_value_lerp(0)
 		managers.environment_controller:set_contrast_value_lerp(0)
-		PD2THHSHIN.need_to_reset_visuals = nil
+		HH.need_to_reset_visuals = nil
 	end
 
 	self:_upd_suppression(t, dt)
@@ -1705,6 +1708,53 @@ function PlayerDamage:update(unit, t, dt)
 	if not self:is_downed() then
 		self:_update_delayed_damage(t, dt)
 	end
+end
+
+function PlayerDamage:_start_tinnitus(sound_eff_mul, skip_explosion_sfx)
+	if self._tinnitus_data then
+		if sound_eff_mul < self._tinnitus_data.intensity then
+			return
+		end
+
+		self._tinnitus_data.intensity = sound_eff_mul
+		self._tinnitus_data.duration = 4 + sound_eff_mul * math.lerp(8, 12, math.random())
+		self._tinnitus_data.end_t = managers.player:player_timer():time() + self._tinnitus_data.duration
+
+		if self._tinnitus_data.snd_event then
+			self._tinnitus_data.snd_event:stop()
+		end
+
+		SoundDevice:set_rtpc("downed_state_progression", math.max(self._downed_progression or 0, self._tinnitus_data.intensity * 100))
+
+		self._tinnitus_data.snd_event = self._unit:sound():play("concussion_effect_on")
+	else
+		local duration = 4 + sound_eff_mul * math.lerp(8, 12, math.random())
+
+		SoundDevice:set_rtpc("downed_state_progression", math.max(self._downed_progression or 0, sound_eff_mul * 100))
+
+		self._tinnitus_data = {
+			intensity = sound_eff_mul,
+			duration = duration,
+			end_t = managers.player:player_timer():time() + duration,
+			snd_event = self._unit:sound():play("concussion_effect_on")
+		}
+	end
+	
+	self._unit:sound():play("concussion_player_disoriented_sfx")
+
+	if not skip_explosion_sfx then
+		self._unit:sound():play("flashbang_explode_sfx_player")
+	end
+end
+
+function PlayerDamage:_stop_tinnitus()
+	if not self._tinnitus_data then
+		return
+	end
+
+	self._unit:sound():play("concussion_effect_off")
+
+	self._tinnitus_data = nil
 end
 
 function PlayerDamage:revive(silent)
@@ -1861,4 +1911,35 @@ function PlayerDamage:restore_health(health_restored, is_static, chk_health_rati
 
 		return self:change_health(max_health * health_restored * self._healing_reduction)
 	end
+end
+
+function PlayerDamage:pre_destroy()
+	if alive(self._gui) and alive(self._ws) then
+		self._gui:destroy_workspace(self._ws)
+	end
+
+	if self._critical_state_heart_loop_instance then
+		self._critical_state_heart_loop_instance:stop()
+	end
+
+	if self._slomo_sound_instance then
+		self._slomo_sound_instance:stop()
+
+		self._slomo_sound_instance = nil
+	end
+
+	managers.player:unregister_message(Message.RevivePlayer, self)
+	managers.environment_controller:set_last_life(false)
+	managers.environment_controller:set_downed_value(0)
+	SoundDevice:set_rtpc("downed_state_progression", 0)
+	SoundDevice:set_rtpc("shield_status", 100)
+	managers.environment_controller:kill_player_hurt_screen()
+	managers.environment_controller:set_hurt_value(1)
+	managers.environment_controller:set_health_effect_value(1)
+	managers.environment_controller:set_suppression_value(0)
+	managers.sequence:remove_inflict_updator_body("fire", self._unit:key(), self._inflict_damage_body:key())
+	CopDamage.unregister_listener("on_damage")
+	managers.mission:remove_global_event_listener("player_regenerate_armor")
+	managers.mission:remove_global_event_listener("player_force_bleedout")
+	self._unit:sound():play("concussion_effect_off")
 end

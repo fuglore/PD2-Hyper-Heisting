@@ -168,6 +168,7 @@
 		["hud_assault_FG_danger49"] = "!!! NOW IS THE TIME FOR FEAR !!!",
 		["hud_assault_FG_danger50"] = "!!! YOUR BODY WILL SHATTER !!!",
 		["hud_assault_FG_danger51"] = "!!! YOU'RE FINISHED !!!",
+		["hud_assault_FG_danger52"] = "!!! YOUR SHIT AINT TIGHT !!!",
 		["hud_assault_heat"] = "HEAT BONUS",
 		["hud_heat_common"] = "BREAK TIME!",
 		["hud_heat_1"] = "ANARCHY RULES!",
@@ -307,6 +308,9 @@
 		
 		["shin_toggle_suppression_title"] = "Extreme Visible Suppression!",
 		["shin_toggle_suppression_desc"] = "Adds a unique visual effect to your screen for when you are being suppressed by enemies! (Looks more fancy if you have Chromatic Aberration on!)",
+		
+		["shin_toggle_health_effect_title"] = "Low Health Visuals!",
+		["shin_toggle_health_effect_desc"] = "Adds a bloody screen border effect to indicate how low your health is! NOTE: Requires a heist restart to apply changes.",
 		
 		["shin_screenshakemult_title"] = "Screenshake Intensity",
 		["shin_screenshakemult_desc"] = "Allows you to manually set how intense screenshake effects are! You can lower it if you're prone to motion sickness! NOTE: Lowering the screenshake can make the game feel a lot less impactful!",
@@ -524,6 +528,12 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_frenzy"] = "Something To Prove",
 			["menu_frenzy_desc"] = "BASIC: ##$basic##\nYou start with ##50%## of your Health and cannot heal above that.\n\n##ALL DAMAGE DEALT## is increased by ##25%##.\n\nACE: ##$pro##\n##You lose 1 down.##\n\nYour movement speed is increased by ##25%##.\n\n##ALL DAMAGE DEALT## is further increased by ##25%##.\n\n##Kill all sons of bitches, right?##",
+			
+			--mutual perks
+			["menu_deckall_2"] = "Used To It",
+			["menu_deckall_2_desc"] = "You gain ##+50%## resistance to suppression.",
+			
+			["menu_deckall_6_desc"] = "Unlocks the ##Armor Bag## equipment for you to use.\n\nThe ##Armor Bag## can be used to change your armor during a heist.",
 			
 			-- weapon stuff below	
 			["bm_wp_g3_b_short"] = "Short Barrel",
