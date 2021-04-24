@@ -11,6 +11,9 @@ Hooks:PostHook(CoreEnvironmentControllerManager, "init", "hhpost_env", function(
 	self._effect_manager = World:effect_manager()
 end)
 
+local san_other = {near_plane_x = 10, near_plane_y = 12, far_plane_x = 4000, far_plane_y = 5000}
+local san_steel = {near_plane_x = 2500, near_plane_y = 2500, far_plane_x = 500, far_plane_y = 2000}
+
 function CoreEnvironmentControllerManager:_update_dof(t, dt)
 	local mvec_set = mvector3.set_static
 	local mvec = mvec1
@@ -60,7 +63,7 @@ function CoreEnvironmentControllerManager:_update_dof(t, dt)
 					mvec_set(mvec, self._far_plane_x, self._far_plane_y, 0)
 					self._material:set_variable(ids_dof_far_plane, mvec)
 				else
-					dof_settings = dof_settings.steelsight
+					dof_settings = dof_settings.steelsight or san_steel
 					local dof_plane_v = math.clamp(self._current_dof_distance / 5000, 0, 1)
 					dof_plane_v = math.max(dof_plane_v, self._current_concussion)
 					
@@ -82,7 +85,8 @@ function CoreEnvironmentControllerManager:_update_dof(t, dt)
 				end
 			else
 				if no_dof or not steelsight then
-					dof_settings = dof_settings.other
+					dof_settings = dof_settings.other or san_other
+					
 					self._near_plane_x = math.lerp(self._near_plane_x, dof_settings.near_plane_x, conc_lerp)
 					self._near_plane_y = math.lerp(self._near_plane_y, dof_settings.near_plane_y, conc_lerp)
 					self._far_plane_x = math.lerp(self._far_plane_x, dof_settings.far_plane_x, conc_lerp)
@@ -93,7 +97,7 @@ function CoreEnvironmentControllerManager:_update_dof(t, dt)
 					mvec_set(mvec, self._far_plane_x, self._far_plane_y, 1)
 					self._material:set_variable(ids_dof_far_plane, mvec)
 				else
-					dof_settings = dof_settings.steelsight
+					dof_settings = dof_settings.steelsight or san_steel
 					local dof_plane_v = math.clamp(self._current_dof_distance / 5000, 0, 1)
 					dof_plane_v = math.max(dof_plane_v, self._current_concussion)
 					
@@ -127,7 +131,7 @@ function CoreEnvironmentControllerManager:_update_dof(t, dt)
 				self._material:set_variable(ids_dof_far_plane, mvec)
 			end
 		elseif steelsight then
-			dof_settings = dof_settings.steelsight
+			dof_settings = dof_settings.steelsight or san_steel
 			local dof_plane_v = math.clamp(self._current_dof_distance / 5000, 0, 1)
 			self._near_plane_x = math.lerp(500, dof_settings.near_plane_x, dof_plane_v)
 			self._near_plane_y = math.lerp(20, dof_settings.near_plane_y, dof_plane_v)
@@ -150,7 +154,7 @@ function CoreEnvironmentControllerManager:_update_dof(t, dt)
 			mvec_set(mvec, self._far_plane_x, self._far_plane_y, 0)
 			self._material:set_variable(ids_dof_far_plane, mvec)
 		else
-			dof_settings = dof_settings.other
+			dof_settings = dof_settings.other or san_other
 			local dof_speed = math.min(10 * dt, 1)
 			self._near_plane_x = math.lerp(self._near_plane_x, dof_settings.near_plane_x, dof_speed)
 			self._near_plane_y = math.lerp(self._near_plane_y, dof_settings.near_plane_y, dof_speed)
