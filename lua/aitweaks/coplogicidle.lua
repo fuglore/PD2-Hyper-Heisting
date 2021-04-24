@@ -539,6 +539,8 @@ function CopLogicIdle.damage_clbk(data, damage_info)
 		end
 	end
 	
+	 data.unit:movement():set_cool(false)
+	
 	if data.tactics and data.tactics.sneaky then
 		data.coward_t = t
 	end

@@ -1854,37 +1854,23 @@ function PlayerDamage:_upd_health_regen(t, dt)
 
 
 	if #self._damage_to_hot_stack > 0 then
-		local restore_hp_func = self.restore_health
 		local regen_rate = managers.player:upgrade_value("player", "damage_to_hot", 0)
-
+		local restore_health_func = self.restore_health
+		local t = TimerManager:game():time()
+		
 		repeat
-			local DTH_data = self._damage_to_hot_stack
-			local nr_DTH = #DTH_data
-			local next_doh = DTH_data[1]
+			local next_doh = self._damage_to_hot_stack[1]
 			local done = not next_doh or t < next_doh.next_tick
 
 			if not done then
-				restore_hp_func(self, regen_rate, true)
+				restore_health_func(self, regen_rate, true)
 
 				next_doh.ticks_left = next_doh.ticks_left - 1
 
 				if next_doh.ticks_left == 0 then
-					local new_table = {}
-					
-					if #nr_DTH > 1 then
-						for i = 2, #nr_DTH do
-							new_table[#new_table + 1] = DTH_data
-						end
-						
-						self._damage_to_hot_stack = new_table
-					else
-						self._damage_to_hot_stack = {}
-						
-						break
-					end
+					table.remove(self._damage_to_hot_stack, 1)
 				else
-					local next_tick_add = self._doh_data.tick_time or 1
-					next_doh.next_tick = next_doh.next_tick + next_tick_add
+					next_doh.next_tick = next_doh.next_tick + (self._doh_data.tick_time or 1)
 				end
 
 				table.sort(self._damage_to_hot_stack, function (x, y)
