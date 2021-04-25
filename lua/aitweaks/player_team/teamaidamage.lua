@@ -25,6 +25,10 @@ function TeamAIDamage:on_recon()
 	self:_regenerated()
 end
 
+function TeamAIDamage:is_friendly_fire(unit)
+	return PlayerDamage.is_friendly_fire(self, unit)
+end
+
 function TeamAIDamage:damage_tase(attack_data)
 	--local diff_index = Global.game_settings and tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	--local tase_down_time = nil
