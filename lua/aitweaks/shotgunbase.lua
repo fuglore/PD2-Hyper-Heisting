@@ -12,7 +12,7 @@ local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_set = mvector3.set
 local mvec3_add = mvector3.add
 local mvec3_mul = mvector3.multiply
-local mvec3_cpy = mvector3.multiply
+local mvec3_cpy = mvector3.copy
 local mvec3_set_static = mvector3.set_static
 local mvec3_divide = mvector3.divide
 
