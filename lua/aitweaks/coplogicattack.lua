@@ -164,13 +164,15 @@ function CopLogicAttack.update(data)
 
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
+		
+		if my_data.has_old_action then
+			if not my_data.update_queue_id then
+				data.brain:set_update_enabled_state(false)
 
-		if not my_data.update_queue_id then
-			data.brain:set_update_enabled_state(false)
+				my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
 
-			my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
-
-			CopLogicAttack.queue_update(data, my_data)
+				CopLogicAttack.queue_update(data, my_data)
+			end
 		end
 
 		return
@@ -2160,6 +2162,10 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 	if my_data.moving_to_cover then 
 		return true
 	end
+	
+	if data.is_suppressed then
+		return true
+	end
 
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
@@ -2169,9 +2175,17 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		end
 	end
 	
-	if data.is_suppressed then
-		return true
+	if diff_index < 6 then
+		local last_sup_t = data.unit:character_damage():last_suppression_t()
+		
+		if last_sup_t then
+			if data.t - last_sup_t < 1 then
+				return true
+			end
+		end
 	end
+	
+	
 end
 
 function CopLogicAttack._set_best_cover(data, my_data, cover_data)

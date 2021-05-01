@@ -84,9 +84,7 @@ function PlayerTased:enter(state_data, enter_data)
 end
 
 function PlayerTased:_check_action_shock(t, input)
-		
 	if self._next_shock < t then
-		
 		self._num_shocks = self._num_shocks + 1
 		self._next_shock = t + 0.75
 
@@ -95,28 +93,29 @@ function PlayerTased:_check_action_shock(t, input)
 
 		self._unit:sound():play("tasered_shock")
 		managers.rumble:play("electric_shock")
-		if self._unit:character_damage()._tase_data and not self._is_non_lethal then
-			if self._num_shocks == 3 then
-				if not self._played_sound_this_once then
-					self._played_sound_this_once = true
-					self._unit:character_damage()._tase_data.attacker_unit:sound():say("post_tasing_taunt")
+		
+		if not self._is_non_lethal then
+			local tase_data = self._unit:character_damage()._tase_data
+			
+			if tase_data then
+				if not tase_data.attacker_unit or not alive(tase_data.attacker_unit) then
+					self:on_tase_ended()
+				elseif self._num_shocks == 3 then
+					if not self._played_sound_this_once then
+						self._played_sound_this_once = true
+						self._unit:character_damage()._tase_data.attacker_unit:sound():say("post_tasing_taunt")
+					end
+				elseif self._num_shocks >= 4 then					
+					local attack_data = {
+						attacker_unit = self._unit:character_damage()._tase_data.attacker_unit,
+						is_taser_shock = true,
+						armor_piercing = true,
+						damage = 1
+					}
+					self._unit:movement():play_taser_boom(true)
+					self._unit:character_damage():damage_bullet(attack_data)
+					self:on_tase_ended()
 				end
-			elseif self._num_shocks >= 4 then
-				--local damage = 4.1
-				
-				--if managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
-					--damage = damage * 2
-				--end
-				
-				local attack_data = {
-					attacker_unit = self._unit:character_damage()._tase_data.attacker_unit,
-					is_taser_shock = true,
-					armor_piercing = true,
-					damage = 1
-				}
-				self._unit:movement():play_taser_boom(true)
-				self._unit:character_damage():damage_bullet(attack_data)
-				self:on_tase_ended()
 			end
 		end
 

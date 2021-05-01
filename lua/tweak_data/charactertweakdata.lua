@@ -20,7 +20,6 @@ end
 function CharacterTweakData:_presets(tweak_data)
 	local presets = origin_presets(self, tweak_data)
 	
-	
 	--replace existing suppression presets with lighter and consistent ones to accomodate for lack of immediate enemy suppression
 	presets.suppression = {
 		easy = {
@@ -1840,6 +1839,52 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+	
+	presets.hurt_severities.no_hurts = { --due to overkill's recent updates, i have to do this now, apparently >:c
+		tase = true,
+		bullet = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		explosion = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		melee = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		fire = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		poison = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		}
+	}
+	presets.hurt_severities.no_hurts_no_tase = deep_clone(presets.hurt_severities.no_hurts)
+	presets.hurt_severities.no_hurts_no_tase.tase = false
 	
 	--special no_tase hurt severities based on specialenemy, possibly used on taser.
 	presets.hurt_severities.no_tase_special = deep_clone(presets.hurt_severities.specialenemy)

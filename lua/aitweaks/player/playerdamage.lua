@@ -207,6 +207,93 @@ Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	self:clear_delayed_damage()
 end)
 
+function PlayerDamage:damage_fall(data)
+	local damage_info = {
+		result = {
+			variant = "fall",
+			type = "hurt"
+		}
+	}
+
+	if self._god_mode or self._invulnerable or self._mission_damage_blockers.invulnerable then
+		self:_call_listeners(damage_info)
+
+		return
+	elseif self:incapacitated() then
+		return
+	elseif self._unit:movement():current_state().immortal then
+		return
+	elseif self._mission_damage_blockers.damage_fall_disabled then
+		return
+	end
+
+	local height_limit = 400
+	local death_limit = 800
+
+	if data.height < height_limit then
+		return
+	end
+
+	if self._bleed_out and self._unit:movement():current_state_name() ~= "jerry1" then
+		return
+	end
+	
+	local die = death_limit < data.height
+	
+	if not die then
+		return
+	end
+	
+	self._unit:sound():play("player_hit")	
+	managers.environment_controller:hit_feedback_down()
+	managers.hud:on_hit_direction(Vector3(0, 0, 0), die and HUDHitDirection.DAMAGE_TYPES.HEALTH or HUDHitDirection.DAMAGE_TYPES.ARMOUR, 0)
+
+	local health_damage_multiplier = 0
+
+	if self._unit:movement():current_state_name() == "jerry1" then
+		self._check_berserker_done = false
+
+		self:set_health(0)
+			
+		self._revives = Application:digest_value(1, true)
+	else
+		local damage = self:_max_health() / 3
+		
+		self:change_health(-damage)
+	end
+
+	local alert_rad = tweak_data.player.fall_damage_alert_size or 500
+	local new_alert = {
+		"vo_cbt",
+		self._unit:movement():m_head_pos(),
+		alert_rad,
+		self._unit:movement():SO_access(),
+		self._unit
+	}
+
+	managers.groupai:state():propagate_alert(new_alert)
+
+	self:set_armor(0)
+
+	SoundDevice:set_rtpc("shield_status", 0)
+	self:_send_set_armor()
+
+	self._bleed_out_blocked_by_movement_state = nil
+
+	managers.hud:set_player_health({
+		current = self:get_real_health(),
+		total = self:_max_health(),
+		revives = Application:digest_value(self._revives, false)
+	})
+	self:_send_set_health()
+	self:_set_health_effect()
+	self:_damage_screen()
+	self:_check_bleed_out(nil, true)
+	self:_call_listeners(damage_info)
+
+	return true
+end
+
 function PlayerDamage:damage_melee(attack_data)
 	if not self:_chk_can_take_dmg() then
 		return

@@ -245,6 +245,13 @@ function PlayerStandard:_get_total_max_speed()
 	
 	local final_speed = movement_speed * multiplier
 	
+	if self._fall_damage_slow_t then
+		local fall_lerp = self._fall_damage_slow_t - t
+		local mul = math.max(math.lerp(1, 0, fall_lerp), 0.05)
+	
+		final_speed = final_speed * mul
+	end
+	
 	return final_speed
 end
 
@@ -306,7 +313,7 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 	
 	if self._unit:movement():is_above_stamina_threshold() then
 		if self._wave_dash_t and self._running then
-			multiplier = multiplier * 1.5
+			multiplier = multiplier * 1.25
 		end
 	end
 	
@@ -315,6 +322,14 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 	end
 	
 	local final_speed = movement_speed * multiplier
+	
+	if self._fall_damage_slow_t then
+		local fall_lerp = self._fall_damage_slow_t - t
+		local mul = math.max(math.lerp(1, 0, fall_lerp), 0.05)
+	
+		final_speed = final_speed * mul
+	end
+	
 	--log("speed is " .. final_speed .. "!")
 	self._cached_final_speed = self._cached_final_speed or 0
 	
@@ -1216,29 +1231,31 @@ function PlayerStandard:_update_foley(t, input)
 		local from = self._pos + math.UP * 10
 		local to = self._pos - math.UP * 60
 		local material_name, pos, norm = World:pick_decal_material(from, to, self._slotmask_bullet_impact_targets)
-
+		local height = self._state_data.enter_air_pos_z - self._pos.z
 		self._unit:sound():play_land(material_name)
+		
 
 		if self._unit:character_damage():damage_fall({
-			height = self._state_data.enter_air_pos_z - self._pos.z
+			height = height
 		}) then
+			local fall_distance_lerp = math.min(5, height / 400)
 			--self._running_wanted = false
 			
-			local fall_distance = self._state_data.enter_air_pos_z - self._pos.z
-			local fall_distance_lerp = math.clamp(fall_distance, 315.5, 631) / 315.5
-
+			self._fall_damage_slow_t = t + 1
 			managers.rumble:play("hard_land")
 			self._ext_camera:play_shaker("player_fall_damage", fall_distance_lerp)
+			self._ext_camera:play_shaker("player_land", fall_distance_lerp)
+			self:on_melee_stun(t, 1)
 			--self:_start_action_ducking(t)
-		elseif input.btn_run_state then
-			--self._running_wanted = true
+		else
+			self._ext_camera:play_shaker("player_land", 0.5)
 		end
+		
+		managers.rumble:play("land")
 	
 		self._jump_t = nil
 		self._jump_vel_xy = nil
-
-		self._ext_camera:play_shaker("player_land", 0.5)
-		managers.rumble:play("land")
+	
 	elseif self._jump_vel_xy and t - self._jump_t > 0.3 then
 		self._jump_vel_xy = nil
 		
@@ -1266,6 +1283,10 @@ function PlayerStandard:_start_action_running(t)
 	if not self._move_dir then
 		self._running_wanted = true
 
+		return
+	end
+	
+	if self._fall_damage_slow_t then
 		return
 	end
 
@@ -1923,6 +1944,10 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	if self._wave_dash_t and self._wave_dash_t < t then
 		self._wave_dash_t = nil
 		self._speed_is_wavedash_boost = nil
+	end
+	
+	if self._fall_damage_slow_t and self._fall_damage_slow_t < t then
+		self._fall_damage_slow_t = nil
 	end
 	
 	self:_update_interaction_timers(t)

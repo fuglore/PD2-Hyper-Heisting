@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mod name="PD2THHSHIN" global_key="PD2THHSHIN">
-	<:include src="hooks.xml" />
-	<:include src="hooks2.xml" />
+	<:include src="lib.xml" />
+	<:include src="corelib.xml" />
 	<tweak definition="tweaks.xml" />
 </mod>

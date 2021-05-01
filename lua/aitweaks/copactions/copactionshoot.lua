@@ -133,7 +133,7 @@ function CopActionShoot:init(action_desc, common_data)
 	self._doom_enemy = char_tweak.stop_firing_on_hurt
 	self._is_shin_shootout = Global.game_settings.one_down and true or nil
 
-	if managers.crime_spree then
+	if managers.crime_spree and managers.crime_spree.current_mission then
 		self._cs_acc_mul = managers.crime_spree:get_acc_mult()
 	end
 

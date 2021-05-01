@@ -1348,16 +1348,12 @@ function EnemyManager:get_nearby_medic(unit)
 		local enemy = enemies[i]
 
 		if enemy:base():has_tag("medic") then
-			local cooldown_t = enemy:character_damage()._heal_cooldown_t
-
-			if no_cooldown or cooldown_t and t > cooldown_t + cooldown then
-				local obstructed = unit:raycast("ray", unit:movement():m_head_pos(), enemy:movement():m_head_pos(), "sphere_cast_radius", 5, "slot_mask", obstruction_mask, "report") --whoops. no wonder medics were basically useless the past few times ive played...and now they wont be. so i want to hear people complain. i really want to hear it.
+			local obstructed = unit:raycast("ray", unit:movement():m_head_pos(), enemy:movement():m_head_pos(), "sphere_cast_radius", 5, "slot_mask", obstruction_mask, "report") --whoops. no wonder medics were basically useless the past few times ive played...and now they wont be. so i want to hear people complain. i really want to hear it.
 				
-				--SCREAM AND BEG FOR MERCY.
+			--SCREAM AND BEG FOR MERCY.
 
-				if not obstructed then
-					return enemy
-				end
+			if not obstructed then
+				return enemy
 			end
 		end
 	end

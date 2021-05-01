@@ -1382,7 +1382,12 @@ function CopActionWalk:update(t)
 		mrot_lookat(new_rot, wanted_u_fwd, math_up)
 
 		--if turning towards an attention, prevent insta-turning, else do the usual vanilla insta-turn (interpolated by delta time)
-		local lerp_modifier = not turning_to_face_attention and 1 or self._shield_turning and 0.75 or 0.3
+		local lerp_modifier = not turning_to_face_attention and 1 or self._shield_turning and 0.15 or 0.3
+		
+		if turning_to_face_attention and managers.crime_spree.current_mission then
+			lerp_modifier = lerp_modifier + managers.crime_spree:get_turn_spd_add()
+		end
+		
 		local delta_lerp = dt * 5 * lerp_modifier
 		delta_lerp = delta_lerp > 1 and 1 or delta_lerp
 		new_rot = common_data.rot:slerp(new_rot, delta_lerp)

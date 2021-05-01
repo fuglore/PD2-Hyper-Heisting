@@ -1,11 +1,11 @@
 local math_random = math.random
 
 function MedicDamage:heal_unit(unit, no_cooldown)
-	if not no_cooldown then
-		local t = Application:time()
-
-		self._heal_cooldown_t = t
-	end
+	--if not no_cooldown then
+	--	local t = Application:time()
+	--
+	--	self._heal_cooldown_t = t
+	--end
 
 	if not self._unit:character_damage():dead() then
 		self._unit:sound():say("heal")

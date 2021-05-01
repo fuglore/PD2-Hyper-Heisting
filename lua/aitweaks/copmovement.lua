@@ -669,73 +669,18 @@ function CopMovement:on_suppressed(state)
 					end
 				end
 
-				if try_something_else and self._ext_anim.run and self._ext_anim.move_fwd and not self:chk_action_forbidden("act") and not is_shin_shootout then
-					local vec_from = temp_vec1
-					local vec_to = temp_vec2
-					local ray_params = {
-						allow_entry = false,
-						trace = true,
-						tracker_from = self:nav_tracker(),
-						pos_from = vec_from,
-						pos_to = vec_to
-					}
-
-					mvec3_set(ray_params.pos_from, self:m_pos())
-					mvec3_set(ray_params.pos_to, self:m_rot():y())
-					mvec3_mul(ray_params.pos_to, 380) --small offset from 4m
-					mvec3_add(ray_params.pos_to, self:m_pos())
-
-					if not managers.navigation:raycast(ray_params) then
-						local action_desc = {
-							clamp_to_graph = true,
-							type = "act",
-							body_part = 1,
-							variant = "e_nl_slide_fwd_4m",
-							blocks = {
-								action = -1,
-								act = -1,
-								tase = -1,
-								bleedout = -1,
-								dodge = -1,
-								walk = -1,
-								hurt = -1,
-								heavy_hurt = -1
-							}
-						}
-
-						if self:action_request(action_desc) then
-							try_something_else = false
-						end
-					end
-				end
-
 				if try_something_else and not self._tweak_data.no_suppression_reaction then
 					if self._ext_anim.idle then
 						if not self._active_actions[2] or self._active_actions[2]:type() == "idle" then
 							if not self:chk_action_forbidden("act") then
-								if diff_index >= 1 then
-									if not self._ext_anim.crouch then
-										local action_desc = {
-											clamp_to_graph = true,
-											type = "act",
-											body_part = 2,
-											variant = "suppressed_reaction", --they do an unique crouching animation instead of freezing.
-											blocks = {
-												walk = -1
-											}
-										}
-
-										self:action_request(action_desc)
-									end
-								else
+								if not self._ext_anim.crouch then
 									local action_desc = {
 										clamp_to_graph = true,
 										type = "act",
-										body_part = 1,
-										variant = "surprised", --they freeze in their spot and play the "surprised" animation.
+										body_part = 2,
+										variant = "suppressed_reaction", --they do an unique crouching animation instead of freezing.
 										blocks = {
-											walk = -1,
-											action = -1
+											walk = -1
 										}
 									}
 
@@ -772,14 +717,14 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			self._ext_damage._invulnerability_t = t + 4
 
 			if self._unit:contour() then
-				self._unit:contour():add("medic_heal_complex")
-				self._unit:contour():flash("medic_heal_complex", 0.15)
+				self._unit:contour():add("medic_heal", 4)
+				self._unit:contour():flash("medic_heal", 0.15)
 			end
 		else
 			self._ext_damage._invulnerability_t = t + 2
 
 			if self._unit:contour() then
-				self._unit:contour():add("medic_heal")
+				self._unit:contour():add("medic_heal", 2)
 				self._unit:contour():flash("medic_heal", 0.2)
 			end
 		end
