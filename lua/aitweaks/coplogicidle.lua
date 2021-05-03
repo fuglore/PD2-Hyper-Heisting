@@ -255,9 +255,12 @@ function CopLogicIdle.queued_update(data)
 
 	if my_data.has_old_action then
 		CopLogicIdle._upd_stop_old_action(data, my_data, objective)
-		CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicIdle.queued_update, data, data.t + delay, data.cool and true or data.important and true)
+		
+		if my_data.has_old_action then
+			CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicIdle.queued_update, data, data.t + delay, data.cool and true or data.important and true)
 
-		return
+			return
+		end
 	end
 	
 	if data.objective and data.objective.area then
@@ -2428,7 +2431,12 @@ function CopLogicIdle._upd_stop_old_action(data, my_data, objective)
 			})
 		end
 	elseif data.unit:anim_data().act then
-		CopLogicIdle._start_idle_action_from_act(data)
+		if not my_data.starting_idle_action_from_act then
+			my_data.starting_idle_action_from_act = true
+			CopLogicIdle._start_idle_action_from_act(data)
+		end
+	else
+		my_data.starting_idle_action_from_act = nil
 	end
 
 	CopLogicIdle._chk_has_old_action(data, my_data)
