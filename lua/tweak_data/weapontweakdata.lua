@@ -269,18 +269,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 		{
 			800,
 			1
-		},
-		{
-			1000,
-			1
-		},
-		{
-			3000,
-			0.5
-		},
-		{
-			5000,
-			0
 		}
 	}
 	self.swat_van_turret_module.dontsuppressonmiss = true
@@ -400,10 +388,12 @@ function WeaponTweakData:_set_normal()
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 300
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 400
+	self.swat_van_turret_module.spread = 40
 	self.ceiling_turret_module.HEALTH_INIT = 400
 	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
 	self.ceiling_turret_module.DAMAGE = 2
 	self.ceiling_turret_module.CLIP_SIZE = 150
+	self.ceiling_turret_module.spread = 10
 	self.aa_turret_module.HEALTH_INIT = 1500
 	self.aa_turret_module.SHIELD_HEALTH_INIT = 300
 	self.aa_turret_module.DAMAGE = 4
@@ -422,10 +412,12 @@ function WeaponTweakData:_set_normal()
 	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 150
 	self.ceiling_turret_module_no_idle.DAMAGE = 2
 	self.ceiling_turret_module_no_idle.CLIP_SIZE = 150
+	self.ceiling_turret_module_no_idle.spread = 10
 	self.ceiling_turret_module_longer_range.HEALTH_INIT = 400
 	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 150
 	self.ceiling_turret_module_longer_range.DAMAGE = 2
 	self.ceiling_turret_module_longer_range.CLIP_SIZE = 150
+	self.ceiling_turret_module_longer_range.spread = 10
 end
 
 function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
@@ -469,6 +461,7 @@ function WeaponTweakData:_set_hard() --He's only done it for the fuck-ing.
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 300
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 400
+	self.swat_van_turret_module.spread = 40
 	self.ceiling_turret_module.HEALTH_INIT = 400
 	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
 	self.ceiling_turret_module.DAMAGE = 2
@@ -540,6 +533,7 @@ function WeaponTweakData:_set_overkill() --aldstone? shit id be more worried abo
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 300
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 400
+	self.swat_van_turret_module.spread = 40
 	self.ceiling_turret_module.HEALTH_INIT = 400
 	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
 	self.ceiling_turret_module.DAMAGE = 2
@@ -613,6 +607,7 @@ function WeaponTweakData:_set_overkill_145()
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 300
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 800
+	self.swat_van_turret_module.spread = 40
 	self.ceiling_turret_module.HEALTH_INIT = 1000
 	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 150
 	self.ceiling_turret_module.DAMAGE = 2
@@ -702,6 +697,7 @@ function WeaponTweakData:_set_easy_wish()
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 400
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 800
+	self.swat_van_turret_module.spread = 30
 	self.ceiling_turret_module.HEALTH_INIT = 1250
 	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module.DAMAGE = 2
@@ -791,6 +787,7 @@ function WeaponTweakData:_set_overkill_290()
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 400
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 800
+	self.swat_van_turret_module.spread = 20
 	self.ceiling_turret_module.HEALTH_INIT = 1250
 	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module.DAMAGE = 2
@@ -882,6 +879,7 @@ function WeaponTweakData:_set_sm_wish()
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 400
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 800
+	self.swat_van_turret_module.spread = 20
 	self.ceiling_turret_module.HEALTH_INIT = 1500
 	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module.DAMAGE = 2

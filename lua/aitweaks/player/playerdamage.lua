@@ -997,16 +997,11 @@ end
 
 function PlayerDamage:_chk_dmg_too_soon(damage, ...)
 	local next_allowed_dmg_t = type(self._next_allowed_dmg_t) == "number" and self._next_allowed_dmg_t or Application:digest_value(self._next_allowed_dmg_t, false)
-	local min_allowed_dmg_t = next_allowed_dmg_t - 0.1
 	local t = managers.player:player_timer():time()
 	
 	if damage <= self._last_received_dmg + 0.01 and next_allowed_dmg_t > t then
 		self._old_last_received_dmg = nil
 		self._old_next_allowed_dmg_t = nil
-		return true
-	end
-	
-	if min_allowed_dmg_t > t then
 		return true
 	end
 	
@@ -1813,7 +1808,7 @@ function PlayerDamage:_start_tinnitus(sound_eff_mul, skip_explosion_sfx)
 
 		SoundDevice:set_rtpc("downed_state_progression", math.max(self._downed_progression or 0, self._tinnitus_data.intensity * 100))
 
-		self._tinnitus_data.snd_event = self._unit:sound():play("concussion_effect_on")
+		--self._tinnitus_data.snd_event = self._unit:sound():play("concussion_effect_on")
 	else
 		local duration = 4 + sound_eff_mul * math.lerp(8, 12, math.random())
 
@@ -1823,11 +1818,11 @@ function PlayerDamage:_start_tinnitus(sound_eff_mul, skip_explosion_sfx)
 			intensity = sound_eff_mul,
 			duration = duration,
 			end_t = managers.player:player_timer():time() + duration,
-			snd_event = self._unit:sound():play("concussion_effect_on")
+			--snd_event = self._unit:sound():play("concussion_effect_on")
 		}
 	end
 	
-	self._unit:sound():play("concussion_player_disoriented_sfx")
+	--self._unit:sound():play("concussion_player_disoriented_sfx")
 
 	if not skip_explosion_sfx then
 		self._unit:sound():play("flashbang_explode_sfx_player")
