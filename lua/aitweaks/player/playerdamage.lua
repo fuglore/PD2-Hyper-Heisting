@@ -16,13 +16,8 @@ local HH = PD2THHSHIN
 
 PlayerDamage._UPPERS_COOLDOWN = 60
 
-Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
+function PlayerDamage:init(unit)
 	self._lives_init = tweak_data.player.damage.LIVES_INIT
-
-	if Global.game_settings.one_down then
-		self._lives_init = tweak_data.player.damage.LIVES_INIT
-	end
-
 	self._lives_init = managers.modifiers:modify_value("PlayerDamage:GetMaximumLives", self._lives_init)
 	
 	if managers.player:has_category_upgrade("player", "criticalmode") then
@@ -205,7 +200,7 @@ Hooks:PostHook(PlayerDamage, "init", "hhpost_lives", function(self, unit)
 	}
 
 	self:clear_delayed_damage()
-end)
+end
 
 function PlayerDamage:damage_fall(data)
 	local damage_info = {

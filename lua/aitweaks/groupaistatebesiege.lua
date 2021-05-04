@@ -683,7 +683,6 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 
 				for u_key, u_data in pairs_g(group.units) do
 					local objective = u_data.unit:brain():objective()
-					local move
 
 					if objective then
 						if objective.grp_objective ~= grp_objective then

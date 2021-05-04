@@ -7350,15 +7350,20 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 		"city_swat"
 	}
 	
-	local common_units = {
+	local punks_units = {
 		"security",
 		"security_undominatable",
+		"security_mex",
+		"security_mex_no_pager",
+		"security_undominatable",
 		"mute_security_undominatable",
+		"gensec",
 		"cop",
-		"cop_female",
+		"cop_moss",
 		"cop_scared",
 		"gangster",
 		"bolivian",
+		"triad",
 		"mobster",
 		"biker",
 		"mobster",
@@ -7366,7 +7371,7 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 		"bolivian_indoors_mex"
 	}
 
-	for _, cname in ipairs(common_units) do
+	for _, cname in ipairs(punks_units) do
 		self[cname].crumble_chance = common_chance
 		self[cname].allow_pass_out = true
 		self[cname].damage.fire_damage_mul = 24
@@ -8258,7 +8263,7 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.assault_sniper.HEALTH_INIT = 20
 	self.assault_sniper.headshot_dmg_mul = 6
 	self.assault_sniper.dodge = presets.dodge.athletic
-	self.assault_sniper.damage.fire_damage_mul = 2
+	self.assault_sniper.damage.fire_damage_mul = 24
 	table.insert(self._enemy_list, "assault_sniper")
 	
 end)
@@ -9740,16 +9745,14 @@ function CharacterTweakData:_set_sm_wish()
 	self.spooc.dodge = self.presets.dodge.ninja_complex
 	--Explosive resist for certain enemies.
 	self.shield.damage.explosion_damage_mul = 0.25
-	self.heavy_swat.damage.explosion_damage_mul = 0.5
-	self.fbi_heavy_swat.damage.explosion_damage_mul = 0.5
 	self.tank.damage.explosion_damage_mul = 0.7
 	self.tank_medic.damage.explosion_damage_mul = 0.7
 	self.tank_mini.damage.explosion_damage_mul = 0.7
 	--heavy swat health clamping for guaranteed two-shot-to-kill ratios
 	self.heavy_swat.DAMAGE_CLAMP_BULLET = 79
-	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 30
+	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET = 79
-	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 30
+	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	
 	self.phalanx_minion.HEALTH_INIT = 300
 	self.phalanx_minion.DAMAGE_CLAMP_BULLET = 40
