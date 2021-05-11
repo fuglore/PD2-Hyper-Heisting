@@ -382,7 +382,7 @@ function TankCopLogicAttack._upd_combat_movement(data)
 							my_data.chase_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, 300)
 						else
 							local chase_pos = focus_enemy.nav_tracker:field_position()
-							local pos_on_wall = CopLogicTravel._get_pos_on_wall(chase_pos, 300, nil, nil, data.pos_rsrv_id)
+							local pos_on_wall = CopLogicTravel._get_pos_on_wall(chase_pos, 300, nil, nil, data.pos_rsrv_id, 90)
 
 							if mvec3_not_equal(chase_pos, pos_on_wall) then
 								my_data.chase_pos = pos_on_wall

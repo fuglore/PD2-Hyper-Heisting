@@ -12,19 +12,19 @@ local ids_l_toe = ids_func("LeftToeBase")
 CopBase = CopBase or class(UnitBase)
 local old_init = CopBase.init
 
+local highdiff_c45_units = {
+	Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
+	Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45"),		
+	Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"),	
+	Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45"),
+	Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"),
+	Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1"),	
+	Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
+	Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45")
+}
+
 function CopBase:init(unit)
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local highdiff_c45_units = {
-		Idstring("units/pd2_mod_psc/characters/ene_murky_fbigod_c45/ene_murky_fbigod_c45"),
-		Idstring("units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_fbigod_c45"),		
-		Idstring("units/pd2_dlc_bex/characters/ene_bex_ninja_c45/ene_bex_ninja_c45"),	
-		Idstring("units/pd2_dlc_mad/characters/ene_akan_hyper_fbininja_c45/ene_akan_hyper_fbininja_c45"),
-		Idstring("units/pd2_dlc_hvh/characters/ene_fbigod_hvh_c45/ene_fbigod_hvh_c45"),
-		Idstring("units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1"),	
-		Idstring("units/payday2/characters/ene_fbi_1/ene_fbi_1"),
-		Idstring("units/pd2_mod_ftsu/characters/ene_gensec_fbigod_c45/ene_gensec_fbigod_c45")	
-		
-	}
 	
 	if diff_index >= 6 then
 		for _, pistoleer in ipairs(highdiff_c45_units) do
@@ -267,6 +267,7 @@ function CopBase:default_weapon_name()
 	local suppressed_grom = Idstring("units/pd2_dlc_spa/weapons/wpn_npc_svd_silenced/wpn_npc_svd_silenced")
 	local vulcan_minigun = Idstring("units/pd2_dlc_drm/weapons/wpn_npc_mini/wpn_npc_mini")
 	local zeal_gewehr = Idstring("units/pd2_dlc_drm/weapons/wpn_npc_heavy_zeal_sniper/wpn_npc_heavy_zeal_sniper")
+	local galil = Idstring("units/payday2/weapons/wpn_npc_galil/wpn_npc_galil")
 
 	--HH npc custom weapons; this is by no means all of them, only the ones that were already here
 	local commando_553 = Idstring("units/payday2/weapons/wpn_npc_s552/wpn_npc_s552")

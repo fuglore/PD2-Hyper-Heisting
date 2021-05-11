@@ -1563,6 +1563,18 @@ function PlayerDamage:_upd_suppression(t, dt)
 	end
 end
 
+function PlayerDamage:_set_health_effect()
+	local max_hp = self:_max_health() * self._max_health_reduction
+	local hp = self:get_real_health() / max_hp
+	
+	if hp < 1 and self._max_health_reduction < 0.5 then
+		hp = hp - 0.5
+	end
+
+	math.clamp(hp, 0, 1)
+	managers.environment_controller:set_health_effect_value(hp)
+end
+
 function PlayerDamage:_begin_akuma_snddedampen()
 	if self._akuma_dampen and self._akuma_dampen > 0 then
 		self._akuma_dampen = 0

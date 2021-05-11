@@ -351,9 +351,9 @@ function CopLogicAttack._upd_combat_movement(data)
 						action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
 					elseif not my_data.charge_path_search_id and focus_enemy.nav_tracker then
 						if not tactics or tactics.flank then
-							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, my_data.weapon_range.close) --charge to a position that would put the unit in a flanking position, not a flanking path
+							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, engage_range) --charge to a position that would put the unit in a flanking position, not a flanking path
 						else
-							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.close, nil, nil, data.pos_rsrv_id)
+							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), engage_range, nil, nil, data.pos_rsrv_id, 90)
 						end
 
 						--my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.optimal, 45, nil, data.pos_rsrv_id)

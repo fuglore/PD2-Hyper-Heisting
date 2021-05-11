@@ -625,6 +625,16 @@
 
 	<df_nm path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire" />
 	
+	<unit path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil" load="true"/>
+	<material_config path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil"/>	
+	<object path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil" />
+	<model path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil" />	
+	<cooked_physics path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil"/>	
+	<sequence_manager path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil"/>
+
+	<texture path="units/payday2/weapons/wpn_npc_galil/galil_df" />
+	<texture path="units/payday2/weapons/wpn_npc_galil/galil_nm" />
+	
 	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" load="true"/>
 	<object path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />
@@ -838,6 +848,8 @@
 	<texture path="effects/pd2_mod_hh/particles/textures/marauderspooc_glint" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/glint" load="true" />
 	<texture path="units/lights/pd2_hh_flashlight_proj/flashlight_player" load="true" />
+	<effect path="effects/payday2/particles/weapons/arrow_trail" force="true"/>
+	<effect path="effects/payday2/particles/weapons/arrow_trail_homing"/>
 	<effect path="effects/particles/weapons/flashlight/flashlight" force="true"/>
 	<effect path="effects/particles/weapons/flashlight/flashlight_mp9" load="true"/>
 	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/hurt_screen" />
