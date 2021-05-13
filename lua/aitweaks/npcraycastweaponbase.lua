@@ -26,7 +26,7 @@ function NPCRaycastWeaponBase:init(...)
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b")
 	end
 	
-	if weapon_Tweak and weapon_tweak.no_vis then
+	if weapon_tweak and weapon_tweak.no_vis then
 		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak")
 	end
 		

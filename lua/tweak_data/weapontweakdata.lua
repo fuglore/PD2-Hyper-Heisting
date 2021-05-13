@@ -3570,13 +3570,28 @@ self.hunter.AMMO_MAX = 50
 
 --Modern Bow
 
+self.elastic.AMMO_MAX = 20
+self.elastic.charge_data = {
+	max_t = 1
+}
+
 --Airbow
 
 --Plainsrider Bow
 
+self.plainsrider.charge_data = {
+	max_t = 0.75
+}
+self.plainsrider.AMMO_MAX = 40
+
 --Light Crossbow
 
 --Longbow
+
+self.long.charge_data = {
+	max_t = 1.25
+}
+self.long.AMMO_MAX = 30
 
 --Heavy Crossbow
 

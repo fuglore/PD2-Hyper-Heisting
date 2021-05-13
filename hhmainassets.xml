@@ -635,6 +635,16 @@
 	<texture path="units/payday2/weapons/wpn_npc_galil/galil_df" />
 	<texture path="units/payday2/weapons/wpn_npc_galil/galil_nm" />
 	
+	<unit path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu" load="true"/>
+	<material_config path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu"/>	
+	<object path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu" />
+	<model path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu" />	
+	<cooked_physics path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu"/>	
+	<sequence_manager path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu"/>
+
+	<texture path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/silserbu_df" />
+	<texture path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/silserbu_nm" />
+	
 	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" load="true"/>
 	<object path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />

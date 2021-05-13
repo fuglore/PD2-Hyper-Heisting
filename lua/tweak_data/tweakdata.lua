@@ -27,6 +27,11 @@ tweak_data.projectiles.fir_com.fire_dot_data = {
 	dot_trigger_max_distance = 3000,
 	dot_tick_period = 0.5
 }
+tweak_data.projectiles.west_arrow.launch_speed = 1250 --plainrider bow
+
+tweak_data.projectiles.long_arrow.launch_speed = 1500 --english longbow
+
+tweak_data.projectiles.elastic_arrow.launch_speed = 1500 --compound bow
 
 function TweakData:_set_normal()
 	self.player:_set_normal()

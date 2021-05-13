@@ -1,6 +1,5 @@
 local mvec1 = Vector3()
 local mvec2 = Vector3()
-local mrot1 = Rotation()
 local ids_pickup = Idstring("pickup")
 
 local tmp_vec1 = Vector3()
@@ -19,6 +18,8 @@ local mvec3_norm = mvector3.normalize
 
 local math_lerp = math.lerp
 
+local anti_gravitate_idstr = Idstring("physic_effects/anti_gravitate")
+
 function ArrowBase.throw_projectile(projectile_type, pos, dir, owner_peer_id, homing)
 	if not ProjectileBase.check_time_cheat(projectile_type, owner_peer_id) then
 		return
@@ -27,6 +28,10 @@ function ArrowBase.throw_projectile(projectile_type, pos, dir, owner_peer_id, ho
 	local tweak_entry = tweak_data.blackmarket.projectiles[projectile_type]
 	local unit_name = Idstring(not Network:is_server() and tweak_entry.local_unit or tweak_entry.unit)
 	local unit = World:spawn_unit(unit_name, pos, Rotation(dir, math.UP))
+	
+	if homing then
+		unit:base()._should_home_in = world_g:play_physic_effect(anti_gravitate_idstr, unit)
+	end
 
 	if owner_peer_id and managers.network:session() then
 		local peer = managers.network:session():peer(owner_peer_id)
@@ -36,11 +41,6 @@ function ArrowBase.throw_projectile(projectile_type, pos, dir, owner_peer_id, ho
 			unit:base():set_thrower_unit(thrower_unit)
 
 			if not tweak_entry.throwable and thrower_unit:movement() and thrower_unit:movement():current_state() then
-				if homing then
-					local physic_effect = Idstring("physic_effects/anti_gravitate")
-					unit:base()._should_home_in = world_g:play_physic_effect(physic_effect, unit)
-				end
-				
 				unit:base():set_weapon_unit(thrower_unit:movement():current_state()._equipped_unit)
 			end
 		end
@@ -169,7 +169,7 @@ function ArrowBase:_calculate_autohit_direction()
 
 						local angle = mvec3_angle(dir, tmp_vec1)
 
-						if angle <= 30 then
+						if angle <= 60 then
 							if enemy:base():has_tag(medic_tag) then
 								best_angle = angle
 								closest_dis = dis
@@ -204,7 +204,7 @@ function ArrowBase:_calculate_autohit_direction()
 
 						local angle = mvec3_angle(dir, tmp_vec1)
 
-						if angle <= 30 then
+						if angle <= 60 then
 							if not closest_dis or dis < closest_dis then
 								if not best_angle or angle <= best_angle then
 									best_angle = angle
@@ -227,7 +227,6 @@ function ArrowBase:_calculate_autohit_direction()
 end
 
 local tmp_vel = Vector3()
-
 function ArrowBase:update(unit, t, dt)
 	if self._drop_in_sync_data then
 		self._drop_in_sync_data.f = self._drop_in_sync_data.f - 1
@@ -258,9 +257,15 @@ function ArrowBase:update(unit, t, dt)
 					
 				local speed = mvec3_norm(tmp_vel)
 
-				mvec3_step(tmp_vel, tmp_vel, autohit_dir, dt * 24)
+				mvec3_step(tmp_vel, tmp_vel, autohit_dir, dt * 84)
 				
-				body:set_velocity(tmp_vel * speed)	
+				local rot = Rotation(tmp_vel, math.UP)
+				
+				body:set_rotation(rot)
+				
+				body:set_velocity(tmp_vel * speed)
+				
+				
 			end
 		end
 	elseif self._should_home_in then

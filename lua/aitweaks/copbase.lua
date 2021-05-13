@@ -267,10 +267,11 @@ function CopBase:default_weapon_name()
 	local suppressed_grom = Idstring("units/pd2_dlc_spa/weapons/wpn_npc_svd_silenced/wpn_npc_svd_silenced")
 	local vulcan_minigun = Idstring("units/pd2_dlc_drm/weapons/wpn_npc_mini/wpn_npc_mini")
 	local zeal_gewehr = Idstring("units/pd2_dlc_drm/weapons/wpn_npc_heavy_zeal_sniper/wpn_npc_heavy_zeal_sniper")
-	local galil = Idstring("units/payday2/weapons/wpn_npc_galil/wpn_npc_galil")
 
 	--HH npc custom weapons; this is by no means all of them, only the ones that were already here
+	local silserbu = Idstring("units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu")
 	local commando_553 = Idstring("units/payday2/weapons/wpn_npc_s552/wpn_npc_s552")
+	local galil = Idstring("units/payday2/weapons/wpn_npc_galil/wpn_npc_galil")
 	local kmtac = Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_kmtac")			
 	local kmtac_akimbo = Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac")		
 	local white_streak_akimbo = Idstring("units/pd2_dlc_mad/weapons/wpn_npc_pl14/wpn_npc_x_pl14")
