@@ -41,7 +41,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	self._small_map = small_map or nil
 	
-	log(tostring(self._small_map))
+	--log(tostring(self._small_map))
 	
 	self._spawn_group_timers = {}
 	self._graph_distance_cache = {}
