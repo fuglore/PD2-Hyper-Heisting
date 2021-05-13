@@ -338,8 +338,20 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local heatbonus_line_to_use = "hud_heat_common"
 	
 	if faction then
-		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)				
-		if faction == "russia" then
+		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		if faction == "bo" then
+			if diff_index < 4 then
+				versusline = "hud_assault_faction_sbz"
+			elseif diff_index < 6 then
+				versusline = "hud_assault_faction_ovk"
+			elseif diff_index == 6 then
+				versusline = "hud_assault_faction_bofadeez"
+			elseif diff_index == 7 then
+				versusline = "hud_assault_faction_bofa"
+			else
+				versusline = "hud_assault_faction_zeal"
+			end
+		elseif faction == "russia" then
 			versusline = "hud_assault_faction_mad"
 			assaultline = "hud_assault_assaultrepers"			
 		elseif faction == "federales" then

@@ -7377,6 +7377,12 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 		self[cname].damage.fire_damage_mul = 24
 	end
 	
+	if self.security_no_pager then
+		self.security_no_pager.crumble_chance = common_chance
+		self.security_no_pager.allow_pass_out = true
+		self.security_no_pager.damage.fire_damage_mul = 24
+	end
+	
 	for _, lname in ipairs(light_units) do
 		self[lname].crumble_chance = light_swat_chance
 		self[lname].allow_pass_out = true
@@ -10202,6 +10208,11 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	--punks
 	self.security.HEALTH_INIT = self.security.HEALTH_INIT * hp_mul
 	self.security_undominatable.HEALTH_INIT = self.security.HEALTH_INIT
+	
+	if self.security_no_pager then
+		self.security_no_pager.HEALTH_INIT = self.security.HEALTH_INIT
+	end
+	
 	self.mute_security_undominatable.HEALTH_INIT = self.security.HEALTH_INIT
 	self.security_mex.HEALTH_INIT = self.security.HEALTH_INIT
 	self.security_mex_no_pager.HEALTH_INIT = self.security.HEALTH_INIT
@@ -10272,6 +10283,10 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 
 	--punks
 	self.security.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
+	
+	if self.security_no_pager then
+		self.security_no_pager.headshot_dmg_mul = self.security.headshot_dmg_mul
+	end
 	
 	self.security_undominatable.headshot_dmg_mul = self.security.headshot_dmg_mul
 	self.mute_security_undominatable.headshot_dmg_mul = self.security.headshot_dmg_mul

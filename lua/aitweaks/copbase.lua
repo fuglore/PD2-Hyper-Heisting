@@ -119,6 +119,10 @@ function CopBase:set_visibility_state(stage)
 	self:chk_freeze_anims()
 end
 
+local do_this_shit = not Global or not Global.game_settings or Global.game_settings.level_id ~= "physics_citystreets" and Global.game_settings.level_id ~= "physics_tower" and Global.game_settings.level_id ~= "physics_core" 
+
+if do_this_shit then
+
 function CopBase:_chk_spawn_gear()
 	local tweak = managers.job:current_level_data()
 	local unit_name = self._unit:name()
@@ -212,6 +216,8 @@ function CopBase:_chk_spawn_gear()
 			end
 		end
 	end
+end
+
 end
 
 function CopBase:pre_destroy(unit)

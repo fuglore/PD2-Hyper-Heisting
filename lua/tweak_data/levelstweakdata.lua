@@ -88,20 +88,28 @@ end
 
 function LevelsTweakData:get_ai_group_type()
 	local level_data = Global.level_data and Global.level_data.level_id and self[Global.level_data.level_id]
-
+	
+	
 	if level_data then
 		local ai_group_type = level_data.ai_group_type
-		if ai_group_type and ai_group_type == "zombie" and Global.game_settings and Global.game_settings.incsmission then
-			return "america"	
-		elseif ai_group_type and ai_group_type == "shared" and Global.game_settings and Global.game_settings.incsmission then
-			return "america"					
-		elseif ai_group_type then
-			--log("group type name is" .. ai_group_type .. "woo")
-			return ai_group_type
+		
+		if ai_group_type then
+			local sm_wish = Global.game_settings.difficulty == "sm_wish"
+			
+			if ai_group_type == "bo" and sm_wish then
+				return "america"
+			elseif ai_group_type == "zombie" and Global.game_settings and Global.game_settings.incsmission then
+				return "america"	
+			elseif ai_group_type == "shared" and Global.game_settings and Global.game_settings.incsmission then
+				return "america"					
+			else
+				--log("group type name is" .. ai_group_type .. "woo")
+				return ai_group_type
+			end
 		end
 	end
 
 	--print("[LevelsTweakData:get_ai_group_type] group is not defined for this level, fallback on default")
 
-	return self.ai_groups.default
+	return self.ai_groups.america
 end

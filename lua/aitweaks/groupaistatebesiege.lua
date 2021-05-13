@@ -37,8 +37,11 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	local level = Global.level_data and Global.level_data.level_id
 		
-	local small_map = level == "sah" or level == "born" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" or level == "dinner" or level == "mallcrasher" or level == "moon" or level == "cane"
+	local small_map = level == "sah" or level == "born" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" or level == "dinner" or level == "mallcrasher" or level == "moon" or level == "cane" or level == "physics_tower" or level == "physics_core"
+	
 	self._small_map = small_map or nil
+	
+	log(tostring(self._small_map))
 	
 	self._spawn_group_timers = {}
 	self._graph_distance_cache = {}
@@ -3430,4 +3433,168 @@ function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delay
 	end
 
 	return best_grp, best_grp_type
+end
+
+local bo_hh = "bo_hh"
+local shield = "shield"
+local winters = Idstring("units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master")
+
+function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last)
+	local nr_units_spawned = 0
+	local produce_data = {
+		name = true,
+		spawn_ai = {}
+	}
+	local group_ai_tweak = tweak_data.group_ai
+	local spawn_points = spawn_task.spawn_group.spawn_pts
+
+	local function _try_spawn_unit(u_type_name, spawn_entry)
+		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
+			return
+		end
+
+		local hopeless = true
+		local current_unit_type = tweak_data.levels:get_ai_group_type()
+		local try_hh = current_unit_type == "bo"
+
+		for _, sp_data in ipairs(spawn_points) do
+			local category = group_ai_tweak.unit_categories[u_type_name]
+
+			if (sp_data.accessibility == "any" or category.access[sp_data.accessibility]) and (not sp_data.amount or sp_data.amount > 0) and sp_data.mission_element:enabled() then
+				hopeless = false
+
+				if sp_data.delay_t < self._t then
+					local cat_unit_types = category.unit_types
+					local units = cat_unit_types[current_unit_type]
+					
+					if try_hh then
+						if cat_unit_types[bo_hh] then
+							units = cat_unit_types[bo_hh]
+						end
+					end
+					
+					if try_hh and category.special_type == shield and self._downs_during_assault <= 0 and math.random() <= 0.2 then
+						produce_data.name = winters
+					else
+						produce_data.name = units[math.random(#units)]
+					end
+					
+					produce_data.name = managers.modifiers:modify_value("GroupAIStateBesiege:SpawningUnit", produce_data.name)
+					local spawned_unit = sp_data.mission_element:produce(produce_data)
+					local u_key = spawned_unit:key()
+					local objective = nil
+
+					if spawn_task.objective then
+						objective = self.clone_objective(spawn_task.objective)
+					else
+						objective = spawn_task.group.objective.element:get_random_SO(spawned_unit)
+
+						if not objective then
+							spawned_unit:set_slot(0)
+
+							return true
+						end
+
+						objective.grp_objective = spawn_task.group.objective
+					end
+
+					local u_data = self._police[u_key]
+
+					self:set_enemy_assigned(objective.area, u_key)
+
+					if spawn_entry.tactics then
+						u_data.tactics = spawn_entry.tactics
+						u_data.tactics_map = {}
+
+						for _, tactic_name in ipairs(u_data.tactics) do
+							u_data.tactics_map[tactic_name] = true
+						end
+					end
+
+					spawned_unit:brain():set_spawn_entry(spawn_entry, u_data.tactics_map)
+
+					u_data.rank = spawn_entry.rank
+
+					self:_add_group_member(spawn_task.group, u_key)
+
+					if spawned_unit:brain():is_available_for_assignment(objective) then
+						if objective.element then
+							objective.element:clbk_objective_administered(spawned_unit)
+						end
+
+						spawned_unit:brain():set_objective(objective)
+					else
+						spawned_unit:brain():set_followup_objective(objective)
+					end
+
+					nr_units_spawned = nr_units_spawned + 1
+
+					if spawn_task.ai_task then
+						spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
+						spawned_unit:brain()._logic_data.spawned_in_phase = spawn_task.ai_task.phase
+					end
+
+					sp_data.delay_t = self._t + sp_data.interval
+
+					if sp_data.amount then
+						sp_data.amount = sp_data.amount - 1
+					end
+
+					return true
+				end
+			end
+		end
+
+		if hopeless then
+			debug_pause("[GroupAIStateBesiege:_upd_group_spawning] spawn group", spawn_task.spawn_group.id, "failed to spawn unit", u_type_name)
+
+			return true
+		end
+	end
+
+	for u_type_name, spawn_info in pairs(spawn_task.units_remaining) do
+		if not group_ai_tweak.unit_categories[u_type_name].access.acrobatic then
+			for i = spawn_info.amount, 1, -1 do
+				local success = _try_spawn_unit(u_type_name, spawn_info.spawn_entry)
+
+				if success then
+					spawn_info.amount = spawn_info.amount - 1
+				end
+
+				break
+			end
+		end
+	end
+
+	for u_type_name, spawn_info in pairs(spawn_task.units_remaining) do
+		for i = spawn_info.amount, 1, -1 do
+			local success = _try_spawn_unit(u_type_name, spawn_info.spawn_entry)
+
+			if success then
+				spawn_info.amount = spawn_info.amount - 1
+			end
+
+			break
+		end
+	end
+
+	local complete = true
+
+	for u_type_name, spawn_info in pairs(spawn_task.units_remaining) do
+		if spawn_info.amount > 0 then
+			complete = false
+
+			break
+		end
+	end
+
+	if complete then
+		spawn_task.group.has_spawned = true
+
+		table.remove(self._spawning_groups, use_last and #self._spawning_groups or 1)
+
+		if spawn_task.group.size <= 0 then
+			self._groups[spawn_task.group.id] = nil
+		end
+	end
 end
