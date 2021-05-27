@@ -24,13 +24,6 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 			}
 		}
 		
-		self.projectiles.cs_grenade_quick = {
-			radius = 300,
-			radius_blurzone_multiplier = 0,
-			damage_tick_period = 0.35,
-			damage_per_tick = 1
-		}
-		
 		self.projectiles.frag.pickup_chance = 0.05
 		self.projectiles.frag_com.pickup_chance = 0.05
 		self.projectiles.dada_com.pickup_chance = 0.05

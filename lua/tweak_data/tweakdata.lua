@@ -15,6 +15,13 @@ if not tweak_data then
 	return 
 end
 
+tweak_data.projectiles.cs_grenade_quick = {
+	radius = 300,
+	radius_blurzone_multiplier = 0,
+	damage_tick_period = 0.35,
+	damage_per_tick = 1
+}
+
 --Why are projectile's damage stats handled here? I don't know! Fuck you Jules!
 tweak_data.projectiles.wpn_prj_ace.damage = 10
 tweak_data.projectiles.wpn_prj_jav.damage = 300
