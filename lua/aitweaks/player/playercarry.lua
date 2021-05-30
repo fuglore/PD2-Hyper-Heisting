@@ -13,6 +13,10 @@ function PlayerCarry:_update_check_actions(t, dt)
 		self._speed_is_wavedash_boost = nil
 	end
 	
+	if self._fall_damage_slow_t and self._fall_damage_slow_t < t then
+		self._fall_damage_slow_t = nil
+	end
+	
 	self:_update_interaction_timers(t)
 	self:_update_throw_projectile_timers(t, input)
 	self:_update_reload_timers(t, dt, input)
