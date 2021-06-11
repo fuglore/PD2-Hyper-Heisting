@@ -4,6 +4,7 @@ local mvec3_dot = mvector3.dot
 local mvec3_sub = mvector3.subtract
 local mvec3_mul = mvector3.multiply
 local mvec3_norm = mvector3.normalize
+local mvec3_dis = mvector3.distance
 local mvec3_dir = mvector3.direction
 local mvec3_set_l = mvector3.set_length
 local mvec3_len = mvector3.length
@@ -12,6 +13,9 @@ local math_lerp = math.lerp
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_rot1 = Rotation()
+
+local table_insert = table.insert
+local table_contains = table.contains
 
 local afsf_blacklist = {
 	["saw"] = true,
@@ -550,7 +554,10 @@ function RaycastWeaponBase:_suppress_units(from_pos, direction, distance, slotma
 	mvector3.multiply(tmp_to, distance)
 	mvector3.add(tmp_to, mvector3.copy(from_pos))
 
-	local cone_radius = distance / 4
+	local cone_radius = distance / 16
+	
+	cone_radius = cone_radius * self._suppression
+
 	local enemies_in_cone = World:find_units(user_unit, "cone", from_pos, tmp_to, cone_radius, slotmask)
 	local enemies_to_suppress = {}
 
@@ -566,15 +573,17 @@ function RaycastWeaponBase:_suppress_units(from_pos, direction, distance, slotma
 	end
 
 	if #enemies_in_cone > 0 then
-		for _, enemy in ipairs(enemies_in_cone) do
+		for i = 1, #enemies_in_cone do
+			enemy = enemies_in_cone[i]
+			
 			if Network:is_server() or user_unit == managers.player:player_unit() or enemy == managers.player:player_unit() then --clients only allow the local player to suppress or be suppressed (so that NPC husks don't suppress each other)
-				if not table.contains(enemies_to_suppress, enemy) and enemy.character_damage and enemy:character_damage() and enemy:character_damage().build_suppression then --valid enemy + has suppression function
+				if not table_contains(enemies_to_suppress, enemy) and enemy.character_damage and enemy:character_damage() and enemy:character_damage().build_suppression then --valid enemy + has suppression function
 					if not enemy:movement().cool or enemy:movement().cool and not enemy:movement():cool() then --is alerted or can't be alerted at all (player)
 						if enemy:character_damage().is_friendly_fire and not enemy:character_damage():is_friendly_fire(user_unit) then --not in the same team as the shooter
-							local obstructed = World:raycast("ray", from_pos, enemy:movement():m_head_pos(), "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision", "report") --imitating AI checking for visibility for things like shouting
+							local obstructed = World:raycast("ray", from_pos, enemy:movement():m_com(), "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision", "report") --imitating AI checking for visibility for things like shouting
 
 							if not obstructed then
-								table.insert(enemies_to_suppress, enemy)
+								table_insert(enemies_to_suppress, enemy)
 							end
 						end
 					end
@@ -583,30 +592,18 @@ function RaycastWeaponBase:_suppress_units(from_pos, direction, distance, slotma
 		end
 
 		if #enemies_to_suppress > 0 then
-			for _, enemy in ipairs(enemies_to_suppress) do
-				local enemy_distance = mvector3.distance(from_pos, enemy:movement():m_head_pos())
-				local dis_lerp_value = math.clamp(enemy_distance, 0, distance) / distance
+			for i = 1, #enemies_to_suppress do
+				enemy = enemies_in_cone[i]
+				
+				local enemy_distance = mvec3_dis(from_pos, enemy:movement():m_com())
+				local dis_lerp_value = math_clamp(enemy_distance, 0, 3000) / 3000
 				local total_suppression = self._suppression
 
 				if suppr_mul then
 					total_suppression = total_suppression * suppr_mul
 				end
 
-				total_suppression = math.lerp(total_suppression, 0, dis_lerp_value)
-				
-				local total_panic_chance = nil
-
-				if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-					--nothing
-				else
-					if self._panic_suppression_chance then
-						total_panic_chance = self._panic_suppression_chance
-
-						local suppr_lerp_value = math.clamp(total_suppression, 0, 4.5) / 4.5
-
-						total_panic_chance = math.lerp(0, total_panic_chance, suppr_lerp_value)
-					end
-				end
+				total_suppression = math_lerp(total_suppression, 0, dis_lerp_value)
 
 				if total_suppression > 0 then
 					if mark_suppressed_enemies and enemy:contour() then

@@ -83,7 +83,7 @@ function GroupAIStateBase:on_enemy_registered(unit)
 end
 
 function GroupAIStateBase:is_enemy_special(unit)
-	if not unit:base() then
+	if not unit:base() or not unit:base()._char_tweak then
 		return false
 	end
 

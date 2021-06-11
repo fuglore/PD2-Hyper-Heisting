@@ -457,7 +457,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 		end
 	end
 
-	local delay = within_any_acquire_range and 0 or 2
+	local delay = within_any_acquire_range and 0 or data.important and 0 or 2
 
 	for u_key, attention_info in pairs_g(detected_obj) do
 		local can_detect = true
@@ -1210,6 +1210,15 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 	end
 end
 
+function CopLogicBase._set_attention_on_pos(data, pos, reaction)
+	local attention_data = {
+		pos = pos,
+		reaction = reaction
+	}
+
+	data.unit:movement():set_attention(attention_data)
+end
+
 function CopLogicBase.should_duck_on_alert(data, alert_data)
 	--[[if data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.crouch or data.unit:anim_data().crouch or data.unit:movement():chk_action_forbidden("walk") then
 		return
@@ -1228,18 +1237,21 @@ end
 
 --allows nearly_visible checks to work more consistently while still saving perfomance
 function CopLogicBase._chk_nearly_visible_chk_needed(data, attention_info, u_key)
-	local current_focus = data.attention_obj
+	
+	if data.important then
+		local current_focus = data.attention_obj
 
-	if current_focus then
-		if current_focus.u_key == u_key then
-			return true
-		elseif not current_focus.verified and not current_focus.nearly_visible then
-			if attention_info.verified_t and data.t - attention_info.verified_t < 3 or attention_info.nearly_visible_t and data.t - attention_info.nearly_visible_t < 3 then
+		if current_focus then
+			if current_focus.u_key == u_key then
 				return true
+			elseif not current_focus.verified and not current_focus.nearly_visible then
+				if attention_info.verified_t and data.t - attention_info.verified_t < 3 or attention_info.nearly_visible_t and data.t - attention_info.nearly_visible_t < 3 then
+					return true
+				end
 			end
+		elseif attention_info.verified_t and data.t - attention_info.verified_t < 3 or attention_info.nearly_visible_t and data.t - attention_info.nearly_visible_t < 3 then
+			return true
 		end
-	elseif attention_info.verified_t and data.t - attention_info.verified_t < 3 or attention_info.nearly_visible_t and data.t - attention_info.nearly_visible_t < 3 then
-		return true
 	end
 end
 

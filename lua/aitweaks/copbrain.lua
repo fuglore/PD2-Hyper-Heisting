@@ -57,7 +57,7 @@ function CopBrain:post_init()
 	CopBrain._logic_variants.cop_moss = clone(security_variant)
 	CopBrain._logic_variants.armored_sniper = clone(security_variant)	
 	CopBrain._logic_variants.shield = clone(security_variant)
-	CopBrain._logic_variants.shield.attack = CopLogicAttack
+	CopBrain._logic_variants.shield.attack = ShieldLogicAttack
 	CopBrain._logic_variants.akuma = clone(security_variant)
 	CopBrain._logic_variants.akuma.attack = CopLogicAttack
 	

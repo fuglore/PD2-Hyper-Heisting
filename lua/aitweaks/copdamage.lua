@@ -934,13 +934,9 @@ function CopDamage:damage_melee(attack_data)
 		return
 	end
 
-	if is_civilian or self._unit:base():has_tag("takedown") then
+	if is_civilian or self._unit:base():has_tag("special") then
 		if self:is_friendly_fire(attack_data.attacker_unit) then
-			if is_civilian then
-				return "friendly_fire"
-			else
-				attack_data.damage = attack_data.damage * 0.1
-			end
+			return "friendly_fire"
 		end
 	elseif self:is_friendly_fire(attack_data.attacker_unit) then
 		if attack_data.attacker_unit:base().has_tag and attack_data.attacker_unit:base():has_tag("tank") and not self._unit:base():has_tag("tank") and not self._unit:base():has_tag("protected_reverse") then

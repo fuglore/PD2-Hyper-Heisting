@@ -669,14 +669,6 @@ function GroupAIStateBesiege:_upd_police_activity()
 	self:_queue_police_upd_task()
 end
 
-function GroupAIStateBesiege:_queue_police_upd_task()
-	if not self._police_upd_task_queued then
-		self._police_upd_task_queued = true
-		
-		managers.enemy:queue_task("GroupAIStateBesiege._upd_police_activity", self._upd_police_activity, self, self._t + 0.2, nil, nil)
-	end
-end
-
 function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 	for group_id, group in pairs_g(self._groups) do
 		local grp_objective = group.objective
@@ -1711,19 +1703,26 @@ function GroupAIStateBesiege:_upd_assault_task()
 		end
 	end
 	
-	local primary_target_area = nil
-	
-	if self._task_data.assault.target_areas then
-		self._current_target_area = self._task_data.assault.target_areas[1]
-		primary_target_area = self._current_target_area
-	end
+	local primary_target_area = task_data.target_areas[1]
 
-	if not primary_target_area or not self._current_target_area or self:is_area_safe_assault(primary_target_area) then
-		self._task_data.assault.target_areas = self:_upd_assault_areas()
-		
-		if self._task_data.assault.target_areas then
-			self._current_target_area = self._task_data.assault.target_areas[1]
-			primary_target_area = self._current_target_area
+	if self:is_area_safe_assault(primary_target_area) then
+		local target_pos = primary_target_area.pos
+		local nearest_area, nearest_dis = nil
+
+		for criminal_key, criminal_data in pairs_g(self._player_criminals) do
+			if not criminal_data.status then
+				local dis = mvec3_dis_sq(target_pos, criminal_data.m_pos)
+
+				if not nearest_dis or dis < nearest_dis then
+					nearest_dis = dis
+					nearest_area = self:get_area_from_nav_seg_id(criminal_data.tracker:nav_segment())
+				end
+			end
+		end
+
+		if nearest_area then
+			primary_target_area = nearest_area
+			task_data.target_areas[1] = nearest_area
 		end
 	end
 	
@@ -1741,14 +1740,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 	--local enemies_wanted = task_data.force * 0.25
 	
 	local low_carnage = self:_count_criminals_engaged_force(4) <= 8
-	
-	if not self._mass_reveal_t or self._mass_reveal_t < t then
-		for criminal_key, criminal_data in pairs(self._criminals) do
-			self:criminal_spotted(criminal_data.unit)
-		end
-			
-		self._mass_reveal_t = t + 4
-	end
 	
 	if self._task_data.assault.target_areas and primary_target_area and nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh or self._task_data.assault.target_areas and primary_target_area and self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak and not self._feddensityhigh then
 		local used_event = nil
@@ -3339,17 +3330,12 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 		end
 	end
 	
-	local delays = {5, 10}
+	local delays = {7.5, 15}
 	
 	if spawn_group_number > 3 and spawn_group_number < 6 then
-		delays = {5, 7.5}
+		delays = {5, 10}
 	elseif spawn_group_number < 3 then
 		delays = {2.5, 5}
-	end
-	
-	if self._small_map then --higher delays on small maps
-		delays[1] = delays[1] * 1.25
-		delays[2] = delays[2] * 1.25
 	end
 	
 	if Global.game_settings.one_down then --LET'S GIVE INTO PAAAAAAIN

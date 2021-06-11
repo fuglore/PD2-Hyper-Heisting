@@ -1,3 +1,7 @@
+Hooks:PostHook(NewRaycastWeaponBase, "init", "hhpost_shieldknock", function(self, unit)
+	self._shield_knock = managers.player:has_category_upgrade("player", "shield_knock_bullet")
+end)
+
 function NewRaycastWeaponBase:reload_speed_multiplier()
 	if self._current_reload_speed_multiplier then
 		return self._current_reload_speed_multiplier

@@ -1787,7 +1787,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	if aim or shoot then
 		local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
 		
-		if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification <= 3 then
+		if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification <= 0.3 then
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)
 
@@ -1800,28 +1800,35 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		else
 			local look_pos = nil
-			local coarse_path = my_data.coarse_path
-			local nav_index = my_data.coarse_path_index
+			local reaction = nil
 			
-			if coarse_path and nav_index and #coarse_path >= nav_index + 1 then
-				local total_nav_points = #coarse_path
-				local index = nav_index + 1
-				local seg = coarse_path[index][1]
-				look_pos = managers.navigation:find_random_position_in_segment(seg)
+			if time_since_verification and time_since_verification <= 2 then
+				look_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
+				reaction = REACT_COMBAT
 			end
 
 			if not look_pos then
-				look_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
-			end
-
-			if my_data.attention_unit ~= look_pos then
-				CopLogicBase._set_attention_on_pos(data, mvec3_cpy(look_pos))
-
-				my_data.attention_unit = mvec3_cpy(look_pos)
+				local coarse_path = my_data.coarse_path
+				local nav_index = my_data.coarse_path_index
+				
+				if coarse_path and nav_index and #coarse_path >= nav_index + 1 then
+					local total_nav_points = #coarse_path
+					local index = nav_index + 1
+					local seg = coarse_path[index][1]
+					look_pos = managers.navigation:find_random_position_in_segment(seg)
+				end
 			end
 			
-			if data.logic.chk_should_turn(data, my_data) then
-				CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, look_pos)
+			if look_pos then
+				if my_data.attention_unit ~= look_pos then
+					CopLogicBase._set_attention_on_pos(data, mvec3_cpy(look_pos), reaction)
+
+					my_data.attention_unit = mvec3_cpy(look_pos)
+				end
+				
+				if data.logic.chk_should_turn(data, my_data) then
+					CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, look_pos)
+				end
 			end
 		end
 
@@ -2240,7 +2247,7 @@ function CopLogicAttack.on_new_objective(data, old_objective)
 end
 
 function CopLogicAttack.queue_update(data, my_data)
-	local delay = data.important and 0 or 0.7
+	local delay = data.important and 0 or 2
 	
 	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
 	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter

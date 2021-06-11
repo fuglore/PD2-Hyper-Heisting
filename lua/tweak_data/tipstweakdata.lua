@@ -175,7 +175,94 @@ Hooks:PostHook(TipsTweakData, "init", "hh_tips", function(self)
 			category = "hh"
 		}
 	)
-	
+	table.insert(self.tips,
+		{
+			cat_index = 21,
+			image = "tactics_cover",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 22,
+			image = "hh_ninjas",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 23,
+			image = "hh_ssstyle",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 24,
+			image = "hh_ssstyle",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 25,
+			image = "hh_ssstyle",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 26,
+			image = "crimenet_difficulty",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 27,
+			image = "tactics_shooting",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 28,
+			image = "enemy_bulldozer",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 29,
+			image = "hh_toasty",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 30,
+			image = "hh_toasty",
+			consoles = true,
+			category = "hh"
+		}
+	)
+	table.insert(self.tips,
+		{
+			cat_index = 31,
+			image = "enemy_cloaker",
+			consoles = true,
+			category = "hh"
+		}
+	)
 	
     for _, tip in ipairs(self.tips) do
 		if not self.category_totals[tip.category] or self.category_totals[tip.category] < tip.cat_index then
@@ -199,7 +286,7 @@ function TipsTweakData:get_a_tip()
 				if tip.category and tip.category == "trivia" then
 					--log("how")
 				end
-			end		
+			end
 		end
 	end
 	

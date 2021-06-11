@@ -1492,7 +1492,6 @@ function PlayerDamage:build_suppression(amount)
 	end
 	
 	self._last_received_sup = amount
-	self._next_allowed_sup_t = managers.player:player_timer():time() + self._dmg_interval
 	
 	local decay_t = 0.15 * math.min(amount, 15)
 	
@@ -1536,7 +1535,7 @@ function PlayerDamage:_upd_suppression(t, dt)
 
 	if data.value then
 		if data.decay_start_t < t then
-			local drain = dt * 30
+			local drain = dt * 20
 			data.value = data.value - drain
 			
 			--log("ratio is " .. tostring(self:suppression_ratio()) .. "")

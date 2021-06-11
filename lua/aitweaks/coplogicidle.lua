@@ -1786,6 +1786,8 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 							
 							if takedown then
 								weight_mul = weight_mul + 0.5
+							elseif aimed_at then
+								weight_mul = weight_mul + 0.2
 							end
 							
 							if not cur_state._moving and cur_state:ducking() then
@@ -1817,6 +1819,8 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 							
 							if takedown then
 								weight_mul = weight_mul + 0.5
+							elseif aimed_at then
+								weight_mul = weight_mul + 0.2
 							end
 
 							if att_base_ext and att_base_ext.upgrade_value then
@@ -1871,10 +1875,16 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						local has_damaged = dmg_dt < 5
 
 						if has_damaged then
-							target_priority_slot = target_priority_slot - 2
-						else
-							if aimed_at then
-								target_priority_slot = target_priority_slot - 1
+							target_priority_slot = target_priority_slot - 1
+						end
+						
+						if not attention_data.is_human_player then
+							if takedown then
+								target_priority_slot = target_priority_slot + 2
+							else
+								if target_priority_slot > 2 then
+									target_priority_slot = target_priority_slot + 1
+								end
 							end
 						end
 
@@ -2055,7 +2065,7 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 							end
 						end
 
-						target_priority_slot = math_clamp(target_priority_slot, 1, 10)
+						target_priority_slot = math_clamp(target_priority_slot, 1, 20)
 					end
 
 					if reaction < REACT_COMBAT then

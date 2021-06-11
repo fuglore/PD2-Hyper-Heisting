@@ -65,7 +65,7 @@ function TankCopLogicAttack.enter(data, new_logic_name, enter_params)
 	local key_str = tostring(data.key)
 	my_data.detection_task_key = "TankLogicAttack._upd_enemy_detection" .. key_str
 
-	CopLogicBase.queue_task(my_data, my_data.detection_task_key, TankCopLogicAttack._upd_enemy_detection, data, data.t, data.important and true)
+	CopLogicBase.queue_task(my_data, my_data.detection_task_key, TankCopLogicAttack._upd_enemy_detection, data, data.t, true)
 
 	CopLogicIdle._chk_has_old_action(data, my_data)
 
@@ -106,15 +106,10 @@ function TankCopLogicAttack.update(data)
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
 
-		if not my_data.update_queue_id then
-			data.brain:set_update_enabled_state(false)
-
-			my_data.update_queue_id = "TankLogicAttack.queued_update" .. tostring(data.key)
-
-			TankCopLogicAttack.queue_update(data, my_data)
+		
+		if my_data.has_old_action then
+			return
 		end
-
-		return
 	end
 
 	if CopLogicIdle._chk_relocate(data) or CopLogicAttack._chk_exit_non_walkable_area(data) then
@@ -148,14 +143,6 @@ function TankCopLogicAttack.update(data)
 		TankCopLogicAttack._upd_combat_movement(data)
 	else
 		TankCopLogicAttack._cancel_chase_attempt(data, my_data)
-	end
-
-	if not my_data.update_queue_id then
-		data.brain:set_update_enabled_state(false)
-
-		my_data.update_queue_id = "TankLogicAttack.queued_update" .. tostring(data.key)
-
-		TankCopLogicAttack.queue_update(data, my_data)
 	end
 end
 
@@ -627,7 +614,7 @@ function TankCopLogicAttack.action_taken(data, my_data)
 end
 
 function TankCopLogicAttack.queue_update(data, my_data)
-	local delay = data.important and 0 or 1.5
+	local delay = data.important and 0 or 0.2
 
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, TankCopLogicAttack.queued_update, data, data.t + delay, data.important and true)
 end
