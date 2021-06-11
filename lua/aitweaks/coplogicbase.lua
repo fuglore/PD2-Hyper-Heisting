@@ -1210,15 +1210,6 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 	end
 end
 
-function CopLogicBase._set_attention_on_pos(data, pos, reaction)
-	local attention_data = {
-		pos = pos,
-		reaction = reaction
-	}
-
-	data.unit:movement():set_attention(attention_data)
-end
-
 function CopLogicBase.should_duck_on_alert(data, alert_data)
 	--[[if data.char_tweak.allowed_poses and not data.char_tweak.allowed_poses.crouch or data.unit:anim_data().crouch or data.unit:movement():chk_action_forbidden("walk") then
 		return

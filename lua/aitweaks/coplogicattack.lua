@@ -1800,11 +1800,9 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		else
 			local look_pos = nil
-			local reaction = nil
 			
 			if time_since_verification and time_since_verification <= 2 then
 				look_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
-				reaction = REACT_COMBAT
 			end
 
 			if not look_pos then
@@ -1821,7 +1819,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 			
 			if look_pos then
 				if my_data.attention_unit ~= look_pos then
-					CopLogicBase._set_attention_on_pos(data, mvec3_cpy(look_pos), reaction)
+					CopLogicBase._set_attention_on_pos(data, mvec3_cpy(look_pos))
 
 					my_data.attention_unit = mvec3_cpy(look_pos)
 				end
