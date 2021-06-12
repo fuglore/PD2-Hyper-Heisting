@@ -459,8 +459,6 @@ function ElementSpawnEnemyDummy:init(...)
 		if overkill_290_and_easywish[self._values.enemy] then
 			self._values.enemy = overkill_290_and_easywish[self._values.enemy]
 		end
-		
-		self._values.enemy = overkill_290_and_easywish[self._values.enemy] or self._values.enemy
 	end
 
 	self._enemy_name = self._values.enemy and Idstring(self._values.enemy) or Idstring("units/payday2/characters/ene_swat_1/ene_swat_1")
@@ -477,10 +475,6 @@ function ElementSpawnEnemyDummy:produce(params)
 	end
 
 	local unit = nil
-	
-	--[[if self._unit_name then
-		log("spawned: " .. self._unit_name .. "")
-	end]]
 
 	if params and params.name then
 		local ai_type = tweak_data.levels:get_ai_group_type()
@@ -661,11 +655,10 @@ function ElementSpawnEnemyDummy:produce(params)
 			
 			name = overkill_290_and_easywish[name] or name
 		end
-	
-	
+		
 		unit = safe_spawn_unit(name, self:get_orientation())
 		local spawn_ai = self:_create_spawn_AI_parametric(params.stance, params.objective, self._values)
-
+		
 		unit:brain():set_spawn_ai(spawn_ai)
 	else
 		local enemy_name = self:value("enemy") or self._enemy_name

@@ -1241,6 +1241,9 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.unit_categories.CS_swat_R870 = {
 			unit_types = {
 				america = {
+					Idstring("units/payday2/characters/ene_swat_2/ene_swat_2")
+				},
+				bo_hh = {
 					Idstring("units/pd2_mod_bofa/characters/sbz_units/ene_sbz_r870/ene_sbz_r870")
 				},
 				russia = {
@@ -1511,7 +1514,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 				america = {
 					Idstring("units/payday2/characters/ene_shield_2/ene_shield_2")
 				},
-				america = {
+				bo_hh = {
 					Idstring("units/pd2_mod_bofa/characters/sbz_units/ene_sbz_shield_c45/ene_sbz_shield_c45")
 				},
 				russia = {
