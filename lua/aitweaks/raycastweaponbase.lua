@@ -8,14 +8,19 @@ local mvec3_dis = mvector3.distance
 local mvec3_dir = mvector3.direction
 local mvec3_set_l = mvector3.set_length
 local mvec3_len = mvector3.length
-local math_clamp = math.clamp
-local math_lerp = math.lerp
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_rot1 = Rotation()
 
+local pairs_g = pairs
+
 local table_insert = table.insert
 local table_contains = table.contains
+
+local math_clamp = math.clamp
+local math_lerp = math.lerp
+local math_acos = math.acos
+local math_pow = math.pow
 
 local afsf_blacklist = {
 	["saw"] = true,
@@ -930,7 +935,126 @@ if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 
 		return ray_res
 	end
+end
 
+function RaycastWeaponBase:get_aim_assist(from_pos, direction, max_dist, use_aim_assist)
+	local autohit = use_aim_assist and self._aim_assist_data or self._autohit_data
+	local autohit_near_angle = autohit.near_angle
+	local autohit_far_angle = autohit.far_angle
+	local far_dis = autohit.far_dis
+	local far_dis_sq = far_dis * far_dis
+	local closest_error, closest_ray = nil
+	local tar_vec = tmp_vec1
+	local tar_vec2 = tmp_vec2
+	local ignore_units = self._setup.ignore_units
+	local slotmask = self._bullet_slotmask
+	local enemies = managers.enemy:all_enemies()
+
+	for u_key, enemy_data in pairs_g(enemies) do
+		local enemy = enemy_data.unit
+		local vis_state = enemy:base():lod_stage()
+		local enemy_head_pos = enemy:movement():m_head_pos()
+		
+		if vis_state and mvec3_dis_sq(from_pos, enemy_head_pos) < far_dis_sq and not enemy:in_slot(16) then
+			local com = enemy:movement():m_com()
+
+			mvec3_set(tar_vec, com)
+			mvec3_sub(tar_vec, from_pos)
+
+			local tar_aim_dot = mvec3_dot(direction, tar_vec)
+			local tar_vec_len = math_clamp(mvec3_norm(tar_vec), 1, far_dis)
+
+			if tar_aim_dot > 0 then
+				if not max_dist or tar_aim_dot < max_dist then
+					local error_dot = mvec3_dot(direction, tar_vec)
+					local error_angle = math_acos(error_dot)
+					local dis_lerp = math_pow(tar_aim_dot / far_dis, 0.25)
+					local autohit_min_angle = math_lerp(autohit_near_angle, autohit_far_angle, dis_lerp)
+
+					if error_angle < autohit_min_angle then
+						local percent_error = error_angle / autohit_min_angle
+
+						if not closest_error or percent_error < closest_error then
+							tar_vec_len = tar_vec_len + 100
+
+							mvec3_mul(tar_vec, tar_vec_len)
+							mvec3_add(tar_vec, from_pos)
+
+							local vis_ray = World:raycast("ray", from_pos, tar_vec, "slot_mask", slotmask, "ignore_unit", ignore_units)
+
+							if vis_ray and vis_ray.unit:key() == u_key then
+								if not closest_error or error_angle < closest_error then
+									closest_error = error_angle
+									closest_ray = vis_ray
+
+									mvec3_set(tmp_vec1, com)
+									mvec3_sub(tmp_vec1, from_pos)
+
+									local d = mvec3_dot(direction, tmp_vec1)
+
+									mvec3_set(tmp_vec1, direction)
+									mvec3_mul(tmp_vec1, d)
+									mvec3_add(tmp_vec1, from_pos)
+									mvec3_sub(tmp_vec1, com)
+
+									closest_ray.distance_to_aim_line = mvec3_len(tmp_vec1)
+								end
+							end
+						end
+					end
+				end
+			end
+			
+			mvec3_set(tar_vec2, enemy_head_pos)
+			mvec3_sub(tar_vec2, from_pos)
+
+			local tar_aim_dot = mvec3_dot(direction, tar_vec2)
+			local tar_vec_len = math_clamp(mvec3_norm(tar_vec2), 1, far_dis)
+
+			if tar_aim_dot > 0 then
+				if not max_dist or tar_aim_dot < max_dist then
+					local error_dot = mvec3_dot(direction, tar_vec2)
+					local error_angle = math_acos(error_dot)
+					local dis_lerp = math_pow(tar_aim_dot / far_dis, 0.25)
+					local autohit_min_angle = math_lerp(autohit_near_angle, autohit_far_angle, dis_lerp)
+
+					if error_angle < autohit_min_angle then
+						local percent_error = error_angle / autohit_min_angle
+
+						if not closest_error or percent_error < closest_error then
+							tar_vec_len = tar_vec_len + 100
+
+							mvec3_mul(tar_vec2, tar_vec_len)
+							mvec3_add(tar_vec2, from_pos)
+
+							local vis_ray = World:raycast("ray", from_pos, tar_vec2, "slot_mask", slotmask, "ignore_unit", ignore_units)
+
+							if vis_ray and vis_ray.unit:key() == u_key then
+								if not closest_error or error_angle < closest_error then
+									closest_error = error_angle
+									closest_ray = vis_ray
+
+									mvec3_set(tmp_vec1, enemy_head_pos)
+									mvec3_sub(tmp_vec1, from_pos)
+
+									local d = mvec3_dot(direction, tmp_vec1)
+
+									mvec3_set(tmp_vec1, direction)
+									mvec3_mul(tmp_vec1, d)
+									mvec3_add(tmp_vec1, from_pos)
+									mvec3_sub(tmp_vec1, enemy_head_pos)
+
+									closest_ray.distance_to_aim_line = mvec3_len(tmp_vec1)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+
+	return closest_ray
 end
 
 --Original mod by 90e, uploaded by DarKobalt.

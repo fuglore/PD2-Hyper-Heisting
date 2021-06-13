@@ -436,6 +436,10 @@ end
 
 function CopActionDodge._determine_needed_distance(stance, var, side)
 	stance = stance or "hos"
+	
+	if stance == "ntl" then
+		stance = "hos"
+	end
 
 	return CopActionDodge._dodge_anim_distances[stance][var][side]
 end
