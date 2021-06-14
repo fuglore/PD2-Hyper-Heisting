@@ -1535,14 +1535,8 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		end
 	end
 	
-	if is_civilian or self._unit:base():has_tag("takedown") then
-		if self:is_friendly_fire(attack_data.attacker_unit) then
-			if is_civilian then
-				return "friendly_fire"
-			else
-				attack_data.damage = attack_data.damage * 0.1
-			end
-		end
+	if is_civilian or self._unit:base():has_tag("special") or self._unit:base():has_tag("protected_reverse") then
+		return "friendly_fire"
 	elseif self:is_friendly_fire(attack_data.attacker_unit) then
 		if attack_data.attacker_unit:base().has_tag and attack_data.attacker_unit:base():has_tag("tank") and not self._unit:base():has_tag("tank") and not self._unit:base():has_tag("protected_reverse") then
 			attack_data.damage = attack_data.damage * 9
