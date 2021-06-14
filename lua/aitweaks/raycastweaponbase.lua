@@ -5,6 +5,7 @@ local mvec3_sub = mvector3.subtract
 local mvec3_mul = mvector3.multiply
 local mvec3_norm = mvector3.normalize
 local mvec3_dis = mvector3.distance
+local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_dir = mvector3.direction
 local mvec3_set_l = mvector3.set_length
 local mvec3_len = mvector3.length
