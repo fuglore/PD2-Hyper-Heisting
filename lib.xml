@@ -78,6 +78,7 @@
 	<!-- Tweaks for enemy AI and other weirdness starts here. -->
 	<post :script_path="aitweaks/player/playerbase.lua" :hook_id="units/beings/player/playerbase"/>
 	<post :script_path="aitweaks/player/playerdamage.lua" :hook_id="units/beings/player/playerdamage"/>
+	<post :script_path="aitweaks/player/playersound.lua" :hook_id="units/beings/player/playersound"/>
 	<post :script_path="aitweaks/player/playerinventory.lua" :hook_id="units/beings/player/playerinventory"/>
 	<post :script_path="aitweaks/player/playermovement.lua" :hook_id="units/beings/player/playermovement"/>
 	<post :script_path="aitweaks/player/huskplayermovement.lua" :hook_id="units/beings/player/huskplayermovement"/>
