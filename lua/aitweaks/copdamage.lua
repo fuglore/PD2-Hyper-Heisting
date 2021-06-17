@@ -240,6 +240,7 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 	local dmg_chk = not self._dead and self._health > 0
 	
 	local doomzer = self._char_tweak.damage.doom_hurt_type == "doomzer" or nil
+	local superarmor = self._char_tweak.damage.doom_hurt_type == "superarmor" or nil
 	local light = self._char_tweak.damage.doom_hurt_type == "light" or nil
 	local light2 = self._char_tweak.damage.hurt_severity and self._char_tweak.damage.hurt_severity.doom_light or nil
 	local heavy = self._char_tweak.damage.doom_hurt_type == "heavy" or nil
@@ -259,6 +260,9 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		elseif self._tasing then
 			hurtlevel_mult = 0.5
 			time_mult = time_mult + 0.5
+		elseif superarmor then
+			hurtlevel_mult = 1.75
+			time_mult = 0.75
 		elseif heavy then
 			hurtlevel_mult = 0.5
 			time_mult = time_mult + 0.5
@@ -450,7 +454,7 @@ function CopDamage:die(attack_data)
 	
 	local faction = tweak_data.levels:get_ai_group_type()
 
-	if self._unit:base():has_tag("spooc") then
+	if self._char_tweak.die_sound_event then
 		if self._char_tweak.die_sound_event then
 			self._unit:sound():play(self._char_tweak.die_sound_event, nil, nil)
 		end
@@ -460,18 +464,10 @@ function CopDamage:die(attack_data)
 		end
 	else
 		if not self._unit:movement():cool() then
-			if self._char_tweak.die_sound_event then
-				if self._unit:base():has_tag("special") then
-					self._unit:sound():say(self._char_tweak.die_sound_event, true, nil, true, nil)
-				else
-					self._unit:sound():say(self._char_tweak.die_sound_event, true, nil, true, nil)
-				end
+			if self._unit:base():has_tag("special") then
+				self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
 			else
-				if self._unit:base():has_tag("special") then
-					self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
-				else
-					self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
-				end
+				self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
 			end
 		end
 	end

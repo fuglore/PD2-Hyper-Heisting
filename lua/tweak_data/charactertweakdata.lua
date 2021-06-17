@@ -7495,12 +7495,12 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		"special",
 		"ohfuck"
 	}
-	self.tank_hw.move_speed = presets.move_speed.slow_consistency --lol stop
+	self.tank_hw.move_speed = presets.move_speed.mini_consistency --lol stop
 	self.tank_hw.HEALTH_INIT = 100 --3200 on top difficulty, encourage teamfire against these guys since they're gonna be on the halloween maps
 	self.tank_hw.headshot_dmg_mul = 1
 	self.tank_hw.ignore_headshot = true
-	self.tank_hw.damage.explosion_damage_mul = 8 --explosives can eliminate them very easily
-	self.tank_hw.damage.fire_damage_mul = 8
+	self.tank_hw.damage.explosion_damage_mul = 1
+	self.tank_hw.damage.fire_damage_mul = 1
 	self.tank_hw.use_animation_on_fire_damage = false
 	self.tank_hw.flammable = true
 	self.tank_hw.can_be_tased = false
@@ -7666,9 +7666,9 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	}
 	self.shadow_spooc.experience = {}
 	self.shadow_spooc.weapon = deep_clone(presets.weapon.fbigod)
-	self.shadow_spooc.detection = presets.detection.normal
+	self.shadow_spooc.detection = presets.detection.enemymook
 	self.shadow_spooc.HEALTH_INIT = 50
-	self.shadow_spooc.headshot_dmg_mul = 4
+	self.shadow_spooc.headshot_dmg_mul = 1
 	self.shadow_spooc.move_speed = presets.move_speed.lightning_constant
 	self.shadow_spooc.no_retreat = true
 	self.shadow_spooc.no_arrest = true
@@ -7701,11 +7701,11 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	self.shadow_spooc.speech_prefix_count = nil
 	self.shadow_spooc.access = "spooc"
 	self.shadow_spooc.use_radio = nil
-	self.shadow_spooc.use_animation_on_fire_damage = false
-	self.shadow_spooc.flammable = false
+	self.shadow_spooc.use_animation_on_fire_damage = nil
+	self.shadow_spooc.flammable = true
 	self.shadow_spooc.dodge = presets.dodge.ninja_complex
 	self.shadow_spooc.chatter = presets.enemy_chatter.no_chatter
-	self.shadow_spooc.do_not_drop_ammo = true
+	self.shadow_spooc.do_not_drop_ammo = nil
 	self.shadow_spooc.steal_loot = nil
 	self.shadow_spooc.spawn_sound_event = "uno_cloaker_presence_loop"
 	self.shadow_spooc.die_sound_event = "uno_cloaker_presence_stop"
@@ -7715,6 +7715,11 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 		taunt_after_assault = "",
 		detect = "uno_cloaker_detect"
 	}
+	self.shadow_swat = deep_clone(self.shadow_spooc)
+	self.shadow_taser = deep_clone(self.shadow_spooc)
+	
+	table.insert(self._enemy_list, "shadow_swat")
+	table.insert(self._enemy_list, "shadow_taser")
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(self, presets) --TODO: Nothing yet.
@@ -9916,6 +9921,7 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"smoke",
 		"s553_zeal",
 		"lazer",
+		"tazerlazer",
 		"blazter",
 		"bayou_spas",
 		"quagmire",
@@ -9967,6 +9973,7 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_uno/weapons/wpn_npc_smoke/wpn_npc_smoke"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_s553/wpn_npc_s553"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_lazer"),
+		Idstring("units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_tazerlazer"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_blazter/wpn_npc_blazter"),
 		Idstring("units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"),
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"),
@@ -10258,7 +10265,6 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	--cloakers
 	self.spooc.HEALTH_INIT = self.spooc.HEALTH_INIT * hp_mul
 	self.spooc_heavy.HEALTH_INIT = self.spooc_heavy.HEALTH_INIT * hp_mul
-	self.shadow_spooc.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT * hp_mul
 	
 	--shields
 	self.shield.HEALTH_INIT = self.shield.HEALTH_INIT * hp_mul
@@ -10278,6 +10284,9 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	
 	self.sniper.HEALTH_INIT = self.sniper.HEALTH_INIT * hp_mul
 	self.armored_sniper.HEALTH_INIT = self.armored_sniper.HEALTH_INIT * hp_mul
+	self.shadow_spooc.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT * hp_mul
+	self.shadow_taser.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT
+	self.shadow_swat.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT
 
 	--HEADSHOT MULS
 
@@ -10359,10 +10368,6 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 		self.spooc_heavy.headshot_dmg_mul = self.spooc_heavy.headshot_dmg_mul * hs_mul
 	end
 	
-	if self.shadow_spooc.headshot_dmg_mul then
-		self.shadow_spooc.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul * hs_mul
-	end
-	
 	--shields
 	if self.shield.headshot_dmg_mul then
 		self.shield.headshot_dmg_mul = self.shield.headshot_dmg_mul * hs_mul
@@ -10396,4 +10401,10 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 
 	self.sniper.headshot_dmg_mul = self.sniper.headshot_dmg_mul * hs_mul
 	self.armored_sniper.headshot_dmg_mul = self.armored_sniper.headshot_dmg_mul * hs_mul
+	
+	if self.shadow_spooc.headshot_dmg_mul then
+		self.shadow_spooc.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul * hs_mul
+		self.shadow_swat.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul
+		self.shadow_taser.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul
+	end
 end

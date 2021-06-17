@@ -97,6 +97,8 @@ function CopMovement:init(unit)
 	CopMovement._action_variants.akuma = clone(security_variant)
 	CopMovement._action_variants.akuma.hurt = ShieldActionHurt
 	CopMovement._action_variants.akuma.walk = ShieldCopActionWalk
+	CopMovement._action_variants.shadow_taser = security_variant
+	CopMovement._action_variants.shadow_swat = security_variant
 	
 	old_init(self, unit)
 end

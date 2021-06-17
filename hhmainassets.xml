@@ -913,42 +913,6 @@
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_ftsudozer" force="false"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_bronconinja" force="false"/>
 
-	<!--SHADOW CLOACKERS-->	
-	
-	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true" load="true" />
-	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1_husk" force="true" load="true" />
-	<material_config path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true"/>	
-	<material_config path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true"/>		
-	<object path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1"  force="true"/>
-	<sequence_manager path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1"  force="true"/>	
-	<model path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1"  force="true"/>	
-	<cooked_physics path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true"/>	
-
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_df" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_nm" />
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_il" />		
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_blue_df" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_blue_il" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/eyes_blue_il" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_body_nm" />	
-
-	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2" force="true" load="true" />
-	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2_husk" force="true" load="true" />
-	<material_config path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2" force="true"/>	
-	<material_config path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2" force="true"/>		
-	<object path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2"  force="true"/>
-	<sequence_manager path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2"  force="true"/>	
-	<model path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2"  force="true"/>	
-	<cooked_physics path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2" force="true"/>	
-
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/mask_red_df" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/mask_red_nm" />
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/mask_red_il" />		
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_red_df" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_red_il" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/red_eyes_il" />
-	<!--SHADOW CLOACKERS End-->	
-
 	<!--Gensec Ninja M4-->
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4" load="true"/>
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4_husk" load="true"/>	

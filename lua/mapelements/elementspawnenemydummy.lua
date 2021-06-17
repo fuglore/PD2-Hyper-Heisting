@@ -12,7 +12,27 @@
 		["units/payday2/characters/ene_cop_2/ene_cop_2"] = "units/pd2_dlc_rvd/characters/ene_la_cop_2/ene_la_cop_2",
 		["units/payday2/characters/ene_cop_3/ene_cop_3"] = "units/pd2_dlc_rvd/characters/ene_la_cop_3/ene_la_cop_3",
 		["units/payday2/characters/ene_cop_4/ene_cop_4"] = "units/pd2_dlc_rvd/characters/ene_la_cop_4/ene_la_cop_4"			
-	}	
+	}
+	
+	local vanilla_shadow_zs = {
+		["units/pd2_dlc_uno/characters/ene_shadow_cloaker_1"] = "units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle",
+		["units/pd2_dlc_uno/characters/ene_shadow_cloaker_2"] = "units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun"
+	}
+	
+	local shadow_zs = {
+		"units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle",
+		"units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun",
+		"units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser",
+		"units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker"
+	}
+	
+	local new_haunted_units = {
+		"units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle",
+		"units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun",
+		"units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser",
+		"units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker",
+		"units/payday2/characters/ene_bulldozer_4/ene_bulldozer_4"
+	}
 	
 	local sm_wish = {
 			["units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2"] = "units/payday2/characters/ene_bulldozer_1/ene_bulldozer_1",	
@@ -442,6 +462,18 @@ function ElementSpawnEnemyDummy:init(...)
 			self._values.enemy = federales_low_diff[self._values.enemy]
 		end
 	end
+	
+	if vanilla_shadow_zs[self._values.enemy] then
+		self._values.enemy = shadow_zs[math.random(#shadow_zs)]
+	end
+	
+	if job == "haunted" then
+		if self._values.enemy == "units/payday2/characters/ene_bulldozer_4/ene_bulldozer_4" or self._values.enemy == "units/payday2/characters/ene_spook_1/ene_spook_1" then
+			self._values.enemy = new_haunted_units[math.random(#new_haunted_units)]
+		end
+		
+		self._respectenemylimit = true
+	end
 
 	if ai_type == "zombie" then
 		if zombies[self._values.enemy] then
@@ -473,7 +505,14 @@ function ElementSpawnEnemyDummy:produce(params)
 	if not managers.groupai:state():is_AI_enabled() then
 		return
 	end
-
+	
+	if self._respectenemylimit then
+		local enemy_count = managers.groupai:state()._police_force
+		if enemy_count >= 8 then
+			return
+		end
+	end
+	
 	local unit = nil
 
 	if params and params.name then
@@ -519,6 +558,10 @@ function ElementSpawnEnemyDummy:produce(params)
 			"pal",
 			"kenaz"
 		}
+		
+		if vanilla_shadow_zs[name] then
+			name = shadow_zs[math.random(#shadow_zs)]
+		end
 		
 		if ai_type == "america" then
 			if difficulty_index == 8 and table.contains(intense_heists, Global.level_data.level_id) then  --this only gets set during init so parentheses can't be too bad, right

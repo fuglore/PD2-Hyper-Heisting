@@ -39,7 +39,7 @@ function LevelsTweakData:init()
 	self.dinner.package = {"packages/narr_dinner", "packages/murkyassets"}
 	self.des.package = {"packages/murkyassets", "packages/job_des"}
 	self.bph.package = {"packages/murkyassets", "packages/dlcs/bph/job_bph"}	
-	self.vit.package = {"packages/murkyassets", "packages/dlcs/vit/job_vit"}
+	self.vit.package = {"packages/holyfuckingshitghosts", "packages/murkyassets", "packages/dlcs/vit/job_vit"}
 	self.mex.package = {"packages/murkyassets", "packages/job_mex"}
 	self.mex_cooking.package = {"packages/murkyassets", "packages/job_mex2"}
 	self.kosugi.package = {"packages/murkyassets", "packages/kosugi"}
@@ -50,6 +50,7 @@ function LevelsTweakData:init()
 	self.fex.package = {"packages/mexicoassets", "packages/job_fex"}
 	self.skm_bex.package = {"packages/mexicoassets", "packages/dlcs/skm/job_bex_skm"}
 	
+	self.haunted.package = {"packages/holyfuckingshitghosts", "packages/narr_haunted"}
 	self.hvh.package = {"packages/zombieassets", "packages/narr_hvh"}
 	
 	--fix missing ganster vo, ty rino
@@ -61,12 +62,6 @@ function LevelsTweakData:init()
 
 	--halloween heists (designed to have the zombie faction disabled in crime spree)
 	if not Global.crime_spree or not Global.crime_spree.current_mission then
-		self.haunted.package = {
-			"packages/zombieassets",
-			"packages/narr_haunted", 
-			"packages/narr_hvh", 
-			"levels/narratives/bain/hvh/world_sounds"
-		}
 		self.nail.package = {
 			"packages/zombieassets",
 			"packages/job_nail", 
@@ -78,8 +73,7 @@ function LevelsTweakData:init()
 			"packages/lvl_help",
 			"packages/narr_hvh", 
 			"levels/narratives/bain/hvh/world_sounds"
-		}
-		self.haunted.ai_group_type = zombie		
+		}	
 		self.nail.ai_group_type = zombie
 		self.help.ai_group_type = zombie
 	end

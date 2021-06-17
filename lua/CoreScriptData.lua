@@ -42,14 +42,16 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_day_hh.custom_xml", "custom_xml", "environments/pd2_env_mid_day/pd2_env_mid_day", "environment")
 	end
 	
-	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+	if sex == "haunted" then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/hellvoid.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
+	elseif diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_night/pd2_env_night", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_hlm1/pd2_hlm1", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_rat_night/pd2_env_rat_night", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_rat_night_stage_3/pd2_env_rat_night_stage_3", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_kosugi/pd2_kosugi", "environment")
-		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/no_mercy_default.custom_xml", "custom_xml", "units/pd2_dlc_nmh/enviroments/nmh_enviroment_01", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
 	else
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/maybe_some_mercy.custom_xml", "custom_xml", "units/pd2_dlc_nmh/enviroments/nmh_enviroment_01", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_env_night/pd2_env_night", "environment")

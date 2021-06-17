@@ -127,7 +127,13 @@ function CopActionDodge:init(action_desc, common_data)
 
 		common_data.ext_network:send("action_dodge_start", body_part, var_index, side_index, sync_yaw, speed, sync_acc)
 	end
-
+	
+	if not common_data.ext_damage:dead() then
+		if common_data.unit:damage():has_sequence("turn_on_spook_lights") then
+			common_data.unit:damage():run_sequence_simple("turn_on_spook_lights")
+		end
+	end
+	
 	self._shoot_accuracy = shoot_accuracy
 
 	self._last_vel_z = 0
@@ -145,6 +151,12 @@ function CopActionDodge:on_exit()
 		ext_mov:set_m_host_stop_pos(self._common_data.pos)
 	elseif not expired then
 		self._common_data.ext_network:send("action_dodge_end")
+	end
+	
+	if not self._common_data.ext_damage:dead() then
+		if self._unit:damage():has_sequence("kill_spook_lights") then
+			self._unit:damage():run_sequence_simple("kill_spook_lights")
+		end
 	end
 
 	if expired then

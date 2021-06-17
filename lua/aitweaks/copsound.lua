@@ -7,6 +7,10 @@ function CopSound:init(unit)
 		self._unit:sound():play(self._unit:base():char_tweak().spawn_sound_event, nil, nil)
 	end
 	
+	if self._unit:base():char_tweak().spawn_scream then
+		self._unit:sound():say(self._unit:base():char_tweak().spawn_sound_event, nil, nil)
+	end
+	
 	unit:base():post_init()
 	self._prefix = self:get_appropriate_unit_sound_prefix()
 end
@@ -123,6 +127,16 @@ end
 
 function CopSound:set_voice_prefix(index) -- this function can go punch a cactus
 	self._prefix = self:get_appropriate_unit_sound_prefix()
+end
+
+function CopSound:destroy(unit)
+	if alive(unit) and unit:base() then
+		if unit:base():char_tweak().die_sound_event then
+			unit:sound():play(self._unit:base():char_tweak().die_sound_event, nil, nil)
+		end
+		
+		unit:base():pre_destroy(unit)
+	end
 end
 
 function CopSound:chk_voice_prefix()

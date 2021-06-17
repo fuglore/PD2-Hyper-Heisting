@@ -1,0 +1,39 @@
+<materials version="3" group="ene_shadow_spook_1">
+
+    <material name="mtr_body" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2">
+        <bump_normal_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_body_nm"/>
+        <diffuse_texture file="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_body_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0"     type="scalar" name="contour_opacity"/>
+    </material>
+	
+    <material name="mtr_body_lod" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2">
+		<bump_normal_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_body_nm" mip="1"/>
+		<diffuse_texture file="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_body_df" mip="1"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0"     type="scalar" name="contour_opacity"/>
+    </material>
+
+    <material name="mtr_head" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2">
+        <bump_normal_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/material_mask_1_nm"/>
+        <diffuse_texture file="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_head_df"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0" 	type="scalar" name="contour_opacity"/>
+    </material>
+	
+    <material name="mtr_head_lod" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2">
+        <bump_normal_texture file="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/material_mask_1_nm" mip="1"/>
+        <diffuse_texture file="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_head_df" mip="1"/>
+        <variable value="1 1 1" type="vector3" name="contour_color"/>
+        <variable value="0"     type="scalar" name="contour_opacity"/>
+    </material>
+
+	<material render_template="generic:ALPHA_MASKED:DIFFUSE_TEXTURE:OPACITY_TEXTURE:RL_COPS:SELF_ILLUMINATION" name="mtr_il" version="2">
+        <diffuse_texture file="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_eye_il"/>
+        <self_illumination_texture file="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_eye_il"/>
+        <opacity_texture file="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_eye_il"/>
+        <variable type="scalar" name="il_multiplier" value="inside of borg queen"/>
+    </material>
+	
+    <material name="shadow_caster" render_template="shadow_caster_only:SKINNED_1WEIGHT" version="2"/>
+</materials>

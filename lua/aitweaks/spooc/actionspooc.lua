@@ -2670,12 +2670,11 @@ function ActionSpooc:_check_sounds_and_lights_state(state, is_dead)
 				my_unit:sound():play(detect_sound)
 			end
 
-			--lights are permanent here, leaving this in case that gets changed later
-			--[[local u_dmg = my_unit:damage()
+			local u_dmg = my_unit:damage()
 
 			if u_dmg and u_dmg:has_sequence("turn_on_spook_lights") then
 				u_dmg:run_sequence_simple("turn_on_spook_lights")
-			end]]
+			end
 
 			self._chk_detect_sound_and_lights = true
 		end
@@ -2694,12 +2693,11 @@ function ActionSpooc:_check_sounds_and_lights_state(state, is_dead)
 			end
 		end
 
-		--lights are permanent here, leaving this in case that gets changed later
-		--[[local u_dmg = my_unit:damage()
+		local u_dmg = my_unit:damage()
 
 		if u_dmg and u_dmg:has_sequence("kill_spook_lights") then
 			u_dmg:run_sequence_simple("kill_spook_lights")
-		end]]
+		end
 	end
 end
 

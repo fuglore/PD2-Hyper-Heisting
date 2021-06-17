@@ -1478,56 +1478,25 @@ function PlayerDamage:build_suppression(amount)
 	local mul = tweak_data.player.suppression.receive_mul * managers.player:upgrade_value("player", "perk_received_suppression_mul", 1)
 
 	amount = amount * mul
-	data.value = math.min(tweak_data.player.suppression.max_value, (data.value or 0) + amount * tweak_data.player.suppression.receive_mul)
+	
+	local pm = managers.player
+	local current_state = pm:get_current_state()
+
+	if current_state and current_state:_interacting() then
+		amount = amount * managers.player:upgrade_value("player", "coolheaded_basic", 1)
+	end
 	
 	if managers.player:has_category_upgrade("player", "strong_spirit") and self:health_ratio() <= 0.5 then
 		amount = amount * 0.5
 	end
 	
-	local pm = managers.player
-	local current_state = pm:get_current_state()
-	
-	if current_state and current_state:_interacting() then
-		amount = amount * managers.player:upgrade_value("player", "coolheaded_basic", 1)
-	end
+	data.value = math.min(tweak_data.player.suppression.max_value, (data.value or 0) + amount * tweak_data.player.suppression.receive_mul)
 	
 	self._last_received_sup = amount
 	
-	local decay_t = 0.15 * math.min(amount, 15)
+	local delay_t = self._akuma_effect and 4 or -1
 	
-	if self._akuma_effect then
-		decay_t = decay_t + 2
-	end
-	
-	if not data.decay_start_t or data.decay_start_t < managers.player:player_timer():time() then
-		if self._akuma_effect then
-			data.decay_start_t = managers.player:player_timer():time() + decay_t
-		else
-			data.decay_start_t = managers.player:player_timer():time() + decay_t
-		end
-	else
-		if self._akuma_effect then
-			data.decay_start_t = managers.player:player_timer():time() + decay_t
-		else
-			local raw_decay_start_t = math.max(0, data.decay_start_t - managers.player:player_timer():time())
-			
-			--log("current regen t is " .. tostring(raw_decay_start_t) .. "")
-			
-			if raw_decay_start_t >= 0 and raw_decay_start_t < 1.5 then
-				decay_t = math.min(1.5, decay_t)
-				
-				if decay_t + raw_decay_start_t > 1.5 then
-					decay_t = decay_t - raw_decay_start_t
-				end
-				
-				if decay_t > 0 then
-					--log("decay t is " .. tostring(decay_t) .. "")	
-					
-					data.decay_start_t = data.decay_start_t + decay_t
-				end
-			end
-		end
-	end
+	data.decay_start_t = managers.player:player_timer():time() + delay_t
 end
 
 function PlayerDamage:_upd_suppression(t, dt)
@@ -1535,16 +1504,12 @@ function PlayerDamage:_upd_suppression(t, dt)
 
 	if data.value then
 		if data.decay_start_t < t then
-			local drain = dt * 20
-			data.value = data.value - drain
-			
-			--log("ratio is " .. tostring(self:suppression_ratio()) .. "")
-			
-			--log("suppression is " .. tostring(data.value) .. "")
+			data.value = data.value - dt
 
 			if data.value <= 0 then
 				data.value = nil
 				data.decay_start_t = nil
+
 				if HH:SupEnabled() then
 					managers.environment_controller:set_chromatic_value_lerp(0)
 					managers.environment_controller:set_contrast_value_lerp(0)
@@ -1553,12 +1518,24 @@ function PlayerDamage:_upd_suppression(t, dt)
 		elseif data.value == tweak_data.player.suppression.max_value and self._regenerate_timer then
 			self._listener_holder:call("suppression_max")
 		end
+
 		if HH:SupEnabled() then
 			if data.value then
 				managers.environment_controller:set_chromatic_value_lerp(self:suppression_ratio())
 				managers.environment_controller:set_contrast_value_lerp(self:suppression_ratio())
 			end
 		end
+	end
+end
+
+function PlayerDamage:_update_regenerate_timer(t, dt)
+	local dt_mul = self._regenerate_speed or 1
+	dt_mul = dt_mul * math.lerp(1, 0, self:suppression_ratio())
+
+	self._regenerate_timer = math.max(self._regenerate_timer - dt * dt_mul, 0)
+
+	if self._regenerate_timer <= 0 then
+		self:_regenerate_armor()
 	end
 end
 

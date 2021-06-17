@@ -7132,6 +7132,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		self.small_map = true
 	end
 	
+	if level == "haunted" then
+		self.nightmare = true
+	end
+	
 	self.max_nr_simultaneous_boss_types = 0
 	self.difficulty_curve_points = {
 		0.1
@@ -7380,7 +7384,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	end
 
-	if self.small_map then
+	if self.small_map or self.haunted then
 		self.besiege.assault.force = {
 			1,
 			1,
@@ -7403,8 +7407,21 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			64
 		}
 	end
-
-	if self.small_map then
+	
+	if self.haunted then
+		self.besiege.assault.force_balance_mul = {
+				4,
+				6,
+				8,
+				8
+			}
+			self.besiege.assault.force_pool_balance_mul = {
+				1,
+				2,
+				4,
+				4
+			}
+	elseif self.small_map then
 		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.assault.force_balance_mul = {
 				22,

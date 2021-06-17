@@ -15,6 +15,7 @@
 	<Package id="packages/murkyassets" file="psc.xml" use_clbk="self:DebugLoadAssets"/>
 	<Package id="packages/mexicoassets" file="bex.xml" use_clbk="self:DebugLoadAssets"/>	
 	<Package id="packages/zombieassets" file="brains.xml" use_clbk="self:DebugLoadAssets"/>
+	<Package id="packages/holyfuckingshitghosts" file="ghosts.xml" use_clbk="self:DebugLoadAssets"/>
 
 	<!-- HERE BE THE SCRIPTSREPLACEMENTMODULE SEQMANZ TWEAKS -->
 	<ScriptMods directory="scriptdata/characters">
