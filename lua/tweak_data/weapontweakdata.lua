@@ -1266,30 +1266,66 @@ self.sub2000.kick.steelsight = self.new_m14.kick.steelsight
 
 -- SUBMACHINE GUNS
 
+-- Compact-5
+self.new_mp5.stats.spread = 16
+self.new_mp5.stats.damage = 59
+self.new_mp5.stats.recoil = 15
+self.new_mp5.AMMO_PICKUP = {4, 8}
+self.new_mp5.AMMO_MAX = 120  
+self.new_mp5.kick = {
+	standing = {
+			0.8,
+			1.4,
+			-0.75,
+			0.75
+	},
+	steelsight = {
+			0.6,
+			0.75,
+			-0.25,
+			0.25
+	},
+	crouching = {
+			0.6,
+			0.75,
+			-0.25,
+			0.25
+	}
+}
+self.x_mp5.AMMO_MAX = 150  
+self.x_mp5.stats.spread = 16
+self.x_mp5.stats.damage = 59
+self.x_mp5.stats.recoil = 15
+self.x_mp5.AMMO_PICKUP = {4, 8}
+self.x_mp5.kick = self.new_mp5.kick
+self.x_mp5.kick.crouching = self.new_mp5.kick.standing
+self.x_mp5.kick.steelsight = self.new_mp5.kick.standing
+
 -- Chicago Typewriter
 self.m1928.stats.spread = 16
 self.m1928.AMMO_MAX = 120  
 self.x_m1928.AMMO_MAX = 150  
-self.m1928.kick.standing = self.new_m4.kick.standing
-self.m1928.kick.crouching = self.new_m4.kick.crouching
-self.m1928.kick.steelsight = self.new_m4.kick.steelsight
-self.x_m1928.kick = self.new_m4.kick
-self.x_m1928.kick.crouching = self.new_m4.kick.standing
-self.x_m1928.kick.steelsight = self.new_m4.kick.standing
+self.m1928.kick.standing = self.new_mp5.kick.standing
+self.m1928.kick.crouching = self.new_mp5.kick.crouching
+self.m1928.kick.steelsight = self.new_mp5.kick.steelsight
+self.x_m1928.kick = self.new_mp5.kick
+self.x_m1928.kick.crouching = self.new_mp5.kick.standing
+self.x_m1928.kick.steelsight = self.new_mp5.kick.standing
 
 -- Jackal
 self.schakal.stats.spread = 17
 self.schakal.AMMO_PICKUP = {3, 6.5}
 self.schakal.AMMO_MAX = 100
 self.schakal.stats.damage = 78
+self.schakal.kick = self.vhs.kick
 
 self.x_schakal.stats.damage = 78
 self.x_schakal.AMMO_PICKUP = {3, 6.5}
 self.x_schakal.AMMO_MAX = 120
 self.x_schakal.AMMO_PICKUP = {2, 5}
-self.x_schakal.kick = self.new_m4.kick
-self.x_schakal.kick.crouching = self.new_m4.kick.standing
-self.x_schakal.kick.steelsight = self.new_m4.kick.standing
+self.x_schakal.kick = self.vhs.kick
+self.x_schakal.kick.crouching = self.vhs.kick.standing
+self.x_schakal.kick.steelsight = self.vhs.kick.standing
 
 -- MP40
 self.erma.stats.damage = 59
@@ -1301,24 +1337,24 @@ self.x_erma.AMMO_MAX = 200
 self.x_erma.stats.spread = 16
 self.erma.AMMO_PICKUP = {1.5, 7}
 self.x_erma.AMMO_PICKUP = {1.5, 7}
-self.erma.kick.standing = self.new_m4.kick.standing
-self.erma.kick.crouching = self.new_m4.kick.crouching
-self.erma.kick.steelsight = self.new_m4.kick.steelsight
-self.x_erma.kick = self.new_m4.kick
-self.x_erma.kick.crouching = self.new_m4.kick.standing
-self.x_erma.kick.steelsight = self.new_m4.kick.standing
+self.erma.kick.standing = self.new_mp5.kick.standing
+self.erma.kick.crouching = self.new_mp5.kick.crouching
+self.erma.kick.steelsight = self.new_mp5.kick.steelsight
+self.x_erma.kick = self.new_mp5.kick
+self.x_erma.kick.crouching = self.new_mp5.kick.standing
+self.x_erma.kick.steelsight = self.new_mp5.kick.standing
 
 -- Heather
 self.sr2.AMMO_MAX = 120
 self.sr2.stats.spread = 17
 self.sr2.AMMO_PICKUP = {1.5, 7}
 self.x_sr2.AMMO_MAX = 150  
-self.sr2.kick.standing = self.new_m4.kick.standing
-self.sr2.kick.crouching = self.new_m4.kick.crouching
-self.sr2.kick.steelsight = self.new_m4.kick.steelsight
-self.x_sr2.kick = self.new_m4.kick
-self.x_sr2.kick.crouching = self.new_m4.kick.standing
-self.x_sr2.kick.steelsight = self.new_m4.kick.standing
+self.sr2.kick.standing = self.new_mp5.kick.standing
+self.sr2.kick.crouching = self.new_mp5.kick.crouching
+self.sr2.kick.steelsight = self.new_mp5.kick.steelsight
+self.x_sr2.kick = self.new_mp5.kick
+self.x_sr2.kick.crouching = self.new_mp5.kick.standing
+self.x_sr2.kick.steelsight = self.new_mp5.kick.standing
 
 -- AK Gen 21 Tactical
 self.vityaz.AMMO_MAX = 120
@@ -1330,13 +1366,13 @@ self.olympic.AMMO_PICKUP = {6, 8}
 self.olympic.CLIP_AMMO_MAX = 30
 self.olympic.AMMO_MAX = 120  
 self.x_olympic.AMMO_MAX = 150  
-self.olympic.kick.standing = self.new_m4.kick.standing
-self.olympic.kick.crouching = self.new_m4.kick.crouching
-self.olympic.kick.steelsight = self.new_m4.kick.steelsight
+self.olympic.kick.standing = self.new_mp5.kick.standing
+self.olympic.kick.crouching = self.new_mp5.kick.crouching
+self.olympic.kick.steelsight = self.new_mp5.kick.steelsight
 self.x_olympic.AMMO_PICKUP = {6, 8}
-self.x_olympic.kick = self.new_m4.kick
-self.x_olympic.kick.crouching = self.new_m4.kick.standing
-self.x_olympic.kick.steelsight = self.new_m4.kick.standing
+self.x_olympic.kick = self.new_mp5.kick
+self.x_olympic.kick.crouching = self.new_mp5.kick.standing
+self.x_olympic.kick.steelsight = self.new_mp5.kick.standing
 
 -- Patchett
 self.sterling.stats.damage = 128
@@ -1415,15 +1451,15 @@ self.coal.AMMO_PICKUP = {4, 8}
 self.coal.AMMO_MAX = 120
 self.coal.stats.spread = 17
 self.coal.stats.damage = 59
-self.coal.kick.standing = self.new_m4.kick.standing
-self.coal.kick.crouching = self.new_m4.kick.crouching
-self.coal.kick.steelsight = self.new_m4.kick.steelsight
+self.coal.kick.standing = self.new_mp5.kick.standing
+self.coal.kick.crouching = self.new_mp5.kick.crouching
+self.coal.kick.steelsight = self.new_mp5.kick.steelsight
 
 self.x_coal.AMMO_MAX = 150
 self.x_coal.stats.spread = 17
 self.x_coal.stats.damage = 59
 self.x_coal.AMMO_PICKUP = {1.5, 7}
-self.x_coal.kick = self.new_m4.kick
+self.x_coal.kick = self.new_mp5.kick
 self.x_coal.kick.crouching = self.x_coal.kick.standing
 self.x_coal.kick.steelsight = self.x_coal.kick.standing
 
@@ -1454,21 +1490,21 @@ self.cobray.AMMO_MAX = 120
 self.x_cobray.AMMO_MAX = 150  
 self.cobray.stats.damage = 61
 self.x_cobray.stats.damage = 61
-self.cobray.kick.standing = self.new_m4.kick.standing
-self.cobray.kick.crouching = self.new_m4.kick.crouching
-self.cobray.kick.steelsight = self.new_m4.kick.steelsight
-self.x_cobray.kick = self.new_m4.kick
-self.x_cobray.kick.crouching = self.new_m4.kick.standing
-self.x_cobray.kick.steelsight = self.new_m4.kick.standing
+self.cobray.kick.standing = self.new_mp5.kick.standing
+self.cobray.kick.crouching = self.new_mp5.kick.crouching
+self.cobray.kick.steelsight = self.new_mp5.kick.steelsight
+self.x_cobray.kick = self.new_mp5.kick
+self.x_cobray.kick.crouching = self.new_mp5.kick.standing
+self.x_cobray.kick.steelsight = self.new_mp5.kick.standing
 
 -- Kross Vertex
 self.polymer.stats.spread = 15
 self.polymer.AMMO_MAX = 120  
 self.x_polymer.AMMO_MAX = 150  
-self.polymer.kick.standing = self.new_m4.kick.standing
-self.polymer.kick.crouching = self.new_m4.kick.crouching
-self.polymer.kick.steelsight = self.new_m4.kick.steelsight
-self.x_polymer.kick = self.new_m4.kick
+self.polymer.kick.standing = self.new_mp5.kick.standing
+self.polymer.kick.crouching = self.new_mp5.kick.crouching
+self.polymer.kick.steelsight = self.new_mp5.kick.steelsight
+self.x_polymer.kick = self.new_mp5.kick
 self.x_polymer.kick.crouching = self.x_polymer.kick.standing
 self.x_polymer.kick.steelsight = self.x_polymer.kick.standing
 
@@ -1513,17 +1549,17 @@ self.shepheard.stats.damage = 59
 self.shepheard.stats.recoil = 15
 self.shepheard.AMMO_PICKUP = {4, 8}
 self.shepheard.AMMO_MAX = 120 
-self.shepheard.kick.standing = self.new_m4.kick.standing
-self.shepheard.kick.crouching = self.new_m4.kick.crouching
-self.shepheard.kick.steelsight = self.new_m4.kick.steelsight
+self.shepheard.kick.standing = self.new_mp5.kick.standing
+self.shepheard.kick.crouching = self.new_mp5.kick.crouching
+self.shepheard.kick.steelsight = self.new_mp5.kick.steelsight
 self.x_shepheard.AMMO_MAX = 150   
 self.x_shepheard.stats.spread = 16
 self.x_shepheard.stats.damage = 59
 self.x_shepheard.stats.recoil = 15
 self.x_shepheard.AMMO_PICKUP = {4, 8}
-self.x_shepheard.kick = self.new_m4.kick
-self.x_shepheard.kick.crouching = self.new_m4.kick.standing
-self.x_shepheard.kick.steelsight = self.new_m4.kick.standing
+self.x_shepheard.kick = self.new_mp5.kick
+self.x_shepheard.kick.crouching = self.new_mp5.kick.standing
+self.x_shepheard.kick.steelsight = self.new_mp5.kick.standing
 
 -- Uzi
 self.uzi.AMMO_MAX = 150
@@ -1535,46 +1571,27 @@ self.x_uzi.kick = self.amcar.kick
 self.x_uzi.kick.crouching = self.amcar.kick.standing
 self.x_uzi.kick.steelsight = self.amcar.kick.standing
 
--- Compact-5
-self.new_mp5.stats.spread = 16
-self.new_mp5.stats.damage = 59
-self.new_mp5.stats.recoil = 15
-self.new_mp5.AMMO_PICKUP = {4, 8}
-self.new_mp5.AMMO_MAX = 120  
-self.new_mp5.kick.standing = self.new_m4.kick.standing
-self.new_mp5.kick.crouching = self.new_m4.kick.crouching
-self.new_mp5.kick.steelsight = self.new_m4.kick.steelsight
-self.x_mp5.AMMO_MAX = 150  
-self.x_mp5.stats.spread = 16
-self.x_mp5.stats.damage = 59
-self.x_mp5.stats.recoil = 15
-self.x_mp5.AMMO_PICKUP = {4, 8}
-
-self.x_mp5.kick = self.new_m4.kick
-self.x_mp5.kick.crouching = self.new_m4.kick.standing
-self.x_mp5.kick.steelsight = self.new_m4.kick.standing
-
 
 -- Mark 10
 self.mac10.AMMO_MAX = 120  
 self.x_mac10.AMMO_MAX = 150  
-self.mac10.kick.standing = self.new_m4.kick.standing
-self.mac10.kick.crouching = self.new_m4.kick.crouching
-self.mac10.kick.steelsight = self.new_m4.kick.steelsight
-self.x_mac10.kick = self.new_m4.kick
-self.x_mac10.kick.crouching = self.new_m4.kick.standing
-self.x_mac10.kick.steelsight = self.new_m4.kick.standing
+self.mac10.kick.standing = self.new_mp5.kick.standing
+self.mac10.kick.crouching = self.new_mp5.kick.crouching
+self.mac10.kick.steelsight = self.new_mp5.kick.steelsight
+self.x_mac10.kick = self.new_mp5.kick
+self.x_mac10.kick.crouching = self.new_mp5.kick.standing
+self.x_mac10.kick.steelsight = self.new_mp5.kick.standing
 
 -- SpecOps
 self.mp7.AMMO_MAX = 120
-self.mp7.kick.standing = self.new_m4.kick.standing
-self.mp7.kick.crouching = self.new_m4.kick.crouching
-self.mp7.kick.steelsight = self.new_m4.kick.steelsight
+self.mp7.kick.standing = self.new_mp5.kick.standing
+self.mp7.kick.crouching = self.new_mp5.kick.crouching
+self.mp7.kick.steelsight = self.new_mp5.kick.steelsight
 
 self.x_mp7.AMMO_MAX = 150  
-self.x_mp7.kick = self.new_m4.kick
-self.x_mp7.kick.crouching = self.new_m4.kick.standing
-self.x_mp7.kick.steelsight = self.new_m4.kick.standing
+self.x_mp7.kick = self.new_mp5.kick
+self.x_mp7.kick.crouching = self.new_mp5.kick.standing
+self.x_mp7.kick.steelsight = self.new_mp5.kick.standing
 
 --Krinkov
 self.akmsu.AMMO_PICKUP = {3, 6.5}

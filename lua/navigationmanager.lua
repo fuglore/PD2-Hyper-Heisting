@@ -72,9 +72,7 @@ NavigationManager.ACCESS_FLAGS = {
 NavigationManager.ACCESS_FLAGS_OLD = {}
 
 function NavigationManager:shorten_coarse_through_dis(path)
-	if #path < 3 then
-		return path
-	end
+	do return path end
 	
 	local i = 1
 	local all_nav_segs = self._nav_segments
