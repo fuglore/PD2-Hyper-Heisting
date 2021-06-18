@@ -337,7 +337,128 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local assaultline = "hud_assault_assault"
 	local heatbonus_line_to_use = "hud_heat_common"
 	
-	if faction then
+	
+	if level == "haunted" then
+		assaultline = "hud_assault_assault_nightmare"
+		cover_line_to_use = "hud_assault_cover_nightmare"
+		versusline = "hud_assault_faction_nightmare"
+		
+		if self._assault_mode == "normal" then
+			local ids_risk = Idstring("risk")
+			
+			if self._assault_state == "danger" or self._assault_state == "lastcrimstanding" then
+				if managers.job:current_difficulty_stars() > 0 then
+					return {
+						assaultline,
+						"hud_assault_end_line",
+						danger_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						ids_risk,
+						"hud_assault_end_line",
+						assaultline,
+						"hud_assault_end_line",
+						danger_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						ids_risk,
+						"hud_assault_end_line",
+					}
+				else
+					return {
+						assaultline,
+						"hud_assault_end_line",
+						danger_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						assaultline,
+						"hud_assault_end_line",
+						danger_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+					}
+				end
+			else		
+				if managers.job:current_difficulty_stars() > 0 then
+					if self._assault_state == "heat" then
+						return {
+							"hud_assault_heat",
+							"hud_assault_end_line",
+							heatbonus_line_to_use,
+							"hud_assault_end_line",
+							"hud_heat_gameplay",
+							"hud_assault_end_line",
+							ids_risk,
+							"hud_assault_end_line",
+							"hud_assault_heat",
+							"hud_assault_end_line",
+							heatbonus_line_to_use,
+							"hud_assault_end_line",
+							"hud_heat_gameplay",
+							"hud_assault_end_line",
+							ids_risk,
+							"hud_assault_end_line",
+						}
+					else
+						return {
+							assaultline,
+							"hud_assault_end_line",
+							cover_line_to_use,
+							"hud_assault_end_line",
+							versusline,
+							"hud_assault_end_line",
+							ids_risk,
+							"hud_assault_end_line",
+							assaultline,
+							"hud_assault_end_line",
+							cover_line_to_use,
+							"hud_assault_end_line",
+							versusline,
+							"hud_assault_end_line",
+							ids_risk,
+							"hud_assault_end_line",
+						}
+					end
+				else
+					if self._assault_state == "heat" then
+						return {
+							"hud_assault_heat",
+							"hud_assault_end_line",
+							heatbonus_line_to_use,
+							"hud_assault_end_line",
+							"hud_heat_gameplay",
+							"hud_assault_end_line",
+							assaultline,
+							"hud_assault_end_line",
+							heatbonus_line_to_use,
+							"hud_assault_end_line",
+							"hud_heat_gameplay",
+							"hud_assault_end_line",
+						}
+					else
+						return {
+							assaultline,
+							"hud_assault_end_line",
+							cover_line_to_use,
+							"hud_assault_end_line",
+							versusline,
+							"hud_assault_end_line",
+							assaultline,
+							"hud_assault_end_line",
+							cover_line_to_use,
+							"hud_assault_end_line",
+							versusline,
+							"hud_assault_end_line",
+						}
+					end
+				end
+			end
+		end
+	elseif faction then
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 		if faction == "bo" then
 			if diff_index < 4 then
@@ -428,6 +549,8 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	end
 	
 	if self._assault_mode == "normal" then
+		local ids_risk = Idstring("risk")
+		
 		if self._assault_state == "danger" or self._assault_state == "lastcrimstanding" then
 			if managers.job:current_difficulty_stars() > 0 then
 				return {
@@ -437,15 +560,18 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 					"hud_assault_end_line",
 					versusline,
 					"hud_assault_end_line",
+					ids_risk,
+					"hud_assault_end_line",
 					assaultline,
 					"hud_assault_end_line",
 					danger_line_to_use,
 					"hud_assault_end_line",
 					versusline,
 					"hud_assault_end_line",
+					ids_risk,
+					"hud_assault_end_line",
 				}
 			else
-				local ids_risk = Idstring("risk")
 				return {
 					assaultline,
 					"hud_assault_end_line",
@@ -453,22 +579,16 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 					"hud_assault_end_line",
 					versusline,
 					"hud_assault_end_line",
-					ids_risk,
-					"hud_assault_end_line",
 					assaultline,
 					"hud_assault_end_line",
 					danger_line_to_use,
 					"hud_assault_end_line",
 					versusline,
 					"hud_assault_end_line",
-					ids_risk,
-					"hud_assault_end_line",
 				}
 			end
 		else		
 			if managers.job:current_difficulty_stars() > 0 then
-				local ids_risk = Idstring("risk")
-				
 				if self._assault_state == "heat" then
 					return {
 						"hud_assault_heat",

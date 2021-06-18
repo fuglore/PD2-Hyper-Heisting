@@ -411,9 +411,11 @@ function CopDamage:die(attack_data)
 	self:_check_friend_4(attack_data)
 	CopDamage.MAD_3_ACHIEVEMENT(attack_data)
 	self:_remove_debug_gui()
+	
 	if self._punk_effect then
 		self:kill_punk_visual_effect()
 	end
+	
 	self._unit:base():set_slot(self._unit, 17)
 
 	if alive(managers.interaction:active_unit()) then
@@ -443,32 +445,22 @@ function CopDamage:die(attack_data)
 	self._dead = true
 
 	self:set_mover_collision_state(false)
-
-	if self._death_sequence then
-		if self._unit:damage() and self._unit:damage():has_sequence(self._death_sequence) then
-			self._unit:damage():run_sequence_simple(self._death_sequence)
-		else
-			debug_pause_unit(self._unit, "[CopDamage:die] does not have death sequence", self._death_sequence, self._unit)
-		end
-	end
 	
-	local faction = tweak_data.levels:get_ai_group_type()
-
 	if self._char_tweak.die_sound_event then
 		if self._char_tweak.die_sound_event then
 			self._unit:sound():play(self._char_tweak.die_sound_event, nil, nil)
 		end
-
-		if not self._unit:movement():cool() then
-			self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
-		end
-	else
-		if not self._unit:movement():cool() then
-			if self._unit:base():has_tag("special") then
-				self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
-			else
-				self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
+	end
+	
+	if not self._unit:movement():cool() then
+		if self._unit:base():char_tweak()["custom_voicework"] then
+			local voicelines = _G.voiceline_framework.BufferedSounds[self._unit:base():char_tweak().custom_voicework]
+			if voicelines and voicelines["death"] then
+				local line_to_use = voicelines.death[math.random(#voicelines.death)]
+				self._unit:base():play_voiceline(line_to_use, true)
 			end
+		else
+			self._unit:sound():say("x02a_any_3p", true, nil, true, nil)
 		end
 	end
 
@@ -477,6 +469,14 @@ function CopDamage:die(attack_data)
 		self._unit:base().looping_voice:stop()
 		self._unit:base().looping_voice:close()
 		self._unit:base().looping_voice = nil
+	end
+	
+	if self._death_sequence then
+		if self._unit:damage() and self._unit:damage():has_sequence(self._death_sequence) then
+			self._unit:damage():run_sequence_simple(self._death_sequence)
+		else
+			debug_pause_unit(self._unit, "[CopDamage:die] does not have death sequence", self._death_sequence, self._unit)
+		end
 	end
 
 	self:_on_death()
@@ -488,14 +488,6 @@ function CopDamage:die(attack_data)
 			if managers.groupai:state():all_criminals()[attack_data.attacker_unit:key()] then
 				managers.groupai:state():report_aggression(attack_data.attacker_unit)
 			end
-		end
-	end
-
-	if self._unit:base():char_tweak()["custom_voicework"] then
-		local voicelines = _G.voiceline_framework.BufferedSounds[self._unit:base():char_tweak().custom_voicework]
-		if voicelines and voicelines["death"] then
-			local line_to_use = voicelines.death[math.random(#voicelines.death)]
-			self._unit:base():play_voiceline(line_to_use, true)
 		end
 	end
 end

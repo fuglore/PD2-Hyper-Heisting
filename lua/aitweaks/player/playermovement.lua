@@ -206,7 +206,7 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 	end
 
 	if self._unit:character_damage()._god_mode or self._unit:character_damage():get_mission_blocker("invulnerable") then
-		return
+		return true
 	end
 	
 	local push_mul = 2000

@@ -160,6 +160,8 @@ function ActionSpooc:init(action_desc, common_data)
 	local nav_index = action_desc.path_index or 1
 	self._nav_index = nav_index
 
+	self._vanish = char_tweak.spooc_vanish
+
 	local beating_time = 0
 	local tweak_beat = char_tweak.spooc_attack_beating_time
 
@@ -2142,17 +2144,47 @@ function ActionSpooc:anim_act_clbk(anim_act)
 
 		return
 	end
+	
+	if self._vanish then
+		if target_base_ext.is_local_player or self._is_server and not target_base_ext.is_husk_player then
+			local dmg_ext = my_unit:character_damage()
+			local from_pos = ext_mov:m_head_pos()
+			local m_com = ext_mov:m_com()
+			local attack_dir = mvec3_cpy(m_com)
+			mvec3_sub(attack_dir, from_pos)
+			mvec3_norm(attack_dir)
 
-	if spooc_res == "countered" then
+			local attack_data = {
+				damage = dmg_ext._HEALTH_INIT,
+				damage_effect = dmg_ext._HEALTH_INIT,
+				variant = "melee",
+				attacker_unit = my_unit,
+				attack_dir = attack_dir,
+				col_ray = {
+					position = m_com,
+					body = my_unit:body("body"),
+					ray = attack_dir
+				}
+			}
+
+			dmg_ext:damage_melee(attack_data)
+			local full_body_action = ext_mov and ext_mov._active_actions and ext_mov._active_actions[1]
+
+			if full_body_action and full_body_action:type() == "hurt" then
+				full_body_action:force_ragdoll(true)
+			end
+		end	
+	elseif spooc_res == "countered" then
 		if not self._is_server then
 			self:_send_stop()
 		end
 
 		self._blocks = {}
 
-		local my_com = ext_mov:m_com()
+		local m_com = ext_mov:m_com()
 		local from_pos = target_mov_ext:m_head_pos()
-		local attack_dir = ext_mov:m_com() - from_pos
+		local attack_dir = mvec3_cpy(m_com)
+		mvec3_sub(attack_dir, from_pos)
 		mvec3_norm(attack_dir)
 
 		local melee_weapon_id = target_base_ext.is_local_player and managers.blackmarket:equipped_melee_weapon() or target_base_ext.melee_weapon and target_base_ext:melee_weapon() or nil
@@ -2163,7 +2195,7 @@ function ActionSpooc:anim_act_clbk(anim_act)
 			attacker_unit = target_unit,
 			attack_dir = attack_dir,
 			col_ray = {
-				position = mvec3_cpy(my_com),
+				position = mvec3_cpy(m_com),
 				body = my_unit:body("body"),
 				ray = attack_dir
 			},

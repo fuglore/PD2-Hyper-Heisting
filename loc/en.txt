@@ -83,5 +83,9 @@
 	  "ene_murky_DS_shield" : "Heavy Shield",
 	  "ene_murky_shield" : "Shield",
 	  "ene_murky_shield_ld" : "Shield", 
-	  "ene_murky_cloaker" : "Cloaker"	
+	  "ene_murky_cloaker" : "Cloaker",
+	  "ene_true_zeal_cloaker" : "???",
+	  "ene_true_zeal_rifle" : "???",
+	  "ene_true_zeal_shotgun" : "???",
+	  "ene_true_zeal_taser" : "???"
 }

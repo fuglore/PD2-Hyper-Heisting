@@ -15,9 +15,12 @@ function SpoocLogicAttack.queued_update(data)
 
 	if my_data.has_old_action then
 		CopLogicAttack._upd_stop_old_action(data, my_data)
-		SpoocLogicAttack.queue_update(data, my_data)
-
-		return
+		
+		if my_data.has_old_action then
+			SpoocLogicAttack.queue_update(data, my_data)
+			
+			return
+		end		
 	end
 
 	if CopLogicIdle._chk_relocate(data) then
@@ -33,10 +36,12 @@ function SpoocLogicAttack.queued_update(data)
 
 			my_data.wants_stop_old_walk_action = nil
 		end
-
-		SpoocLogicAttack.queue_update(data, my_data)
-
-		return
+		
+		if my_data.wants_stop_old_walk_action then
+			SpoocLogicAttack.queue_update(data, my_data)
+			
+			return
+		end
 	end
 
 	CopLogicAttack._process_pathing_results(data, my_data)
