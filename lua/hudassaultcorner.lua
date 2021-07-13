@@ -159,7 +159,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		w = size,
 		x = self._hud_panel:w() - size
 	})
-	self._noreturn_color = Color(1, 1, 0, 0)
+	self._noreturn_data = self:_get_noreturn_data()
 	local icon_noreturnbox = point_of_no_return_panel:bitmap({
 		texture = "guis/textures/pd2/hud_icon_noreturnbox",
 		name = "icon_noreturnbox",
@@ -172,7 +172,9 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		halign = "right",
 		x = 0,
 		valign = "top",
-		color = self._noreturn_color
+		color = self._noreturn_data.color,
+		texture = self._noreturn_data.icon_texture,
+		texture_rect = self._noreturn_data.icon_texture_rect
 	})
 
 	icon_noreturnbox:set_right(icon_noreturnbox:parent():w())
@@ -184,7 +186,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		w = self._bg_box_size
 	}, {
 		blend_mode = "add",
-		color = self._noreturn_color
+		color = self._noreturn_data.color
 	})
 
 	self._noreturn_bg_box:set_right(icon_noreturnbox:left() - 3)
@@ -201,12 +203,12 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		y = 0,
 		x = 0,
 		layer = 1,
-		color = self._noreturn_color,
+		color = self._noreturn_data.color,
 		font_size = tweak_data.hud_corner.noreturn_size,
 		font = tweak_data.hud_corner.assault_font
 	})
 
-	point_of_no_return_text:set_text(utf8.to_upper(managers.localization:text("hud_assault_point_no_return_in", {
+	point_of_no_return_text:set_text(utf8.to_upper(managers.localization:text(self._noreturn_data.text_id, {
 		time = ""
 	})))
 	point_of_no_return_text:set_size(self._noreturn_bg_box:w(), self._noreturn_bg_box:h())
@@ -221,7 +223,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		y = 0,
 		x = 0,
 		layer = 1,
-		color = self._noreturn_color,
+		color = self._noreturn_data.color,
 		font_size = tweak_data.hud_corner.noreturn_size,
 		font = tweak_data.hud_corner.assault_font
 	})
@@ -230,6 +232,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 	point_of_no_return_timer:set_size(46, self._noreturn_bg_box:h())
 	point_of_no_return_timer:set_right(point_of_no_return_timer:parent():w())
 	point_of_no_return_text:set_right(math.round(point_of_no_return_timer:left()))
+	self:_update_noreturn()
 
 	if self._hud_panel:child("casing_panel") then
 		self._hud_panel:remove(self._hud_panel:child("casing_panel"))
