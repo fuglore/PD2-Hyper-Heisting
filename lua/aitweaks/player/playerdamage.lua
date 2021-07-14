@@ -1504,7 +1504,7 @@ function PlayerDamage:_upd_suppression(t, dt)
 
 	if data.value then
 		if data.decay_start_t < t then
-			data.value = data.value - dt
+			data.value = data.value - dt * 4
 
 			if data.value <= 0 then
 				data.value = nil

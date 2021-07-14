@@ -382,7 +382,7 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 	
 	if self._hurt_effect then
 		local value = self._health_effect_value
-		local pain = math.lerp(255, 0, value)
+		local pain = math.lerp(200, 0, value)
 		local painflash = math.lerp(255, 0, value + value)
 		
 		self._effect_manager:set_simulator_var_float(self._hurt_effect, pain_ids, opacity_ids, opacity_ids, pain)

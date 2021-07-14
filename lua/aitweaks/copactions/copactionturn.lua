@@ -28,7 +28,7 @@ function CopActionTurn:init(action_desc, common_data)
 	
 	self._turn_speed_mul = turn_speed_mul --also used on the animation itself
 
-	local turn_step_mul = machine:get_global("shield") == 1 and 1.25 or 0.75
+	local turn_step_mul = machine:get_global("shield") == 1 and 1 or 0.75
 	self._dt_turn_adj = 5 * turn_step_mul * turn_speed_mul
 
 	local end_angle = action_desc.angle

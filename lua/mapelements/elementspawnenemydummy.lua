@@ -508,7 +508,7 @@ function ElementSpawnEnemyDummy:produce(params)
 	
 	if self._respectenemylimit then
 		local enemy_count = managers.groupai:state()._police_force
-		if enemy_count >= 8 then
+		if enemy_count >= 6 then
 			return
 		end
 	end

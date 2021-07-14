@@ -7667,8 +7667,8 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	self.shadow_spooc.experience = {}
 	self.shadow_spooc.weapon = deep_clone(presets.weapon.fbigod)
 	self.shadow_spooc.detection = presets.detection.enemymook
-	self.shadow_spooc.HEALTH_INIT = 25
-	self.shadow_spooc.headshot_dmg_mul = 1
+	self.shadow_spooc.HEALTH_INIT = 20
+	self.shadow_spooc.headshot_dmg_mul = 8
 	self.shadow_spooc.move_speed = presets.move_speed.lightning_constant
 	self.shadow_spooc.spooc_vanish = true
 	self.shadow_spooc.no_retreat = true
@@ -7717,6 +7717,8 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 		detect = "uno_cloaker_detect"
 	}
 	self.shadow_swat = deep_clone(self.shadow_spooc)
+	self.shadow_swat.health = 10
+	self.shadow_swat.headshot_dmg_mul = 1
 	self.shadow_swat.spawn_sound_event = nil
 	self.shadow_swat.die_sound_event = nil
 	self.shadow_swat.move_speed = presets.move_speed.anarchy_consistency

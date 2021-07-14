@@ -35,6 +35,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
 	self._last_killed_cop_t = 0
+	self._heat_bonus_count = 0
 	self._heat_bonus_clbk_id = "GroupAIStateBase:HEATBONUS"
 	self._current_assault_state = "normal"
 	local drama_tweak = tweak_data.drama
@@ -106,7 +107,6 @@ function GroupAIStateBase:is_enemy_special(unit)
 	return category[unit:key()]
 end
 
-
 local origfunc2 = GroupAIStateBase.on_simulation_started
 function GroupAIStateBase:on_simulation_started(...)
 	origfunc2(self, ...)
@@ -119,6 +119,7 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._guard_detection_mul = 1
 	self._guard_delay_deduction = 0
 	self._last_killed_cop_t = 0
+	self._heat_bonus_count = 0
 	self._current_assault_state = "normal"
 	local drama_tweak = tweak_data.drama
 	self._drama_data = {
@@ -366,6 +367,7 @@ function GroupAIStateBase:save(save_data)
 	my_save_data._enemy_weapons_hot = self._enemy_weapons_hot
 	my_save_data._activeassaultbreak = self._activeassaultbreak
 	my_save_data._enemy_speed_mul = self._enemy_speed_mul
+	my_save_data._heat_bonus_count = self._heat_bonus_count
 
 	if self._hostage_headcount > 0 then
 		my_save_data.hostage_headcount = self._hostage_headcount
@@ -388,6 +390,7 @@ function GroupAIStateBase:load(load_data)
 	
 	self._activeassaultbreak = my_load_data._activeassaultbreak
 	self._enemy_speed_mul = my_load_data._enemy_speed_mul
+	self._heat_bonus_count = my_load_data._heat_bonus_count
 	
 	self:sync_assault_mode(my_load_data._assault_mode)
 	self:set_fake_assault_mode(my_load_data._fake_assault_mode)
@@ -507,6 +510,7 @@ function GroupAIStateBase:chk_random_drama_comment(lastcrimstanding)
 	if not self._criminals or #self._criminals <= 0 then
 		return
 	end
+	
 	local random_comments = {
 		"g68",
 		"g60",
@@ -823,6 +827,8 @@ function GroupAIStateBase:reset_heat_bonus()
 			self._enemies_killed_sustain_guaranteed_break = self._enemies_killed_sustain_guaranteed_break + value
 		end
 	end
+	
+	self._heat_bonus_count = 0
 end
 
 function GroupAIStateBase:on_enemy_unregistered(unit)

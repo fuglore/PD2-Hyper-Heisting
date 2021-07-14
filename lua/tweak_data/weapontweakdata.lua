@@ -998,19 +998,19 @@ crouching = {
 self.new_m4.stats.damage = 55
 self.new_m4.kick = {
 	standing = {
+			0.6,
 			1,
-			2,
 			-0.75,
 			0.75
 	},
 	steelsight = {
-			0.75,
+			0.6,
 			1,
 			-0.25,
 			0.25
 	},
 	crouching = {
-			0.75,
+			0.6,
 			1,
 			-0.25,
 			0.25
@@ -1028,7 +1028,7 @@ self.g3.stats.recoil = 17
 self.g3.kick = {
 	standing = {
 			1.15,
-			2.2,
+			1.75,
 			-1.1,
 			1.1
 	},
@@ -1051,20 +1051,20 @@ self.akm.AMMO_PICKUP = {2, 6}
 self.akm.AMMO_MAX = 100
 self.akm.kick = {
 	standing = {
-			1.75,
-			2.5,
+			1.5,
+			2,
 			-1.9,
 			1.9
 	},
 	steelsight = {
-			1.2,
-			1.6,
+			1,
+			1.5,
 			-1.2,
 			1.2
 	},
 	crouching = {
-			1.2,
-			1.6,
+			1,
+			1.5,
 			-1.2,
 			1.2
 	}
@@ -1274,20 +1274,20 @@ self.new_mp5.AMMO_PICKUP = {4, 8}
 self.new_mp5.AMMO_MAX = 120  
 self.new_mp5.kick = {
 	standing = {
+			0.6,
 			0.8,
-			1.4,
 			-0.75,
 			0.75
 	},
 	steelsight = {
 			0.6,
-			0.75,
+			0.6,
 			-0.25,
 			0.25
 	},
 	crouching = {
 			0.6,
-			0.75,
+			0.6,
 			-0.25,
 			0.25
 	}
@@ -1599,20 +1599,20 @@ self.akmsu.AMMO_MAX = 100
 self.akmsu.stats.damage = 78
 self.akmsu.kick = {
 standing = {
-		1.3,
-		2.5,
+		1.15,
+		1.5,
 		-1.2,
 		1.2
 },
 steelsight = {
 		0.7,
-		1.6,
+		1.2,
 		-1,
 		1
 },
 crouching = {
 		0.7,
-		1.6,
+		1.2,
 		-0.8,
 		0.6
 }

@@ -114,7 +114,7 @@ function GroupAIStateBesiege:_draw_enemy_activity_client(t)
 			local team = ext_mov:team()
 			local text_str = team and team.id or "no_team"
 
-			--[[local anim_machine = unit:anim_state_machine()
+			local anim_machine = unit:anim_state_machine()
 
 			if anim_machine then
 				local base_seg_state = anim_machine:segment_state(Idstring("base"))
@@ -130,7 +130,7 @@ function GroupAIStateBesiege:_draw_enemy_activity_client(t)
 					local idx = anim_machine:state_name_to_index(upper_body_seg_state)
 					text_str = text_str .. ":upp_bdy_anim_idx( " .. tostring(idx) .. " )"
 				end
-			end]]
+			end
 
 			local active_actions = ext_mov._active_actions
 
@@ -332,7 +332,7 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 		end
 
 		local unit = l_data.unit
-		--[[local anim_machine = unit:anim_state_machine()
+		local anim_machine = unit:anim_state_machine()
 
 		if anim_machine then
 			local base_seg_state = anim_machine:segment_state(Idstring("base"))
@@ -348,7 +348,7 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 				local idx = anim_machine:state_name_to_index(upper_body_seg_state)
 				text_str = text_str .. ":upp_bdy_anim_idx( " .. tostring(idx) .. " )"
 			end
-		end]]
+		end
 
 		local ext_mov = unit:movement()
 		local active_actions = ext_mov._active_actions
@@ -600,12 +600,12 @@ function GroupAIStateBesiege:_draw_enemy_activity(t)
 		for u_key, u_data in pairs_g(group_data.group) do
 			_f_draw_obj_pos(u_data.unit)
 
-			--[[if camera then
+			if camera then
 				local l_data = u_data.unit:brain()._logic_data
 
 				_f_draw_logic_name(u_key, l_data, group_data.color)
 				_f_draw_attention(l_data)
-			end]]
+			end
 		end
 	end
 
@@ -810,6 +810,7 @@ function GroupAIStateBesiege:update(t, dt)
 				if task_data and task_data.phase == "sustain" or self._hunt_mode then
 					if not self._activeassaultbreak and self._current_assault_state ~= "heat" and self._activeassaultnextbreak_t and self._enemies_killed_sustain_guaranteed_break then
 						if self._enemies_killed_sustain_guaranteed_break <= self._enemies_killed_sustain and self._activeassaultnextbreak_t < self._t and not self._stopassaultbreak_t then
+							self._heat_bonus_count = self._heat_bonus_count + 1
 							self._stopassaultbreak_t = self._t + 20
 							self._activeassaultbreak = true
 							--self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
@@ -849,9 +850,16 @@ function GroupAIStateBesiege:update(t, dt)
 										local player = pm:player_unit()
 										local dmg_ext = player:character_damage()
 										
-										if not dmg_ext:dead() then
-											if not dmg_ext:need_revive() and not dmg_ext:is_berserker() then
-												dmg_ext:restore_health(0.5) --50% health restored on heat bonus
+										if not dmg_ext:dead() then			
+											if not dmg_ext:need_revive() then
+												if self._heat_bonus_count >= 3 then
+													dmg_ext:replenish() 
+													self._heat_bonus_count = 0
+												end
+												
+												if not dmg_ext:is_berserker() then
+													dmg_ext:restore_health(0.5) --50% health restored on heat bonus
+												end
 											end
 											
 											local inventory = player:inventory()
@@ -873,6 +881,8 @@ function GroupAIStateBesiege:update(t, dt)
 						end
 					end
 				else
+					self._heat_bonus_count = 0
+					
 					if self._activeassaultbreak then
 						self._activeassaultbreak = nil
 						self._activeassaultnextbreak_t = nil
@@ -3171,6 +3181,8 @@ function GroupAIStateBesiege:_end_regroup_task()
 		managers.groupai:dispatch_event("end_assault_late", self._assault_number)
 		managers.hud:end_assault(result)
 		self:_mark_hostage_areas_as_unsafe()
+		self._heat_bonus_count = 0
+		
 		--self:_set_rescue_state(true)
 
 		if not self._task_data.assault.next_dispatch_t then

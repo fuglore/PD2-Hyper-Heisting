@@ -252,41 +252,43 @@ function CopLogicAttack._upd_combat_movement(data)
 	local unit = data.unit
 	local focus_enemy = data.attention_obj
 	local action_taken = nil
+	local want_to_take_cover = my_data.want_to_take_cover	
+	
+	if not my_data.moving_to_cover then
+		if not my_data.surprised and data.important and focus_enemy.verified and not my_data.turning and CopLogicAttack._can_move(data) and not unit:movement():chk_action_forbidden("walk") then
+			if not my_data.in_cover or not my_data.in_cover[4] then
+				if data.is_suppressed and t - unit:character_damage():last_suppression_t() < 0.7 then
+					action_taken = CopLogicBase.chk_start_action_dodge(data, "scared")
+				end
 
-	if not my_data.surprised and data.important and focus_enemy.verified and not my_data.turning and CopLogicAttack._can_move(data) and not unit:movement():chk_action_forbidden("walk") then
-		if not my_data.in_cover or not my_data.in_cover[4] then
-			if data.is_suppressed and t - unit:character_damage():last_suppression_t() < 0.7 then
-				action_taken = CopLogicBase.chk_start_action_dodge(data, "scared")
-			end
+				if not action_taken and focus_enemy.is_person and focus_enemy.aimed_at and focus_enemy.dis < 2000 then
+					--if data.group and data.group.size > 1 or math_random() < 0.5 then --unnecessary extra RNG
+						local dodge = nil
 
-			if not action_taken and focus_enemy.is_person and focus_enemy.aimed_at and focus_enemy.dis < 2000 then
-				--if data.group and data.group.size > 1 or math_random() < 0.5 then --unnecessary extra RNG
-					local dodge = nil
+						if focus_enemy.is_local_player then
+							local e_movement_state = focus_enemy.unit:movement():current_state()
 
-					if focus_enemy.is_local_player then
-						local e_movement_state = focus_enemy.unit:movement():current_state()
-
-						if not e_movement_state:_is_reloading() and not e_movement_state:_interacting() and not e_movement_state:is_equipping() then
-							dodge = true
-						end
-					else
-						local e_anim_data = focus_enemy.unit:anim_data()
-
-						if not e_anim_data.reload then
-							if e_anim_data.move or e_anim_data.idle then
+							if not e_movement_state:_is_reloading() and not e_movement_state:_interacting() and not e_movement_state:is_equipping() then
 								dodge = true
 							end
-						end
-					end
+						else
+							local e_anim_data = focus_enemy.unit:anim_data()
 
-					if dodge then
-						action_taken = CopLogicBase.chk_start_action_dodge(data, "preemptive")
-					end
-				--end
+							if not e_anim_data.reload then
+								if e_anim_data.move or e_anim_data.idle then
+									dodge = true
+								end
+							end
+						end
+
+						if dodge then
+							action_taken = CopLogicBase.chk_start_action_dodge(data, "preemptive")
+						end
+					--end
+				end
 			end
 		end
 	end
-
 	action_taken = action_taken or data.logic.action_taken(data, my_data)
 	
 	local tactics = data.tactics
@@ -301,7 +303,6 @@ function CopLogicAttack._upd_combat_movement(data)
 	
 	local enemy_visible_soft = focus_enemy.verified_t and t - focus_enemy.verified_t < soft_t
 	local enemy_visible_softer = focus_enemy.verified_t and t - focus_enemy.verified_t < softer_t
-	local want_to_take_cover = my_data.want_to_take_cover
 
 	if my_data.cover_test_step ~= 1 and not enemy_visible_softer then
 		if action_taken or want_to_take_cover or not my_data.in_cover then
