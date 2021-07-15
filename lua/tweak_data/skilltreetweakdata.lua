@@ -33,10 +33,16 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 		self.skills.juggernaut[1].upgrades = {"player_armor_multiplier_cooler", "body_armor6"}
 				
 		self.skills.overkill[2].upgrades = {"player_overkill_damage_multiplier"}
-		self.skills.overkill[1].upgrades = {"player_killshot_close_panic_chance"}	
+		self.skills.overkill[1].upgrades = {"player_killshot_close_panic_chance"}
+
+		self.skills.heavy_impact[1].upgrades = {"player_muscle_memory_basic"}	
+		self.skills.heavy_impact[2].upgrades = {"player_muscle_memory_aced"}
 		
 		self.skills.fast_fire[1].upgrades = {"player_automatic_mag_increase_1"}	
 		self.skills.fast_fire[2].upgrades = {"player_pop_pop"}
+		
+		self.skills.body_expertise[1].upgrades = {"player_ridethebull_basic"}	
+		self.skills.body_expertise[2].upgrades = {"player_ridethebull_aced"}
 
 		self.skills.carbon_blade[1].upgrades = {"saw_damage_mult", "saw_enemy_slicer"}	
 			

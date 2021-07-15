@@ -1058,6 +1058,33 @@ function RaycastWeaponBase:get_aim_assist(from_pos, direction, max_dist, use_aim
 	return closest_ray
 end
 
+function RaycastWeaponBase:on_bull_event(aced)
+	if self:ammo_full() then
+		return
+	end
+	
+	local is_player = self._setup.user_unit == managers.player:player_unit()
+	local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
+	
+	if consume_ammo then
+		if is_player or Network:is_server() then
+			local ammo_base = self._reload_ammo_base or self:ammo_base()
+			local ammo_total = ammo_base:get_ammo_total()
+			local max_ammo_in_clip = ammo_base:get_ammo_max_per_clip()
+			local ammo_in_clip = ammo_base:get_ammo_remaining_in_clip()
+			local amount = ammo_in_clip + math.ceil(max_ammo_in_clip * 0.25)
+			
+			if aced then	
+				amount = amount + 1
+			end
+
+			if self._setup.expend_ammo then
+				ammo_base:set_ammo_remaining_in_clip(math.min(math.min(ammo_total, max_ammo_in_clip), amount))
+			end
+		end
+	end
+end
+
 --Original mod by 90e, uploaded by DarKobalt.
 --Reverb fixed by Doctor Mister Cool, aka Didn'tMeltCables, aka DinoMegaCool
 --New version uploaded and maintained by Offyerrocker.

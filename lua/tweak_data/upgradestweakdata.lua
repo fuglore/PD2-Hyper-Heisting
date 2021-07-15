@@ -432,6 +432,32 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	}
 	
+	self.values.player.muscle_memory_basic = { --muscle memory basic
+		1.5
+	}
+	self.definitions.player_muscle_memory_basic = {
+		name_id = "menu_muscle_memory_basic",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "muscle_memory_basic",
+			category = "player"
+		}
+	}
+	
+	self.values.player.muscle_memory_aced = { --muscle memory aced
+		0.8
+	}
+	self.definitions.player_muscle_memory_aced = {
+		name_id = "menu_muscle_memory_aced",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "muscle_memory_aced",
+			category = "player"
+		}
+	}
+	
 	self.values.player.pop_pop = { --pop pop aced
 		true
 	}
@@ -441,6 +467,31 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		upgrade = {
 			value = 1,
 			upgrade = "pop_pop",
+			category = "player"
+		}
+	}
+	
+	self.values.player.ridethebull_basic = { --confiscate basic
+		true
+	}
+	self.definitions.player_ridethebull_basic = {
+		name_id = "menu_ridethebull_basic",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "ridethebull_basic",
+			category = "player"
+		}
+	}
+	self.values.player.ridethebull_aced = { --confiscate aced
+		true
+	}
+	self.definitions.player_ridethebull_aced = {
+		name_id = "menu_ridethebull_aced",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "ridethebull_aced",
 			category = "player"
 		}
 	}

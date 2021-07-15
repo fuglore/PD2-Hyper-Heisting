@@ -190,6 +190,15 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		end
 	end
 	
+	local bull = self:has_category_upgrade("player", "ridethebull_basic")
+	local aced_bull = self:has_category_upgrade("player", "ridethebull_basic")
+	
+	if bull then
+		if aced_bull and variant == "melee" or equipped_unit:fire_mode() == "auto" then
+			equipped_unit:on_bull_event(aced_bull)
+		end
+	end
+	
 	if headshot and self:has_category_upgrade("player", "fineredmist_basic") and equipped_unit:fire_mode() == "single" then
 		--THANK YOU FOR IMPROVING ALL OF THIS HOXI AAAAAAAAAAAAAAAAAAAA <33333333
 		local pos = killed_unit:movement():m_head_pos()

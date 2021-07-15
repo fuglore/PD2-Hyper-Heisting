@@ -1768,6 +1768,8 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						end
 
 						local recoil_multiplier = (weap_base:recoil() + weap_base:recoil_addend()) * weap_base:recoil_multiplier()
+						
+						recoil_multiplier = recoil_multiplier * managers.player:upgrade_value("player", "muscle_memory_aced", 1)
 
 						cat_print("jansve", "[PlayerStandard] Weapon Recoil Multiplier: " .. tostring(recoil_multiplier))
 
@@ -1855,10 +1857,30 @@ function PlayerStandard:_interupt_action_reload(t)
 	self:send_reload_interupt()
 end 
 
+function PlayerStandard:_get_swap_speed_multiplier()
+	local multiplier = 1.5
+	local weapon_tweak_data = self._equipped_unit:base():weapon_tweak_data()
+	multiplier = multiplier * managers.player:upgrade_value("weapon", "swap_speed_multiplier", 1)
+	multiplier = multiplier * managers.player:upgrade_value("weapon", "passive_swap_speed_multiplier", 1)
+
+	for _, category in ipairs(weapon_tweak_data.categories) do
+		multiplier = multiplier * managers.player:upgrade_value(category, "swap_speed_multiplier", 1)
+	end
+
+	multiplier = multiplier * managers.player:upgrade_value("team", "crew_faster_swap", 1)
+	multiplier = multiplier * managers.player:upgrade_value("player", "muscle_memory_basic", 1)
+
+	if managers.player:has_activate_temporary_upgrade("temporary", "swap_weapon_faster") then
+		multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "swap_weapon_faster", 1)
+	end
+
+	multiplier = managers.modifiers:modify_value("PlayerStandard:GetSwapSpeedMultiplier", multiplier)
+
+	return multiplier
+end
+
 function PlayerStandard:_start_action_unequip_weapon(t, data)
 	local speed_multiplier = self:_get_swap_speed_multiplier()
-	
-	speed_multiplier = speed_multiplier + 0.5 --this needs to be faster. i hate weapon switching taking as long as it does. holy shit.
 
 	self._equipped_unit:base():tweak_data_anim_stop("equip")
 	self._equipped_unit:base():tweak_data_anim_play("unequip", speed_multiplier)
