@@ -105,6 +105,12 @@
 		["hud_assault_FG_cover102"] = "ATOMIC OVERDRIVE",
 		["hud_assault_FG_cover103"] = "THERE IS NO FATE",
 		["hud_assault_FG_cover104"] = "LET THE HEIST BEGIN",
+		["hud_assault_FG_cover105"] = "GET IN THE DAMN COVER, LOVE",
+		["hud_assault_FG_cover106"] = "THERE IS NO SPOON",
+		["hud_assault_FG_cover107"] = "BRING THE HEAT",
+		["hud_assault_FG_cover108"] = "SOMETHING SOMETHING COVER",
+		["hud_assault_FG_cover109"] = "DARE TO BELIEVE YOU CAN SURVIVE",
+		["hud_assault_FG_cover110"] = "STYLE ON THEM",
 		["hud_assault_faction_nightmare"] = "VS. ???",
 		["hud_assault_faction_sbz"] = "VS. SBZ OPERATORS",
 		["hud_assault_faction_ovk"] = "VS. OVERKILL MODERATORS",
@@ -186,6 +192,7 @@
 		["hud_assault_FG_danger57"] = "!!! YOU MAKE EVEN THE DEVIL CRY !!!",
 		["hud_assault_FG_danger58"] = "!!! FOOLISHNESS, HEISTER, FOOLISHNESS !!!",
 		["hud_assault_FG_danger59"] = "!!! SAY PAL, YOU DON'T LOOK SO GOOD !!!",
+		["hud_assault_FG_danger60"] = "!!! IT IS INEVITABLE !!!",
 		["hud_assault_heat"] = "HEAT BONUS",
 		["hud_heat_common"] = "BREAK TIME!",
 		["hud_heat_1"] = "ANARCHY REIGNS!",
@@ -524,7 +531,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_fast_fire_beta_desc"] = "BASIC: ##$basic##\nYour SMGs, LMGs and Assault Rifles gain ##15## more bullets in their magazines. This does not affect Lock n' Load aced.\n\nACE: ##$pro##\nHolding down your fire button with any weapon set to automatic fire will slowly increase your firerate by ##25%## over the course of ##3## seconds.\n\n##no popo##",
 			
 			["menu_body_expertise_beta"] = "Livid Lead",
-			["menu_body_expertise_beta_desc"] = "BASIC: ##$basic##\nKilling an enemy with a weapon set to automatic fire will ##automatically## reload ##25%## of your magazine ##from your reserve ammo##.\n\nACE: ##$pro##\n##Livid Lead's effect## now also activates ##regardless of fire mode## when killing enemies ##with a melee attack## and reloads ##one extra bullet##.\n\n##No better way to take your anger out on people.##",
+			["menu_body_expertise_beta_desc"] = "BASIC: ##$basic##\nKilling an enemy with a weapon set to automatic fire will ##automatically## reload ##25%## of your magazine ##from your reserve ammo##.\n\nACE: ##$pro##\n##Livid Lead## reloads ##one extra bullet## on activation and can now also be activated by ##killing an enemy with a Melee Weapon##.\n\n##No better way to take your anger out on people.##",
 			
 			["menu_gun_fighter_beta_desc"] = "BASIC: ##$basic##\nPistols gain ##5## more damage points. \n\nACE: ##$pro##\nPistols gain an additional ##5## damage points.",
 		
