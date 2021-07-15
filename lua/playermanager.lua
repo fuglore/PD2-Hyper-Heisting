@@ -147,6 +147,54 @@ function PlayerManager:damage_reduction_skill_multiplier(damage_type, sneakier_a
 	return multiplier
 end
 
+function PlayerManager:drop_carry(zipline_unit)
+	local carry_data = self:get_my_carry_data()
+
+	if not carry_data then
+		return
+	end
+
+	self._carry_blocked_cooldown_t = Application:time() + 0.2
+	local player = self:player_unit()
+
+	if player then
+		player:sound():play("Play_bag_generic_throw", nil, false)
+	end
+
+	local camera_ext = player:camera()
+	local dye_initiated = carry_data.dye_initiated
+	local has_dye_pack = carry_data.has_dye_pack
+	local dye_value_multiplier = carry_data.dye_value_multiplier
+	local throw_distance_multiplier_upgrade_level = managers.player:upgrade_level("carry", "throw_distance_multiplier", 0)
+	local position = camera_ext:position()
+	local rotation = camera_ext:rotation()
+	local forward = player:camera():forward()
+
+	if _G.IS_VR then
+		local active_hand = player:hand():get_active_hand("bag")
+
+		if active_hand then
+			position = active_hand:position()
+			rotation = active_hand:rotation()
+			forward = rotation:y()
+		end
+	end
+
+	if Network:is_client() then
+		managers.network:session():send_to_host("server_drop_carry", carry_data.carry_id, carry_data.multiplier, dye_initiated, has_dye_pack, dye_value_multiplier, position, rotation, forward, throw_distance_multiplier_upgrade_level, zipline_unit)
+	else
+		self:server_drop_carry(carry_data.carry_id, carry_data.multiplier, dye_initiated, has_dye_pack, dye_value_multiplier, position, rotation, forward, throw_distance_multiplier_upgrade_level, zipline_unit, managers.network:session():local_peer())
+	end
+
+	managers.hud:remove_teammate_carry_info(HUDManager.PLAYER_PANEL)
+	managers.hud:temp_hide_carry_bag()
+	self:update_removed_synced_carry_to_peers()
+
+	if self._current_state == "carry" then
+		managers.player:set_player_state("standard")
+	end
+end
+
 function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	local player_unit = self:player_unit()
 	local effect_sync_index = nil
