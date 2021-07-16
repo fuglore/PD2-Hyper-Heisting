@@ -551,8 +551,9 @@ function CopLogicIdle.damage_clbk(data, damage_info)
 	if data.important or data.is_converted or data.unit:in_slot(16) then
 		if not data.unit:movement():chk_action_forbidden("walk") then
 			local my_data = data.internal_data
+			local moving_to_cover = my_data.want_to_take_cover and my_data.moving_to_cover
 			
-			if not my_data.tasing and not my_data.spooc_attack then
+			if not moving_to_cover and not my_data.tasing and not my_data.spooc_attack then
 				CopLogicBase.chk_start_action_dodge(data, "hit")
 			end
 		end

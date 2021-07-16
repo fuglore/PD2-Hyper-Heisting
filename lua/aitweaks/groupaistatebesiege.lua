@@ -2686,19 +2686,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			self:_set_objective_to_enemy_group(group, grp_objective)
 		end
 	elseif pull_back then
-		local retreat_area, do_not_retreat = nil
+		local retreat_area = nil
 
 		if not next(objective_area.criminal.units) then
 			retreat_area = objective_area
 		else
 			for u_key, u_data in pairs_g(group.units) do
 				local nav_seg_id = u_data.tracker:nav_segment()
-
-				if current_objective.area.nav_segs[nav_seg_id] then
-					retreat_area = current_objective.area
-
-					break
-				end
 
 				if self:is_nav_seg_safe(nav_seg_id) then
 					retreat_area = self:get_area_from_nav_seg_id(nav_seg_id)
@@ -2708,7 +2702,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			end
 		end
 
-		if not retreat_area and not do_not_retreat and current_objective.coarse_path then
+		if not retreat_area and current_objective.coarse_path then
 			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
 
 			if forwardmost_i_nav_point then

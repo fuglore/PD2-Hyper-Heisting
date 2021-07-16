@@ -485,13 +485,13 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 	
 	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then -- spicy
 		self.special_unit_spawn_limits = {
-			shield = 8,
+			shield = 6,
 			medic = 8,
-			taser = 3,
+			taser = 2,
 			tank = 2,
 			sniper = 3,						
-			spooc = 3,
-			fbi = 12
+			spooc = 2,
+			fbi = 8
 		}
 	elseif difficulty_index <= 2 then
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
@@ -513,7 +513,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	elseif difficulty_index == 4 then
 		self.special_unit_spawn_limits = { --very hard enables satan himself to come visit you, increases max medics and shields
-			shield = 6,
+			shield = 4,
 			medic = 4,
 			taser = 1,
 			tank = 1,
@@ -524,46 +524,46 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 	elseif difficulty_index == 5 then
 		self.special_unit_spawn_limits = { --overkill enables two spoocs, adds another taser, escalate the game meaningfully every difficulty by increasing complexity
 			shield = 6,
-			medic = 4,
-			taser = 1,
-			sniper = 3,						
-			tank = 2,
-			spooc = 1,
-			fbi = 4
-		}
-	elseif difficulty_index == 6 then
-		self.special_unit_spawn_limits = { --begin coordinated spawngroups to heighten gameplay complexity, start pushing the boundaries, no big special limit change here outside of the cloakers, medics and shields, its fine though
-			shield = 8,
 			medic = 6,
 			taser = 1,
-			tank = 2,
 			sniper = 3,						
+			tank = 1,
 			spooc = 1,
 			fbi = 6
 		}
-	elseif difficulty_index == 7 then
-		self.special_unit_spawn_limits = { --setting medic limit to six allows for survivability within common enemy spawngroups since special enemies are now paired commonly with medics to keep them alive consistently
-			shield = 8,
+	elseif difficulty_index == 6 then
+		self.special_unit_spawn_limits = {
+			shield = 6,
 			medic = 6,
-			taser = 2,
+			taser = 1,
+			tank = 1,
 			sniper = 3,						
+			spooc = 1,
+			fbi = 8
+		}
+	elseif difficulty_index == 7 then
+		self.special_unit_spawn_limits = {
+			shield = 6,
+			medic = 8,
+			taser = 2,
 			tank = 2,
+			sniper = 3,						
 			spooc = 2,
 			fbi = 8
 		}
 	elseif difficulty_index == 8 then
-		self.special_unit_spawn_limits = { --game reaches boiling point, 2 dozers, 4-5 tasers, 8-10 medics, 3-4 cloakers and 8-10 shields.
-			shield = 8,
+		self.special_unit_spawn_limits = {
+			shield = 6,
 			medic = 8,
-			taser = 3,
+			taser = 2,
 			tank = 2,
 			sniper = 3,						
-			spooc = 3,
-			fbi = 12
+			spooc = 2,
+			fbi = 8
 		}
 	else
 		self.special_unit_spawn_limits = {
-			shield = 8,
+			shield = 4,
 			medic = 8,
 			taser = 3,
 			tank = 2,

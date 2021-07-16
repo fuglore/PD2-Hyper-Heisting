@@ -1530,7 +1530,7 @@ end
 
 function PlayerDamage:_update_regenerate_timer(t, dt)
 	local dt_mul = self._regenerate_speed or 1
-	dt_mul = dt_mul * math.lerp(1, 0, self:suppression_ratio())
+	dt_mul = dt_mul * math.lerp(1, 0.25, self:suppression_ratio())
 
 	self._regenerate_timer = math.max(self._regenerate_timer - dt * dt_mul, 0)
 

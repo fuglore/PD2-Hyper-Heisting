@@ -48,8 +48,8 @@ function CharacterTweakData:_presets(tweak_data)
 				1
 			},
 			brown_point = {
-				6,
-				6
+				3,
+				3
 			}
 		},
 		hard_agg = {
@@ -60,11 +60,11 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			react_point = {
 				3,
-				4
+				3
 			},
 			brown_point = {
-				6,
-				6
+				4,
+				4
 			}
 		},
 		no_supress = {
@@ -7922,7 +7922,7 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.move_speed = presets.move_speed.simple_consistency
 	self.swat.damage.doom_hurt_type = "light"
 	self.swat.damage.hurt_severity = presets.hurt_severities.hordemook
-	self.swat.suppression = presets.suppression.hard_agg
+	self.swat.suppression = presets.suppression.hard_def
 	self.swat.surrender = presets.surrender.easy
 	self.swat.experience.cable_tie = "tie_swat"
 	self.swat.speech_prefix_p1 = self._prefix_data_p1.swat()
@@ -7953,7 +7953,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.no_fumbling = true
 	self.fbi.no_suppression_reaction = true
 	self.fbi.no_retreat = nil
-	self.fbi.HEALTH_INIT = 16
+	self.fbi.HEALTH_INIT = 12
 	self.fbi.headshot_dmg_mul = 9
 	self.fbi.move_speed = presets.move_speed.simple_consistency
 	self.fbi.damage.no_suppression_crouch = true
@@ -8066,6 +8066,8 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.damage.doom_hurt_type = "heavy"
 	self.heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
+	self.heavy_swat.DAMAGE_CLAMP_BULLET = 79
+	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.heavy_swat.suppression = presets.suppression.hard_agg
 	self.heavy_swat.surrender = presets.surrender.easy
 	self.heavy_swat.experience.cable_tie = "tie_swat"
@@ -8169,6 +8171,8 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_heavy_swat.damage.doom_hurt_type = "heavy"
 	self.fbi_heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
+	self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET = 79
+	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.fbi_heavy_swat.suppression = presets.suppression.hard_agg
 	self.fbi_heavy_swat.surrender = presets.surrender.easy
 	self.fbi_heavy_swat.speech_prefix_p1 = self._prefix_data_p1.heavy_swat()
@@ -9766,11 +9770,6 @@ function CharacterTweakData:_set_sm_wish()
 	self.tank.damage.explosion_damage_mul = 0.7
 	self.tank_medic.damage.explosion_damage_mul = 0.7
 	self.tank_mini.damage.explosion_damage_mul = 0.7
-	--heavy swat health clamping for guaranteed two-shot-to-kill ratios
-	self.heavy_swat.DAMAGE_CLAMP_BULLET = 79
-	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
-	self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET = 79
-	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	
 	self.phalanx_minion.HEALTH_INIT = 300
 	self.phalanx_minion.DAMAGE_CLAMP_BULLET = 40

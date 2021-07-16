@@ -575,14 +575,7 @@ function CopDamage:build_suppression(amount, panic_chance, was_saw)
 		self._suppression_data.brown_zone = true
 
 		self._unit:brain():on_suppressed(amount == "panic" and "panic" or true)
-	elseif amount == "panic" then
-		self._unit:brain():on_suppressed("panic")
-	end
-
-	if not self._suppression_data.react_zone and self._suppression_data.react_point and self._suppression_data.react_point <= self._suppression_data.value then
-		self._suppression_data.react_zone = true
-
-		self._unit:movement():on_suppressed(amount == "panic" and "panic" or true)
+		
 		if amount == "panic" then
 			if was_saw then
 				self._unit:sound():say("ch4", true, nil, true, nil)
@@ -593,12 +586,21 @@ function CopDamage:build_suppression(amount, panic_chance, was_saw)
 			self._unit:sound():say("hlp", true, nil, true, nil)
 		end
 	elseif amount == "panic" then
-		self._unit:movement():on_suppressed("panic")
 		if was_saw then
 			self._unit:sound():say("ch4", true, nil, true, nil)
 		else
 			self._unit:sound():say("lk3b", true, nil, true, nil) 
 		end
+	
+		self._unit:brain():on_suppressed("panic")
+	end
+
+	if not self._suppression_data.react_zone and self._suppression_data.react_point and self._suppression_data.react_point <= self._suppression_data.value then
+		self._suppression_data.react_zone = true
+
+		self._unit:movement():on_suppressed(amount == "panic" and "panic" or true)
+	elseif amount == "panic" then
+		self._unit:movement():on_suppressed("panic")
 	end
 end
 

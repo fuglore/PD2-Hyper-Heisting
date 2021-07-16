@@ -31,7 +31,7 @@ function Drill:_register_sabotage_SO()
 		fail_clbk = callback(self, self, "on_sabotage_SO_failed"),
 		complete_clbk = callback(self, self, "on_sabotage_SO_completed"),
 		action_start_clbk = callback(self, self, "on_sabotage_SO_started"),
-		followup_objective = followup_objective,
+		--followup_objective = followup_objective,
 		action = {
 			align_sync = true,
 			type = "act",
