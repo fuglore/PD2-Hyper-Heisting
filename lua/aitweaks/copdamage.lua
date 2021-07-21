@@ -1618,12 +1618,14 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 						position = attack_data.col_ray.position
 					})
 				end
-					
-				world_g:effect_manager():spawn({
-					effect = idstr_shieldbreak,
-					position = attack_data.col_ray.position,
-					normal = math.UP
-				})
+				
+				if attack_data.attacker_unit == managers.player:player_unit() then
+					world_g:effect_manager():spawn({
+						effect = idstr_shieldbreak,
+						position = attack_data.col_ray.position,
+						normal = math.UP
+					})
+				end
 				
 				self._unit:sound():play("bulldozer_visor_shatter")
 				

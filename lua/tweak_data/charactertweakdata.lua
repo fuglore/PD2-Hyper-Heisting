@@ -3140,10 +3140,10 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	
 	--civil begins here, noteworthy change being increases in attack rate along with less falloff, plus the increase of focus delay minimum starting range
-presets.weapon.civil.is_pistol = {
+	presets.weapon.civil.is_pistol = {
 		aim_delay = { --no aim delay
-			0.25,
-			0.25
+			0.6,
+			0.6
 		},
 		focus_delay = 1.5,
 		focus_dis = 100,
@@ -3220,8 +3220,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.civil.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
-			0.25,
-			0.25
+			0.6,
+			0.6
 		},
 		focus_delay = 1.5,
 		focus_dis = 100,
@@ -3298,8 +3298,8 @@ presets.weapon.civil.is_pistol = {
 	}	
 	presets.weapon.civil.is_rifle = {
 		aim_delay = {
-			0.35,
-			0.35
+			0.7,
+			0.7
 		},
 		focus_delay = 1.25, 
 		focus_dis = 100,
@@ -3423,8 +3423,8 @@ presets.weapon.civil.is_pistol = {
 	presets.weapon.civil.is_bullpup = presets.weapon.civil.is_rifle
 	presets.weapon.civil.is_shotgun_pump = {
 		aim_delay = {
-			0.4,
-			0.4
+			0.9,
+			0.9
 		},
 		focus_delay = 1.25, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
@@ -3641,8 +3641,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.civil.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
 		aim_delay = {
-			0.28,
-			0.28
+			0.6,
+			0.6
 		},
 		focus_delay = 1.2,
 		focus_dis = 100, 
@@ -3723,8 +3723,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.civil.is_revolver = { --used by punks and beat police
 		aim_delay = {
-			0.4,
-			0.4
+			0.6,
+			0.6
 		},
 		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
 		focus_dis = 100,
@@ -3802,8 +3802,8 @@ presets.weapon.civil.is_pistol = {
 	presets.weapon.civil.mini = { --my wrath is finally............gone...........
 		spread_only = true,
 		aim_delay = {
-			0.7,
-			0.7
+			0.9,
+			0.9
 		},
 		focus_delay = 2,
 		focus_dis = 100,
@@ -3903,8 +3903,8 @@ presets.weapon.civil.is_pistol = {
 	presets.weapon.civil.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
 		spread_only = true,
 		aim_delay = {
-			0.35,
-			0.35
+			0.7,
+			0.7
 		},
 		focus_delay = 3, 
 		focus_dis = 100,
@@ -4019,8 +4019,8 @@ presets.weapon.civil.is_pistol = {
 	
 	presets.weapon.complex.is_pistol = {
 		aim_delay = { --no aim delay
-			0.25,
-			0.25
+			0.5,
+			0.5
 		},
 		focus_delay = 1,
 		focus_dis = 100,
@@ -4115,8 +4115,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.complex.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
-			0.25,
-			0.25
+			0.5,
+			0.5
 		},
 		focus_delay = 1,
 		focus_dis = 100,
@@ -4211,8 +4211,8 @@ presets.weapon.civil.is_pistol = {
 	}	
 	presets.weapon.complex.is_rifle = {
 		aim_delay = {
-			0.25,
-			0.25
+			0.6,
+			0.6
 		},
 		focus_delay = 1.25,
 		focus_dis = 100,
@@ -4354,8 +4354,8 @@ presets.weapon.civil.is_pistol = {
 	presets.weapon.complex.is_bullpup = presets.weapon.complex.is_rifle
 	presets.weapon.complex.is_shotgun_pump = {
 		aim_delay = {
-			0.4,
-			0.4
+			0.8,
+			0.8
 		},
 		focus_delay = 1, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
@@ -4572,8 +4572,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.complex.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
 		aim_delay = {
-			0.28,
-			0.28
+			0.5,
+			0.5
 		},
 		focus_delay = 1.1,
 		focus_dis = 100, 
@@ -4672,8 +4672,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.complex.is_revolver = { --used by punks and beat police
 		aim_delay = {
-			0.4,
-			0.4
+			0.5,
+			0.5
 		},
 		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
 		focus_dis = 100,
@@ -4769,8 +4769,8 @@ presets.weapon.civil.is_pistol = {
 	presets.weapon.complex.mini = { --my wrath is finally............gone...........
 		spread_only = true,
 		aim_delay = {
-			0.7,
-			0.7
+			0.8,
+			0.8
 		},
 		focus_delay = 2,
 		focus_dis = 100,
@@ -4870,8 +4870,8 @@ presets.weapon.civil.is_pistol = {
 	presets.weapon.complex.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
 		spread_only = true,
 		aim_delay = {
-			0.35,
-			0.35
+			0.6,
+			0.6
 		},
 		focus_delay = 3, 
 		focus_dis = 100,
@@ -4986,8 +4986,8 @@ presets.weapon.civil.is_pistol = {
 	
 	presets.weapon.anarchy.is_pistol = {
 		aim_delay = { --no aim delay
-			0.25,
-			0.25
+			0.4,
+			0.4
 		},
 		focus_delay = 1,
 		focus_dis = 100,
@@ -5100,8 +5100,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.anarchy.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
-			0.25,
-			0.25
+			0.4,
+			0.4
 		},
 		focus_delay = 1,
 		focus_dis = 100,
@@ -5214,8 +5214,8 @@ presets.weapon.civil.is_pistol = {
 	}	
 	presets.weapon.anarchy.is_rifle = {
 		aim_delay = {
-			0.25,
-			0.25
+			0.5,
+			0.5
 		},
 		focus_delay = 1,
 		focus_dis = 100,
@@ -5375,8 +5375,8 @@ presets.weapon.civil.is_pistol = {
 	presets.weapon.anarchy.is_bullpup = presets.weapon.anarchy.is_rifle
 	presets.weapon.anarchy.is_shotgun_pump = {
 		aim_delay = {
-			0.4,
-			0.4
+			0.7,
+			0.7
 		},
 		focus_delay = 0.8, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
@@ -5611,8 +5611,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.anarchy.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
 		aim_delay = {
-			0.28,
-			0.28
+			0.4,
+			0.4
 		},
 		focus_delay = 1,
 		focus_dis = 100, 
@@ -5909,8 +5909,8 @@ presets.weapon.civil.is_pistol = {
 	presets.weapon.anarchy.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
 		spread_only = true,
 		aim_delay = {
-			0.35,
-			0.35
+			0.5,
+			0.5
 		},
 		focus_delay = 3, 
 		focus_dis = 100,
@@ -6043,8 +6043,8 @@ presets.weapon.civil.is_pistol = {
 	
 	presets.weapon.fbigod.is_pistol = { --Only used by FBIs on Anarchy, they're tough guys.
 		aim_delay = {
-			0.28,
-			0.28
+			0.6,
+			0.6
 		},
 		focus_delay = 0.7, --focus delay.
 		focus_dis = 500,
@@ -6174,9 +6174,9 @@ presets.weapon.civil.is_pistol = {
 		}
 	}
 	presets.weapon.fbigod.akimbo_pistol = { --oh boy why didnt i do this earlier
-		aim_delay = { --no aim delay
-			0.28,
-			0.28
+		aim_delay = {
+			0.6,
+			0.6
 		},
 		focus_delay = 0.7, --focus delay.
 		focus_dis = 500,
@@ -6307,8 +6307,8 @@ presets.weapon.civil.is_pistol = {
 	}
 	presets.weapon.fbigod.is_rifle = {
 		aim_delay = {
-			0.28,
-			0.28
+			0.6,
+			0.6
 		},
 		focus_delay = 0.7,
 		focus_dis = 500, --focus displacement punishment starts after 5m
