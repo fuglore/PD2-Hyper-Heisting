@@ -1,0 +1,18 @@
+<effect force_synch="false">
+	<atom name="shield" min_size="1" max_size="1" lifetime="0.35" random_start_time="false" start_time="0" preroll="0" inherit_velocity_multiplier="0" fade_in_start="-1" fade_in_length="0" fade_out_start="-1" spawn_cull_policy="initialize" cull_policy="freeze" cull_gracetime="0" max_particle_radius="20" soundbank="" cue="" ambient="false" grab_relative="effect" grab_pos="0 0 0" grab_radius="0" grab_backfacing="false" timeline="">
+		<initializerstack>
+			<localboxrandomposition min="0 0 50" max="0 0 50"/>
+		</initializerstack>
+		<simulatorstack>
+			<worldtransform transform_rotations="false"/>
+		</simulatorstack>
+		<visualizerstack>
+			<billboard texture="effects/pd2_mod_hh/particles/textures/shield" intensity="identity" billboard_type="camera_facing" rotation_channel="world_rotation" blend_mode="normal" render_template="effect_op_add" origo="0.5 0.5" per_particle_age="false" size_input="constant" size="50 50" color_input="constant" color="255 255 255" opacity_input="keys" rotation_input="constant" rotation="0" rotation_axis="0 0 1" uv_size="1 1" uv_offset_input="constant" uv_offset="1 1">
+				<opacity_keys loop="false">
+					<key t="0.1" v="255"/>
+					<key t="0.3" v="0"/>
+				</opacity_keys>
+			</billboard>
+		</visualizerstack>
+	</atom>
+</effect>

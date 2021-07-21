@@ -857,6 +857,7 @@
 	<texture path="effects/pd2_mod_hh/particles/textures/taser_glint" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/marauderspooc_glint" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/glint" load="true" />
+	<texture path="effects/pd2_mod_hh/particles/textures/shield" load="true" />
 	<texture path="units/lights/pd2_hh_flashlight_proj/flashlight_player" load="true" />
 	<effect path="effects/payday2/particles/weapons/arrow_trail" force="true"/>
 	<effect path="effects/payday2/particles/weapons/arrow_trail_homing"/>
@@ -867,6 +868,7 @@
 	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties" />
 	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/floaties_df" load="true" />
 	<effect path="effects/pd2_mod_hh/particles/character/gore_explosion"/>
+	<effect path="effects/pd2_mod_hh/particles/character/shield_break"/>
 	<effect path="effects/pd2_mod_hh/particles/character/prefire_glint"/>
 	<effect path="effects/pd2_mod_hh/particles/character/pretase_glint"/>
 	<effect path="effects/pd2_mod_hh/particles/character/taser_warning"/>
@@ -893,6 +895,8 @@
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"/>
+	
+	<effect path="effects/pd2_mod_hh/particles/iconograph/deathresist"/>
 	
 	<texture path="guis/textures/loading/hints/hh_ninjas" force="false"/>
 	<texture path="guis/textures/loading/hints/hh_shotgunners" force="false"/>

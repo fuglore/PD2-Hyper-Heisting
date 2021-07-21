@@ -1303,8 +1303,10 @@ self.x_mp5.kick.steelsight = self.new_mp5.kick.standing
 
 -- Chicago Typewriter
 self.m1928.stats.spread = 16
-self.m1928.AMMO_MAX = 120  
-self.x_m1928.AMMO_MAX = 150  
+self.m1928.AMMO_MAX = 120 
+self.m1928.stats.damage = 59 
+self.x_m1928.AMMO_MAX = 150
+self.x_m1928.stats.damage = 59   
 self.m1928.kick.standing = self.new_mp5.kick.standing
 self.m1928.kick.crouching = self.new_mp5.kick.crouching
 self.m1928.kick.steelsight = self.new_mp5.kick.steelsight
@@ -2189,24 +2191,24 @@ self.par.AMMO_PICKUP = {6, 14}
 self.par.stats.damage = 59
 self.par.stats.recoil = 12
 self.par.kick = {
-standing = {
-		2.0,
-		4.2,
-		-0.6,
-		0.6
-},
-steelsight = {
-		1.0,
-		2.1,
-		-0.6,
-		0.6
-},
-crouching = {
-		1.5,
-		3,
-		-0.6,
-		0.6
-}
+	standing = {
+			1.4,
+			1.8,
+			-0.6,
+			0.6
+	},
+	steelsight = {
+			1.2,
+			1.2,
+			-0.6,
+			0.6
+	},
+	crouching = {
+			1.2,
+			1.2,
+			-0.6,
+			0.6
+	}
 }
 
 --M60
@@ -2215,24 +2217,24 @@ self.m60.AMMO_PICKUP = {2, 8}
 self.m60.stats.damage = 79
 self.m60.stats.recoil = 10
 self.m60.kick = {
-standing = {
-		2.0,
-		4.2,
-		-0.6,
-		0.6
-},
-steelsight = {
-		1.0,
-		2.1,
-		-0.6,
-		0.6
-},
-crouching = {
-		1.5,
-		3,
-		-0.6,
-		0.6
-}
+	standing = {
+			1.6,
+			2,
+			-0.6,
+			0.6
+	},
+	steelsight = {
+			1.5,
+			1.5,
+			-0.6,
+			0.6
+	},
+	crouching = {
+			1.5,
+			1.5,
+			-0.6,
+			0.6
+	}
 }
 
 --KSP
@@ -2240,24 +2242,24 @@ self.m249.AMMO_PICKUP = {6, 14}
 self.m249.stats.damage = 59
 self.m249.stats.recoil = 9
 self.m249.kick = {
-standing = {
-		2.0,
-		4.2,
-		-0.6,
-		0.6
-},
-steelsight = {
-		1.0,
-		2.1,
-		-0.6,
-		0.6
-},
-crouching = {
-		1.5,
-		3,
-		-0.6,
-		0.6
-}
+	standing = {
+			1.4,
+			1.8,
+			-0.6,
+			0.6
+	},
+	steelsight = {
+			1.2,
+			1.2,
+			-0.6,
+			0.6
+	},
+	crouching = {
+			1.2,
+			1.2,
+			-0.6,
+			0.6
+	}
 }
 
 --Buzzsaw
@@ -2266,24 +2268,24 @@ self.mg42.stats.damage = 59
 self.mg42.stats.recoil = 9
 self.mg42.stats.spread = 15
 self.mg42.kick = {
-standing = {
-		2.0,
-		4.2,
-		-0.6,
-		0.6
-},
-steelsight = {
-		1.0,
-		2.1,
-		-0.6,
-		0.6
-},
-crouching = {
-		1.5,
-		3,
-		-0.6,
-		0.6
-}
+	standing = {
+			1.4,
+			1.8,
+			-0.6,
+			0.6
+	},
+	steelsight = {
+			1.2,
+			1.2,
+			-0.6,
+			0.6
+	},
+	crouching = {
+			1.2,
+			1.2,
+			-0.6,
+			0.6
+	}
 }
 
 --Brenner
@@ -2291,24 +2293,24 @@ self.hk21.AMMO_PICKUP = {2, 8}
 self.hk21.stats.damage = 79
 self.hk21.stats.recoil = 10
 self.hk21.kick = {
-standing = {
-		2.0,
-		4.2,
-		-0.6,
-		0.6
-},
-steelsight = {
-		1.0,
-		2.1,
-		-0.6,
-		0.6
-},
-crouching = {
-		1.5,
-		3,
-		-0.6,
-		0.6
-}
+	standing = {
+			1.6,
+			2,
+			-0.6,
+			0.6
+	},
+	steelsight = {
+			1.5,
+			1.5,
+			-0.6,
+			0.6
+	},
+	crouching = {
+			1.5,
+			1.5,
+			-0.6,
+			0.6
+	}
 }
 
 --RPK
@@ -2316,24 +2318,24 @@ self.rpk.AMMO_PICKUP = {4, 8}
 self.rpk.stats.damage = 59
 self.rpk.stats.recoil = 18
 self.rpk.kick = {
-standing = {
-		2.0,
-		4.2,
-		-0.6,
-		0.6
-},
-steelsight = {
-		1.0,
-		2.1,
-		-0.6,
-		0.6
-},
-crouching = {
-		1.5,
-		3,
-		-0.6,
-		0.6
-}
+	standing = {
+			1.4,
+			1.8,
+			-0.6,
+			0.6
+	},
+	steelsight = {
+			1.2,
+			1.2,
+			-0.6,
+			0.6
+	},
+	crouching = {
+			1.2,
+			1.2,
+			-0.6,
+			0.6
+	}
 }
 
 --Microgun

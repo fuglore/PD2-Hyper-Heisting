@@ -16,7 +16,9 @@ local mvec_spread = mvector3.spread
 local mvec3_dot = mvector3.dot
 local mvec3_copy = mvector3.copy
 local mvec3_dis = mvector3.distance
-
+local idstr_gore = Idstring("effects/pd2_mod_hh/particles/character/gore_explosion")
+local idstr_deathresist = Idstring("effects/pd2_mod_hh/particles/iconograph/deathresist")
+local idstr_shieldbreak = Idstring("effects/pd2_mod_hh/particles/character/shield_break")
 
 function CopDamage:is_immune_to_shield_knockback()
 	if self._immune_to_knockback then
@@ -115,6 +117,10 @@ function CopDamage:save(data)
 		if self._hurt_level then
 			data._hurt_level = self._hurt_level
 		end
+		
+		if self._resisted_death then
+			data._resisted_death = self._resisted_death
+		end
 	end
 end
 
@@ -180,6 +186,10 @@ function CopDamage:load(data)
 		
 		if data._hurt_level then
 			self._hurt_level = data._hurt_level
+		end
+		
+		if data._resisted_death then
+			self._resisted_death = data._resisted_death
 		end
 	end
 end
@@ -1573,14 +1583,6 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 
 	local diff_index = Global.game_settings and tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
-	if head and self._char_tweak.DAMAGE_CLAMP_BULLET and damage >= self._char_tweak.DAMAGE_CLAMP_BULLET then
-		self:_spawn_head_gadget({
-			position = attack_data.col_ray.body:position(),
-			rotation = attack_data.col_ray.body:rotation(),
-			dir = attack_data.col_ray.ray
-		})
-	end
-	
 	if head and diff_index <= 5 and self._unit:movement():cool() then
 		damage = self._HEALTH_INIT
 	else
@@ -1594,7 +1596,42 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	local damage_percent = math.ceil(math.clamp(damage / self._HEALTH_INIT_PRECENT, 1, self._HEALTH_GRANULARITY))
 	damage = damage_percent * self._HEALTH_INIT_PRECENT
 	damage, damage_percent = self:_apply_min_health_limit(damage, damage_percent)
-
+	
+	if not self._resisted_death then 
+		if self._char_tweak.resist_death and self._char_tweak.resist_death[attack_data.variant] then
+			if damage >= self._health then
+				if not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then 
+					damage = self._health - 1
+					self._resisted_death = true
+						
+						
+					if head then
+						self:_spawn_head_gadget({
+							position = attack_data.col_ray.body:position(),
+							rotation = attack_data.col_ray.body:rotation(),
+							dir = attack_data.col_ray.ray
+						})
+					end
+					
+					world_g:effect_manager():spawn({
+						effect = idstr_deathresist,
+						position = attack_data.col_ray.position
+					})
+				end
+					
+				world_g:effect_manager():spawn({
+					effect = idstr_shieldbreak,
+					position = attack_data.col_ray.position,
+					normal = math.UP
+				})
+				
+				self._unit:sound():play("bulldozer_visor_shatter")
+				
+				effect_to_sync = 3
+			end
+		end
+	end
+	
 	if self._immortal then
 		damage = math.min(damage, self._health - 1)
 	end
@@ -1805,9 +1842,9 @@ function CopDamage:roll_critical_hit(attack_data)
 	return critical_hit, damage
 end
 
-function CopDamage:play_offset_effects(index)
+function CopDamage:offset_sync(index)
 	--log("executed")
-	local pos = Vector3()
+	local pos = pos or Vector3()
 	
 	if index == 1 then --fine red mist basic	
 		--log("index 1")
@@ -1817,10 +1854,9 @@ function CopDamage:play_offset_effects(index)
 		else
 			mvec3_set(pos, self._unit:movement():m_head_pos())
 		end
-
-	
+		
 		world_g:effect_manager():spawn({
-			effect = Idstring("effects/pd2_mod_hh/particles/character/gore_explosion"),
+			effect = idstr_gore,
 			position = pos,
 			normal = math.UP
 		})
@@ -1836,20 +1872,23 @@ function CopDamage:play_offset_effects(index)
 		end
 	
 		world_g:effect_manager():spawn({
-			effect = Idstring("effects/pd2_mod_hh/particles/character/gore_explosion"),
+			effect = idstr_gore,
 			position = pos,
 			normal = math.UP
 		})
 		
 		self._unit:sound():play("expl_gen_head", nil, nil)
 		self._unit:sound():play("split_gen_body", nil, nil) --play both of these at once if aced for extra impact
+	elseif index == 3 then
+		self._resisted_death = true
+		
+		self._unit:sound():play("bulldozer_visor_shatter", nil, nil)
 	end
-
 end
 
 function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit_offset_height, variant, death)
 	--log("it starts here")
-	self:play_offset_effects(hit_offset_height)
+	self:offset_sync(hit_offset_height)
 
 	if self._dead then
 		--log("it stops here")
@@ -1883,7 +1922,23 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 
 	attack_data.attack_dir = attack_dir
 	local shotgun_push, result = nil
+	
+	if hit_offset_height == 3 then
+		if head then
+			self:_spawn_head_gadget({
+				position = body:position(),
+				rotation = body:rotation(),
+				dir = attack_dir
+			})
+		end
 
+		world_g:effect_manager():spawn({
+			effect = idstr_shieldbreak,
+			position = hit_pos,
+			normal = math.UP
+		})
+	end
+	
 	if death then
 		if head then
 			self:_spawn_head_gadget({

@@ -8052,10 +8052,13 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.experience = {}
 	self.heavy_swat.weapon = presets.weapon.simple
 	self.heavy_swat.detection = presets.detection.enemymook
-	self.heavy_swat.HEALTH_INIT = 20
+	self.heavy_swat.HEALTH_INIT = 15
 	self.heavy_swat.speed_mul = 0.9
 	self.heavy_swat.headshot_dmg_mul = 6
 	self.heavy_swat.ecm_vulnerability = 1
+	self.heavy_swat.resist_death = {
+		bullet = true
+	}
 	self.heavy_swat.ecm_hurts = {
 		ears = {
 			max_duration = 2,
@@ -8066,7 +8069,6 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.damage.doom_hurt_type = "heavy"
 	self.heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
-	self.heavy_swat.DAMAGE_CLAMP_BULLET = 79
 	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.heavy_swat.suppression = presets.suppression.hard_agg
 	self.heavy_swat.surrender = presets.surrender.easy
@@ -8157,10 +8159,13 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	}
 	self.fbi_heavy_swat.weapon = presets.weapon.civil
 	self.fbi_heavy_swat.detection = presets.detection.enemymook
-	self.fbi_heavy_swat.HEALTH_INIT = 20
+	self.fbi_heavy_swat.HEALTH_INIT = 15
 	self.fbi_heavy_swat.speed_mul = 0.9
 	self.fbi_heavy_swat.headshot_dmg_mul = 6
 	self.fbi_heavy_swat.ecm_vulnerability = 1
+	self.fbi_heavy_swat.resist_death = {
+		bullet = true
+	}
 	self.fbi_heavy_swat.ecm_hurts = {
 		ears = {
 			max_duration = 2,
@@ -8171,7 +8176,6 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_heavy_swat.damage.doom_hurt_type = "heavy"
 	self.fbi_heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
-	self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET = 79
 	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.fbi_heavy_swat.suppression = presets.suppression.hard_agg
 	self.fbi_heavy_swat.surrender = presets.surrender.easy
