@@ -7808,7 +7808,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	}
 	self.medic.weapon = presets.weapon.civil
 	self.medic.detection = presets.detection.enemymook
-	self.medic.HEALTH_INIT = 18 --health lowered slightly to keep medics less tanky, tanky medics create unsolvable situations and aren't too fun.
+	self.medic.HEALTH_INIT = 12
 	self.medic.headshot_dmg_mul = 6
 	self.medic.damage.doom_hurt_type = "doom"
 	self.medic.damage.hurt_severity = presets.hurt_severities.specialenemy

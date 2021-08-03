@@ -354,7 +354,7 @@ function CopLogicAttack._upd_combat_movement(data)
 						if not tactics or tactics.flank then
 							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, engage_range) --charge to a position that would put the unit in a flanking position, not a flanking path
 						else
-							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), engage_range, nil, nil, data.pos_rsrv_id, 90)
+							my_data.charge_pos = CopLogicTravel._find_near_free_pos(focus_enemy.nav_tracker:field_position(), engage_range, 2, data.pos_rsrv_id)
 						end
 
 						--my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.optimal, 45, nil, data.pos_rsrv_id)
@@ -517,6 +517,10 @@ function CopLogicAttack._upd_combat_movement(data)
 	else
 		my_data.flank_cover = nil
 	end
+	
+	if not action_taken and move_to_cover and my_data.cover_path then
+		action_taken = CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
+	end
 
 	if not action_taken then
 		if data.important or not my_data.cover_path_failed_t or t - my_data.cover_path_failed_t > 2 then
@@ -569,10 +573,6 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 			end
 		end
-	end
-
-	if not action_taken and move_to_cover and my_data.cover_path then
-		action_taken = CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
 	end
 	
 	if not action_taken then
@@ -719,7 +719,7 @@ function CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 	}
 
 	if not managers.navigation:is_pos_free(reservation) then
-		local to_pos = CopLogicTravel._get_pos_on_wall(data.m_pos, 500, nil, nil, data.pos_rsrv_id)
+		local to_pos = CopLogicTravel._find_near_free_pos(data.m_pos, 500, nil, data.pos_rsrv_id)
 
 		if to_pos then
 			local path = {
@@ -1179,7 +1179,7 @@ function CopLogicAttack._update_cover(data)
 				
 				local min_dis = range * dis_mul
 
-				min_dis = math_min(min_dis - 200, weapon_ranges.optimal)
+				min_dis = math_min(min_dis - 200, long_range)
 				
 				local best_cover_bad_dis = nil
 				
@@ -2172,7 +2172,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 	if data.is_suppressed then
 		return true
 	end
-
+	
 	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
 	if diff_index < 7 then
@@ -2189,9 +2189,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 				return true
 			end
 		end
-	end
-	
-	
+	end	
 end
 
 function CopLogicAttack._set_best_cover(data, my_data, cover_data)

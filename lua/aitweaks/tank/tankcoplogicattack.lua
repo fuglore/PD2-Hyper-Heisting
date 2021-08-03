@@ -297,7 +297,7 @@ local math_random = math.random
 function TankCopLogicAttack._walk_around_menacingly(data, my_data) 
 	local my_pos = data.unit:movement():nav_tracker():field_position()
 	local dis = math_lerp(200, 600, math_random())
-	local menacing_pos = CopLogicTravel._get_pos_on_wall(my_pos, dis, nil, nil, data.pos_rsrv_id, 60)
+	local menacing_pos = CopLogicTravel._find_near_free_pos(my_pos, dis, nil, data.pos_rsrv_id)
 
 	if menacing_pos then
 		CopLogicAttack._cancel_cover_pathing(data, my_data)
@@ -335,15 +335,14 @@ function TankCopLogicAttack._upd_combat_movement(data)
 	local want_to_move_back = my_data.want_to_move_back
 
 	if not action_taken then
-		local should_try_chase = true
+		local enemy_dis = enemy_visible and focus_enemy.dis or focus_enemy.verified_dis
+		local run_dist = 600
+		local speed = enemy_dis < run_dist and "walk" or "run"
+		local should_try_chase = not enemy_visible or enemy_dis > run_dist
 		
 		if should_try_chase then
 			if not my_data.chase_path_failed_t or t - my_data.chase_path_failed_t > 1 then --helps not nuking performance if there's too many Dozers in attack logic
 				if my_data.chase_path then
-					local enemy_dis = enemy_visible and focus_enemy.dis or focus_enemy.verified_dis
-					local run_dist = enemy_visible and 1500 or 800
-					local speed = enemy_dis < run_dist and "walk" or "run"
-
 					action_taken = TankCopLogicAttack._chk_request_action_walk_to_chase_pos(data, my_data, speed)
 				elseif not my_data.chase_path_search_id and focus_enemy.nav_tracker then
 					local height_diff = math_abs(data.m_pos.z - focus_enemy.m_pos.z)
@@ -369,7 +368,7 @@ function TankCopLogicAttack._upd_combat_movement(data)
 							my_data.chase_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, 300)
 						else
 							local chase_pos = focus_enemy.nav_tracker:field_position()
-							local pos_on_wall = CopLogicTravel._get_pos_on_wall(chase_pos, 300, nil, nil, data.pos_rsrv_id, 90)
+							local pos_on_wall = CopLogicTravel._find_near_free_pos(chase_pos, 300, nil, data.pos_rsrv_id)
 
 							if mvec3_not_equal(chase_pos, pos_on_wall) then
 								my_data.chase_pos = pos_on_wall
@@ -401,10 +400,6 @@ function TankCopLogicAttack._upd_combat_movement(data)
 								--[[local line = Draw:brush(Color.blue:with_alpha(0.5), 5)
 								line:cylinder(my_pos, my_data.chase_pos, 25)]]
 
-								local enemy_dis = enemy_visible and focus_enemy.dis or focus_enemy.verified_dis
-								local run_dist = enemy_visible and 1500 or 800
-								local speed = enemy_dis < run_dist and "walk" or "run"
-
 								action_taken = TankCopLogicAttack._chk_request_action_walk_to_chase_pos(data, my_data, speed)
 							else
 								my_data.chase_path_search_id = tostring(data.unit:key()) .. "chase"
@@ -435,7 +430,7 @@ function TankCopLogicAttack._upd_combat_movement(data)
 		end
 		 		
 		action_taken = action_taken or TankCopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
-	elseif my_data.walking_to_chase_pos and not my_data.use_flank_pos_when_chasing then
+	elseif my_data.walking_to_chase_pos then
 		--dozers are not supposed to use running start or stop animations, but if you make a unit use tankcoplogicattack, enable the stopping() check
 		local current_haste = my_data.advancing --[[and not my_data.advancing:stopping()]] and my_data.advancing:haste()
 
@@ -649,7 +644,7 @@ function TankCopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 	}
 
 	if not managers.navigation:is_pos_free(reservation) then
-		local to_pos = CopLogicTravel._get_pos_on_wall(data.m_pos, 500, nil, nil, data.pos_rsrv_id)
+		local to_pos = CopLogicTravel._find_near_free_pos(data.m_pos, 500, nil, data.pos_rsrv_id)
 
 		if to_pos then
 			local path = {

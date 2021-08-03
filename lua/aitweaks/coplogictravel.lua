@@ -1,51 +1,31 @@
---local mvec3_x = mvector3.x
---local mvec3_y = mvector3.y
---local mvec3_z = mvector3.z
 local mvec3_set = mvector3.set
---local mvec3_set_z = mvector3.set_z
---local mvec3_sub = mvector3.subtract
---local mvec3_dir = mvector3.direction
---local mvec3_dot = mvector3.dot
 local mvec3_dis = mvector3.distance
 local mvec3_dis_sq = mvector3.distance_sq
---local mvec3_lerp = mvector3.lerp
---local mvec3_norm = mvector3.normalize
 local mvec3_add = mvector3.add
 local mvec3_mul = mvector3.multiply
---local mvec3_cross = mvector3.cross
---local mvec3_rand_ortho = mvector3.random_orthogonal
 local mvec3_negate = mvector3.negate
 local mvec3_len = mvector3.length
---local mvec3_len_sq = mvector3.length_sq
 local mvec3_cpy = mvector3.copy
---local mvec3_set_stat = mvector3.set_static
 local mvec3_set_length = mvector3.set_length
---local mvec3_angle = mvector3.angle
---local mvec3_step = mvector3.step
 local mvec3_rotate_with = mvector3.rotate_with
 
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
+local tmp_vec3 = Vector3()
+local tmp_vec4 = Vector3()
 
 local math_lerp = math.lerp
 local math_random = math.random
 local math_up = math.UP
 local math_abs = math.abs
---local math_clamp = math.clamp
 local math_min = math.min
---local math_max = math.max
 local math_sign = math.sign
 local math_floor = math.floor
-
---local m_rot_x = mrotation.x
---local m_rot_y = mrotation.y
---local m_rot_z = mrotation.z
 
 local pairs_g = pairs
 local next_g = next
 local table_insert = table.insert
 local table_remove = table.remove
---local table_contains = table.contains
 
 local clone_g = clone
 
@@ -1256,7 +1236,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 					radius = objective.radius
 				}
 			else
-				near_pos = CopLogicTravel._get_pos_on_wall(managers.navigation._nav_segments[objective.nav_seg].pos, 700, nil, nil, data.pos_rsrv_id) ----
+				near_pos = CopLogicTravel._find_near_free_pos(managers.navigation._nav_segments[objective.nav_seg].pos, 700, nil, data.pos_rsrv_id) ----
 				occupation = {
 					type = "defend",
 					seg = objective.nav_seg,
@@ -1325,7 +1305,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 				max_dist = 500
 			end
 
-			local to_pos = CopLogicTravel._get_pos_on_wall(follow_pos, max_dist, nil, nil, data.pos_rsrv_id)
+			local to_pos = CopLogicTravel._find_near_free_pos(follow_pos, max_dist, nil, data.pos_rsrv_id)
 			occupation = {
 				type = "defend",
 				pos = to_pos,
@@ -1416,6 +1396,117 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 	end
 
 	return occupation
+end
+
+local free_pos_dirs = {
+	Vector3(1, 1, 0),
+	Vector3(1, -1, 0),
+	Vector3(1, 0, 0),
+	Vector3(0, 1, 0),
+	Vector3(1, 0.5, 0),
+	Vector3(0.5, 1, 0),
+	Vector3(1, -0.5, 0),
+	Vector3(0.5, -1, 0),
+	Vector3(0.5, 0, 0),
+	Vector3(0, 0.5, 0)
+}
+
+function CopLogicTravel._find_near_free_pos(from_pos, search_dis, max_recurse_i, pos_rsrv_id)
+	max_recurse_i = max_recurse_i or 5
+	
+	if search_dis then
+		search_dis = search_dis / max_recurse_i
+	end
+	
+	search_dis = search_dis or 100
+
+	local nav_manager = managers.navigation
+	local nav_ray_f = nav_manager.raycast
+	local pos_free_f = nav_manager.is_pos_free
+	local fail_position, fail_position_dis, ray_res, traced_pos = nil
+	local rsrv_desc = pos_rsrv_id and {
+		radius = 60,
+		filter = pos_rsrv_id
+	} or {
+		false,
+		60
+	}
+
+	local to_pos, dir_vec = tmp_vec3, tmp_vec4
+	local ray_params = {
+		allow_entry = false,
+		trace = true,
+		pos_from = from_pos
+	}
+	local i, max_i, advance, recurse_i = 1, #free_pos_dirs, false, 0
+
+	while true do
+		local dir = free_pos_dirs[i]
+		mvec3_set(dir_vec, dir)
+
+		if advance then
+			mvec3_negate(dir_vec)
+		end
+
+		mvec3_mul(dir_vec, search_dis)
+		mvec3_set(to_pos, from_pos)
+		mvec3_add(to_pos, dir_vec)
+
+		ray_params.pos_to = to_pos
+		ray_res = nav_ray_f(nav_manager, ray_params)
+		traced_pos = ray_params.trace[1]
+
+		if not ray_res then
+			rsrv_desc.position = traced_pos
+
+			if pos_free_f(nav_manager, rsrv_desc) then
+				return traced_pos
+			end
+		elseif fail_position then
+			local this_dis = mvec3_dis_sq(from_pos, traced_pos)
+
+			if this_dis < fail_position_dis then
+				rsrv_desc.position = traced_pos
+
+				if pos_free_f(nav_manager, rsrv_desc) then
+					fail_position = traced_pos
+					fail_position_dis = this_dis
+				end
+			end
+		else
+			rsrv_desc.position = traced_pos
+
+			if pos_free_f(nav_manager, rsrv_desc) then
+				fail_position = traced_pos
+				fail_position_dis = mvec3_dis_sq(from_pos, traced_pos)
+			end
+		end
+
+		if not advance then
+			advance = true
+		else
+			advance = false
+
+			i = i + 1
+
+			if i > max_i then
+				recurse_i = recurse_i + 1
+
+				if recurse_i > max_recurse_i then
+					break
+				else
+					i = 1
+					search_dis = search_dis + 100
+				end
+			end
+		end
+	end
+
+	if fail_position then
+		return fail_position
+	end
+
+	return from_pos
 end
 
 function CopLogicTravel._get_pos_on_wall(from_pos, max_dist, step_offset, is_recurse, pos_rsrv_id, too_same_dis)
@@ -2274,7 +2365,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 						}
 
 						if not managers.navigation:is_pos_free(rsrv_desc) then
-							to_pos = CopLogicTravel._get_pos_on_wall(to_pos, 700, nil, nil, pos_rsrv_id)
+							to_pos = CopLogicTravel._find_near_free_pos(to_pos, 700, nil, pos_rsrv_id)
 						end
 					end
 				end
@@ -2300,7 +2391,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 					}
 
 					if not managers.navigation:is_pos_free(rsrv_desc) then
-						to_pos = CopLogicTravel._get_pos_on_wall(to_pos, 700, nil, nil, pos_rsrv_id)
+						to_pos = CopLogicTravel._find_near_free_pos(to_pos, 700, nil, pos_rsrv_id)
 					end
 				end
 			end
@@ -2316,7 +2407,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 			}
 
 			if not managers.navigation:is_pos_free(rsrv_desc) then
-				to_pos = CopLogicTravel._get_pos_on_wall(to_pos, nil, nil, nil, pos_rsrv_id)
+				to_pos = CopLogicTravel._find_near_free_pos(to_pos, nil, nil, pos_rsrv_id)
 			end
 
 			wants_reservation = true
@@ -2354,7 +2445,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 			}
 
 			if not managers.navigation:is_pos_free(rsrv_desc) then
-				to_pos = CopLogicTravel._get_pos_on_wall(to_pos, 700, nil, nil, pos_rsrv_id)
+				to_pos = CopLogicTravel._find_near_free_pos(to_pos, 700, nil, pos_rsrv_id)
 			end
 		end
 
