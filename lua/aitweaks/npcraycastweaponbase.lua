@@ -1,34 +1,38 @@
 local trail_func = NPCRaycastWeaponBase.init
+
+local ids_func = Idstring
+local trails = {
+	ids_func("effects/particles/weapons/weapon_trail"),
+	ids_func("effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"),
+	ids_func("effects/pd2_mod_hh/particles/weapons/genstreaks/lotus_streak"),
+	ids_func("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r"),
+	ids_func("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b"),
+	ids_func("effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak"),
+	ids_func("effects/pd2_mod_hh/particles/weapons/genstreaks/healstop_streak")
+}
+
 function NPCRaycastWeaponBase:init(...)
 	trail_func(self, ...)
 	self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(22)
 	self.low_prio = true
 	
 	local weapon_tweak = tweak_data.weapon[self._name_id]
-
-	local trail = Idstring("effects/particles/weapons/weapon_trail")
+	local trail = trails[1]
+	
+	if weapon_tweak then
+		self._hivis = weapon_tweak.hivis
 		
-	if weapon_tweak and weapon_tweak.r_trail then
-		trail = Idstring("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r")
-		self._hivis = true
+		if weapon_tweak.trail_i then
+			trail = trails[weapon_tweak.trail_i]
+		elseif self._hivis then
+			trail = trails[2]
+		end
+	else
+		self:lol_invalid_weapon_id()
+		trail = trails[69]
 	end
 	
-	if weapon_tweak and weapon_tweak.hivis then
-		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak")
-		self._hivis = true
-	end
-	
-	if weapon_tweak and weapon_tweak.lotus_vis then
-		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/lotus_streak")
-	end
-	
-	if weapon_tweak and weapon_tweak.b_trail then
-		trail = Idstring("effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b")
-	end
-	
-	if weapon_tweak and weapon_tweak.no_vis then
-		trail = Idstring("effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak")
-	end
+	self.mangle = weapon_tweak.mangle or nil
 		
 	self._trail_effect_table = {
 		effect = trail,

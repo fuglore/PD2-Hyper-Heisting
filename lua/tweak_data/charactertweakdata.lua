@@ -9946,7 +9946,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"x_kmtac",
 		"trolliam_sidearm",
 		"degle",
-		"m60"
+		"m60",
+		"m37"
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -9998,12 +9999,22 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac"),	
 		Idstring("units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm"),
 		Idstring("units/payday2/weapons/wpn_npc_degle/wpn_npc_degle"),
-		Idstring("units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60")
+		Idstring("units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60"),
+		Idstring("units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37")
 	}
 end
 
 function CharacterTweakData:character_map()
 	local char_map = origin_charmap(self)
+	char_map.ghosts = {
+		path = "units/pd2_mod_zmansion/characters/",
+		list = {
+			"ene_true_zeal_cloaker",
+			"ene_true_zeal_rifle",
+			"ene_true_zeal_shotgun",
+			"ene_true_zeal_taser"
+		}
+	}
 	char_map.additions = {
 		path = "units/payday2/characters/",
 		list = {
@@ -10056,7 +10067,8 @@ function CharacterTweakData:character_map()
 			"ene_medic_heavy_r870",
 			"ene_city_swat_saiga",
 			"ene_medic_carkdown",
-			"ene_true_lotus_master"
+			"ene_true_lotus_master",
+			"ene_ovk_mangler"
 		}
 	}
 	char_map.gitgud = {

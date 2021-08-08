@@ -327,6 +327,8 @@
 		["loading_hh_29"] = "A great way to stun Bulldozers is to pelt them with flames from a Flamethrower for a bit, and then use a gun to guarantee the stun animation!",
 		["loading_hh_30"] = "Flamethrowers are great at locking down enemies into stun animations, and tend to finish common mooks off extremely quickly!",
 		["loading_hh_31"] = "Cloakers make loud breathing sounds from their gas masks when moving around, keep an ear out!",
+		["loading_hh_32"] = "In Hyper Heisting, Shotguns deal a minimum of 10% of their damage at a range! SWAT snipers beware!",
+		["loading_hh_33"] = "In Hyper Heisting, when using Shotguns, raising your weapon's Accuracy above 50 grants you increased minimum damage at higher ranges!",
 		["pattern_truthrunes_title"] = "Truth Runes",				
 		["menu_l_global_value_hyperheist"] = "This is a Hyper Heisting item!",
 		["menu_l_global_value_hyperheisting_desc"] = "This is a Hyper Heisting item!",		

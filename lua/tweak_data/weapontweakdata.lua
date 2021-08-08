@@ -56,51 +56,83 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.degle_npc = deep_clone(self.raging_bull_npc)
 	self.degle_npc.CLIP_AMMO_MAX = 10
 	self.degle_npc.armor_piercing = true	
-	self.degle_npc.sounds.prefix = "deagle_npc"	
-	self.xkill_npc = deep_clone(self.c45_npc)
-	self.xkill_npc.sounds.prefix = "c45_npc"
+	self.degle_npc.sounds.prefix = "deagle_npc"
+	
 	self.trolliam_sidearm_npc = deep_clone(self.saiga_npc)
 	self.trolliam_sidearm_npc.CLIP_AMMO_MAX = 128
 	self.trolliam_sidearm_npc.sounds.prefix = "g17_npc"	
 	self.trolliam_sidearm_npc.muzzleflash = "effects/payday2/particles/weapons/big_762_auto"	
 	self.trolliam_sidearm_npc.DAMAGE = 15 --150 damage it works well trust me
+	
+	self.xkill_npc = deep_clone(self.c45_npc)
+	self.xkill_npc.sounds.prefix = "c45_npc"
+	
 	self.streak_npc = deep_clone(self.c45_npc)
 	self.streak_npc.sounds.prefix = "pl14_npc"	
+	
 	self.kmtac_npc = deep_clone(self.c45_npc)
 	self.kmtac_npc.sounds.prefix = "usp45_npc"		
+	
 	self.x_xkill_npc = deep_clone(self.x_c45_npc)
 	self.x_xkill_npc.sounds.prefix = "c45_npc"	
+	
 	self.x_streak_npc = deep_clone(self.x_c45_npc)
 	self.x_streak_npc.sounds.prefix = "pl14_npc"
+	
 	self.x_kmtac_npc = deep_clone(self.x_c45_npc)
-	self.x_kmtac_npc.sounds.prefix = "usp45_npc"			
-	self.bayou_npc = deep_clone(self.r870_npc)
-	self.bayou_npc.sounds.prefix = "spas_npc"
-	self.quagmire_npc = deep_clone(self.m4_npc)
-	self.quagmire_npc.sounds.prefix = "contraband_npc"
-	self.quagmire_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
-	self.quagmire_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
-	self.galil_npc = deep_clone(self.m4_npc)
-	self.galil_npc.sounds.prefix = "galil_npc"
-	self.galil_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
-	self.galil_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
-	self.silserbu_npc = deep_clone(self.r870_npc)
-	self.silserbu_npc.sounds.prefix = "serbu_npc"
-	self.silserbu_npc.has_suppressor = "suppressed_a"
-	self.smoke_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
-	self.lazer_npc = deep_clone(self.m4_npc)
-	self.lazer_npc.sounds.prefix = "tecci_npc"
-	self.lazer_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_empty"
-	self.lazer_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"
-	self.lazer_npc.b_trail = true
+	self.x_kmtac_npc.sounds.prefix = "usp45_npc"
+
 	self.blazter_npc = deep_clone(self.benelli_npc)
 	self.blazter_npc.sounds.prefix = "boot_npc"
 	self.blazter_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_empty"
 	self.blazter_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"
-	self.blazter_npc.r_trail = true
+	self.blazter_npc.hivis = true
+	self.blazter_npc.trail_i = 4
+	
+	self.bayou_npc = deep_clone(self.r870_npc)
+	self.bayou_npc.sounds.prefix = "spas_npc"
+	self.bayou_npc.hivis = true
+	
+	self.m37_npc = deep_clone(self.r870_npc)
+	self.m37_npc.rays = nil
+	self.m37_npc.sounds.prefix = "m37_npc"
+	self.m37_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_mangler"
+	self.m37_npc.hivis = true
+	self.m37_npc.mangle = true
+	self.m37_npc.trail_i = 7
+	
+	self.silserbu_npc = deep_clone(self.r870_npc)
+	self.silserbu_npc.sounds.prefix = "serbu_npc"
+	self.silserbu_npc.has_suppressor = "suppressed_a"
+	
+	self.quagmire_npc = deep_clone(self.m4_npc)
+	self.quagmire_npc.sounds.prefix = "contraband_npc"
+	self.quagmire_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
+	self.quagmire_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
+	
+	self.galil_npc = deep_clone(self.m4_npc)
+	self.galil_npc.sounds.prefix = "galil_npc"
+	self.galil_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
+	self.galil_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
+
+	self.lazer_npc = deep_clone(self.m4_npc)
+	self.lazer_npc.sounds.prefix = "tecci_npc"
+	self.lazer_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_empty"
+	self.lazer_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"
+	self.lazer_npc.trail_i = 5
+	
+	self.s552_npc = deep_clone(self.m4_npc)
+	self.s552_npc.sounds.prefix = "sig552_npc"
+	self.s552_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
+	self.s552_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
+	
+	self.ak47_ass_npc = deep_clone(self.m4_npc)
+	self.ak47_ass_npc.sounds.prefix = "ak74_npc"
+	self.ak47_ass_npc.muzzleflash = "effects/payday2/particles/weapons/762_auto"
 	
 	--idk where to put this lol--
 	self.beretta92_npc.has_suppressor = "suppressed_b"	
+	self.smoke_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
 	
 	--shotgun reload stuff
 	self.r870_npc.hold = "rifle"
@@ -110,6 +142,10 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.bayou_npc.hold = "rifle"
 	self.bayou_npc.reload = "looped"
 	self.bayou_npc.looped_reload_speed = 0.8
+	
+	self.m37_npc.hold = "rifle"
+	self.m37_npc.reload = "looped"
+	self.m37_npc.looped_reload_speed = 0.8
 	
 	self.benelli_npc.hold = "rifle"
 	self.benelli_npc.reload = "looped"
@@ -164,9 +200,10 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.mp9_npc.suppression = 2.5
 	self.saiga_npc.suppression = 2.5
 	self.r870_npc.suppression = 5
+	self.bayou_npc.suppression = 5
 	self.blazter_npc.suppression = 5
 	self.silserbu_npc.suppression = 5
-	self.benelli_npc.suppression = 2
+	self.benelli_npc.suppression = 5
 	self.m249_npc.suppression = 5
 	self.mini_npc.suppression = 5
 	
@@ -187,27 +224,25 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	--A bunch of NPC weapon clone/consistency issues, fixed in minutes back when I made fixed weapon preset scaling because OVERKILL sucks.
 	self.c45_npc.sounds.prefix = "g17_npc"
 	self.x_c45_npc.sounds.prefix = "g17_npc"
-	self.s552_npc = deep_clone(self.m4_npc)
-	self.s552_npc.sounds.prefix = "sig552_npc"
-	self.s552_npc.muzzleflash = "effects/payday2/particles/weapons/556_auto"
-	self.s552_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
-	self.ak47_ass_npc = deep_clone(self.m4_npc)
-	self.ak47_ass_npc.sounds.prefix = "ak74_npc"
-	self.ak47_ass_npc.muzzleflash = "effects/payday2/particles/weapons/762_auto"
+
 	self.mp5_tactical_npc = deep_clone(self.mp5_npc)
 	self.mp5_tactical_npc.muzzleflash = "effects/payday2/particles/weapons/9mm_auto_silence"
 	self.mp5_tactical_npc.has_suppressor = "suppressed_a"
-	self.mp5_tactical_npc.no_vis = true
+	self.mp5_tactical_npc.trail_i = 6
+	
 	self.ump_npc = deep_clone(self.mp5_npc)
 	self.ump_npc.sounds.prefix = "schakal_npc"
+	
 	self.akmsu_smg_npc = deep_clone(self.mp5_npc)
 	self.akmsu_smg_npc.sounds.prefix = "coal_npc"
 	self.akmsu_smg_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
+	
 	self.asval_smg_npc = deep_clone(self.mp5_npc)
 	self.asval_smg_npc.sounds.prefix = "akmsu_npc"
 	self.asval_smg_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_556"
 	self.asval_smg_npc.muzzleflash = "effects/payday2/particles/weapons/9mm_auto_silence"
 	self.asval_smg_npc.no_vis = true
+	
 	self.mac11_npc.sounds.prefix = "mac10_npc"
 	self.benelli_npc.sounds.prefix = "benelli_m4_npc"
 	
@@ -258,6 +293,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.silserbu_npc.hi_vis = true
 	self.mossberg_npc.hi_vis = true
 	self.bayou_npc.hi_vis = true
+	self.m37_npc.hi_vis = true
 	self.m14_sniper_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.svd_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.svdsil_snp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
@@ -341,7 +377,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.emp_npc.CLIP_AMMO_MAX = 100000
 	self.emp_npc.shell_ejection = "effects/payday2/particles/weapons/shells/shell_empty"
 	self.emp_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/lotus_muzzle"
-	self.emp_npc.lotus_vis = true
+	self.emp_npc.trail_i = 3
 	self.emp_npc.damage = 0
 	self.emp_npc.suppression = 99
 	self.emp_npc.apply_emp = true
@@ -600,6 +636,8 @@ function WeaponTweakData:_set_overkill_145()
 	--shotgun tweaks, fires 4 times before reload on FBI-tier
 	self.r870_npc.CLIP_AMMO_MAX = 4
 	self.bayou_npc.CLIP_AMMO_MAX = 4
+	self.m37_npc.CLIP_AMMO_MAX = 4
+	self.silserbu_npc.CLIP_AMMO_MAX = 4
 	self.benelli_npc.CLIP_AMMO_MAX = 4
 	self.blazter_npc.CLIP_AMMO_MAX = 4
 	
@@ -1695,6 +1733,7 @@ crouching = {
 --Reinfeld
 self.r870.fire_mode_data.fire_rate = 0.35294117647
 self.r870.stats.damage = 190
+self.r870.stats.spread = 12
 self.r870.damage_near = 650
 self.r870.damage_far = 1120
 self.r870.AMMO_PICKUP = {1.8, 2.9}
@@ -1833,8 +1872,8 @@ crouching = {
 
 --Steakout
 self.aa12.stats.damage = 100
-self.aa12.damage_near = 650
-self.aa12.damage_far = 1120
+self.aa12.damage_near = 300
+self.aa12.damage_far = 800
 self.aa12.AMMO_PICKUP = {2, 5}
 self.aa12.AMMO_MAX = 60
 self.aa12.kick = {
@@ -1938,8 +1977,9 @@ crouching = {
 
 --Izhma
 self.saiga.stats.damage = 100
-self.saiga.damage_near = 650
-self.saiga.damage_far = 1120
+self.saiga.stats.spread = 12
+self.saiga.damage_near = 500
+self.saiga.damage_far = 1000
 self.saiga.AMMO_PICKUP = {2, 5}
 self.saiga.AMMO_MAX = 60
 self.saiga.kick = {

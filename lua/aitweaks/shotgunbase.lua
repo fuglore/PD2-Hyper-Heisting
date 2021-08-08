@@ -25,7 +25,15 @@ function ShotgunBase:get_damage_falloff(damage, col_ray, user_unit)
 		inc_range_mul = managers.player:upgrade_value("shotgun", "steelsight_range_inc", 1)
 	end
 	
-	local damage_percent_min = damage * 0.1
+	local spread_mul = 2
+	local spread_index = self._current_stats_indices and self._current_stats_indices.spread or 1
+	local spread_mul_reduction = self:_get_spread_index(current_state, spread_index)
+	
+	spread_mul = spread_mul - spread_mul_reduction
+	inc_range_mul = math.max(1, spread_mul * inc_range_mul)
+	
+	local damage_percent_min = inc_range_mul * 0.1
+	damage_percent_min = damage * damage_percent_min
 	local new_damage = 1 - math_min(1, math_max(0, distance - self._damage_near * inc_range_mul) / (self._damage_far * inc_range_mul))
 	new_damage = new_damage * damage
 	

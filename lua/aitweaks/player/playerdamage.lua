@@ -1006,6 +1006,15 @@ function PlayerDamage:_chk_dmg_too_soon(damage, ...)
 	end
 end
 
+function PlayerDamage:apply_mangle_effect(duration)
+	if not self._mangle_t or duration > self._mangle_t then
+		self._mangle_t = duration
+		self._mangle_intensity_max = duration
+		self._mangle_effect_t = duration + 0.35
+		managers.environment_controller:set_mangle_effect_intensity(255, 255)
+	end
+end
+
 function PlayerDamage:damage_bullet(attack_data)
 	if not self:_chk_can_take_dmg() then
 		return
@@ -1123,6 +1132,13 @@ function PlayerDamage:damage_bullet(attack_data)
 	
 	if attack_data then
 		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
+		
+			if a then
+				if attack_data.weapon_unit and alive(attack_data.weapon_unit:base()) and attack_data.weapon_unit:base().mangle then
+					self:apply_mangle_effect(2.5)
+				end
+			end
+	
 			if tostring(attack_data.attacker_unit:base()._tweak_table) == "akuma" then
 				if alive(player_unit) then
 					--self._akuma_effect = true
@@ -1758,6 +1774,28 @@ function PlayerDamage:update(unit, t, dt)
 		end
 	end
 	
+	if self._mangle_effect_t then
+		self._mangle_effect_t = self._mangle_effect_t - dt
+		
+		if self._mangle_effect_t <= 0 then
+			managers.environment_controller:set_mangle_effect_intensity(0, 0)
+			self._mangle_effect_t = nil
+		else
+			local poison = math.lerp(0, 255, math.clamp(self._mangle_effect_t, 0, 0.35) / 0.35)
+			local darkness = math.lerp(0, 255, math.clamp(self._mangle_effect_t, 0, 0.35) / 0.35)
+			managers.environment_controller:set_mangle_effect_intensity(poison, darkness)
+		end
+	end
+	
+	if self._mangle_t then
+		self._mangle_t = self._mangle_t - dt
+	
+		if self._mangle_t <= 0 then
+			self._mangle_t = nil
+			self._mangle_intensity_max = nil
+		end
+	end
+	
 	if HH.need_to_reset_visuals then
 		managers.environment_controller:set_chromatic_value_lerp(0)
 		managers.environment_controller:set_contrast_value_lerp(0)
@@ -1947,10 +1985,14 @@ function PlayerDamage:_upd_health_regen(t, dt)
 end
 
 function PlayerDamage:restore_health(health_restored, is_static, chk_health_ratio)
-	if chk_health_ratio and managers.player:is_damage_health_ratio_active(self:health_ratio()) then
+	if self._mangle_t then
 		return false
 	end
 
+	if chk_health_ratio and managers.player:is_damage_health_ratio_active(self:health_ratio()) then
+		return false
+	end
+	
 	if managers.player:has_category_upgrade("player", "antilethal_meds") then
 		health_restored = health_restored * 2
 	end
@@ -1961,6 +2003,23 @@ function PlayerDamage:restore_health(health_restored, is_static, chk_health_rati
 		local max_health = self:_max_health()
 
 		return self:change_health(max_health * health_restored * self._healing_reduction)
+	end
+end
+
+function PlayerDamage:restore_armor(armor_restored)
+	if self._mangle_t or self._dead or self._bleed_out or self._check_berserker_done then
+		return
+	end
+
+	local max_armor = self:_max_armor()
+	local armor = self:get_real_armor()
+	local new_armor = math.min(armor + armor_restored, max_armor)
+
+	self:set_armor(new_armor)
+	self:_send_set_armor()
+
+	if self._unit:sound() and new_armor ~= armor and new_armor == max_armor then
+		self._unit:sound():play("shield_full_indicator")
 	end
 end
 
