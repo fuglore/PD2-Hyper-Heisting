@@ -211,17 +211,10 @@ Hooks:Add("NetworkReceivedData", "shin_receive_network_data", function(sender, m
 								end
 								
 								local inventory = player:inventory()
-							
-								if inventory then
-									local available_selections = {}
-
+										
+								if inventory then						
 									for i, weapon in pairs(inventory:available_selections()) do
-										available_selections[#available_selections] = weapon
-									end
-									
-									for i = 1, #available_selections do
-										local weapon = available_selections[i]
-										weapon.unit:base():add_ammo_from_bag(0.5) --3 instead of 2 in case theres 
+										weapon.unit:base():add_ratio_plus_ammo(0.5)
 									end
 								end
 							end

@@ -129,6 +129,18 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 	
 	self.values.temporary.overkill_damage_multiplier = {{1.50, 3}}
 	self.values.pistol.damage_addend = {0.5, 1}
+	self.values.pistol.stacking_hit_damage_multiplier = {
+		{
+			max_stacks = 1,
+			max_time = 1;25,
+			damage_bonus = 1.4
+		},
+		{
+			max_stacks = 1,
+			max_time = 2,
+			damage_bonus = 1.4
+		}
+	}
 	--[[
 		self.values.player.head_shot_ammo_return = {
 		{
