@@ -299,19 +299,55 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		
 		local time_to_chk = 0.2 * time_mult	
 		
-		if damage > 30 then
+		if damage >= 1600 then
+			time_to_chk = 8 * time_mult
+			hurt_level_add = 160
+		elseif damage >= 800 then
+			time_to_chk = 8 * time_mult
+			hurt_level_add = 80
+		elseif damage >= 120 then
+			time_to_chk = 8 * time_mult
+			hurt_level_add = 26
+		elseif damage >= 110 then
+			time_to_chk = 6 * time_mult
+			hurt_level_add = 24
+		elseif damage >= 100 then
+			time_to_chk = 4 * time_mult
+			hurt_level_add = 22
+		elseif damage >= 90 then
+			time_to_chk = 3.7 * time_mult
+			hurt_level_add = 20
+		elseif damage >= 80 then
+			time_to_chk = 3.35 * time_mult
+			hurt_level_add = 18
+		elseif damage >= 70 then
+			time_to_chk = 3 * time_mult
+			hurt_level_add = 16
+		elseif damage >= 60 then
+			time_to_chk = 2.7 * time_mult
+			hurt_level_add = 14
+		elseif damage >= 50 then
+			time_to_chk = 2.35 * time_mult
+			hurt_level_add = 12
+		elseif damage >= 40 then
 			time_to_chk = 2 * time_mult
+			hurt_level_add = 10
+		elseif damage >= 30 then
+			time_to_chk = 1.7 * time_mult
 			hurt_level_add = 8
-		elseif damage > 20 then
+		elseif damage >= 20 then
 			time_to_chk = 1.35 * time_mult
 			hurt_level_add = 6
-		elseif damage > 12 then
+		elseif damage >= 12 then
 			time_to_chk = 1.2 * time_mult
 			hurt_level_add = 4
-		elseif damage > 8 then
+		elseif damage >= 8 then
 			time_to_chk = 1 * time_mult
+			hurt_level_add = 3
+		elseif damage >= 6 then
+			time_to_chk = 0.8 * time_mult
 			hurt_level_add = 2
-		elseif damage > 4 then
+		elseif damage >= 4 then
 			time_to_chk = 0.4 * time_mult
 			hurt_level_add = 1
 		end
@@ -743,20 +779,56 @@ function CopDamage:_on_damage_received(damage_info)
 			end
 				
 			local time_to_chk = 0.2 * time_mult	
-			
-			if damage > 30 then
+		
+			if damage >= 1600 then
+				time_to_chk = 8 * time_mult
+				hurt_level_add = 160
+			elseif damage >= 800 then
+				time_to_chk = 8 * time_mult
+				hurt_level_add = 80
+			elseif damage >= 120 then
+				time_to_chk = 8 * time_mult
+				hurt_level_add = 26
+			elseif damage >= 110 then
+				time_to_chk = 6 * time_mult
+				hurt_level_add = 24
+			elseif damage >= 100 then
+				time_to_chk = 4 * time_mult
+				hurt_level_add = 22
+			elseif damage >= 90 then
+				time_to_chk = 3.7 * time_mult
+				hurt_level_add = 20
+			elseif damage >= 80 then
+				time_to_chk = 3.35 * time_mult
+				hurt_level_add = 18
+			elseif damage >= 70 then
+				time_to_chk = 3 * time_mult
+				hurt_level_add = 16
+			elseif damage >= 60 then
+				time_to_chk = 2.7 * time_mult
+				hurt_level_add = 14
+			elseif damage >= 50 then
+				time_to_chk = 2.35 * time_mult
+				hurt_level_add = 12
+			elseif damage >= 40 then
 				time_to_chk = 2 * time_mult
+				hurt_level_add = 10
+			elseif damage >= 30 then
+				time_to_chk = 1.7 * time_mult
 				hurt_level_add = 8
-			elseif damage > 20 then
+			elseif damage >= 20 then
 				time_to_chk = 1.35 * time_mult
 				hurt_level_add = 6
-			elseif damage > 12 then
+			elseif damage >= 12 then
 				time_to_chk = 1.2 * time_mult
 				hurt_level_add = 4
-			elseif damage > 8 then
+			elseif damage >= 8 then
 				time_to_chk = 1 * time_mult
+				hurt_level_add = 3
+			elseif damage >= 6 then
+				time_to_chk = 0.8 * time_mult
 				hurt_level_add = 2
-			elseif damage > 4 then
+			elseif damage >= 4 then
 				time_to_chk = 0.4 * time_mult
 				hurt_level_add = 1
 			end
