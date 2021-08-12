@@ -722,7 +722,7 @@ function CopDamage:_on_damage_received(damage_info)
 						
 						if alive(damage_info.weapon_unit) then
 							local weapon_tweak = tweak_data.weapon[damage_info.weapon_unit:base():get_name_id()] 
-							fire_variant = weapon_tweak.fire_variant or "fire"
+							fire_variant = weapon_tweak and weapon_tweak.fire_variant or "fire"
 							money = fire_variant == "money"
 						else
 							fire_variant = "fire"
@@ -752,7 +752,7 @@ function CopDamage:_on_damage_received(damage_info)
 						
 						if alive(damage_info.weapon_unit) then
 							local weapon_tweak = tweak_data.weapon[damage_info.weapon_unit:base():get_name_id()] 
-							fire_variant = weapon_tweak.fire_variant or "fire"
+							fire_variant = weapon_tweak and weapon_tweak.fire_variant or "fire"
 							money = fire_variant == "money"
 						else
 							fire_variant = "fire"
