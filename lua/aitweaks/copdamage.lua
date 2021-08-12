@@ -717,8 +717,23 @@ function CopDamage:_on_damage_received(damage_info)
 			if not damage_info.result_type or damage_info.result_type ~= "healed" and damage_info.result_type ~= "death" then
 				if self._unit:base():has_tag("takedown") and self._unit:base():has_tag("special") then
 					if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
+						local fire_variant = nil
+						local money = nil
+						
+						if alive(damage_info.weapon_unit) then
+							local weapon_tweak = tweak_data.weapon[damage_info.weapon_unit:base():get_name_id()] 
+							fire_variant = weapon_tweak.fire_variant or "fire"
+							money = fire_variant == "money"
+						else
+							fire_variant = "fire"
+						end
+
 						if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
-							self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+							if money then
+								self._unit:sound():say("moneythrower_hurt", nil, true, nil, nil)
+							else
+								self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+							end
 							self._next_allowed_burnhurt_t = t + 3
 							self._next_allowed_hurt_t = t + math.random(1, 2)
 						end
@@ -732,8 +747,24 @@ function CopDamage:_on_damage_received(damage_info)
 					end
 				else
 					if damage_info.is_fire_dot_damage or damage_info.variant == "fire" then
+						local fire_variant = nil
+						local money = nil
+						
+						if alive(damage_info.weapon_unit) then
+							local weapon_tweak = tweak_data.weapon[damage_info.weapon_unit:base():get_name_id()] 
+							fire_variant = weapon_tweak.fire_variant or "fire"
+							money = fire_variant == "money"
+						else
+							fire_variant = "fire"
+						end
+					
 						if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
-							self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+							if money then
+								self._unit:sound():say("moneythrower_hurt", nil, true, nil, nil)
+							else
+								self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+							end
+							
 							self._next_allowed_burnhurt_t = t + 1
 							self._next_allowed_hurt_t = t + math.random(1, 2)
 						end
@@ -2734,7 +2765,8 @@ function CopDamage:sync_damage_fire(attacker_unit, damage_percent, start_dot_dan
 	local is_fire_dot_damage = false
 	local attack_data = {
 		variant = variant,
-		attacker_unit = attacker_unit
+		attacker_unit = attacker_unit,
+		weapon_unit = attacker_unit and attacker_unit:inventory() and attacker_unit:inventory():equipped_unit()
 	}
 	local result = nil
 

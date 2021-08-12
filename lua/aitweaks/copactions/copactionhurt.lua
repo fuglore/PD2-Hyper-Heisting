@@ -420,18 +420,27 @@ function CopActionHurt:init(action_desc, common_data)
 				if common_data.ext_anim.ragdoll or common_data.ext_movement:died_on_rope() then
 					self:force_ragdoll()
 				else
-					redir_res = common_data.ext_movement:play_redirect("death_fire")
+					local fire_variant = alive(action_desc.weapon_unit) and (tweak_data.weapon[action_desc.weapon_unit:base():get_name_id()] or tweak_data.weapon.amcar).fire_variant or "fire"
+					
+					redir_res = common_data.ext_movement:play_redirect("death_" .. fire_variant)
 
 					if not redir_res then
 						--debug_pause("[CopActionHurt:init] death_fire redirect failed in", common_data.machine:segment_state(ids_base))
 
 						return
 					end
+					
+					if fire_variant == "money" then
+						if alive(self._unit) and self._unit:inventory() then
+							self._unit:inventory():set_visibility_state(false)
+						end
+					end
 
 					self:_prepare_ragdoll()
 
 					variant = 1
-					local variant_count = #CopActionHurt.fire_death_anim_variants_length or 5
+					
+					local variant_count = fire_variant == "money" and 10 or 5
 
 					if variant_count > 1 then
 						variant = self:_pseudorandom(variant_count)
@@ -452,7 +461,7 @@ function CopActionHurt:init(action_desc, common_data)
 					variant = 0
 				end
 
-				self:_start_enemy_fire_effect_on_death(variant)
+				self:_start_enemy_fire_effect_on_death(variant, action_desc)
 				managers.fire:check_achievemnts(common_data.unit, t)
 			elseif action_desc.variant == "poison" or action_desc.variant == "dot" then
 				keep_checking = nil
@@ -885,10 +894,8 @@ function CopActionHurt:init(action_desc, common_data)
 	end
 
 	if not common_data.ext_base.nick_name then
-		if action_desc.variant == "fire" then
-			if action_type == "fire_hurt" then
-				common_data.unit:sound():say("burnhurt")
-			elseif action_type == "death" then
+		if action_desc.variant == "fire" then		
+			if action_type == "death" then
 				if common_data.ext_base:has_tag("tank") then
 					if common_data.char_tweak.die_sound_event then
 						common_data.unit:sound():say(common_data.char_tweak.die_sound_event)
@@ -896,7 +903,10 @@ function CopActionHurt:init(action_desc, common_data)
 						common_data.unit:sound():say("x02a_any_3p")
 					end
 				else
-					common_data.unit:sound():say("burndeath")
+					local fire_variant = alive(action_desc.weapon_unit) and (tweak_data.weapon[action_desc.weapon_unit:base():get_name_id()] or tweak_data.weapon.amcar).fire_variant or "fire"
+					
+					local deathstring = fire_variant == "money" and "moneythrower_death" or "burndeath"
+					common_data.unit:sound():say(deathstring, nil, fire_variant == "money")
 
 					if common_data.ext_base:has_tag("spooc") and common_data.char_tweak.die_sound_event then
 						common_data.unit:sound():play(common_data.char_tweak.die_sound_event)
@@ -1157,7 +1167,7 @@ end
 
 local tmp_used_flame_objects = nil
 
-function CopActionHurt:_start_enemy_fire_effect_on_death(death_variant)
+function CopActionHurt:_start_enemy_fire_effect_on_death(death_variant, action_desc)
 	local effect_tbl = tweak_data.fire.fire_death_anims[death_variant] or tweak_data.fire.fire_death_anims[0]
 	local num_objects = #tweak_data.fire.fire_bones
 	local num_effects = math_random(3, num_objects)
@@ -1182,7 +1192,9 @@ function CopActionHurt:_start_enemy_fire_effect_on_death(death_variant)
 		local bone = self._unit:get_object(Idstring(tweak_data.fire.fire_bones[idx]))
 
 		if bone then
-			local effect_name = tweak_data.fire.effects[effect_tbl.effect][tweak_data.fire.effects_cost[i]]
+			local fire_variant = alive(action_desc.weapon_unit) and (tweak_data.weapon[action_desc.weapon_unit:base():get_name_id()] or tweak_data.weapon.amcar).fire_variant
+			local effect_type = fire_variant and "short_" .. fire_variant or effect_tbl.effect
+			local effect_name = tweak_data.fire.effects[effect_type][tweak_data.fire.effects_cost[i]]
 			effect_id = World:effect_manager():spawn({
 				effect = Idstring(effect_name),
 				parent = bone
