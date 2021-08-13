@@ -3300,6 +3300,52 @@ crouching = {
 }}
 end
 
+--Flamethrower
+self.flamethrower_mk2.stats.damage = 16
+self.flamethrower_mk2.AMMO_PICKUP = {self.flamethrower_mk2.CLIP_AMMO_MAX / 20, self.flamethrower_mk2.CLIP_AMMO_MAX / 10}
+self.flamethrower_mk2.kick = {
+	standing = {
+		0.2,
+		0.2,
+		-0.2,
+		0.2
+	}
+}
+self.flamethrower_mk2.kick.crouching = self.flamethrower_mk2.kick.standing
+self.flamethrower_mk2.kick.steelsight = {
+	0.1,
+	0.1,
+	-0.1,
+	0.1
+}
+self.flamethrower_mk2.shake = {
+	fire_multiplier = 0.1,
+	fire_steelsight_multiplier = 0.05
+}
+
+--MA-17 Flamethrower
+self.system.stats.damage = 14
+self.system.AMMO_PICKUP = {self.system.CLIP_AMMO_MAX / 20, self.system.CLIP_AMMO_MAX / 10}
+self.system.kick = {
+	standing = {
+		0.2,
+		0.2,
+		-0.2,
+		0.2
+	}
+}
+self.system.kick.crouching = self.system.kick.standing
+self.system.kick.steelsight = {
+	0.1,
+	0.1,
+	-0.1,
+	0.1
+}
+self.system.shake = {
+	fire_multiplier = 0.1,
+	fire_steelsight_multiplier = 0.05
+}
+
 --Cashthrower
 self.money.stats.damage = 46
 self.money.CLIP_AMMO_MAX = 200
@@ -3319,6 +3365,10 @@ self.money.kick.steelsight = {
 	0.2,
 	-0.2,
 	0.2
+}
+self.money.shake = {
+	fire_multiplier = 0.2,
+	fire_steelsight_multiplier = 0.1
 }
 
 self.stats.recoil = {
