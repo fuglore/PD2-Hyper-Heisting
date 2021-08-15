@@ -814,7 +814,9 @@ function GroupAIStateBase:reset_heat_bonus()
 		end
 		
 		local small_map = self._small_map
-			
+		
+		local value = 64
+		
 		if self._force_pool then
 			if small_map then
 				value = self._force_pool / 2

@@ -1838,12 +1838,21 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 			return
 		end
 
-		local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
-
-		if cat_data.special_type and not cat_data.is_captain and spawn_limit < self:_get_special_unit_type_count(cat_data.special_type) + (spawn_entry.amount_min or 0) then
-			spawn_group.delay_t = self._t + 2
-
-			return
+		if cat_data.special_type and not cat_data.is_captain then
+			local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
+		
+			if self._spawned_megatank_t and cat_data.special_type == "tank" and self._spawned_megatank_t > self._t then
+				log("dick")
+				spawn_group.delay_t = self._t + 2
+				
+				return
+			elseif spawn_limit > self:_get_special_unit_type_count(cat_data.special_type) + (spawn_entry.amount_min or 0) then
+				total_wgt = total_wgt + spawn_entry.freq
+				i = i + 1
+			else
+				spawn_group.delay_t = self._t + 2
+				return
+			end
 		else
 			total_wgt = total_wgt + spawn_entry.freq
 			i = i + 1
@@ -1922,13 +1931,53 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 
 		if spawn_entry.amount_max then
 			spawn_entry.amount_max = spawn_entry.amount_max - 1
+			
+			local cat_data = unit_categories[spawn_entry.unit]
 
+			if not cat_data then
+				debug_pause("[GroupAIStateBesiege:_spawn_in_group] unit category doesn't exist:", spawn_entry.unit)
+
+				return
+			end
+			
+			if cat_data.special_type then
+				local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
+				
+				if spawn_limit > self:_get_special_unit_type_count(cat_data.special_type) + spawn_amount_mine then
+					table.remove(valid_unit_types, i)
+
+					total_wgt = total_wgt - spawn_entry.freq
+
+					return true
+				end
+			end
+			
 			if spawn_entry.amount_max == 0 then
 				table.remove(valid_unit_types, i)
 
 				total_wgt = total_wgt - spawn_entry.freq
 
 				return true
+			end
+		else
+			local cat_data = unit_categories[spawn_entry.unit]
+
+			if not cat_data then
+				debug_pause("[GroupAIStateBesiege:_spawn_in_group] unit category doesn't exist:", spawn_entry.unit)
+
+				return
+			end
+			
+			if cat_data.special_type then
+				local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
+				
+				if spawn_limit > self:_get_special_unit_type_count(cat_data.special_type) + spawn_amount_mine then
+					table.remove(valid_unit_types, i)
+
+					total_wgt = total_wgt - spawn_entry.freq
+
+					return true
+				end
 			end
 		end
 	end
@@ -3502,7 +3551,11 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 							u_data.tactics_map[tactic_name] = true
 						end
 					end
-
+					
+					if spawned_unit:base()._tweak_table == "tank_mini" or spawned_unit:base()._tweak_table == "tank_medic" then
+						self._spawned_megatank_t = self._t + 30
+					end
+					
 					spawned_unit:brain():set_spawn_entry(spawn_entry, u_data.tactics_map)
 
 					u_data.rank = spawn_entry.rank
