@@ -18,5 +18,30 @@ Hooks:PostHook(InteractionTweakData, "init", "hh_interactions", function(self, t
 		self.gage_assignment.sound_start = "money_grab"	
 		self.gage_assignment.sound_event = "money_grab"	
 		self.gage_assignment.sound_done = "money_grab"	
+		
+		self.pick_lock_easy.timer = 5
+		self.pick_lock_easy_no_skill.timer = 5
+		self.pick_lock_deposit_transport.timer = 6
+		self.pick_lock_hard.timer = 10
+		self.pick_lock_hard_no_skill.timer = 10
+		
+		self.drill_upgrade.timer = 6
+		self.drill_jammed.timer = 6
+		self.glass_cutter_jammed.timer = 6
+		self.hack_ipad_bp1.timer = 6
+		self.hack_ipad_jammed.timer = 6
+		self.security_station_jammed.timer = 6
+		
+		self.hold_moon_attach_winch.timer = 2
+		self.hold_friend_attach_winch.timer = 2
+		self.rewire_friend_fuse_box.timer = 4
+		self.hold_born_receive_item_blow_torch.timer = 0
+		self.hold_born_search_tools.timer = 3
+		self.hold_turn_off_gas.timer = 3
+		self.hold_remove_hand.timer = 3
+		self.dark_screw_down.timer = 1
+		self.drk_hold_hack_computer.timer = 5
+		self.man_trunk_picklock.timer = 15
+		self.hold_insert_paper_roll.timer = 2
 	end
 end)

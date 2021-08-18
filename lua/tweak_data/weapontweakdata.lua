@@ -308,6 +308,9 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.rpk_lmg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	self.mossberg_npc.muzzleflash = "effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"
 	
+	self.chernobog_npc = deep_clone(self.saiga_npc)
+	self.chernobog_npc.sounds.prefix = "aa12_npc"	
+	
 	self.swat_van_turret_module.DAMAGE_MUL_RANGE = {
 		{
 			800,
@@ -691,6 +694,7 @@ end
 function WeaponTweakData:_set_easy_wish()
 	--saiga tweak
 	self.saiga_npc.CLIP_AMMO_MAX = 16
+	self.chernobog_npc.CLIP_AMMO_MAX = 16
 	
 	--tweaks for smgs
 	self.mp5_npc.CLIP_AMMO_MAX = 64
@@ -782,6 +786,7 @@ end
 function WeaponTweakData:_set_overkill_290()
 	--saiga tweak
 	self.saiga_npc.CLIP_AMMO_MAX = 16
+	self.chernobog_npc.CLIP_AMMO_MAX = 16
 	
 	--tweaks for smgs
 	self.mp5_npc.CLIP_AMMO_MAX = 64
@@ -873,6 +878,7 @@ end
 function WeaponTweakData:_set_sm_wish()
 	--saiga tweak
 	self.saiga_npc.CLIP_AMMO_MAX = 32
+	self.chernobog_npc.CLIP_AMMO_MAX = 32
 	
 	--tweaks for smgs
 	self.mp5_npc.CLIP_AMMO_MAX = 64
@@ -2169,6 +2175,7 @@ crouching = {
 }
 
 --Street Sweeper
+self.striker.has_magazine = true --julesyes the rota can do it so this can too
 self.striker.stats.damage = 130
 self.striker.damage_near = 550
 self.striker.damage_far = 1050

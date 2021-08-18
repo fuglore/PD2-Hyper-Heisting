@@ -719,8 +719,8 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			self._ext_damage._invulnerability_t = t + 4
 
 			if self._unit:contour() then
-				self._unit:contour():add("medic_heal", 4)
-				self._unit:contour():flash("medic_heal", 0.15)
+				self._unit:contour():add("medic_heal_anarchy", 4)
+				self._unit:contour():flash("medic_heal_anarchy", 0.15)
 			end
 		else
 			self._ext_damage._invulnerability_t = t + 2

@@ -32,7 +32,7 @@ end
 
 function CopDamage:_apply_damage_reduction(damage)
 	local damage_reduction = self._unit:movement():team().damage_reduction or 0
-
+	
 	if damage_reduction > 0 then
 		damage = damage * (1 - damage_reduction)
 	end
@@ -43,6 +43,10 @@ function CopDamage:_apply_damage_reduction(damage)
 	
 	if self._punk_effect then
 		damage = damage * 0.25
+	end
+	
+	if self._invulnerability_t and self._invulnerability_t > TimerManager:game():time()  then
+		damage = damage * 0.1
 	end
 
 	return damage
@@ -1033,7 +1037,7 @@ if PD2THHSHIN and PD2THHSHIN:IsHelmetEnabled() then
 end
 
 function CopDamage:damage_melee(attack_data)
-	if self._dead or self._invulnerable or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then
+	if self._dead or self._invulnerable then
 		return
 	end
 
@@ -1491,7 +1495,7 @@ function CopDamage:chk_killshot(attacker_unit, variant, headshot, weapon_id)
 end
 
 function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do because of post-hooks not working right.
-	if self._dead or self._invulnerable or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then
+	if self._dead or self._invulnerable then
 		return
 	end
 
@@ -2171,7 +2175,7 @@ function CopDamage:sync_damage_bullet(attacker_unit, damage_percent, i_body, hit
 end
 
 function CopDamage:damage_simple(attack_data)
-	if self._dead or self._invulnerable or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then
+	if self._dead or self._invulnerable then
 		return
 	end
 
@@ -2420,7 +2424,7 @@ end
 function CopDamage:stun_hit(attack_data)
 	local anim_data = self._unit:anim_data()
 
-	if self._dead or self._invulnerable or (anim_data and (anim_data.act or anim_data.surrender or anim_data.hands_back or anim_data.hands_tied)) or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then --dead, invulnerable, is acting or is intimidated
+	if self._dead or self._invulnerable or (anim_data and (anim_data.act or anim_data.surrender or anim_data.hands_back or anim_data.hands_tied)) then --dead, invulnerable, is acting or is intimidated
 		return
 	end
 
@@ -2499,7 +2503,7 @@ function CopDamage:sync_damage_stun(attacker_unit, damage_percent, i_attack_vari
 end
 
 function CopDamage:damage_fire(attack_data)
-	if self._dead or self._invulnerable or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then
+	if self._dead or self._invulnerable then
 		return
 	end
 
@@ -2920,7 +2924,7 @@ function CopDamage:is_friendly_fire(unit)
 end
 
 function CopDamage:damage_explosion(attack_data)
-	if self._dead or self._invulnerable or attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:base().is_cop_grenade or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then
+	if self._dead or self._invulnerable or attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:base().is_cop_grenade then
 		return
 	end
 	
@@ -3276,7 +3280,7 @@ function CopDamage:sync_damage_explosion(attacker_unit, damage_percent, i_attack
 end
 
 function CopDamage:damage_dot(attack_data)
-	if self._dead or self._invulnerable or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then
+	if self._dead or self._invulnerable then
 		return
 	end
 
@@ -3467,7 +3471,7 @@ function CopDamage:sync_damage_dot(attacker_unit, damage_percent, death, variant
 end
 
 function CopDamage:damage_tase(attack_data)
-	if self._dead or self._invulnerable or self._invulnerability_t and self._invulnerability_t > TimerManager:game():time() then
+	if self._dead or self._invulnerable then
 		return
 	end
 
