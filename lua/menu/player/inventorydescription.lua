@@ -45,12 +45,29 @@ function WeaponDescription._get_skill_stats(name, category, slot, base_stats, mo
 				local has_magazine = weapon_tweak.has_magazine
 				local add_modifier = false
 
-				if is_weapon_category(weapon_tweak, "shotgun") and has_magazine then
-					skill_stats[stat.name].value = skill_stats[stat.name].value + managers.player:upgrade_value("shotgun", "magazine_capacity_inc", 0)
-					add_modifier = managers.player:has_category_upgrade("shotgun", "magazine_capacity_inc")
+				if is_weapon_category(weapon_tweak, "shotgun") then
+					if has_magazine then
+						skill_stats[stat.name].value = skill_stats[stat.name].value + managers.player:upgrade_value("shotgun", "magazine_capacity_inc", 0)
+						add_modifier = managers.player:has_category_upgrade("shotgun", "magazine_capacity_inc")
 
-					if primary_category == "akimbo" then
-						skill_stats[stat.name].value = skill_stats[stat.name].value * 2
+						if primary_category == "akimbo" then
+							skill_stats[stat.name].value = skill_stats[stat.name].value * 2
+						end
+					end
+					
+					local mag_mul = managers.player:upgrade_value("player", "cool_hunting_basic", 1)
+					
+					if mag_mul > 1 then
+						local to_add = weapon_tweak.CLIP_AMMO_MAX * mag_mul
+						to_add = to_add - weapon_tweak.CLIP_AMMO_MAX
+						
+						to_add = math.ceil(to_add)
+						
+						if to_add >= 1 then
+							add_modifier = true
+						
+							skill_stats[stat.name].value = skill_stats[stat.name].value + to_add
+						end
 					end
 				elseif is_weapon_category(weapon_tweak, "pistol") and managers.player:has_category_upgrade("pistol", "magazine_capacity_inc") then
 					skill_stats[stat.name].value = skill_stats[stat.name].value + managers.player:upgrade_value("pistol", "magazine_capacity_inc", 0)

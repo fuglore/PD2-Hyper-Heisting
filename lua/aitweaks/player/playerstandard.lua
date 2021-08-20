@@ -33,13 +33,17 @@ function PlayerStandard:on_melee_stun(t, timer)
 		return
 	end
 
+	self._melee_stunned_expire_t = t + timer
+	self._melee_stunned = true
+
 	self:_interupt_action_reload(t)
 	self:_interupt_action_steelsight(t)
 	self:_interupt_action_running(t)
 	self:_interupt_action_charging_weapon(t)
-
-	self._melee_stunned_expire_t = t + timer
-	self._melee_stunned = true
+	self:_interupt_action_melee(t)
+	self:_interupt_action_interact(t)
+	self:_interupt_action_throw_grenade(t)
+	self:_interupt_action_throw_projectile(t)
 
 	self:_play_unequip_animation()
 end
@@ -307,18 +311,10 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 		multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "increased_movement_speed", 1)
 	end
 	
-	if managers.player:has_category_upgrade("player", "criticalmode") then
-		multiplier = multiplier * 1.25
-	end
-	
 	if self._unit:movement():is_above_stamina_threshold() then
 		if self._wave_dash_t and self._running then
 			multiplier = multiplier * 1.25
 		end
-	end
-	
-	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
-		multiplier = multiplier * managers.player:upgrade_value("player", "perkdeck_movespeed_mult", 1)
 	end
 	
 	local final_speed = movement_speed * multiplier
@@ -1869,6 +1865,10 @@ function PlayerStandard:_get_swap_speed_multiplier()
 
 	multiplier = multiplier * managers.player:upgrade_value("team", "crew_faster_swap", 1)
 	multiplier = multiplier * managers.player:upgrade_value("player", "muscle_memory_basic", 1)
+	
+	if self._running then
+		multiplier = multiplier * managers.player:upgrade_value("player", "hq_grease_basic", 1)
+	end
 
 	if managers.player:has_activate_temporary_upgrade("temporary", "swap_weapon_faster") then
 		multiplier = multiplier * managers.player:temporary_upgrade_value("temporary", "swap_weapon_faster", 1)
@@ -1951,6 +1951,34 @@ function PlayerStandard:_start_action_equip_weapon(t)
 	self._equipped_unit:base():tweak_data_anim_stop("unequip")
 	self._equipped_unit:base():tweak_data_anim_play("equip", speed_multiplier)
 	managers.upgrades:setup_current_weapon()
+end
+
+function PlayerStandard:_action_interact_forbidden()
+	local action_forbidden = self:chk_action_forbidden("interact") or self._unit:base():stats_screen_visible() or self:_interacting() or self._ext_movement:has_carry_restriction() or self:is_deploying() or self:_changing_weapon() or self:_is_throwing_projectile() or self:_is_meleeing() or self:_on_zipline() or self._melee_stunned
+
+	return action_forbidden
+end
+
+function PlayerStandard:_check_action_throw_grenade(t, input)
+	local action_wanted = input.btn_throw_grenade_press
+
+	if not action_wanted then
+		return
+	end
+
+	if not managers.player:can_throw_grenade() then
+		return
+	end
+
+	local action_forbidden = not PlayerBase.USE_GRENADES or self:chk_action_forbidden("interact") or self._unit:base():stats_screen_visible() or self:_is_throwing_grenade() or self:_interacting() or self:is_deploying() or self:_changing_weapon() or self:_is_meleeing() or self:_is_using_bipod() or self._melee_stunned
+
+	if action_forbidden then
+		return
+	end
+
+	self:_start_action_throw_grenade(t, input)
+
+	return action_wanted
 end
 
 function PlayerStandard:_update_check_actions(t, dt, paused)

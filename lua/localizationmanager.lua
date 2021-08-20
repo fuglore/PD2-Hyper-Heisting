@@ -116,11 +116,13 @@
 		["hud_assault_FG_cover113"] = "LET'S DO THIS",
 		["hud_assault_FG_cover114"] = "I HAVE THE POWER",
 		["hud_assault_FG_cover115"] = "IT'S HEISTING TIME",
-		["hud_assault_FG_cover116"] = "ROBBEERS WITH ATTITUDE",
+		["hud_assault_FG_cover116"] = "ROBBERS WITH ATTITUDE",
 		["hud_assault_FG_cover117"] = "COME ON YOU PUNK, LET'S HAVE SOME APHEX ACID",
 		["hud_assault_FG_cover118"] = "ERROR: hud_assault_F- JUST KIDDING",
 		["hud_assault_FG_cover119"] = "IT'S NOT A BIG DEAL",
 		["hud_assault_FG_cover120"] = "WHY OH YOU ARE LOVE",
+		["hud_assault_FG_cover121"] = "ROB BEARS WITH ATTITUDE",
+		["hud_assault_FG_cover122"] = "ROB BEERS WITH ATTITUDE",
 		["hud_assault_faction_nightmare"] = "VS. ???",
 		["hud_assault_faction_sbz"] = "VS. SBZ OPERATORS",
 		["hud_assault_faction_ovk"] = "VS. OVERKILL MODERATORS",
@@ -428,7 +430,10 @@ end
 Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 	
 	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-		LocalizationManager:add_localized_strings({		
+		LocalizationManager:add_localized_strings({	
+			--SPEED IS WAR
+			["bm_menu_movement"] = "M/S",
+		
 			--Anarchist
 			["menu_deck15_1_desc"] = "Instead of fully regenerating armor when out of combat, The Anarchist will periodically regenerate armor at a rate equivalent to ##8## armor per second. Heavier armor regenerates more armor per tick, but has a longer delay between ticks.\n\nNote: Skills and perks that increases the armor recovery rate are disabled when using this perk deck.",
 			["menu_deck15_3_desc"] = "##50%## of your health is converted into ##50%## armor.",
@@ -517,6 +522,15 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_sniper_graze_damage"] = "Fine Red Mist",
 			["menu_sniper_graze_damage_desc"] = "BASIC: ##$basic##\nSuccessfully killing an enemy with a headshot will cause a ##massive blood explosion## that ##staggers## enemies and deals ##300## damage within a ##2m## radius of the victim.\n\nThis can only be activated by weapons fired in their ##single-fire## mode.\n\nACE: ##$pro##\nFine Red Mist's blood explosion range is increased to ##4 meters##.\n\n##Thanks for standing still, wanker!##",
+			
+			["menu_shotgun_cqb_beta"] = "High Quality Grease",
+			["menu_shotgun_cqb_beta_desc"] = "BASIC: ##$basic##\nYour weapon swap speed is increased by ##+50%## while you are ##sprinting##.\n\nACE: ##$pro##\nYYou reload shotguns ##+20%## faster while sprinting and ##+40%## faster when you're not.\n\n##You don't want to know what it actually is, but there's no arguing with the results.##",
+			
+			["menu_shotgun_impact_beta"] = "Shotgun Shoulders",
+			["menu_shotgun_impact_beta_desc"] = "BASIC: ##$basic##\nYour shotguns gain ##+12## stability.\n\nACE: ##$pro##\nYour shotguns deal ##+50%## damage to ##healthy enemies##.\n\n##FLASHYN!##",
+			
+			["menu_close_by_beta"] = "Cool Hunting",
+			["menu_close_by_beta_desc"] = "BASIC: ##$basic##\nYour shotguns gain ##+25%## increased magazine capacity.\n\nIn addition, your shotguns with magazines have their magazine size increased by ##+8##.\n\nACE: ##$pro##\nYour shotguns gain a ##+0.5%## increase to firerate for every time you kill multiple enemies in a single shot for ##3## seconds.\n\nThis bonus can stack infinitely, and is refreshed every time it's activated.\n\n##Problem solved!##",
 			
 			["menu_iron_man_beta_desc"] = "BASIC: ##$basic##\nIncreases the armor recovery rate for you and your crew by ##25%##.\n\nACE: ##$pro##\nYour Melee Weapons can now ##stagger shields##.",
 			

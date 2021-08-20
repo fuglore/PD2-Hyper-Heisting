@@ -30,7 +30,13 @@ function CopDamage:is_immune_to_shield_knockback()
 	return false
 end
 
-function CopDamage:_apply_damage_reduction(damage)
+function CopDamage:_apply_damage_reduction(damage, attack_data)
+	if self._health_ratio > 0.75 then
+		if attack_data.weapon_unit and not attack_data.weapon_unit:base().thrower_unit and attack_data.weapon_unit:base():is_category("shotgun") then
+			damage = damage * managers.player:upgrade_value("player", "shot_shoulders_crowbar", 1)
+		end
+	end
+
 	local damage_reduction = self._unit:movement():team().damage_reduction or 0
 	
 	if damage_reduction > 0 then
@@ -1083,7 +1089,7 @@ function CopDamage:damage_melee(attack_data)
 		damage = damage * self._marked_dmg_mul
 	end
 
-	damage = self:_apply_damage_reduction(damage)
+	damage = self:_apply_damage_reduction(damage, attack_data)
 
 	if self._unit:movement():cool() then
 		damage = self._HEALTH_INIT
@@ -1686,7 +1692,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	end
 
 	--moving damage reduction and clamping/insta-kill down here so that they work properly
-	damage = self:_apply_damage_reduction(damage)
+	damage = self:_apply_damage_reduction(damage, attack_data)
 
 	local diff_index = Global.game_settings and tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
@@ -2183,7 +2189,7 @@ function CopDamage:damage_simple(attack_data)
 	local result = nil
 	local damage = attack_data.damage
 
-	damage = self:_apply_damage_reduction(damage) --they also forgot to add this one
+	damage = self:_apply_damage_reduction(damage, attack_data) --they also forgot to add this one
 	
 	--Graze damage is supposed to not benefit from any damage bonuses (as the damage is defined by the shot and skill upgrade you have), but it's not supposed to not be clamped like in vanilla, where everything can get nuked by it
 	if self._unit:movement():cool() and damage > 0 then --allowing stealth insta-kill
@@ -2556,7 +2562,7 @@ function CopDamage:damage_fire(attack_data)
 		damage = damage * self._unit:base():char_tweak().fire_damage_mul
 	end
 
-	damage = self:_apply_damage_reduction(damage)
+	damage = self:_apply_damage_reduction(damage, attack_data)
 
 	if self._unit:base():char_tweak().DAMAGE_CLAMP_FIRE and not attack_data.is_fire_dot_damage then
 		damage = math.min(damage, self._unit:base():char_tweak().DAMAGE_CLAMP_FIRE)
@@ -2973,7 +2979,7 @@ function CopDamage:damage_explosion(attack_data)
 	end
 
 	damage = managers.modifiers:modify_value("CopDamage:DamageExplosion", damage, self._unit:base()._tweak_table)
-	damage = self:_apply_damage_reduction(damage)
+	damage = self:_apply_damage_reduction(damage, attack_data)
 
 	if self._char_tweak.DAMAGE_CLAMP_EXPLOSION then
 		damage = math.min(damage, self._char_tweak.DAMAGE_CLAMP_EXPLOSION)
@@ -3307,7 +3313,7 @@ function CopDamage:damage_dot(attack_data)
 		damage = damage * self._marked_dmg_mul
 	end
 
-	damage = self:_apply_damage_reduction(damage)
+	damage = self:_apply_damage_reduction(damage, attack_data)
 
 	if self._char_tweak.DAMAGE_CLAMP_DOT then --never hurts to add these additional clamps as they do nothing if you don't specifically add them in charactertweakdata
 		damage = math.min(damage, self._char_tweak.DAMAGE_CLAMP_DOT)
@@ -3483,7 +3489,7 @@ function CopDamage:damage_tase(attack_data)
 	local damage = attack_data.damage
 	--local head = self._head_body_name and not self._unit:in_slot(16) and not self._char_tweak.ignore_headshot and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 
-	damage = self:_apply_damage_reduction(damage)
+	damage = self:_apply_damage_reduction(damage, attack_data)
 	damage = math.clamp(damage, 0, self._HEALTH_INIT)
 	
 	local damage_percent = math.ceil(damage / self._HEALTH_INIT_PRECENT)

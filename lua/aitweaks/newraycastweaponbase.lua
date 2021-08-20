@@ -26,6 +26,20 @@ function NewRaycastWeaponBase:reload_speed_multiplier()
 
 	if self._setup and alive(self._setup.user_unit) and self._setup.user_unit:movement() then
 		local morale_boost_bonus = self._setup.user_unit:movement():morale_boost()
+		
+		if self:weapon_tweak_data().categories["shotgun"] then
+			if managers.player:has_category_upgrade("player", "hq_grease_aced") then
+				local data = managers.player:upgrade_value("player", "hq_grease_aced", nil)
+				
+				if data then
+					if self._setup.user_unit:movement():current_state()._running then
+						multiplier = multiplier + 1 - data[1]
+					else
+						multiplier = multiplier + 1 - data[2]
+					end
+				end
+			end
+		end		
 
 		if morale_boost_bonus then
 			multiplier = multiplier + 1 - morale_boost_bonus.reload_speed_bonus
@@ -58,12 +72,25 @@ function NewRaycastWeaponBase:calculate_ammo_max_per_clip()
 	local added = 0
 	local weapon_tweak_data = self:weapon_tweak_data()
 
-	if self:is_category("shotgun") and tweak_data.weapon[self._name_id].has_magazine then
-		added = managers.player:upgrade_value("shotgun", "magazine_capacity_inc", 0)
+	if self:is_category("shotgun") then 
+		if tweak_data.weapon[self._name_id].has_magazine then
+			added = managers.player:upgrade_value("shotgun", "magazine_capacity_inc", 0)
 
-		if self:is_category("akimbo") then
-			added = added * 2
+			if self:is_category("akimbo") then
+				added = added * 2
+			end
 		end
+		
+		local mag_mul = managers.player:upgrade_value("player", "cool_hunting_basic", 1)
+		local to_add = weapon_tweak_data.CLIP_AMMO_MAX * mag_mul
+		
+		to_add = to_add - weapon_tweak_data.CLIP_AMMO_MAX 
+		
+		to_add = math.ceil(to_add)
+		
+		log(tostring(to_add))
+		
+		added = added + to_add
 	elseif self:is_category("pistol") and managers.player:has_category_upgrade("pistol", "magazine_capacity_inc") then
 		added = managers.player:upgrade_value("pistol", "magazine_capacity_inc", 0)
 
@@ -77,7 +104,7 @@ function NewRaycastWeaponBase:calculate_ammo_max_per_clip()
 			added = added * 2
 		end
 	end
-
+	
 	local ammo = tweak_data.weapon[self._name_id].CLIP_AMMO_MAX + added
 	ammo = ammo + managers.player:upgrade_value(self._name_id, "clip_ammo_increase")
 
@@ -92,7 +119,8 @@ function NewRaycastWeaponBase:calculate_ammo_max_per_clip()
 	end
 
 	ammo = ammo + (self._extra_ammo or 0)
-
+	math.floor(ammo)
+	
 	return ammo
 end
 

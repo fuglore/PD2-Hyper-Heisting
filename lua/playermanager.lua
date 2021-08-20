@@ -18,6 +18,56 @@ function PlayerManager:_chk_fellow_crimin_proximity(unit)
 	return players_nearby
 end
 
+function PlayerManager:movement_speed_multiplier(speed_state, bonus_multiplier, upgrade_level, health_ratio)
+	local multiplier = 1
+	local armor_penalty = self:mod_movement_penalty(self:body_armor_value("movement", upgrade_level, 1))
+	multiplier = multiplier + armor_penalty - 1
+
+	if bonus_multiplier then
+		multiplier = multiplier + bonus_multiplier - 1
+	end
+
+	if speed_state then
+		multiplier = multiplier + self:upgrade_value("player", speed_state .. "_speed_multiplier", 1) - 1
+	end
+	
+	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
+		multiplier = multiplier * managers.player:upgrade_value("player", "perkdeck_movespeed_mult", 1)
+	end
+		
+	if managers.player:has_category_upgrade("player", "criticalmode") then
+		multiplier = multiplier * 1.25
+	end
+
+	multiplier = multiplier + self:get_hostage_bonus_multiplier("speed") - 1
+	multiplier = multiplier + self:upgrade_value("player", "movement_speed_multiplier", 1) - 1
+
+	if self:num_local_minions() > 0 then
+		multiplier = multiplier + self:upgrade_value("player", "minion_master_speed_multiplier", 1) - 1
+	end
+
+	if self:has_category_upgrade("player", "secured_bags_speed_multiplier") then
+		local bags = 0
+		bags = bags + (managers.loot:get_secured_mandatory_bags_amount() or 0)
+		bags = bags + (managers.loot:get_secured_bonus_bags_amount() or 0)
+		multiplier = multiplier + bags * (self:upgrade_value("player", "secured_bags_speed_multiplier", 1) - 1)
+	end
+
+	if managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") then
+		multiplier = multiplier * (tweak_data.upgrades.berserker_movement_speed_multiplier or 1)
+	end
+
+	if health_ratio then
+		local damage_health_ratio = self:get_damage_health_ratio(health_ratio, "movement_speed")
+		multiplier = multiplier * (1 + managers.player:upgrade_value("player", "movement_speed_damage_health_ratio_multiplier", 0) * damage_health_ratio)
+	end
+
+	local damage_speed_multiplier = managers.player:temporary_upgrade_value("temporary", "damage_speed_multiplier", managers.player:temporary_upgrade_value("temporary", "team_damage_speed_multiplier_received", 1))
+	multiplier = multiplier * damage_speed_multiplier
+
+	return multiplier
+end
+
 function PlayerManager:health_skill_addend()
 	local addend = 0
 	addend = addend + self:upgrade_value("team", "crew_add_health", 0)
@@ -231,7 +281,9 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		local pos = killed_unit:position()
 		local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, 600, 12, 21)
 			
-		for i, unit in ipairs(enemies) do
+		for i = 1, #enemies do
+			local unit = enemies[i]
+			
 			if unit:character_damage() and unit:character_damage().build_suppression then
 				unit:character_damage():build_suppression(suppression_amount, 50, nil)
 			end
@@ -279,7 +331,8 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		local obstruction_slotmask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
 		local weap_unit = self:get_current_state()._equipped_unit
 
-		for _, enemy in ipairs(enemies) do
+		for i = 1, #enemies do
+			local enemy = enemies[i]
 			local dmg_ext = enemy:character_damage()
 
 			if dmg_ext and dmg_ext.damage_simple then
@@ -317,8 +370,10 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 				local chance = skill.chance
 				local amount = skill.amount
 				local enemies = World:find_units_quick("sphere", pos, area, 12, 21)
-
-				for i, unit in ipairs(enemies) do
+				
+				for i = 1, #enemies do
+					local unit = enemies[i]
+					
 					if unit:character_damage() and unit:character_damage().build_suppression then
 						unit:character_damage():build_suppression(amount, chance, true)
 					end
@@ -361,6 +416,37 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	end
 
 	local t = Application:time()
+	
+	if variant ~= "melee" then
+		if self:has_category_upgrade("player", "cool_hunting_aced") then
+			local equipped_unit = self:get_current_state()._equipped_unit:base()
+
+			if equipped_unit:is_category("shotgun") then
+
+				--https://media.discordapp.net/attachments/737554686139170866/878072580421087282/FB_IMG_1629413974581.png
+				if not self._cool_chain_t or self._cool_chain_t < t then
+					self._cool_chain_t = t + 0.1
+					self._cool_chain_kills = 1
+				else
+					self._cool_chain_t = t + 0.1
+					self._cool_chain_kills = self._cool_chain_kills + 1
+				end
+				
+				if self._cool_chain_kills >= 2 then					
+					if self._cool_chain_mul then
+						self._cool_chain_mul = self._cool_chain_mul - 0.05
+					else
+						self._cool_chain_mul = 0.95
+					end
+					
+					self._cool_hunting_t = t + 3
+					self._cool_chain_kills = nil
+					self._cool_chain_t = nil
+				end
+			end
+		end
+	end
+	
 	local damage_ext = player_unit:character_damage()
 
 	if self:has_category_upgrade("player", "kill_change_regenerate_speed") then
@@ -502,6 +588,13 @@ function PlayerManager:update(t, dt)
 			if self._syringe_t < t then
 				self._syringe_stam = nil
 				self._syringe_t = nil
+			end
+		end
+		
+		if self._cool_hunting_t then
+			if self._cool_hunting_t < t then
+				self._cool_chain_mul = nil
+				self._cool_hunting_t = nil
 			end
 		end
 		

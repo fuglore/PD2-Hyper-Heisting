@@ -132,7 +132,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 	self.values.pistol.stacking_hit_damage_multiplier = {
 		{
 			max_stacks = 1,
-			max_time = 1;25,
+			max_time = 1.25,
 			damage_bonus = 1.4
 		},
 		{
@@ -247,6 +247,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		1.05,
 		1.1,
 		1.15,
+		1.2,
 		1.2
 	}
 
@@ -378,6 +379,87 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			value = 1,
 			synced = true,
 			upgrade = "fineredmist_aced",
+			category = "player"
+		}
+	}
+	
+	self.values.player.hq_grease_basic = {
+		1.5
+	}
+	self.values.player.hq_grease_aced = {
+		{1.2, 1.4}
+	}
+	self.definitions.player_hq_grease_basic = {
+		name_id = "menu_hq_grease_basic",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			--synced = true,
+			upgrade = "hq_grease_basic",
+			category = "player"
+		}
+	}
+	self.definitions.player_hq_grease_aced = {
+		name_id = "menu_hq_grease_aced",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			--synced = true,
+			upgrade = "hq_grease_aced",
+			category = "player"
+		}
+	}
+	
+	self.values.player.shot_shoulders_recoil_addend = {
+		3
+	}
+	self.values.player.shot_shoulders_crowbar = {
+		1.5
+	}
+	self.definitions.player_shot_shoulders_basic = {
+		name_id = "menu_shot_shoulders_basic",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "shot_shoulders_recoil_addend",
+			category = "player"
+		}
+	}
+	self.definitions.player_shot_shoulders_aced = {
+		name_id = "menu_shot_shoulders_aced",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "shot_shoulders_crowbar",
+			category = "player"
+		}
+	}
+	
+	self.values.shotgun.magazine_capacity_inc = {
+		8
+	}
+
+	self.values.player.cool_hunting_basic = {
+		1.25
+	}
+	self.values.player.cool_hunting_aced = {
+		true
+	}
+	self.definitions.player_cool_hunting_basic = {
+		name_id = "menu_cool_hunting_basic",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "cool_hunting_basic",
+			category = "player"
+		}
+	}
+	self.definitions.player_cool_hunting_aced = {
+		name_id = "menu_cool_hunting_aced",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "cool_hunting_aced",
 			category = "player"
 		}
 	}

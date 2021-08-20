@@ -2175,7 +2175,7 @@ crouching = {
 }
 
 --Street Sweeper
-self.striker.has_magazine = true --julesyes the rota can do it so this can too
+self.striker.has_magazine = true --balance issue
 self.striker.stats.damage = 130
 self.striker.damage_near = 550
 self.striker.damage_far = 1050

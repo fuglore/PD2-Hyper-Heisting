@@ -180,14 +180,23 @@ end
 
 function RaycastWeaponBase:update_next_shooting_time()
 	local next_fire = (tweak_data.weapon[self._name_id].fire_mode_data and tweak_data.weapon[self._name_id].fire_mode_data.fire_rate or 0) / self:fire_rate_multiplier()
+	
+	local mul = 1
+	
 	if managers.player._magic_bullet_aced_t then
-		next_fire = next_fire * 0.8
+		mul = mul * 0.8
 	end
 	
 	if managers.player._pop_pop_mul then
 		local pop_pop_mul_true = managers.player._pop_pop_mul + 1
-		next_fire = next_fire * pop_pop_mul_true
+		mul = mul * pop_pop_mul_true
 	end
+	
+	if managers.player._cool_hunting_aced_mul then
+		mul = mul * managers.player._cool_hunting_aced_mul
+	end
+	
+	next_fire = next_fire * mul
 	
 	if next_fire < 0 then
 		next_fire = 0
