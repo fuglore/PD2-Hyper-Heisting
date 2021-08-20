@@ -197,6 +197,23 @@ function CoreEnvironmentControllerManager:kill_player_hurt_screen()
 	end
 end
 
+local mangled_ids = Idstring("effects/pd2_mod_hh/particles/character/playerscreen/mangle_screen")
+local mangled_poison_ids = Idstring("mangled_poison")
+local mangled_darkness_ids = Idstring("mangled_darkness")
+
+function CoreEnvironmentControllerManager:set_mangle_effect_intensity(poison_intensity, darkness_intensity)
+	if not self._mangled_effect then
+		self._mangled_effect = self._effect_manager:spawn({
+			effect = mangled_ids,
+			position = Vector3(),
+			rotation = Rotation()
+		})
+	end	
+		
+	self._effect_manager:set_simulator_var_float(self._mangled_effect, mangled_poison_ids, opacity_ids, opacity_ids, poison_intensity)
+	self._effect_manager:set_simulator_var_float(self._mangled_effect, mangled_darkness_ids, opacity_ids, opacity_ids, darkness_intensity)
+end
+
 function CoreEnvironmentControllerManager:update(t, dt)
 	self:_update_values(t, dt)
 	self:set_post_composite(t, dt)

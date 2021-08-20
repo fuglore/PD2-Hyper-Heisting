@@ -243,6 +243,7 @@ function CopBase:default_weapon_name()
 	local level = Global.level_data and Global.level_data.level_id
 	
 	--available vanilla weapons, using their in-game names to avoid confusion since I'm planning to post this in the WIP thread regarding incorrect weapons in vanilla
+	local chernobog = Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92")
 	local suppressed_bernetti = Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92")
 	local crosskill_chimano = Idstring("units/payday2/weapons/wpn_npc_c45/wpn_npc_c45")
 	local bronco = Idstring("units/payday2/weapons/wpn_npc_raging_bull/wpn_npc_raging_bull")

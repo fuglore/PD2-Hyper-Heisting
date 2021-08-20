@@ -795,6 +795,35 @@
 	<texture path="units/pd2_dlc_drm/characters/ene_sniper_heavy/helmets_atlas_il" />
 	<!--Lol Trole-->
 
+	<!--OVK MC Mangler-->
+	<unit path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler" load="true"/>
+	<unit path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler" load="true"/>	
+	<material_config path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler_contour"/>	
+	<object path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler" />
+	<model path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler" />	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_ovk_mangler/mangler_body_df" />
+	<texture path="units/pd2_dlc_drm/characters/ene_ovk_mangler/mangler_helmet_df" />
+	
+	<unit path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37" load="true"/>
+	<material_config path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"/>	
+	<object path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37" />
+	<model path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37" />	
+	<cooked_physics path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"/>	
+	<sequence_manager path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"/>
+
+	<texture path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37_df" />
+	
+	<unit path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog" load="true"/>
+	<material_config path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"/>	
+	<object path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog" />
+	<model path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog" />	
+	<cooked_physics path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"/>	
+	<sequence_manager path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"/>
+
+	<texture path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/chernobog_df" />
+	
 	<!--sniperdozer-->
 	<unit path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" load="true"/>
 	<sequence_manager path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" />	
@@ -863,10 +892,13 @@
 	<effect path="effects/payday2/particles/weapons/arrow_trail_homing"/>
 	<effect path="effects/particles/weapons/flashlight/flashlight" force="true"/>
 	<effect path="effects/particles/weapons/flashlight/flashlight_mp9" load="true"/>
+	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/literally_a_square" load="true"/>
 	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/hurt_screen" />
 	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/hurt_screen_df" load="true"/>
 	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties" />
 	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/floaties_df" load="true" />
+	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/mangle_screen" />
+	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/mangle_screen_df" load="true" />
 	<effect path="effects/pd2_mod_hh/particles/character/gore_explosion"/>
 	<effect path="effects/pd2_mod_hh/particles/character/shield_break"/>
 	<effect path="effects/pd2_mod_hh/particles/character/prefire_glint"/>
@@ -887,6 +919,7 @@
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/lotus_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/healstop_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"/>
@@ -895,6 +928,7 @@
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_mangler"/>
 	
 	<effect path="effects/pd2_mod_hh/particles/iconograph/deathresist"/>
 	
@@ -1151,4 +1185,20 @@
 	
 	<!--dumbass fucks at overkill made a typo-->
 	<material_config path="units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2_contour" force="true"/> 
+	
+	<!--weapon mods-->
+	
+	<!--flamethrower long barrel-->
+	<texture path="units/mods/weapons/wpn_fps_fla_mk2_pts/smallnozzle_df"/>
+	<texture path="units/mods/weapons/wpn_fps_fla_mk2_pts/longheat_df"/>
+	<cooked_physics path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<model path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<object path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<unit path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<material_config path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<material_config path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long_cc"/>
+	<material_config path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long_thq"/>
+	<material_config path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long_cc_thq"/>
+
+	<texture path="guis/dlcs/mods/textures/pd2/blackmarket/icons/mods/wpn_fps_fla_mk2_body_long"/>
 </table>

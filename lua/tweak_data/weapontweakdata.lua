@@ -3331,7 +3331,21 @@ self.flamethrower_mk2.shake = {
 }
 
 --MA-17 Flamethrower
-self.system.stats.damage = 14
+self.system.stats = {
+	zoom = 1,
+	total_ammo_mod = 21,
+	damage = 8,
+	alert_size = 1,
+	spread = 1,
+	spread_moving = 6,
+	recoil = 2,
+	value = 1,
+	extra_ammo = 51,
+	reload = 11,
+	suppression = 2,
+	concealment = 15
+}
+self.system.flame_max_range = 2000
 self.system.AMMO_PICKUP = {self.system.CLIP_AMMO_MAX / 20, self.system.CLIP_AMMO_MAX / 10}
 self.system.kick = {
 	standing = {

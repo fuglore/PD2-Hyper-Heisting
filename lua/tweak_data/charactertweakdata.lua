@@ -9947,7 +9947,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"trolliam_sidearm",
 		"degle",
 		"m60",
-		"m37"
+		"m37",
+		"chernobog"
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -10000,7 +10001,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm"),
 		Idstring("units/payday2/weapons/wpn_npc_degle/wpn_npc_degle"),
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60"),
-		Idstring("units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37")
+		Idstring("units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"),
+		Idstring("units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog")
 	}
 end
 

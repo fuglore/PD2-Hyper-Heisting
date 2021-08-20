@@ -88,5 +88,8 @@
 	  "ene_true_zeal_cloaker" : "???",
 	  "ene_true_zeal_rifle" : "???",
 	  "ene_true_zeal_shotgun" : "???",
-	  "ene_true_zeal_taser" : "???"
+	  "ene_true_zeal_taser" : "???",
+	  
+	  
+	  "bm_wp_wpn_fps_fla_mk2_body_long": "WAR! Nozzle",
 }

@@ -58,5 +58,14 @@
 		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_bex/characters/ene_swat_dozer_policia_federale_minigun/ene_swat_dozer_policia_federale_minigun" target_type="sequence_manager" merge_mode="script_merge"/>
 		<mod file="dozersevil.xml" type="custom_xml" target_file="units/pd2_dlc_bex/characters/ene_swat_dozer_medic_policia_federale/ene_swat_dozer_medic_policia_federale" target_type="sequence_manager" merge_mode="script_merge"/>
 		
-	</ScriptMods>			
+	</ScriptMods>
+
+	<!-- THE long barrel for the flamethrower-->
+	<WeaponMod id="wpn_fps_fla_mk2_body_long" inherit_adds="true" based_on="wpn_fps_fla_mk2_body" type="lower_reciever" unit="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long" drop="false" texture_bundle_folder="mods" is_a_unlockable="true">
+		<stats/>
+		<weapons>
+			<value_node value="wpn_fps_fla_mk2"/>
+		</weapons>
+		<pcs/>
+	</WeaponMod>
 </table>
