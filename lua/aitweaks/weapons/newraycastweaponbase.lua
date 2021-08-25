@@ -16,9 +16,17 @@ function NewRaycastWeaponBase:reload_speed_multiplier()
 	if managers.player._syringe_t then
 		multiplier = multiplier - 0.5
 	end
-
+	
+	local hq_aced = nil
+	
 	for _, category in ipairs(self:weapon_tweak_data().categories) do
 		multiplier = multiplier + 1 - managers.player:upgrade_value(category, "reload_speed_multiplier", 1)
+		
+		if category == "shotgun" then
+			if managers.player:has_category_upgrade("player", "hq_grease_aced") then
+				hq_aced = true
+			end
+		end
 	end
 
 	multiplier = multiplier + 1 - managers.player:upgrade_value("weapon", "passive_reload_speed_multiplier", 1)
@@ -27,16 +35,14 @@ function NewRaycastWeaponBase:reload_speed_multiplier()
 	if self._setup and alive(self._setup.user_unit) and self._setup.user_unit:movement() then
 		local morale_boost_bonus = self._setup.user_unit:movement():morale_boost()
 		
-		if self:weapon_tweak_data().categories["shotgun"] then
-			if managers.player:has_category_upgrade("player", "hq_grease_aced") then
-				local data = managers.player:upgrade_value("player", "hq_grease_aced", nil)
-				
-				if data then
-					if self._setup.user_unit:movement():current_state()._running then
-						multiplier = multiplier + 1 - data[1]
-					else
-						multiplier = multiplier + 1 - data[2]
-					end
+		if hq_aced then
+			local data = managers.player:upgrade_value("player", "hq_grease_aced", nil)
+			
+			if data then
+				if self._setup.user_unit:movement():current_state()._running then
+					multiplier = multiplier + 1 - data[1]
+				else
+					multiplier = multiplier + 1 - data[2]
 				end
 			end
 		end		

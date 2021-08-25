@@ -110,14 +110,10 @@ function CopActionHurt:init(action_desc, common_data)
 	self._tank_animations = self._ext_movement._anim_global == "tank" and true or nil
 	self._speed = 1
 	
-	if not self._tank_animations then
-		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or difficulty_index == 8 then
-			self._speed = 1.5
-		elseif difficulty_index == 6 or difficulty_index == 7 then
-			self._speed = 1.25
-		else
-			self._speed = 1
-		end
+	if difficulty_index >= 7 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		self._speed = 1.5
+	elseif difficulty_index > 5 then
+		self._speed = 1.25
 	end
 
 	if common_data.machine:get_global("female") == 1 then

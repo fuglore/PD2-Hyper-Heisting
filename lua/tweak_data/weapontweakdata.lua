@@ -384,9 +384,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.emp_npc.damage = 0
 	self.emp_npc.suppression = 99
 	self.emp_npc.apply_emp = true
-
-	
-	
 end)
 
 --TODO: it is done
@@ -785,8 +782,8 @@ end
 
 function WeaponTweakData:_set_overkill_290()
 	--saiga tweak
-	self.saiga_npc.CLIP_AMMO_MAX = 16
-	self.chernobog_npc.CLIP_AMMO_MAX = 16
+	self.saiga_npc.CLIP_AMMO_MAX = 32
+	self.chernobog_npc.CLIP_AMMO_MAX = 32
 	
 	--tweaks for smgs
 	self.mp5_npc.CLIP_AMMO_MAX = 64
@@ -796,16 +793,16 @@ function WeaponTweakData:_set_overkill_290()
 	self.asval_smg_npc.CLIP_AMMO_MAX = 64
 	self.mp9_npc.CLIP_AMMO_MAX = 64
 	
-	--tweaks for rifles, 2.4 seconds of firing
-	self.m4_npc.CLIP_AMMO_MAX = 30
-	self.m4_yellow_npc.CLIP_AMMO_MAX = 30
-	self.g36_npc.CLIP_AMMO_MAX = 30
-	self.smoke_npc.CLIP_AMMO_MAX = 30
-	self.ak47_ass_npc.CLIP_AMMO_MAX = 30
-	self.ak47_npc.CLIP_AMMO_MAX = 30
-	self.lazer_npc.CLIP_AMMO_MAX = 30
-	self.quagmire_npc.CLIP_AMMO_MAX = 30
-	self.galil_npc.CLIP_AMMO_MAX = 30
+	--tweaks for rifles, 3.6 seconds of firing
+	self.m4_npc.CLIP_AMMO_MAX = 45
+	self.m4_yellow_npc.CLIP_AMMO_MAX = 45
+	self.g36_npc.CLIP_AMMO_MAX = 45
+	self.smoke_npc.CLIP_AMMO_MAX = 45
+	self.ak47_ass_npc.CLIP_AMMO_MAX = 45
+	self.ak47_npc.CLIP_AMMO_MAX = 45
+	self.lazer_npc.CLIP_AMMO_MAX = 45
+	self.quagmire_npc.CLIP_AMMO_MAX = 45
+	self.galil_npc.CLIP_AMMO_MAX = 45
 	
 	--shotgun tweaks, fires 4 times before reload on FBI+ tiers
 	self.r870_npc.CLIP_AMMO_MAX = 4
@@ -821,11 +818,11 @@ function WeaponTweakData:_set_overkill_290()
 	--self:_set_characters_weapon_preset(8, 6, 8, 20) --setting enemy weapon spread, unbased
 	
 	--sniper tweak
-	self.m14_sniper_npc.suppression = 16
+	self.m14_sniper_npc.suppression = 40 --They'll lock your armor regen down after breaking it for a little while, but can't pierce your armor anymore.
 	self.m14_sniper_npc.CLIP_AMMO_MAX = 24
-	self.svd_snp_npc.suppression = 16
+	self.svd_snp_npc.suppression = 40
 	self.svd_snp_npc.CLIP_AMMO_MAX = 24
-	self.svdsil_snp_npc.suppression = 16
+	self.svdsil_snp_npc.suppression = 40
 	self.svdsil_snp_npc.CLIP_AMMO_MAX = 24
 	self.heavy_snp_npc.DAMAGE = 1
 	self.heavy_snp_npc.suppression = 16
@@ -842,12 +839,12 @@ function WeaponTweakData:_set_overkill_290()
 	self.smoke_npc.DAMAGE = 1
 	
 	--Turret tweaks.
-	self.swat_van_turret_module.HEALTH_INIT = 2000
+	self.swat_van_turret_module.HEALTH_INIT = 2500
 	self.swat_van_turret_module.SHIELD_HEALTH_INIT = 400
 	self.swat_van_turret_module.DAMAGE = 2
 	self.swat_van_turret_module.CLIP_SIZE = 800
 	self.swat_van_turret_module.spread = 20
-	self.ceiling_turret_module.HEALTH_INIT = 1250
+	self.ceiling_turret_module.HEALTH_INIT = 1500
 	self.ceiling_turret_module.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module.DAMAGE = 2
 	self.ceiling_turret_module.CLIP_SIZE = 300
@@ -865,11 +862,11 @@ function WeaponTweakData:_set_overkill_290()
 	self.crate_turret_module.CLIP_SIZE = 800
 	
 	--ceiling turret clones
-	self.ceiling_turret_module_no_idle.HEALTH_INIT = 1250
+	self.ceiling_turret_module_no_idle.HEALTH_INIT = 1500
 	self.ceiling_turret_module_no_idle.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module_no_idle.DAMAGE = 2
 	self.ceiling_turret_module_no_idle.CLIP_SIZE = 300
-	self.ceiling_turret_module_longer_range.HEALTH_INIT = 1250
+	self.ceiling_turret_module_longer_range.HEALTH_INIT = 1500
 	self.ceiling_turret_module_longer_range.SHIELD_HEALTH_INIT = 400
 	self.ceiling_turret_module_longer_range.DAMAGE = 2
 	self.ceiling_turret_module_longer_range.CLIP_SIZE = 300

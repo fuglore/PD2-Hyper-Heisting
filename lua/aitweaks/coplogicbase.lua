@@ -2054,7 +2054,7 @@ function CopLogicBase._evaluate_reason_to_surrender(data, my_data, aggressor_uni
 		isolated = function (isolated_surrender)
 			if data.group and data.group.has_spawned and data.group.initial_size > 1 then
 				local has_support = nil
-				local max_dis_sq = 722500
+				local max_dis_sq = 640000
 
 				for u_key, u_data in pairs(data.group.units) do
 					if u_key ~= data.key and mvec3_dis_sq(data.m_pos, u_data.m_pos) < max_dis_sq then

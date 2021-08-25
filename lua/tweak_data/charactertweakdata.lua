@@ -9487,15 +9487,15 @@ function CharacterTweakData:_set_overkill_290()
 	self.gensec.no_arrest = true
 	
 	--fbi setup
-	self.fbi.dodge = self.presets.dodge.athletic_complex
+	self.fbi.dodge = self.presets.dodge.ninja_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_girl.dodge = self.presets.dodge.athletic_complex
+	self.fbi_girl.dodge = self.presets.dodge.ninja_complex
 	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
-	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
+	self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_pager.dodge = self.presets.dodge.athletic_complex
+	self.fbi_pager.dodge = self.presets.dodge.ninja_complex
 	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
+	self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--MFR has radio static in this difficulty.
 	if self.tweak_data and self.tweak_data.levels then
@@ -9527,19 +9527,22 @@ function CharacterTweakData:_set_overkill_290()
 		end
 	end
 	--Movespeed setups.
-	self.swat.move_speed = self.presets.move_speed.complex_consistency
-	self.city_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.heavy_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_heavy_swat.move_speed = self.presets.move_speed.complex_consistency
+	self.swat.move_speed = self.presets.move_speed.anarchy_consistency
+	self.city_swat.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_swat.move_speed = self.presets.move_speed.anarchy_consistency
+	self.heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
 	--special movespeed
-	self.taser.move_speed = self.presets.move_speed.complex_consistency
-	self.medic.move_speed = self.presets.move_speed.complex_consistency
-	self.shield.move_speed = self.presets.move_speed.complex_consistency
+	self.taser.move_speed = self.presets.move_speed.anarchy_consistency
+	self.medic.move_speed = self.presets.move_speed.anarchy_consistency
+	self.shield.move_speed = self.presets.move_speed.anarchy_consistency
 	--dodge setups.
-	self.swat.dodge = self.presets.dodge.heavy_complex
-	self.fbi_swat.dodge = self.presets.dodge.heavy_complex
-	self.city_swat.dodge = self.presets.dodge.heavy_complex
+	self.swat.dodge = self.presets.dodge.athletic_complex
+	self.fbi_swat.dodge = self.presets.dodge.athletic_complex
+	self.city_swat.dodge = self.presets.dodge.athletic_complex
+	self.heavy_swat.dodge = self.presets.dodge.heavy_complex
+	self.fbi_heavy_swat.dodge = self.presets.dodge.heavy_complex
+	self.spooc.dodge = self.presets.dodge.ninja_complex
 	--Shield explosive resist
 	self.shield.damage.explosion_damage_mul = 0.5
 	self.phalanx_minion.HEALTH_INIT = 200
