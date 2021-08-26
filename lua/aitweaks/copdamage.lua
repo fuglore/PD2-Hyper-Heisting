@@ -32,7 +32,7 @@ end
 
 function CopDamage:_apply_damage_reduction(damage, attack_data)
 	if self._health_ratio > 0.75 then
-		if attack_data.weapon_unit and not attack_data.weapon_unit:base().thrower_unit and attack_data.weapon_unit:base().is_category and attack_data.weapon_unit:base():is_category("shotgun") then
+		if not attack_data.is_fire_dot_damage and attack_data.weapon_unit and not attack_data.weapon_unit:base().thrower_unit and alive(attack_data.weapon_unit) and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and attack_data.weapon_unit:base():is_category("shotgun") then
 			damage = damage * managers.player:upgrade_value("player", "shot_shoulders_crowbar", 1)
 		end
 	end
