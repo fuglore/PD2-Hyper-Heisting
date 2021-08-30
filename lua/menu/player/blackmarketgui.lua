@@ -22,11 +22,10 @@ function BlackMarketGui:_get_armor_stats(name)
 
 		if stat.name == "armor" then
 			local base = tweak_data.player.damage.ARMOR_INIT
-			
-			base_stats[stat.name] = {
-				value = (base) * tweak_data.gui.stats_present_multiplier
-			}
 			local mod = managers.player:body_armor_value("armor", upgrade_level)
+			base_stats[stat.name] = {
+				value = (base + mod) * tweak_data.gui.stats_present_multiplier
+			}
 			skill_stats[stat.name] = {
 				value = (base_stats[stat.name].value + managers.player:body_armor_skill_addend(name) * tweak_data.gui.stats_present_multiplier) * managers.player:body_armor_skill_multiplier(name) - base_stats[stat.name].value
 			}

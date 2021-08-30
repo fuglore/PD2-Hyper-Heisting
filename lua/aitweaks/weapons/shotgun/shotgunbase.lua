@@ -77,6 +77,7 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 	local pierce_shield = self._can_shoot_through_shield
 	local pierce_enemies = self._can_shoot_through_enemy
 	local pierce_wall = self._can_shoot_through_wall
+	local use_tracers = self._can_shoot_through_shield or self._use_tracers
 	
 	local ASTB_hit_enemy = pierce_shield or pierce_wall
 
@@ -169,6 +170,27 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 			hit_something = true
 
 			hit_enemy(col_ray)
+		end
+		
+		if use_tracers then
+			if alive(self._obj_fire) then
+				local furthest_hit = col_ray
+			
+				if furthest_hit and furthest_hit.distance > 600 or not furthest_hit then --last collision made by the ray or no collision, both used to spawn the cosmetic tracers from the barrel of the gun
+					local trail_direction = furthest_hit and furthest_hit.ray or mvec_spread_direction
+
+					self._obj_fire:m_position(self._trail_effect_table.position)
+					mvector3.set(self._trail_effect_table.normal, trail_direction)
+
+					local trail = World:effect_manager():spawn(self._trail_effect_table)
+
+					if furthest_hit then
+						World:effect_manager():set_remaining_lifetime(trail, math.clamp((furthest_hit.distance - 600) / 10000, 0, furthest_hit.distance))
+					else
+						World:effect_manager():set_remaining_lifetime(trail, math.clamp((20000 - 600) / 10000, 0, 20000))
+					end
+				end
+			end
 		end
 	end
 

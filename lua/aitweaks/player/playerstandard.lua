@@ -876,7 +876,7 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 				variant = "melee"
 			}
 
-			if special_weapon == "taser" then
+			if tweak_data.blackmarket.melee_weapons[melee_entry].tase_data and character_unit:character_damage().damage_tase then
 				action_data.variant = "taser_tased"
 			end
 

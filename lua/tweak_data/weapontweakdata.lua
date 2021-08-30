@@ -3326,6 +3326,13 @@ self.flamethrower_mk2.shake = {
 	fire_multiplier = 0.1,
 	fire_steelsight_multiplier = 0.05
 }
+self.flamethrower_mk2.fire_dot_data = {
+	dot_trigger_chance = 75,
+	dot_damage = 20,
+	dot_length = 1.6,
+	dot_trigger_max_distance = 3000,
+	dot_tick_period = 0.5
+}
 
 --MA-17 Flamethrower
 self.system.stats = {
@@ -3362,6 +3369,13 @@ self.system.kick.steelsight = {
 self.system.shake = {
 	fire_multiplier = 0.1,
 	fire_steelsight_multiplier = 0.05
+}
+self.system.fire_dot_data = {
+	dot_trigger_chance = 75,
+	dot_damage = 20,
+	dot_length = 1.6,
+	dot_trigger_max_distance = 3000,
+	dot_tick_period = 0.5
 }
 
 --Cashthrower

@@ -43,6 +43,20 @@ self.parts.wpn_fps_upg_a_slug.custom_stats = {
 self.parts.wpn_fps_upg_a_slug.stats.total_ammo_mod = -5
 
 self.parts.wpn_fps_upg_a_slug.stats.spread = 6
+
+self.parts.wpn_fps_upg_a_custom.stats = {value = 2}
+self.parts.wpn_fps_upg_a_custom.custom_stats = {use_tracers = true}
+self.parts.wpn_fps_upg_a_custom_free.stats = {value = 2}
+self.parts.wpn_fps_upg_a_custom_free.custom_stats = {use_tracers = true}
+
+self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.can_shoot_through_shield = nil
+self.parts.wpn_fps_upg_a_dragons_breath.custom_stats.fire_dot_data = {
+	dot_trigger_chance = "60",
+	dot_damage = "2",
+	dot_length = "6.1",
+	dot_trigger_max_distance = "2000",
+	dot_tick_period = "0.5"
+}
 	
 self.parts.wpn_fps_upg_a_piercing.custom_stats = {
 	damage_near_mul = 1,
@@ -155,10 +169,14 @@ if self.wpn_fps_ass_sg416 then
 end
 
 if self.parts.wpn_fps_fla_mk2_body_long then --WAR! Nozzle
+	self.parts.wpn_fps_fla_mk2_body_long.desc_id = "bm_wpn_fps_fla_mk2_body_long_desc"
+	self.parts.wpn_fps_fla_mk2_body_long.has_description = true
 	self.parts.wpn_fps_fla_mk2_body_long.stats = {damage = -6, concealment = -2, recoil = 2}
 	self.parts.wpn_fps_fla_mk2_body_long.custom_stats = {range_mul = 3}
 end
 
+self.parts.wpn_fps_fla_system_b_wtf.desc_id = "bm_wpn_fps_fla_system_b_wtf_desc"
+self.parts.wpn_fps_fla_system_b_wtf.has_description = true
 self.parts.wpn_fps_fla_system_b_wtf.stats = {
 	damage = 6,
 	recoil = -2,

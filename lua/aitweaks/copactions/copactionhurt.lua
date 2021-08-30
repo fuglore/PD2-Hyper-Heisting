@@ -143,13 +143,71 @@ function CopActionHurt:init(action_desc, common_data)
 		end
 
 		managers.hud:set_mugshot_downed(common_data.unit:unit_data().mugshot_id)
-	elseif action_type == "bleedout" then
-		redir_res = common_data.ext_movement:play_redirect("bleedout")
+	elseif action_type == "taser_tased" then
+		local can_be_tased = nil
+		
+		self._next_hurt_sound_dt = 1
+		
+		--[[if common_data.char_tweak.can_be_tased == nil then
+			can_be_tased = true
+		else
+			can_be_tased = common_data.char_tweak.can_be_tased
+		end
 
-		if not redir_res then
-			--debug_pause("[CopActionHurt:init] bleedout redirect failed in", common_data.machine:segment_state(ids_base))
-
+		if not can_be_tased then
 			return
+		end
+
+		if common_data.ext_brain and common_data.ext_brain.surrendered and common_data.ext_brain:surrendered() then
+			return
+		end]]
+
+		local tase_time = not uses_shield_anims and common_data.ext_damage._tased_time
+
+		if tase_time then
+			--log("fuck?")
+			self._tased_time = t + tase_time
+			common_data.ext_damage._tased_time = nil
+
+			--[[local down_time = common_data.ext_damage._tased_down_time
+
+			if down_time then
+				self._tased_down_time = t + down_time
+				common_data.ext_damage._tased_down_time = nil
+			end]]
+
+			redir_res = self._ext_movement:play_redirect("tased")
+
+			if not redir_res then
+				--debug_pause("[CopActionHurt:init] tased redirect failed in", self._machine:segment_state(ids_base))
+
+				return
+			end
+
+			taser_tased_tasing = true
+		else
+			redir_res = common_data.ext_movement:play_redirect("taser")
+
+			if not redir_res then
+				return
+			end
+
+			local anim_roll = self:_pseudorandom(4)
+			local anim_parameter = "var" .. tostring(anim_roll)
+
+			common_data.machine:set_parameter(redir_res, anim_parameter, 1)
+		end
+
+		if self._tased_effect then
+			World:effect_manager():fade_kill(self._tased_effect)
+
+			self._tased_effect = nil
+		end
+
+		local tase_effect_table = common_data.ext_damage._tase_effect_table
+
+		if tase_effect_table then
+			self._tased_effect = World:effect_manager():spawn(tase_effect_table)
 		end
 	elseif action_desc.variant == "tase" then
 		redir_res = common_data.ext_movement:play_redirect("tased")
@@ -161,6 +219,14 @@ function CopActionHurt:init(action_desc, common_data)
 		end
 
 		managers.hud:set_mugshot_tased(common_data.unit:unit_data().mugshot_id)
+	elseif action_type == "bleedout" then
+		redir_res = common_data.ext_movement:play_redirect("bleedout")
+
+		if not redir_res then
+			--debug_pause("[CopActionHurt:init] bleedout redirect failed in", common_data.machine:segment_state(ids_base))
+
+			return
+		end
 	elseif action_type == "fire_hurt" or action_type == "light_hurt" and action_desc.variant == "fire" then
 		--[[local use_animation_on_fire_damage = nil
 
@@ -209,69 +275,6 @@ function CopActionHurt:init(action_desc, common_data)
 		end
 
 		common_data.machine:set_parameter(redir_res, dir_str, 1)
-	elseif action_type == "taser_tased" then
-		local can_be_tased = nil
-
-		--[[if common_data.char_tweak.can_be_tased == nil then
-			can_be_tased = true
-		else
-			can_be_tased = common_data.char_tweak.can_be_tased
-		end
-
-		if not can_be_tased then
-			return
-		end
-
-		if common_data.ext_brain and common_data.ext_brain.surrendered and common_data.ext_brain:surrendered() then
-			return
-		end]]
-
-		local tase_time = not uses_shield_anims and common_data.ext_damage._tased_time
-
-		if tase_time then
-			self._tased_time = t + tase_time
-			common_data.ext_damage._tased_time = nil
-
-			--[[local down_time = common_data.ext_damage._tased_down_time
-
-			if down_time then
-				self._tased_down_time = t + down_time
-				common_data.ext_damage._tased_down_time = nil
-			end]]
-
-			redir_res = self._ext_movement:play_redirect("tased")
-
-			if not redir_res then
-				--debug_pause("[CopActionHurt:init] tased redirect failed in", self._machine:segment_state(ids_base))
-
-				return
-			end
-
-			taser_tased_tasing = true
-		else
-			redir_res = common_data.ext_movement:play_redirect("taser")
-
-			if not redir_res then
-				return
-			end
-
-			local anim_roll = self:_pseudorandom(4)
-			local anim_parameter = "var" .. tostring(anim_roll)
-
-			common_data.machine:set_parameter(redir_res, anim_parameter, 1)
-		end
-
-		if self._tased_effect then
-			World:effect_manager():fade_kill(self._tased_effect)
-
-			self._tased_effect = nil
-		end
-
-		local tase_effect_table = common_data.ext_damage._tase_effect_table
-
-		if tase_effect_table then
-			self._tased_effect = World:effect_manager():spawn(tase_effect_table)
-		end
 	elseif action_type == "light_hurt" then
 		if common_data.ext_anim.upper_body_active and not common_data.ext_anim.upper_body_empty and not common_data.ext_anim.recoil then
 			return
@@ -1457,6 +1460,20 @@ function CopActionHurt:_upd_tased(t)
 	local dt = TimerManager:game():delta_time()
 
 	if self._ext_anim.tased or self._ext_anim.tased_loop then
+		if self._next_hurt_sound_dt then
+			self._next_hurt_sound_dt = self._next_hurt_sound_dt - dt
+			
+			if self._next_hurt_sound_dt <= 0 then
+				if self._unit:base():has_tag("tank") then
+					--shut up. STOP PLAYING PDTH PAIN NOISES.
+				else
+					self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+				end
+				
+				 self._next_hurt_sound_dt = 1
+			end
+		end
+	
 		if self._shooting_hurt_tase then
 			self:_upd_tase_shooting(t)
 		end
@@ -1473,7 +1490,8 @@ function CopActionHurt:_upd_tased(t)
 		self._ext_movement:set_rotation(new_rot)
 	else
 		self._shooting_hurt_tase = nil
-
+		self._next_hurt_sound_dt = nil
+		
 		if self._autofiring then
 			self._weapon_base:stop_autofire()
 

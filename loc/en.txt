@@ -92,4 +92,6 @@
 	  
 	  
 	  "bm_wp_wpn_fps_fla_mk2_body_long": "WAR! Nozzle",
+	  "bm_wpn_fps_fla_mk2_body_long_desc": "Increases your Flamethrower's range at the cost of damage.",
+	  "bm_wpn_fps_fla_system_b_wtf_desc": "Increases your Flamethrower's damage at the cost of range.",
 }

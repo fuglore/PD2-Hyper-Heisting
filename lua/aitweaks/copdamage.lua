@@ -1149,8 +1149,9 @@ function CopDamage:damage_melee(attack_data)
 			result_type = "shield_knock"
 		elseif attack_data.variant == "counter_tased" then
 			result_type = "counter_tased"
-		elseif attack_data.variant == "taser_tased" and self._char_tweak.can_be_tased == nil or attack_data.variant == "taser_tased" and self._char_tweak.can_be_tased then
+		elseif attack_data.variant == "taser_tased" and self._char_tweak.can_be_tased == nil or attack_data.variant == "taser_tased" and self._char_tweak.can_be_tased or attack_data.variant == "tase" and self._char_tweak.can_be_tased == nil or attack_data.variant == "tase" and self._char_tweak.can_be_tased then
 			result_type = "taser_tased"
+			--log("uh")
 		elseif attack_data.variant == "counter_spooc" and not self._unit:base():has_tag("tank") or attack_data.variant == "counter_spooc" and not self._unit:base():has_tag("boss") then
 			result_type = "expl_hurt"
 		else
@@ -1158,9 +1159,7 @@ function CopDamage:damage_melee(attack_data)
 		end
 
 		if result_type == "taser_tased" and not self._unit:base():has_tag("shield") then --shields get tased as usual, other enemies get tased similarly to bots
-			result_type = "hurt"
-			variant = nil
-			attack_data.variant = "tase"
+			result_type = "taser_tased"
 
 			if attack_data.charge_lerp_value then
 				local charge_power = math.lerp(0, 1, attack_data.charge_lerp_value)
@@ -1441,6 +1440,9 @@ function CopDamage:sync_damage_melee(attacker_unit, damage_percent, damage_effec
 			result_type = "expl_hurt"
 		elseif variant == 5 then
 			result_type = "taser_tased"
+			
+			self._tased_time = math.lerp(1, 5, damage_effect_percent)
+			self._tased_down_time = self._tased_time * 2
 		elseif variant == 8 or variant == 9 then
 			result_type = "hurt"
 
@@ -2721,7 +2723,7 @@ function CopDamage:damage_fire(attack_data)
 			elseif alive(attack_data.weapon_unit) and attack_data.weapon_unit:base()._parts then
 				for part_id, part in pairs(attack_data.weapon_unit:base()._parts) do
 					if tweak_data.weapon.factory.parts[part_id].custom_stats and tweak_data.weapon.factory.parts[part_id].custom_stats.fire_dot_data then
-						dot_damage = dot_damage * damage * 0.01 --Dragon's Breath rounds, scale DoT damage depending on the total damage dealt through direct (impact) fire damage
+						dot_damage = dot_damage * damage * 0.05 --Dragon's Breath rounds, scale DoT damage depending on the total damage dealt through direct (impact) fire damage
 						--usual dot_damage is 10
 					end
 				end
@@ -3533,27 +3535,22 @@ function CopDamage:damage_tase(attack_data)
 				end
 			end
 
-			if self._unit:base():has_tag("shield") then
-				result.type = "taser_tased"
-			else
-				if self._char_tweak.damage and self._char_tweak.damage.tased_response then
-					if attack_data.variant == "heavy" and self._char_tweak.damage.tased_response.heavy then
-						self._tased_time = self._char_tweak.damage.tased_response.heavy.tased_time
-						self._tased_down_time = self._char_tweak.damage.tased_response.heavy.down_time
-						result.variant = "heavy"
-					elseif self._char_tweak.damage.tased_response.light then
-						self._tased_time = self._char_tweak.damage.tased_response.light.tased_time
-						self._tased_down_time = self._char_tweak.damage.tased_response.light.down_time
-						result.variant = "light"
-					else
-						self._tased_time = 1
-						self._tased_down_time = 5
-						result.variant = nil
-					end
-				end
+			result.type = "taser_tased"
 
-				result.type = "hurt"
-				attack_data.variant = "tase"
+			if self._char_tweak.damage and self._char_tweak.damage.tased_response then
+				if attack_data.variant == "heavy" and self._char_tweak.damage.tased_response.heavy then
+					self._tased_time = self._char_tweak.damage.tased_response.heavy.tased_time
+					self._tased_down_time = self._char_tweak.damage.tased_response.heavy.down_time
+					result.variant = "heavy"
+				elseif self._char_tweak.damage.tased_response.light then
+					self._tased_time = self._char_tweak.damage.tased_response.light.tased_time
+					self._tased_down_time = self._char_tweak.damage.tased_response.light.down_time
+					result.variant = "light"
+				else
+					self._tased_time = 1
+					self._tased_down_time = 5
+					result.variant = nil
+				end
 			end
 		end
 

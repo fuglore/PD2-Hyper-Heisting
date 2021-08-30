@@ -7374,24 +7374,24 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 	for _, cname in ipairs(punks_units) do
 		self[cname].crumble_chance = common_chance
 		self[cname].allow_pass_out = true
-		self[cname].damage.fire_damage_mul = 24
+		self[cname].damage.fire_damage_mul = 18
 	end
 	
 	if self.security_no_pager then
 		self.security_no_pager.crumble_chance = common_chance
 		self.security_no_pager.allow_pass_out = true
-		self.security_no_pager.damage.fire_damage_mul = 24
+		self.security_no_pager.damage.fire_damage_mul = 18
 	end
 	
 	for _, lname in ipairs(light_units) do
 		self[lname].crumble_chance = light_swat_chance
 		self[lname].allow_pass_out = true
-		self[lname].damage.fire_damage_mul = 16
+		self[lname].damage.fire_damage_mul = 12
 	end
 	
 	for _, hname in ipairs(heavy_units) do
 		self[hname].crumble_chance = heavy_swat_chance
-		self[hname].damage.fire_damage_mul = 8
+		self[hname].damage.fire_damage_mul = 6
 	end
 end
 

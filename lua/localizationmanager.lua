@@ -341,6 +341,8 @@
 		["loading_hh_31"] = "Cloakers make loud breathing sounds from their gas masks when moving around, keep an ear out!",
 		["loading_hh_32"] = "In Hyper Heisting, Shotguns deal a minimum of 10% of their damage at a range! SWAT snipers beware!",
 		["loading_hh_33"] = "In Hyper Heisting, when using Shotguns, raising your weapon's Accuracy above 50 grants you increased minimum damage at higher ranges!",
+		["loading_hh_34"] = "In Hyper Heisting, the continuous damage an enemy takes when burning is based on the weapon's damage stat! Both for Flamethrowers, and Dragon's Breath rounds on shotguns!",
+		["loading_hh_35"] = "A Flamethrower's damage over time will mostly always exceed the Dragon's Breath rounds' damage over time, but will also be much shorter.",
 		["pattern_truthrunes_title"] = "Truth Runes",				
 		["menu_l_global_value_hyperheist"] = "This is a Hyper Heisting item!",
 		["menu_l_global_value_hyperheisting_desc"] = "This is a Hyper Heisting item!",		
@@ -617,8 +619,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["bm_wp_g3_b_short"] = "Short Barrel",
 			["bm_wp_g3_b_sniper"] = "Long Barrel",
 			["bm_wp_upg_a_piercing_desc"] = "Pierces through enemy armor.",
+			["bm_wp_upg_a_custom_desc"] = "Gives your shotgun rounds fancy tracer effects! Purely aesthetic!",
 			["bm_w_p90"] = "Kobus 90 A/P Submachine Gun",
-			["bm_w_asval"] = "Valkyria AP Rifle",		
+			["bm_w_asval"] = "Valkyria AP Rifle",
 		})
 	end
 	

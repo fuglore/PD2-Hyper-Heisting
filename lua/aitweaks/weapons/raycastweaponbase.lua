@@ -654,6 +654,10 @@ function InstantBulletBase:on_collision_effects(col_ray, weapon_unit, user_unit,
 	end
 end
 
+function FlameBulletBase:bullet_slotmask()
+	return managers.slot:get_mask("bullet_impact_targets")
+end
+
 function FlameBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, blank, use_damage_mul)
 	local hit_unit = col_ray.unit
 	local play_impact_flesh = false
@@ -735,7 +739,7 @@ function FlameBulletBase:give_fire_damage(col_ray, weapon_unit, user_unit, damag
 		damage = damage,
 		weapon_unit = weapon_unit,
 		attacker_unit = user_unit,
-		use_armor_piercing = use_damage_mul,
+		use_damage_mul = use_damage_mul,
 		col_ray = col_ray,
 		armor_piercing = armor_piercing,
 		fire_dot_data = fire_dot_data

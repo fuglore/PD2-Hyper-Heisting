@@ -160,6 +160,10 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish)
 				self._ammo_data.ammo_pickup_max_mul = self._ammo_data.ammo_pickup_max_mul and self._ammo_data.ammo_pickup_max_mul * stats.ammo_pickup_max_mul or stats.ammo_pickup_max_mul
 			end
 		end
+		
+		if stats.use_tracers then
+			self._use_tracers = stats.use_tracers
+		end
 	end
 
 	if self._ammo_data then
