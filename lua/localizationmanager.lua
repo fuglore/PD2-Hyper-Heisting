@@ -451,13 +451,13 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_deck8_3_desc"] = "Your movement speed is further increased by ##5%##.",
 			
-			["menu_deck8_7_desc"] = "Your movement speed is increased by ##15%##. \n\nEach consecutive melee hit will increase your melee weapon swing speed by ##25%## for ##1.5## seconds.\n\nThis can be stacked up to ##4## times.\n\nMissing your melee swing or running out of time will reset all stacks.",
+			["menu_deck8_7_desc"] = "Your movement speed is increased by ##15%##. \n\nEach consecutive melee hit will increase your melee weapon swing speed by ##25%## for ##1.5## seconds.\n\nThis can be stacked up to ##4## times.\n\nRunning out of time will reset all stacks",
 			
 			["menu_deck8_9_desc"] = "Striking an enemy with your melee weapon will heal you for ##+25 Health##.\n\nThis cannot occur more than once every ##5## seconds",
 
 			["menu_deck9_1"] = "No Talk",
 
-			["menu_deck9_1_desc"] = "Your movement speed is increased by ##15%##. \n\nEach consecutive melee hit will increase your melee weapon swing speed by ##25%##for ##1.5## seconds.\n\nThis can be stacked up to ##4## times.\n\nMissing your melee swing or running out of time will reset all stacks.",
+			["menu_deck9_1_desc"] = "Your movement speed is increased by ##15%##. \n\nEach consecutive melee hit will increase your melee weapon swing speed by ##25%##for ##1.5## seconds.\n\nThis can be stacked up to ##4## times.\n\nRunning out of time will reset all stacks.",
  
 			["menu_deck9_5_desc"] ="Killing an enemy with a melee weapon regenerates ##10%## health. \n\nThis cannot occur more than once every ##1## second. \n\nYour movement speed is further increased by ##5%##.",
  

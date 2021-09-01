@@ -336,34 +336,6 @@ function TeamAILogicIdle.on_long_dis_interacted(data, other_unit, secondary)
 	end
 
 	if cur_objective and cur_objective.type == "revive" then
-		if mov_ext:carrying_bag() then
-			local throw_bag = true
-
-			if other_unit:base().is_local_player then
-				if other_unit_mov_ext:current_state_name() == "carry" or other_unit:character_damage():need_revive() then
-					throw_bag = false
-				end
-			elseif other_unit_mov_ext:carry_id() ~= nil or other_unit_mov_ext:need_revive() then
-				throw_bag = false
-			end
-
-			if throw_bag then
-				local spine_pos = tmp_vec1
-				mov_ext._obj_spine:m_position(spine_pos)
-
-				local dis = mvec3_dist(spine_pos, other_unit_mov_ext:m_head_pos())
-
-				local throw_distance = tweak_data.ai_carry.throw_distance * mov_ext:carry_tweak().throw_distance_multiplier
-				throw_bag = dis <= throw_distance
-			end
-
-			if throw_bag then
-				mov_ext:throw_bag(other_unit)
-
-				return
-			end
-		end
-
 		if was_staying then
 			mov_ext:set_should_stay(false)
 		end
@@ -484,19 +456,6 @@ function TeamAILogicIdle.on_long_dis_interacted(data, other_unit, secondary)
 
 		if not objective_action == "untie" then
 			data.unit:sound():say("r02a_sin", true)
-		end
-
-		if mov_ext:carrying_bag() and not mov_ext:carry_tweak().can_run then
-			local range_sq = 810000
-			local dist_sq = mvec3_dist_sq(data.m_pos, other_unit:movement():m_pos())
-
-			if dist_sq < range_sq then --within inspire range, taken from teamailogictravel as it's calculated with square distance
-				if not managers.player:is_custom_cooldown_not_active("team", "crew_inspire") then --if inspire is on cooldown, throw the bag, otherwise, don't
-					mov_ext:throw_bag()
-				end
-			else --not within inspire range, so throw the bag
-				mov_ext:throw_bag()
-			end
 		end
 	end
 

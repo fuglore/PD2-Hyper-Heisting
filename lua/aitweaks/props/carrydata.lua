@@ -142,7 +142,6 @@ function CarryData._register_body_bag(unit)
 		return
 	end
 
-
 	CarryData._body_bags[unit:key()] = unit
 
 	if managers.groupai:state():enemy_weapons_hot() then

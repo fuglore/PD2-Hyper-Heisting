@@ -1447,11 +1447,52 @@ function CharacterTweakData:_presets(tweak_data)
 		0.5,
 		2
 	}
+	presets.detection.gang_member = { 
+		idle = {},
+		combat = {},
+		recon = {},
+		guard = {},
+		ntl = {}
+	}
+	presets.detection.gang_member.idle.dis_max = 20000
+	presets.detection.gang_member.idle.angle_max = 360
+	presets.detection.gang_member.idle.delay = {
+		0,
+		0
+	}
+	presets.detection.gang_member.idle.use_uncover_range = true
+	presets.detection.gang_member.combat.dis_max = 20000
+	presets.detection.gang_member.combat.angle_max = 360
+	presets.detection.gang_member.combat.delay = {
+		0,
+		0
+	}
+	presets.detection.gang_member.combat.use_uncover_range = true
+	presets.detection.gang_member.recon.dis_max = 20000
+	presets.detection.gang_member.recon.angle_max = 360
+	presets.detection.gang_member.recon.delay = {
+		0,
+		0
+	}
+	presets.detection.gang_member.recon.use_uncover_range = true
+	presets.detection.gang_member.guard.dis_max = 20000
+	presets.detection.gang_member.guard.angle_max = 360
+	presets.detection.gang_member.guard.delay = {
+		0,
+		0
+	}
+	presets.detection.gang_member.ntl.use_uncover_range = true
+	presets.detection.gang_member.ntl.dis_max = 1500
+	presets.detection.gang_member.ntl.angle_max = 360
+	presets.detection.gang_member.ntl.delay = {
+		0,
+		0
+	}
+	
 	
 	--make normal clone my new preset to keep enemies not currently set here capable of detecting people too
 	presets.detection.normal = deep_clone(presets.detection.enemymook)
 	presets.detection.guard = deep_clone(presets.detection.enemymook)
-	presets.detection.gang_member = deep_clone(presets.detection.enemymook)
 	
 	--custom hurt severities start here, focus on less enemy down time as enemy health goes up 
 	--satisfying staggering behavior, burying full auto rounds into enemies faces eventually makes them fall over and squirm, anything that deals immediate large damage staggers enemies consistently. 
@@ -6443,15 +6484,19 @@ function CharacterTweakData:_presets(tweak_data)
 		0.2,
 		0.3
 	}
-	presets.weapon.gang_member.is_pistol.focus_delay = 1
+	presets.weapon.gang_member.is_pistol.focus_delay = 0.4
 	presets.weapon.gang_member.is_pistol.focus_dis = 200
 	presets.weapon.gang_member.is_pistol.spread = 25
 	presets.weapon.gang_member.is_pistol.miss_dis = 20
 	presets.weapon.gang_member.is_pistol.RELOAD_SPEED = 1.5
-	presets.weapon.gang_member.is_pistol.melee_speed = 3
-	presets.weapon.gang_member.is_pistol.melee_dmg = 3
+	presets.weapon.gang_member.is_pistol.melee_speed = 2
+	presets.weapon.gang_member.is_pistol.melee_dmg = 45
 	presets.weapon.gang_member.is_pistol.melee_retry_delay = presets.weapon.normal.is_pistol.melee_retry_delay
-	presets.weapon.gang_member.is_pistol.range = presets.weapon.normal.is_pistol.range
+	presets.weapon.gang_member.is_pistol.range = {
+		optimal = 4000,
+		far = 6000, 
+		close = 3000
+	}
 	presets.weapon.gang_member.is_pistol.FALLOFF = {
 		{
 			dmg_mul = 1,
@@ -6501,12 +6546,12 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 10,
 		RELOAD_SPEED = 1,
 		melee_speed = 2,
-		melee_dmg = 3,
+		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_rifle.melee_retry_delay,
 		range = {
-			optimal = 2500,
-			far = 6000,
-			close = 1500
+			optimal = 4000,
+			far = 6000, 
+			close = 3000
 		},
 		autofire_rounds = {45, 45},
 		FALLOFF = {
@@ -6595,12 +6640,12 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 10,
 		RELOAD_SPEED = 1,
 		melee_speed = 2,
-		melee_dmg = 3,
+		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_rifle.melee_retry_delay,
 		range = {
 			optimal = 4000,
 			far = 6000,
-			close = 2000
+			close = 3000
 		},
 		FALLOFF = {
 			{
@@ -6706,12 +6751,12 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 10,
 		RELOAD_SPEED = 0.7,
 		melee_speed = 2,
-		melee_dmg = 3,
+		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_lmg.melee_retry_delay,
 		range = {
-			optimal = 2500,
+			optimal = 4000,
 			far = 6000,
-			close = 1500
+			close = 3000
 		},
 		autofire_rounds = {100, 200},
 		FALLOFF = {
@@ -6836,9 +6881,13 @@ function CharacterTweakData:_presets(tweak_data)
 		miss_dis = 10,
 		RELOAD_SPEED = 2,
 		melee_speed = 2,
-		melee_dmg = 3,
+		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_shotgun_pump.melee_retry_delay,
-		range = presets.weapon.normal.is_shotgun_pump.range,
+		range = {
+			optimal = 4000,
+			far = 6000,
+			close = 3000
+		},
 		FALLOFF = {
 			{
 				dmg_mul = 3,
@@ -6909,7 +6958,11 @@ function CharacterTweakData:_presets(tweak_data)
 		melee_speed = 2,
 		melee_dmg = 3,
 		melee_retry_delay = presets.weapon.normal.is_shotgun_mag.melee_retry_delay,
-		range = presets.weapon.normal.is_shotgun_mag.range,
+		range = {
+			optimal = 4000,
+			far = 6000,
+			close = 3000
+		},
 		autofire_rounds = {
 			4,
 			8
@@ -7037,12 +7090,12 @@ function CharacterTweakData:_presets(tweak_data)
 			dmg_mul = 10,
 			r = 300,
 			acc = {
-				0,
+				0.6,
 				1
 			},
 			recoil = {
-				0.45,
-				1
+				0.35,
+				0.6
 			},
 			mode = {
 				0.5,
@@ -7055,12 +7108,12 @@ function CharacterTweakData:_presets(tweak_data)
 			dmg_mul = 10,
 			r = 3000,
 			acc = {
-				0,
+				0.3,
 				1
 			},
 			recoil = {
-				0.45,
-				1.25
+				0.4,
+				0.7
 			},
 			mode = {
 				0.5,

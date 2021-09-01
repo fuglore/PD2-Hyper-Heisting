@@ -925,18 +925,6 @@ function PlayerStandard:_do_melee_damage(t, bayonet_melee, melee_hit_ray, melee_
 							stack[1] = t + 1.5
 							stack[2] = 0.25
 						end
-					else
-						if managers.player:has_category_upgrade("melee", "stacking_hit_damage_multiplier") then
-							self._state_data.stacking_melee_speed = self._state_data.stacking_melee_speed or {
-								nil,
-								0
-							}
-									
-							local stack = self._state_data.stacking_melee_speed
-
-							stack[1] = nil
-							stack[2] = 0
-						end
 					end
 				end
 			end
@@ -1953,12 +1941,6 @@ function PlayerStandard:_start_action_equip_weapon(t)
 	managers.upgrades:setup_current_weapon()
 end
 
-function PlayerStandard:_action_interact_forbidden()
-	local action_forbidden = self:chk_action_forbidden("interact") or self._unit:base():stats_screen_visible() or self:_interacting() or self._ext_movement:has_carry_restriction() or self:is_deploying() or self:_changing_weapon() or self:_is_throwing_projectile() or self:_is_meleeing() or self:_on_zipline() or self._melee_stunned
-
-	return action_forbidden
-end
-
 function PlayerStandard:_check_action_throw_grenade(t, input)
 	local action_wanted = input.btn_throw_grenade_press
 
@@ -1979,6 +1961,170 @@ function PlayerStandard:_check_action_throw_grenade(t, input)
 	self:_start_action_throw_grenade(t, input)
 
 	return action_wanted
+end
+
+function PlayerStandard:_check_action_throw_projectile(t, input)
+	local projectile_entry = managers.blackmarket:equipped_projectile()
+	local projectile_tweak = tweak_data.blackmarket.projectiles[projectile_entry]
+	
+	if projectile_tweak.ability then
+		return
+	end
+
+	if projectile_tweak.is_a_grenade then
+		return self:_check_action_throw_grenade(t, input)
+	end
+
+	if self._state_data.projectile_throw_wanted then
+		if not self._state_data.projectile_throw_allowed_t then
+			self._state_data.projectile_throw_wanted = nil
+
+			self:_do_action_throw_projectile(t, input)
+		end
+
+		return
+	end
+
+	local action_wanted = input.btn_projectile_press or input.btn_projectile_release or self._state_data.projectile_idle_wanted
+
+	if not action_wanted then
+		return
+	end
+
+	if not managers.player:can_throw_grenade() then
+		self._state_data.projectile_throw_wanted = nil
+		self._state_data.projectile_idle_wanted = nil
+
+		return
+	end
+
+	if input.btn_projectile_release then
+		if self._state_data.throwing_projectile then
+			if self._state_data.projectile_throw_allowed_t then
+				self._state_data.projectile_throw_wanted = true
+
+				return
+			end
+
+			self:_do_action_throw_projectile(t, input)
+		end
+
+		return
+	end
+
+	local action_forbidden = not PlayerBase.USE_GRENADES or not self:_projectile_repeat_allowed() or self:chk_action_forbidden("interact") or self:_interacting() or self:is_deploying() or self:_changing_weapon() or self:_is_meleeing() or self:_is_using_bipod()
+
+	if action_forbidden then
+		return
+	end
+
+	self:_start_action_throw_projectile(t, input)
+
+	return true
+end
+
+function PlayerStandard:_check_action_interact(t, input)
+	local keyboard = self._controller.TYPE == "pc" or managers.controller:get_default_wrapper_type() == "pc"
+	local new_action, timer, interact_object = nil
+
+	if input.btn_interact_press then
+		if _G.IS_VR then
+			self._interact_hand = input.btn_interact_left_press and PlayerHand.LEFT or PlayerHand.RIGHT
+		end
+
+		if not self:_action_interact_forbidden() then
+			new_action, timer, interact_object = self._interaction:interact(self._unit, input.data, self._interact_hand)
+
+			if new_action then
+				self:_play_interact_redirect(t, input)
+			end
+
+			if timer then
+				new_action = true
+
+				self._ext_camera:camera_unit():base():set_limits(80, 50)
+				self:_start_action_interact(t, input, timer, interact_object)
+			end
+
+			if not new_action then
+				self._start_intimidate = true
+				self._start_intimidate_t = t
+			end
+		end
+	end
+
+	local secondary_delay = tweak_data.team_ai.stop_action.delay
+	local force_secondary_intimidate = false
+
+	if not new_action and keyboard and input.btn_interact_secondary_press then
+		force_secondary_intimidate = true
+	end
+
+	if input.btn_interact_release then
+		local released = true
+
+		if _G.IS_VR then
+			local release_hand = input.btn_interact_left_release and PlayerHand.LEFT or PlayerHand.RIGHT
+			released = release_hand == self._interact_hand
+		end
+
+		if released then
+			if self._start_intimidate and not self:_action_interact_forbidden() then
+				if t < self._start_intimidate_t + secondary_delay then
+					self:_start_action_intimidate(t)
+
+					self._start_intimidate = false
+					
+					return
+				end
+			else
+				self:_interupt_action_interact()
+			end
+		end
+	end
+
+	if (self._start_intimidate or force_secondary_intimidate) and not self:_action_interact_forbidden() and (not keyboard and t > self._start_intimidate_t + secondary_delay or force_secondary_intimidate) then
+		self:_start_action_intimidate(t, true)
+
+		self._start_intimidate = false
+		
+		return
+	end
+
+	return new_action
+end
+
+function PlayerStandard:_start_action_throw_grenade(t, input)
+	self:_check_stop_shooting()
+	self:_interupt_action_reload(t)
+	self:_interupt_action_steelsight(t)
+	self:_interupt_action_running(t)
+	self:_interupt_action_charging_weapon(t)
+
+	local equipped_grenade = managers.blackmarket:equipped_grenade()
+	local projectile_tweak = tweak_data.blackmarket.projectiles[equipped_grenade]
+
+	if self._projectile_global_value then
+		self._camera_unit:anim_state_machine():set_global(self._projectile_global_value, 0)
+
+		self._projectile_global_value = nil
+	end
+
+	if projectile_tweak.anim_global_param then
+		self._projectile_global_value = projectile_tweak.anim_global_param
+
+		self._camera_unit:anim_state_machine():set_global(self._projectile_global_value, 1)
+	end
+
+	local delay = self:_get_projectile_throw_offset()
+
+	managers.network:session():send_to_peers_synched("play_distance_interact_redirect_delay", self._unit, "throw_grenade", delay)
+	self._ext_camera:play_redirect(Idstring(projectile_tweak.animation or "throw_grenade"))
+
+	local projectile_data = tweak_data.blackmarket.projectiles[equipped_grenade]
+	self._state_data.throw_grenade_expire_t = t + (projectile_data.expire_t or 1.1)
+
+	self:_stance_entered()
 end
 
 function PlayerStandard:_update_check_actions(t, dt, paused)
@@ -2030,6 +2176,17 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 
 	local new_action = nil
 	local anim_data = self._ext_anim
+	new_action = new_action or self:_check_action_interact(t, input)
+	
+	local projectile_entry = managers.blackmarket:equipped_projectile()
+	local projectile_tweak = tweak_data.blackmarket.projectiles[projectile_entry]
+		
+	if projectile_tweak.ability then
+		self:_check_action_use_ability(t, input)
+	else
+		new_action = new_action or self:_check_action_throw_projectile(t, input)
+	end
+	
 	new_action = new_action or self:_check_action_weapon_gadget(t, input)
 	new_action = new_action or self:_check_action_weapon_firemode(t, input)
 	new_action = new_action or self:_check_action_melee(t, input)
@@ -2046,8 +2203,6 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 
 	new_action = new_action or self:_check_action_equip(t, input)
 	new_action = new_action or self:_check_use_item(t, input)
-	new_action = new_action or self:_check_action_throw_projectile(t, input)
-	new_action = new_action or self:_check_action_interact(t, input)
 
 	self:_check_action_jump(t, input)
 	self:_check_action_run(t, input)
@@ -2067,3 +2222,100 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	
 	self:_find_pickups(t)
 end
+
+function PlayerStandard:_action_interact_forbidden()
+	local action_forbidden = self:chk_action_forbidden("interact") or self._unit:base():stats_screen_visible() or self:_interacting() or self._ext_movement:has_carry_restriction() or self:is_deploying() or self._melee_stunned
+
+	return action_forbidden
+end
+
+function PlayerStandard:_play_distance_interact_redirect(t, variant)
+	managers.network:session():send_to_peers_synched("play_distance_interact_redirect", self._unit, variant)
+
+	if self._state_data.in_steelsight then
+		return
+	end
+
+	if self._shooting or not self._equipped_unit:base():start_shooting_allowed() then
+		return
+	end
+
+	if self:_is_reloading() or self:_changing_weapon() or self:_is_meleeing() or self._use_item_expire_t then
+		return
+	end
+	
+	if self._running and not self._equipped_unit:base():run_and_shoot_allowed() then
+		return
+	end
+	
+	if self:is_deploying() or self:_changing_weapon() or self:_is_throwing_projectile() or self:_interacting() then
+		return
+	end
+	
+	if self._melee_stunned then
+		return
+	end
+
+	self._state_data.interact_redirect_t = t + 1
+
+	self._ext_camera:play_redirect(Idstring(variant))
+end
+
+function PlayerStandard:_check_action_use_ability(t, input)
+	local action_wanted = input.btn_throw_grenade_press
+
+	if not action_wanted then
+		return
+	end
+	
+	if not managers.player:can_throw_grenade() then
+		return
+	end
+
+	local equipped_ability = managers.blackmarket:equipped_grenade()
+
+	managers.player:attempt_ability(equipped_ability) --return nothing in order to allow other actions while activating these
+end
+
+function PlayerStandard:_do_action_intimidate(t, interact_type, sound_name, skip_alert)
+	if sound_name then
+		self._intimidate_t = t
+
+		self:say_line(sound_name, skip_alert)
+
+		if _G.IS_VR then
+			self._unit:hand():intimidate(self._interact_hand)
+		end
+
+		if interact_type and not self:_is_using_bipod() then
+			self:_play_distance_interact_redirect(t, interact_type)
+		end
+	end
+end
+
+function PlayerStandard:_start_action_interact(t, input, timer, interact_object)
+	self:_interupt_action_reload(t)
+	self:_interupt_action_steelsight(t)
+	self:_interupt_action_running(t)
+	self:_interupt_action_charging_weapon(t)
+	self:_interupt_action_melee(t)
+	self:_interupt_action_interact(t)
+	self:_interupt_action_throw_grenade(t)
+	self:_interupt_action_throw_projectile(t)
+
+	local final_timer = timer
+	final_timer = managers.modifiers:modify_value("PlayerStandard:OnStartInteraction", final_timer, interact_object)
+	self._interact_expire_t = final_timer
+	local start_timer = 0
+	self._interact_params = {
+		object = interact_object,
+		timer = final_timer,
+		tweak_data = interact_object:interaction().tweak_data
+	}
+
+	self:_play_unequip_animation()
+	managers.hud:show_interaction_bar(start_timer, final_timer)
+	managers.network:session():send_to_peers_synched("sync_teammate_progress", 1, true, self._interact_params.tweak_data, final_timer, false)
+	self._unit:network():send("sync_interaction_anim", true, self._interact_params.tweak_data)
+end
+
