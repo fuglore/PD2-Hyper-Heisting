@@ -46,6 +46,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 		--self.projectiles.wpn_prj_jav.damage = 300
 		self.projectiles.wpn_prj_jav.pickup_chance = 0.03
 		self.projectiles.wpn_prj_jav.max_amount = 1
+		self.projectiles.wpn_gre_electric.pickup_chance = 0.03
 		
 	end
 end)

@@ -3378,31 +3378,6 @@ self.system.fire_dot_data = {
 	dot_tick_period = 0.5
 }
 
---Cashthrower
-self.money.stats.damage = 46
-self.money.CLIP_AMMO_MAX = 200
-self.money.AMMO_MAX = self.money.CLIP_AMMO_MAX * self.money.NR_CLIPS_MAX
-self.money.AMMO_PICKUP = {self.money.CLIP_AMMO_MAX / 20, self.money.CLIP_AMMO_MAX / 10}
-self.money.kick = {
-	standing = {
-		0.4,
-		0.4,
-		-0.4,
-		0.4
-	}
-}
-self.money.kick.crouching = self.money.kick.standing
-self.money.kick.steelsight = {
-	0.2,
-	0.2,
-	-0.2,
-	0.2
-}
-self.money.shake = {
-	fire_multiplier = 0.2,
-	fire_steelsight_multiplier = 0.1
-}
-
 self.stats.recoil = {
 	2,
 	1.96,
