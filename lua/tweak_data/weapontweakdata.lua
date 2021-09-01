@@ -272,12 +272,6 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	
 	self.mini_npc.CLIP_AMMO_MAX = 100000 --new minigun dozer buff setup
 	self.mini_npc.NR_CLIPS_MAX = 1
-
-	-- Bot Weapon Changes
-	self.sr2_crew.use_data.selection_index = 2
-	self.cobray_crew.use_data.selection_index = 2
-	self.baka_crew.use_data.selection_index = 2
-	self.shepheard_crew.use_data.selection_index = 2
 	
 	--high vis trails for high damage/important enemy weapons
 	self.m14_sniper_npc.hivis = true
@@ -384,6 +378,27 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.emp_npc.damage = 0
 	self.emp_npc.suppression = 99
 	self.emp_npc.apply_emp = true
+	
+	-- Bot Weapon Changes
+	self.sr2_crew.use_data.selection_index = 2
+	self.cobray_crew.use_data.selection_index = 2
+	self.baka_crew.use_data.selection_index = 2
+	self.shepheard_crew.use_data.selection_index = 2
+	self.r870_crew.rays = 10
+	self.serbu_crew.rays = 10
+	self.ksg_crew.rays = 10
+	self.spas12_crew.rays = 10
+	self.m37_crew.rays = 10
+	self.boot_crew.rays = 10
+	self.judge_crew.rays = 10
+	self.m1897_crew.rays = 10
+	self.benelli_crew.rays = 9
+	self.striker_crew.rays = 9
+	self.m590_crew.rays = 9
+	self.saiga_crew.rays = 8
+	self.aa12_crew.rays = 8
+	self.rota_crew.rays = 8
+	self.basset_crew.rays = 6	
 end)
 
 --TODO: it is done
@@ -1901,6 +1916,7 @@ crouching = {
 }
 
 --Raven
+self.ksg.rays = 10
 self.ksg.stats.damage = 190
 self.ksg.damage_near = 600
 self.ksg.damage_far = 1100

@@ -6486,7 +6486,7 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.gang_member.is_pistol.focus_delay = 0.4
 	presets.weapon.gang_member.is_pistol.focus_dis = 200
-	presets.weapon.gang_member.is_pistol.spread = 25
+	presets.weapon.gang_member.is_pistol.spread = 3
 	presets.weapon.gang_member.is_pistol.miss_dis = 20
 	presets.weapon.gang_member.is_pistol.RELOAD_SPEED = 1.5
 	presets.weapon.gang_member.is_pistol.melee_speed = 2
@@ -6542,7 +6542,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 1,
 		focus_dis = 100,
-		spread = 25,
+		spread = 3,
 		miss_dis = 10,
 		RELOAD_SPEED = 1,
 		melee_speed = 2,
@@ -6636,7 +6636,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 1.5,
 		focus_dis = 200,
-		spread = 25,
+		spread = 1,
 		miss_dis = 10,
 		RELOAD_SPEED = 1,
 		melee_speed = 2,
@@ -6747,7 +6747,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 1,
 		focus_dis = 100,
-		spread = 30,
+		spread = 3,
 		miss_dis = 10,
 		RELOAD_SPEED = 0.7,
 		melee_speed = 2,
@@ -6877,7 +6877,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 3,
 		focus_dis = 100,
-		spread = 15,
+		spread = 3,
 		miss_dis = 10,
 		RELOAD_SPEED = 2,
 		melee_speed = 2,
@@ -6952,7 +6952,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 1,
 		focus_dis = 200,
-		spread = 18,
+		spread = 3,
 		miss_dis = 10,
 		RELOAD_SPEED = 1.6,
 		melee_speed = 2,

@@ -1,3 +1,20 @@
+local mvec_to = Vector3()
+local mvec_spread = Vector3()
+
+local world_g = World
+
+local math_UP = math.UP
+local math_sin = math.sin
+local math_cos = math.cos
+local math_random = math.random
+local math_rad = math.rad
+local math_clamp = math.clamp
+
+local mvec3_set = mvector3.set
+local mvec3_add = mvector3.add
+local mvec3_mul = mvector3.multiply
+local mvec3_cpy = mvector3.copy
+
 function NewNPCRaycastWeaponBase:init(unit)
 	NewRaycastWeaponBase.super.super.init(self, unit, false)
 
@@ -7,6 +24,7 @@ function NewNPCRaycastWeaponBase:init(unit)
 	self.name_id = nil
 	self._bullet_slotmask = managers.slot:get_mask("bullet_impact_targets")
 	self._blank_slotmask = managers.slot:get_mask("bullet_blank_impact_targets")
+	self._effect_manager = world_g:effect_manager()
 
 	self:_create_use_setups()
 
@@ -102,8 +120,189 @@ function NewNPCRaycastWeaponBase:setup(setup_data)
 	self._part_stats = managers.weapon_factory:get_stats(self._factory_id, self._blueprint)
 
 	if setup_data.user_unit:in_slot(16) then --allow bots to shoot through each other
-		self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(16, 22)
+		self._bullet_slotmask = self._bullet_slotmask - world_g:make_slot_mask(16, 22)
 	end
+end
+
+local mto = Vector3()
+local mfrom = Vector3()
+local mspread = Vector3()
+
+function NewNPCRaycastWeaponBase:_spawn_trail_effect(direction, col_ray)
+	if not alive(self._obj_fire) then
+		return
+	end
+
+	self._obj_fire:m_position(self._trail_effect_table.position)
+	mvec3_set(self._trail_effect_table.normal, direction)
+
+	local trail = self._effect_manager:spawn(self._trail_effect_table)
+
+	if col_ray then
+		self._effect_manager:set_remaining_lifetime(trail, math_clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
+	end
+end
+
+function NewNPCRaycastWeaponBase:_spawn_muzzle_effect(from_pos, direction)
+	self._effect_manager:spawn(self._muzzle_effect_table)
+end
+
+function NewNPCRaycastWeaponBase:auto_fire_blank(direction, impact, sub_ids, override_direction)
+	local user_unit = self._setup.user_unit
+
+	self._unit:m_position(mfrom)
+
+	if override_direction then
+		direction = self:fire_object():rotation():y()
+	end
+	--local rays = {}
+	
+	
+	if impact and (self._use_trails == nil or self._use_trails == true) then
+		local right = direction:cross(math_UP):normalized()
+		local up = direction:cross(right):normalized()
+		local num_rays = (tweak_data.weapon[self:non_npc_name_id()] or {}).rays or 1
+
+		if self._ammo_data and self._ammo_data.rays then
+			num_rays = self._ammo_data.rays
+		end
+		
+		local spread_x, spread_y = self:_get_spread(user_unit)
+		
+		if not spread_y then
+			spread_y = spread_x
+		end
+		
+		for i = 1, num_rays do	
+			local theta = math_random() * 360
+			local ax = math_sin(theta) * math_random() * spread_x
+			local ay = math_cos(theta) * math_random() * spread_y
+
+			mvec3_set(mspread, direction)
+			mvec3_set(mspread, right * math_rad(ax))
+			mvec3_set(mspread, up * math_rad(ay))
+			mvec3_set(mto, mspread)
+			mvec3_mul(mto, 20000)
+			mvec3_set(mto, mfrom)
+
+			local col_ray = world_g:raycast("ray", mfrom, mto, "slot_mask", self._blank_slotmask, "ignore_unit", self._setup.ignore_units)
+
+			if alive(self._obj_fire) then
+				self._obj_fire:m_position(self._trail_effect_table.position)
+				mvec3_set(self._trail_effect_table.normal, mspread)
+			end
+
+			local trail = nil
+
+			if not self:weapon_tweak_data().no_trail then
+				trail = alive(self._obj_fire) and (not col_ray or col_ray.distance > 650) and self._effect_manager:spawn(self._trail_effect_table) or nil
+			end
+
+			if col_ray then
+				InstantBulletBase:on_collision(col_ray, self._unit, user_unit, self._damage, true)
+
+				if trail then
+					self._effect_manager:set_remaining_lifetime(trail, math_clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
+				end
+			end
+		end
+	end
+
+	if alive(self._obj_fire) then
+		self:_spawn_muzzle_effect(mfrom, direction)
+	end
+
+	if self._use_shell_ejection_effect then
+		self._effect_manager:spawn(self._shell_ejection_effect_table)
+	end
+
+	if self:weapon_tweak_data().has_fire_animation then
+		self:tweak_data_anim_play("fire")
+	end
+
+	if user_unit:movement() then
+		local anim_data = user_unit:anim_data()
+
+		if not anim_data or not anim_data.reload then
+			user_unit:movement():play_redirect("recoil_single")
+		end
+	end
+
+	return true
+end
+
+function NewNPCRaycastWeaponBase:fire_blank(direction, impact, sub_id, override_direction)
+	local user_unit = self._setup.user_unit
+
+	self._unit:m_position(mfrom)
+
+	if override_direction then
+		direction = self:fire_object():rotation():y()
+	end
+	
+	if impact and (self._use_trails == nil or self._use_trails == true) then
+		local num_rays = (tweak_data.weapon[self:non_npc_name_id()] or {}).rays or 1
+		local right = direction:cross(math_UP):normalized()
+		local up = direction:cross(right):normalized()
+	
+		if self._ammo_data and self._ammo_data.rays then
+			num_rays = self._ammo_data.rays
+		end
+		
+		local spread_x, spread_y = self:_get_spread(user_unit)
+		
+		if not spread_y then
+			spread_y = spread_x
+		end
+
+		for i = 1, num_rays do
+			local theta = math_random() * 360
+			local ax = math_sin(theta) * math_random() * spread_x
+			local ay = math_cos(theta) * math_random() * spread_y
+
+			mvec3_set(mspread, direction)
+			mvec3_set(mspread, right * math_rad(ax))
+			mvec3_set(mspread, up * math_rad(ay))
+			mvec3_set(mto, mspread)
+			mvec3_mul(mto, 20000)
+			mvec3_set(mto, mfrom)
+
+			local col_ray = world_g:raycast("ray", mfrom, mto, "slot_mask", self._blank_slotmask, "ignore_unit", self._setup.ignore_units)
+
+			if alive(self._obj_fire) then
+				self._obj_fire:m_position(self._trail_effect_table.position)
+				mvec3_set(self._trail_effect_table.normal, mspread)
+			end
+
+			local trail = nil
+
+			if not self:weapon_tweak_data().no_trail then
+				trail = alive(self._obj_fire) and (not col_ray or col_ray.distance > 650) and self._effect_manager:spawn(self._trail_effect_table) or nil
+			end
+
+			if col_ray then
+				InstantBulletBase:on_collision(col_ray, self._unit, user_unit, self._damage, true)
+
+				if trail then
+					self._effect_manager:set_remaining_lifetime(trail, math_clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
+				end
+			end
+		end
+	end
+
+	if alive(self._obj_fire) then
+		self:_spawn_muzzle_effect(mfrom, direction)
+	end
+
+	if self._use_shell_ejection_effect then
+		self._effect_manager:spawn(self._shell_ejection_effect_table)
+	end
+
+	if self:weapon_tweak_data().has_fire_animation then
+		self:tweak_data_anim_play("fire")
+	end
+
+	self:_sound_singleshot()
 end
 
 local mvec_to = Vector3()
@@ -125,9 +324,9 @@ function NewNPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, d
 	local result = {}
 	local ray_distance = self._weapon_range or 20000
 
-	mvector3.set(mvec_to, direction)
-	mvector3.multiply(mvec_to, ray_distance)
-	mvector3.add(mvec_to, from_pos)
+	mvec3_set(mvec_to, direction)
+	mvec3_mul(mvec_to, ray_distance)
+	mvec3_add(mvec_to, from_pos)
 
 	local damage = self._damage * (dmg_mul or 1)
 
@@ -141,9 +340,9 @@ function NewNPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, d
 	local bulletproof_ids = Idstring("bulletproof")
 
 	if self._use_armor_piercing then
-		ray_hits = World:raycast_wall("ray", from_pos, mvec_to, "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units, "thickness", 40, "thickness_mask", wall_mask)
+		ray_hits = world_g:raycast_wall("ray", from_pos, mvec_to, "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units, "thickness", 40, "thickness_mask", wall_mask)
 	else
-		ray_hits = World:raycast_all("ray", from_pos, mvec_to, "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units)
+		ray_hits = world_g:raycast_all("ray", from_pos, mvec_to, "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units)
 	end
 
 	local units_hit = {}
@@ -194,9 +393,9 @@ function NewNPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, d
 						if not self._use_armor_piercing then
 							hit.unit = managers.player:player_unit()
 							hit.body = hit.unit:body("inflict_reciever")
-							hit.position = mvector3.copy(hit.body:position())
+							hit.position = mvec3_cpy(hit.body:position())
 							hit.hit_position = hit.position
-							hit.distance = mvector3.direction(hit.ray, mvector3.copy(from_pos), mvector3.copy(hit.position))
+							hit.distance = mvec3_dir(hit.ray, mvec3_cpy(from_pos), mvec3_cpy(hit.position))
 							hit.normal = -hit.ray
 							furthest_hit = hit
 
@@ -235,9 +434,9 @@ function NewNPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, d
 					if not self._use_armor_piercing then
 						player_ray_data.unit = managers.player:player_unit()
 						player_ray_data.body = player_ray_data.unit:body("inflict_reciever")
-						player_ray_data.position = mvector3.copy(player_ray_data.body:position())
+						player_ray_data.position = mvec3_cpy(player_ray_data.body:position())
 						player_ray_data.hit_position = player_ray_data.position
-						player_ray_data.distance = mvector3.direction(player_ray_data.ray, mvector3.copy(from_pos), mvector3.copy(player_ray_data.position))
+						player_ray_data.distance = mvec3_dir(player_ray_data.ray, mvec3_cpy(from_pos), mvec3_cpy(player_ray_data.position))
 						player_ray_data.normal = -player_ray_data.ray
 						furthest_hit = player_ray_data
 					end
@@ -251,22 +450,27 @@ function NewNPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, d
 	if alive(self._obj_fire) then
 		if furthest_hit and furthest_hit.distance > 600 or not furthest_hit then
 			local trail_direction = furthest_hit and furthest_hit.ray or direction
-			local right = trail_direction:cross(math.UP):normalized()
+			local right = trail_direction:cross(math_UP):normalized()
 			local up = trail_direction:cross(right):normalized()
 			local name_id = self.non_npc_name_id and self:non_npc_name_id() or self._name_id
 			local num_rays = (tweak_data.weapon[name_id] or {}).rays or 1
 
 			for v = 1, num_rays, 1 do
-				mvector3.set(mvec_spread, trail_direction)
+				mvec3_set(mvec_spread, trail_direction)
 
 				if v > 1 then
 					local spread_x, spread_y = self:_get_spread(user_unit)
-					local theta = math.random() * 360
-					local ax = math.sin(theta) * math.random() * spread_x
-					local ay = math.cos(theta) * math.random() * (spread_y or spread_x)
+					
+					if not spread_y then
+						spread_y = spread_x
+					end
+					
+					local theta = math_random() * 360
+					local ax = math_sin(theta) * math_random() * spread_x
+					local ay = math_cos(theta) * math_random() * spread_y
 
-					mvector3.add(mvec_spread, right * math.rad(ax))
-					mvector3.add(mvec_spread, up * math.rad(ay))
+					mvec3_add(mvec_spread, right * math_rad(ax))
+					mvec3_add(mvec_spread, up * math_rad(ay))
 				end
 
 				self:_spawn_trail_effect(mvec_spread, furthest_hit)
@@ -277,7 +481,7 @@ function NewNPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, d
 	if self._suppression then
 		local suppression_slot_mask = user_unit:in_slot(16) and managers.slot:get_mask("enemies") or managers.slot:get_mask("players", "criminals")
 
-		self:_suppress_units(mvector3.copy(from_pos), mvector3.copy(direction), ray_distance, suppression_slot_mask, user_unit, nil)
+		self:_suppress_units(mvec3_cpy(from_pos), mvec3_cpy(direction), ray_distance, suppression_slot_mask, user_unit, nil)
 	end
 
 	if self._alert_events then
