@@ -13,6 +13,7 @@ local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_rot1 = Rotation()
 local HH = PD2THHSHIN
+local alive_g = alive
 
 PlayerDamage._UPPERS_COOLDOWN = 60
 
@@ -99,7 +100,7 @@ function PlayerDamage:init(unit)
 			local function on_damage(damage_info)
 				local attacker_unit = damage_info and damage_info.attacker_unit
 
-				if alive(attacker_unit) and attacker_unit:base() and attacker_unit:base().thrower_unit then
+				if alive_g(attacker_unit) and attacker_unit:base() and attacker_unit:base().thrower_unit then
 					attacker_unit = attacker_unit:base():thrower_unit()
 				end
 
@@ -298,7 +299,7 @@ function PlayerDamage:damage_melee(attack_data)
 	local can_counter_strike = pm:has_category_upgrade("player", "counter_strike_melee")
 
 	if can_counter_strike and self._unit:movement():current_state().in_melee and self._unit:movement():current_state():in_melee() then
-		if attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:base() then
+		if attack_data.attacker_unit and alive_g(attack_data.attacker_unit) and attack_data.attacker_unit:base() then
 			local is_dozer = attack_data.attacker_unit:base().has_tag and attack_data.attacker_unit:base():has_tag("tank")
 
 			--prevent the player from countering Dozers or other players through FF, for obvious reasons
@@ -425,9 +426,9 @@ function PlayerDamage:damage_melee(attack_data)
 		local dmg_is_allowed = next_allowed_dmg_t and next_allowed_dmg_t > t
 		
 		--enemies were meleeing players and taking their guns away during invincibility frames and thats no bueno
-		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "bipod" and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and dmg_is_allowed then
+		if alive_g(attack_data.attacker_unit) and not self:is_downed() and not self._bleed_out and not self._dead and cur_state ~= "bipod" and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal and dmg_is_allowed then
 			-- log("balls")				
-			if alive(player_unit) then
+			if alive_g(player_unit) then
 				local melee_stun_t = 0.4
 				
 				if tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_xc45" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_pager" then
@@ -597,7 +598,7 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 				self._current_state = nil
 				self._check_berserker_done = true
 
-				if alive(self._interaction:active_unit()) and not self._interaction:active_unit():interaction():can_interact(self._unit) then
+				if alive_g(self._interaction:active_unit()) and not self._interaction:active_unit():interaction():can_interact(self._unit) then
 					self._unit:movement():interupt_interact()
 				end
 
@@ -673,7 +674,7 @@ function PlayerDamage:play_melee_hit_sound_and_effects(attack_data, sound_type, 
 
 	local melee_name_id = nil
 	local attacker_unit = attack_data.attacker_unit
-	local valid_attacker = attacker_unit and alive(attacker_unit) and attacker_unit:base()
+	local valid_attacker = attacker_unit and alive_g(attacker_unit) and attacker_unit:base()
 
 	if valid_attacker then
 		--get melee weapon id
@@ -723,7 +724,7 @@ function PlayerDamage:damage_fire(attack_data)
 		return
 	end
 
-	local attack_pos = attack_data.position or attack_data.col_ray.position or attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:position()
+	local attack_pos = attack_data.position or attack_data.col_ray.position or attack_data.attacker_unit and alive_g(attack_data.attacker_unit) and attack_data.attacker_unit:position()
 	local distance = mvector3.distance(attack_pos, self._unit:position())
 
 	if not attack_data.range then
@@ -756,7 +757,7 @@ function PlayerDamage:damage_fire(attack_data)
 		return
 	end
 
-	if attack_data.attacker_unit and alive(attack_data.attacker_unit) then
+	if attack_data.attacker_unit and alive_g(attack_data.attacker_unit) then
 		self:_hit_direction(attack_data.attacker_unit:position())
 	end
 
@@ -815,7 +816,7 @@ function PlayerDamage:damage_explosion(attack_data)
 		return
 	end
 
-	local attack_pos = attack_data.position or attack_data.col_ray.position or attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit:position()
+	local attack_pos = attack_data.position or attack_data.col_ray.position or attack_data.attacker_unit and alive_g(attack_data.attacker_unit) and attack_data.attacker_unit:position()
 	local distance = mvector3.distance(attack_pos, self._unit:position())
 
 	if not attack_data.range then
@@ -859,7 +860,7 @@ function PlayerDamage:damage_explosion(attack_data)
 		attack_data.damage = math.max(0, attack_data.damage - damage_absorption)
 	end
 
-	if attack_data.attacker_unit and alive(attack_data.attacker_unit) then
+	if attack_data.attacker_unit and alive_g(attack_data.attacker_unit) then
 		self:_hit_direction(attack_data.attacker_unit:position())
 	end
 
@@ -1131,16 +1132,16 @@ function PlayerDamage:damage_bullet(attack_data)
 	end
 	
 	if attack_data then
-		if alive(attack_data.attacker_unit) and not self:is_downed() and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
+		if alive_g(attack_data.attacker_unit) and not self:is_downed() and not self._dead and cur_state ~= "fatal" and cur_state ~= "bleedout" and not self._invulnerable and not self._unit:character_damage().swansong and not self._unit:movement():tased() and not self._mission_damage_blockers.invulnerable and not self._god_mode and not self:incapacitated() and not self._unit:movement():current_state().immortal then
 		
 			if a then
-				if attack_data.weapon_unit and alive(attack_data.weapon_unit:base()) and attack_data.weapon_unit:base().mangle then
+				if attack_data.weapon_unit and alive_g(attack_data.weapon_unit:base()) and attack_data.weapon_unit:base().mangle then
 					self:apply_mangle_effect(2.5)
 				end
 			end
 	
 			if tostring(attack_data.attacker_unit:base()._tweak_table) == "akuma" then
-				if alive(player_unit) then
+				if alive_g(player_unit) then
 					--self._akuma_effect = true
 					self:build_suppression(99)
 					return
@@ -1152,7 +1153,7 @@ function PlayerDamage:damage_bullet(attack_data)
 	--local testing = true
 	local state_chk = cur_state == "standard" or cur_state == "carry" or cur_state == "bipod"
 	if Global.game_settings.bulletknock or testing then
-		if alive(attack_data.attacker_unit) and state_chk then
+		if alive_g(attack_data.attacker_unit) and state_chk then
 			local from_pos = nil
 
 			--probably unnecessary but you never know
@@ -1456,7 +1457,7 @@ function PlayerDamage:_calc_health_damage(attack_data)
 end
 
 function PlayerDamage:is_friendly_fire(unit)
-	if not unit or not unit:movement() or unit:base().is_grenade then
+	if not alive_g(unit) or not unit:movement() or unit:base().is_grenade then
 		return false
 	end
 
@@ -2024,7 +2025,7 @@ function PlayerDamage:restore_armor(armor_restored)
 end
 
 function PlayerDamage:pre_destroy()
-	if alive(self._gui) and alive(self._ws) then
+	if alive_g(self._gui) and alive_g(self._ws) then
 		self._gui:destroy_workspace(self._ws)
 	end
 

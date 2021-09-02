@@ -20,6 +20,8 @@ TeamAIDamage._HEALTH_GRANULARITY = CopDamage._HEALTH_GRANULARITY
 TeamAIDamage.set_invulnerable = CopDamage.set_invulnerable
 TeamAIDamage._hurt_severities = CopDamage._hurt_severities
 TeamAIDamage.get_damage_type = CopDamage.get_damage_type
+local alive_g = alive
+
 
 function TeamAIDamage:on_recon()
 	self:_regenerated()
@@ -29,15 +31,16 @@ function TeamAIDamage:is_friendly_fire(unit)
 	return PlayerDamage.is_friendly_fire(self, unit)
 end
 
-function TeamAIDamage:damage_tase(attack_data)
-	--local diff_index = Global.game_settings and tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	--local tase_down_time = nil
-		
-	if attack_data ~= nil and PlayerDamage.is_friendly_fire(self, attack_data.attacker_unit) then
-		self:friendly_fire_hit()
+function TeamAIDamage:damage_tase(attack_data)	
+	if not attack_data or not alive_g(attack_data.attacker_unit) then
+        return
+    end
 
-		return
-	end
+    if PlayerDamage.is_friendly_fire(self, attack_data.attacker_unit) then
+        self:friendly_fire_hit()
+
+        return
+    end
 
 	if self:_cannot_take_damage() then
 		return
@@ -69,9 +72,7 @@ function TeamAIDamage:damage_tase(attack_data)
 		end
 	end
 	
-	if attack_data.attacker_unit then
-		self._taser_unit = attack_data.attacker_unit
-	end
+	self._taser_unit = attack_data.attacker_unit
 
 	self:_call_listeners(damage_info)
 
@@ -175,20 +176,29 @@ function TeamAIDamage:update(unit, t, dt)
 			self._next_shock_t = t + 0.75
 		else
 			if self._num_shocks >= 4 then
-				self._unit:movement():play_taser_boom()
-				if Network:is_server() then
-					local attack_data = {
-						attacker_unit = self._taser_unit,
-						pos = self._unit:movement():m_pos(),
-						is_taser_shock = true,
-						armor_piercing = true,
-						damage = 1
-					}
-					self._num_shocks = nil
-					self._next_shock_t = nil
-					self._unit:movement():on_tase_ended()
-					self._unit:character_damage():damage_bullet(attack_data)
+				if not alive_g(self._taser_unit) then					
+					if Network:is_server() then
+						self._num_shocks = nil
+						self._next_shock_t = nil
+						self._unit:movement():on_tase_ended()
+					end
+				else
+					self._unit:movement():play_taser_boom()
+					if Network:is_server() then
+						local attack_data = {
+							attacker_unit = self._taser_unit,
+							pos = self._unit:movement():m_pos(),
+							is_taser_shock = true,
+							armor_piercing = true,
+							damage = 1
+						}
+						self._num_shocks = nil
+						self._next_shock_t = nil
+						self._unit:movement():on_tase_ended()
+						self._unit:character_damage():damage_bullet(attack_data)
+					end
 				end
+				
 				self._taser_unit = nil
 			elseif self._next_shock_t < t then
 				self._num_shocks = self._num_shocks + 1
