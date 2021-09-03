@@ -399,6 +399,14 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.aa12_crew.rays = 8
 	self.rota_crew.rays = 8
 	self.basset_crew.rays = 6	
+	
+	self.ching_crew.usage = "rifle"
+	self.ching_crew.anim_usage = "is_rifle"
+	self.ching_crew.fire_rate = 0.085
+	self.ching_crew.auto.fire_rate = 0.085
+	
+	self.sub2000_crew.usage = "rifle"
+	self.sub2000_crew.anim_usage = "is_smg"
 end)
 
 --TODO: it is done

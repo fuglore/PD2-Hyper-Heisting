@@ -7094,12 +7094,12 @@ function CharacterTweakData:_presets(tweak_data)
 				1
 			},
 			recoil = {
-				0.35,
-				0.6
+				0.25,
+				0.3
 			},
 			mode = {
-				0.5,
-				0.5,
+				1,
+				0,
 				0,
 				0
 			}
@@ -7112,12 +7112,12 @@ function CharacterTweakData:_presets(tweak_data)
 				1
 			},
 			recoil = {
-				0.4,
-				0.7
+				0.3,
+				0.5
 			},
 			mode = {
-				0.5,
-				0.5,
+				1,
+				0,
 				0,
 				0
 			}
@@ -7130,8 +7130,8 @@ function CharacterTweakData:_presets(tweak_data)
 				1
 			},
 			recoil = {
-				2,
-				3
+				0.7,
+				1.25
 			},
 			mode = {
 				1,
