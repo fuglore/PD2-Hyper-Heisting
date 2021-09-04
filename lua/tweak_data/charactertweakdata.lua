@@ -6499,7 +6499,7 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.gang_member.is_pistol.FALLOFF = {
 		{
-			dmg_mul = 1,
+			dmg_mul = 6,
 			r = 300,
 			acc = {
 				1,
@@ -6557,7 +6557,7 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 4,
-				r = 100,
+				r = 400,
 				acc = {
 					1,
 					1
@@ -6577,7 +6577,7 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4,
 				r = 1000,
 				acc = {
-					0.9,
+					0.3,
 					0.9
 				},
 				recoil = {
@@ -6595,18 +6595,18 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4,
 				r = 2000,
 				acc = {
-					0.5,
+					0.2,
 					0.5
 				},
 				recoil = {
-					0.3,
-					0.8
+					0.6,
+					1
 				},
 				mode = {
-					0,
-					0,
+					0.25,
 					0.5,
-					0.5
+					0.25,
+					0
 				}
 			},
 			{
@@ -6617,8 +6617,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.25
 				},
 				recoil = {
-					0.4,
-					0.8
+					0.6,
+					1.2
 				},
 				mode = {
 					0.25,
@@ -6749,7 +6749,7 @@ function CharacterTweakData:_presets(tweak_data)
 		focus_dis = 100,
 		spread = 3,
 		miss_dis = 10,
-		RELOAD_SPEED = 0.7,
+		RELOAD_SPEED = 0.6,
 		melee_speed = 2,
 		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_lmg.melee_retry_delay,
@@ -6762,7 +6762,7 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 8.4,
-				r = 100,
+				r = 400,
 				acc = {
 					1,
 					1
@@ -6782,7 +6782,7 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 8.4,
 				r = 1000,
 				acc = {
-					0.6,
+					0.1,
 					0.6
 				},
 				recoil = {
@@ -6797,10 +6797,10 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4.2,
+				dmg_mul = 8.4,
 				r = 2000,
 				acc = {
-					0.3,
+					0.0,
 					0.3
 				},
 				recoil = {
@@ -6815,51 +6815,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1,
+				dmg_mul = 4.2,
 				r = 3000,
 				acc = {
-					0.2,
+					0,
 					0.2
 				},
 				recoil = {
 					2.5,
 					3.5
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 0.4,
-				r = 4000,
-				acc = {
-					0.1,
-					0.1
-				},
-				recoil = {
-					1,
-					2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 0.25,
-				r = 6000,
-				acc = {
-					0.01,
-					0.1
-				},
-				recoil = {
-					2,
-					3
 				},
 				mode = {
 					0,
@@ -6891,9 +6855,9 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 3,
-				r = 300,
+				r = 1000,
 				acc = {
-					1,
+					0.5,
 					1
 				},
 				recoil = {
@@ -6909,9 +6873,9 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1.5,
-				r = 1500,
+				r = 2000,
 				acc = {
-					1,
+					0,
 					1
 				},
 				recoil = {
@@ -6929,7 +6893,7 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0.5,
 				r = 3000,
 				acc = {
-					0.5,
+					0,
 					0.75
 				},
 				recoil = {
@@ -6970,9 +6934,9 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 4.2,
-				r = 100,
+				r = 400,
 				acc = {
-					1,
+					0.6,
 					1
 				},
 				recoil = {
@@ -6988,9 +6952,9 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 4.2,
-				r = 500,
+				r = 800,
 				acc = {
-					1,
+					0,
 					1
 				},
 				recoil = {
@@ -7008,7 +6972,7 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3.8,
 				r = 1000,
 				acc = {
-					0.85,
+					0,
 					0.95
 				},
 				recoil = {
@@ -7026,8 +6990,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2,
 				r = 2000,
 				acc = {
-					0.75,
-					0.9
+					0,
+					0.6
 				},
 				recoil = {
 					0.25,
@@ -7041,11 +7005,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.5,
+				dmg_mul = 2,
 				r = 3000,
 				acc = {
-					0.4,
-					0.7
+					0,
+					0.3
 				},
 				recoil = {
 					0.4,
@@ -7055,24 +7019,6 @@ function CharacterTweakData:_presets(tweak_data)
 					4,
 					2,
 					1,
-					0
-				}
-			},
-			{
-				dmg_mul = 0.1,
-				r = 5000,
-				acc = {
-					0.05,
-					0.2
-				},
-				recoil = {
-					0.5,
-					1
-				},
-				mode = {
-					2,
-					1,
-					0,
 					0
 				}
 			}
@@ -7106,9 +7052,9 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		{
 			dmg_mul = 10,
-			r = 3000,
+			r = 1000,
 			acc = {
-				0.3,
+				0.4,
 				1
 			},
 			recoil = {
@@ -7123,15 +7069,33 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		},
 		{
-			dmg_mul = 2.5,
-			r = 10000,
+			dmg_mul = 10,
+			r = 2000,
 			acc = {
 				0,
 				1
 			},
 			recoil = {
-				0.7,
-				1.25
+				0.5,
+				0.8
+			},
+			mode = {
+				1,
+				0,
+				0,
+				0
+			}
+		},
+		{
+			dmg_mul = 10,
+			r = 3000,
+			acc = {
+				0,
+				0.6
+			},
+			recoil = {
+				0.6,
+				1
 			},
 			mode = {
 				1,
@@ -8707,7 +8671,7 @@ function CharacterTweakData:_set_normal()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 1000
+	self.presets.gang_member_damage.HEALTH_INIT = 750
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8864,7 +8828,7 @@ function CharacterTweakData:_set_hard()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 1000
+	self.presets.gang_member_damage.HEALTH_INIT = 750
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9029,7 +8993,7 @@ function CharacterTweakData:_set_overkill()
 	
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 1000
+	self.presets.gang_member_damage.HEALTH_INIT = 750
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9209,7 +9173,7 @@ function CharacterTweakData:_set_overkill_145()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 1000
+	self.presets.gang_member_damage.HEALTH_INIT = 750
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9333,7 +9297,7 @@ function CharacterTweakData:_set_easy_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 1000
+	self.presets.gang_member_damage.HEALTH_INIT = 750
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9529,7 +9493,7 @@ function CharacterTweakData:_set_overkill_290()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 1000
+	self.presets.gang_member_damage.HEALTH_INIT = 750
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9732,7 +9696,7 @@ function CharacterTweakData:_set_sm_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 1000
+	self.presets.gang_member_damage.HEALTH_INIT = 750
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("anarchy")
