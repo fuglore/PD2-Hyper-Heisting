@@ -1842,7 +1842,7 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 			local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
 		
 			if self._spawned_megatank_t and cat_data.special_type == "tank" and self._spawned_megatank_t > self._t then
-				log("dick")
+				--log("dick")
 				spawn_group.delay_t = self._t + 2
 				
 				return

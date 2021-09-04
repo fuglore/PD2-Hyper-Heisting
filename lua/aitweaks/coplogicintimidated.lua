@@ -655,7 +655,23 @@ function CopLogicIntimidated.register_rescue_SO(ignore_this, data)
 	my_data.delayed_rescue_SO_id = nil
 	local my_tracker = data.unit:movement():nav_tracker()
 	local objective_pos = my_tracker:field_position()
-
+	
+	local followup_objective = {
+		scan = true,
+		type = "act",
+		stance = "hos",
+		action = {
+			variant = "idle",
+			body_part = 1,
+			type = "act",
+			blocks = {
+				action = -1,
+				walk = -1
+			}
+		},
+		action_duration = tweak_data.interaction.free.timer
+	}
+	
 	local objective = {
 		interrupt_health = 0.85,
 		stance = "hos",
@@ -677,7 +693,8 @@ function CopLogicIntimidated.register_rescue_SO(ignore_this, data)
 				walk = -1
 			}
 		},
-		action_duration = tweak_data.interaction.free.timer
+		action_duration = tweak_data.interaction.free.timer,
+		followup_objective = followup_objective
 	}
 	local so_descriptor = {
 		interval = 10,
