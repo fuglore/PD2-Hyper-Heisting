@@ -10,6 +10,8 @@ local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local ids_unit = Idstring("unit")
 
+
+local math_up = math.UP
 local math_random = math.random
 local math_lerp = math.lerp
 local math_min = math.min
@@ -1028,6 +1030,96 @@ function GroupAIStateBase:is_area_safe_assault(area)
 end
 
 function GroupAIStateBase:_set_rescue_state(state)
+	self._rescue_allowed = true
+end
+
+function GroupAIStateBase:print_objective(objective)
+	if objective then
+		log("objective info:")
+		
+		log(objective.type)
+		
+		if objective.stance then
+			log(objective.stance)
+		end
+		
+		if objective.attitude then
+			log(objective.attitude)
+		end
+		
+		if objective.path_style then
+			log(objective.path_style)
+		end
+	else
+		log("no objective")
+		
+		return
+	end
+
+	local cmpl_clbk = objective.complete_clbk
+	
+	if cmpl_clbk then
+		log("objective has completion clbk")
+	end
+	
+	local fail_clbk = objective.fail_clbk
+	
+	if fail_clbk then
+		log("objective has fail clbk")
+	end
+	
+	local act_start_clbk = objective.action_start_clbk
+	
+	if act_start_clbk then
+		log("objective has action start clbk")
+	end
+	
+	local ver_clbk = objective.verification_clbk
+	
+	if ver_clbk then
+		log("objective has verification clbk")
+	end
+	
+	local area = objective.area
+	
+	if area then
+		log("objective has area, drawing pillar")
+		
+		local line = Draw:brush(Color.blue:with_alpha(0.5), 5)
+		line:cylinder(area.pos, area.pos + math_up * 1000, 100)
+	end
+	
+	local followup_SO = objective.followup_SO
+	
+	if followup_SO then
+		log("objective has follow up SO")
+		
+		if followup_SO.type then
+			local followup_SO_type_str = followup_SO.type and tostring(followup_SO.type) or "lmao what"
+			
+			log("f. SO has type: " .. followup_SO_type_str .. "")
+		end
+	end
+	
+	local grp_objective = objective.grp_objective
+	
+	if grp_objective then
+		local grp_objective_type_str = grp_objective.type and tostring(grp_objective.type) or "lmao what"
+	
+		log("objective has group objective!!! type: " .. grp_objective_type_str .. "")
+	end
+	
+	local followup_objective = objective.followup_objective
+	
+	if followup_objective then
+		log("objective has followup objective")
+		
+		if followup_objective.type then
+			local followup_objective_type_str = followup_objective.type and tostring(followup_objective.type) or "lmao what"
+			
+			log("f. objective has type: " .. followup_objective_type_str .. "")
+		end
+	end
 end
 
 function GroupAIStateBase:_get_anticipation_duration(anticipation_duration_table, is_first)

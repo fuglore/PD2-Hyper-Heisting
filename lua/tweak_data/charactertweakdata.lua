@@ -8466,9 +8466,23 @@ end)
 
 Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", function(self, presets)
 	self.old_hoxton_mission.move_speed = presets.move_speed.teamai
+	self.old_hoxton_mission.dodge = nil
 	self.old_hoxton_mission.crouch_move = false
-	self.old_hoxton_mission.suppression = presets.suppression.stalwart_nil
+	self.old_hoxton_mission.suppression = nil
 	self.old_hoxton_mission.weapon = deep_clone(presets.weapon.fbigod)
+end)
+
+Hooks:PostHook(CharacterTweakData, "_init_spa_vip", "hhpost_spa", function(self, presets)
+	self.spa_vip = deep_clone(self.old_hoxton_mission)
+	self.spa_vip.dodge = nil
+	self.spa_vip.move_speed = presets.move_speed.teamai
+	self.spa_vip.crouch_move = false
+	self.spa_vip.suppression = nil
+	self.spa_vip.weapon = deep_clone(presets.weapon.fbigod)
+	self.spa_vip.spotlight_important = 100
+	self.spa_vip.is_escort = true
+	self.spa_vip.escort_idle_talk = false
+	self.spa_vip.escort_scared_dist = 100
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)

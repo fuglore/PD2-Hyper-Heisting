@@ -887,4 +887,12 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			category = "player"
 		}
 	}
+	
+	self.values.team.crew_interact = {
+		{
+			0.9,
+			0.75,
+			0.5
+		}
+	}
 end)

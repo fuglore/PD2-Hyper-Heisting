@@ -51,19 +51,6 @@ function CivilianLogicFlee.register_rescue_SO(ignore_this, data)
 	local interrupt_health = nil
 	local interrupt_dis = nil
 	
-	if not Global.game_settings.one_down then
-		if diff_index < 4 then
-			interrupt_health = 0.75
-			interrupt_dis = 700
-		elseif diff_index < 6 then
-			interrupt_health = 0.5
-			interrupt_dis = nil
-		else
-			interrupt_health = 0.1
-			interrupt_dis = nil
-		end
-	end
-	
 	local objective = {
 		type = "act",
 		interrupt_health = interrupt_health,
@@ -90,22 +77,8 @@ function CivilianLogicFlee.register_rescue_SO(ignore_this, data)
 	}
 	local receiver_areas = managers.groupai:state():get_areas_from_nav_seg_id(objective.nav_seg)
 	
-	local interval = nil
-	
-	if Global.game_settings.one_down then
-		interval = 0.1
-	else
-		if diff_index < 4 then
-			interval = 8
-		elseif diff_index < 6 then
-			interval = 5
-		else
-			interval = 0.1
-		end
-	end
-	
 	local so_descriptor = {
-		interval = interval,
+		interval = 10,
 		search_dis_sq = 25000000,
 		AI_group = "enemies",
 		base_chance = 1,
@@ -130,11 +103,7 @@ function CivilianLogicFlee.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 
 	if action:type() == "walk" then
-		if Global.game_settings.one_down then
-			my_data.next_action_t = TimerManager:game():time() - 1
-		else
-			my_data.next_action_t = TimerManager:game():time() + math.random(0.25, 1)
-		end
+		my_data.next_action_t = -1
 
 		if action:expired() then
 			if my_data.moving_to_cover then
