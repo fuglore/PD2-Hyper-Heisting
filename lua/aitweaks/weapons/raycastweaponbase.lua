@@ -192,8 +192,8 @@ function RaycastWeaponBase:update_next_shooting_time()
 		mul = mul * pop_pop_mul_true
 	end
 	
-	if managers.player._cool_hunting_aced_mul then
-		mul = mul * managers.player._cool_hunting_aced_mul
+	if managers.player._cool_chain_mul then
+		mul = mul * managers.player._cool_chain_mul
 	end
 	
 	next_fire = next_fire * mul

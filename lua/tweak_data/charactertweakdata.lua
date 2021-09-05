@@ -6484,7 +6484,7 @@ function CharacterTweakData:_presets(tweak_data)
 		0.2,
 		0.3
 	}
-	presets.weapon.gang_member.is_pistol.focus_delay = 0.4
+	presets.weapon.gang_member.is_pistol.focus_delay = 1.2
 	presets.weapon.gang_member.is_pistol.focus_dis = 200
 	presets.weapon.gang_member.is_pistol.spread = 3
 	presets.weapon.gang_member.is_pistol.miss_dis = 20
@@ -8671,7 +8671,7 @@ function CharacterTweakData:_set_normal()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 750
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8828,7 +8828,7 @@ function CharacterTweakData:_set_hard()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 750
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8993,7 +8993,7 @@ function CharacterTweakData:_set_overkill()
 	
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 750
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9173,7 +9173,7 @@ function CharacterTweakData:_set_overkill_145()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 750
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9297,7 +9297,7 @@ function CharacterTweakData:_set_easy_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 750
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9493,7 +9493,7 @@ function CharacterTweakData:_set_overkill_290()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 750
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9696,7 +9696,7 @@ function CharacterTweakData:_set_sm_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 750
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("anarchy")

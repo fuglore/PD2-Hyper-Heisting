@@ -265,7 +265,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.mossberg_npc.hold = "rifle"
 	self.mossberg_npc.reload = "looped"
 	self.mossberg_npc.looped_reload_speed = 1
-	self.mossberg_npc.sounds.prefix = "remington_npc"
+	self.mossberg_npc.sounds.prefix = "huntsman_npc"
 	self.mossberg_npc.DAMAGE = 3
 	self.mossberg_npc.spread = 1
 	self.mossberg_npc.CLIP_AMMO_MAX = 2
@@ -384,6 +384,8 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.cobray_crew.use_data.selection_index = 2
 	self.baka_crew.use_data.selection_index = 2
 	self.shepheard_crew.use_data.selection_index = 2
+	self.b682_crew.rays = 16
+	self.huntsman_crew.rays = 16
 	self.r870_crew.rays = 10
 	self.serbu_crew.rays = 10
 	self.ksg_crew.rays = 10
@@ -1844,10 +1846,10 @@ crouching = {
 }
 
 --M1014
-self.benelli.stats.damage = 130
+self.benelli.stats.damage = 99
 self.benelli.damage_near = 650
 self.benelli.damage_far = 1120
-self.benelli.AMMO_PICKUP = {2, 5}
+self.benelli.AMMO_PICKUP = {3, 5}
 self.benelli.fire_mode_data.fire_rate = 0.12
 self.benelli.AMMO_MAX = 50
 self.benelli.kick = {
@@ -1872,12 +1874,14 @@ crouching = {
 }
 
 --Predator
-self.spas12.stats.damage = 130
+self.spas12.stats.damage = 128
+self.spas12.stats.spread = 10
+self.spas12.stats.spread_moving = 10
 self.spas12.damage_near = 650
 self.spas12.damage_far = 1120
 self.spas12.AMMO_PICKUP = {2, 4}
-self.spas12.fire_mode_data.fire_rate = 0.12
-self.spas12.AMMO_MAX = 50
+self.spas12.fire_mode_data.fire_rate = 0.14
+self.spas12.AMMO_MAX = 30
 self.spas12.kick = {
 standing = {
 		4.5,
@@ -2069,6 +2073,7 @@ self.huntsman.stats_modifiers = {damage = 2}
 self.huntsman.fire_mode_data.fire_rate = 0.075
 self.huntsman.damage_near = 750
 self.huntsman.damage_far = 1450
+self.huntsman.rays = 16
 self.huntsman.kick = {
 standing = {
 		4,
@@ -2096,25 +2101,34 @@ self.b682.stats_modifiers = {damage = 2}
 self.b682.damage_near = 750
 self.b682.damage_far = 1450
 self.b682.fire_mode_data.fire_rate = 0.075
-self.b682.kick = {
-standing = {
-		4,
-		5,
-		-1,
-		1
-},
-steelsight = {
-		3,
-		3.5,
-		-1,
-		1
-},
-crouching = {
-		3,
-		3.5,
-		-1,
-		1
+self.b682.stats.spread = 18
+self.b682.stats.spread_moving = 18
+self.b682.timers = {
+	reload_not_empty = 2,
+	reload_empty = 2,
+	unequip = 0.55,
+	equip = 0.55
 }
+self.b682.rays = 16
+self.b682.kick = {
+	standing = {
+			4,
+			5,
+			-1,
+			1
+	},
+	steelsight = {
+			3,
+			3.5,
+			-1,
+			1
+	},
+	crouching = {
+			3,
+			3.5,
+			-1,
+			1
+	}
 }
 
 --Judge

@@ -535,7 +535,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_shotgun_impact_beta_desc"] = "BASIC: ##$basic##\nYour shotguns gain ##+12## stability.\n\nACE: ##$pro##\nYour shotguns deal ##+50%## damage to ##healthy enemies##.\n\n##FLASHYN!##",
 			
 			["menu_close_by_beta"] = "Cool Hunting",
-			["menu_close_by_beta_desc"] = "BASIC: ##$basic##\nYour shotguns gain ##+25%## increased magazine capacity.\n\nIn addition, your shotguns with magazines have their magazine size increased by ##+8##.\n\nACE: ##$pro##\nYour shotguns gain a ##+0.5%## increase to firerate for every time you kill multiple enemies in a single shot for ##3## seconds.\n\nThis bonus can stack infinitely, and is refreshed every time it's activated.\n\n##Problem solved!##",
+			["menu_close_by_beta_desc"] = "BASIC: ##$basic##\nYour shotguns gain ##+25%## increased magazine capacity.\n\nIn addition, your shotguns with magazines have their magazine size increased by ##+8##.\n\nACE: ##$pro##\nYour shotguns gain a ##+0.5%## increase to firerate for every time you kill multiple enemies in quick succession for ##3## seconds.\n\nThis bonus can stack infinitely, and is refreshed every time it's activated.\n\n##Problem solved!##",
 			
 			["menu_iron_man_beta_desc"] = "BASIC: ##$basic##\nIncreases the armor recovery rate for you and your crew by ##25%##.\n\nACE: ##$pro##\nYour Melee Weapons can now ##stagger shields##.",
 			

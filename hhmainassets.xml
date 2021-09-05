@@ -191,6 +191,7 @@
 	<cooked_physics path="units/payday2/characters/ene_swat_3/ene_swat_3"/>
 
 	<!--NPC Mosconi less ugly-->
+	<unit path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/wpn_npc_sawnoff_shotgun" force="true"/>	
 	<model path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/wpn_npc_sawnoff_shotgun" force="true"/>	
 	<texture path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/sawnoff_df" force="true"/>
 	<texture path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/sawnoff_nm" force="true"/>

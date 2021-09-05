@@ -3,9 +3,9 @@ Hooks:PostHook(NewRaycastWeaponBase, "init", "hhpost_shieldknock", function(self
 end)
 
 function NewRaycastWeaponBase:reload_speed_multiplier()
-	if self._current_reload_speed_multiplier then
-		return self._current_reload_speed_multiplier
-	end
+	--if self._current_reload_speed_multiplier then
+		--return self._current_reload_speed_multiplier
+	--end
 
 	local multiplier = 1
 	
@@ -31,7 +31,7 @@ function NewRaycastWeaponBase:reload_speed_multiplier()
 
 	multiplier = multiplier + 1 - managers.player:upgrade_value("weapon", "passive_reload_speed_multiplier", 1)
 	multiplier = multiplier + 1 - managers.player:upgrade_value(self._name_id, "reload_speed_multiplier", 1)
-
+	
 	if self._setup and alive(self._setup.user_unit) and self._setup.user_unit:movement() then
 		local morale_boost_bonus = self._setup.user_unit:movement():morale_boost()
 		

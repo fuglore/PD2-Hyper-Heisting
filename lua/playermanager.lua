@@ -425,10 +425,10 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 
 				--https://media.discordapp.net/attachments/737554686139170866/878072580421087282/FB_IMG_1629413974581.png
 				if not self._cool_chain_t or self._cool_chain_t < t then
-					self._cool_chain_t = t + 0.1
+					self._cool_chain_t = t + 0.8
 					self._cool_chain_kills = 1
 				else
-					self._cool_chain_t = t + 0.1
+					self._cool_chain_t = t + 0.8
 					self._cool_chain_kills = self._cool_chain_kills + 1
 				end
 				
