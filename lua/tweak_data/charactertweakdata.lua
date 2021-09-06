@@ -6556,7 +6556,7 @@ function CharacterTweakData:_presets(tweak_data)
 		autofire_rounds = {45, 45},
 		FALLOFF = {
 			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 400,
 				acc = {
 					1,
@@ -6574,7 +6574,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 1000,
 				acc = {
 					0.3,
@@ -6592,7 +6592,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 2000,
 				acc = {
 					0.2,
@@ -6610,7 +6610,7 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 4000,
 				acc = {
 					0,
@@ -6631,7 +6631,7 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.gang_member.is_sniper = {
 		aim_delay = {
-			0.25,
+			0.35,
 			1
 		},
 		focus_delay = 1.5,
@@ -6743,13 +6743,13 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.gang_member.is_lmg = {
 		aim_delay = {
 			0.35,
-			0.35
+			1
 		},
 		focus_delay = 1,
-		focus_dis = 100,
+		focus_dis = 200,
 		spread = 3,
 		miss_dis = 10,
-		RELOAD_SPEED = 0.6,
+		RELOAD_SPEED = 0.3,
 		melee_speed = 2,
 		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_lmg.melee_retry_delay,
@@ -6759,13 +6759,14 @@ function CharacterTweakData:_presets(tweak_data)
 			close = 3000
 		},
 		autofire_rounds = {100, 200},
+		spread_only = true,
 		FALLOFF = {
 			{
-				dmg_mul = 8.4,
+				dmg_mul = 4.2,
 				r = 400,
 				acc = {
-					1,
-					1
+					20,
+					6
 				},
 				recoil = {
 					2.5,
@@ -6779,11 +6780,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 8.4,
+				dmg_mul = 4.2,
 				r = 1000,
 				acc = {
-					0.1,
-					0.6
+					20,
+					6
 				},
 				recoil = {
 					2.5,
@@ -6797,11 +6798,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 8.4,
+				dmg_mul = 4.2,
 				r = 2000,
 				acc = {
-					0.0,
-					0.3
+					20,
+					10
 				},
 				recoil = {
 					2.5,
@@ -6818,8 +6819,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4.2,
 				r = 3000,
 				acc = {
-					0,
-					0.2
+					20,
+					10
 				},
 				recoil = {
 					2.5,
