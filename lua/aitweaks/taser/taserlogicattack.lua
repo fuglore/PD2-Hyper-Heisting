@@ -464,29 +464,35 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 	local tase_length = data.internal_data.tase_distance or 1500
 
 	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
+		--log("augh1")
 		return reaction
 	end
 
 	if attention_data.verified and attention_data.verified_dis <= tase_length then
 		if not data.internal_data.tasing or data.internal_data.tasing.target_u_key ~= attention_data.u_key then
 			if attention_data.unit:movement().tased and attention_data.unit:movement():tased() then
+				--log("augh2")
 				return AIAttentionObject.REACT_COMBAT
 			end
 		end
 
 		if attention_data.is_human_player then
 			if not attention_data.unit:movement():is_taser_attack_allowed() then
+				--log("augh3")
 				return AIAttentionObject.REACT_COMBAT
 			end
 		elseif attention_data.unit:movement():chk_action_forbidden("hurt") then
+			--log("augh4")
 			return AIAttentionObject.REACT_COMBAT
 		end
 
-		local obstructed = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 30, "report")
+		local obstructed = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 10, "report")
 
 		if obstructed then
+			--log("augh5")
 			return AIAttentionObject.REACT_COMBAT
 		else
+			--log("augh6")
 			return AIAttentionObject.REACT_SPECIAL_ATTACK
 		end
 	end

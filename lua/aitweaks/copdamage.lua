@@ -277,9 +277,6 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 			hurtlevel_mult = 5
 		elseif doomzer then
 			hurtlevel_mult = 5
-		elseif self._tasing then
-			hurtlevel_mult = 0.5
-			time_mult = time_mult + 0.5
 		elseif superarmor then
 			hurtlevel_mult = 1.75
 			time_mult = 0.75

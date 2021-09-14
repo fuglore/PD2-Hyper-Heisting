@@ -460,6 +460,12 @@ function CopLogicTravel._upd_enemy_detection(data)
 
 	CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
 
+	if not is_cool then
+		if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+			my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
+		end
+	end
+
 	local objective = data.objective
 	local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
 	
