@@ -286,10 +286,6 @@ function ShieldLogicAttack._upd_enemy_detection(data)
 					ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
 				end
 			end
-
-			if AIAttentionObject.REACT_COMBAT <= new_reaction and new_attention.nav_tracker then
-				my_data.optimal_pos = CopLogicAttack._find_flank_pos(data, my_data, new_attention.nav_tracker)
-			end
 		elseif old_att_obj and not data.unit:movement():chk_action_forbidden("walk") then
 			ShieldLogicAttack._cancel_optimal_attempt(data, my_data)
 		end

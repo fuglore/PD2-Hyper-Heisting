@@ -73,6 +73,11 @@ function CopActionWalk:init(action_desc, common_data)
 
 	self._persistent = action_desc.persistent
 	self._haste = action_desc.variant
+	
+	if self._unit:base():has_tag("no_run") then
+		self._haste = "walk"
+	end
+	
 	self._no_walk = action_desc.no_walk
 	self._no_strafe = action_desc.no_strafe
 	self._last_pos = mvec3_cpy(common_data.pos)

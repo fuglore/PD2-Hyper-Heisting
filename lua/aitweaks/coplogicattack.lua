@@ -1153,21 +1153,19 @@ function CopLogicAttack._update_cover(data)
 				if want_to_take_cover then
 					dis_mul = dis_mul + 0.4
 					
-					if want_to_take_cover == "hitnrun" then
-						dis_mul = dis_mul + 0.2
-					elseif want_to_take_cover == "reload" then
+					
+					if want_to_take_cover == "reload" then
 						dis_mul = dis_mul + 0.4
 					elseif want_to_take_cover == "spoocavoidance" or want_to_take_cover == "coward" then
-						dis_mul = dis_mul + 1
+						dis_mul = 1
 					end
 					
 					if data.tactics then
 						if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
-							dis_mul = dis_mul + 0.6
+							dis_mul = dis_mul + 0.2
 						end	
 					end
 				end
-			
 				
 				if not data.tactics or data.tactics.aggressor then
 					dis_mul = dis_mul * 0.2
@@ -2181,7 +2179,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		end
 	end
 	
-	if diff_index < 6 then
+	if diff_index < 4 then
 		local last_sup_t = data.unit:character_damage():last_suppression_t()
 		
 		if last_sup_t then

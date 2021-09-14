@@ -9,6 +9,7 @@ local mvec2 = Vector3()
 
 Hooks:PostHook(CoreEnvironmentControllerManager, "init", "hhpost_env", function(self)
 	self._effect_manager = World:effect_manager()
+	self._base_chromatic_amount = -0.4
 end)
 
 local san_other = {near_plane_x = 10, near_plane_y = 12, far_plane_x = 4000, far_plane_y = 5000}
@@ -564,6 +565,7 @@ function CoreEnvironmentControllerManager:set_chromatic_value_lerp(lerp_value)
 		if self._chromatic_enabled then
 			--log("nice")
 			local high_chrom = lerp_value >= 0.99 and math.lerp(-0.85, -1.4, math.random()) or -0.85
+			high_chrom = high_chrom - self._base_chromatic_amount
 			local new_chrom_value = math.lerp(self._base_chromatic_amount, high_chrom, lerp_value)
 			self._material:set_variable(Idstring("chromatic_amount"), new_chrom_value)
 		end

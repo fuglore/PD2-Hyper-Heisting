@@ -81,14 +81,6 @@ self.wpn_fps_shot_serbu.override = {
 			can_shoot_through_enemy = true,
 			rays = 1
 		}
-	},
-	wpn_fps_upg_a_custom = {
-		desc_id = "bm_wp_upg_a_custom2_desc",
-		custom_stats = {}
-	},
-	wpn_fps_upg_a_custom_free = {
-		desc_id = "bm_wp_upg_a_custom2_desc",
-		custom_stats = {}
 	}
 }
 
@@ -106,14 +98,6 @@ self.wpn_fps_sho_striker.override = {
 			can_shoot_through_enemy = true,
 			rays = 1
 		}
-	},
-	wpn_fps_upg_a_custom = {
-		desc_id = "bm_wp_upg_a_custom2_desc",
-		custom_stats = {}
-	},
-	wpn_fps_upg_a_custom_free = {
-		desc_id = "bm_wp_upg_a_custom2_desc",
-		custom_stats = {}
 	}
 }
 	

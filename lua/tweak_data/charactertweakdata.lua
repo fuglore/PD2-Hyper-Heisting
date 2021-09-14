@@ -1948,52 +1948,34 @@ function CharacterTweakData:_presets(tweak_data)
 	--Custom sniper preset to make them work differently, they work as a mini turret of sorts, dealing big damage with good accuracy, standing in their line of fire isn't wise as they'll suppress the shit out of you and take off armor very quickly.
 	presets.weapon.rhythmsniper = deep_clone(presets.weapon.sniper)
 	presets.weapon.rhythmsniper.is_rifle.autofire_rounds = nil	
-	presets.weapon.rhythmsniper.is_rifle.focus_delay = 2
+	presets.weapon.rhythmsniper.is_rifle.focus_delay = 0.8
 	presets.weapon.rhythmsniper.is_rifle.fireline_t = 3 --how long it takes for enemies to reset their focus and aim delay.
 	presets.weapon.rhythmsniper.is_rifle.aim_delay = {
-		0.4,
-		0.4
+		0,
+		0
 	}
 	presets.weapon.rhythmsniper.is_rifle.FALLOFF = {
 		{
 			dmg_mul = 2.5,
-			r = 3500,
-			acc = {
-				0,
-				1
-			},
-			recoil = {
-				0.8,
-				0.8
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 2.5,
-			r = 6000,
-			acc = {
-				0,
-				0.75
-			},
-			recoil = {
-				0.8,
-				0.8
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 2.5,
 			r = 10000,
+			acc = {
+				0,
+				1
+			},
+			recoil = {
+				0.8,
+				0.8
+			},
+			mode = {
+				0,
+				0,
+				0,
+				1
+			}
+		},
+		{
+			dmg_mul = 2.5,
+			r = 20000,
 			acc = {
 				0,
 				0.5
@@ -7544,7 +7526,8 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		"takedown",
 		"tank",
 		"special",
-		"ohfuck"
+		"ohfuck",
+		"no_run"
 	}
 	self.tank_mini.move_speed = presets.move_speed.mini_consistency --New movement presets.
 	self.tank_mini.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
@@ -7557,7 +7540,8 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_ftsu.tags = {
 		"law",
 		"tank",
-		"special"
+		"special",
+		"no_run"
 	}
 	self.tank_ftsu.weapon = presets.weapon.rhythmsniper
 	self.tank_ftsu.move_speed = presets.move_speed.mini_consistency
@@ -8672,7 +8656,7 @@ function CharacterTweakData:_set_normal()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 500
+	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8829,7 +8813,7 @@ function CharacterTweakData:_set_hard()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 500
+	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8994,7 +8978,7 @@ function CharacterTweakData:_set_overkill()
 	
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 500
+	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9174,7 +9158,7 @@ function CharacterTweakData:_set_overkill_145()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 500
+	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9298,7 +9282,7 @@ function CharacterTweakData:_set_easy_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 500
+	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9494,7 +9478,7 @@ function CharacterTweakData:_set_overkill_290()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 500
+	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9697,7 +9681,7 @@ function CharacterTweakData:_set_sm_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 500
+	self.presets.gang_member_damage.HEALTH_INIT = 400
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("anarchy")
