@@ -51,7 +51,7 @@ function CopBase:init(unit)
 
 	self._char_tweak = tweak_data.character[self._tweak_table]
 	
-	if unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss") then
+	if unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss") or unit:name() == Idstring("units/pd2_mod_psc/characters/ene_murky_punk_moss/ene_murky_punk_moss_husk") then
 		self._voidrage = true
 	end
 

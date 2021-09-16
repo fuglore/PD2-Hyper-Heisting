@@ -1315,7 +1315,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 					end
 					
 					if REACT_COMBAT <= attention.reaction then
-						if not data.tactics or not data.tactics.charge or objective.area and next(objective.area.police.units) then
+						if not data.tactics or not data.tactics.charge or objective.area and next(objective.area.police.units) or managers.groupai:state():chk_heat_bonus_retreat() then
 							local grp_objective = objective.grp_objective
 							local dis = data.unit:base()._engagement_range or data.internal_data.weapon_range and data.internal_data.weapon_range.close or 500
 							local my_data = data.internal_data
@@ -2084,7 +2084,7 @@ function CopLogicBase._evaluate_reason_to_surrender(data, my_data, aggressor_uni
 	
 	hold_chance = math.clamp(hold_chance, 0, 1)
 	
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local diff_index =  managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
 	if diff_index > 6 then
 		hold_chance = hold_chance * 1.25

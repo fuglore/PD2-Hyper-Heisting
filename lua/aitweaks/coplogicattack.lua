@@ -209,6 +209,8 @@ function CopLogicAttack.update(data)
 	
 	if not my_data.tasing then
 		if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+			my_data.attitude = data.objective and data.objective.attitude or "avoid"
+			
 			my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 
 			CopLogicAttack._update_cover(data)
@@ -2262,7 +2264,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		return true
 	end
 	
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local diff_index = managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
 	if diff_index < 7 then
 		if data.attention_obj.dmg_t and data.t - data.attention_obj.dmg_t < 1 then
@@ -2279,6 +2281,10 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 			end
 		end
 	end	
+	
+	if managers.groupai:state():chk_heat_bonus_retreat() then
+		return true
+	end
 end
 
 function CopLogicAttack._set_best_cover(data, my_data, cover_data)

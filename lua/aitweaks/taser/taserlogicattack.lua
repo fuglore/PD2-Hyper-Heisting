@@ -461,6 +461,7 @@ end
 
 function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data, stationary)
 	local reaction = CopLogicIdle._chk_reaction_to_attention_object(data, attention_data, stationary)
+	local my_data = data.internal_data
 	local tase_length = data.internal_data.tase_distance or 1500
 
 	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then

@@ -770,7 +770,7 @@ function GroupAIStateBesiege:update(t, dt)
 				end
 
 				local task_data = self._task_data.assault
-				local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+				local diff_index = managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 				
 				if self._activeassaultbreak and self._stopassaultbreak_t and self._stopassaultbreak_t < self._t then
 					self._stopassaultbreak_t = nil
@@ -1014,15 +1014,7 @@ function GroupAIStateBesiege:get_hostage_count_for_chatter()
 end
 
 function GroupAIStateBesiege:chk_heat_bonus_retreat()
-	local assault_task = self._task_data.assault
-	
-	if assault_task and assault_task.phase == "build" or assault_task and assault_task.phase == "sustain" then
-		if self._activeassaultbreak then
-			return true
-		end
-	end
-	
-	return	
+	return self._activeassaultbreak
 end
 
 function GroupAIStateBesiege:_upd_assault_areas(current_area)
@@ -1527,7 +1519,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			--fade
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
-		elseif task_data.phase_end_t < t and self._drama_data.amount >= tweak_data.drama.assaultstart or self._drama_data.zone == "high" and not low_carnage or self._hunt_mode or self._skip_phase then --if drama is high and there are 5 or more enemies engaging all players, start the assault and drop the bass
+		elseif task_data.phase_end_t < t and self._drama_data.amount >= tweak_data.drama.assaultstart or self._hunt_mode or self._skip_phase then --if drama is high and there are 5 or more enemies engaging all players, start the assault and drop the bass
 			self._assault_number = self._assault_number + 1
 			
 			self._skip_phase = nil

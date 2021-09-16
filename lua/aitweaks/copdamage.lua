@@ -274,9 +274,9 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		local hurtlevel_mult = 0.75
 		
 		if self._punk_effect then
-			hurtlevel_mult = 5
+			hurtlevel_mult = 10
 		elseif doomzer then
-			hurtlevel_mult = 5
+			hurtlevel_mult = 10
 		elseif superarmor then
 			hurtlevel_mult = 1.75
 			time_mult = 0.75
@@ -308,7 +308,7 @@ function CopDamage:determine_doom_hurt_type(damage_info)
 		
 		if damage >= 1600 then
 			time_to_chk = 8 * time_mult
-			hurt_level_add = 160
+			hurt_level_add = 320
 		elseif damage >= 800 then
 			time_to_chk = 8 * time_mult
 			hurt_level_add = 80
@@ -707,7 +707,7 @@ function CopDamage:_on_damage_received(damage_info)
 	if dmg_chk and damage_info.damage and damage_info.damage > 0.01 and self._health > damage_info.damage then
 		
 		if not self._dead then
-			if not damage_info.result_type or damage_info.result_type ~= "death"  then
+			if not damage_info.result_type or damage_info.result_type ~= "death" then
 				if self._unit:base():has_tag("punk_rage") then
 					local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 

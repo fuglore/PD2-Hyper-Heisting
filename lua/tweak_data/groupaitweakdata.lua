@@ -7180,15 +7180,13 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			0.33
 		}
 	}
-
-	if difficulty_index <= 5 then
+	
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or difficulty_index > 6 then
+		self.flash_grenade.timer = 1.35
+	elseif difficulty_index <= 5 then
 		self.flash_grenade.timer = 3
 	elseif difficulty_index == 6 then
 		self.flash_grenade.timer = 2
-	elseif difficulty_index == 7 then
-		self.flash_grenade.timer = 2
-	else
-		self.flash_grenade.timer = 1.35
 	end
 
 	self.optimal_trade_distance = {
