@@ -154,6 +154,14 @@ function ActionSpooc:init(action_desc, common_data)
 	local timer = TimerManager:game()
 	self._timer = timer
 	self._is_flying_strike = action_desc.flying_strike
+	
+	if not self._is_flying_strike then
+		self._buildup_speed_mul_t = 0
+		self._buildup_speed_mul_buildup_t = 1
+		self._builddup_speed_mul_max = 1.5
+		self._buildup_speed_mul = 1
+	end
+	
 	self._host_stop_pos_inserted = action_desc.host_stop_pos_inserted
 	self._stop_pos = action_desc.stop_pos
 
@@ -675,7 +683,9 @@ function ActionSpooc:_upd_strike_first_frame(t)
 	end
 
 	if redir_result then
-		self._machine:set_speed(redir_result, 1.75)
+		local speed = self._already_kicked_after_landing and 1.25 or 1.75
+	
+		self._machine:set_speed(redir_result, speed)
 		if skipped_item_spawning then
 			ext_mov:anim_clbk_wanted_item(my_unit, "baton", "hand_l", true)
 			ext_mov:spawn_wanted_items()
@@ -1385,6 +1395,17 @@ function ActionSpooc:_nav_chk(t, dt)
 	local path = self._nav_path
 	local old_nav_index = self._nav_index
 	local move_side = self._ext_anim.move_side or "fwd"
+	
+	local ellapsed_t = self._buildup_speed_mul_t + dt
+    self._buildup_speed_mul_t = ellapsed_t
+
+    local buildup_speed_lerp = ellapsed_t / self._buildup_speed_mul_buildup_t --time to reach maximum speed
+
+    --clamping lerp, comment out to infinitely increase speed
+    buildup_speed_lerp = buildup_speed_lerp > 1 and 1 or buildup_speed_lerp
+
+    self._buildup_speed_mul = math.lerp(1, self._builddup_speed_mul_max, buildup_speed_lerp)
+	
 	local vel = self:_get_current_max_walk_speed(move_side)
 	local walk_dis = vel * dt
 	local last_pos = self._last_pos
@@ -2748,7 +2769,9 @@ function ActionSpooc:_get_current_max_walk_speed(move_dir)
 		end
 		--log("multiplier is " .. tostring(multiplier) .. "!") careful uncommenting these, dont nuke your framerate, nerd.
 	end
-
+	
+	speed_modifier = speed_modifier * self._buildup_speed_mul
+	
 	if speed_modifier ~= 1 then
 		speed = speed * speed_modifier
 	end
