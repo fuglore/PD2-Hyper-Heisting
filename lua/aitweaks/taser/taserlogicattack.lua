@@ -485,14 +485,20 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 			--log("augh4")
 			return AIAttentionObject.REACT_COMBAT
 		end
-
+		
+		if my_data.last_available_tase_t then
+			if data.t - my_data.last_available_tase_t < 2 then
+				return AIAttentionObject.REACT_SPECIAL_ATTACK
+			end
+		end
+		
 		local obstructed = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 10, "report")
 
 		if obstructed then
 			--log("augh5")
 			return AIAttentionObject.REACT_COMBAT
 		else
-			--log("augh6")
+			my_data.last_available_tase_t = data.t
 			return AIAttentionObject.REACT_SPECIAL_ATTACK
 		end
 	end

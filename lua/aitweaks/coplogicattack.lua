@@ -342,10 +342,14 @@ function CopLogicAttack._upd_combat_movement(data)
 			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "reload")
 		end
 	end
+	
+	local in_cover = my_data.in_cover
+	
+	if in_cover and my_data.best_cover then
+		in_cover = in_cover[1] == my_data.best_cover[1] and in_cover
+	end
 
 	if not action_taken then
-		local in_cover = my_data.in_cover
-		
 		if want_to_take_cover or my_data.at_cover_shoot_pos then
 			if in_cover then
 				if my_data.attitude == "engage" then
@@ -1099,7 +1103,7 @@ function CopLogicAttack._update_cover(data)
 	local focus_enemy = data.attention_obj
 
 	if focus_enemy and focus_enemy.nav_tracker and REACT_COMBAT <= focus_enemy.reaction then
-		local find_new_cover = not my_data.cover_path_failed_t or data.t - my_data.cover_path_failed_t > 1
+		local find_new_cover = data.important or not my_data.cover_path_failed_t or data.t - my_data.cover_path_failed_t > 1
 
 		if find_new_cover then
 			if my_data.processing_cover_path or my_data.charge_path_search_id or my_data.moving_to_cover or my_data.walking_to_cover_shoot_pos or my_data.surprised then
