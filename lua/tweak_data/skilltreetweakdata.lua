@@ -1,4 +1,8 @@
-Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, tweak_data)
+local former_init = SkillTreeTweakData.init
+
+function SkillTreeTweakData:init()
+	former_init(self)
+	
 	table.insert(self.default_upgrades, "carry_movement_penalty_nullifier")		
 	table.insert(self.default_upgrades, "player_pick_lock_easy_speed_multiplier_1")
 	table.insert(self.default_upgrades, "player_can_free_run")
@@ -834,4 +838,142 @@ Hooks:PostHook(SkillTreeTweakData, "init", "skillrebalances", function(self, twe
 			}
 		}
 	}
-end)
+	
+	local deck2 = {
+		cost = 300,
+		desc_id = "menu_deckall_2_desc",
+		name_id = "menu_deckall_2",
+		upgrades = {
+			"weapon_passive_headshot_damage_multiplier"
+		},
+		icon_xy = {
+			1,
+			0
+		}
+	}
+	local deck4 = {
+		cost = 600,
+		desc_id = "menu_deckall_4_desc",
+		name_id = "menu_deckall_4",
+		upgrades = {
+			"passive_player_xp_multiplier",
+			"player_passive_suspicion_bonus",
+			"player_passive_armor_movement_penalty_multiplier"
+		},
+		icon_xy = {
+			3,
+			0
+		}
+	}
+	local deck6 = {
+		cost = 1600,
+		desc_id = "menu_deckall_6_desc",
+		name_id = "menu_deckall_6",
+		upgrades = {
+			"armor_kit",
+			"player_pick_up_ammo_multiplier"
+		},
+		icon_xy = {
+			5,
+			0
+		}
+	}
+	local deck8 = {
+		cost = 3200,
+		desc_id = "menu_deckall_8_desc",
+		name_id = "menu_deckall_8",
+		upgrades = {
+			"weapon_passive_damage_multiplier",
+			"passive_doctor_bag_interaction_speed_multiplier"
+		},
+		icon_xy = {
+			7,
+			0
+		}
+	}
+	
+	self.specializations[11][1].upgrades = {
+		"player_damage_to_hot_1",
+		"perk_max_health_reduction"
+	}
+	
+	self.specializations[15] = {
+		{
+			cost = 200,
+			texture_bundle_folder = "opera",
+			desc_id = "menu_deck15_1_desc",
+			name_id = "menu_deck15_1",
+			upgrades = {
+				"player_armor_grinding_1"
+			},
+			icon_xy = {
+				0,
+				0
+			}
+		},
+		deck2,
+		{
+			cost = 400,
+			texture_bundle_folder = "opera",
+			desc_id = "menu_deck15_3_desc",
+			name_id = "menu_deck15_3",
+			upgrades = {
+				"player_health_decrease_1",
+				"player_armor_increase_1"
+			},
+			icon_xy = {
+				1,
+				0
+			}
+		},
+		deck4,
+		{
+			cost = 1000,
+			texture_bundle_folder = "opera",
+			desc_id = "menu_deck15_5_desc",
+			name_id = "menu_deck15_5",
+			upgrades = {
+				"player_health_decrease_2",
+				"player_armor_increase_2"
+			},
+			icon_xy = {
+				2,
+				0
+			}
+		},
+		deck6,
+		{
+			cost = 2400,
+			texture_bundle_folder = "opera",
+			desc_id = "menu_deck15_7_desc",
+			name_id = "menu_deck15_7",
+			upgrades = {
+				"player_armor_grinding_regen_t_on_kill"
+			},
+			icon_xy = {
+				3,
+				0
+			}
+		},
+		deck8,
+		{
+			cost = 4000,
+			texture_bundle_folder = "opera",
+			desc_id = "menu_deck15_9_desc",
+			name_id = "menu_deck15_9",
+			upgrades = {
+				"player_passive_loot_drop_multiplier",
+				"player_armor_grinding_on_dmg_regen"
+			},
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		name_id = "menu_st_spec_15",
+		dlc = "opera",
+		desc_id = "menu_st_spec_15_desc"
+	}
+	
+end
+

@@ -184,18 +184,75 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	}
 	
-	--temp resmod anarchist values--
-	self.values.player.armor_grinding = {
-		{
-			{2.4, 3.0},
-			{2.8, 3.5},
-			{3.2, 4.0},
-			{3.6, 4.5},
-			{4.0, 5.0},
-			{4.4, 5.5},
-			{4.8, 6.0}
+	self.values.player.health_decrease_2_decrease_harder = {
+		0.5,
+		0.25
+	}
+	
+	self.definitions.player_health_decrease_1 = {
+		name_id = "menu_player_health_decrease",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "health_decrease_2_decrease_harder",
+			category = "player"
 		}
 	}
+	
+	self.definitions.player_health_decrease_2 = {
+		name_id = "menu_player_health_decrease",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "health_decrease_2_decrease_harder",
+			category = "player"
+		}
+	}
+
+	self.values.player.armor_grinding = {
+		{
+			{1.5, 3},
+			{2, 4},
+			{3, 4.5},
+			{4, 5},
+			{4.5, 5.5},
+			{5, 6},
+			{6, 7}
+		}
+	}
+	
+	self.values.player.armor_grinding_regen_t_on_kill = {
+		{
+			15,
+			15,
+			10,
+			9,
+			8,
+			7,
+			6
+		}
+	}
+	self.definitions.player_armor_grinding_regen_t_on_kill = {
+		name_id = "menu_anarchdeck6",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "armor_grinding_regen_t_on_kill",
+			category = "player"
+		}
+	}
+	
+	self.values.player.armor_grinding_on_dmg_regen = {true}
+	self.definitions.player_armor_grinding_on_dmg_regen = {
+		name_id = "menu_anarchdeck8",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "armor_grinding_on_dmg_regen",
+			category = "player"
+		}
+	}
+	
 	--Temp values for stoic nerf
 	self.values.player.armor_to_health_conversion = {
 		100

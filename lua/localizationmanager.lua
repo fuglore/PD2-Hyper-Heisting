@@ -455,11 +455,20 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["bm_menu_movement"] = "M/S",
 		
 			--Anarchist
-			["menu_deck15_1_desc"] = "Instead of fully regenerating armor when out of combat, The Anarchist will periodically regenerate armor at a rate equivalent to ##8## armor per second. Heavier armor regenerates more armor per tick, but has a longer delay between ticks.\n\nNote: Skills and perks that increases the armor recovery rate are disabled when using this perk deck.",
+			["menu_deck15_1"] = "Warrior Sound",
+			["menu_deck15_1_desc"] = "Instead of fully regenerating armor instantly once the Armor Recovery timer has elapsed, The Anarchist will periodically generate armor at a rate equivalent to ##5## armor per second.\n\nHeavier armors generate more armor per tick, but have a longer delay between ticks.\n\nNote: Skills and perks that increases the armor recovery rate are disabled when using this perk deck.",
+			
+			["menu_deck15_3"] = "Run You",
 			["menu_deck15_3_desc"] = "##50%## of your health is converted into ##50%## armor.",
-			["menu_deck15_5_desc"] = "##50%## of your health is converted into ##75%## armor.",
-			["menu_deck15_7_desc"] = "##50%## of your health is converted into ##100%## armor.",
-			["menu_deck15_9_desc"] = "Dealing damage will grant you armor - This can only occur once every ##3## seconds. Heavier armors are granted more armor.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a PAYDAY is increased by ##10%.##",
+			
+			["menu_deck15_5"] = "New Design",
+			["menu_deck15_5_desc"] = "##75%## of your health is converted into ##75%## armor.",
+			
+			["menu_deck15_7"] = "Requiem",
+			["menu_deck15_7_desc"] = "Killing enemies ##speeds up the delay## between ticks for armor generation.\n\n##Heavier armors speed it up more##.",
+			
+			["menu_deck15_9"] = "No Respect",
+			["menu_deck15_9_desc"] = "Upon taking health damage, ##you regenerate the next tick of armor instantly##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a PAYDAY is increased by ##10%.##",
 
 			--Even more Fire Power!--
 			["menu_more_fire_power_desc"] = "BASIC: ##$basic;##\nYou gain ##1## more shaped charge and ##4## more trip mines.\n\nACE: ##$pro;##\nYou gain ##4## more shaped charges and ##7## more trip mines.",
@@ -499,7 +508,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_deck10_5_desc"] = "When you get healed from picking up ammo packs, your teammates also get healed for ##50%## of the amount.\n\nYou gain ##5%## more health.",
 			
 			--Grinder
-			["menu_deck11_1_desc"] = "You start with ##50%## of your Health and cannot heal above that.\n\nDamaging an enemy heals ##1## life points every ##0.3## seconds for ##3## seconds.\n\nThis effect stacks but cannot occur more than once every ##1.5## seconds, and only while wearing the ##Two-Piece Suit## or ##Lightweight Ballistic Vest##.\n\nNOTE: The health limit stacks with ##Something To Prove##.",
+			["menu_deck11_1_desc"] = "You start with ##50%## of your Maximum Health and cannot heal above that.\n\nDamaging an enemy heals ##1## life points every ##0.3## seconds for ##3## seconds.\n\nThis effect stacks but cannot occur more than once every ##1.5## seconds, and only while wearing the ##Two-Piece Suit## or ##Lightweight Ballistic Vest##.\n\nNOTE: The health limit stacks with ##Something To Prove##.",
 			
 			["menu_deck11_3_desc"] = "Damaging an enemy now heals ##2## life points every ##0.3## seconds for ##3## seconds.\n\nYou gain ##10%## more health.",
 			
@@ -604,7 +613,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_oppressor_beta_desc"] = "BASIC: ##$basic##\nThe duration of the visual effect caused by flashbangs is reduced by ##25%##.\n\nACE: ##$pro##\nYour armor recovery rate is increased by ##15%##.",
 			
 			["menu_prison_wife_beta"] = "Jackpot",
-			["menu_prison_wife_beta_desc"] = "BASIC: ##$basic##\nYou regenerate ##5## armor for each successful headshot. This effect cannot occur more than once every ##2## seconds.\n\nACE: ##$pro##\nUpon killing an enemy with a headshot, you gain the ability to resist one instance of ##lethal damage##. This does not apply multiple times, and can only be activated every ##5## seconds.\n\n##Let's rock, baby!##",
+			["menu_prison_wife_beta_desc"] = "BASIC: ##$basic##\nYou regenerate ##5## armor for each successful headshot. This effect cannot occur more than once every ##5## seconds.\n\nACE: ##$pro##\nUpon killing an enemy with a headshot, you gain the ability to resist one instance of ##lethal damage##. This does not apply multiple times, and can only be activated every ##5## seconds.\n\n##Let's rock, baby!##",
 			
 			["menu_show_of_force_beta"] = "Cool Headed",
 			["menu_show_of_force_beta_desc"] = "BASIC: ##$basic##\nYou gain ##+50%## resistance to suppression while interacting with objects.\n\nACE: ##$pro##\nYou gain ##+50%## resistance to damage while performing interactions.\n\n##Phew, good thing I'm indestructible.##",
@@ -625,7 +634,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_wolverine_beta_desc"] = "BASIC: ##$basic##\nThe less health you have, the more power you gain.\n\nWhen under ##100%## Health, deal up to ##500%## more melee and saw damage.\n\nWhen under ##50%## Health, you reload all weapons ##50%## faster.\n\nACE: ##$pro##\nWhen at ##50%## Health or below, you gain ##+50%## resistance to suppression and your interaction speed with Medic Bags and First Aid Kits is increased by ##75%##.",
 			
 			["menu_frenzy"] = "Something To Prove",
-			["menu_frenzy_desc"] = "BASIC: ##$basic##\nYou start with ##50%## of your Health and cannot heal above that.\n\n##ALL DAMAGE DEALT## is increased by ##25%##.\n\nACE: ##$pro##\n##You lose 1 down.##\n\nYour movement speed is increased by ##25%##.\n\n##ALL DAMAGE DEALT## is further increased by ##25%##.\n\n##Kill all sons of bitches, right?##",
+			["menu_frenzy_desc"] = "BASIC: ##$basic##\nYou start with ##50%## of your Maximum Health and cannot heal above that.\n\n##ALL DAMAGE DEALT## is increased by ##25%##.\n\nACE: ##$pro##\n##You lose 1 down.##\n\nYour movement speed is increased by ##25%##.\n\n##ALL DAMAGE DEALT## is further increased by ##25%##.\n\n##Kill all sons of bitches, right?##",
 			
 			--mutual perks
 			["menu_deckall_2"] = "Used To It",

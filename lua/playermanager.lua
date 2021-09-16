@@ -68,6 +68,22 @@ function PlayerManager:movement_speed_multiplier(speed_state, bonus_multiplier, 
 	return multiplier
 end
 
+function PlayerManager:health_skill_multiplier()
+	local multiplier = 1
+	multiplier = multiplier + self:upgrade_value("player", "health_multiplier", 1) - 1
+	multiplier = multiplier + self:upgrade_value("player", "passive_health_multiplier", 1) - 1
+	multiplier = multiplier + self:team_upgrade_value("health", "passive_multiplier", 1) - 1
+	multiplier = multiplier + self:get_hostage_bonus_multiplier("health") - 1
+	multiplier = multiplier - self:upgrade_value("player", "health_decrease", 0)
+	multiplier = multiplier * self:upgrade_value("player", "health_decrease_2_decrease_harder", 1)
+
+	if self:num_local_minions() > 0 then
+		multiplier = multiplier + self:upgrade_value("player", "minion_master_health_multiplier", 1) - 1
+	end
+
+	return multiplier
+end
+
 function PlayerManager:health_skill_addend()
 	local addend = 0
 	addend = addend + self:upgrade_value("team", "crew_add_health", 0)
@@ -449,6 +465,22 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	
 	local damage_ext = player_unit:character_damage()
 
+	if damage_ext._armor_grinding then
+		if self:has_category_upgrade("player", "armor_grinding_regen_t_on_kill") then
+			local regen_data = managers.player:upgrade_value("player", "armor_grinding_regen_t_on_kill", nil)
+
+			if regen_data and regen_data ~= 0 then
+				local armor_data = tweak_data.blackmarket.armors[managers.blackmarket:equipped_armor(true, true)]
+				local idx = armor_data.upgrade_level
+				local elaps_div = regen_data[idx]
+				local target_tick = damage_ext._armor_grinding.target_tick
+				local elaps_add = target_tick / elaps_div
+				
+				damage_ext._armor_grinding.elapsed = damage_ext._armor_grinding.elapsed + elaps_add
+			end
+		end
+	end
+	
 	if self:has_category_upgrade("player", "kill_change_regenerate_speed") then
 		local amount = self:body_armor_value("skill_kill_change_regenerate_speed", nil, 1)
 		local multiplier = self:upgrade_value("player", "kill_change_regenerate_speed", 0)
@@ -684,7 +716,7 @@ function PlayerManager:on_headshot_dealt()
 
 	if damage_ext and regen_armor_bonus > 0 and regen_armor_t_chk then
 		damage_ext:restore_armor(regen_armor_bonus)
-		self._on_headshot_dealt_t = t + (tweak_data.upgrades.on_headshot_dealt_cooldown or 0)
+		self._on_headshot_dealt_t = t + 5
 	end
 	
 	if damage_ext and self:has_category_upgrade("player", "jackpot_safety") and not damage_ext:has_jackpot_token() and player_unit:movement() then	

@@ -1388,8 +1388,8 @@ function PlayerDamage:_calc_armor_damage(attack_data)
 end
 
 function PlayerDamage:_calc_health_damage(attack_data)
-
 	attack_data.damage = attack_data.damage - (self._old_last_received_dmg or 0)
+	
 	if self._unit then
 		local state = self._unit:movement():current_state_name()
 		if state == "driving" or self._unit:movement():zipline_unit() then
@@ -1435,6 +1435,16 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	self:_send_set_health()
 	self:_set_health_effect()
 	managers.statistics:health_subtracted(health_subtracted)
+	
+	if self:get_real_health() > 0 then
+		if managers.player:has_category_upgrade("player", "armor_grinding_on_dmg_regen") then
+			if health_subtracted > 0 then
+				self:change_armor(self._armor_grinding.armor_value)
+				self._armor_grinding.elapsed = 0
+				self:_send_set_armor()
+			end
+		end
+	end
 	
 	if death_prevented then 
 		if self._phoenix_down_t then
