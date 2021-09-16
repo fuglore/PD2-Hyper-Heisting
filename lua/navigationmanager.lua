@@ -309,6 +309,9 @@ function NavigationManager:_execute_coarce_search(search_data)
 				local new_seg_weight = seg_data.weight
 				local search_index = #to_search
 				if search_data.long_path then
+					local weight_mul = math.lerp(1, 2, math.random())
+				
+					new_seg_weight = new_seg_weight * weight_mul
 					while search_index > 0 and to_search[search_index].weight > new_seg_weight do
 						search_index = search_index - 1
 					end
@@ -344,6 +347,7 @@ function NavigationManager:_sort_nav_segs_after_pos(to_pos, i_seg, ignore_seg, v
 		if not ignore_seg[neighbour_seg_id] and not all_segs[neighbour_seg_id].disabled and (not verify_clbk or verify_clbk(neighbour_seg_id)) then
 			for i = 1, #door_list do
 				local i_door = door_list[i]
+				
 				if type(i_door) == "number" then
 					local door = all_doors[i_door]
 					local door_pos = door.center
