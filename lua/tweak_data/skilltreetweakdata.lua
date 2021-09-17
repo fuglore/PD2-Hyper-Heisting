@@ -894,7 +894,7 @@ function SkillTreeTweakData:init()
 	
 	self.specializations[11][1].upgrades = {
 		"player_damage_to_hot_1",
-		"perk_max_health_reduction"
+		"player_perk_max_health_reduction"
 	}
 	
 	self.specializations[15] = {

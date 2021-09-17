@@ -488,7 +488,7 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 		end
 		
 		if my_data.last_available_tase_t then
-			if data.t - my_data.last_available_tase_t < 2 then
+			if data.t - my_data.last_available_tase_t < 4 then
 				return AIAttentionObject.REACT_SPECIAL_ATTACK
 			end
 		end

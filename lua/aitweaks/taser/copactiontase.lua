@@ -75,8 +75,9 @@ function CopActionTase:init(action_desc, common_data)
 		}
 	}
 	self._tase_distance = weapon_usage_tweak.tase_distance or 1500
-	self._sphere_radius = weapon_usage_tweak.tase_sphere_cast_radius or 30
+	self._sphere_radius = 10
 	self._line_of_fire_slotmask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
+	self._discharge_line_of_fire_slotmask = managers.slot:get_mask("world_geometry", "vehicles")
 	self._weapon_obj_fire = weapon_unit:get_object(Idstring("fire"))
 	self._shield = alive(self._ext_inventory._shield_unit) and self._ext_inventory._shield_unit or nil
 	self._firing_at_husk = action_desc.firing_at_husk or nil
@@ -328,7 +329,6 @@ function CopActionTase:update(t)
 							local new_action_data = {
 								body_part = 2,
 								type = "turn",
-								speed = self._turn_speed,
 								angle = spin
 							}
 
@@ -417,9 +417,9 @@ function CopActionTase:update(t)
 				cancel_tase = true
 			else
 				if self._shield then
-					cancel_tase = self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", self._sphere_radius, "ignore_unit", self._shield, "report")
+					cancel_tase = self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._discharge_line_of_fire_slotmask, "sphere_cast_radius", self._sphere_radius, "ignore_unit", self._shield, "report")
 				else
-					cancel_tase = self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._line_of_fire_slotmask, "sphere_cast_radius", self._sphere_radius, "report")
+					cancel_tase = self._unit:raycast("ray", self._shoot_from_pos, target_pos, "slot_mask", self._discharge_line_of_fire_slotmask, "sphere_cast_radius", self._sphere_radius, "report")
 				end
 			end
 

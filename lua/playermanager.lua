@@ -74,12 +74,13 @@ function PlayerManager:health_skill_multiplier()
 	multiplier = multiplier + self:upgrade_value("player", "passive_health_multiplier", 1) - 1
 	multiplier = multiplier + self:team_upgrade_value("health", "passive_multiplier", 1) - 1
 	multiplier = multiplier + self:get_hostage_bonus_multiplier("health") - 1
-	multiplier = multiplier - self:upgrade_value("player", "health_decrease", 0)
-	multiplier = multiplier * self:upgrade_value("player", "health_decrease_2_decrease_harder", 1)
-
+	
 	if self:num_local_minions() > 0 then
 		multiplier = multiplier + self:upgrade_value("player", "minion_master_health_multiplier", 1) - 1
 	end
+	
+	multiplier = multiplier - self:upgrade_value("player", "health_decrease", 0)
+	multiplier = multiplier * self:upgrade_value("player", "health_decrease_2_decrease_harder", 1)
 
 	return multiplier
 end
