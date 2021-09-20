@@ -453,19 +453,46 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 		LocalizationManager:add_localized_strings({	
 			--SPEED IS WAR
 			["bm_menu_movement"] = "M/S",
+			
+			
+			--Rogue
+			["menu_deck4_1_desc"] = "Your chance to dodge is increased by ##5%##.",
+			["menu_deck4_5_desc"] = "Your chance to dodge is increased by ##10%##.",
+			["menu_deck4_7_desc"] = "Your chance to dodge is increased by ##15%##.",
+		
+			--Crook
+			["menu_deck6_1_desc"] = "Your chance to dodge is increased by ##5%##.",
+			["menu_deck6_5_desc"] = "Your chance to dodge is increased by ##5%## for ballistic vests.\n\nYour armor is increased by ##20%## for ballistic vests.",
+			["menu_deck6_7_desc"] = "Your chance to dodge is increased by ##5%## for ballistic vests.\n\nYour armor is increased by ##25%## for ballistic vests.",
+			
+			--Burglar
+			["menu_deck7_1_desc"] = "Your chance to dodge is increased by ##5%##.",
+			
+			--Ex-President
+			["menu_deck13_3_desc"] = "Increases the amount of health stored from kills by ##4##.\n\nYou gain ##5%## more health.",
+			["menu_deck13_5_desc"] = "Increases the maximum health that can be stored by ##50%##.\n\nYou gain ##5%## more health.\n\nYour chance to dodge is increased by ##5%##.",
+			["menu_deck13_7_desc"] = "Increases the amount of health stored from kills by ##4##.\n\nYou gain ##5%## more health.",
+			
+			--Sicario
+			["menu_deck18_3_desc"] = "Every time the player gets shot, ##10%## dodge chance is gained.\n\nThis effect is reset once the player dodges and will not occur for the next ##6## seconds.",
+			["menu_deck18_5_desc"] = "Your chance to dodge is increased by ##5%##.",
+			
+			--Hacker
+			["menu_deck21_3_desc"] = "Your maximum health is increased by ##+10%##.",
+			["menu_deck21_5_desc"] = "Killing at least ##1## enemy while the feedback or jamming effect is active will grant ##+15%## dodge for ##30## seconds.",
 		
 			--Anarchist
 			["menu_deck15_1"] = "Warrior Sound",
-			["menu_deck15_1_desc"] = "Instead of fully regenerating armor instantly once the Armor Recovery timer has elapsed, The Anarchist will periodically generate armor at a rate equivalent to ##5## armor per second.\n\nHeavier armors generate more armor per tick, but have a longer delay between ticks.\n\nNote: Skills and perks that increases the armor recovery rate are disabled when using this perk deck.",
+			["menu_deck15_1_desc"] = "Instead of fully regenerating armor instantly once the Armor Recovery timer has elapsed, The Anarchist will generate ##12## armor every ##6## seconds.\n\nHeavier armors ##generate more armor## per tick, but have a ##longer delay## between ticks.\n\nKilling enemies ##speeds up the delay## between ticks for armor generation, with each enemy killed being ##1/20th## of the timer.\n\nNote: Skills and perks that increases the armor recovery rate are disabled when using this perk deck.",
 			
 			["menu_deck15_3"] = "Run You",
-			["menu_deck15_3_desc"] = "##50%## of your health is converted into ##50%## armor.",
+			["menu_deck15_3_desc"] = "##50%## of your health is converted into ##25%## armor.",
 			
 			["menu_deck15_5"] = "New Design",
-			["menu_deck15_5_desc"] = "##75%## of your health is converted into ##75%## armor.",
+			["menu_deck15_5_desc"] = "##75%## of your health is converted into ##50%## armor.",
 			
 			["menu_deck15_7"] = "Requiem",
-			["menu_deck15_7_desc"] = "Killing enemies ##speeds up the delay## between ticks for armor generation.\n\n##Heavier armors speed it up more##.",
+			["menu_deck15_7_desc"] = "Killing enemies now speeds up the delay between ticks for armor generation by ##1/10th## of the timer.",
 			
 			["menu_deck15_9"] = "No Respect",
 			["menu_deck15_9_desc"] = "Upon taking health damage, ##you regenerate the next tick of armor instantly##.\n\nDeck Completion Bonus: Your chance of getting a higher quality item during a PAYDAY is increased by ##10%.##",
@@ -514,12 +541,6 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_deck11_7_desc"] = "Damaging an enemy now heals ##4## life points every ##0.3## seconds for ##3## seconds.\n\nYou gain ##5%## more health.",
 			
-			["menu_deck13_3_desc"] = "Increases the amount of health stored from kills by ##4##.\n\nYou gain ##5%## more health.",
-			
-			["menu_deck13_5_desc"] = "Increases the maximum health that can be stored by ##50%##.\n\nYou gain ##5%## more health.\n\nYour chance to dodge is increased by ##10%##.",
-			
-			["menu_deck13_7_desc"] = "Increases the amount of health stored from kills by ##4##.\n\nYou gain ##5%## more health.",
-			
 			["menu_deck17_3_desc"] = "You gain ##5%## more health.",
 			["menu_deck17_5_desc"] = "You gain ##5%## more health.\n\nEnemies nearby will prefer targeting you, whenever possible, while the Injector effect is active.",
 			["menu_deck17_7_desc"] = "You gain ##5%## more health.\n\nThe amount of health received during the Injector effect is increased by ##25%## while below ##50%## health.",
@@ -537,7 +558,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_tea_cookies_beta_desc"] = "BASIC: ##$basic##\nYou gain ##2## extra First Aid Kits.\n\nACE: ##$pro##\nYou gain ##2## more extra First Aid Kits.\n\nYour deployed First Aid Kits will be automatically used if a player is downed within a ##5## meter radius of the First Aid Kit.\n\nThis cannot occur more than once every ##60## seconds.",
 			
 			["menu_medic_2x_beta"] = "Vitamins",
-			["menu_medic_2x_beta_desc"] = "BASIC: ##$basic##\nYour doctor bags now have ##2## charges.\n\nACE: ##$pro##\nYou receive ##+100%## healing from all sources.\n\nYour Doctor Bags now grant the user the ability to resist one instance of ##lethal damage##.\n\nNOTE: This stacks with ##Jackpot Aced##.\n\n##The container's label has very visible quotation marks.##",
+			["menu_medic_2x_beta_desc"] = "BASIC: ##$basic##\nYour doctor bags now have ##2## charges.\n\nACE: ##$pro##\nYou receive ##+50%## healing from all sources.\n\nYour Doctor Bags now grant the user the ability to resist one instance of ##lethal damage##.\n\nNOTE: This stacks with ##Jackpot Aced##.\n\n##The container's label has very visible quotation marks.##",
 			
 			["menu_inspire_beta_desc"] = "BASIC: ##$basic##\nYou revive crew members ##100%## faster. Shouting at your teammates will increase both their movement and reload speed by ##30%## and enable them to resist suppression for ##10## seconds. \n\nACE: ##$pro##\nThere is a ##100%## chance that you can revive crew members at a distance of up to ##9## meters by shouting at them. This cannot occur more than once every ##30## seconds.",
 			
@@ -564,7 +585,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_iron_man_beta_desc"] = "BASIC: ##$basic##\nIncreases the armor recovery rate for you and your crew by ##25%##.\n\nACE: ##$pro##\nYour Melee Weapons can now ##stagger shields##.",
 			
 			["menu_juggernaut_beta"] = "Big Guy",
-			["menu_juggernaut_beta_desc"] = "BASIC: ##$basic##\nUnlocks the ability to wear the ##Improved Combined Tactical Vest##. \n\nYour total armor value is increased by ##50%##.\n\nACE: ##$pro##\nYou gain ##115## extra health.\n\nNOTE: ##Big Guy Aced## is applied before multipliers.\n\n##For you.##",
+			["menu_juggernaut_beta_desc"] = "BASIC: ##$basic##\nUnlocks the ability to wear the ##Improved Combined Tactical Vest##.\n\nACE: ##$pro##\nYou gain ##115## extra health.\n\nNOTE: ##Big Guy Aced## is applied after multipliers.\n\n##For you.##",
 			
 			["bm_menu_skill_locked_level_7"] = "Requires the Big Guy skill",
 			
@@ -577,7 +598,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_feign_death_desc"] = "BASIC: ##$basic##\nUpon killing an enemy, regenerate ##2.5## Health.\n\nACE: ##$pro##\nThe regeneration is increased to ##5## Health.\n\n##...But enough talk! Have at you!##",
 			
 			["menu_pistol_beta_messiah"] = "Resurrection",
-			["menu_pistol_beta_messiah_desc"] = "BASIC: ##$basic##\nWhile in bleedout, you can revive yourself if you kill an enemy.  This can only happen every ##120## seconds.\n\nACE: ##$pro##\nYou gain the ability to get downed ##1## more time before going into custody.\n\n##The mark of my divinity shall scar thy DNA.##",
+			["menu_pistol_beta_messiah_desc"] = "BASIC: ##$basic##\nWhile in bleedout, you can revive yourself if you kill an enemy.  This can only happen every ##240## seconds.\n\nACE: ##$pro##\nYou gain the ability to get downed ##1## more time before going into custody.\n\n##The mark of my divinity shall scar thy DNA.##",
 			
 			["menu_heavy_impact_beta"] = "Short Holster",
 			["menu_heavy_impact_beta_desc"] = "BASIC: ##$basic##\nYou swap weapons ##50%## faster.\n\nACE: ##$pro##\nYour weapons' recoil is reduced by ##20%##.\n\nNOTE: This applies separately from the Stability weapon stat.\n\n##Comfy and easy to wear.##",
@@ -595,7 +616,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_expert_handling_desc"] = "BASIC: ##$basic##\nEach successful pistol hit gives you a ##10%## increased accuracy bonus for ##10## seconds and can stack ##4## times.\n\nACE: ##$pro##\nYou reload all pistols ##25%## faster.",
 			
 			["menu_sprinter_beta"] = "High Vigour",
-			["menu_sprinter_beta_desc"] = "BASIC: ##$basic##\nYour stamina regenerates ##25%## faster.\n\nACE: ##$pro##\nYou gain ##+10## ##Dodge##. ##Dodge## gives you a random chance to ##completely negate damage##.\n\nUpon successfully ##dodging## an attack, regain ##5## stamina.",
+			["menu_sprinter_beta_desc"] = "BASIC: ##$basic##\nYour stamina regenerates ##25%## faster.\n\nACE: ##$pro##\nYou gain ##+10## ##Dodge##. ##Dodge## gives you a random chance to ##completely negate damage##.\n\nUpon successfully ##dodging## an attack, regain ##5## stamina.\n\nNOTE: ##ALL Dodge## chance is halved while you are not sprinting!",
 			
 			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nWhen tased, the effect has a ##25%## chance to ##backfire## on the Taser, knocking them back.\n\nACE: ##$pro##\nWhen tased, you are able to ##free yourself from the Taser## by looking at the Taser and pressing your interact key within ##0.4## seconds of getting tased.",
 			

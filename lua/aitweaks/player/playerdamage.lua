@@ -348,7 +348,7 @@ function PlayerDamage:damage_melee(attack_data)
 	
 	self:build_suppression(20)
 	
-	local allow_melee_dodge = true
+	local allow_melee_dodge = nil
 	local sneakier_activated = nil
 	if allow_melee_dodge and not attack_data.is_cloaker_kick and pm:current_state() ~= "bleed_out" and pm:current_state() ~= "bipod" and pm:current_state() ~= "tased" then --self._bleed_out and current_state() ~= "bleed_out" aren't the same thing
 		local dodge_roll = math.random()
@@ -1995,17 +1995,21 @@ function PlayerDamage:_upd_health_regen(t, dt)
 	end
 end
 
-function PlayerDamage:restore_health(health_restored, is_static, chk_health_ratio)
-	if self._mangle_t then
-		return false
+function PlayerDamage:restore_health(health_restored, is_static, chk_health_ratio, heat_bonus)
+	if not heat_bonus then
+		if self._mangle_t then
+			return false
+		end
 	end
 
 	if chk_health_ratio and managers.player:is_damage_health_ratio_active(self:health_ratio()) then
 		return false
 	end
 	
-	if managers.player:has_category_upgrade("player", "antilethal_meds") then
-		health_restored = health_restored * 2
+	if not heat_bonus then
+		if managers.player:has_category_upgrade("player", "antilethal_meds") then
+			health_restored = health_restored * 1.5
+		end
 	end
 
 	if is_static then

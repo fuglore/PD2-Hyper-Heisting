@@ -369,7 +369,7 @@ function TankCopLogicAttack._upd_combat_movement(data)
 		end
 		
 		if should_try_chase then
-			if not my_data.chase_path_failed_t or t - my_data.chase_path_failed_t > 1 then --helps not nuking performance if there's too many Dozers in attack logic
+			if data.important or not my_data.chase_path_failed_t or t - my_data.chase_path_failed_t > 1 then --helps not nuking performance if there's too many Dozers in attack logic
 				local speed = no_run and "walk" or enemy_dis < run_dist and "walk" or "run"
 				
 				--log(speed)

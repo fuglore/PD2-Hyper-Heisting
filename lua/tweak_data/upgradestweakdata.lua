@@ -2,12 +2,12 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 	self.values.player.body_armor = {
 		armor = {
 			0,
-			2,
-			3,
 			4,
+			5.5,
 			7,
-			8,
-			10
+			11.5,
+			13,
+			15
 		},
 		movement = {
 			1,
@@ -28,12 +28,12 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			9
 		},
 		dodge = {
-			0.05,
 			0,
 			-0.05,
 			-0.1,
 			-0.15,
 			-0.2,
+			-0.3,
 			-0.5
 		},
 		damage_shake = {
@@ -184,6 +184,29 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	}
 	
+	self.values.player.armor_conversion = {
+		0.25,
+		0.5
+	}
+	self.definitions.player_armor_conversion_1 = {
+		name_id = "menu_player_health_decrease",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "armor_conversion",
+			category = "player"
+		}
+	}
+	self.definitions.player_armor_conversion_2 = {
+		name_id = "menu_player_health_decrease",
+		category = "feature",
+		upgrade = {
+			value = 2,
+			upgrade = "armor_conversion",
+			category = "player"
+		}
+	}
+	
 	self.values.player.health_decrease_2_decrease_harder = {
 		0.5,
 		0.25
@@ -211,32 +234,34 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 
 	self.values.player.armor_grinding = {
 		{
-			{1.5, 3},
-			{2, 4},
-			{3, 4.5},
-			{4, 5},
-			{4.5, 5.5},
-			{5, 6},
-			{6, 7}
+			{1.2, 6},
+			{2, 6.5},
+			{3, 7},
+			{4, 8},
+			{5, 9},
+			{7, 9.5},
+			{8, 10}
 		}
 	}
 	
 	self.values.player.armor_grinding_regen_t_on_kill = {
-		{
-			15,
-			15,
-			10,
-			9,
-			8,
-			7,
-			6
-		}
+		20,
+		10
 	}
-	self.definitions.player_armor_grinding_regen_t_on_kill = {
-		name_id = "menu_anarchdeck6",
+	self.definitions.player_armor_grinding_regen_t_on_kill_1 = {
+		name_id = "menu_anarchdeck1",
 		category = "feature",
 		upgrade = {
 			value = 1,
+			upgrade = "armor_grinding_regen_t_on_kill",
+			category = "player"
+		}
+	}
+	self.definitions.player_armor_grinding_regen_t_on_kill_2 = {
+		name_id = "menu_anarchdeck6",
+		category = "feature",
+		upgrade = {
+			value = 2,
 			upgrade = "armor_grinding_regen_t_on_kill",
 			category = "player"
 		}
@@ -283,8 +308,8 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 	self.values.player.health_decrease = {0.5}
 	
 	self.values.player.armor_increase = {
-		0.50,
-		0.75,
+		0.25,
+		0.5,
 		1.00
 	}
 
@@ -952,4 +977,46 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 			0.5
 		}
 	}
+	
+	--all dodge needs to not be ridiculous now
+	self.values.player.passive_dodge_chance = {
+		0.05,
+		0.15,
+		0.25
+	}
+	self.values.player.tier_dodge_chance = {
+		0.05,
+		0.1,
+		0.15
+	}
+	self.values.player.level_2_dodge_addend = {
+		0.05,
+		0.1,
+		0.15
+	}
+	self.values.player.level_3_dodge_addend = {
+		0.05,
+		0.1,
+		0.15
+	}
+	self.values.player.level_4_dodge_addend = {
+		0.05,
+		0.1,
+		0.15
+	}
+	
+	self.values.player.dodge_shot_gain = {
+		{
+			0.05,
+			6
+		}
+	}
+	self.values.temporary.pocket_ecm_kill_dodge = {
+		{
+			0.15,
+			30,
+			1
+		}
+	}
+	
 end)

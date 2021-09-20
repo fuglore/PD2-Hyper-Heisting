@@ -80,7 +80,6 @@ function PlayerManager:health_skill_multiplier()
 	end
 	
 	multiplier = multiplier - self:upgrade_value("player", "health_decrease", 0)
-	multiplier = multiplier * self:upgrade_value("player", "health_decrease_2_decrease_harder", 1)
 
 	return multiplier
 end
@@ -94,6 +93,33 @@ function PlayerManager:health_skill_addend()
 	if table.contains(self._global.kit.equipment_slots, "thick_skin") then
 		addend = addend + self:upgrade_value("player", "thick_skin", 0)
 	end
+
+	return addend
+end
+
+function PlayerManager:max_health()
+	local base_health = PlayerDamage._HEALTH_INIT
+	local health = (base_health + self:health_skill_addend()) * self:health_skill_multiplier()
+	health = health * self:upgrade_value("player", "health_decrease_2_decrease_harder", 1)
+	
+	return health
+end
+
+function PlayerManager:body_armor_skill_addend(override_armor)
+	local addend = 0
+	addend = addend + self:upgrade_value("player", tostring(override_armor or managers.blackmarket:equipped_armor(true, true)) .. "_armor_addend", 0)
+
+	if self:has_category_upgrade("player", "armor_conversion") then
+		local health_multiplier = self:health_skill_multiplier()
+		local max_health = (PlayerDamage._HEALTH_INIT + self:health_skill_addend()) * health_multiplier
+
+		local conversion_mult = 0 + self:upgrade_value("player", "armor_conversion", 0)
+		local to_add = max_health * conversion_mult
+		
+		addend = addend + to_add
+	end
+
+	addend = addend + self:upgrade_value("team", "crew_add_armor", 0)
 
 	return addend
 end
@@ -468,17 +494,12 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 
 	if damage_ext._armor_grinding then
 		if self:has_category_upgrade("player", "armor_grinding_regen_t_on_kill") then
-			local regen_data = managers.player:upgrade_value("player", "armor_grinding_regen_t_on_kill", nil)
-
-			if regen_data and regen_data ~= 0 then
-				local armor_data = tweak_data.blackmarket.armors[managers.blackmarket:equipped_armor(true, true)]
-				local idx = armor_data.upgrade_level
-				local elaps_div = regen_data[idx]
-				local target_tick = damage_ext._armor_grinding.target_tick
-				local elaps_add = target_tick / elaps_div
-				
-				damage_ext._armor_grinding.elapsed = damage_ext._armor_grinding.elapsed + elaps_add
-			end
+			local elaps_div =  managers.player:upgrade_value("player", "armor_grinding_regen_t_on_kill", 1)
+			local target_tick = damage_ext._armor_grinding.target_tick
+			local elaps_add = target_tick / elaps_div
+			--log("a " .. tostring(elaps_add) .. "")
+			
+			damage_ext._armor_grinding.elapsed = damage_ext._armor_grinding.elapsed + elaps_add
 		end
 	end
 	
@@ -634,7 +655,7 @@ function PlayerManager:update(t, dt)
 		if self._max_messiah_charges > 0 then
 			if self._messiah_charges < self._max_messiah_charges then
 				if not self._messiah_recharge_t then
-					self._messiah_recharge_t = t + 120
+					self._messiah_recharge_t = t + 240
 				elseif self._messiah_recharge_t < t then
 					self:_on_messiah_recharge_event()
 				end

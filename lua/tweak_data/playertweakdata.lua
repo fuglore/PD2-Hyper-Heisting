@@ -1,15 +1,14 @@
 Hooks:PostHook(PlayerTweakData, "init", "hhplayertweakbullshit", function(self, tweak_data)
 	self.damage.HEALTH_INIT = 34.5
-	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-		self.put_on_mask_time = 1
-		self.movement_state.stamina.STAMINA_REGEN_RATE = 6
-		self.movement_state.stamina.JUMP_STAMINA_DRAIN = 5
-		self.movement_state.stamina.MIN_STAMINA_THRESHOLD = 5
-		self.movement_state.standard.movement.speed.RUNNING_MAX = 862.50
-		self.movement_state.standard.movement.jump_velocity.xy.walk = self.movement_state.standard.movement.speed.STANDARD_MAX
-		self.movement_state.standard.gravity = 982
-		self.movement_state.standard.terminal_velocity = 7000
-	end
+	self.damage.ARMOR_INIT = 3
+	self.put_on_mask_time = 1
+	self.movement_state.stamina.STAMINA_REGEN_RATE = 6
+	self.movement_state.stamina.JUMP_STAMINA_DRAIN = 5
+	self.movement_state.stamina.MIN_STAMINA_THRESHOLD = 5
+	self.movement_state.standard.movement.speed.RUNNING_MAX = 862.50
+	self.movement_state.standard.movement.jump_velocity.xy.walk = self.movement_state.standard.movement.speed.STANDARD_MAX
+	self.movement_state.standard.gravity = 982
+	self.movement_state.standard.terminal_velocity = 7000
 end)
 
 --TODO: Nothing currently.

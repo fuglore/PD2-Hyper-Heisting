@@ -858,7 +858,7 @@ function GroupAIStateBesiege:update(t, dt)
 												end
 												
 												if not dmg_ext:is_berserker() then
-													dmg_ext:restore_health(0.5) --50% health restored on heat bonus
+													dmg_ext:restore_health(0.5, nil, nil, true) --50% health restored on heat bonus
 												end
 											end
 											

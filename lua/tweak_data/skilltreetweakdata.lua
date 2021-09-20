@@ -33,7 +33,7 @@ function SkillTreeTweakData:init()
 	self.skills.second_chances[2].upgrades = {"player_pick_lock_easy_speed_multiplier_2", "player_pick_lock_hard"}
 	
 	self.skills.juggernaut[2].upgrades = {"player_health_increase"}
-	self.skills.juggernaut[1].upgrades = {"player_armor_multiplier_cooler", "body_armor6"}
+	self.skills.juggernaut[1].upgrades = {"body_armor6"}
 	
 	self.skills.shotgun_impact = {
 		{
@@ -904,7 +904,8 @@ function SkillTreeTweakData:init()
 			desc_id = "menu_deck15_1_desc",
 			name_id = "menu_deck15_1",
 			upgrades = {
-				"player_armor_grinding_1"
+				"player_armor_grinding_1",
+				"player_armor_grinding_regen_t_on_kill_1"
 			},
 			icon_xy = {
 				0,
@@ -919,7 +920,7 @@ function SkillTreeTweakData:init()
 			name_id = "menu_deck15_3",
 			upgrades = {
 				"player_health_decrease_1",
-				"player_armor_increase_1"
+				"player_armor_conversion_1"
 			},
 			icon_xy = {
 				1,
@@ -934,7 +935,7 @@ function SkillTreeTweakData:init()
 			name_id = "menu_deck15_5",
 			upgrades = {
 				"player_health_decrease_2",
-				"player_armor_increase_2"
+				"player_armor_conversion_2"
 			},
 			icon_xy = {
 				2,
@@ -948,7 +949,7 @@ function SkillTreeTweakData:init()
 			desc_id = "menu_deck15_7_desc",
 			name_id = "menu_deck15_7",
 			upgrades = {
-				"player_armor_grinding_regen_t_on_kill"
+				"player_armor_grinding_regen_t_on_kill_2"
 			},
 			icon_xy = {
 				3,
@@ -973,6 +974,83 @@ function SkillTreeTweakData:init()
 		name_id = "menu_st_spec_15",
 		dlc = "opera",
 		desc_id = "menu_st_spec_15_desc"
+	}
+	
+	self.specializations[21] = {
+		{
+			cost = 200,
+			texture_bundle_folder = "joy",
+			desc_id = "menu_deck21_1_desc",
+			name_id = "menu_deck21_1",
+			upgrades = {
+				"pocket_ecm_jammer",
+				"player_pocket_ecm_jammer_base"
+			},
+			icon_xy = {
+				0,
+				0
+			}
+		},
+		deck2,
+		{
+			cost = 400,
+			texture_bundle_folder = "joy",
+			desc_id = "menu_deck21_3_desc",
+			name_id = "menu_deck21_3",
+			upgrades = {
+				"player_passive_health_multiplier_1",
+				"player_passive_health_multiplier_2"
+			},
+			icon_xy = {
+				1,
+				0
+			}
+		},
+		deck4,
+		{
+			cost = 1000,
+			texture_bundle_folder = "joy",
+			desc_id = "menu_deck21_5_desc",
+			name_id = "menu_deck21_5",
+			upgrades = {
+				"player_pocket_ecm_heal_on_kill_1"
+			},
+			icon_xy = {
+				2,
+				0
+			}
+		},
+		deck6,
+		{
+			cost = 2400,
+			texture_bundle_folder = "joy",
+			desc_id = "menu_deck21_7_desc",
+			name_id = "menu_deck21_7",
+			upgrades = {
+				"player_pocket_ecm_kill_dodge_1"
+			},
+			icon_xy = {
+				3,
+				0
+			}
+		},
+		deck8,
+		{
+			cost = 4000,
+			texture_bundle_folder = "joy",
+			desc_id = "menu_deck21_9_desc",
+			name_id = "menu_deck21_9",
+			upgrades = {
+				"player_passive_loot_drop_multiplier",
+				"team_pocket_ecm_heal_on_kill_1"
+			},
+			icon_xy = {
+				0,
+				1
+			}
+		},
+		desc_id = "menu_st_spec_21_desc",
+		name_id = "menu_st_spec_21"
 	}
 	
 end

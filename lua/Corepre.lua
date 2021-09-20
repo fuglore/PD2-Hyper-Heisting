@@ -207,7 +207,7 @@ Hooks:Add("NetworkReceivedData", "shin_receive_network_data", function(sender, m
 							
 							if not dmg_ext:dead() then
 								if not dmg_ext:need_revive() and not dmg_ext:is_berserker() then
-									dmg_ext:restore_health(0.5) --50% health restored on heat bonus
+									dmg_ext:restore_health(0.5, nil, nil, true) --50% health restored on heat bonus
 								end
 								
 								local inventory = player:inventory()

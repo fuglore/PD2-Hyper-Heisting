@@ -23,6 +23,9 @@ function PlayerInventoryGui:_get_armor_stats(name)
 		skill_stats[stat.name] = {
 			value = 0
 		}
+		
+		--local a = managers.player:upgrade_value("player", "armor_grinding_regen_t_on_kill", 1)
+		--log(tostring(a))
 
 		if stat.name == "armor" then
 			local base = tweak_data.player.damage.ARMOR_INIT
@@ -35,15 +38,13 @@ function PlayerInventoryGui:_get_armor_stats(name)
 			}
 		elseif stat.name == "health" then
 			local base = tweak_data.player.damage.HEALTH_INIT
-			local mod = managers.player:health_skill_addend()
-			local mul_add = base * managers.player:health_skill_multiplier()
-			local skill_add = mod + mul_add
-			skill_add = skill_add - base
+			local mod = managers.player:max_health()
+			mod = mod - base
 			base_stats[stat.name] = {
 				value = (base) * tweak_data.gui.stats_present_multiplier
 			}
 			skill_stats[stat.name] = {
-				value = skill_add * tweak_data.gui.stats_present_multiplier
+				value = mod * tweak_data.gui.stats_present_multiplier
 			}
 		elseif stat.name == "concealment" then
 			base_stats[stat.name] = {

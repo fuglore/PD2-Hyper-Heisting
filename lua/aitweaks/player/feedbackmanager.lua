@@ -20,14 +20,23 @@ function FeedBackCameraShake:set_param(name, value)
 end
 
 function FeedBackCameraShake:play(extra_params)
+	local screenshake_mul = PD2THHSHIN.settings.screenshakemult
 	local params = managers.feedback:get_effect_table(self._name)[self._type]
 	local name = extra_params.name or params.name
+	
+	if params.amplitude then
+		params.amplitude = params.amplitude * PD2THHSHIN.settings.screenshakemult
+	else
+		params.amplitude = PD2THHSHIN.settings.screenshakemult
+	end
+	
 	self._multiplier = extra_params.multiplier or 1
+	self._multiplier = self._multiplier * screenshake_mul
 
 	if self._unit_camera then
 		self._id = self._unit_camera:play_shaker(name, params.amplitude or 1, params.frequency or 1, params.offset or 0)
 	else
-		local screenshake_mul = PD2THHSHIN.settings.screenshakemult
+		
 		params.amplitude = params.amplitude and params.amplitude * screenshake_mul or screenshake_mul
 	
 		self._playing_camera = alive(self._camera) and self._camera or managers.viewport:get_current_shaker()
