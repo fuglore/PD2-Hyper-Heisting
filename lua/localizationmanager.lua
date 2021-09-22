@@ -616,7 +616,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_expert_handling_desc"] = "BASIC: ##$basic##\nEach successful pistol hit gives you a ##10%## increased accuracy bonus for ##10## seconds and can stack ##4## times.\n\nACE: ##$pro##\nYou reload all pistols ##25%## faster.",
 			
 			["menu_sprinter_beta"] = "High Vigour",
-			["menu_sprinter_beta_desc"] = "BASIC: ##$basic##\nYour stamina regenerates ##25%## faster.\n\nACE: ##$pro##\nYou gain ##+10## ##Dodge##. ##Dodge## gives you a random chance to ##completely negate damage##.\n\nUpon successfully ##dodging## an attack, regain ##5## stamina.\n\nNOTE: ##ALL Dodge## chance is halved while you are not sprinting!",
+			["menu_sprinter_beta_desc"] = "BASIC: ##$basic##\nYour stamina regenerates ##25%## faster.\n\nACE: ##$pro##\nYou gain ##+10## ##Dodge##. ##Dodge## gives you a random chance to ##completely negate damage##.\n\nUpon successfully ##dodging## an attack, regain ##5## stamina.",
 			
 			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nWhen tased, the effect has a ##25%## chance to ##backfire## on the Taser, knocking them back.\n\nACE: ##$pro##\nWhen tased, you are able to ##free yourself from the Taser## by looking at the Taser and pressing your interact key within ##0.4## seconds of getting tased.",
 			
