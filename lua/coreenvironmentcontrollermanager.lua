@@ -6,6 +6,8 @@ local ids_dof_far_plane = Idstring("far_plane")
 local ids_dof_settings = Idstring("settings")
 local mvec1 = Vector3()
 local mvec2 = Vector3()
+local temp_vec_1 = Vector3()
+local temp_vec_2 = Vector3()
 
 Hooks:PostHook(CoreEnvironmentControllerManager, "init", "hhpost_env", function(self)
 	self._effect_manager = World:effect_manager()
@@ -220,7 +222,7 @@ function CoreEnvironmentControllerManager:update(t, dt)
 	self:set_post_composite(t, dt)
 	
 	if self._concussion_effect and self._current_concussion <= 0.8 then
-		self._effect_manager:fade_kill(self._concussion_effect)
+ 		self._effect_manager:fade_kill(self._concussion_effect)
 		self._concussion_effect = nil
 	end
 end
@@ -235,8 +237,6 @@ local ids_hdr_post_composite = Idstring("post_DOF")
 local ids_anti_aliasing_processor = Idstring("anti_aliasing_post_processor")
 local ids_ao_post_processor = Idstring("ao_post_processor")
 local ids_ao_mask_post_processor = Idstring("ao_mask_post_processor")
-local mvec1 = Vector3()
-local mvec2 = Vector3()
 local new_cam_fwd = Vector3()
 local new_cam_up = Vector3()
 local new_cam_right = Vector3()
@@ -395,8 +395,11 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 	end
 
 	self._health_effect_value_diff = math.max(self._health_effect_value_diff - dt * 0.5, 0)
-
-	self._lut_modifier_material:set_variable(ids_LUT_settings_a, Vector3(math.clamp(self._health_effect_value_diff * 1.3 * (1 + hurt_mod * 1.3), 0, 1.2), 0, math.min(blur_zone_val + self._HE_blinding, 1)))
+	self._buff_effect_value = math.min(self._buff_effect_value + dt * 0.5, 0)
+	
+	mvector3.set(temp_vec_1, Vector3(math.clamp(self._health_effect_value_diff * 1.3 * (1 + hurt_mod * 1.3), 0, 1.2), 0, math.min(blur_zone_val + self._HE_blinding, 1)))
+	mvector3.add(temp_vec_1, Vector3(self._buff_effect_value, self._buff_effect_value, self._buff_effect_value, 0.5))
+	self._lut_modifier_material:set_variable(ids_LUT_settings_a, temp_vec_1)
 	
 	if self._hurt_effect then
 		local value = self._health_effect_value
@@ -416,8 +419,10 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 			last_life = math.clamp((hurt_mod - 0.5) * 2, 0, 1)
 		end
 	end
-
-	self._lut_modifier_material:set_variable(ids_LUT_settings_b, Vector3(last_life, flash_2 + math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15, 0))
+	
+	mvector3.set(temp_vec_2, Vector3(last_life, flash_2 + math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15, 0))
+	
+	self._lut_modifier_material:set_variable(ids_LUT_settings_b, temp_vec_2)
 	self._lut_modifier_material:set_variable(ids_LUT_contrast, flashbang * 0.5)
 end
 

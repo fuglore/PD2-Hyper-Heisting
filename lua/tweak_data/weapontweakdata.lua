@@ -1139,6 +1139,41 @@ self.akm.kick = {
 	}
 }
 
+--KS12
+self.shak12.muzzleflash = "effects/payday2/particles/weapons/50cal_auto_fps"
+self.shak12.has_description = true
+self.shak12.fire_mode_data = {
+	fire_rate = 0.15
+}
+self.shak12.CAN_TOGGLE_FIREMODE = true
+self.shak12.auto = {
+	fire_rate = 0.15
+}
+self.shak12.kick = self.akm.kick
+self.shak12.AMMO_PICKUP = {4, 6}
+self.shak12.stats = {
+	zoom = 1,
+	total_ammo_mod = 21,
+	damage = 115,
+	alert_size = 8,
+	spread = 16,
+	spread_moving = 16,
+	recoil = 7,
+	value = 9,
+	extra_ammo = 51,
+	reload = 11,
+	suppression = 14,
+	concealment = 16
+}
+self.shak12.timers = {
+	reload_not_empty = 2.5,
+	reload_empty = 3.1,
+	unequip = 0.6,
+	equip = 0.6
+}
+self.shak12.armor_piercing_chance = 1
+self.shak12.can_shoot_through_enemy = true
+
 --Bootleg
 self.tecci.CLIP_AMMO_MAX = 100 
 self.tecci.AMMO_MAX = 200  
@@ -1208,6 +1243,7 @@ self.s552.kick.crouching = self.new_m4.kick.crouching
 self.s552.kick.steelsight = self.new_m4.kick.steelsight
 
 --Valkyria
+self.asval.has_description = true
 self.asval.AMMO_MAX = 100
 self.asval.stats.spread = 18
 self.asval.stats.recoil = 16
@@ -1294,7 +1330,11 @@ self.galil.CLIP_AMMO_MAX = 25
 --M308
 self.new_m14.AMMO_PICKUP = {1, 2.7}
 self.new_m14.AMMO_MAX = 60
-self.new_m14.fire_mode_data.fire_rate = .12
+self.new_m14.fire_mode_data.fire_rate = 0.085
+self.new_m14.single.fire_rate = 0.085
+self.new_m14.stats.recoil = 10
+self.new_m14.stats.spread = 18
+self.new_m14.stats.spread_moving = 16
 self.new_m14.kick = {
 	standing = {
 			2,
@@ -1315,19 +1355,34 @@ self.new_m14.kick = {
 			0.6
 	}
 }
-
+self.new_m14.stats.damage = 108
 
 --Galant
-self.ching.fire_mode_data.fire_rate = .12
+self.ching.has_description = true
+self.ching.fire_mode_data.fire_rate = .16
+self.ching.single.fire_rate = .16
 self.ching.AMMO_PICKUP = {1, 2.7}
+self.ching.stats.recoil = 8
+self.ching.armor_piercing_chance = 1
+self.ching.can_shoot_through_enemy = true
+self.ching.can_shoot_through_shield = true
 self.ching.AMMO_MAX = 60
 self.ching.kick.standing = self.new_m14.kick.standing
 self.ching.kick.crouching = self.new_m14.kick.crouching
 self.ching.kick.steelsight = self.new_m14.kick.steelsight
+self.ching.timers = {
+	reload_not_empty = 2.56,
+	reload_empty = 1.9,
+	unequip = 0.6,
+	equip = 0.55
+}
 
 --Cavity
+self.sub2000.fire_mode_data.fire_rate = .1
+self.sub2000.single.fire_rate = .1
 self.sub2000.AMMO_PICKUP = {1, 3}
 self.sub2000.stats.damage = 120
+self.sub2000.stats.recoil = 14
 self.sub2000.AMMO_MAX = 70
 self.sub2000.kick.standing = self.new_m14.kick.standing
 self.sub2000.kick.crouching = self.new_m14.kick.crouching
@@ -1580,8 +1635,10 @@ self.x_polymer.kick.crouching = self.x_polymer.kick.standing
 self.x_polymer.kick.steelsight = self.x_polymer.kick.standing
 
 -- Kobus 90
-self.p90.AMMO_PICKUP = {0.5, 3}
-self.x_p90.AMMO_PICKUP = {0.5, 3}
+self.p90.has_description = true
+self.p90.AMMO_PICKUP = {2, 4}
+self.x_p90.has_description = true
+self.x_p90.AMMO_PICKUP = {2, 4}
 self.p90.stats.spread = 12
 self.x_p90.stats.spread = 12
 self.p90.stats.damage = 39
@@ -2545,7 +2602,7 @@ self.glock_17.AMMO_MAX = 150
 self.glock_17.stats.recoil = 19
 self.glock_17.kick = {
 standing = {
-	-0.2,
+	0.2,
 	0.4,
 	-1,
 	1
@@ -2590,7 +2647,7 @@ self.g26.stats.damage = 59
 self.g26.AMMO_MAX = 150
 self.g26.kick = {
 standing = {
-	-0.2,
+	0.2,
 	0.4,
 	-1,
 	1
@@ -2667,7 +2724,7 @@ self.ppk.CLIP_AMMO_MAX = 22
 self.ppk.stats.recoil = 19
 self.ppk.kick = {
 standing = {
-	-0.2,
+	0.2,
 	0.4,
 	-1,
 	1
@@ -2758,7 +2815,7 @@ self.legacy.CLIP_AMMO_MAX = 22
 self.legacy.stats.recoil = 19
 self.legacy.kick = {
 standing = {
-	-0.2,
+	0.2,
 	0.4,
 	-1,
 	1
@@ -2797,7 +2854,7 @@ self.shrew.AMMO_MAX = 150
 self.shrew.AMMO_PICKUP = {6, 9}
 self.shrew.kick = {
 standing = {
-	-0.2,
+	0.2,
 	0.4,
 	-1,
 	1
@@ -2814,6 +2871,58 @@ crouching = {
 	-0.5,
 	0.5
 }}
+
+
+--KANG ARMS PISTOL
+self.type54.kick = {
+	standing = self.glock_17.kick.standing
+}
+self.type54.kick.crouching = self.type54.kick.standing
+self.type54.kick.steelsight = self.type54.kick.standing
+self.type54.stats = {
+	zoom = 1,
+	total_ammo_mod = 21,
+	damage = 40,
+	alert_size = 7,
+	spread = 18,
+	spread_moving = 18,
+	recoil = 12,
+	value = 4,
+	extra_ammo = 51,
+	reload = 11,
+	suppression = 15,
+	concealment = 22
+}
+self.type54.AMMO_PICKUP = {4, 6}
+self.type54_underbarrel.AMMO_PICKUP = {
+	0.55,
+	0.55
+}
+self.type54_underbarrel.stats = {
+	zoom = 1,
+	total_ammo_mod = 21,
+	damage = 12,
+	alert_size = 7,
+	spread = 14,
+	spread_moving = 14,
+	recoil = 4,
+	value = 1,
+	extra_ammo = 51,
+	reload = 11,
+	suppression = 2,
+	concealment = 18
+}
+self.type54_underbarrel.stats_modifiers = {
+	damage = 10
+}
+
+--Angry Tiger
+self.rsh12.NR_CLIPS_MAX = 2
+self.rsh12.AMMO_MAX = self.rsh12.CLIP_AMMO_MAX * self.rsh12.NR_CLIPS_MAX
+self.rsh12.AMMO_PICKUP = {
+	0.6,
+	0.6
+}
 
 -- AKIMBO PISTOLS--
 
@@ -3070,6 +3179,39 @@ crouching = {
 	0.5
 }}
 self.x_shrew.AMMO_PICKUP = self.shrew.AMMO_PICKUP
+
+self.x_type54.stats = {
+	zoom = 1,
+	total_ammo_mod = 21,
+	damage = 40,
+	alert_size = 7,
+	spread = 14,
+	spread_moving = 14,
+	recoil = 12,
+	value = 4,
+	extra_ammo = 51,
+	reload = 11,
+	suppression = 15,
+	concealment = 22
+}
+self.x_type54.AMMO_PICKUP = self.type54.AMMO_PICKUP
+self.x_type54_underbarrel.stats = {
+	zoom = 1,
+	total_ammo_mod = 21,
+	damage = 12,
+	alert_size = 7,
+	spread = 14,
+	spread_moving = 14,
+	recoil = 4,
+	value = 1,
+	extra_ammo = 51,
+	reload = 11,
+	suppression = 2,
+	concealment = 18
+}
+self.x_type54_underbarrel.stats_modifiers = {
+	damage = 10
+}
 
 --BOWS--
 
