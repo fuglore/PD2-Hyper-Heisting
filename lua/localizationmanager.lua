@@ -663,11 +663,13 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["menu_deckall_6_desc"] = "Unlocks the ##Armor Bag## equipment for you to use.\n\nThe ##Armor Bag## can be used to change your armor during a heist.",
 			
-			-- weapon stuff below	
+			-- weapon stuff below
 			["bm_wp_g3_b_short"] = "Short Barrel",
 			["bm_wp_g3_b_sniper"] = "Long Barrel",
+			
 			["bm_wp_upg_a_piercing_desc"] = "Pierces through enemy armor.",
 			["bm_wp_upg_a_custom_desc"] = "Gives your shotgun rounds fancy tracer effects! Purely aesthetic!",
+			
 			["bm_w_p90"] = "Kobus 90 A/P Submachine Gun",
 			["bm_w_p90_desc"] = "Piercer Rounds that penetrate Walls, Enemies, Shields and Body Armor!",
 			["bm_w_asval"] = "Valkyria AP Rifle",
@@ -676,6 +678,12 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["bm_w_shak12_desc"] = "Heavy Rounds that pierce Enemies and Body Armor!",
 			["des_ching"] = "High-Caliber Rounds that pierce Enemies, Shields and Body Armor!",
 			["bm_w_ching_desc"] = "High-Caliber Rounds that pierce Enemies, Shields and Body Armor!",
+			
+			--DMR KITS
+			["bm_GEN_light_DMR_desc"] = "Grants your weapon Heavy Rounds that pierce Enemies and Body Armor! Reduces your Rate Of Fire!",
+			["bm_GEN_heavy_DMR_desc"] = "Grants your weapon High-Caliber Rounds that pierce Enemies, Shields and Body Armor! Greatly reduces your Rate Of Fire!",
+			["bm_GEN_sniper_kit"] = "Highly Modified Kit",
+			["bm_GEN_sniperkit_desc"] = "Grants your weapon Piercer Rounds that penetrate Walls, Enemies, Shields and Body Armor! Tremendously reduces your Rate of Fire!",
 		})
 	end
 	

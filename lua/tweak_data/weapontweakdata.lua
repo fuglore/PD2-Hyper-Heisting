@@ -1150,7 +1150,7 @@ self.shak12.auto = {
 	fire_rate = 0.15
 }
 self.shak12.kick = self.akm.kick
-self.shak12.AMMO_PICKUP = {4, 6}
+self.shak12.AMMO_PICKUP = {3, 5}
 self.shak12.stats = {
 	zoom = 1,
 	total_ammo_mod = 21,
@@ -1332,9 +1332,9 @@ self.new_m14.AMMO_PICKUP = {1, 2.7}
 self.new_m14.AMMO_MAX = 60
 self.new_m14.fire_mode_data.fire_rate = 0.085
 self.new_m14.single.fire_rate = 0.085
-self.new_m14.stats.recoil = 10
+self.new_m14.stats.recoil = 12
 self.new_m14.stats.spread = 18
-self.new_m14.stats.spread_moving = 16
+self.new_m14.stats.spread_moving = 18
 self.new_m14.kick = {
 	standing = {
 			2,
@@ -1355,13 +1355,13 @@ self.new_m14.kick = {
 			0.6
 	}
 }
-self.new_m14.stats.damage = 108
+self.new_m14.stats.damage = 120
 
 --Galant
 self.ching.has_description = true
 self.ching.fire_mode_data.fire_rate = .16
 self.ching.single.fire_rate = .16
-self.ching.AMMO_PICKUP = {1, 2.7}
+self.ching.AMMO_PICKUP = {2, 3}
 self.ching.stats.recoil = 8
 self.ching.armor_piercing_chance = 1
 self.ching.can_shoot_through_enemy = true
@@ -1381,8 +1381,8 @@ self.ching.timers = {
 self.sub2000.fire_mode_data.fire_rate = .1
 self.sub2000.single.fire_rate = .1
 self.sub2000.AMMO_PICKUP = {1, 3}
-self.sub2000.stats.damage = 120
-self.sub2000.stats.recoil = 14
+self.sub2000.stats.damage = 140
+self.sub2000.stats.recoil = 15
 self.sub2000.AMMO_MAX = 70
 self.sub2000.kick.standing = self.new_m14.kick.standing
 self.sub2000.kick.crouching = self.new_m14.kick.crouching

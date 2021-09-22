@@ -145,7 +145,11 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish)
 	local primary_category = self:weapon_tweak_data().categories and self:weapon_tweak_data().categories[1]
 	self._movement_penalty = tweak_data.upgrades.weapon_movement_penalty[primary_category] or 1
 	local custom_stats = managers.weapon_factory:get_custom_stats_from_weapon(self._factory_id, self._blueprint)
-
+	
+	local user_unit = self._setup and self._setup.user_unit
+	local current_state = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state
+	self._fire_rate_multiplier = managers.blackmarket:fire_rate_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, nil, current_state, self._blueprint)
+	
 	for part_id, stats in pairs(custom_stats) do
 		if stats.movement_speed then
 			self._movement_penalty = self._movement_penalty * stats.movement_speed
@@ -163,6 +167,10 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish)
 		
 		if stats.use_tracers then
 			self._use_tracers = stats.use_tracers
+		end
+		
+		if stats.rof_mul then
+			self._fire_rate_multiplier = self._fire_rate_multiplier * stats.rof_mul
 		end
 	end
 
@@ -295,8 +303,4 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish)
 	if not disallow_replenish then
 		self:replenish()
 	end
-
-	local user_unit = self._setup and self._setup.user_unit
-	local current_state = alive(user_unit) and user_unit:movement() and user_unit:movement()._current_state
-	self._fire_rate_multiplier = managers.blackmarket:fire_rate_multiplier(self._name_id, self:weapon_tweak_data().categories, self._silencer, nil, current_state, self._blueprint)
 end

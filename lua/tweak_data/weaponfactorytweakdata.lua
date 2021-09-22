@@ -168,5 +168,89 @@ self.parts.wpn_fps_fla_system_b_wtf.stats = {
 }
 self.parts.wpn_fps_fla_system_b_wtf.custom_stats = {range_mul = 0.5}
 
+--M4 DMRs
+self.parts.wpn_fps_upg_ass_m4_b_beowulf.desc_id = "bm_GEN_light_DMR_desc"
+self.parts.wpn_fps_upg_ass_m4_b_beowulf.has_description = true
+self.parts.wpn_fps_upg_ass_m4_b_beowulf.stats = {
+	spread = 0,
+	total_ammo_mod = -12,
+	damage = 44,
+	concealment = -4,
+	value = 1,
+	recoil = -10
+}
+self.parts.wpn_fps_upg_ass_m4_b_beowulf.custom_stats = {
+	armor_piercing_add = 1,
+	can_shoot_through_enemy = true,
+	rof_mul = 0.7,
+	ammo_pickup_max_mul = 0.6,
+	ammo_pickup_min_mul = 0.6
+}
+
+self.wpn_fps_ass_m16.override = {
+	wpn_fps_upg_ass_m4_b_beowulf = {
+		desc_id = "bm_GEN_heavy_DMR_desc",
+		has_description = true,
+		stats = {
+			spread = 4,
+			total_ammo_mod = -8,
+			damage = 22,
+			concealment = -4,
+			recoil = -8,
+			value = 1
+		},
+		custom_stats = {
+			armor_piercing_add = 1,
+			can_shoot_through_enemy = true,
+			can_shoot_through_shield = true,
+			rof_mul = 0.5,
+			ammo_pickup_max_mul = 0.8,
+			ammo_pickup_min_mul = 0.8
+		}
+	}
+}
+
+--AK DMRs
+self.parts.wpn_fps_upg_ass_ak_b_zastava.desc_id = "bm_GEN_sniperkit_desc"
+self.parts.wpn_fps_upg_ass_ak_b_zastava.has_description = true
+self.parts.wpn_fps_upg_ass_ak_b_zastava.stats = {
+	spread = 3,
+	total_ammo_mod = -12,
+	damage = 97,
+	concealment = -4,
+	value = 1,
+	recoil = -17
+}
+self.parts.wpn_fps_upg_ass_ak_b_zastava.custom_stats = {
+	armor_piercing_add = 1,
+	can_shoot_through_wall = true,
+	can_shoot_through_enemy = true,
+	can_shoot_through_shield = true,
+	rof_mul = 0.4,
+	ammo_pickup_max_mul = 0.4,
+	ammo_pickup_min_mul = 0.5
+}
+self.wpn_fps_ass_74.override = {
+	wpn_fps_upg_ass_ak_b_zastava = {
+		stats = {
+			spread = 2,
+			total_ammo_mod = -6,
+			damage = 24,
+			concealment = -4,
+			value = 1,
+			recoil = -8
+		},
+		desc_id = "bm_GEN_heavy_DMR_desc",
+		custom_stats = {
+			armor_piercing_add = 1,
+			can_shoot_through_enemy = true,
+			can_shoot_through_shield = true,
+			rof_mul = 0.5,
+			ammo_pickup_max_mul = 0.5,
+			ammo_pickup_min_mul = 0.5
+		}
+	}
+}
+
 
 end)
