@@ -1,5 +1,21 @@
 <?xml version="1.0"?>
 <tweaks>
+	<!--criminal hurt-->
+	<tweak name="settings/network" extension="network_settings">
+        <search>
+            <network/>
+            <rpc/>
+        </search>
+        <target>
+            <message name="criminal_hurt" delivery="unreliable" receiver="unit">
+				<param type="unit" />
+				<param type="unit" /><!-- attacker -->
+				<param type="int" min="1" max="100"/><!-- damage sustained as percentage of full health -->
+				<param type="bool" /> <!--Armor or not-->
+			</message>
+        </target>
+    </tweak>
+
     <!--damage_bullet-->
     <tweak name="settings/network" extension="network_settings">
         <search>

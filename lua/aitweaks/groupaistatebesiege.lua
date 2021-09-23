@@ -1125,9 +1125,9 @@ function GroupAIStateBesiege:_begin_new_tasks()
 	local reenforce_candidates = nil
 	local reenforce_data = task_data.reenforce
 
-	if reenforce_data.next_dispatch_t and reenforce_data.next_dispatch_t < t then
-		reenforce_candidates = {}
-	end
+	--if reenforce_data.next_dispatch_t and reenforce_data.next_dispatch_t < t then
+	--	reenforce_candidates = {}
+	--end
 
 	local recon_candidates, are_recon_candidates_safe = nil
 	local recon_data = task_data.recon
@@ -1221,36 +1221,42 @@ function GroupAIStateBesiege:_begin_new_tasks()
 			end
 		end
 
-		if recon_candidates and area.loot or recon_candidates and area.hostages then
-			local occupied = nil
+		if recon_candidates then
+			if area.loot or area.hostages then
+				local occupied = nil
 
-			for group_id, group in pairs(self._groups) do
-				if group.objective.target_area == area or group.objective.area == area then
-					occupied = true
+				for group_id, group in pairs(self._groups) do
+					if group.objective.target_area == area or group.objective.area == area then
+						occupied = true
 
-					break
-				end
-			end
-
-			if not occupied then
-				local is_area_safe = nr_criminals == 0
-
-				if is_area_safe then
-					if are_recon_candidates_safe then
-						table_insert(recon_candidates, area)
-					else
-						are_recon_candidates_safe = true
-						recon_candidates = {
-							area
-						}
+						break
 					end
-				elseif not are_recon_candidates_safe then
+				end
+
+				if not occupied then
+					local is_area_safe = nr_criminals == 0
+
+					if is_area_safe then
+						if are_recon_candidates_safe then
+							table_insert(recon_candidates, area)
+						else
+							are_recon_candidates_safe = true
+							recon_candidates = {
+								area
+							}
+						end
+					elseif not are_recon_candidates_safe then
+						table_insert(recon_candidates, area)
+					end
+				end
+			else
+				if nr_criminals and nr_criminals > 0 then
 					table_insert(recon_candidates, area)
 				end
 			end
 		end
 
-		if recon_candidates and not next(recon_candidates) or reenforce_candidates and not next(reenforce_candidates) then
+		if recon_candidates or reenforce_candidates then
 			for neighbour_area_id, neighbour_area in pairs(area.neighbours) do
 				if not found_areas[neighbour_area_id] then
 					table_insert(to_search_areas, neighbour_area)
@@ -1270,7 +1276,16 @@ function GroupAIStateBesiege:_begin_new_tasks()
 	end
 
 	if recon_candidates and #recon_candidates > 0 then
-		local recon_area = recon_candidates[math_random(#recon_candidates)]
+		local recon_area = nil
+		
+		for i = 1, #recon_candidates do
+			local area = recon_candidates[i]
+			recon_area = area
+			
+			if area.loot or area.hostages then
+				break
+			end
+		end
 
 		self:_begin_recon_task(recon_area)
 	end
@@ -1331,12 +1346,6 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 		local wave = math_clamp(managers.skirmish:current_wave_number(), 1, #force_table)
 		local force_to_use = force_table[wave]
 		assault_task.force = force_to_use * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul)
-	elseif assault_task.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
-		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-	elseif self._assault_number == 2 then
-		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.85 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-	elseif self._assault_number == 3 then
-		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.9 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
 	else
 		assault_task.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
 	end
@@ -1434,28 +1443,13 @@ function GroupAIStateBesiege:set_wave_mode(flag)
 	end
 end
 		
-function GroupAIStateBesiege:_upd_assault_task()
-	
-	 
+function GroupAIStateBesiege:_upd_assault_task() 
 	local task_data = self._task_data.assault
 	local assault_number_sustain_t_mul = nil
-	
-	--if task_data.phase == "anticipation" then
-		--self._task_data.assault.force = task_data.force_anticipation
-	--else
-		--if task_data.is_first or self._assault_number and self._assault_number == 1 or not self._assault_number then
-			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.75 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-		--elseif self._assault_number == 2 then
-			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.85 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-		--elseif self._assault_number == 3 then
-			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * 0.9 * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-		--else
-			--self._task_data.assault.force = math.ceil(self:_get_difficulty_dependent_value(self._tweak_data.assault.force) * self:_get_balancing_multiplier(self._tweak_data.assault.force_balance_mul))
-		--end
-	--end
+
 	
 	if task_data.is_first or not self._assault_number then
-		assault_number_sustain_t_mul = 0.5
+		assault_number_sustain_t_mul = 0.75
 	elseif self._assault_number >= 3 then
 		assault_number_sustain_t_mul = 1
 	else
@@ -1490,10 +1484,10 @@ function GroupAIStateBesiege:_upd_assault_task()
 		local force_pool_to_use = force_pool_table[wave]
 		force_pool = force_pool_to_use * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif task_data.is_first or self._assault_number and self._assault_number <= 1 or not self._assault_number then
-		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.5
+		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.75
 		force_pool = force_pool * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif self._assault_number == 2 then
-		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.75
+		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * 0.8
 		force_pool = force_pool * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
 	elseif self._assault_number >= 3 then
 		force_pool = self:_get_difficulty_dependent_value(self._tweak_data.assault.force_pool) * self:_get_balancing_multiplier(self._tweak_data.assault.force_pool_balance_mul)
@@ -1572,7 +1566,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 					end					   
 				end	
 			end
-		elseif task_data.phase_end_t < t or self._drama_data.zone == "high" or self._skip_phase then
+		elseif task_data.phase_end_t < t or self._skip_phase then
 			local sustain_duration = math_lerp(self:_get_difficulty_dependent_value(self._tweak_data.assault.sustain_duration_min), self:_get_difficulty_dependent_value(self._tweak_data.assault.sustain_duration_max), math_random()) * self:_get_balancing_multiplier(self._tweak_data.assault.sustain_duration_balance_mul) * assault_number_sustain_t_mul
 			
 			self._skip_phase = nil
@@ -1659,7 +1653,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 					
 					self._skip_phase = nil
 					
-				elseif self._skip_phase or task_data.phase_end_t < t and not self._feddensityhigh then
+				elseif self._skip_phase or task_data.phase_end_t < t and not self._activeassaultbreak then
 					local drama_pass = self._drama_data.amount < tweak_data.drama.assault_fade_end --if there is no active fighting going on
 					local engagement_pass = self:_count_criminals_engaged_force(4) < 5 --if theres less than 5 enemies engaging all players
 					local taking_too_long = t > task_data.phase_end_t + drama_engagement_time_limit
@@ -1743,17 +1737,13 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	local low_carnage = self:_count_criminals_engaged_force(4) <= 8
 	
-	if self._task_data.assault.target_areas and primary_target_area and nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak and not self._feddensityhigh or self._task_data.assault.target_areas and primary_target_area and self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak and not self._feddensityhigh then
+	if self._task_data.assault.target_areas and primary_target_area and nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak or self._task_data.assault.target_areas and primary_target_area and self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak then
 		local used_event = nil
 		local phase = task_data.phase
 		local anticipation = self:chk_anticipation()
 
-		if task_data.use_spawn_event and not anticipation or task_data.use_spawn_event and self._hunt_mode then
-			task_data.use_spawn_event = false
-
-			if self:_try_use_task_spawn_event(t, primary_target_area, "assault") then
-				used_event = true
-			end
+		if not anticipation or self._hunt_mode then
+			self:_try_use_task_spawn_event(t, primary_target_area, "assault")
 		end
 
 		if not used_event then
@@ -1792,6 +1782,64 @@ function GroupAIStateBesiege:_upd_assault_task()
 	end
 	
 	self:_assign_enemy_groups_to_assault(task_data.phase)
+end
+
+function GroupAIStateBesiege:_upd_recon_tasks()
+	local task_data = self._task_data.recon.tasks[1]
+
+	self:_assign_enemy_groups_to_recon()
+
+	if not task_data then
+		return
+	end
+
+	local t = self._t
+
+	self:_assign_assault_groups_to_retire()
+
+	local target_pos = task_data.target_area.pos
+	local nr_wanted = self:_get_difficulty_dependent_value(self._tweak_data.recon.force) - self:_count_police_force("recon")
+
+	if nr_wanted <= 0 then
+		return
+	end
+
+	local used_event, used_spawn_points, reassigned = nil
+
+	if task_data.use_spawn_event then
+		if self:_try_use_task_spawn_event(t, task_data.target_area, "recon") then
+			used_event = true
+		end
+	end
+
+	local used_group = nil
+
+	if next(self._spawning_groups) then
+		used_group = true
+	else
+		local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(task_data.target_area, self._tweak_data.recon.groups, nil, nil, nil)
+
+		if spawn_group then
+			local grp_objective = {
+				attitude = "avoid",
+				scan = true,
+				stance = "hos",
+				type = "recon_area",
+				area = spawn_group.area,
+				target_area = task_data.target_area
+			}
+
+			self:_spawn_in_group(spawn_group, spawn_group_type, grp_objective)
+
+			used_group = true
+		end
+	end
+
+	if used_event or used_spawn_points or reassigned then
+		table.remove(self._task_data.recon.tasks, 1)
+
+		self._task_data.recon.next_dispatch_t = t + 10 * math.random()
+	end
 end
 
 function GroupAIStateBesiege:_get_special_unit_type_count(special_type)
@@ -2279,7 +2327,12 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	end
 
 	local phase_is_anticipation = self._activeassaultbreak or self:chk_anticipation()
-	local phase_is_sustain = phase == "sustain"
+	local phase_is_sustain = nil
+	
+	if not phase_is_anticipation then
+		phase_is_sustain = phase == "sustain" or self._drama_data.amount > self._drama_data.high_p or self._danger_state
+	end
+	
 	local current_objective = group.objective
 	local approach, open_fire, push, pull_back, charge = nil
 	local obstructed_area = self:_chk_group_areas_tresspassed(group)

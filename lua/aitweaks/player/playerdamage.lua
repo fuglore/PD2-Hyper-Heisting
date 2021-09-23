@@ -519,8 +519,8 @@ function PlayerDamage:damage_melee(attack_data)
 		else
 			attack_data.damage = attack_data.damage * armor_reduction_multiplier
 		end
-
-		health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+		
+		health_subtracted = self:_calc_health_damage(attack_data)
 	end
 
 	local hit_sound_type = "hit_gen"
@@ -805,7 +805,7 @@ function PlayerDamage:damage_fire(attack_data)
 	local health_subtracted = self:_calc_armor_damage(attack_data)
 
 	attack_data.damage = attack_data.damage * armor_reduction_multiplier
-	health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+	health_subtracted = self:_calc_health_damage(attack_data)
 
 	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
 	self:_call_listeners(damage_info)
@@ -902,7 +902,7 @@ function PlayerDamage:damage_explosion(attack_data)
 	local health_subtracted = self:_calc_armor_damage(attack_data)
 
 	attack_data.damage = attack_data.damage - health_subtracted
-	health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+	health_subtracted = self:_calc_health_damage(attack_data)
 
 	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
 	self:_call_listeners(damage_info)
@@ -1073,11 +1073,7 @@ function PlayerDamage:damage_bullet(attack_data)
 			if not _G.IS_VR then
 				managers.rumble:play("damage_bullet")
 			end
-		
-			if attack_data.damage > 0 then
-				self:_send_damage_drama(attack_data, attack_data.damage)
-			end
-			
+
 			shake_multiplier = shake_multiplier * 4
 			
 			self._unit:camera():play_shaker("player_bullet_damage", 1 * shake_multiplier)
@@ -1297,8 +1293,14 @@ function PlayerDamage:damage_bullet(attack_data)
 	else
 		attack_data.damage = attack_data.damage * armor_reduction_multiplier
 	end
+	
+	if not self._bleed_out then 
+		if health_subtracted > 0 then
+			self:_send_damage_drama(attack_data, health_subtracted, true)
+		end
+	end
 
-	health_subtracted = health_subtracted + self:_calc_health_damage(attack_data)
+	health_subtracted = self:_calc_health_damage(attack_data)
 
 	if not self._bleed_out then
 		if health_subtracted > 0 then
@@ -1385,6 +1387,25 @@ function PlayerDamage:_calc_armor_damage(attack_data)
 	managers.hud:damage_taken()
 
 	return health_subtracted
+end
+
+function PlayerDamage:_send_damage_drama(attack_data, health_subtracted, armor)
+	local dmg_percent = armor and health_subtracted / self:_max_armor() or health_subtracted / self:_max_health()
+	local attacker = attack_data.attacker_unit
+
+	if not attacker or attack_data.attacker_unit:id() == -1 then
+		attacker = self._unit
+	end
+	
+	if attacker and attack_data.attacker_unit:movement() then
+		self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100), armor)
+
+		if Network:is_server() then
+			managers.groupai:state():criminal_hurt_drama(self._unit, attacker, dmg_percent, armor)
+		else
+			self._unit:network():send_to_host("damage_bullet", attacker, 1, 1, 1, 0, false)
+		end
+	end
 end
 
 function PlayerDamage:_calc_health_damage(attack_data)

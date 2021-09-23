@@ -172,6 +172,22 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish)
 		if stats.rof_mul then
 			self._fire_rate_multiplier = self._fire_rate_multiplier * stats.rof_mul
 		end
+		
+		if stats.can_shoot_through_shield ~= nil then
+			self._can_shoot_through_shield = stats.can_shoot_through_shield
+		end
+
+		if stats.can_shoot_through_enemy ~= nil then
+			self._can_shoot_through_enemy = stats.can_shoot_through_enemy
+		end
+
+		if stats.can_shoot_through_wall ~= nil then
+			self._can_shoot_through_wall = stats.can_shoot_through_wall
+		end
+		
+		if stats.armor_piercing_add ~= nil then
+			self._armor_piercing_chance = math.clamp(self._armor_piercing_chance + stats.armor_piercing_add, 0, 1)
+		end
 	end
 
 	if self._ammo_data then

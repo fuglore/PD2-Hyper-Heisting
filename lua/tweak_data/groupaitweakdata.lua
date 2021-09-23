@@ -3061,7 +3061,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"groupany"
 		},
 		swat_shotgun_rush_complex = {
-			"deathguard",
 			"charge",
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
@@ -3069,7 +3068,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"groupany"
 		},
 		swat_shotgun_rush_complex_independant = {
-			"deathguard",
 			"charge",
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
@@ -3078,7 +3076,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"groupany"
 		},
 		swat_shotgun_rush = {
-			"deathguard",
 			"charge",
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
@@ -3087,7 +3084,6 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"groupany"
 		},
 		swat_shotgun_rush_independant = {
-			"deathguard",
 			"charge",
 			"provide_coverfire",
 			"flash_grenade", --pushers use flashes
@@ -3111,7 +3107,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"groupany"
 		},
 		swat_shotgun_flank_complex = {
-			"hunter",
+			"deathguard",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
@@ -3120,7 +3116,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"hitnrun" --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
 		},
 		swat_shotgun_flank_complex_independant = {
-			"hunter",
+			"deathguard",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
@@ -3130,7 +3126,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"hitnrun" --the idea is after they open fire, and you're near, they'll run away to a safe spot before striking again since they'll only decide to back off after opening fire
 		},
 		swat_shotgun_flank = {
-			"hunter",
+			"deathguard",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke
@@ -3139,7 +3135,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"groupany"
 		},
 		swat_shotgun_flank_independant = {
-			"hunter",
+			"deathguard",
 			"flank",
 			"provide_coverfire",
 			"smoke_grenade", --flank uses smoke

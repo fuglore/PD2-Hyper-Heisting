@@ -133,6 +133,28 @@ function TeamAIDamage:damage_bullet(attack_data)
 	return result
 end
 
+function TeamAIDamage:_send_damage_drama(attack_data, health_subtracted)
+	if not Network:is_server() then
+		return
+	end
+
+	local dmg_percent = health_subtracted / self._HEALTH_INIT
+	local attacker = attack_data.attacker_unit
+
+	if not attacker or attack_data.attacker_unit:id() == -1 then
+		attacker = self._unit
+	end
+	
+	if attacker and attack_data.attacker_unit:movement() then
+		local group_ai = managers.groupai:state()
+		self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100), nil)
+		
+		if group_ai._drama_data.amount < 0.2 then
+			managers.groupai:state():criminal_hurt_drama(self._unit, attacker, dmg_percent, true)
+		end
+	end
+end
+
 function TeamAIDamage:update(unit, t, dt)
 	if self._regenerate_t then
 		if self._regenerate_t < t then

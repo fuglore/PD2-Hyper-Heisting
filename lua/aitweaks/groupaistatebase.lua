@@ -50,7 +50,9 @@ function GroupAIStateBase:_init_misc_data(...)
 		high_p = drama_tweak.peak,
 		actions = drama_tweak.drama_actions,
 		max_dis = drama_tweak.max_dis,
-		dis_mul = drama_tweak.max_dis_mul
+		dis_mul = drama_tweak.max_dis_mul,
+		max_dis_armor = drama_tweak.max_dis_armor,
+		dis_mul_armor = drama_tweak.max_dis_mul_armor
 	}
 	self._nr_important_cops = 8
 	self._special_unit_types = {
@@ -161,6 +163,27 @@ function GroupAIStateBase:chk_guard_delay_deduction()
 	else
 		return self._guard_delay_deduction * 1
 	end
+end
+
+function GroupAIStateBase:criminal_hurt_drama(unit, attacker, dmg_percent, armor)
+	local drama_data = self._drama_data
+	local drama_amount = armor and drama_data.actions.criminal_hurt_armor or drama_data.actions.criminal_hurt
+
+	if alive(attacker) then
+		local dis_mul = armor and drama_data.dis_mul_armor or drama_data.dis_mul
+		local max_dis = armor and drama_data.max_dis_armor or drama_data.max_dis
+		local dis = mvec3_dis(attacker:movement():m_pos(), unit:movement():m_pos())
+		
+		if dis > max_dis then
+			return
+		end
+		
+		local dis_lerp = math.min(1, dis / max_dis)
+		dis_lerp = math.lerp(1, dis_mul, dis_lerp)
+		drama_amount = drama_amount * dis_lerp
+	end
+
+	self:_add_drama(drama_amount)
 end
 
 function GroupAIStateBase:chk_area_leads_to_enemy(start_nav_seg_id, test_nav_seg_id, enemy_is_criminal)
@@ -456,11 +479,11 @@ end
 function GroupAIStateBase:_check_drama_low_p()
 	local drama_tweak = tweak_data.drama
 	if not self._assault_number or self._assault_number and self._assault_number == 1 then
-		self._drama_data.low_p = drama_tweak.low
+		self._drama_data.high_p = drama_tweak.peak
 	elseif self._assault_number == 2 then
-		self._drama_data.low_p = drama_tweak.low_2nd
+		self._drama_data.high_p = drama_tweak.high_2nd
 	elseif self._assault_number >= 3 then
-		self._drama_data.low_p = drama_tweak.low_3rd
+		self._drama_data.high_p = drama_tweak.high_3rd
 	end
 end
 
@@ -880,33 +903,6 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		end
 	end
 	
-	if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
-		self._assault_number = self._assault_number + 1
-
-		managers.mission:call_global_event("start_assault")
-		managers.hud:start_assault(self._assault_number)
-		managers.groupai:dispatch_event("start_assault", self._assault_number)
-
-		for group_id, group in pairs_g(self._groups) do
-			for u_key, u_data in pairs_g(group.units) do
-				u_data.unit:sound():say("g90", true)
-			end
-		end
-		
-		if managers.modifiers:check_boolean("itmightrain") then
-			self._enemy_speed_mul = self._enemy_speed_mul + 0.1
-		end
-				
-		LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring_g(self._enemy_speed_mul))
-
-		self._task_data.assault.phase = "build"
-		self._task_data.assault.phase_end_t = self._t + self._tweak_data.assault.build_duration
-		self._task_data.assault.is_hesitating = nil
-
-		self:set_assault_mode(true)
-		managers.trade:set_trade_countdown(false)
-	end
-	
 	--if not self._next_allowed_enemykill_drama_t or self._next_allowed_enemykill_drama_t < self._t then
 	--	self:_add_drama(self._drama_data.actions.enemy_dead)
 	--	self._next_allowed_enemykill_drama_t = self._t + 2
@@ -926,6 +922,37 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 
 	local dead = unit:character_damage():dead()
 
+	if dead then
+		self:_add_drama(-self._drama_data.actions.enemy_dead)
+		
+		if self._task_data and self._task_data.assault and self._task_data.assault.phase == "anticipation" and self._task_data.assault.phase_end_t and self._task_data.assault.phase_end_t < self._t then
+			self._assault_number = self._assault_number + 1
+
+			managers.mission:call_global_event("start_assault")
+			managers.hud:start_assault(self._assault_number)
+			managers.groupai:dispatch_event("start_assault", self._assault_number)
+
+			for group_id, group in pairs_g(self._groups) do
+				for u_key, u_data in pairs_g(group.units) do
+					u_data.unit:sound():say("g90", true)
+				end
+			end
+			
+			if managers.modifiers:check_boolean("itmightrain") then
+				self._enemy_speed_mul = self._enemy_speed_mul + 0.1
+			end
+					
+			LuaNetworking:SendToPeers("shin_sync_speed_mul",tostring_g(self._enemy_speed_mul))
+
+			self._task_data.assault.phase = "build"
+			self._task_data.assault.phase_end_t = self._t + self._tweak_data.assault.build_duration
+			self._task_data.assault.is_hesitating = nil
+
+			self:set_assault_mode(true)
+			managers.trade:set_trade_countdown(false)
+		end
+	end
+
 	if e_data.group then
 		self:_remove_group_member(e_data.group, u_key, dead)
 		
@@ -935,8 +962,10 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 		end
 		
 		if dead and self._task_data and self._task_data.assault and self._task_data.assault.active then
-			if self._hunt_mode or self._task_data.assault.phase == "sustain" then
-				self._enemies_killed_sustain = self._enemies_killed_sustain + 1
+			if self._drama_data.amount < self._drama_data.high_p then
+				if self._hunt_mode or self._task_data.assault.phase == "sustain" then
+					self._enemies_killed_sustain = self._enemies_killed_sustain + 1
+				end
 			end
 		end
 	end
@@ -1000,22 +1029,6 @@ function GroupAIStateBase:detonate_world_smoke_grenade(id)
 
 	if Network:is_server() then
 		managers.network:session():send_to_peers_synched("sync_smoke_grenade", data.detonate_pos, data.detonate_pos, data.duration, data.flashbang and true or false)
-	end
-end
-
-function GroupAIStateBase:criminal_hurt_drama_armor(unit, attacker)
-	local drama_data = self._drama_data
-
-	if alive_g(attacker) then
-		local drama_amount = 0.1
-		local max_dis = drama_data.max_dis_armor
-		local dis_lerp = math_min(1, mvec3_dis(attacker:movement():m_pos(), unit:movement():m_pos()) / drama_data.max_dis_armor)
-		dis_lerp = math_lerp(1, drama_data.max_dis_mul_armor, dis_lerp)
-		drama_amount = drama_amount * dis_lerp
-	end
-	
-	if drama_amount and drama_amount >= 0.01 then 
-		self:_add_drama(drama_amount)
 	end
 end
 
