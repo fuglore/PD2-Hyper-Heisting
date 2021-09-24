@@ -145,7 +145,7 @@ function TeamAIDamage:_send_damage_drama(attack_data, health_subtracted)
 		attacker = self._unit
 	end
 	
-	if attacker and attack_data.attacker_unit:movement() then
+	if attacker and attacker:movement() then
 		local group_ai = managers.groupai:state()
 		self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100), nil)
 		
