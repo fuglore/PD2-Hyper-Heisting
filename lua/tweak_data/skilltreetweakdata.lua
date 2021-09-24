@@ -976,6 +976,12 @@ function SkillTreeTweakData:init()
 		desc_id = "menu_st_spec_15_desc"
 	}
 	
+	self.specializations[19][3].upgrades = {
+		"player_passive_health_multiplier_1",
+		"player_passive_health_multiplier_2",
+		"player_passive_health_multiplier_3"
+	}
+	
 	self.specializations[21] = {
 		{
 			cost = 200,

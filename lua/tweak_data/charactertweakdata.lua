@@ -3424,11 +3424,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0,
+				dmg_mul = 1,
 				r = 4000,
 				acc = {
 					0,
-					0
+					0.05
 				},
 				recoil = {
 					0.4,
@@ -3725,11 +3725,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, -- no longer a threat, gun stops working
+				dmg_mul = 0.5,
 				r = 3000,
 				acc = {
 					0,
-					0
+					0.025
 				},
 				recoil = {
 					0.2,
@@ -4355,11 +4355,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0,
+				dmg_mul = 1,
 				r = 4000,
 				acc = {
 					0,
-					0
+					0.05
 				},
 				recoil = {
 					0.4,
@@ -4674,11 +4674,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, -- no longer a threat, gun stops working
+				dmg_mul = 0.5, -- no longer a threat, gun stops working
 				r = 3000,
 				acc = {
 					0,
-					0
+					0.05
 				},
 				recoil = {
 					0.2,
@@ -5376,11 +5376,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, --young man, theres no need to get downed, i said, young man, get the fuck off the ground, because, young man, there are cops all around, and the FUCK. ING. DRILL. IS. JAMMED UP.
+				dmg_mul = 2, --young man, theres no need to get downed, i said, young man, get the fuck off the ground, because, young man, there are cops all around, and the FUCK. ING. DRILL. IS. JAMMED UP.
 				r = 5000,
 				acc = {
 					0,
-					0
+					0.05
 				},
 				recoil = {
 					0.4,
@@ -5713,11 +5713,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, -- no longer a threat, gun stops working
+				dmg_mul = 1, -- no longer a threat, gun stops working
 				r = 3000,
 				acc = {
 					0,
-					0
+					0.1
 				},
 				recoil = {
 					0.2,
