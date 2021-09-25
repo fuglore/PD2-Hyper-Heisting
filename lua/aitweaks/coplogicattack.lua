@@ -2250,6 +2250,10 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		return
 	end
 	
+	if Global.game_settings.one_down then
+		return
+	end
+	
 	local groupai = managers.groupai:state()
 	
 	if groupai._drama_data.zone == "high" then

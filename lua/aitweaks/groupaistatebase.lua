@@ -968,7 +968,71 @@ function GroupAIStateBase:enemy_killed(unit, attack_data)
 	
 	if self._player_criminals[au_key] then
 		self._last_killed_cop_t = self._t
-		self:_add_drama(-self._drama_data.actions.enemy_dead)
+		local mul = 5 - table.size(self._player_criminals) 
+		local val = self._drama_data.actions.enemy_dead * mul
+
+		self:_add_drama(-val)
+	end
+end
+
+function GroupAIStateBase:hostage_killed(killer_unit)
+	if not alive(killer_unit) then
+		return
+	end
+
+	if killer_unit:base() and killer_unit:base().thrower_unit then
+		killer_unit = killer_unit:base():thrower_unit()
+
+		if not alive(killer_unit) then
+			return
+		end
+	end
+
+	local key = killer_unit:key()
+	local criminal = self._criminals[key]
+
+	if not criminal then
+		return
+	end
+
+	self._hostages_killed = (self._hostages_killed or 0) + 1
+
+	if not self._hunt_mode then
+		if self._hostages_killed >= 1 and not self._hostage_killed_warning_lines then
+			if self:sync_hostage_killed_warning(1) then
+				managers.network:session():send_to_peers_synched("sync_hostage_killed_warning", 1)
+
+				self._hostage_killed_warning_lines = 1
+			end
+		elseif self._hostages_killed >= 3 and self._hostage_killed_warning_lines == 1 then
+			if self:sync_hostage_killed_warning(2) then
+				managers.network:session():send_to_peers_synched("sync_hostage_killed_warning", 2)
+
+				self._hostage_killed_warning_lines = 2
+			end
+		elseif self._hostages_killed >= 7 and self._hostage_killed_warning_lines == 2 and self:sync_hostage_killed_warning(3) then
+			managers.network:session():send_to_peers_synched("sync_hostage_killed_warning", 3)
+
+			self._hostage_killed_warning_lines = 3
+		end
+	end
+
+	if not criminal.is_deployable then
+		local tweak = nil
+
+		if killer_unit:base().is_local_player or killer_unit:base().is_husk_player then
+			tweak = tweak_data.player.damage
+		else
+			tweak = tweak_data.character[killer_unit:base()._tweak_table].damage
+		end
+
+		local respawn_penalty = criminal.respawn_penalty or tweak.base_respawn_time_penalty
+		criminal.respawn_penalty = respawn_penalty + tweak.respawn_time_penalty
+		criminal.hostages_killed = (criminal.hostages_killed or 0) + 1
+		
+		if Network:is_server() then
+			self:_add_drama(0.2)
+		end
 	end
 end
 
