@@ -536,10 +536,16 @@ function CopDamage:die(attack_data)
 	managers.mutators:notify(Message.OnCopDamageDeath, self, attack_data)
 
 	--report enemy deaths when not in stealth and when instantly killing enemies without alerting them
-	if not managers.groupai:state():whisper_mode() and not CopDamage.is_civilian(self._unit:base()._tweak_table) then
+	local group_ai = managers.groupai:state()
+	
+	if not group_ai:whisper_mode() and not CopDamage.is_civilian(self._unit:base()._tweak_table) then
 		if attack_data.attacker_unit and alive(attack_data.attacker_unit) then
-			if managers.groupai:state():all_criminals()[attack_data.attacker_unit:key()] then
-				managers.groupai:state():report_aggression(attack_data.attacker_unit)
+			if group_ai:all_criminals()[attack_data.attacker_unit:key()] then
+				group_ai:report_aggression(attack_data.attacker_unit)
+			end
+			
+			if self._unit:base():has_tag("law") then
+				group_ai:enemy_killed(self._unit, attack_data)
 			end
 		end
 	end

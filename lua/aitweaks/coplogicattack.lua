@@ -352,7 +352,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 
 	if not action_taken then
-		if want_to_take_cover or my_data.at_cover_shoot_pos then
+		if want_to_take_cover then
 			if in_cover then
 				if my_data.attitude == "engage" then
 					if my_data.cover_test_step <= 2 then
@@ -1605,6 +1605,10 @@ function CopLogicAttack.action_complete_clbk(data, action)
 		if action:expired() and data.important then
 			CopLogicAttack._upd_pose(data, my_data)
 		end
+	elseif action_type == "act" then
+		if my_data.starting_idle_action_from_act or action:expired() then
+			data.logic._upd_aim(data, my_data)
+		end
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
 	elseif action_type == "tase" then
@@ -1807,6 +1811,8 @@ function CopLogicAttack._upd_aim(data, my_data)
 							else
 								aim = true
 							end
+							
+							my_data.expected_pos = expected_pos
 						end
 					end
 				end
@@ -1820,7 +1826,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 		if data.logic.chk_should_turn(data, my_data) then
 			local enemy_pos = nil
 
-			if focus_enemy.verified or focus_enemy.nearly_visible then
+			if focus_enemy.verified or focus_enemy.nearly_visible or data.char_tweak.always_face_enemy then
 				enemy_pos = focus_enemy.m_pos
 			else
 				enemy_pos = expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
@@ -1858,7 +1864,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 		else
 			local look_pos = nil
 			
-			if time_since_verification and time_since_verification <= 2 then
+			if time_since_verification and time_since_verification <= 2 or focus_enemy.dis < 400 then
 				look_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
 			end
 
@@ -1870,7 +1876,15 @@ function CopLogicAttack._upd_aim(data, my_data)
 					local total_nav_points = #coarse_path
 					local index = nav_index + 1
 					local seg = coarse_path[index][1]
-					look_pos = managers.navigation:find_random_position_in_segment(seg)
+					local pos = managers.navigation:find_random_position_in_segment(seg)
+					
+					if mvec3_dis_sq(data.m_pos, pos) > 360000 then
+						if math_abs(data.unit:movement():m_head_pos().z - pos.z) < 200 then
+							mvec3_set_z(pos, data.unit:movement():m_head_pos().z)
+						end
+						
+						look_pos = pos
+					end
 				end
 			end
 			
@@ -2236,6 +2250,12 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		return
 	end
 	
+	local groupai = managers.groupai:state()
+	
+	if groupai._drama_data.zone == "high" then
+		return
+	end
+	
 	if data.tactics then
 		if data.tactics.sneaky and data.coward_t and data.t - data.coward_t < 5 then
 			return "coward"
@@ -2282,7 +2302,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		end
 	end	
 	
-	if managers.groupai:state():chk_heat_bonus_retreat() then
+	if groupai:chk_heat_bonus_retreat() then
 		return true
 	end
 end

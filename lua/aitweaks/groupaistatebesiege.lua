@@ -33,6 +33,8 @@ function GroupAIStateBesiege:init(group_ai_state)
 	end
 	
 	--self:set_debug_draw_state(true)
+	--self:set_drama_draw_state(true)
+	
 	self._tweak_data = tweak_data.group_ai[group_ai_state]
 	
 	local level = Global.level_data and Global.level_data.level_id
@@ -653,7 +655,7 @@ function GroupAIStateBesiege:_upd_police_activity()
 		self:_check_phalanx_damage_reduction_increase()
 
 		if self._enemy_weapons_hot then
-			self:_claculate_drama_value()
+			--self:_claculate_drama_value()
 			self:_upd_regroup_task()
 			self:_upd_reenforce_tasks()
 			self:_upd_recon_tasks()
@@ -733,7 +735,7 @@ function GroupAIStateBesiege:update(t, dt)
 		self:_queue_police_upd_task()
 		
 		if self._task_data then			
-			self:_claculate_drama_value()
+			--self:_claculate_drama_value()
 			
 			if Global.game_settings and Global.game_settings.one_down then
 				--nothing
@@ -1737,19 +1739,18 @@ function GroupAIStateBesiege:_upd_assault_task()
 	
 	local low_carnage = self:_count_criminals_engaged_force(4) <= 8
 	
-	if self._task_data.assault.target_areas and primary_target_area and nr_wanted > 0 and task_data.phase ~= "fade" and not self._activeassaultbreak or self._task_data.assault.target_areas and primary_target_area and self._hunt_mode and nr_wanted > 0 and not self._activeassaultbreak then
-		local used_event = nil
-		local phase = task_data.phase
-		local anticipation = self:chk_anticipation()
+	if primary_target_area and nr_wanted > 0 and not self._activeassaultbreak then
+		if task_data.phase ~= "fade" or self._hunt_mode then 
+			local used_event = next(self._spawning_groups)
+			local phase = task_data.phase
+			local anticipation = self:chk_anticipation()
 
-		if not anticipation or self._hunt_mode then
-			self:_try_use_task_spawn_event(t, primary_target_area, "assault")
-		end
-
-		if not used_event then
-			if next(self._spawning_groups) then
-				-- Nothing
-			else
+			if not used_event then
+				if not anticipation or self._hunt_mode then
+					self:_try_use_task_spawn_event(t, primary_target_area, "assault")
+				end
+				
+				
 				--local max_dis = self._small_map and 4000 or 8000
 				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, nil)
 				local area_to_approach = nil
@@ -1901,7 +1902,7 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 
 	for i = 1, #spawn_group.spawn_pts do
 		local sp_data = spawn_group.spawn_pts[i]
-		sp_data.delay_t = self._t + math.rand(0.5)
+		sp_data.delay_t = self._t + math.random()
 	end
 	
 	if grp_objective.area and not grp_objective.coarse_path then
@@ -2466,7 +2467,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	local diff_index = Global.game_settings.one_down and 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
 	if obstructed_area then
-		
 		--if one of the group members walk into a criminal then, if the phase is anticipation, they'll retreat backwards, otherwise, stand their ground and start shooting.
 		--this will most likely always instantly kick in if the group has finished charging into an area.
 	
@@ -2626,7 +2626,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		
 		repeat
 			local search_area = table_remove(to_search_areas, 1)
-			local needs_coarse_path = nil
 			
 			if next(search_area.criminal.units) then
 				local assault_from_here = true
@@ -3552,11 +3551,14 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 		local hopeless = true
 		local current_unit_type = tweak_data.levels:get_ai_group_type()
 		local try_hh = current_unit_type == "bo"
-
-		for _, sp_data in ipairs(spawn_points) do
+		
+		for i = 1, #spawn_points do
+			local sp_data = spawn_points[i]
 			local category = group_ai_tweak.unit_categories[u_type_name]
+			local access_check = sp_data.accessibility == "any" or category.access[sp_data.accessibility]
+			local amount_check = not sp_data.amount or sp_data.amount > 0
 
-			if (sp_data.accessibility == "any" or category.access[sp_data.accessibility]) and (not sp_data.amount or sp_data.amount > 0) and sp_data.mission_element:enabled() then
+			if access_check and amount_check and sp_data.mission_element:enabled() then
 				hopeless = false
 
 				if sp_data.delay_t < self._t then
@@ -3633,7 +3635,12 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 						spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
 						spawned_unit:brain()._logic_data.spawned_in_phase = spawn_task.ai_task.phase
 					end
-
+					
+					if sp_data.interval < 0.5 then
+						log("ah, cuck")
+						sp_data.interval = 1
+					end
+					
 					sp_data.delay_t = self._t + sp_data.interval
 
 					if sp_data.amount then

@@ -150,15 +150,19 @@ function TeamAIDamage:_send_damage_drama(attack_data, health_subtracted)
 		self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100), nil)
 		
 		if group_ai._drama_data.amount < 0.2 then
-			managers.groupai:state():criminal_hurt_drama(self._unit, attacker, dmg_percent, true)
+			group_ai:criminal_hurt_drama(self._unit, attacker, dmg_percent, true)
 		end
 	end
 end
 
 function TeamAIDamage:update(unit, t, dt)
-	if self._regenerate_t then
-		if self._regenerate_t < t then
-			self:_regenerated()
+	local group_ai = managers.groupai:state()
+	
+	if group_ai._drama_data.amount < group_ai._drama_data.high_p then
+		if self._regenerate_t then
+			if self._regenerate_t < t then
+				self:_regenerated()
+			end
 		end
 	elseif self._arrested_timer and self._arrested_paused_counter == 0 then
 		self._arrested_timer = self._arrested_timer - dt
@@ -181,7 +185,7 @@ function TeamAIDamage:update(unit, t, dt)
 
 			self._unit:brain():on_recovered(self._unit)
 			self._unit:network():send("from_server_unit_recovered")
-			managers.groupai:state():on_criminal_recovered(self._unit)
+			group_ai:on_criminal_recovered(self._unit)
 			managers.hud:set_mugshot_normal(self._unit:unit_data().mugshot_id)
 		end
 	end

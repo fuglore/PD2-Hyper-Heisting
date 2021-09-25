@@ -7596,6 +7596,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.move_speed = presets.move_speed.lightning_constant
 	self.spooc.no_retreat = nil
 	self.spooc.no_arrest = true
+	self.spooc.always_face_enemy = true
 	self.spooc.damage.doom_hurt_type = "doom"
 	self.spooc.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.spooc.surrender_break_time = {

@@ -271,31 +271,6 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 		--log("they're in my area")
 		return
 	end
-
-	local is_my_area_dangerous, is_follow_unit_area_dangerous = nil
-	local my_areas = managers.groupai:state():get_areas_from_nav_seg_id(my_nav_seg_id)
-
-	for _, area in ipairs_g(my_areas) do
-		if next(area.police.units) then
-			is_my_area_dangerous = true
-
-			break
-		end
-	end
-
-	local follow_unit_areas = managers.groupai:state():get_areas_from_nav_seg_id(follow_unit_nav_seg_id)
-
-	for _, area in ipairs_g(follow_unit_areas) do
-		if next(area.police.units) then
-			is_follow_unit_area_dangerous = true
-
-			break
-		end
-	end
-	
-	if is_my_area_dangerous and not is_follow_unit_area_dangerous then
-		return true
-	end
 	
 	if not data.attention_obj or not data.attention_obj.verified and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT then
 		local slot_mask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
@@ -1234,7 +1209,7 @@ function TeamAILogicIdle.on_new_objective(data, old_objective)
 				if new_objective.type == "revive" then
 					objective_needs_travel = CopLogicIdle._chk_objective_needs_travel(data, new_objective)
 				elseif not data.unit:movement()._should_stay then
-					if new_objective.in_place and new_objective.type == "follow" and TeamAILogicIdle._check_should_relocate(data, my_data, new_objective) then
+					if new_objective.type == "follow" and TeamAILogicIdle._check_should_relocate(data, my_data, new_objective) then
 						new_objective.in_place = nil
 
 						objective_needs_travel = true

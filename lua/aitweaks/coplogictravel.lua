@@ -537,8 +537,8 @@ function CopLogicTravel._upd_enemy_detection(data)
 		CopLogicAttack._upd_aim(data, my_data)
 
 		if not data.entrance and new_attention and data.char_tweak.chatter and data.char_tweak.chatter.entrance then
-			if new_attention.criminal_record and new_reaction >= REACT_COMBAT and new_attention.dis < 1000 and math_abs(data.m_pos.z - new_attention.m_pos.z) < 250 then
-				local voiceline = data.brain.entrance_chatter_cue or data.char_tweak.elite_entrance or "entrance"
+			if new_attention.criminal_record and new_reaction >= REACT_COMBAT and new_attention.dis < 1500 and math_abs(data.m_pos.z - new_attention.m_pos.z) < 250 then
+				local voiceline = data.brain.entrance_chatter_cue or data.char_tweak.spawn_sound_event or "entrance"
 
 				data.unit:sound():say(voiceline, true, nil)
 
@@ -802,6 +802,44 @@ function CopLogicTravel.action_complete_clbk(data, action)
 						end
 					end
 				end
+			end
+		end
+	elseif action_type == "act" then
+		if my_data.starting_idle_action_from_act then
+			if my_data.advance_path then
+				CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
+
+				if my_data ~= data.internal_data then
+					return
+				end
+
+				data.t = TimerManager:game():time()
+
+				CopLogicTravel._chk_begin_advance(data, my_data)
+
+				if my_data.advancing and my_data.path_ahead then
+					CopLogicTravel._check_start_path_ahead(data)
+				end
+			elseif my_data.coarse_path and not my_data.processing_advance_path and not my_data.processing_coarse_path then
+				local objective = data.objective
+
+				if objective then
+					if objective.nav_seg or objective.type == "follow" then
+						if not data.unit:movement():chk_action_forbidden("walk") then
+							if my_data.coarse_path_index == #my_data.coarse_path then
+								--CopLogicTravel._on_destination_reached(data) ----test
+							elseif data.important or data.is_converted or data.unit:in_slot(16) then
+								CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
+							end
+						end
+					end
+				end
+			end
+			
+			CopLogicAttack._upd_aim(data, my_data)
+		elseif action:expired() then
+			if data.important or data.is_converted or data.unit:in_slot(16) then
+				CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 	elseif action_type == "turn" then

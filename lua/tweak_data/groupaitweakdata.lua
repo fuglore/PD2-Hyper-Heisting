@@ -497,7 +497,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = { --start normal with the idea that specials can and will inconvenience the player in any way possible if not taken care of, two tasers.
 			shield = 4,
 			medic = 0,
-			taser = 1,
+			taser = 2,
 			tank = 0,
 			sniper = 3,			
 			spooc = 0
@@ -506,7 +506,7 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		self.special_unit_spawn_limits = { --hard escalates this, enables medics to keep tasers alive, adds a rare occasional dozer
 			shield = 4,
 			medic = 3,
-			taser = 1,
+			taser = 2,
 			tank = 1,
 			sniper = 3,			
 			spooc = 0
@@ -7531,87 +7531,67 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	elseif difficulty_index <= 2 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				11,
-				11,
-				11
+				8,
+				8,
+				8
 			},
 			tac_swat_shotgun_flank = {
-				11,
-				11,
-				11
+				8,
+				8,
+				8
 			},
 			tac_swat_rifle = {
-				15,
-				15,
-				15
+				10,
+				10,
+				10
 			},
 			tac_swat_rifle_flank = {
+				10,
+				10,
+				10
+			},
+			punks_A = {
+				5,
+				5,
+				5
+			},
+			punks_B = {
+				5,
+				5,
+				5
+			},
+			punks_C = {
+				5,
+				5,
+				5
+			},
+			tac_shield_wall_ranged = {
 				15,
 				15,
 				15
 			},
-			punks_A = {
-				4,
-				4,
-				4
-			},
-			punks_B = {
-				4,
-				4,
-				4
-			},
-			punks_C = {
-				4,
-				4,
-				4
-			},
-			tac_shield_wall_ranged = {
-				16,
-				16,
-				16
-			},
-			tac_shield_wall_charge = {
-				0,
-				0,
-				0
-			},
-			tac_shield_wall = {
-				0,
-				0,
-				0
-			},
 			tac_tazer_flanking = {
-				20,
-				20,
-				20
+				17,
+				17,
+				17
 			},
 			tac_tazer_charge = {
-				0,
-				0,
-				0
-			},
-			single_spooc = {
-				0,
-				0,
-				0
-			},
-			tac_bull_rush = {
-				0,
-				0,
-				0
+				17,
+				17,
+				17
 			}
 		}
 	elseif difficulty_index == 3 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				9,
-				9,
-				9
+				8,
+				8,
+				8
 			},
 			tac_swat_shotgun_flank = {
-				9,
-				9,
-				9
+				8,
+				8,
+				8
 			},
 			tac_swat_rifle = {
 				10,
@@ -7624,54 +7604,44 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				10
 			},
 			punks_A = {
-				4,
-				4,
-				4
+				5,
+				5,
+				5
 			},
 			punks_B = {
-				4,
-				4,
-				4
+				5,
+				5,
+				5
 			},
 			punks_C = {
-				4,
-				4,
-				4
+				5,
+				5,
+				5
 			},
 			tac_shield_wall_ranged = {
-				10,
-				10,
-				10
+				8,
+				8,
+				8
 			},
 			tac_shield_wall_charge = {
-				9.1,
-				9.1,
-				9.1
-			},
-			tac_shield_wall = {
-				7,
-				7,
-				7
+				8,
+				8,
+				8
 			},
 			tac_tazer_flanking = {
-				7,
-				7,
-				7
+				9,
+				9,
+				9
 			},
 			tac_tazer_charge = {
-				7,
-				7,
-				7
-			},
-			single_spooc = {
-				0,
-				0,
-				0
+				9,
+				9,
+				9
 			},
 			tac_bull_rush = {
-				10,
-				10,
-				10
+				7.1,
+				7.1,
+				7.1
 			}
 		}
 	elseif difficulty_index == 4 then

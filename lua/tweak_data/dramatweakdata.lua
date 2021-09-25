@@ -2,13 +2,13 @@ function DramaTweakData:init()
 	self:_create_table_structure()
 
 	self.drama_actions = {
-		criminal_hurt = 0.3,
+		criminal_hurt = 0.2,
 		criminal_hurt_armor = 0.1,
 		criminal_dead = 0.6,
 		criminal_disabled = 0.2,
 		enemy_dead = 0.02
 	}
-	self.decay_period = 20
+	self.decay_period = 30
 	self.max_dis = 6000
 	self.max_dis_mul = 0.3
 	self.max_dis_armor = 2000
