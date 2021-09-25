@@ -317,7 +317,7 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 	local adj = nil
 	local task_data = self._task_data.assault
 	
-	if not task_data or not task_data.active or self._activeassaultbreak or self._last_killed_cop_t and t - self._last_killed_cop_t < 5 and not self._danger_state then
+	if not task_data or not task_data.active or task_data.phase == "fade" or self._activeassaultbreak or self._last_killed_cop_t and t - self._last_killed_cop_t < 5 and not self._danger_state then
 		adj = -dt / drama_data.decay_period
 	else
 		if task_data.phase =="sustain" or self._hunt_mode then
