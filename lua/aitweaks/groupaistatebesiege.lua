@@ -3637,7 +3637,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 					end
 					
 					if sp_data.interval < 0.5 then
-						log("ah, cuck")
+						--log("ah, cuck")
 						sp_data.interval = 1
 					end
 					

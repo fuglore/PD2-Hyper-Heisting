@@ -318,7 +318,20 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 	local task_data = self._task_data.assault
 	
 	if not task_data or not task_data.active or task_data.phase == "fade" or self._activeassaultbreak or self._last_killed_cop_t and t - self._last_killed_cop_t < 5 and not self._danger_state then
-		adj = -dt / drama_data.decay_period
+		local player_count = table.size(self._player_criminals)
+		local mul = 1
+		
+		if player_count <= 1 then
+			mul = 2
+		else
+			player_count = player_count * 0.25
+			
+			mul = 2 - player_count
+		end
+		
+		
+		local decay_period = drama_data.decay_period / mul
+		adj = -dt / decay_period
 	else
 		if task_data.phase =="sustain" or self._hunt_mode then
 			local mul = 2
