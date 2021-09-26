@@ -21,7 +21,8 @@ Hooks:Add("BeardLibPreProcessScriptData", "HHCreateEnvironment", function(PackMa
 			"sky_2335_night_moon"
 			
         }
-        for _, sky in ipairs(skies) do
+        for i = 1, #skies do
+			sky = skies[i]
             if not managers.dyn_resource:has_resource(Idstring("scene"), Idstring("core/environments/skies/" .. sky .. "/" .. sky), managers.dyn_resource.DYN_RESOURCES_PACKAGE) then
                 managers.dyn_resource:load(Idstring("scene"), Idstring("core/environments/skies/" .. sky .. "/" .. sky), managers.dyn_resource.DYN_RESOURCES_PACKAGE, nil)
             end
@@ -45,6 +46,8 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 	if sex == "haunted" then
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/hellvoid.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
 	elseif diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/calmbeforethestorm.custom_xml", "custom_xml", "environments/pd2_env_ed1/pd2_env_ed1", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_ed2/pd2_env_ed2", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_night/pd2_env_night", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_hlm1/pd2_hlm1", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_rat_night/pd2_env_rat_night", "environment")
