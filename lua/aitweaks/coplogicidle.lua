@@ -1238,6 +1238,16 @@ function CopLogicIdle._chk_relocate(data) ----keep fiddling with this, maybe it'
 
 			return
 		end
+		
+		local allow_trans = CopLogicBase.is_obstructed(data, data.objective, nil, data.attention_obj)
+		
+		if allow_trans then
+			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
+
+			if wanted_state and wanted_state ~= data.name then
+				return
+			end
+		end
 
 		local follow_unit = data.objective.follow_unit
 		local follow_tracker = follow_unit:movement():nav_tracker()
@@ -1297,7 +1307,7 @@ function CopLogicIdle._chk_relocate(data) ----keep fiddling with this, maybe it'
 			data.objective.in_place = nil
 			data.objective.relocated_to = mvec3_cpy(follow_unit_pos)
 
-			data.logic._exit(data.unit, "travel")
+			data.logic.on_new_objective(data)
 
 			return true
 		end
@@ -1851,6 +1861,10 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 									weight_mul = weight_mul * mul
 								end
 							end
+						end
+						
+						if crim_record and crim_record.hostage_killed_pen then
+							weight_mul = weight_mul + crim_record.hostage_killed_pen
 						end
 
 						if weight_mul and weight_mul ~= 1 then

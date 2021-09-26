@@ -48,6 +48,7 @@ function GroupAIStateBase:_init_misc_data(...)
 		decay_period = tweak_data.drama.decay_period,
 		low_p = drama_tweak.low,
 		high_p = drama_tweak.peak,
+		high_p_reduction = 0,
 		actions = drama_tweak.drama_actions,
 		max_dis = drama_tweak.max_dis,
 		dis_mul = drama_tweak.max_dis_mul,
@@ -548,6 +549,8 @@ function GroupAIStateBase:_check_drama_low_p()
 	elseif self._assault_number >= 3 then
 		self._drama_data.high_p = drama_tweak.high_3rd
 	end
+	
+	self._drama_data.high_p = self._drama_data.high_p - self._drama_data.high_p_reduction
 end
 
 function GroupAIStateBase:_check_assault_panic_chatter()
@@ -1045,6 +1048,16 @@ function GroupAIStateBase:hostage_killed(killer_unit)
 		
 		if Network:is_server() then
 			self:_add_drama(0.2)
+			
+			if criminal.hostage_killed_pen then
+				criminal.hostage_killed_pen = criminal.hostage_killed_pen + 0.1
+			else
+				criminal.hostage_killed_pen = 0.1
+			end
+			
+			if self._hostages_killed > 3 then
+				self._drama_data.high_p_reduction = self._drama_data.high_p_reduction + 0.05
+			end
 		end
 	end
 end

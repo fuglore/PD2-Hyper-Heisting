@@ -647,12 +647,21 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 				if attention_info.identified then
 					local is_ignored = false
-
-					if attention_info.unit:movement() and attention_info.unit:movement().is_cuffed then
-						is_ignored = attention_info.unit:movement():is_cuffed()
+					local penisgod = nil
+					
+					if alive(attention_info.unit) then
+						if attention_info.unit:movement() and attention_info.unit:movement().is_cuffed then
+							is_ignored = attention_info.unit:movement():is_cuffed()
+						end
+					else
+						penisgod = true
+						log("auuuugh") --AUUUUGH
+						--log(tostring(attention_info.unit:base()._tweak_table))
 					end
-
-					if is_ignored then
+					
+					if penisgod then
+					
+					elseif is_ignored then
 						CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 					else
 						if not is_cool then
@@ -857,17 +866,46 @@ function CopLogicBase._create_detected_attention_object_data(t, my_unit, u_key, 
 	local m_head_pos = attention_info.handler:get_detection_m_pos()
 	local is_local_player, is_husk_player, is_deployable, is_person, nav_tracker, char_tweak, m_rot = nil
 	local is_alive = true
+	local log_everything, tweak_table = nil
+	
+	if not alive(att_unit) then
+		log("diiiiicks")
+		log_everything = true
+	end
 
 	if att_unit:base() then
 		is_local_player = att_unit:base().is_local_player
 		is_husk_player = att_unit:base().is_husk_player
 		is_deployable = att_unit:base().sentry_gun
 		is_person = att_unit:in_slot(managers.slot:get_mask("persons"))
-
+		
+		if log_everything and att_unit:base()._tweak_table then
+			tweak_table = att_unit:base()._tweak_table
+		end
+		
 		if att_unit:base().char_tweak then
 			char_tweak = att_unit:base():char_tweak()
 		end
 	end
+	
+	if log_everything then
+		local logstring = "unit is... "
+		
+		if tweak_table then
+			logstring = logstring .. tostring(char_tweak)
+		else
+			logstring = logstring .. "no_tweak "
+		end
+		
+		if is_deployable then
+			logstring = logstring .. "deployable cuntfucker "
+		elseif is_person then
+			logstring = logstring .. "person "
+		end
+		
+		log(logstring)
+	end
+		
 
 	if att_unit:movement() and att_unit:movement().m_rot then
 		m_rot = att_unit:movement():m_rot()
@@ -875,6 +913,12 @@ function CopLogicBase._create_detected_attention_object_data(t, my_unit, u_key, 
 
 	if att_unit:character_damage() and att_unit:character_damage().dead then
 		is_alive = not att_unit:character_damage():dead()
+	end
+	
+	if log_everything then
+		if not is_alive then
+			log("unit is fucking dead lol")
+		end
 	end
 
 	local verify_interval = settings.notice_interval or settings.verification_interval
@@ -1118,6 +1162,14 @@ function CopLogicBase.on_detected_attention_obj_modified(data, modified_u_key)
 			end
 		end
 	else
+		if data.attention_obj and data.attention_obj.u_key == modified_u_key and modified_u_key ~= attention_info.unit:key() then
+			log("cocksucker")
+		end
+
+		if attention_info.unit and attention_info.u_key ~= attention_info.unit:key() then
+			log("penis")
+		end
+	
 		CopLogicBase._destroy_detected_attention_object_data(data, attention_info)
 	end
 
@@ -1295,7 +1347,8 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 		if attention and REACT_COMBAT <= attention.reaction then
 			local good_types = {
 				free = true,
-				defend_area = true
+				defend_area = true,
+				follow = true
 			}
 				
 			if good_types[objective.type] then

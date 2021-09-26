@@ -607,3 +607,24 @@ function CopBrain:cancel_all_pathing_searches()
 	self._logic_data.active_searches = {}
 	self._logic_data.pathing_results = nil
 end
+
+function CopBrain:search_for_coarse_path(search_id, to_seg, verify_clbk, access_neg)
+	local params = {
+		from_tracker = self._unit:movement():nav_tracker(),
+		to_seg = to_seg,
+		access = {
+			"walk"
+		},
+		id = search_id,
+		long_path = not self._logic_data.is_converted and self._logic_data.tactics and self._logic_data.tactics.flank,
+		results_clbk = callback(self, self, "clbk_coarse_pathing_results", search_id),
+		verify_clbk = verify_clbk,
+		access_pos = self._logic_data.char_tweak.access,
+		access_neg = access_neg
+	}
+	self._logic_data.active_searches[search_id] = 2
+
+	managers.navigation:search_coarse(params)
+
+	return true
+end

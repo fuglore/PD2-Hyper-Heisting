@@ -7,13 +7,7 @@ function PlayerManager:_chk_fellow_crimin_proximity(unit)
 		
 	local enemies = world_g:find_units_quick(unit, "sphere", unit:position(), 1500, managers.slot:get_mask("criminals_no_deployables"))
 
-	for _, enemy in ipairs(enemies) do
-		players_nearby = players_nearby + 1
-	end
-		
-	if players_nearby <= 0 then
-		--log("uhohstinky")
-	end
+	players_nearby = #enemies
 		
 	return players_nearby
 end
@@ -412,7 +406,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 				local area = skill.area
 				local chance = skill.chance
 				local amount = skill.amount
-				local enemies = World:find_units_quick("sphere", pos, area, 12, 21)
+				local enemies = world_g:find_units_quick("sphere", pos, area, 12, 21)
 				
 				for i = 1, #enemies do
 					local unit = enemies[i]
@@ -544,7 +538,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 
 		if panic_chance > 0 or panic_chance == -1 then
 			local slotmask = managers.slot:get_mask("enemies")
-			local units = World:find_units_quick("sphere", player_unit:movement():m_pos(), tweak_data.upgrades.killshot_close_panic_range, slotmask)
+			local units = world_g:find_units_quick("sphere", player_unit:movement():m_pos(), tweak_data.upgrades.killshot_close_panic_range, slotmask)
 
 			for e_key, unit in pairs(units) do
 				if alive(unit) and unit:character_damage() and not unit:character_damage():dead() then

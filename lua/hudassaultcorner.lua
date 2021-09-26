@@ -31,7 +31,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 
 	self._assault_mode = "normal"
 	self._assault_state = "normal"
-	self._assault_color = Color(1, 1, 1, 0)
+	
 	self._regular_assault_color = Color(1, 1, 1, 0)
 	self._danger_color = tweak_data.screen_colors.skirmish_color
 	self._clutch_color = Color(1, 1, 0.1, 0)
@@ -44,7 +44,8 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 
 
 	self._assault_survived_color = Color(1, 0.12549019607843137, 0.9019607843137255, 0.12549019607843137)
-	self._current_assault_color = self._assault_color
+	self._current_assault_color = self._regular_assault_color
+	self._assault_color = self._current_assault_color
 	local icon_assaultbox = assault_panel:bitmap({
 		texture = "guis/textures/pd2/hud_icon_assaultbox",
 		name = "icon_assaultbox",
@@ -332,7 +333,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local danger_line_to_use = "hud_assault_danger"
 	local FG_chance = math.random(1, 325)
 	local danger_chance = math.random(1, 63)
-	local heat_chance = math.random(1, 44)
+	local heat_chance = math.random(1, 48)
 	local versusline = "hud_assault_faction_swat"
 	
 	local faction = tweak_data.levels:get_ai_group_type()
@@ -547,7 +548,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if heat_chance <= 44 then
+	if heat_chance <= 48 then
 		heatbonus_line_to_use = "hud_heat_" .. heat_chance
 	end
 	
@@ -694,6 +695,102 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	end
 end)
 
+function HUDAssaultCorner:_start_assault(text_list)
+	text_list = text_list or {
+		""
+	}
+	local assault_panel = self._hud_panel:child("assault_panel")
+	local text_panel = assault_panel:child("text_panel")
+
+	self:_set_text_list(text_list)
+
+	local started_now = not self._assault
+	self._assault = true
+
+	if self._bg_box:child("text_panel") then
+		self._bg_box:child("text_panel"):stop()
+		self._bg_box:child("text_panel"):clear()
+	else
+		self._bg_box:panel({
+			name = "text_panel"
+		})
+	end
+
+	self._bg_box:child("bg"):stop()
+	assault_panel:set_visible(true)
+
+	local icon_assaultbox = assault_panel:child("icon_assaultbox")
+
+	icon_assaultbox:stop()
+	icon_assaultbox:animate(callback(self, self, "_show_icon_assaultbox"))
+
+	local config = {
+		attention_forever = true,
+		attention_color = self._current_assault_color ~= nil and self._current_assault_color or self._regular_assault_color,
+		attention_color_function = callback(self, self, "assault_attention_color_function")
+	}
+
+	self._bg_box:stop()
+	self._bg_box:animate(callback(nil, _G, "HUDBGBox_animate_open_left"), 0.75, self._bg_box_size, function ()
+	end, config)
+
+	local box_text_panel = self._bg_box:child("text_panel")
+
+	box_text_panel:stop()
+	box_text_panel:animate(callback(self, self, "_animate_text"), nil, nil, callback(self, self, "assault_attention_color_function"))
+	self:_set_feedback_color(config.color)
+
+	if alive(self._wave_bg_box) then
+		self._wave_bg_box:stop()
+		self._wave_bg_box:animate(callback(self, self, "_animate_wave_started"), self)
+	end
+
+	if managers.skirmish:is_skirmish() and started_now then
+		self:_popup_wave_started()
+	end
+end
+
+function HUDAssaultCorner:sync_set_assault_mode(mode)
+	if self._assault_mode == mode then
+		return
+	end
+
+	self._assault_mode = mode
+	local color = self._current_assault_color ~= nil and self._current_assault_color or self._regular_assault_color
+
+	if mode == "phalanx" then
+		color = self._vip_assault_color
+	end
+
+	self:_update_assault_hud_color(color)
+	self:_set_text_list(self:_get_assault_strings())
+
+	local assault_panel = self._hud_panel:child("assault_panel")
+	local icon_assaultbox = assault_panel:child("icon_assaultbox")
+	local image = mode == "phalanx" and "guis/textures/pd2/hud_icon_padlockbox" or "guis/textures/pd2/hud_icon_assaultbox"
+
+	icon_assaultbox:set_image(image)
+end
+
+function HUDAssaultCorner:sync_start_assault(assault_number)
+	if self._point_of_no_return or self._casing then
+		return
+	end
+
+	local color = self._current_assault_color ~= nil and self._current_assault_color or self._regular_assault_color
+
+	if self._assault_mode == "phalanx" then
+		color = self._vip_assault_color
+	end
+
+	self:_update_assault_hud_color(color)
+	self:set_assault_wave_number(assault_number)
+
+	self._start_assault_after_hostage_offset = true
+
+	self:_set_hostage_offseted(true)
+end
+
 function HUDAssaultCorner:set_color_state(state)
 	if not state then
 		return
@@ -728,6 +825,21 @@ function HUDAssaultCorner:set_color_state(state)
 		self._assault_state = "normal"
 		self:_update_assault_hud_color(self._regular_assault_color)
 	end
+end
+
+function HUDAssaultCorner:_update_assault_hud_color(color)
+	self._current_assault_color = color
+	self._assault_color = self._current_assault_color
+
+	self._bg_box:child("left_top"):set_color(color)
+	self._bg_box:child("left_bottom"):set_color(color)
+	self._bg_box:child("right_top"):set_color(color)
+	self._bg_box:child("right_bottom"):set_color(color)
+
+	local assault_panel = self._hud_panel:child("assault_panel")
+	local icon_assaultbox = assault_panel:child("icon_assaultbox")
+
+	icon_assaultbox:set_color(color)
 end
 
 end

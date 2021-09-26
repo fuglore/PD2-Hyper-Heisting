@@ -469,7 +469,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 	local objective = data.objective
 	local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
 	
-	if not objective or objective.type ~= "follow" then		
+	if not objective or not data.is_converted or objective.type ~= "follow" then		
 		if allow_trans then
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
 

@@ -2682,7 +2682,7 @@ function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
 		local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
 				
 		if wanted_state ~= data.name then
-			local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, nil)
+			local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, data.attention_obj)
 
 			if allow_trans then
 				if obj_failed then
