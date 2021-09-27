@@ -1858,6 +1858,73 @@ function GroupAIStateBesiege:_upd_recon_tasks()
 	end
 end
 
+function GroupAIStateBesiege:_assign_group_to_retire(group)
+	local retire_area, retire_pos = nil
+	local start_area = group.objective.area
+	
+	if not start_area then
+		local group_leader_u_key, group_leader_u_data = self._determine_group_leader(group.units)
+		if group_leader_u_data then
+			start_area = group_leader_u_data and self:get_area_from_nav_seg_id(group_leader_u_data.tracker:nav_segment())
+		else
+			for u_key, u_data in pairs_g(group.units) do
+				start_area = self:get_area_from_nav_seg_id(u_data.tracker:nav_segment())
+				
+				if start_area then
+					break
+				end
+			end
+		end
+	end
+	
+	local to_search_areas = {
+		start_area
+	}
+	local found_areas = {
+		[start_area] = true
+	}
+
+	repeat
+		local search_area = table.remove(to_search_areas, 1)
+
+		if search_area.flee_points and next(search_area.flee_points) then
+			retire_area = search_area
+			local flee_point_id, flee_point = next(search_area.flee_points)
+			retire_pos = flee_point.pos
+
+			break
+		else
+			for other_area_id, other_area in pairs(search_area.neighbours) do
+				if not found_areas[other_area] then
+					table.insert(to_search_areas, other_area)
+
+					found_areas[other_area] = true
+				end
+			end
+		end
+	until #to_search_areas == 0
+
+	if not retire_area then
+		Application:error("[GroupAIStateBesiege:_assign_group_to_retire] flee point not found. from area:", inspect(group.objective.area), "group ID:", group.id)
+
+		return
+	end
+
+	local grp_objective = {
+		type = "retire",
+		area = retire_area or group.objective.area,
+		coarse_path = {
+			{
+				retire_area.pos_nav_seg,
+				retire_area.pos
+			}
+		},
+		pos = retire_pos
+	}
+
+	self:_set_objective_to_enemy_group(group, grp_objective)
+end
+
 function GroupAIStateBesiege:_get_special_unit_type_count(special_type)
 	if not self._special_units[special_type] then
 		return 0
@@ -2729,7 +2796,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		end
 	end
 	
-	objective_area = objective_area or current_objective.area or group_leader_u_data and self:get_area_from_nav_seg_id(group_leader_u_data.tracker:nav_segment())or self._task_data.assault.target_areas[1]
+	objective_area = objective_area or current_objective.area or group_leader_u_data and self:get_area_from_nav_seg_id(group_leader_u_data.tracker:nav_segment()) or self._task_data.assault.target_areas[1]
 	
 	if not objective_area then
 		return
