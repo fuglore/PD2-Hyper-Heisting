@@ -1,4 +1,4 @@
-function UnitNetworkHandler:criminal_hurt(criminal_unit, attacker_unit, damage_ratio, armor, sender)
+function UnitNetworkHandler:criminal_hurt(criminal_unit, attacker_unit, damage_ratio, sender)
 	if not self._verify_gamestate(self._gamestate_filter.any_ingame) or not self._verify_character_and_sender(criminal_unit, sender) then
 		return
 	end
@@ -10,7 +10,13 @@ function UnitNetworkHandler:criminal_hurt(criminal_unit, attacker_unit, damage_r
 	managers.hud:set_mugshot_damage_taken(criminal_unit:unit_data().mugshot_id)
 	
 	if Network:is_server() then
-		managers.groupai:state():criminal_hurt_drama(criminal_unit, attacker_unit, damage_ratio * 0.01, armor)
+		local to_send = damage_ratio 
+
+		if damage_ratio > 1 then
+			to_send = to_send * 0.5
+		end
+			
+		managers.groupai:state():criminal_hurt_drama(criminal_unit, attacker_unit, to_send * 0.005, damage_ratio > 1)
 	end
 end
 

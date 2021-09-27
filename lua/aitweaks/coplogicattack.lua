@@ -2288,7 +2288,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		return true
 	end
 	
-	local diff_index = managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+	local diff_index = my_data.attitude == "avoid" and 0 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
 	if diff_index < 7 then
 		if data.attention_obj.dmg_t and data.t - data.attention_obj.dmg_t < 1 then

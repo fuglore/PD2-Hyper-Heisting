@@ -44,6 +44,7 @@ function GroupAIStateBase:_init_misc_data(...)
 	self._drama_data = {
 		amount = 0,
 		zone = "low",
+		pulse = true,
 		last_calculate_t = 0,
 		decay_period = tweak_data.drama.decay_period,
 		low_p = drama_tweak.low,
@@ -130,6 +131,7 @@ function GroupAIStateBase:on_simulation_started(...)
 	self._drama_data = {
 		amount = 0,
 		zone = "low",
+		pulse = true,
 		last_calculate_t = 0,
 		decay_period = tweak_data.drama.decay_period,
 		low_p = drama_tweak.low,
@@ -319,6 +321,7 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 	local task_data = self._task_data.assault
 	
 	if not task_data or not task_data.active or task_data.phase == "fade" or self._activeassaultbreak or self._last_killed_cop_t and t - self._last_killed_cop_t < 5 and not self._danger_state then
+		drama_data.pulse = true
 		local player_count = table.size(self._player_criminals)
 		local mul = 1
 		
@@ -334,14 +337,22 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 		local decay_period = drama_data.decay_period / mul
 		adj = -dt / decay_period
 	else
-		if task_data.phase =="sustain" or self._hunt_mode then
+		drama_data.pulse = false
+
+		if task_data.phase == "sustain" or self._hunt_mode then
 			local mul = 2
 			
 			if self._danger_state then
 				mul = 1
 			end
 			
-			adj = dt / drama_data.decay_period * mul
+			if self._street then
+				mul = mul * 2
+			end
+			
+			local decay_period = drama_data.decay_period * mul
+			
+			adj = dt / decay_period
 		end
 	end
 	
@@ -354,6 +365,13 @@ end
 
 function GroupAIStateBase:_add_drama(amount)
 	local drama_data = self._drama_data
+	
+	if drama_data.pulse then
+		if drama_data.amount + amount > drama_data.amount then
+			amount = amount * 0.5
+		end
+	end
+	
 	local new_val = math_clamp(drama_data.amount + amount, 0, 1)
 	drama_data.amount = new_val
 

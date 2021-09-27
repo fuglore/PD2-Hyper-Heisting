@@ -42,6 +42,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	local small_map = level == "sah" or level == "born" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "watchdogs_1" or level == "watchdogs_1_night" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" or level == "dinner" or level == "mallcrasher" or level == "moon" or level == "cane" or level == "physics_tower" or level == "physics_core"
 	
 	self._small_map = small_map or nil
+	self._street = level == "hox_1" or level == "run"
 	
 	--log(tostring(self._small_map))
 	
@@ -1757,7 +1758,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 		if task_data.phase ~= "fade" or self._hunt_mode then 
 			local used_event = next(self._spawning_groups)
 			local phase = task_data.phase
-			local anticipation = self:chk_anticipation()
+			local anticipation = self._activeassaultbreak or self:chk_anticipation()
 
 			if not used_event then
 				if not anticipation or self._hunt_mode then
@@ -1783,7 +1784,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 				
 				if spawn_group then
 					local grp_objective = {
-						attitude = anticipation and "avoid" or "engage",
+						attitude = self._street and "avoid" or anticipation and "avoid" or "engage",
 						stance = "hos",
 						pose = anticipation and "crouch" or "stand",
 						type = "assault_area",
@@ -1956,7 +1957,6 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 			--log("pog???")
 			grp_objective.coarse_path = coarse_path
 			grp_objective.area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1])
-			
 		else
 			grp_objective.coarse_path = {{spawn_group.nav_seg, spawn_group.area.pos}}
 		end
@@ -2605,21 +2605,42 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		local obstructed_path_index = nil
 		local forwardmost_i_nav_point = nil
 		
-		if not group.is_chasing and group.objective.coarse_path then
+		if current_objective.coarse_path then
 			obstructed_path_index = self:_chk_coarse_path_obstructed(group)
 		end
 				
 		if current_objective.moving_out then
-			if not phase_is_sustain and not self._hunt_mode then
-				if phase_is_anticipation and obstructed_path_index or diff_index < 7 and obstructed_path_index then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
+			if self._street or not phase_is_sustain and not self._hunt_mode then
+				if obstructed_path_index then
+					if self._street or phase_is_anticipation or diff_index < 7 then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
+						local reduct = 1
+						
+						if self._street or phase_is_anticipation then
+							reduct = 2
+						end
+						
+						objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - reduct, 1)][1])
+						pull_back = true
+					end
+				elseif current_objective.coarse_path then
 					local reduct = 1
-					
-					if phase_is_anticipation then
+						
+					if self._street or phase_is_anticipation then
 						reduct = 2
 					end
-					
-					objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - reduct, 1)][1])
-					pull_back = true
+				
+					if current_objective.area and next(current_objective.area.criminal.units) then
+						local coarse_path = current_objective.coarse_path
+						
+						if not coarse_path then
+							log("???")
+						end
+						
+						local number = #coarse_path
+						
+						objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(number - reduct, 1)][1])
+						pull_back = true
+					end
 				end
 			else
 				push = true
@@ -2659,7 +2680,11 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if phase_is_anticipation and current_objective.open_fire then
 				pull_back = true
 			elseif self._hunt_mode or phase_is_sustain then
-				push = true
+				if not self._street then
+					push = true
+				else
+					approach = true
+				end
 			elseif phase_is_anticipation and not has_criminals_close or diff_index < 7 and not has_criminals_close then
 				approach = true
 			elseif not phase_is_anticipation then
@@ -2668,7 +2693,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					
 					--the general idea here is that groups will generally try to wait until other groups have headed into the area
 					--by pushing in one big pile, you make sure to punish players camping and not trying to keep the cops away, without making them too rushy.
-					if diff_index > 6 then
+					if not self._street and diff_index > 6 then
 						push = true
 					elseif not group.in_place_t then
 						pull_back = true
@@ -2845,7 +2870,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local used_grenade = nil
 			
 			if approach and assault_path and next(assault_area.criminal.units) then
-				local safe_i = phase_is_anticipation and 2 or 1
+				local safe_i = self._street and 2 or phase_is_anticipation and 2 or 1
 				local safe_area = self:get_area_from_nav_seg_id(assault_path[math_max(#assault_path - safe_i, 1)][1])
 				
 				if safe_area then
@@ -2892,7 +2917,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				type = "assault_area",
 				stance = "hos",
 				area = assault_area,
-				coarse_path = needs_coarse_path and assault_path or nil,
+				coarse_path = assault_path or nil,
 				pose = "stand",
 				attitude = push and "engage" or "avoid",
 				moving_in = push and true or nil,
@@ -2926,7 +2951,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
 
 			if forwardmost_i_nav_point then
-				local safe_i = phase_is_anticipation and 2 or 1
+				local safe_i = self._street and 2 or phase_is_anticipation and 2 or 1
 				local nearest_safe_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(forwardmost_i_nav_point - safe_i, 1)][1])
 				retreat_area = nearest_safe_area
 			end
@@ -2954,7 +2979,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				type = "assault_area",
 				area = retreat_area,
 				running = true,
-				coarse_path = retreat_path or {{retreat_area.pos_nav_seg, mvec3_cpy(retreat_area.pos)}}
+				coarse_path = retreat_path or nil
 			}
 			group.is_chasing = nil
 

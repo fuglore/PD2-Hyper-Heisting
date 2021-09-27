@@ -2,6 +2,11 @@
 	<!--New CGs-->
 	<dds path="core/textures/cg_rvsb"/>
 	
+	<scene path="core/environments/skies/sky_heated_avenue/sky_heated_avenue" load="true" />
+	<material_config path="core/environments/skies/sky_heated_avenue/sky_heated_avenue" load="true" />
+	<model path="core/environments/skies/sky_heated_avenue/sky_heated_avenue" load="true" />	
+	<texture path="core/environments/skies/sky_heated_avenue/sky_heated_avenue_df" />
+	
 	<scene path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
 	<material_config path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
 	<model path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />	
@@ -9,6 +14,8 @@
 	<texture path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight_df" />
 	
 	<texture path="environments/sunset_hell_global_cubemap/cubemap" load="true"/>
+	
+	<texture path="environments/heated_hox_cubemap/outdoors" load="true"/>
 	
 	<!--Base Game Asset Replacements-->
 	<object path="units/payday2/weapons/wpn_npc_smg_mp9/wpn_npc_smg_mp9" force="true"/>

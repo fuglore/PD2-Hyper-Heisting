@@ -1398,10 +1398,16 @@ function PlayerDamage:_send_damage_drama(attack_data, health_subtracted, armor)
 	end
 	
 	if attacker and attacker:movement() then
-		self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100), armor)
+		local network_percent = math.clamp(math.ceil(dmg_percent * 100), 1, 100)
+		
+		if armor then
+			network_percent = network_percent * 2
+		end
+	
+		self._unit:network():send("criminal_hurt", attacker, math.clamp(network_percent, 1, 200))
 
 		if Network:is_server() then
-			managers.groupai:state():criminal_hurt_drama(self._unit, attacker, dmg_percent, armor)
+			managers.groupai:state():criminal_hurt_drama(self._unit, attacker, dmg_percent)
 		else
 			self._unit:network():send_to_host("damage_bullet", attacker, 1, 1, 1, 0, false)
 		end

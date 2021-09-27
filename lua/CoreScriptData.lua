@@ -46,6 +46,9 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 	if sex == "haunted" then
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/hellvoid.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
 	elseif diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/heated_confrontation.custom_xml", "custom_xml", "environments/pd2_env_hox1_01/pd2_env_hox1_01", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/heated_confrontation_garage.custom_xml", "custom_xml", "environments/pd2_env_hox1_02/pd2_env_hox1_02", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_ed2/pd2_env_ed2", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/calmbeforethestorm.custom_xml", "custom_xml", "environments/pd2_env_ed1/pd2_env_ed1", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_ed2/pd2_env_ed2", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_night/pd2_env_night", "environment")
