@@ -343,7 +343,7 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 		drama_data.pulse = false
 		
 		if not self._reset_heat_bonus_t then
-			self._reset_heat_bonus_t = 5
+			self._reset_heat_bonus_t = 10
 		else
 			self._reset_heat_bonus_t = self._reset_heat_bonus_t - dt
 		end
@@ -1011,8 +1011,6 @@ function GroupAIStateBase:enemy_killed(unit, attack_data)
 				self._enemies_killed_sustain = self._enemies_killed_sustain + 1
 			end
 		end
-		
-		
 	end
 	
 	if self._player_criminals[au_key] then

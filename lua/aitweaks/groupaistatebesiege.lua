@@ -761,9 +761,9 @@ function GroupAIStateBesiege:update(t, dt)
 							
 					if self._force_pool then
 						if small_map then
-							value = self._force_pool / 2
-						else
 							value = self._force_pool / 3
+						else
+							value = self._force_pool / 4
 						end
 						
 						value = value * math.lerp(1, 1.5, self._drama_data.amount)
@@ -821,13 +821,13 @@ function GroupAIStateBesiege:update(t, dt)
 							self._stopassaultbreak_t = self._t + 20
 							self._activeassaultbreak = true
 							--self._task_data.assault.phase_end_t = self._task_data.assault.phase_end_t + 20
-							local value = 64
+							local value = 32
 							
 							if self._force_pool then
 								if small_map then
-									value = self._force_pool / 2
-								else
 									value = self._force_pool / 3
+								else
+									value = self._force_pool / 4
 								end
 								
 								value = value * math.lerp(1, 1.5, self._drama_data.amount)

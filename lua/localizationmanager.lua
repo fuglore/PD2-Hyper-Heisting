@@ -331,7 +331,7 @@
 		["loading_hh_10"] = "If you see extra-bright powerful tracers that distort the area around them, that's probably coming from some important enemy! Like a Shotgunner, or a Bulldozer!",
 		["loading_hh_11"] = "Join the Hyper Heisting Discord! You can find a link to it in the ModWorkshop page!",
 		["loading_hh_12"] = "Ninja enemies are particularly hard to dominate, but are very strong when converted into Jokers!",
-		["loading_hh_13"] = "In Hyper Heisting, Heavy SWATs, Maximum Force Responders, and ZEAL Heavy SWATs gain protection from bullet-based instant kills on all difficulties! But only from weapons and ammo types that can't shoot through walls!",
+		["loading_hh_13"] = "In Hyper Heisting, Heavy SWATs, Maximum Force Responders, and ZEAL Heavy SWATs gain protection from bullet-based instant kills on all difficulties! But only from weapons and ammo types that can't shoot through shields!",
 		["loading_hh_14"] = "You can get to the Hyper Heisting Options through Mod Options in the Options menu!",
 		["loading_hh_15"] = "In Hyper Heisting, getting hit by an enemy melee attack will temporarily stagger you, and cause you to be unable to attack for a few moments!",
 		["loading_hh_16"] = "Punks are overconfident fodder enemies wielding revolvers, double barreled shotguns, and submachine guns. They will not hurt you much if you do not let them!",

@@ -7270,12 +7270,12 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			1,
 			1
 		},
-		build_duration = 90,
+		build_duration = 30,
 		fade_duration = 30
 	}
 	
 	if difficulty_index == 7 or difficulty_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-		self.besiege.assault.build_duration = 120
+		self.besiege.assault.build_duration = 60
 	end
 	
 	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then

@@ -1594,7 +1594,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	local head = self._head_body_name and not self._unit:in_slot(16) and not self._char_tweak.ignore_headshot and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
 
 	--prevent headshots against these units unless shot from the front, used for bulldozers
-	if head and self._unit:base():has_tag("protected") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then
+	if head and self._unit:base():has_tag("protected") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_shield then
 		mvec3_set(mvec_1, attack_data.col_ray.body:position())
 		mvec3_sub(mvec_1, attack_data.attacker_unit:position())
 		mvec3_norm(mvec_1)
@@ -1607,7 +1607,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 		end
 	end
 	
-	if head and self._unit:base():has_tag("protected_reverse") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then
+	if head and self._unit:base():has_tag("protected_reverse") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_shield then
 		mvec3_set(mvec_1, attack_data.col_ray.body:position())
 		mvec3_sub(mvec_1, attack_data.attacker_unit:position())
 		mvec3_norm(mvec_1)
@@ -1704,7 +1704,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	if head and diff_index <= 5 and self._unit:movement():cool() then
 		damage = self._HEALTH_INIT
 	else
-		if self._char_tweak.DAMAGE_CLAMP_BULLET and not attack_data.weapon_unit:base()._can_shoot_through_wall then
+		if self._char_tweak.DAMAGE_CLAMP_BULLET and not attack_data.weapon_unit:base()._can_shoot_through_shield then
 			damage = math.min(damage, self._char_tweak.DAMAGE_CLAMP_BULLET)
 		end
 	end
@@ -1718,7 +1718,7 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	if not self._resisted_death then 
 		if self._char_tweak.resist_death and self._char_tweak.resist_death[attack_data.variant] then
 			if damage >= self._health then
-				if not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_wall then 
+				if not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_shield then 
 					damage = self._health - 1
 					self._resisted_death = true
 						
