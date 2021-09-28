@@ -765,6 +765,8 @@ function GroupAIStateBesiege:update(t, dt)
 						else
 							value = self._force_pool / 3
 						end
+						
+						value = value * math.lerp(1, 1.5, self._drama_data.amount)
 					end
 							
 					if small_map then
@@ -827,6 +829,8 @@ function GroupAIStateBesiege:update(t, dt)
 								else
 									value = self._force_pool / 3
 								end
+								
+								value = value * math.lerp(1, 1.5, self._drama_data.amount)
 							end
 							
 							if small_map then

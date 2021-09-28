@@ -322,6 +322,9 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 	
 	if not task_data or not task_data.active or task_data.phase == "fade" or self._activeassaultbreak or self._last_killed_cop_t and t - self._last_killed_cop_t < 5 and not self._danger_state then
 		drama_data.pulse = true
+		
+		self._reset_heat_bonus_t = nil
+		
 		local player_count = table.size(self._player_criminals)
 		local mul = 1
 		
@@ -338,6 +341,18 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 		adj = -dt / decay_period
 	else
 		drama_data.pulse = false
+		
+		if not self._reset_heat_bonus_t then
+			self._reset_heat_bonus_t = 5
+		else
+			self._reset_heat_bonus_t = self._reset_heat_bonus_t - dt
+		end
+		
+		if self._reset_heat_bonus_t <= 0 then
+			self:reset_heat_bonus()
+			self._next_heatbonus_reset = self._downs_during_assault + 2
+			self._reset_heat_bonus_t = nil
+		end
 
 		if task_data.phase == "sustain" or self._hunt_mode then
 			local mul = 2
@@ -932,6 +947,8 @@ function GroupAIStateBase:reset_heat_bonus()
 			else
 				value = self._force_pool / 3
 			end
+			
+			value = value * math.lerp(1, 1.5, self._drama_data.amount)
 		end
 		
 		if self._enemies_killed_sustain_guaranteed_break then
@@ -990,10 +1007,8 @@ function GroupAIStateBase:enemy_killed(unit, attack_data)
 		end
 		
 		if self._task_data and self._task_data.assault and self._task_data.assault.active then	
-			if self._drama_data.amount < self._drama_data.high_p then
-				if self._hunt_mode or self._task_data.assault.phase == "sustain" then
-					self._enemies_killed_sustain = self._enemies_killed_sustain + 1
-				end
+			if self._hunt_mode or self._task_data.assault.phase == "sustain" then
+				self._enemies_killed_sustain = self._enemies_killed_sustain + 1
 			end
 		end
 		
