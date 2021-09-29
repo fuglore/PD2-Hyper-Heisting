@@ -1804,8 +1804,6 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 							
 							if takedown then
 								weight_mul = weight_mul + 0.5
-							elseif aimed_at then
-								weight_mul = weight_mul + 0.2
 							end
 							
 							if not cur_state._moving and cur_state:ducking() then
@@ -1837,8 +1835,6 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 							
 							if takedown then
 								weight_mul = weight_mul + 0.5
-							elseif aimed_at then
-								weight_mul = weight_mul + 0.2
 							end
 
 							if att_base_ext and att_base_ext.upgrade_value then

@@ -1390,11 +1390,7 @@ function CopActionWalk:update(t)
 		local lerp_modifier = 1
 		
 		if turning_to_face_attention then
-			if self._shield_turning then
-				lerp_modifier = 0.15
-			else
-				lerp_modifier = 0.3
-			end
+			lerp_modifier = 0.3
 			
 			if self._haste == "walk" then
 				lerp_modifier = lerp_modifier * 2
@@ -2774,7 +2770,7 @@ function CopActionWalk:_upd_wait(t)
 			local wanted_u_fwd = move_dir_norm:rotate_with(self._walk_side_rot[wanted_walk_dir])
 			mrot_lookat(new_rot, wanted_u_fwd, math_up)
 
-			local lerp_modifier = self._shield_turning and 0.15 or 0.3
+			local lerp_modifier = 0.3
 			local delta_lerp = dt * 5 * lerp_modifier
 			delta_lerp = delta_lerp > 1 and 1 or delta_lerp
 			new_rot = common_data.rot:slerp(new_rot, delta_lerp)
@@ -2943,7 +2939,7 @@ function CopActionWalk:_upd_stop_anim(t)
 		face_fwd = att_pos - common_data.pos
 		face_fwd = face_fwd:with_z(0):normalized()
 
-		local att_lerp_modifier = self._shield_turning and 0.15 or 0.3
+		local att_lerp_modifier = 0.3
 		delta_lerp = delta_lerp * att_lerp_modifier
 	else
 		face_fwd = self._stop_anim_fwd

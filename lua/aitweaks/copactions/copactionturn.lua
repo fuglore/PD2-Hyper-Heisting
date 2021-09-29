@@ -26,9 +26,13 @@ function CopActionTurn:init(action_desc, common_data)
 		turn_speed_mul = turn_speed_mul + managers.crime_spree:get_turn_spd_add()
 	end
 	
+	if machine:get_global("shield") == 1 then
+		self._shield_turning = true
+	end
+	
 	self._turn_speed_mul = turn_speed_mul --also used on the animation itself
 
-	local turn_step_mul = machine:get_global("shield") == 1 and 1 or 0.75
+	local turn_step_mul = 1
 	self._dt_turn_adj = 5 * turn_step_mul * turn_speed_mul
 
 	local end_angle = action_desc.angle
@@ -79,12 +83,21 @@ function CopActionTurn:update(t)
 	local ext_anim = self._ext_anim
 	local ext_mov = self._ext_movement
 	local end_dir = self._end_dir
-	local delta_lerp = dt * self._dt_turn_adj
+	local delta_lerp = dt * self._dt_turn_adj	
+	
 	delta_lerp = delta_lerp > 1 and 1 or delta_lerp
 
 	local end_rot = self._end_rot
 	local new_rot = self._common_data.rot:slerp(end_rot, delta_lerp)
 	local new_fwd = new_rot:y()
+	
+	if self._shield_turning then
+		local abs_angle = math_abs(end_dir:to_polar_with_reference(new_fwd, math_up).spin)
+		
+		if abs_angle > 135 then
+			self._dt_turn_adj = 5 * 0.5 * self._turn_speed_mul
+		end
+	end
 
 	if new_fwd:dot(end_dir) < 0.98 then
 		ext_mov:set_rotation(new_rot)
