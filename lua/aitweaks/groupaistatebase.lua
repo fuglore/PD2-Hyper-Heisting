@@ -354,7 +354,7 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 			self._reset_heat_bonus_t = nil
 		end
 		
-		if not self._street then
+		if not self._too_drama then
 			if task_data.phase == "sustain" or self._hunt_mode then
 				local mul = 2
 				

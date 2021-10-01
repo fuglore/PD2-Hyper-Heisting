@@ -43,6 +43,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	self._small_map = small_map or nil
 	self._street = level == "hox_1" or level == "run"
+	self._too_drama = level == "hox_1" or level == "run" or level == "chill_combat"
 	
 	--log(tostring(self._small_map))
 	
