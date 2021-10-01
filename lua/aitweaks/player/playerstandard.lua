@@ -344,7 +344,7 @@ function PlayerStandard:_check_action_jump(t, input)
 
 	if action_wanted then
 		local action_forbidden = self._jump_t and t < self._jump_t + 0.55
-		action_forbidden = action_forbidden or self._unit:base():stats_screen_visible() or self._state_data.in_air or self:_interacting() or self:_on_zipline() or self:_does_deploying_limit_movement() or self:_is_using_bipod()
+		action_forbidden = action_forbidden or self._unit:base():stats_screen_visible() or self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.1 or self:_interacting() or self:_on_zipline() or self:_does_deploying_limit_movement() or self:_is_using_bipod()
 
 		if not action_forbidden then
 			if self._state_data.ducking then
@@ -1195,6 +1195,31 @@ function PlayerStandard:_check_action_run(t, input)
 	end
 end
 
+function PlayerStandard:_start_action_jump(t, action_start_data)
+	if self._running and not self.RUN_AND_RELOAD and not self._equipped_unit:base():run_and_shoot_allowed() then
+		self:_interupt_action_reload(t)
+		self._ext_camera:play_redirect(self:get_animation("stop_running"), self._equipped_unit:base():exit_run_speed_multiplier())
+	end
+
+	self:_interupt_action_running(t)
+
+	self._jump_t = t
+	local jump_vec = action_start_data.jump_vel_z * math.UP
+
+	self._unit:mover():jump()
+
+	if self._move_dir then
+		local move_dir_clamp = self._move_dir:normalized() * math.min(1, self._move_dir:length())
+		self._last_velocity_xy = move_dir_clamp * action_start_data.jump_vel_xy
+		self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
+	else
+		self._last_velocity_xy = Vector3()
+	end
+
+	self:_perform_jump(jump_vec)
+	self._gnd_ray = false
+end
+
 function PlayerStandard:_update_foley(t, input)
 	if self._state_data.on_zipline then
 		return
@@ -1203,37 +1228,41 @@ function PlayerStandard:_update_foley(t, input)
 	if not self._gnd_ray and not self._state_data.on_ladder then
 		if not self._state_data.in_air then
 			self._state_data.in_air = true
+			self._state_data.in_air_enter_t = t
 			self._state_data.enter_air_pos_z = self._pos.z
 
-			self:_interupt_action_running(t)
 			self._unit:set_driving("orientation_object") -- i wonder what its like to constantly have this on lol
 		end
 	elseif self._state_data.in_air then
 		self._unit:set_driving("script")
 
 		self._state_data.in_air = false
+		
 		local from = self._pos + math.UP * 10
 		local to = self._pos - math.UP * 60
 		local material_name, pos, norm = World:pick_decal_material(from, to, self._slotmask_bullet_impact_targets)
 		local height = self._state_data.enter_air_pos_z - self._pos.z
 		self._unit:sound():play_land(material_name)
 		
-
-		if self._unit:character_damage():damage_fall({
-			height = height
-		}) then
-			local fall_distance_lerp = math.min(5, height / 400)
-			--self._running_wanted = false
-			
-			self._fall_damage_slow_t = t + 1
-			managers.rumble:play("hard_land")
-			self._ext_camera:play_shaker("player_fall_damage", fall_distance_lerp)
-			self._ext_camera:play_shaker("player_land", fall_distance_lerp)
-			self:on_melee_stun(t, 1)
-			--self:_start_action_ducking(t)
-		else
-			self._ext_camera:play_shaker("player_land", 0.5)
+		if t - self._state_data.in_air_enter_t > 0.2 then
+			if self._unit:character_damage():damage_fall({
+				height = height
+			}) then
+				local fall_distance_lerp = math.min(5, height / 400)
+				--self._running_wanted = false
+				
+				self._fall_damage_slow_t = t + 1
+				managers.rumble:play("hard_land")
+				self._ext_camera:play_shaker("player_fall_damage", fall_distance_lerp)
+				self._ext_camera:play_shaker("player_land", fall_distance_lerp)
+				self:on_melee_stun(t, 1)
+				--self:_start_action_ducking(t)
+			else
+				self._ext_camera:play_shaker("player_land", 0.5)
+			end
 		end
+		
+		self._state_data.in_air_enter_t = nil
 		
 		managers.rumble:play("land")
 	
@@ -1278,7 +1307,7 @@ function PlayerStandard:_start_action_running(t)
 		return
 	end
 
-	if self._shooting and not self._equipped_unit:base():run_and_shoot_allowed() or self._use_item_expire_t or self._state_data.in_air or self:_is_throwing_projectile() or self:_is_charging_weapon() then
+	if self._shooting and not self._equipped_unit:base():run_and_shoot_allowed() or self._use_item_expire_t or self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.1 or self:_is_throwing_projectile() or self:_is_charging_weapon() then
 		self._running_wanted = true
 
 		return
@@ -2129,6 +2158,7 @@ end
 
 function PlayerStandard:_update_check_actions(t, dt, paused)
 	local input = self:_get_input(t, dt, paused)
+	self:_update_foley(t, input)
 
 	self:_determine_move_direction()
 	
@@ -2144,6 +2174,10 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	
 	if self._fall_damage_slow_t and self._fall_damage_slow_t < t then
 		self._fall_damage_slow_t = nil
+	end
+	
+	if self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.1 then
+		self:_interupt_action_running(t)
 	end
 	
 	self:_update_interaction_timers(t)
@@ -2171,8 +2205,6 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	elseif input.btn_stats_screen_release then
 		self._unit:base():set_stats_screen_visible(false)
 	end
-
-	self:_update_foley(t, input)
 
 	local new_action = nil
 	local anim_data = self._ext_anim

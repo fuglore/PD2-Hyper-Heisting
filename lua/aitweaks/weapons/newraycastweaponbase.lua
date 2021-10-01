@@ -2,6 +2,45 @@ Hooks:PostHook(NewRaycastWeaponBase, "init", "hhpost_shieldknock", function(self
 	self._shield_knock = managers.player:has_category_upgrade("player", "shield_knock_bullet")
 end)
 
+function NewRaycastWeaponBase:get_damage_falloff(damage, col_ray, user_unit)
+	local distance = col_ray.distance or mvector3.distance(col_ray.unit:position(), user_unit:position())
+	local near_dist = self._near_falloff
+	local far_dist = self._far_falloff
+	local near_mul = self._near_mul
+	local far_mul = self._far_mul
+	local primary_category = self:weapon_tweak_data().categories and self:weapon_tweak_data().categories[1]
+	local current_state = user_unit and user_unit:movement() and user_unit:movement()._current_state
+
+	if current_state and current_state:in_steelsight() then
+		local mul = managers.player:upgrade_value(primary_category, "steelsight_range_inc", 1)
+		far_dist = far_dist * mul
+	end
+
+	local damage_mul = 1
+
+	if distance < near_dist then
+		damage_mul = near_mul
+	elseif distance > far_dist then
+		damage_mul = far_mul
+	end
+
+	return damage * damage_mul
+end
+
+function NewRaycastWeaponBase:is_weak_hit(distance, user_unit, damage_dealt)
+	if not damage_dealt then
+		return 1
+	end
+
+	local regular_damage = self._damage
+	local new_damage = damage_dealt
+	local scale = nil
+
+	scale = new_damage / regular_damage
+	
+	return scale
+end
+
 function NewRaycastWeaponBase:reload_speed_multiplier()
 	--if self._current_reload_speed_multiplier then
 		--return self._current_reload_speed_multiplier

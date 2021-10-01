@@ -353,21 +353,19 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 			self._next_heatbonus_reset = self._downs_during_assault + 2
 			self._reset_heat_bonus_t = nil
 		end
-
-		if task_data.phase == "sustain" or self._hunt_mode then
-			local mul = 2
-			
-			if self._danger_state then
-				mul = 1
+		
+		if not self._street then
+			if task_data.phase == "sustain" or self._hunt_mode then
+				local mul = 2
+				
+				if self._danger_state then
+					mul = 1
+				end
+				
+				local decay_period = drama_data.decay_period * mul
+				
+				adj = dt / decay_period
 			end
-			
-			if self._street then
-				mul = mul * 2
-			end
-			
-			local decay_period = drama_data.decay_period * mul
-			
-			adj = dt / decay_period
 		end
 	end
 	
@@ -1011,14 +1009,15 @@ function GroupAIStateBase:enemy_killed(unit, attack_data)
 				self._enemies_killed_sustain = self._enemies_killed_sustain + 1
 			end
 		end
-	end
-	
-	if self._player_criminals[au_key] then
-		self._last_killed_cop_t = self._t
+		
 		local mul = 5 - table.size(self._player_criminals) 
 		local val = self._drama_data.actions.enemy_dead * mul
 
 		self:_add_drama(-val)
+	end
+	
+	if self._player_criminals[au_key] then
+		self._last_killed_cop_t = self._t
 	end
 end
 

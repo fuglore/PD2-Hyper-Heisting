@@ -149,9 +149,8 @@ function TeamAIDamage:_send_damage_drama(attack_data, health_subtracted)
 		local group_ai = managers.groupai:state()
 		self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100), nil)
 		
-		if group_ai._drama_data.amount < 0.2 then
-			group_ai:criminal_hurt_drama(self._unit, attacker, dmg_percent, true)
-		end
+		
+		group_ai:criminal_hurt_drama(self._unit, attacker, dmg_percent, true)
 	end
 end
 

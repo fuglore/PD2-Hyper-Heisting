@@ -1,4 +1,5 @@
 local clone_g = clone
+local mvec3_cpy = mvector3.copy
 
 function ShieldLogicAttack.enter(data, new_logic_name, enter_params)
 	local old_internal_data = data.internal_data
@@ -426,10 +427,39 @@ function ShieldLogicAttack.queued_update(data)
 				end
 			end
 		end
+		
+		if not action_taken then
+			ShieldLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
+		end
 	end
 
 	ShieldLogicAttack.queue_update(data, my_data)
 	CopLogicBase._report_detections(data.detected_attention_objects)
+end
+
+function ShieldLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
+	local reservation = {
+		radius = 30,
+		position = data.m_pos,
+		filter = data.pos_rsrv_id
+	}
+
+	if not managers.navigation:is_pos_free(reservation) then
+		local to_pos = CopLogicTravel._find_near_free_pos(data.m_pos, 500, nil, data.pos_rsrv_id)
+
+		if to_pos then
+			local path = {
+				mvec3_cpy(data.m_pos),
+				to_pos
+			}
+			
+			my_data.optimal_path = path
+			my_data.optimal_pos = to_pos
+			my_data.pathing_to_optimal_pos = nil
+			
+			return ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data)
+		end
+	end
 end
 
 function ShieldLogicAttack.queue_update(data, my_data)
@@ -470,7 +500,7 @@ function ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data
 
 		if my_data.walking_to_optimal_pos then
 			data.brain:rem_pos_rsrv("path")
-
+			
 			if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.follow_me and mvector3.distance(new_action_data.nav_path[#new_action_data.nav_path], data.m_pos) > 800 and not data.unit:sound():speaking(data.t) then
 				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "follow_me")
 			end

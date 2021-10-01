@@ -1620,18 +1620,6 @@ function GroupAIStateBesiege:_upd_assault_task()
 			self._skip_phase = nil
 			task_data.phase = "fade"
 			task_data.phase_end_t = t + self._tweak_data.assault.fade_duration
-			local time = self._t
-			for group_id, group in pairs(self._groups) do
-				for u_key, u_data in pairs(group.units) do
-					local nav_seg_id = u_data.tracker:nav_segment()
-					local current_objective = group.objective
-					if current_objective.coarse_path then
-						if not u_data.unit:sound():speaking(time) then
-							u_data.unit:sound():say("m01", true)
-						end	
-					end					   
-				end	
-			end
 		end
 	else
 		local end_assault = false
@@ -1653,7 +1641,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 			local taking_too_long = t > task_data.phase_end_t + enemies_defeated_time_limit
 			local fade_time_over = t > task_data.phase_end_t 
 			--self:_assign_assault_groups_to_retire()
-			if enemies_defeated and fade_time_over or taking_too_long or self._skip_phase then
+			if enemies_defeated or taking_too_long or self._skip_phase then
 				if not task_data.said_retreat then
 					self._task_data.assault.said_retreat = true
 
@@ -1673,10 +1661,8 @@ function GroupAIStateBesiege:_upd_assault_task()
 					end
 					
 					self._skip_phase = nil
-					
-				elseif self._skip_phase or task_data.phase_end_t < t and not self._activeassaultbreak then
+				elseif self._skip_phase or fade_time_over and not self._activeassaultbreak then
 					local drama_pass = self._drama_data.amount < tweak_data.drama.assault_fade_end --if there is no active fighting going on
-					local engagement_pass = self:_count_criminals_engaged_force(4) < 5 --if theres less than 5 enemies engaging all players
 					local taking_too_long = t > task_data.phase_end_t + drama_engagement_time_limit
 					
 					--if engagement_pass then
@@ -1691,7 +1677,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 						--log("i cant believe they kited cops fuglore would never do this im literally shaking and crying right now")
 					--end
 					
-					if self._skip_phase or drama_pass and engagement_pass and t > task_data.phase_end_t or taking_too_long then
+					if self._skip_phase or drama_pass and fade_time_over or taking_too_long then
 						self._skip_phase = nil
 						end_assault = true
 					end

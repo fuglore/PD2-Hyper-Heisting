@@ -170,17 +170,7 @@ function ActionSpooc:init(action_desc, common_data)
 
 	self._vanish = char_tweak.spooc_vanish
 
-	local beating_time = 0
-	local tweak_beat = char_tweak.spooc_attack_beating_time
-
-	if tweak_beat then
-		if tweak_beat[1] == tweak_beat[2] then
-			beating_time = tweak_beat[1]
-		else
-			beating_time = math_lerp(tweak_beat[1], tweak_beat[2], math_random())
-		end
-	end
-
+	local beating_time = 4
 	self._beating_time = beating_time
 
 	local stroke_t = action_desc.stroke_t and tonumber_g(action_desc.stroke_t)
@@ -1662,19 +1652,18 @@ function ActionSpooc:_upd_striking(t)
 		line2:sphere(self._ext_movement:m_head_pos(), 30)]]
 	end
 
-	local needs_to_expire = not target_unit or self:_chk_invalid_beating_unit_status(target_unit)
+	local needs_to_expire = not target_unit
 
 	--[[if needs_to_expire then
 		local line2 = Draw:brush(Color.white:with_alpha(0.5), 1)
 		line2:sphere(self._ext_movement:m_head_pos(), 30)
 	end]]
 
-	if not needs_to_expire and beating_end_t < t then
-		--local line2 = Draw:brush(Color.green:with_alpha(0.5), 1)
-		--line2:sphere(self._ext_movement:m_head_pos(), 30)
-
-		self._action_completed = true
-		needs_to_expire = true
+	if not needs_to_expire then
+		if beating_end_t < t or self:_chk_invalid_beating_unit_status(target_unit) then
+			self._action_completed = true
+			needs_to_expire = true
+		end
 	end
 
 	if needs_to_expire then

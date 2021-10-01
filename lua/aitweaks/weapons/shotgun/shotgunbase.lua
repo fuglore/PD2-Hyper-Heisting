@@ -68,7 +68,7 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 	end
 
 	local damage = self:_get_current_damage(dmg_mul)
-	local autoaim, dodge_enemies = self:check_autoaim(from_pos, direction, self._range)
+	local autoaim, dodge_enemies = self:check_autoaim(from_pos, direction, 20000)
 	local weight = 0.1
 	local enemy_died = false
 	local bullet_class = self._bullet_class
@@ -147,7 +147,7 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 				autoaim = false
 			else
 				autoaim = false
-				local autohit = self:check_autoaim(from_pos, direction, self._range)
+				local autohit = self:check_autoaim(from_pos, direction, 20000)
 
 				if autohit then
 					local autohit_chance = 1 - math_clamp((self._autohit_current - self._autohit_data.MIN_RATIO) / (self._autohit_data.MAX_RATIO - self._autohit_data.MIN_RATIO), 0, 1)

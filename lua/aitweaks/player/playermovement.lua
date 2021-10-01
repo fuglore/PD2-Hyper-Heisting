@@ -198,6 +198,13 @@ function PlayerMovement:update_stamina(t, dt, ignore_running)
 	end
 end
 
+local valid_spooc_states = {
+	standard = true,
+	carry = true,
+	bipod = true,
+	tased = true
+}
+
 function PlayerMovement:on_SPOOCed(enemy_unit)
 	if managers.player:has_category_upgrade("player", "counter_strike_spooc") and self._current_state.in_melee and self._current_state:in_melee() then
 		self._current_state:discharge_melee()
@@ -229,6 +236,14 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 		push_vel = push_vec * push_mul
 	}
 	self._unit:character_damage():damage_melee(attack_data)
+	
+	local state = managers.modifiers:modify_value("PlayerMovement:OnSpooked")
+	
+	if state then
+		if valid_spooc_states[self._current_state_name] then
+			managers.player:set_player_state(state)
+		end
+	end
 		
 	return true
 end

@@ -1,3 +1,57 @@
+function BlackMarketGui:damage_falloff_to_string(damage_falloff)
+
+	if damage_falloff then
+		local bonuses = nil
+		local display_range = damage_falloff.display_range
+		if damage_falloff.far_multiplier > 1 then
+			bonuses = true
+		end
+
+		local range_empty = managers.localization:get_default_macro("BTN_RANGE_EMPTY")
+		local range_filled = managers.localization:get_default_macro("BTN_RANGE_FILLED")
+		local range_bonus = managers.localization:get_default_macro("BTN_RANGE_BONUS")
+		
+		if display_range < 1 then
+			if damage_falloff.far_multiplier > 1 then
+				return range_bonus .. range_empty .. range_empty
+			end
+			
+			return range_empty .. range_empty .. range_empty
+		elseif display_range < 2 then
+			if damage_falloff.far_multiplier > 1 then
+				return range_filled .. range_bonus .. range_bonus
+			end
+			
+			return range_filled .. range_empty .. range_empty
+		elseif display_range < 3 then
+			if damage_falloff.far_multiplier > 1 then
+				return range_filled .. range_filled .. range_bonus
+			end
+			
+			return range_filled .. range_filled .. range_empty
+		elseif display_range == 3 then
+			if damage_falloff.far_multiplier > 1 then
+				return range_filled .. range_filled .. range_filled .. range_bonus
+			end
+			
+			return range_filled .. range_filled .. range_filled
+		elseif display_range > 3 then
+			local chance = math.random(1, 42)
+			
+			if chance == 25 then
+				return range_bonus .. range_bonus .. range_bonus .. range_bonus .. range_bonus
+			end
+			
+			local FG_chance = tostring(chance)
+			
+			local the_string = "bm_menu_damage_falloff_lol_" .. FG_chance
+			return managers.localization:to_upper_text(the_string)
+		end
+	end
+
+	return managers.localization:to_upper_text("bm_menu_damage_falloff_no_data")
+end
+
 function BlackMarketGui:_get_armor_stats(name)
 	local base_stats = {}
 	local mods_stats = {}

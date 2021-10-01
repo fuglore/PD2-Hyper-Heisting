@@ -431,12 +431,11 @@ function PlayerDamage:damage_melee(attack_data)
 			if alive_g(player_unit) then
 				local melee_stun_t = 0.4
 				
-				if tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_xc45" or tostring(attack_data.attacker_unit:base()._tweak_table) == "fbi_pager" then
-					melee_stun_t = 0.8
-				end
-				
 				if attack_data.is_cloaker_kick then
 					melee_stun_t = 1
+				elseif attack_data.attacker_unit:base():has_tag("fbi") then
+					melee_stun_t = 0.8
+					attack_data.ninjaed = true
 				end
 				
 				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), melee_stun_t)
@@ -537,20 +536,6 @@ function PlayerDamage:damage_melee(attack_data)
 		if health_subtracted > 0 then
 			self:_send_damage_drama(attack_data, health_subtracted)
 		end
-	else
-		local attacker = attack_data.attacker_unit
-
-		if attacker:character_damage() and attacker:character_damage().dead and not attacker:character_damage():dead() then
-			if attacker:base().has_tag then
-				if attacker:base():has_tag("tank") then
-					attack_data.attacker_unit:sound():say("post_kill_taunt")
-				elseif attacker:base():has_tag("taser") then
-					attack_data.attacker_unit:sound():say("post_tasing_taunt")
-				elseif attacker:base():has_tag("law") and not attacker:base():has_tag("special") then
-					attack_data.attacker_unit:sound():say("i03")
-				end
-			end
-		end
 	end
 
 	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
@@ -559,7 +544,7 @@ function PlayerDamage:damage_melee(attack_data)
 	return
 end
 
-function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_state, is_special_attack)
+function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_state, is_special_attack, attack_data)
 	if self:get_real_health() == 0 and not self._check_berserker_done then
 		if self._unit:movement():zipline_unit() then
 			self._bleed_out_blocked_by_zipline = true
@@ -586,6 +571,37 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 
 				return
 			end
+		end
+		
+		if is_special_attack == "arrest" then
+			managers.player:set_player_state("arrested")
+			self:restore_health(0.1)
+			
+			if attack_data.attacker_unit then
+				local attacker_unit = attack_data.attacker_unit
+				
+				if alive(attacker_unit) and attacker_unit:base() then
+					if attacker_unit:base().thrower_unit then
+						attacker_unit = attacker_unit:base():thrower_unit()
+					elseif attacker_unit:base().sentry_gun then
+						attacker_unit = attacker_unit:base():get_owner()
+					end
+				end
+
+				if attacker_unit and attacker_unit:character_damage() and attacker_unit:character_damage().dead and not attacker_unit:character_damage():dead() then
+					if attacker_unit:base().has_tag then
+						if attacker_unit:base():has_tag("tank") then
+							attacker_unit:sound():say("post_kill_taunt")
+						elseif attacker_unit:base():has_tag("taser") then
+							attacker_unit:sound():say("post_tasing_taunt")
+						elseif attacker_unit:base():has_tag("law") and not attacker_unit:base():has_tag("special") then
+							attacker_unit:sound():say("i03")
+						end
+					end
+				end
+			end
+			
+			return
 		end
 
 		if can_activate_berserker and not self._check_berserker_done then
@@ -639,6 +655,30 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 
 			self:_drop_blood_sample()
 			self:on_downed()
+			
+			if attack_data.attacker_unit then
+				local attacker_unit = attack_data.attacker_unit
+				
+				if alive(attacker_unit) and attacker_unit:base() then
+					if attacker_unit:base().thrower_unit then
+						attacker_unit = attacker_unit:base():thrower_unit()
+					elseif attacker_unit:base().sentry_gun then
+						attacker_unit = attacker_unit:base():get_owner()
+					end
+				end
+
+				if attacker_unit and attacker_unit:character_damage() and attacker_unit:character_damage().dead and not attacker_unit:character_damage():dead() then
+					if attacker_unit:base().has_tag then
+						if attacker_unit:base():has_tag("tank") then
+							attacker_unit:sound():say("post_kill_taunt")
+						elseif attacker_unit:base():has_tag("taser") then
+							attacker_unit:sound():say("post_tasing_taunt")
+						elseif attacker_unit:base():has_tag("law") and not attacker_unit:base():has_tag("special") then
+							attacker_unit:sound():say("i03")
+						end
+					end
+				end
+			end
 		end
 	elseif not self._said_hurt and self:get_real_health() / self:_max_health() < 0.2 then
 		self._said_hurt = true
@@ -1306,20 +1346,6 @@ function PlayerDamage:damage_bullet(attack_data)
 		if health_subtracted > 0 then
 			self:_send_damage_drama(attack_data, health_subtracted)
 		end
-	else
-		local attacker = attack_data.attacker_unit
-
-		if attacker:character_damage() and attacker:character_damage().dead and not attacker:character_damage():dead() then
-			if attacker:base().has_tag then
-				if attacker:base():has_tag("tank") then
-					attack_data.attacker_unit:sound():say("post_kill_taunt")
-				elseif attacker:base():has_tag("taser") then
-					attack_data.attacker_unit:sound():say("post_tasing_taunt")
-				elseif attacker:base():has_tag("law") and not attacker:base():has_tag("special") then
-					attack_data.attacker_unit:sound():say("i03")
-				end
-			end
-		end
 	end
 	
 	if shake_multiplier then
@@ -1450,10 +1476,10 @@ function PlayerDamage:_calc_health_damage(attack_data)
 		self:_chk_cheat_death()
 	end
 	
-	local incap_attack = attack_data.is_cloaker_kick or attack_data.is_taser_shock or nil
+	local state_attack = attack_data.ninjaed and "arrest" or attack_data.is_cloaker_kick or attack_data.is_taser_shock or nil
 	
 	self:_damage_screen()
-	self:_check_bleed_out(trigger_skills, nil, incap_attack)
+	self:_check_bleed_out(trigger_skills, nil, state_attack, attack_data)
 	managers.hud:set_player_health({
 		current = self:get_real_health(),
 		total = self:_max_health(),

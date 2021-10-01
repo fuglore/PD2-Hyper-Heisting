@@ -344,7 +344,7 @@ function SkirmishTweakData:_init_wave_phase_durations(tweak_data)
 		1,
 		1
 	}
-	skirmish_data.assault.fade_duration = 20
+	skirmish_data.assault.fade_duration = 5
 	skirmish_data.assault.delay = {
 		30,
 		30,

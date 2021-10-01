@@ -1032,8 +1032,72 @@ end
 
 --OVERHAUL STUFF
 
-Hooks:PostHook( WeaponTweakData, "init", "gambyt_weapons", function(self)
+local old_new_weps_init = WeaponTweakData._init_new_weapons
 
+function WeaponTweakData:_init_new_weapons(weapon_data)
+	weapon_data.autohit_rifle_default = {
+		INIT_RATIO = 0,
+		MAX_RATIO = 0.4,
+		far_angle = 3,
+		far_dis = 3000,
+		MIN_RATIO = 0,
+		near_angle = 0
+	}
+	weapon_data.autohit_pistol_default = {
+		INIT_RATIO = 0,
+		MAX_RATIO = 0.6,
+		far_angle = 3,
+		far_dis = 2000,
+		MIN_RATIO = 0,
+		near_angle = 0
+	}
+	weapon_data.autohit_shotgun_default = {
+		INIT_RATIO = 0,
+		MAX_RATIO = 0,
+		far_angle = 6,
+		far_dis = 5000,
+		MIN_RATIO = 0,
+		near_angle = 0
+	}
+	weapon_data.autohit_lmg_default = {
+		INIT_RATIO = 0,
+		MAX_RATIO = 0.01,
+		far_angle = 3,
+		far_dis = 5000,
+		MIN_RATIO = 0,
+		near_angle = 0
+	}
+	weapon_data.autohit_snp_default = {
+		INIT_RATIO = 0,
+		MAX_RATIO = 0.4,
+		far_angle = 4,
+		far_dis = 4000,
+		MIN_RATIO = 0,
+		near_angle = 0
+	}
+	weapon_data.autohit_smg_default = {
+		INIT_RATIO = 0,
+		MAX_RATIO = 0.2,
+		far_angle = 3,
+		far_dis = 2500,
+		MIN_RATIO = 0,
+		near_angle = 0
+	}
+	weapon_data.autohit_minigun_default = {
+		INIT_RATIO = 0,
+		MAX_RATIO = 0.005,
+		far_angle = 3,
+		far_dis = 6000,
+		MIN_RATIO = 0,
+		near_angle = 0
+	}
+
+	old_new_weps_init(self, weapon_data)
+end
+
+local FALLOFF_TEMPLATE = WeaponFalloffTemplate.setup_weapon_falloff_templates()
+
+Hooks:PostHook(WeaponTweakData, "init", "gambyt_weapons", function(self)
 --RIFLES--
 
 --AMCAR
@@ -1216,6 +1280,7 @@ self.famas.stats.damage = 49
 self.famas.kick = self.amcar.kick
 
 --Little Friend
+self.contraband.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_LOW
 self.contraband.AMMO_PICKUP = {3, 5}
 self.contraband.stats.damage = 59
 self.contraband.stats.spread = 18
@@ -1454,6 +1519,8 @@ self.x_schakal.kick.crouching = self.vhs.kick.standing
 self.x_schakal.kick.steelsight = self.vhs.kick.standing
 
 -- MP40
+self.erma.damage_falloff = FALLOFF_TEMPLATE.SMG_FALL_MEDIUM
+self.x_erma.damage_falloff = FALLOFF_TEMPLATE.AKI_SMG_FALL_MEDIUM
 self.erma.stats.damage = 59
 self.x_erma.stats.damage = 59
 self.erma.stats.spread = 16

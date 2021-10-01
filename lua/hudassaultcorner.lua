@@ -791,7 +791,7 @@ function HUDAssaultCorner:sync_start_assault(assault_number)
 	self:_set_hostage_offseted(true)
 end
 
-function HUDAssaultCorner:set_color_state(state)
+function HUDAssaultCorner:set_color_state(state, dont_refresh_hud)
 	if not state then
 		return
 	end
@@ -800,30 +800,30 @@ function HUDAssaultCorner:set_color_state(state)
 		self._assault_state = "danger"
 		if self._current_assault_color ~= self._danger_color then
 			self:_update_assault_hud_color(self._danger_color)
-			self:_start_assault(self:_get_assault_strings())
 		end
 	elseif state == "normal" then
 		self._assault_state = "normal"
 		if self._current_assault_color ~= self._regular_assault_color then
 			self:_update_assault_hud_color(self._regular_assault_color)
-			self:_start_assault(self:_get_assault_strings())
 		end
 	elseif state == "lastcrimstanding" then
 		self._assault_state = "lastcrimstanding"
 		if self._current_assault_color ~= self._clutch_color then
 			self:_update_assault_hud_color(self._clutch_color)
-			self:_start_assault(self:_get_assault_strings())
 		end
 	elseif state == "heat" then
 		self._assault_state = "heat"
 		if self._current_assault_color ~= self._assault_survived_color then
 			self:_update_assault_hud_color(self._assault_survived_color)
-			self:_start_assault(self:_get_assault_strings())
 		end
 	else
 		log("HUDASSAULTCORNER: STATE DOES NOT MATCH ANY COLOR!!!")
 		self._assault_state = "normal"
 		self:_update_assault_hud_color(self._regular_assault_color)
+	end
+	
+	if not dont_refresh_hud then
+		self:_start_assault(self:_get_assault_strings())
 	end
 end
 
@@ -840,6 +840,23 @@ function HUDAssaultCorner:_update_assault_hud_color(color)
 	local icon_assaultbox = assault_panel:child("icon_assaultbox")
 
 	icon_assaultbox:set_color(color)
+end
+
+function HUDAssaultCorner:_close_assault_box()
+	local icon_assaultbox = self._hud_panel:child("assault_panel"):child("icon_assaultbox")
+
+	icon_assaultbox:stop()
+
+	local function close_done()
+		self._bg_box:set_visible(false)
+		icon_assaultbox:stop()
+		icon_assaultbox:animate(callback(self, self, "_hide_icon_assaultbox"))
+		self:sync_set_assault_mode("normal")
+		self:set_color_state(self._assault_state, true)
+	end
+
+	self._bg_box:stop()
+	self._bg_box:animate(callback(nil, _G, "HUDBGBox_animate_close_left"), close_done)
 end
 
 end

@@ -289,7 +289,7 @@ function CopLogicIdle.queued_update(data)
 
 	CopLogicIdle._perform_objective_action(data, my_data, objective)
 	
-	if not data.unit:anim_data().act and not data.unit:movement():chk_action_forbidden("walk") then
+	if not data.unit:anim_data().act and not data.unit:movement():chk_action_forbidden("walk") and not my_data.advancing then
 		CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 	end
 	
@@ -1122,6 +1122,13 @@ function CopLogicIdle.action_complete_clbk(data, action)
 				end
 			end]]
 		end
+	elseif action_type == "walk" then
+		if my_data.walking_to_cover_shoot_pos then
+			my_data.at_cover_shoot_pos = true
+		end
+		
+		my_data.walking_to_cover_shoot_pos = nil
+		my_data.advancing = nil
 	elseif action_type == "dodge" then
 		local timeout = action:timeout()
 

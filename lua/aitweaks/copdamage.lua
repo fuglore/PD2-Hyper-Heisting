@@ -30,6 +30,36 @@ function CopDamage:is_immune_to_shield_knockback()
 	return false
 end
 
+function CopDamage:_get_damage_receive_mul(attack_data)
+	local mul = 1
+	
+	if self._health_ratio > 0.75 then
+		if not attack_data.is_fire_dot_damage and attack_data.weapon_unit and not attack_data.weapon_unit:base().thrower_unit and alive(attack_data.weapon_unit) and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and attack_data.weapon_unit:base():is_category("shotgun") then
+			mul = mul * managers.player:upgrade_value("player", "shot_shoulders_crowbar", 1)
+		end
+	end
+
+	local damage_reduction = self._unit:movement():team().damage_reduction or 0
+	
+	if damage_reduction > 0 then
+		mul = mul * (1 - damage_reduction)
+	end
+
+	if self._damage_reduction_multiplier then
+		mul = mul * self._damage_reduction_multiplier
+	end
+	
+	if self._punk_effect then
+		mul = mul * 0.25
+	end
+	
+	if self._invulnerability_t and self._invulnerability_t > TimerManager:game():time()  then
+		mul = mul * 0.1
+	end
+
+	return mul
+end
+
 function CopDamage:_apply_damage_reduction(damage, attack_data)
 	if self._health_ratio > 0.75 then
 		if not attack_data.is_fire_dot_damage and attack_data.weapon_unit and not attack_data.weapon_unit:base().thrower_unit and alive(attack_data.weapon_unit) and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_category and attack_data.weapon_unit:base():is_category("shotgun") then
@@ -1068,18 +1098,28 @@ function CopDamage:damage_melee(attack_data)
 	local damage = attack_data.damage
 
 	if attack_data.attacker_unit and attack_data.attacker_unit == managers.player:player_unit() then
+		local damage_scale = 1
+		local scale_mul = self:_get_damage_receive_mul(attack_data)
 		local critical_hit, crit_damage = self:roll_critical_hit(attack_data)
+
+		if alive(attack_data.weapon_unit) and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_weak_hit then
+			local scale = attack_data.weapon_unit:base():is_weak_hit(attack_data.col_ray and attack_data.col_ray.distance, attack_data.attacker_unit, damage)
+			
+			damage_scale = scale
+		end
+		
+		damage_scale = math.clamp(damage_scale * scale_mul, 0, 1.25)
 
 		if critical_hit then
 			damage = crit_damage
 			attack_data.critical_hit = true
 
 			if damage > 0 then
-				managers.hud:on_crit_confirmed()
+				managers.hud:on_crit_confirmed(damage_scale)
 			end
 		else
 			if damage > 0 then
-				managers.hud:on_hit_confirmed()
+				managers.hud:on_hit_confirmed(damage_scale)
 			end
 		end
 
@@ -1625,18 +1665,28 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	local headshot_multiplier = 1
 
 	if attack_data.attacker_unit == managers.player:player_unit() then
+		local damage_scale = 1
+		local scale_mul = math.clamp(self:_get_damage_receive_mul(attack_data), 0, 1.25)
 		local critical_hit, crit_damage = self:roll_critical_hit(attack_data)
+
+		if alive(attack_data.weapon_unit) and attack_data.weapon_unit:base() and attack_data.weapon_unit:base().is_weak_hit then
+			local scale = attack_data.weapon_unit:base():is_weak_hit(attack_data.col_ray and attack_data.col_ray.distance, attack_data.attacker_unit, damage)
+			
+			damage_scale = scale
+		end
+		
+		damage_scale = damage_scale * scale_mul
 
 		if critical_hit then
 			damage = crit_damage
 			attack_data.critical_hit = true
 
 			if damage > 0 then
-				managers.hud:on_crit_confirmed()
+				managers.hud:on_crit_confirmed(damage_scale)
 			end
 		else
 			if damage > 0 then
-				managers.hud:on_hit_confirmed()
+				managers.hud:on_hit_confirmed(damage_scale)
 			end
 		end
 
@@ -2949,7 +2999,8 @@ function CopDamage:damage_explosion(attack_data)
 	if attack_data.attacker_unit == managers.player:player_unit() then
 		if attack_data.weapon_unit and attack_data.variant ~= "stun" then
 			if damage > 0 then
-				managers.hud:on_hit_confirmed()
+				local damage_scale = math.clamp(self:_get_damage_receive_mul(attack_data), 0, 1.25)
+				managers.hud:on_hit_confirmed(damage_scale)
 			end
 		end
 
