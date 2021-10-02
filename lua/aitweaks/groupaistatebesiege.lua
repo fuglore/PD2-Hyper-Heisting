@@ -1326,15 +1326,26 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.target_areas = assault_areas or self:_upd_assault_areas(nil)
 	self._current_target_area = self._task_data.assault.target_areas[1]
 	self._used_assault_area_i = 0
-	assault_task.phase = "anticipation"
-	assault_task.start_t = self._t
 	local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.is_first)
+	
+	if self._hunt_mode then
+		assault_task.phase = "sustain"
+		assault_task.phase_end_t = self._t
+	else
+		assault_task.phase = "anticipation"
+		assault_task.phase_end_t = self._t + anticipation_duration
+		
+		managers.hud:setup_anticipation(anticipation_duration)
+		managers.hud:start_anticipation()
+	end
+	
+	assault_task.start_t = self._t
+	
 	assault_task.force_anticipation = 16
 	assault_task.is_first = nil
 	self._force_pool = nil
 	self._enemies_killed_sustain = 0
 	--self._enemies_killed_sustain_guaranteed_break = nil
-	assault_task.phase_end_t = self._t + anticipation_duration
 	
 	if not self._downleniency or self._downleniency < 1 then
 		self._downleniency = 1
@@ -1386,13 +1397,6 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.force_spawned = 0
 
 	self._downs_during_assault = 0
-
-	if self._hunt_mode then
-		assault_task.phase_end_t = 0
-	else
-		managers.hud:setup_anticipation(anticipation_duration)
-		managers.hud:start_anticipation()
-	end
 
 	if self._draw_drama then
 		table_insert(self._draw_drama.assault_hist, {

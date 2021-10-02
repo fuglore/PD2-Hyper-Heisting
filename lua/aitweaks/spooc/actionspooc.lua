@@ -2394,6 +2394,13 @@ function ActionSpooc:_upd_flying_strike_first_frame(t)
 
 	if is_local then
 		target_pos = self._target_unit:movement():m_pos()
+		local to_check_pos = target_pos + math_down * 500
+		local geometry_collision = self._target_unit:raycast("ray", target_pos, to_check_pos, "slot_mask", managers.slot:get_mask("world_geometry"))
+		
+		if geometry_collision then
+			target_pos = geometry_collision.position
+		end
+		
 		path[#path + 1] = mvec3_cpy(target_pos)
 
 		self:_send_nav_point(mvec3_cpy(target_pos))
@@ -2491,20 +2498,18 @@ function ActionSpooc:_upd_flying_strike(t)
 		local seg_rel_t = self._machine:segment_relative_time(ids_base)
 		local strike_data = self._flying_strike_data
 
-		if not strike_data.is_rot_aligned then
-			local rot_correction_period = 0.07
+		local target_pos = self._target_unit:movement():m_pos()
+		local target_vec = target_pos - cur_pos
+		local dt = self._timer:delta_time()
+			
+		local delta_lerp = dt * 5
+		delta_lerp = delta_lerp > 1 and 1 or delta_lerp
 
-			if seg_rel_t < rot_correction_period then
-				local prog = seg_rel_t / rot_correction_period
-				local prog_smooth = math_bezier(bezier_curve, prog)
+		local new_rot = Rotation(target_vec:normalized(), math_up)
 
-				ext_mov:set_rotation(strike_data.start_rot:slerp(strike_data.target_rot, prog_smooth))
-			else
-				ext_mov:set_rotation(strike_data.target_rot)
+		new_rot = common_data.rot:slerp(new_rot, delta_lerp)
 
-				strike_data.is_rot_aligned = true
-			end
-		end
+		self._ext_movement:set_rotation(new_rot)
 
 		local my_unit = self._unit
 		local delta_pos = my_unit:get_animation_delta_position()
@@ -2513,17 +2518,19 @@ function ActionSpooc:_upd_flying_strike(t)
 		local delta_z = delta_pos.z
 		local z_adjust = delta_z + cur_pos.z
 		z_adjust = z_adjust - strike_data.target_pos_z
-
-		if z_adjust ~= 0 then
-			if z_adjust > 0 then --target pos is below
-				if seg_rel_t > 0.5 then
-					z_adjust = z_adjust > 10 and 10 or z_adjust
-					delta_z = delta_z - z_adjust
+		
+		if seg_rel_t < 0.88 then
+			if z_adjust ~= 0 then
+				if z_adjust > 0 then --target pos is below
+					if seg_rel_t > 0.5 then
+						z_adjust = z_adjust > 10 and 10 or z_adjust
+						delta_z = delta_z - z_adjust
+					end
+				elseif seg_rel_t > 0.1 then
+					z_adjust = -z_adjust
+					z_adjust = z_adjust > 15 and 15 or z_adjust
+					delta_z = delta_z + z_adjust
 				end
-			elseif seg_rel_t > 0.1 then
-				z_adjust = -z_adjust
-				z_adjust = z_adjust > 15 and 15 or z_adjust
-				delta_z = delta_z + z_adjust
 			end
 		end
 

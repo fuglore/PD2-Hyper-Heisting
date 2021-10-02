@@ -58,6 +58,11 @@ function CopActionReload:init(action_desc, common_data)
 	self._w_usage_tweak = weapon_usage_tweak
 	self._is_looped = weap_tweak.reload == "looped" and true or nil
 	self._reload_speed = weapon_usage_tweak.RELOAD_SPEED or 1
+	
+	if self._weap_tweak.reload_speed_mul then
+		local reload_mul = self._weap_tweak.reload_speed_mul
+		self._reload_speed = self._reload_speed * reload_mul		
+	end
 
 	self._is_server = Network:is_server()
 

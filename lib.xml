@@ -89,6 +89,7 @@
 	<post :script_path="aitweaks/player/playermovement.lua" :hook_id="units/beings/player/playermovement"/>
 	<post :script_path="aitweaks/player/huskplayermovement.lua" :hook_id="units/beings/player/huskplayermovement"/>
 	<post :script_path="aitweaks/player/playerstandard.lua" :hook_id="units/beings/player/states/playerstandard"/>
+	<post :script_path="aitweaks/player/playerparachuting.lua" :hook_id="units/beings/player/states/playerparachuting"/>
 	<post :script_path="aitweaks/player/playerfatal.lua" :hook_id="units/beings/player/states/playerfatal"/>
 	<post :script_path="aitweaks/player/playercarry.lua" :hook_id="units/beings/player/states/playercarry"/>
 	<post :script_path="aitweaks/playertased.lua" :hook_id="units/beings/player/states/playertased"/>

@@ -577,7 +577,7 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 			managers.player:set_player_state("arrested")
 			self:restore_health(0.1)
 			
-			if attack_data.attacker_unit then
+			if attack_data and attack_data.attacker_unit then
 				local attacker_unit = attack_data.attacker_unit
 				
 				if alive(attacker_unit) and attacker_unit:base() then
@@ -656,7 +656,7 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 			self:_drop_blood_sample()
 			self:on_downed()
 			
-			if attack_data.attacker_unit then
+			if attack_data and attack_data.attacker_unit then
 				local attacker_unit = attack_data.attacker_unit
 				
 				if alive(attacker_unit) and attacker_unit:base() then

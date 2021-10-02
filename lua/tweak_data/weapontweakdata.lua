@@ -400,11 +400,16 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.saiga_crew.rays = 8
 	self.aa12_crew.rays = 8
 	self.rota_crew.rays = 8
-	self.basset_crew.rays = 6	
+	self.basset_crew.rays = 6
+
+	self.tecci_crew.reload_speed_mul = 0.7
+	self.huntsman_crew.reload_speed_mul = 1.5
+	self.b682_crew.reload_speed_mul = 0.2
 	
 	self.m14_crew.usage = "rifle"
 	self.m14_crew.anim_usage = "is_rifle"
 	
+	self.ching_crew.DAMAGE = 1.8
 	self.ching_crew.usage = "rifle"
 	self.ching_crew.anim_usage = "is_rifle"
 	self.ching_crew.fire_rate = 0.085
