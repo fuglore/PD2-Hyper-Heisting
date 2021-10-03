@@ -16,9 +16,11 @@ function PlayerCamera:set_shaker_parameter(effect, parameter, value)
 	end
 
 	if self._shakers[effect] then
-		if parameter == "amplitude" then
-			local screenshake_mul = PD2THHSHIN.settings.screenshakemult
-			value = value * screenshake_mul
+		if effect ~= "breathing" then
+			if parameter == "amplitude" then
+				local screenshake_mul = PD2THHSHIN.settings.screenshakemult
+				value = value * screenshake_mul
+			end
 		end
 		
 		self._shaker:set_parameter(self._shakers[effect], parameter, value)

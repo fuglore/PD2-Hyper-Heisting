@@ -1598,6 +1598,10 @@ function PlayerDamage:_upd_suppression(t, dt)
 		elseif data.value == tweak_data.player.suppression.max_value and self._regenerate_timer then
 			self._listener_holder:call("suppression_max")
 		end
+		
+		local lerp = math.lerp(0.1, 0.3, self:suppression_ratio())
+		
+		self._unit:camera():set_shaker_parameter("breathing", "amplitude", lerp)
 
 		if HH:SupEnabled() then
 			if data.value then

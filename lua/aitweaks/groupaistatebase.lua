@@ -323,8 +323,6 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 	if not task_data or not task_data.active or task_data.phase == "fade" or self._activeassaultbreak or self._last_killed_cop_t and t - self._last_killed_cop_t < 5 and not self._danger_state then
 		drama_data.pulse = true
 		
-		self._reset_heat_bonus_t = nil
-		
 		local player_count = table.size(self._player_criminals)
 		local mul = 1
 		
@@ -341,18 +339,6 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 		adj = -dt / decay_period
 	else
 		drama_data.pulse = false
-		
-		if not self._reset_heat_bonus_t then
-			self._reset_heat_bonus_t = 10
-		else
-			self._reset_heat_bonus_t = self._reset_heat_bonus_t - dt
-		end
-		
-		if self._reset_heat_bonus_t <= 0 then
-			self:reset_heat_bonus()
-			self._next_heatbonus_reset = self._downs_during_assault + 2
-			self._reset_heat_bonus_t = nil
-		end
 		
 		if not self._too_drama then
 			if task_data.phase == "sustain" or self._hunt_mode then
@@ -374,6 +360,21 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 	if adj then
 		self:_add_drama(adj)
 	end
+	
+	if task_data.active and self._drama_data.amount > 0.5 then
+		if not self._reset_heat_bonus_t then
+			self._reset_heat_bonus_t = 10
+		elseif self._reset_heat_bonus_t <= 0 then
+			log("oof")
+			self:reset_heat_bonus()
+			self._next_heatbonus_reset = self._downs_during_assault + 2
+			self._reset_heat_bonus_t = nil
+		else
+			self._reset_heat_bonus_t = self._reset_heat_bonus_t - dt
+		end
+	else
+		self._reset_heat_bonus_t = nil
+	end	
 end
 
 function GroupAIStateBase:_add_drama(amount)
@@ -946,7 +947,7 @@ function GroupAIStateBase:reset_heat_bonus()
 				value = self._force_pool / 3
 			end
 			
-			value = value * math.lerp(1, 1.5, self._drama_data.amount)
+			value = value
 		end
 		
 		if self._enemies_killed_sustain_guaranteed_break then
@@ -1016,7 +1017,7 @@ function GroupAIStateBase:enemy_killed(unit, attack_data)
 		self:_add_drama(-val)
 	end
 	
-	if self._player_criminals[au_key] then
+	if self._player_criminals[au_key] or unit:character_damage()._damage_ratio_dealt_by_player and unit:character_damage()._damage_ratio_dealt_by_player > 0.25 then
 		self._last_killed_cop_t = self._t
 	end
 end

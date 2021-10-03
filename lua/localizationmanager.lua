@@ -673,6 +673,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_deckall_6_desc"] = "Unlocks the ##Armor Bag## equipment for you to use.\n\nThe ##Armor Bag## can be used to change your armor during a heist.",
 			
 			-- weapon stuff below
+			["bm_GEN_speed_strap"] = "Gonzalez Magazine",
+			["bm_GEN_decorative_strap"] = "Adds a useless decorative thingymajig to your weapon for style purposes! Makes you FEEL like you're reloading faster!",--bye bye power creep
 			["bm_wp_g3_b_short"] = "Short Barrel",
 			["bm_wp_g3_b_sniper"] = "Long Barrel",
 			

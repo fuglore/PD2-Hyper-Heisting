@@ -733,6 +733,11 @@ function CopDamage:_on_damage_received(damage_info)
 	if attacker_unit == managers.player:player_unit() and damage_info then
 		managers.player:on_damage_dealt(self._unit, damage_info)
 	end
+	
+	if attacker_unit and attacker_unit:base().is_husk_player or attacker_unit == managers.player:player_unit() then
+		self._damage_dealt_by_player = self._damage_dealt_by_player and self._damage_dealt_by_player + damage_info.damage or damage_info.damage
+		self._damage_ratio_dealt_by_player = self._damage_dealt_by_player / self._HEALTH_INIT
+	end
 
 	local dmg_chk = not self._dead and self._health > 0
 	

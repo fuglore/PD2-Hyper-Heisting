@@ -1,20 +1,61 @@
 Hooks:PostHook( WeaponFactoryTweakData, "init", "gwepmodsrebalance", function(self)
 
+self.parts.wpn_fps_m4_upg_m_quick.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_m4_upg_m_quick.has_description = true
+self.parts.wpn_fps_m4_upg_m_quick.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_m4_upg_m_quick.stats.reload = nil
+self.parts.wpn_fps_m4_upg_m_quick.stats.concealment = nil
 
-self.parts.wpn_fps_m4_upg_m_quick.stats.reload = 3
-self.parts.wpn_fps_m4_upg_m_quick.stats.concealment = -2
-self.parts.wpn_fps_upg_ak_m_quick.stats.reload = 3
-self.parts.wpn_fps_upg_ak_m_quick.stats.concealment = -2
-self.parts.wpn_fps_ass_g36_m_quick.stats.reload = 3
-self.parts.wpn_fps_ass_g36_m_quick.stats.concealment = -2
-self.parts.wpn_fps_smg_p90_m_strap.stats.reload = 3
-self.parts.wpn_fps_smg_p90_m_strap.stats.concealment = -2
-self.parts.wpn_fps_ass_aug_m_quick.stats.reload = 3
-self.parts.wpn_fps_ass_aug_m_quick.stats.concealment = -2
-self.parts.wpn_fps_smg_mac10_m_quick.stats.reload = 3
-self.parts.wpn_fps_smg_mac10_m_quick.stats.concealment = -2
-self.parts.wpn_fps_smg_sr2_m_quick.stats.reload = 3
-self.parts.wpn_fps_smg_sr2_m_quick.stats.concealment = -2
+self.parts.wpn_fps_upg_ak_m_quick.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_upg_ak_m_quick.has_description = true
+self.parts.wpn_fps_upg_ak_m_quick.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_upg_ak_m_quick.stats.reload = nil
+self.parts.wpn_fps_upg_ak_m_quick.stats.concealment = nil
+
+self.parts.wpn_fps_ass_g36_m_quick.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_ass_g36_m_quick.has_description = true
+self.parts.wpn_fps_ass_g36_m_quick.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_ass_g36_m_quick.stats.reload = nil
+self.parts.wpn_fps_ass_g36_m_quick.stats.concealment = nil
+
+self.parts.wpn_fps_smg_p90_m_strap.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_smg_p90_m_strap.has_description = true
+self.parts.wpn_fps_smg_p90_m_strap.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_smg_p90_m_strap.stats.reload = nil
+self.parts.wpn_fps_smg_p90_m_strap.stats.concealment = nil
+
+self.parts.wpn_fps_ass_aug_m_quick.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_ass_aug_m_quick.has_description = true
+self.parts.wpn_fps_ass_aug_m_quick.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_ass_aug_m_quick.stats.reload = nil
+self.parts.wpn_fps_ass_aug_m_quick.stats.concealment = nil
+
+self.parts.wpn_fps_smg_mac10_m_quick.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_smg_mac10_m_quick.has_description = true
+self.parts.wpn_fps_smg_mac10_m_quick.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_smg_mac10_m_quick.stats.extra_ammo = nil
+self.parts.wpn_fps_smg_mac10_m_quick.stats.reload = nil
+self.parts.wpn_fps_smg_mac10_m_quick.stats.concealment = nil
+
+self.wpn_fps_smg_x_mac10.override.wpn_fps_smg_mac10_m_quick = nil
+
+self.parts.wpn_fps_smg_sr2_m_quick.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_smg_sr2_m_quick.has_description = true
+self.parts.wpn_fps_smg_sr2_m_quick.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_smg_sr2_m_quick.stats.reload = nil
+self.parts.wpn_fps_smg_sr2_m_quick.stats.concealment = nil
+
+self.parts.wpn_fps_smg_p90_m_strap.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_smg_p90_m_strap.has_description = true
+self.parts.wpn_fps_smg_p90_m_strap.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_smg_p90_m_strap.stats.reload = nil
+self.parts.wpn_fps_smg_p90_m_strap.stats.concealment = nil
+
+self.parts.wpn_fps_smg_pm9_m_quick.name_id = "bm_GEN_speed_strap"
+self.parts.wpn_fps_smg_pm9_m_quick.has_description = true
+self.parts.wpn_fps_smg_pm9_m_quick.desc_id = "bm_GEN_decorative_strap"
+self.parts.wpn_fps_smg_pm9_m_quick.stats.reload = nil
+self.parts.wpn_fps_smg_pm9_m_quick.stats.concealment= nil
 
 self.parts.wpn_fps_pis_c96_b_long.stats = { value = 2, damage = 0, total_ammo_mod = 0, extra_ammo= 0, spread = 1}
 self.parts.wpn_fps_pis_c96_b_long.custom_stats = nil

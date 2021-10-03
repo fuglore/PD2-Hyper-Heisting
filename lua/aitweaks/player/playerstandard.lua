@@ -1769,7 +1769,7 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						end
 					end
 
-					local suppression_ratio = self._unit:character_damage():effective_suppression_ratio()
+					local suppression_ratio = self._unit:character_damage():suppression_ratio()
 					local spread_mul = math.lerp(1, tweak_data.player.suppression.spread_mul, suppression_ratio)
 					local autohit_mul = math.lerp(1, tweak_data.player.suppression.autohit_chance_mul, suppression_ratio)
 					local suppression_mul = managers.blackmarket:threat_multiplier()
