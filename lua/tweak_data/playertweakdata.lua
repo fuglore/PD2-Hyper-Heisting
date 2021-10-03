@@ -23,7 +23,7 @@ function PlayerTweakData:_set_normal()
 	self.suppression = {
 		receive_mul = 2,
 		decay_start_delay = 1.5,
-		spread_mul = 1,
+		spread_mul = 4,
 		tolerance = 0,
 		max_value = 20,
 		autohit_chance_mul = 1
@@ -45,7 +45,7 @@ function PlayerTweakData:_set_hard()
 	self.suppression = {
 		receive_mul = 2,
 		decay_start_delay = 1.5,
-		spread_mul = 1,
+		spread_mul = 4,
 		tolerance = 0,
 		max_value = 20,
 		autohit_chance_mul = 1
@@ -66,7 +66,7 @@ function PlayerTweakData:_set_overkill()
 	self.suppression = {
 		receive_mul = 2,
 		decay_start_delay = 1.5,
-		spread_mul = 1,
+		spread_mul = 4,
 		tolerance = 0,
 		max_value = 20,
 		autohit_chance_mul = 1
@@ -87,7 +87,7 @@ function PlayerTweakData:_set_overkill_145()
 	self.suppression = {
 		receive_mul = 2,
 		decay_start_delay = 1.5,
-		spread_mul = 1,
+		spread_mul = 4,
 		tolerance = 0,
 		max_value = 20,
 		autohit_chance_mul = 1
@@ -109,7 +109,7 @@ function PlayerTweakData:_set_easy_wish()
 	self.suppression = {
 		receive_mul = 2,
 		decay_start_delay = 1.5,
-		spread_mul = 1,
+		spread_mul = 4,
 		tolerance = 0,
 		max_value = 20,
 		autohit_chance_mul = 1
@@ -133,7 +133,7 @@ function PlayerTweakData:_set_overkill_290()
 	self.suppression = {
 		receive_mul = 2,
 		decay_start_delay = 1.5,
-		spread_mul = 1,
+		spread_mul = 4,
 		tolerance = 0,
 		max_value = 20,
 		autohit_chance_mul = 1
@@ -157,7 +157,7 @@ function PlayerTweakData:_set_sm_wish()
 	self.suppression = {
 		receive_mul = 2,
 		decay_start_delay = 1.5,
-		spread_mul = 1,
+		spread_mul = 4,
 		tolerance = 0,
 		max_value = 20,
 		autohit_chance_mul = 1

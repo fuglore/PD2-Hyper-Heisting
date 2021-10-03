@@ -1,5 +1,8 @@
 ﻿Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 	LocalizationManager:add_localized_strings({
+		["hhmenu_hold_to_jump"] = "AUTO-JUMP",
+		["hhmenu_hold_to_jump_help"] = "Allow consecutive jumps by simply holding the jump button!",
+	
 		["hud_assault_FG_cover1"] = "KILL EACHOTHER, BUT IT'S GOOD INVERSES",
 		["hud_assault_FG_cover2"] = "UNADULTERATED MADNESS",
 		["hud_assault_FG_cover3"] = "THUGGERY AT THE FULLEST OF DISPLAYS",

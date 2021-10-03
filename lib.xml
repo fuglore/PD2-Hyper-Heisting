@@ -56,6 +56,7 @@
 	<post :script_path="localizationmanager.lua" :hook_id="managers/localizationmanager"/>
 	
 	<post :script_path="menumanager.lua" :hook_id="managers/menumanager"/>
+	<post :script_path="usermanager.lua" :hook_id="managers/usermanager"/>
 	
 	<post :script_path="navigationmanager.lua" :hook_id="managers/navigationmanager"/>
 	

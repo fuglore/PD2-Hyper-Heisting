@@ -6,6 +6,11 @@ local mvec3_add = mvector3.add
 local mvec3_mul = mvector3.multiply
 local mvec3_norm = mvector3.normalize
 
+Hooks:PostHook(PlayerStandard, "_calculate_standard_variables", "HH__calculate_standard_variables", function(self, t, dt)
+	self._setting_hold_to_jump = managers.user:get_setting("hold_to_jump")
+end)
+
+
 function PlayerStandard:_find_pickups(t)
 	local pickups = World:find_units_quick("sphere", self._unit:movement():m_pos(), self._pickup_area, self._slotmask_pickups)
 	local grenade_tweak = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()]
@@ -340,11 +345,16 @@ end
 
 function PlayerStandard:_check_action_jump(t, input)
 	local new_action = nil
-	local action_wanted = input.btn_jump_press
+	local action_wanted = input.btn_jump_press or self._setting_hold_to_jump and input.btn_jump_state == true
 
 	if action_wanted then
 		local action_forbidden = self._jump_t and t < self._jump_t + 0.55
-		action_forbidden = action_forbidden or self._unit:base():stats_screen_visible() or self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.1 or self:_interacting() or self:_on_zipline() or self:_does_deploying_limit_movement() or self:_is_using_bipod()
+		
+		if self._state_data.land_t and t - self._state_data.land_t < 0.1 then
+			action_forbidden = nil
+		end
+		
+		action_forbidden = action_forbidden or self._unit:base():stats_screen_visible() or self._state_data.in_air_enter_t and self._jump_t and t < self._jump_t + 0.55 or self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.1 or self:_interacting() or self:_on_zipline() or self:_does_deploying_limit_movement() or self:_is_using_bipod()
 
 		if not action_forbidden then
 			if self._state_data.ducking then
@@ -438,7 +448,7 @@ function PlayerStandard:_update_movement(t, dt)
 		
 	if self._running then
 		
-	elseif self._state_data.in_air then
+	elseif self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
 		if self._jump_vel_xy and not mvector3.is_zero(self._jump_vel_xy) then
 			if math.abs(self._jump_vel_xy:length()) > WALK_SPEED_MAX then
 				WALK_SPEED_MAX = math.abs(self._jump_vel_xy:length())
@@ -448,7 +458,7 @@ function PlayerStandard:_update_movement(t, dt)
 	
 	local air_acceleration = 250
 		
-	if self._state_data.in_air then
+	if self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
 		if math.abs(self._last_velocity_xy:length()) > 250 then
 			air_acceleration = math.abs(self._last_velocity_xy:length())
 			WALK_SPEED_MAX = math.abs(self._last_velocity_xy:length())
@@ -459,6 +469,10 @@ function PlayerStandard:_update_movement(t, dt)
 	
 	local acceleration = self:_get_max_walk_speed(t, true) * 8
 	local decceleration = acceleration * 0.7
+	
+	if self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
+		decceleration = 100
+	end
 	
 	if self._state_data.on_zipline and self._state_data.zipline_data.position then
 		local speed = mvector3.length(self._state_data.zipline_data.position - self._pos) / dt / 500
@@ -507,9 +521,9 @@ function PlayerStandard:_update_movement(t, dt)
 		
 		--log("lleration: " .. lleration .. "")
 		
-		if self._jump_vel_xy and self._state_data.in_air and mvector3.dot(self._jump_vel_xy, self._last_velocity_xy) > 0 then
+		if self._jump_vel_xy and self._state_data.in_air and mvector3.dot(self._jump_vel_xy, self._last_velocity_xy) >= 0 then
 			local wanted_walk_speed_air = WALK_SPEED_MAX * math.min(1, self._move_dir:length())
-			local acceleration = self._state_data.in_air and 700 or self._running and 5000 or 3000
+			local acceleration = self._state_data.in_air and 1200 or lleration
 			local input_move_vec = wanted_walk_speed_air * self._move_dir
 			local jump_dir = mvector3.copy(self._last_velocity_xy)
 			local jump_vel = mvector3.normalize(jump_dir)
@@ -519,20 +533,14 @@ function PlayerStandard:_update_movement(t, dt)
 				local sustain_dot = (input_move_vec:normalized() * jump_vel):dot(jump_dir)
 				local new_move_vec = input_move_vec + jump_dir * (sustain_dot - fwd_dot)
 
-				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, 700 * dt)
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, 1200 * dt)
 			else
 				mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed_air)
 				mvector3.step(achieved_walk_vel, self._last_velocity_xy, wanted_walk_speed_air * self._move_dir:normalized(), acceleration * dt)
 			end
-
-			local fwd_component = nil
 		else
 			mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed)
 			mvector3.step(achieved_walk_vel, self._last_velocity_xy, mvec_move_dir_normalized, lleration * dt)
-		end
-		
-		if self.is_sliding then
-			--log("current speed is " .. math.abs(self._last_velocity_xy:length()) .. "!")
 		end
 
 		if mvector3.is_zero(self._last_velocity_xy) then
@@ -552,19 +560,25 @@ function PlayerStandard:_update_movement(t, dt)
 			self._target_headbob = self._target_headbob * weapon_tweak_data.headbob.multiplier
 		end
 	elseif not mvector3.is_zero(self._last_velocity_xy) then
-		
-		if self.is_sliding then
-			--log("current speed is " .. math.abs(self._last_velocity_xy:length()) .. "!")
+		if not self._state_data.land_t or self._state_data.land_t and t - self._state_data.land_t > 0.1 then
+			local grad = decceleration
+			
+			local achieved_walk_vel = math.step(self._last_velocity_xy, Vector3(), grad * dt)
+			pos_new = mvec_pos_new
+			
+			mvector3.set(pos_new, achieved_walk_vel)
+			mvector3.multiply(pos_new, dt)
+			mvector3.add(pos_new, self._pos)
+			self._target_headbob = 0
+		else
+			local achieved_walk_vel = mvec_achieved_walk_vel
+			mvector3.set(achieved_walk_vel, self._last_velocity_xy)
+			
+			pos_new = mvec_pos_new
+			mvector3.set(pos_new, achieved_walk_vel)
+			mvector3.multiply(pos_new, dt)
+			mvector3.add(pos_new, self._pos)
 		end
-		
-		local achieved_walk_vel = math.step(self._last_velocity_xy, Vector3(), decceleration * dt)
-		pos_new = mvec_pos_new
-
-		mvector3.set(pos_new, achieved_walk_vel)
-		mvector3.multiply(pos_new, dt)
-		mvector3.add(pos_new, self._pos)
-
-		self._target_headbob = 0
 	elseif self._moving then
 		self._target_headbob = 0
 		self._moving = false
@@ -608,6 +622,10 @@ function PlayerStandard:_update_movement(t, dt)
 		end
 
 		mvector3.divide(self._last_velocity_xy, dt)
+		
+		if self._jump_vel_xy and self._state_data.in_air then
+			mvector3.set(self._jump_vel_xy, self._last_velocity_xy)
+		end
 	else
 		mvector3.set_static(self._last_velocity_xy, 0, 0, 0)
 	end
@@ -1209,16 +1227,75 @@ function PlayerStandard:_start_action_jump(t, action_start_data)
 	self._unit:mover():jump()
 
 	if self._move_dir then
-		local move_dir_clamp = self._move_dir:normalized() * math.min(1, self._move_dir:length())
-		self._last_velocity_xy = move_dir_clamp * action_start_data.jump_vel_xy
-		self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
-	else
+		if not mvector3.is_zero(self._last_velocity_xy) then
+			local input_move_vec = action_start_data.jump_vel_xy * self._move_dir
+			local jump_dir = mvector3.copy(self._last_velocity_xy)
+			local jump_vel = mvector3.normalize(jump_dir)
+			local fwd_dot = jump_dir:dot(input_move_vec)
+
+			if fwd_dot < jump_vel then
+				local sustain_dot = (input_move_vec:normalized() * jump_vel):dot(jump_dir)
+				local new_move_vec = input_move_vec + jump_dir * (sustain_dot - fwd_dot)
+				
+				self._jump_vel_xy = mvector3.copy(new_move_vec)
+			else
+				local move_dir_clamp = self._move_dir:normalized() * math.min(1, self._move_dir:length())
+				self._last_velocity_xy = move_dir_clamp * self._last_velocity_xy:length()
+				self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
+			end
+		else
+			local move_dir_clamp = self._move_dir:normalized() * math.min(1, self._move_dir:length())
+			self._last_velocity_xy = move_dir_clamp * action_start_data.jump_vel_xy
+			self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
+		end
+	elseif self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.2 or self._state_data.land_t and t - self._state_data.land_t > 0.1  then
 		self._last_velocity_xy = Vector3()
 	end
 
 	self:_perform_jump(jump_vec)
 	self._gnd_ray = false
+	self._is_jumping = true
 end
+
+local tmp_ground_from_vec = Vector3()
+local tmp_ground_to_vec = Vector3()
+local up_offset_vec = math.UP * 30
+local down_offset_vec = math.UP * -25
+
+function PlayerStandard:_update_ground_ray()
+	local hips_pos = tmp_ground_from_vec
+	local down_pos = tmp_ground_to_vec
+
+	mvector3.set(hips_pos, self._pos)
+	mvector3.add(hips_pos, up_offset_vec)
+	mvector3.set(down_pos, hips_pos)
+	mvector3.add(down_pos, down_offset_vec)
+
+	if self._unit:movement():ladder_unit() then
+		self._gnd_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ignore_unit", self._unit:movement():ladder_unit(), "ray_type", "body mover", "sphere_cast_radius", 20, "report")
+	else
+		self._gnd_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 20, "report")
+	end
+
+	self._gnd_ray_chk = true
+end
+
+function PlayerStandard:_chk_floor_moving_pos(pos)
+	local hips_pos = tmp_ground_from_vec
+	local down_pos = tmp_ground_to_vec
+
+	mvector3.set(hips_pos, self._pos)
+	mvector3.add(hips_pos, up_offset_vec)
+	mvector3.set(down_pos, hips_pos)
+	mvector3.add(down_pos, down_offset_vec)
+
+	local ground_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 29)
+
+	if ground_ray and ground_ray.body and math.abs(ground_ray.body:velocity().z) > 0 then
+		return ground_ray.body:position().z
+	end
+end
+
 
 function PlayerStandard:_update_foley(t, input)
 	if self._state_data.on_zipline then
@@ -1237,6 +1314,7 @@ function PlayerStandard:_update_foley(t, input)
 		self._unit:set_driving("script")
 
 		self._state_data.in_air = false
+		self._is_jumping = nil
 		
 		local from = self._pos + math.UP * 10
 		local to = self._pos - math.UP * 60
@@ -1263,14 +1341,15 @@ function PlayerStandard:_update_foley(t, input)
 		end
 		
 		self._state_data.in_air_enter_t = nil
+		self._state_data.land_t = t 
 		
 		managers.rumble:play("land")
 	
 		self._jump_t = nil
 		self._jump_vel_xy = nil
-	
 	elseif self._jump_vel_xy and t - self._jump_t > 0.3 then
 		self._jump_vel_xy = nil
+		self._jump_t = nil
 		
 		if self._move_dir and self._running then -- if you're holding down a direction to move in and you were already sprinting, continue, otherwise, wait until landing to register anything
 			if self._setting_hold_to_run and input.btn_run_release then
@@ -2154,6 +2233,51 @@ function PlayerStandard:_start_action_throw_grenade(t, input)
 	self._state_data.throw_grenade_expire_t = t + (projectile_data.expire_t or 1.1)
 
 	self:_stance_entered()
+end
+
+local inputs = PlayerStandard._get_input
+
+function PlayerStandard:_get_input(t, dt, paused)
+	if self._state_data.controller_enabled ~= self._controller:enabled() then
+		if self._state_data.controller_enabled then
+			self._state_data.controller_enabled = self._controller:enabled()
+
+			return self:_create_on_controller_disabled_input()
+		end
+	elseif not self._state_data.controller_enabled then
+		local input = {
+			is_customized = true,
+			btn_interact_release = managers.menu:get_controller():get_input_released("interact")
+		}
+
+		return input
+	end
+
+	local pressed = self._controller:get_any_input_pressed()
+	local released = self._controller:get_any_input_released()
+	local downed = self._controller:get_any_input()
+
+	if paused then
+		self._input_paused = true
+	elseif not downed then
+		self._input_paused = false
+	end
+	
+	if not released and not downed and not self._forced_inputs or self._input_paused then
+		return {}
+	end
+	
+	local input = inputs(self, t, dt, paused)
+	
+	if released then
+		input.btn_jump_release = self._controller:get_input_released("jump")
+	end
+	
+	if downed then
+		input.btn_jump_state = self._controller:get_input_bool("jump")
+	end
+	
+	return input
 end
 
 function PlayerStandard:_update_check_actions(t, dt, paused)

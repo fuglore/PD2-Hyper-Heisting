@@ -140,6 +140,8 @@ function TeamAIDamage:_send_damage_drama(attack_data, health_subtracted)
 
 	local dmg_percent = health_subtracted / self._HEALTH_INIT
 	local attacker = attack_data.attacker_unit
+	
+	dmg_percent = dmg_percent * 0.25
 
 	if not attacker or attack_data.attacker_unit:id() == -1 then
 		attacker = self._unit

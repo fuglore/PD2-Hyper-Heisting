@@ -1578,35 +1578,12 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 			damage = damage_percent * self._HEALTH_INIT_PRECENT
 			damage, damage_percent = self:_apply_min_health_limit(damage, damage_percent)
 
-			local result_type = not self._char_tweak.immune_to_knock_down and (attack_data.knock_down and "knock_down" or attack_data.stagger and not self._has_been_staggered and "stagger") or self:get_damage_type(damage_percent, "bullet", attack_data)
-
 			local result = {
-				type = result_type,
+				type = "dmg_rcv",
 				variant = attack_data.variant
 			}
 
-			local variant = nil
-
-			if result.type == "knock_down" then
-				variant = 1
-			elseif result.type == "stagger" then
-				variant = 2
-				self._has_been_staggered = true
-			elseif result.type == "healed" then
-				variant = 3
-			elseif result.type == "expl_hurt" then
-				variant = 4
-			elseif result.type == "hurt" then
-				variant = 5
-			elseif result.type == "heavy_hurt" then
-				variant = 6
-			elseif result.type == "light_hurt" then
-				variant = 7
-			elseif result.type == "dmg_rcv" then --important, need to sync if there's no reaction
-				variant = 8
-			else
-				variant = 0
-			end
+			local variant = 8
 
 			local body_index = self._unit:get_body_index(attack_data.col_ray.body:name())
 			local hit_offset_height = math.clamp(attack_data.col_ray.position.z - self._unit:movement():m_pos().z, 0, 300)

@@ -121,3 +121,81 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 	
 	MenuHelper:LoadFromJsonFile(PD2THHSHIN._options_path, PD2THHSHIN, PD2THHSHIN.settings)
 end)
+
+function MenuCallbackHandler:hold_to_jump_clbk(item)
+	local hold = item:value() == "on"
+
+	managers.user:set_setting("hold_to_jump", hold)
+end
+
+Hooks:Add("MenuManagerBuildCustomMenus", "HH_HTJ", function(menu_manager, nodes)
+	local controls_node = nodes.controls
+
+	local params = {
+		name = "hold_to_jump",
+		text_id = "hhmenu_hold_to_jump",
+		help_id = "hhmenu_hold_to_jump_help",
+		callback = "hold_to_jump_clbk",
+		filter = true,
+		enabled = false,
+		localize = true,
+		localize_help = true
+	}
+	local data_node = {
+		{
+			w = "24",
+			y = "0",
+			h = "24",
+			s_y = "24",
+			value = "on",
+			s_w = "24",
+			s_h = "24",
+			s_x = "24",
+			_meta = "option",
+			icon = "guis/textures/menu_tickbox",
+			x = "24",
+			s_icon = "guis/textures/menu_tickbox"
+		},
+		{
+			w = "24",
+			y = "0",
+			h = "24",
+			s_y = "24",
+			value = "off",
+			s_w = "24",
+			s_h = "24",
+			s_x = "0",
+			_meta = "option",
+			icon = "guis/textures/menu_tickbox",
+			x = "0",
+			s_icon = "guis/textures/menu_tickbox"
+		},
+		type = "CoreMenuItemToggle.ItemToggle"
+	}
+	
+	local jump_item = controls_node:create_item(data_node, params)
+	
+	local position = 0
+	
+	for index, item in pairs(controls_node._items) do
+		if item:name() == "toggle_hold_to_duck" then
+			position = index + 1
+			break
+		end
+	end
+	
+	controls_node:insert_item(jump_item, position)
+end)
+
+Hooks:PostHook(MenuOptionInitiator, "modify_controls", "HH_modify_controls", function(self, node)
+	local option_value = "off"
+	local jump_item = node:item("hold_to_jump")
+	
+	if jump_item then
+		if managers.user:get_setting("hold_to_jump") then
+			option_value = "on"
+		end
+
+		jump_item:set_value(option_value)
+	end
+end)
