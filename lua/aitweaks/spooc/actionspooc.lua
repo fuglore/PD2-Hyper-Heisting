@@ -2497,20 +2497,24 @@ function ActionSpooc:_upd_flying_strike(t)
 	if self._ext_anim.act then
 		local seg_rel_t = self._machine:segment_relative_time(ids_base)
 		local strike_data = self._flying_strike_data
+		
+		if self._is_local then
+			local target_pos = self._target_unit:movement():m_pos()
+			local target_vec = target_pos - cur_pos
+			local dt = self._timer:delta_time()
+				
+			local delta_lerp = dt * 5
+			delta_lerp = delta_lerp > 1 and 1 or delta_lerp
 
-		local target_pos = self._target_unit:movement():m_pos()
-		local target_vec = target_pos - cur_pos
-		local dt = self._timer:delta_time()
-			
-		local delta_lerp = dt * 5
-		delta_lerp = delta_lerp > 1 and 1 or delta_lerp
+			local new_rot = Rotation(target_vec:normalized(), math_up)
 
-		local new_rot = Rotation(target_vec:normalized(), math_up)
+			new_rot = common_data.rot:slerp(new_rot, delta_lerp)
 
-		new_rot = common_data.rot:slerp(new_rot, delta_lerp)
-
-		self._ext_movement:set_rotation(new_rot)
-
+			self._ext_movement:set_rotation(new_rot)
+		else
+			self._ext_movement:set_rotation(strike_data.target_rot)
+		end
+		
 		local my_unit = self._unit
 		local delta_pos = my_unit:get_animation_delta_position()
 		local xy_scaling = strike_data.travel_dis_scaling_xy
