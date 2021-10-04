@@ -123,7 +123,7 @@ function TeamAILogicAssault.update(data)
 	end
 
 	if not data.objective or data.objective.type == "free" then
-		if not data.path_fail_t or data.t - data.path_fail_t > 6 then
+		if not data.path_fail_t or data.t - data.path_fail_t > 1 then
 			managers.groupai:state():on_criminal_jobless(data.unit)
 
 			if my_data ~= data.internal_data then

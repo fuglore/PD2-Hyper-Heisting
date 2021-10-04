@@ -1156,10 +1156,6 @@ end
 
 function CopLogicIdle.is_available_for_assignment(data, objective)
 	local my_data = data.internal_data
-
-	if my_data.exiting then
-		return
-	end
 	
 	if objective and objective.forced then
 		return true
@@ -1174,20 +1170,11 @@ function CopLogicIdle.is_available_for_assignment(data, objective)
 			return
 		end
 	end
-	
-	if not data.cool and not my_data.action_started then 
-		if objective and data.objective and data.objective.grp_objective then
-			local cur_grp_objective = data.objective.grp_objective
-			local new_grp_objective = objective.grp_objective
-			
-			if cur_grp_objective.type == "retire" and objective.type == "act" then
-				return
-			elseif new_grp_objective and new_grp_objective.type == "retire" and data.objective.type == "act" then
-				return
-			end
-		end
+
+	if my_data.exiting then
+		return
 	end
-	
+
 	data.t = TimerManager:game():time()
 	
 	if data.path_fail_t then

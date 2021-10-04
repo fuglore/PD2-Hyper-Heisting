@@ -7227,15 +7227,28 @@ function CharacterTweakData:_presets(tweak_data)
 			cuffed = true
 		},
 		cop = {
+			entry = true,
 			aggressive = true,
-			contact = true,
 			enemyidlepanic = true,
 			controlpanic = true,
+			retreat = true,
+			contact = true,
+			clear = true,
 			clear_whisper = true,
+			go_go = true,
+			push = true,
+			reload = true,
+			look_for_angle = true,
 			ecm = true,
 			saw = true,
 			trip_mines = true,
 			sentry = true,
+			ready = true,
+			smoke = true,
+			flash_grenade = true,
+			follow_me = true,
+			deathguard = true,
+			open_fire = true,
 			suppress = true,
 			dodge = true,
 			cuffed = true
@@ -7268,7 +7281,7 @@ function CharacterTweakData:_presets(tweak_data)
 			cuffed = true
 		},
 		shield = {
-            entry = true,
+			entry = true,
 			aggressive = true,
 			enemyidlepanic = true,
 			controlpanic = true,
@@ -7285,10 +7298,13 @@ function CharacterTweakData:_presets(tweak_data)
 			trip_mines = true,
 			sentry = true,
 			ready = true,
+			smoke = true,
+			flash_grenade = true,
 			follow_me = true,
 			deathguard = true,
 			open_fire = true,
 			suppress = true,
+			dodge = true,
 			cuffed = true
         },
 		bulldozer = {
@@ -7525,6 +7541,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		"frontliner",
 		"takedown",
 		"tank",
+		"protected",
 		"special",
 		"ohfuck",
 		"no_run"

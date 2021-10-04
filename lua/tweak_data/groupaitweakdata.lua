@@ -7078,6 +7078,8 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 
 end)
 
+
+
 Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", function(self, difficulty_index, difficulty)
 	local is_console = SystemInfo:platform() ~= Idstring("WIN32")
 	local level = Global.level_data and Global.level_data.level_id
@@ -7090,7 +7092,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		self.nightmare = true
 	end
 	
-	if level == "chill_combat" then
+	if level == "chill_combat" or level == "hvh" then
 		self._chill = true
 	end
 	

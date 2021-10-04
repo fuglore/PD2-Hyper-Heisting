@@ -20,6 +20,40 @@ local idstr_gore = Idstring("effects/pd2_mod_hh/particles/character/gore_explosi
 local idstr_deathresist = Idstring("effects/pd2_mod_hh/particles/iconograph/deathresist")
 local idstr_shieldbreak = Idstring("effects/pd2_mod_hh/particles/character/shield_break")
 
+local init_original = CopDamage.init
+function CopDamage:init(...)
+	init_original(self, ...)
+
+	if self._head_body_name then
+		local my_unit = self._unit
+		local base_ext = my_unit:base()
+
+		if base_ext.has_tag and base_ext:has_tag("protected") then
+			local function f()
+				if alive(my_unit) then
+					my_unit:body("head"):set_enabled(false)
+				end
+			end
+		
+			managers.enemy:add_delayed_clbk("disable_head_hitbox" .. tostring(my_unit:key()), f, TimerManager:game():time())
+		elseif not base_ext.has_tag or not base_ext:has_tag("fbi") then
+			local function f()
+				if alive(my_unit) then
+					my_unit:body("head"):set_enabled(false)
+					my_unit:body("rag_Head"):set_enabled(true)
+					my_unit:body("rag_Head"):set_sphere_radius(12)
+
+					self._head_body_name = "rag_Head"
+					self._ids_head_body_name = Idstring(self._head_body_name)
+					self._head_body_key = self._unit:body(self._head_body_name):key()
+				end
+			end
+		
+			managers.enemy:add_delayed_clbk("hitboxes" .. tostring(my_unit:key()), f, TimerManager:game():time())
+		end
+	end
+end
+
 function CopDamage:is_immune_to_shield_knockback()
 	if self._immune_to_knockback then
 		return true

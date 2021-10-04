@@ -1272,9 +1272,9 @@ function PlayerStandard:_update_ground_ray()
 	mvector3.add(down_pos, down_offset_vec)
 
 	if self._unit:movement():ladder_unit() then
-		self._gnd_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ignore_unit", self._unit:movement():ladder_unit(), "ray_type", "body mover", "sphere_cast_radius", 20, "report")
+		self._gnd_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ignore_unit", self._unit:movement():ladder_unit(), "ray_type", "body mover", "sphere_cast_radius", 24, "report")
 	else
-		self._gnd_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 20, "report")
+		self._gnd_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 24, "report")
 	end
 
 	self._gnd_ray_chk = true
@@ -1289,7 +1289,7 @@ function PlayerStandard:_chk_floor_moving_pos(pos)
 	mvector3.set(down_pos, hips_pos)
 	mvector3.add(down_pos, down_offset_vec)
 
-	local ground_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 29)
+	local ground_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 24)
 
 	if ground_ray and ground_ray.body and math.abs(ground_ray.body:velocity().z) > 0 then
 		return ground_ray.body:position().z
