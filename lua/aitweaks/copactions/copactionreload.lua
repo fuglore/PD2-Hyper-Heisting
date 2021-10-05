@@ -401,3 +401,43 @@ function CopActionReload:_get_target_pos(shoot_from_pos, attention)
 
 	return target_pos, target_vec
 end
+
+function CopActionReload:save(save_data)
+	if not self._ext_anim.reload then
+		return
+	end
+
+	save_data.type = "reload"
+	save_data.body_part = 3
+
+	local start_data = {
+		anim_interrupt_t = self._machine:segment_real_time(ids_upper_body)
+	}
+
+	if self._is_looped then
+		start_data.rounds_left = self._loop_stop_t - TimerManager:game():time()
+	end
+
+	save_data.start_data = start_data
+end
+
+function CopActionReload:on_inventory_event(event)
+	local new_weapon_unit = self._ext_inventory:equipped_unit()
+
+	if new_weapon_unit then
+		self._weapon_unit = new_weapon_unit
+		self._weapon_base = new_weapon_unit:base()
+		self._weap_tweak = self._weapon_base:weapon_tweak_data()
+	else
+		self._ext_movement:play_redirect("up_idle")
+
+		self._weapon_unit = nil
+		self._weapon_base = nil
+		self._weap_tweak = nil
+
+		self.update = self._upd_empty
+
+		self._expired = true
+	end
+end
+

@@ -72,6 +72,7 @@
 	
 	<!-- crime spree modifications-->
 	<post :script_path="crimespreemanager.lua" :hook_id="managers/crimespreemanager"/>
+	<post :script_path="menu/crimespreemissionsmenucomponent.lua" :hook_id="managers/menu/crimespreemissionsmenucomponent"/> 
 	<post :script_path="menu/crimespreemodifierdetailspage.lua" :hook_id="managers/menu/crimespreemodifierdetailspage"/> <!--removal of crime spree stealth modifier text-->
 	<post :script_path="menu/crimespreemodifiersmenucomponent.lua" :hook_id="managers/menu/crimespreemodifiersmenucomponent"/> <!--fixes modifiers window size with one single modifier-->
 	
