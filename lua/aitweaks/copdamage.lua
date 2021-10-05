@@ -39,13 +39,7 @@ function CopDamage:init(...)
 		elseif not base_ext.has_tag or not base_ext:has_tag("fbi") then
 			local function f()
 				if alive(my_unit) then
-					my_unit:body("head"):set_enabled(false)
-					my_unit:body("rag_Head"):set_enabled(true)
-					my_unit:body("rag_Head"):set_sphere_radius(12)
-
-					self._head_body_name = "rag_Head"
-					self._ids_head_body_name = Idstring(self._head_body_name)
-					self._head_body_key = self._unit:body(self._head_body_name):key()
+					my_unit:body("head"):set_sphere_radius(13)
 				end
 			end
 		
