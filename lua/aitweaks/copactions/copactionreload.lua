@@ -1,3 +1,4 @@
+local ids_upper_body = Idstring("upper_body")
 local mvec3_set = mvector3.set
 local mvec3_set_z = mvector3.set_z
 local mvec3_norm = mvector3.normalize
