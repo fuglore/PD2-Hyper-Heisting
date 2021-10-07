@@ -235,6 +235,10 @@ function CopLogicAttack.update(data)
 				line:cylinder(my_data.in_cover[1][1], my_data.in_cover[1][1] + math_up * 185, 100)
 			end]]
 			
+			if my_data.in_cover then
+				my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
+			end
+			
 			CopLogicAttack._upd_combat_movement(data)
 			
 			if not data.char_tweak.cannot_throw_grenades and not data.is_converted and data.unit:base().has_tag and data.unit:base():has_tag("law") and groupai:is_smoke_grenade_active() then 
@@ -1104,7 +1108,7 @@ function CopLogicAttack._update_cover(data)
 	local satisfied = true --defined properly through the function, but currently unused
 	local my_pos = data.m_pos
 	local focus_enemy = data.attention_obj
-
+	
 	if focus_enemy and focus_enemy.nav_tracker and REACT_COMBAT <= focus_enemy.reaction then
 		local find_new_cover = data.important or not my_data.cover_path_failed_t or data.t - my_data.cover_path_failed_t > 1
 
@@ -2718,7 +2722,9 @@ function CopLogicAttack._upd_pose(data, my_data)
 	local need_cover = nil
 
 	if my_data.want_to_take_cover then
-		need_cover = true
+		if not my_data.in_cover or not my_data.in_cover[4] then
+			need_cover = true
+		end
 	end
 
 	if data.is_suppressed or need_cover or objective_pose == "crouch" then
