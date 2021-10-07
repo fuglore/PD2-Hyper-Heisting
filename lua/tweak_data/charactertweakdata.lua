@@ -7607,7 +7607,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc.experience = {}
 	self.spooc.weapon = deep_clone(presets.weapon.civil)
 	self.spooc.detection = presets.detection.enemyspooc
-	self.spooc.HEALTH_INIT = 20
+	self.spooc.HEALTH_INIT = 8
 	self.spooc.headshot_dmg_mul = 7
 	self.spooc.damage.fire_damage_mul = 8
 	self.spooc.move_speed = presets.move_speed.lightning_constant
@@ -7761,7 +7761,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.experience = {}
 	self.shield.weapon = presets.weapon.simple
 	self.shield.detection = presets.detection.enemymook
-	self.shield.HEALTH_INIT = 14
+	self.shield.HEALTH_INIT = 6
 	self.shield.headshot_dmg_mul = 6
 	self.shield.speed_mul = 0.85
 	self.shield.allowed_stances = {
@@ -7828,7 +7828,7 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	}
 	self.medic.weapon = presets.weapon.civil
 	self.medic.detection = presets.detection.enemymook
-	self.medic.HEALTH_INIT = 12
+	self.medic.HEALTH_INIT = 8
 	self.medic.headshot_dmg_mul = 6
 	self.medic.damage.doom_hurt_type = "doom"
 	self.medic.damage.hurt_severity = presets.hurt_severities.specialenemy
@@ -7874,7 +7874,7 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	}
 	self.taser.weapon = presets.weapon.simple
 	self.taser.detection = presets.detection.enemymook
-	self.taser.HEALTH_INIT = 25
+	self.taser.HEALTH_INIT = 20
 	self.taser.headshot_dmg_mul = 2
 	self.taser.speed_mul = 0.9
 	self.taser.damage.doom_hurt_type = "doom"
@@ -7973,7 +7973,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.no_fumbling = true
 	self.fbi.no_suppression_reaction = true
 	self.fbi.no_retreat = nil
-	self.fbi.HEALTH_INIT = 12
+	self.fbi.HEALTH_INIT = 8
 	self.fbi.headshot_dmg_mul = 9
 	self.fbi.move_speed = presets.move_speed.simple_consistency
 	self.fbi.damage.no_suppression_crouch = true
@@ -8072,7 +8072,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.experience = {}
 	self.heavy_swat.weapon = presets.weapon.simple
 	self.heavy_swat.detection = presets.detection.enemymook
-	self.heavy_swat.HEALTH_INIT = 15
+	self.heavy_swat.HEALTH_INIT = 10
 	self.heavy_swat.speed_mul = 0.9
 	self.heavy_swat.headshot_dmg_mul = 6
 	self.heavy_swat.ecm_vulnerability = 1
@@ -8179,7 +8179,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	}
 	self.fbi_heavy_swat.weapon = presets.weapon.civil
 	self.fbi_heavy_swat.detection = presets.detection.enemymook
-	self.fbi_heavy_swat.HEALTH_INIT = 15
+	self.fbi_heavy_swat.HEALTH_INIT = 10
 	self.fbi_heavy_swat.speed_mul = 0.9
 	self.fbi_heavy_swat.headshot_dmg_mul = 6
 	self.fbi_heavy_swat.ecm_vulnerability = 1

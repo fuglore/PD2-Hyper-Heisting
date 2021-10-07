@@ -21,11 +21,7 @@ function CopActionTurn:init(action_desc, common_data)
 	self._machine = machine
 
 	local turn_speed_mul = 1
-	
-	if Global.crime_spree.current_mission then
-		turn_speed_mul = turn_speed_mul + managers.crime_spree:get_turn_spd_add()
-	end
-	
+
 	if machine:get_global("shield") == 1 then
 		self._shield_turning = true
 	end

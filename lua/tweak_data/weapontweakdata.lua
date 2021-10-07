@@ -1044,7 +1044,7 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 		INIT_RATIO = 0,
 		MAX_RATIO = 0.4,
 		far_angle = 3,
-		far_dis = 3000,
+		far_dis = 2500,
 		MIN_RATIO = 0,
 		near_angle = 0
 	}
@@ -1154,14 +1154,16 @@ self.new_m4.kick = {
 			0.25
 	}
 }
+self.new_m4.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 
 --AK
 self.ak74.stats.damage = 57
+self.ak74.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 
 --Gewehr
 self.g3.AMMO_MAX = 120
 self.g3.stats.damage = 79
-self.g3.AMMO_PICKUP = {3, 6.5}
+self.g3.AMMO_PICKUP = {4, 7}
 self.g3.stats.recoil = 17
 self.g3.kick = {
 	standing = {
@@ -1183,9 +1185,11 @@ self.g3.kick = {
 			0.6
 	}
 }
+self.g3.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
+
 
 --AK 762
-self.akm.AMMO_PICKUP = {2, 6}
+self.akm.AMMO_PICKUP = {4, 6}
 self.akm.AMMO_MAX = 100
 self.akm.kick = {
 	standing = {
@@ -1207,6 +1211,7 @@ self.akm.kick = {
 			1.2
 	}
 }
+self.akm.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --KS12
 self.shak12.muzzleflash = "effects/payday2/particles/weapons/50cal_auto_fps"
@@ -1242,6 +1247,7 @@ self.shak12.timers = {
 }
 self.shak12.armor_piercing_chance = 1
 self.shak12.can_shoot_through_enemy = true
+self.shak12.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Bootleg
 self.tecci.CLIP_AMMO_MAX = 100 
@@ -1254,11 +1260,13 @@ self.tecci.AMMO_PICKUP = {4, 8}
 self.tecci.kick.standing = self.new_m4.kick.standing
 self.tecci.kick.crouching = self.new_m4.kick.crouching
 self.tecci.kick.steelsight = self.new_m4.kick.steelsight
+self.tecci.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_LOW
 
 --Union 5.56
 self.corgi.kick.standing = self.new_m4.kick.standing
 self.corgi.kick.crouching = self.new_m4.kick.crouching
 self.corgi.kick.steelsight = self.new_m4.kick.steelsight
+self.corgi.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 
 -- JP36
 self.g36.AMMO_PICKUP = {6, 10}
@@ -1271,11 +1279,13 @@ self.g36.kick = self.amcar.kick
 self.aug.kick.standing = self.new_m4.kick.standing
 self.aug.kick.crouching = self.new_m4.kick.crouching
 self.aug.kick.steelsight = self.new_m4.kick.steelsight
+self.aug.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 
 --Queen's Wrath
 self.l85a2.kick.standing = self.new_m4.kick.standing
 self.l85a2.kick.crouching = self.new_m4.kick.crouching
 self.l85a2.kick.steelsight = self.new_m4.kick.steelsight
+self.l85a2.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 
 -- Clarion
 self.famas.AMMO_PICKUP = {6, 10}
@@ -1311,6 +1321,7 @@ self.s552.AMMO_PICKUP = {4, 8}
 self.s552.kick.standing = self.new_m4.kick.standing
 self.s552.kick.crouching = self.new_m4.kick.crouching
 self.s552.kick.steelsight = self.new_m4.kick.steelsight
+self.s552.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 
 --Valkyria
 self.asval.has_description = true
@@ -1324,7 +1335,8 @@ self.asval.can_shoot_through_wall = true
 self.asval.kick.standing = self.akm.kick.standing
 self.asval.kick.crouching = self.akm.kick.crouching
 self.asval.kick.steelsight = self.akm.kick.steelsight
-self.asval.AMMO_PICKUP = {2, 4}
+self.asval.AMMO_PICKUP = {3, 6}
+self.asval.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Tempest
 self.komodo.AMMO_MAX = 150
@@ -1334,11 +1346,12 @@ self.komodo.stats.damage = 59
 self.komodo.kick.standing = self.new_m4.kick.standing
 self.komodo.kick.crouching = self.new_m4.kick.crouching
 self.komodo.kick.steelsight = self.new_m4.kick.steelsight
+self.komodo.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 
 --Eagle Heavy
 self.scar.CLIP_AMMO_MAX = 30
 self.scar.AMMO_MAX = 100
-self.scar.AMMO_PICKUP = {2, 6}
+self.scar.AMMO_PICKUP = {4, 6}
 self.scar.kick = {
 standing = {
 		1.3,
@@ -1359,43 +1372,50 @@ crouching = {
 		0.6
 }
 }
+self.scar.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Gold AK
-self.akm_gold.AMMO_PICKUP = {2, 6}
+self.akm_gold.AMMO_PICKUP = {4, 6}
 self.akm_gold.AMMO_MAX = 100
 self.akm_gold.kick = self.akm.kick
+self.akm_gold.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --AK17
-self.flint.AMMO_PICKUP = {2, 6}
+self.flint.AMMO_PICKUP = {4, 6}
 self.flint.AMMO_MAX = 100
 self.flint.CLIP_AMMO_MAX = 30
 self.flint.kick = self.akm.kick
+self.flint.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Falcon
-self.fal.AMMO_PICKUP = {2, 6}
+self.fal.AMMO_PICKUP = {4, 6}
 self.fal.kick = self.akm.kick
+self.fal.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --AMR16
-self.m16.AMMO_PICKUP = {2, 6}
+self.m16.AMMO_PICKUP = {4, 6}
 self.m16.AMMO_MAX = 100
 self.m16.kick = self.akm.kick
+self.m16.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Lion's Roar
 self.vhs.AMMO_MAX = 120
 self.vhs.stats.spread = 15
 self.vhs.stats.damage = 79
-self.vhs.AMMO_PICKUP = {3, 6.5}
+self.vhs.AMMO_PICKUP = {4, 7}
 self.vhs.stats.recoil = 17
 self.vhs.kick = self.g3.kick
+self.vhs.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Gecko
 self.galil.AMMO_MAX = 120
 self.galil.stats.spread = 13
 self.galil.stats.damage = 79
-self.galil.AMMO_PICKUP = {3, 6.5}
+self.galil.AMMO_PICKUP = {4, 7}
 self.galil.stats.recoil = 18
 self.galil.kick = self.akm.kick
 self.galil.CLIP_AMMO_MAX = 25
+self.galil.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --M308
 self.new_m14.AMMO_PICKUP = {1, 2.7}

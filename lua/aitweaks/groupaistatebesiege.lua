@@ -1792,27 +1792,14 @@ function GroupAIStateBesiege:_upd_assault_task()
 				
 				--local max_dis = self._small_map and 4000 or 8000
 				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, nil)
-				local area_to_approach = nil
-			
-				if primary_target_area.neighbours then
-					local areas = {}
-					local i = 1
-					--sorround and lockdown the current target area with the power of RNG!
-					for area_id, neighbour_area in pairs_g(primary_target_area.neighbours) do
-						areas[i] = neighbour_area
-						i = i + 1
-					end
-					
-					area_to_approach = areas[math_random(#areas)]
-				end
-				
+
 				if spawn_group then
 					local grp_objective = {
 						attitude = self._street and "avoid" or anticipation and "avoid" or "engage",
 						stance = "hos",
 						pose = anticipation and "crouch" or "stand",
 						type = "assault_area",
-						area = area_to_approach or primary_target_area
+						area = primary_target_area
 					}
 
 					self:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, task_data)
@@ -1865,7 +1852,7 @@ function GroupAIStateBesiege:_upd_recon_tasks()
 				scan = true,
 				stance = "hos",
 				type = "recon_area",
-				area = spawn_group.area,
+				area = task_data.target_area,
 				target_area = task_data.target_area
 			}
 
@@ -2043,12 +2030,11 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 		local coarse_path = managers.navigation:search_coarse(search_params)
 		
 		if coarse_path then
-			coarse_path = managers.navigation:shorten_coarse_through_dis(coarse_path)
-		
 			--log("pog???")
 			grp_objective.coarse_path = coarse_path
 			grp_objective.area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1])
 		else
+			grp_objective.area = self:get_area_from_nav_seg_id(spawn_group.nav_seg)
 			grp_objective.coarse_path = {{spawn_group.nav_seg, spawn_group.area.pos}}
 		end
 	end
@@ -2446,7 +2432,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	
 	local current_objective = group.objective
 	
-	local approach, open_fire, push, pull_back, charge = nil
+	local approach, open_fire, push, pull_back, charge, has_found_position = nil
 	local obstructed_area = self:_chk_group_areas_tresspassed(group)
 	local group_leader_u_key, group_leader_u_data = self._determine_group_leader(group.units)
 	local tactics_map = nil
@@ -2664,8 +2650,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 	local objective_area = nil
 	
-	local diff_index = Global.game_settings.one_down and 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	
 	if obstructed_area then
 		--if one of the group members walk into a criminal then, if the phase is anticipation, they'll retreat backwards, otherwise, stand their ground and start shooting.
 		--this will most likely always instantly kick in if the group has finished charging into an area.
@@ -2675,65 +2659,47 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		else
 			objective_area = obstructed_area
 			
-			if group.in_place_t and self._t - group.in_place_t > 2 then --if we're in the destination and we have stayed still for longer than 2 seconds, if anyone is camping in a specific spot, try to path to them
+			if not group.in_place_t or group.in_place_t and self._t - group.in_place_t > 2 then --if we're in the destination and we have stayed still for longer than 2 seconds, if anyone is camping in a specific spot, try to path to them
 				push = true
-				charge = true
 			elseif not current_objective.open_fire or not current_objective.area or current_objective.area.id ~= obstructed_area.id then --have to check for this here or open_fire might not get set
 				open_fire = true
 			end
 		end
-	elseif group.objective.moving_in and not current_objective.tactic then
+	elseif current_objective.moving_in and not current_objective.tactic then
 		if phase_is_anticipation then
 			pull_back = true
 		elseif not current_objective.area or not next(current_objective.area.criminal.units) then --if theres suddenly no criminals in the area, start approaching instead
-			approach = true
-
-		end
-	elseif not current_objective.moving_in then
-		local obstructed_path_index = nil
-		local forwardmost_i_nav_point = nil
-		
-		if current_objective.coarse_path then
-			obstructed_path_index = self:_chk_coarse_path_obstructed(group)
-		end
-				
-		if current_objective.moving_out then
-			if self._street or not phase_is_sustain and not self._hunt_mode then
-				if obstructed_path_index then
-					if self._street or phase_is_anticipation or diff_index < 7 then --if theres criminals obstructing the group's coarse_path, then this will get the area in which that's happening.
-						local reduct = 2
-						
-						objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(obstructed_path_index - reduct, 1)][1])
-						pull_back = true
-					end
-				elseif current_objective.coarse_path then
-					local reduct = 2
-				
-					if current_objective.area and next(current_objective.area.criminal.units) then
-						local coarse_path = current_objective.coarse_path
-						
-						if not coarse_path then
-							log("???")
-						end
-						
-						local number = #coarse_path
-						
-						objective_area = self:get_area_from_nav_seg_id(current_objective.coarse_path[math.max(number - reduct, 1)][1])
-						pull_back = true
-					end
-				end
+			if self._street or not phase_is_sustain then
+				pull_back = true
 			else
 				push = true
 			end
-		else
-			local has_criminals_closer = nil
-			local has_criminals_close = nil
-			
-			if next(current_objective.area.criminal.units) then
+		end
+	else
+		local obstructed_path_index = nil
+		local forwardmost_i_nav_point = nil
+		local area_to_chk = nil
+		
+		if current_objective.coarse_path then --if they were previously moving in, use their current coarse path for reference as that means they transitioned
+			forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
+		elseif current_objective.area then --otherwise, use their current objective area, as it means they were in place
+			area_to_chk = current_objective.area
+		end
+
+		if forwardmost_i_nav_point then
+			area_to_chk = self:get_area_from_nav_seg_id(current_objective.coarse_path[forwardmost_i_nav_point][1])
+		end
+				
+		local has_criminals_closer = nil
+		local has_criminals_close = nil
+		
+		--check up to two nav areas away, but first check the current area in case obstructed_area didn't proc
+		if area_to_chk then
+			if next(area_to_chk.criminal.units) then
 				has_criminals_close = true
 				has_criminals_closer = true
 			else
-				for area_id, neighbour_area in pairs_g(current_objective.area.neighbours) do
+				for area_id, neighbour_area in pairs_g(area_to_chk.neighbours) do
 					if next(neighbour_area.criminal.units) then					
 						has_criminals_close = neighbour_area
 						break
@@ -2747,56 +2713,41 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					end
 				end
 			end
+		end
 			
-			if phase_is_anticipation and current_objective.open_fire then
+		if has_criminals_closer then --open fire when enemies are in the current area we are in
+			if phase_is_anticipation then
 				pull_back = true
-			elseif self._hunt_mode or phase_is_sustain then
-				if not self._street then
-					push = true
+			else
+				open_fire = true
+			end
+		elseif phase_is_anticipation and current_objective.open_fire then --if we were aggressive one update ago, start backing up away from the current objective area
+			pull_back = true
+		elseif not phase_is_anticipation and group.in_place_t and self._t - group.in_place_t > 10 or not self._street and self._hunt_mode or not self._street and phase_is_sustain then
+			push = true --various checks for sustain, plus one to make sure that if we're a ranged fire team who refused to push due to street, we will eventually push anyways
+		elseif has_criminals_close then
+			if phase_is_anticipation then --stop early in our coarse path if theres criminals ahead
+				pull_back = true
+				objective_area = area_to_chk
+			elseif self._street then --street behavior, stay in place a bit before pushes 
+				if not group.in_place_t or group.in_place_t and self._t - group.in_place_t > 4 then 
+					if not tactics_map or not tactics_map.ranged_fire and not tactics_map.elite_ranged_fire then
+						objective_area = has_criminals_close
+						push = true
+					else
+						objective_area = area_to_chk
+						open_fire = true
+					end
 				else
 					approach = true
+					objective_area = area_to_chk
 				end
-			elseif phase_is_anticipation and not has_criminals_close or diff_index < 7 and not has_criminals_close then
-				approach = true
-			elseif not phase_is_anticipation then
-				if not has_criminals_closer then
-					objective_area = has_criminals_close
-					
-					--the general idea here is that groups will generally try to wait until other groups have headed into the area
-					--by pushing in one big pile, you make sure to punish players camping and not trying to keep the cops away, without making them too rushy.
-					if not self._street and diff_index > 6 then
-						push = true
-					elseif not group.in_place_t then
-						pull_back = true
-					else
-						local move_t = 4
-						--local deduction = not self._last_killed_cop_t and 4 or self._t - self._last_killed_cop_t
-						
-						if tactics_map then
-							if tactics_map.charge then
-								move_t = move_t - 2
-							elseif tactics_map.ranged_fire or tactics_map.elite_ranged_fire then
-								move_t = move_t + 2
-							end
-						end
-						
-						if diff_index < 4 then
-							move_t = move_t + 2
-						elseif diff_index > 5 then
-							move_t = move_t - 2
-						end
-					
-						if move_t <= 0 or self._t - group.in_place_t > move_t then
-							push = true
-						end
-					end
-				elseif current_objective.coarse_path then
-					--this shouldnt happen under most circumstances, but might be an edge case, so im making sure.
-					--in case the group was moving_out/moving_in and doesn't get obstructed_area, but theres criminals in the area they're in, use open_fire
-					--to wipe the coarse path.
-					open_fire = true
-				end
+			else
+				objective_area = has_criminals_close
+				push = true
 			end
+		else
+			approach = true --continue approaching if none of the conditions above apply
 		end
 	end
 	
@@ -2817,12 +2768,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			type = "assault_area",
 			stance = "hos",
 			open_fire = true,
-			no_move_out = true,
 			tactic = current_objective.tactic,
-			area = obstructed_area or current_objective.area
+			area = obstructed_area or objective_area
 		}
-		
-		group.in_place_t = self._t
+
 		group.is_chasing = nil
 		self:_set_objective_to_enemy_group(group, grp_objective)
 		self:_voice_open_fire_start(group)
@@ -2835,18 +2784,12 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			[objective_area] = "init"
 		}
 		
-		local needs_coarse_path = nil --i set this up in case we want groups in coplogicattack who are opening fire to be able to charge, without wasting performance on a coarse_path
-		
 		repeat
 			local search_area = table_remove(to_search_areas, 1)
 			
 			if next(search_area.criminal.units) then
 				local assault_from_here = true
 				
-				if not current_objective.area or search_area.id ~= current_objective.area.id then
-					needs_coarse_path = true
-				end
-
 				if not push then
 					if tactics_map and tactics_map.flank then
 						local assault_from_area = found_areas[search_area]
@@ -2859,28 +2802,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 									assault_from_here = false
 									
 									if not alternate_assault_area or math_random() < 0.5 then
-										if needs_coarse_path then
-											local search_params = {
-												id = "GroupAI_assault",
-												from_seg = current_objective.area.pos_nav_seg,
-												to_seg = search_area.pos_nav_seg,
-												access_pos = self._get_group_acces_mask(group),
-												long_path = true
-											}
-											alternate_assault_path = managers.navigation:search_coarse(search_params)
-											
-											if alternate_assault_path then
-												--log("pog")
-												self:_merge_coarse_path_by_area(alternate_assault_path)
+										local search_params = {
+											id = "GroupAI_assault",
+											from_seg = current_objective.area.pos_nav_seg,
+											to_seg = search_area.pos_nav_seg,
+											access_pos = self._get_group_acces_mask(group),
+											long_path = true
+										}
+										alternate_assault_path = managers.navigation:search_coarse(search_params)
+										
+										if alternate_assault_path then
+											--log("pog")
+											self:_merge_coarse_path_by_area(alternate_assault_path)
 
-												alternate_assault_area = search_area
-												alternate_assault_area_from = assault_from_area
-											end
-										else
 											alternate_assault_area = search_area
 											alternate_assault_area_from = assault_from_area
 										end
-
+									else
+										alternate_assault_area = search_area
+										alternate_assault_area_from = assault_from_area
 									end
 
 									found_areas[search_area] = nil
@@ -2893,27 +2833,22 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 
 				if assault_from_here then
-					
-					if not needs_coarse_path then
+					local search_params = {
+						id = "GroupAI_assault",
+						from_seg = current_objective.area.pos_nav_seg,
+						to_seg = search_area.pos_nav_seg,
+						access_pos = self._get_group_acces_mask(group),
+						long_path = tactics_map and tactics_map.flank and true or nil
+					}
+					assault_path = managers.navigation:search_coarse(search_params)
+
+					if assault_path then
+						--log("YOOOOOOOOOOOOOOOOOOOOOOOOO")
+						self:_merge_coarse_path_by_area(assault_path)
+
 						assault_area = search_area
-					else
-						local search_params = {
-							id = "GroupAI_assault",
-							from_seg = current_objective.area.pos_nav_seg,
-							to_seg = search_area.pos_nav_seg,
-							access_pos = self._get_group_acces_mask(group),
-							long_path = tactics_map and tactics_map.flank and true or nil
-						}
-						assault_path = managers.navigation:search_coarse(search_params)
 
-						if assault_path then
-							--log("YOOOOOOOOOOOOOOOOOOOOOOOOO")
-							self:_merge_coarse_path_by_area(assault_path)
-
-							assault_area = search_area
-
-							break
-						end
+						break
 					end
 				end
 			else
@@ -2930,31 +2865,14 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if not assault_area and alternate_assault_area then
 			assault_area = alternate_assault_area
 			found_areas[assault_area] = alternate_assault_area_from
-			if needs_coarse_path then
-				assault_path = alternate_assault_path
-			end
+			assault_path = alternate_assault_path
 		end
 
-		if not needs_coarse_path and assault_area or assault_area and assault_path then
+		if assault_area and assault_path then
 			local assault_area = push and assault_area or found_areas[assault_area] == "init" and objective_area or found_areas[assault_area]
 
 			local used_grenade = nil
-			
-			if approach and assault_path and next(assault_area.criminal.units) then
-				local safe_i = 2
-				local safe_area = self:get_area_from_nav_seg_id(assault_path[math_max(#assault_path - safe_i, 1)][1])
-				
-				if safe_area then
-					local new_path = {}
-					for i = 1, #assault_path - safe_i do
-						new_path[i] = assault_path[i]
-					end
-					
-					assault_path = new_path
-					assault_area = safe_area
-				end
-			end
-			
+	
 			if push then
 				if current_objective.area.id == assault_area.id or current_objective.area.neighbours[assault_area] then
 					if math_random() < 0.5 then
@@ -2979,10 +2897,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if assault_path and #assault_path > 2 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
 				table_remove(assault_path)
 			end
-			
-			if assault_path then
-				assault_path = managers.navigation:shorten_coarse_through_dis(assault_path)
-			end
 
 			local grp_objective = {
 				type = "assault_area",
@@ -2991,9 +2905,9 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				coarse_path = assault_path or nil,
 				pose = "stand",
 				attitude = push and "engage" or "avoid",
-				moving_in = push and true or nil,
-				open_fire = push or nil,
-				pushed = push or nil,
+				moving_in = push,
+				open_fire = push,
+				pushed = push,
 				charge = push,
 				interrupt_dis = nil
 			}

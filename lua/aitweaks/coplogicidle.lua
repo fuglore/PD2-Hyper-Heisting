@@ -252,14 +252,16 @@ function CopLogicIdle.queued_update(data)
 	end
 
 	local objective = data.objective
-
-	if my_data.has_old_action then
-		CopLogicIdle._upd_stop_old_action(data, my_data, objective)
-		
+	
+	if not my_data.action_started then
 		if my_data.has_old_action then
-			CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicIdle.queued_update, data, data.t + delay, data.cool and true or data.important and true)
+			CopLogicIdle._upd_stop_old_action(data, my_data, objective)
+			
+			if my_data.has_old_action then
+				CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicIdle.queued_update, data, data.t + delay, data.cool and true or data.important and true)
 
-			return
+				return
+			end
 		end
 	end
 	
@@ -1084,12 +1086,11 @@ function CopLogicIdle.action_complete_clbk(data, action)
 		if my_data.action_started == action then
 			local expired = action:expired()
 
-			if expired or my_data.starting_idle_action_from_act then
+			if expired then
 				if not my_data.action_timeout_clbk_id then
 					data.objective_complete_clbk(data.unit, data.objective)
 				end
 				
-				my_data.starting_idle_action_from_act = nil
 			elseif not my_data.action_expired then
 				data.objective_failed_clbk(data.unit, data.objective)
 			end
@@ -2428,6 +2429,9 @@ function CopLogicIdle._perform_objective_action(data, my_data, objective)
 			end
 
 			if my_data.action_started then
+				my_data.has_old_action = nil
+				my_data.advancing = nil
+				
 				if objective.action_duration or objective.action_timeout_t then
 					my_data.action_timeout_clbk_id = "CopLogicIdle_action_timeout" .. tostring(data.key)
 					local action_timeout_t = objective.action_timeout_t or data.t + objective.action_duration
@@ -2466,7 +2470,7 @@ end
 
 function CopLogicIdle._chk_has_old_action(data, my_data)
 	local anim_data = data.unit:anim_data()
-	my_data.has_old_action = anim_data.to_idle or anim_data.act
+	my_data.has_old_action = my_data.old_action_started or anim_data.to_idle or anim_data.act
 	local lower_body_action = data.unit:movement()._active_actions[2]
 	my_data.advancing = lower_body_action and lower_body_action:type() == "walk" and lower_body_action
 end

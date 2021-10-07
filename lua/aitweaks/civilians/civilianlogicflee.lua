@@ -99,6 +99,14 @@ function CivilianLogicFlee.register_rescue_SO(ignore_this, data)
 	managers.groupai:state():register_rescueable_hostage(data.unit, nil)
 end
 
+function CivilianLogicFlee.on_intimidated(data, amount, aggressor_unit)
+	if not data.char_tweak.intimidateable or data.unit:base().unintimidateable or data.unit:anim_data().unintimidateable then
+		return
+	end
+
+	CivilianLogicFlee._delayed_intimidate_clbk(nil, {data, amount, aggressor_unit})
+end
+
 function CivilianLogicFlee.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 
@@ -145,4 +153,17 @@ function CivilianLogicFlee.on_rescue_SO_administered(ignore_this, data, receiver
 	receiver_unit:sound():say("cr1", true) --"We'll come to you!"
 
 	managers.groupai:state():unregister_rescueable_hostage(data.key)
+end
+
+function CivilianLogicFlee.reset_actions(data)
+	data.brain:action_request({
+		variant = "idle",
+		body_part = 1,
+		type = "act",
+		blocks = {
+			action = -1,
+			idle = -1,
+			walk = -1
+		}
+	})
 end

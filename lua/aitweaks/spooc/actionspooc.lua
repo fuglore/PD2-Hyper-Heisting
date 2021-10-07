@@ -2498,7 +2498,7 @@ function ActionSpooc:_upd_flying_strike(t)
 		local seg_rel_t = self._machine:segment_relative_time(ids_base)
 		local strike_data = self._flying_strike_data
 		
-		if self._is_local then
+		if self._is_local and self._target_unit and alive(self._target_unit) then
 			local target_pos = self._target_unit:movement():m_pos()
 			local target_vec = target_pos - cur_pos
 			local dt = self._timer:delta_time()
@@ -2509,7 +2509,8 @@ function ActionSpooc:_upd_flying_strike(t)
 			local new_rot = Rotation(target_vec:normalized(), math_up)
 
 			new_rot = common_data.rot:slerp(new_rot, delta_lerp)
-
+			strike_data.target_rot = new_rot
+			
 			self._ext_movement:set_rotation(new_rot)
 		else
 			self._ext_movement:set_rotation(strike_data.target_rot)

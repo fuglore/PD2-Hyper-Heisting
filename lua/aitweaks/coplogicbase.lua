@@ -1343,62 +1343,60 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 		end
 	end
 	
-	if not objective.pos and not objective.action and not objective.running then
-		if attention and REACT_COMBAT <= attention.reaction then
-			local good_types = {
-				free = true,
-				defend_area = true,
-				follow = true
-			}
-				
-			if good_types[objective.type] then
-				local good_grp_types = {
-					recon_area = true,
-					assault_area = true,
-					reenforce_area = true,
-					defend_area = true
+	if not data.internal_data.action_started then
+		if not objective.pos and not objective.action and not objective.running then
+			if attention and REACT_COMBAT <= attention.reaction then
+				local good_types = {
+					free = true,
+					defend_area = true,
+					follow = true
 				}
-				
-				if not objective.grp_objective or good_grp_types[objective.grp_objective.type] then 
-					local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
-					local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
 					
-					if objective.area and objective.area.nav_segs[my_nav_seg] and next(objective.area.criminal.units) then
-						return true, false
-					end
+				if good_types[objective.type] then
+					local good_grp_types = {
+						recon_area = true,
+						assault_area = true,
+						reenforce_area = true,
+						defend_area = true
+					}
 					
-					if REACT_COMBAT <= attention.reaction then
-						if not data.tactics or not data.tactics.charge or objective.area and next(objective.area.police.units) or managers.groupai:state():chk_heat_bonus_retreat() then
-							local grp_objective = objective.grp_objective
-							local dis = data.unit:base()._engagement_range or data.internal_data.weapon_range and data.internal_data.weapon_range.close or 500
-							local my_data = data.internal_data
-							local soft_t = 1
-							
-							if not data.internal_data.want_to_take_cover then
-								if not data.unit:base()._engagement_range then
-									if grp_objective and not grp_objective.open_fire then
+					if not objective.grp_objective or good_grp_types[objective.grp_objective.type] then 
+						local my_nav_seg = data.unit:movement():nav_tracker():nav_segment()
+						local my_area = managers.groupai:state():get_area_from_nav_seg_id(data.unit:movement():nav_tracker():nav_segment())
+						
+						if REACT_COMBAT <= attention.reaction then
+							if not data.tactics or not data.tactics.charge or objective.area and next(objective.area.police.units) or managers.groupai:state():chk_heat_bonus_retreat() then
+								local grp_objective = objective.grp_objective
+								local dis = data.unit:base()._engagement_range or data.internal_data.weapon_range and data.internal_data.weapon_range.close or 500
+								local my_data = data.internal_data
+								local soft_t = 1
+								
+								if not data.internal_data.want_to_take_cover then
+									if not data.unit:base()._engagement_range then
+										if grp_objective and not grp_objective.open_fire then
+											dis = dis * 0.5
+										end
+									else
+										soft_t = 2
+									end
+									
+									if not attention.verified then
 										dis = dis * 0.5
 									end
-								else
-									soft_t = 2
 								end
 								
-								if not attention.verified then
-									dis = dis * 0.5
+								local visible_softer = data.internal_data.want_to_take_cover or attention.verified_t and data.t - attention.verified_t < soft_t
+								
+								if visible_softer and attention.dis <= dis then
+									return true, false
 								end
-							end
-							
-							local visible_softer = data.internal_data.want_to_take_cover or attention.verified_t and data.t - attention.verified_t < soft_t
-							
-							if visible_softer and attention.dis <= dis then
-								return true, false
 							end
 						end
 					end
 				end
-			end
-		end		
-	end
+			end		
+		end
+		end
 	
 	if objective.interrupt_dis then
 		attention = attention or data.attention_obj

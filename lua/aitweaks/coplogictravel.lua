@@ -61,6 +61,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	end
 
 	if old_internal_data then
+		my_data.old_action_started = old_internal_data.action_started
 		my_data.turning = old_internal_data.turning
 		my_data.firing = old_internal_data.firing
 		my_data.shooting = old_internal_data.shooting
@@ -836,6 +837,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				end
 			end
 			
+			my_data.old_action_started = nil
 			CopLogicAttack._upd_aim(data, my_data)
 		elseif action:expired() then
 			if data.important or data.is_converted or data.unit:in_slot(16) then

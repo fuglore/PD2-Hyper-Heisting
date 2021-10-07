@@ -56,6 +56,7 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	my_data.detection = data.char_tweak.detection.combat
 
 	if old_internal_data then
+		my_data.old_action_started = old_internal_data.action_started
 		my_data.turning = old_internal_data.turning
 		my_data.firing = old_internal_data.firing
 		my_data.shooting = old_internal_data.shooting
@@ -1257,7 +1258,7 @@ function CopLogicAttack._update_cover(data)
 						end
 					end]]
 					
-					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, nil, cone_angle, nil, nil, nil, data.pos_rsrv_id)
+					local found_cover = managers.navigation:find_cover_in_cone_from_threat_pos_1(threat_pos, furthest_side_pos, my_side_pos, cone_angle, cone_angle, nil, nil, nil, data.pos_rsrv_id)
 					
 					--log(tostring(i))
 					
@@ -1608,6 +1609,7 @@ function CopLogicAttack.action_complete_clbk(data, action)
 	elseif action_type == "act" then
 		if my_data.starting_idle_action_from_act or action:expired() then
 			data.logic._upd_aim(data, my_data)
+			my_data.old_action_started = nil
 		end
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
@@ -1787,27 +1789,33 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 						if expected_pos then
 							if running then
-								expected_pos = mvec3_cpy(expected_pos)
-								local watch_dir = temp_vec1
-
-								mvec3_set(watch_dir, expected_pos)
-								mvec3_sub(watch_dir, data.m_pos)
-								mvec3_set_z(watch_dir, 0)
-
-								local watch_pos_dis = mvec3_norm(watch_dir)
 								local walk_to_pos = data.unit:movement():get_walk_to_pos()
-								local walk_vec = temp_vec2
+								
+								if walk_to_pos then
+									expected_pos = mvec3_cpy(expected_pos)
+									local watch_dir = temp_vec1
 
-								mvec3_set(walk_vec, walk_to_pos)
-								mvec3_sub(walk_vec, data.m_pos)
-								mvec3_set_z(walk_vec, 0)
-								mvec3_norm(walk_vec)
+									mvec3_set(watch_dir, expected_pos)
+									mvec3_sub(watch_dir, data.m_pos)
+									mvec3_set_z(watch_dir, 0)
 
-								local watch_walk_dot = mvec3_dot(watch_dir, walk_vec)
+									local watch_pos_dis = mvec3_norm(watch_dir)
+									local walk_vec = temp_vec2
 
-								if watch_pos_dis < 500 or watch_pos_dis < 1000 and watch_walk_dot > 0.85 then
+									mvec3_set(walk_vec, walk_to_pos)
+									mvec3_sub(walk_vec, data.m_pos)
+									mvec3_set_z(walk_vec, 0)
+									mvec3_norm(walk_vec)
+
+									local watch_walk_dot = mvec3_dot(watch_dir, walk_vec)
+
+									if watch_pos_dis < 500 or watch_pos_dis < 1000 and watch_walk_dot > 0.85 then
+										aim = true
+									end
+								else
 									aim = true
 								end
+								
 							else
 								aim = true
 							end
@@ -2201,10 +2209,6 @@ function CopLogicAttack.is_available_for_assignment(data, new_objective)
 		if data.t < data.path_fail_t + fail_t_chk then
 			return
 		end
-	end
-
-	if my_data.want_to_take_cover then
-		return
 	end
 
 	local att_obj = data.attention_obj

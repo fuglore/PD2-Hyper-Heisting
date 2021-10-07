@@ -2407,7 +2407,17 @@ function CopActionHurt:on_death_drop(unit, stage)
 end
 
 function CopActionHurt:on_inventory_event(event)
-	local weapon_unit = self._ext_inventory:equipped_unit()
+	if self._autofiring or self._shooting_hurt then
+		self._shooting_hurt = false
+		self._autofiring = nil
+		self._autoshots_fired = nil
+
+		if alive(self._weapon_unit) then
+			self._weapon_base:stop_autofire()
+		end
+	end
+
+	local weapon_unit = not self._weapon_dropped and self._ext_inventory:equipped_unit()
 
 	if weapon_unit then
 		local weap_tweak = weapon_unit:base():weapon_tweak_data()

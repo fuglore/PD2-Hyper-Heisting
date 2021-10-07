@@ -296,7 +296,7 @@
 		["menu_cs_modifier_voltergas"] = "Smoke Grenades are replaced by Tear Gas Smoke Grenades.",
 		["menu_cs_modifier_bouncers"] = "Enemies have a chance drop a destructible explosive grenade with a beeping timer on death.",
 		["menu_cs_modifier_cloaker_tear_gas"] = "Cloakers are now silent while charging and move 25% faster.",
-		["menu_cs_modifier_enemy_health_damage"] = "Enemies deal an additional 15% more damage, are 10% more accurate, have 15% more health, turn 5% faster and detect you slightly faster in Stealth.",
+		["menu_cs_modifier_enemy_health_damage"] = "Enemies deal an additional 15% more damage, have 15% more health, and detect you slightly faster in Stealth.",
 		["loading_heister_13"] = "Go shoot a cop in real life RIGHT NOW!!! It'll end well! Trust me!",
 		["loading_heister_21"] = "Suppression does NOT completely stop armor regeneration! When taking fire with your armor down, don't panic! Try to cut line of sight and be patient!",
 		["loading_heister_44"] = "Mayhem, Death Wish and Death Sentence enemies are much better at dodging! Try to predict when they will execute them!",
