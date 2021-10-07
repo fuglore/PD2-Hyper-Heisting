@@ -365,7 +365,7 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 		if not self._reset_heat_bonus_t then
 			self._reset_heat_bonus_t = 10
 		elseif self._reset_heat_bonus_t <= 0 then
-			log("oof")
+			--log("oof")
 			self:reset_heat_bonus()
 			self._next_heatbonus_reset = self._downs_during_assault + 2
 			self._reset_heat_bonus_t = nil
