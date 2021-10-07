@@ -9,6 +9,10 @@ local mvec3_add = mvector3.add
 local mvec3_divide = mvector3.divide
 local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_cpy = mvector3.copy
+local mvec3_sub = mvector3.subtract
+local mvec3_dir = mvector3.direction
+local mvec3_dot = mvector3.dot
+local mvec3_norm = mvector3.normalize
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_vec3 = Vector3()
@@ -1354,6 +1358,18 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	assault_task.next_dispatch_t = nil
 	assault_task.target_areas = assault_areas or self:_upd_assault_areas(nil)
 	self._current_target_area = self._task_data.assault.target_areas[1]
+	
+	if self._street then 
+		if self._current_objective_pos then
+			local area_pos = self._current_objective_pos:with_z(0)
+			local primary_target_area_pos = self._task_data.assault.target_areas[1].pos:with_z(0)
+			mvec3_dir(area_pos, primary_target_area_pos, area_pos)
+			self._current_objective_dir = area_pos
+		else
+			self._current_objective_dir = nil
+		end
+	end
+	
 	self._used_assault_area_i = 0
 	local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.is_first)
 	
@@ -1761,6 +1777,17 @@ function GroupAIStateBesiege:_upd_assault_task()
 			primary_target_area = nearest_area
 			task_data.target_areas[1] = nearest_area
 		end
+		
+		if self._street then 
+			if self._current_objective_pos then
+				local area_pos = self._current_objective_pos:with_z(0)
+				local primary_target_area_pos = primary_target_area.pos:with_z(0)
+				mvec3_dir(area_pos, primary_target_area_pos, area_pos)
+				self._current_objective_dir = area_pos
+			else
+				self._current_objective_dir = nil
+			end
+		end
 	end
 	
 	if task_data.phase ~= "fade" then
@@ -1790,7 +1817,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 				end
 				
 				
-				--local max_dis = self._small_map and 4000 or 8000
+				--local max_dis = self._street and 6000 or 12000
 				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, nil)
 
 				if spawn_group then
@@ -3406,6 +3433,8 @@ function GroupAIStateBesiege:_end_regroup_task()
 		if not Global.game_settings.single_player then
 			LuaNetworking:SendToPeers("shin_sync_post_assault_replenish", "")
 		end
+		
+		self._current_objective_dir = nil
 
 		managers.mission:call_global_event("end_assault_late")
 		managers.groupai:dispatch_event("end_assault_late", self._assault_number)
@@ -3538,6 +3567,16 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 						if max_dis and my_dis > max_dis then
 							should_add_spawngroup = nil
 							--log("piss2")
+						end
+						
+						if self._current_objective_dir then
+							local spawn_group_dir = spawn_group.pos:with_z(0)
+							mvec3_sub(spawn_group_dir, target_pos:with_z(0))
+							mvec3_norm(spawn_group_dir)
+							
+							if mvec3_dot(self._current_objective_dir, spawn_group_dir) < 0.2 then
+								should_add_spawngroup = nil
+							end
 						end
 						
 						if should_add_spawngroup then
