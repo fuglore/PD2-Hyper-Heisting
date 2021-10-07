@@ -1335,7 +1335,7 @@ self.asval.can_shoot_through_wall = true
 self.asval.kick.standing = self.akm.kick.standing
 self.asval.kick.crouching = self.akm.kick.crouching
 self.asval.kick.steelsight = self.akm.kick.steelsight
-self.asval.AMMO_PICKUP = {3, 6}
+self.asval.AMMO_PICKUP = {4, 6}
 self.asval.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Tempest
@@ -1530,15 +1530,14 @@ self.x_m1928.kick.steelsight = self.new_mp5.kick.standing
 
 -- Jackal
 self.schakal.stats.spread = 17
-self.schakal.AMMO_PICKUP = {3, 6.5}
+self.schakal.AMMO_PICKUP = {4, 6}
 self.schakal.AMMO_MAX = 100
 self.schakal.stats.damage = 78
 self.schakal.kick = self.vhs.kick
 
 self.x_schakal.stats.damage = 78
-self.x_schakal.AMMO_PICKUP = {3, 6.5}
+self.x_schakal.AMMO_PICKUP = {4, 6}
 self.x_schakal.AMMO_MAX = 120
-self.x_schakal.AMMO_PICKUP = {2, 5}
 self.x_schakal.kick = self.vhs.kick
 self.x_schakal.kick.crouching = self.vhs.kick.standing
 self.x_schakal.kick.steelsight = self.vhs.kick.standing
@@ -1553,8 +1552,8 @@ self.erma.stats.recoil = 15
 self.erma.AMMO_MAX = 150
 self.x_erma.AMMO_MAX = 200
 self.x_erma.stats.spread = 16
-self.erma.AMMO_PICKUP = {1.5, 7}
-self.x_erma.AMMO_PICKUP = {1.5, 7}
+self.erma.AMMO_PICKUP = {4, 8}
+self.x_erma.AMMO_PICKUP = {4, 8}
 self.erma.kick.standing = self.new_mp5.kick.standing
 self.erma.kick.crouching = self.new_mp5.kick.crouching
 self.erma.kick.steelsight = self.new_mp5.kick.steelsight
@@ -1565,7 +1564,7 @@ self.x_erma.kick.steelsight = self.new_mp5.kick.standing
 -- Heather
 self.sr2.AMMO_MAX = 120
 self.sr2.stats.spread = 17
-self.sr2.AMMO_PICKUP = {1.5, 7}
+self.sr2.AMMO_PICKUP = {4, 8}
 self.x_sr2.AMMO_MAX = 150  
 self.sr2.kick.standing = self.new_mp5.kick.standing
 self.sr2.kick.crouching = self.new_mp5.kick.crouching
@@ -1595,7 +1594,7 @@ self.x_olympic.kick.steelsight = self.new_mp5.kick.standing
 -- Patchett
 self.sterling.stats.damage = 128
 self.sterling.stats.spread = 16
-self.sterling.AMMO_PICKUP = {2, 3}
+self.sterling.AMMO_PICKUP = {3, 4}
 self.sterling.AMMO_MAX = 60
 self.sterling.kick = {
 standing = {
@@ -1620,7 +1619,7 @@ crouching = {
 
 self.x_sterling.stats.damage = 128
 self.x_sterling.stats.spread = 17
-self.x_sterling.AMMO_PICKUP = {1, 3}
+self.x_sterling.AMMO_PICKUP = {3, 4}
 self.x_sterling.AMMO_MAX = 50
 self.x_sterling.kick = self.sterling.kick
 self.x_sterling.kick.crouching = self.sterling.kick.standing
@@ -1660,6 +1659,7 @@ self.x_m45.AMMO_MAX = 90
 self.m45.AMMO_PICKUP = {2, 5}
 self.m45.kick = self.sterling.kick
 
+self.x_m45.AMMO_PICKUP = {2, 5}
 self.x_m45.kick = self.sterling.kick
 self.x_m45.kick.crouching = self.sterling.kick.standing
 self.x_m45.kick.steelsight = self.sterling.kick.standing
@@ -1672,14 +1672,16 @@ self.coal.stats.damage = 59
 self.coal.kick.standing = self.new_mp5.kick.standing
 self.coal.kick.crouching = self.new_mp5.kick.crouching
 self.coal.kick.steelsight = self.new_mp5.kick.steelsight
+self.coal.damage_falloff = FALLOFF_TEMPLATE.SMG_FALL_MEDIUM
 
 self.x_coal.AMMO_MAX = 150
-self.x_coal.stats.spread = 17
+self.x_coal.stats.spread = 12
 self.x_coal.stats.damage = 59
-self.x_coal.AMMO_PICKUP = {1.5, 7}
+self.x_coal.AMMO_PICKUP = {4, 8}
 self.x_coal.kick = self.new_mp5.kick
 self.x_coal.kick.crouching = self.x_coal.kick.standing
 self.x_coal.kick.steelsight = self.x_coal.kick.standing
+self.x_coal.damage_falloff = FALLOFF_TEMPLATE.AKI_SMG_FALL_MEDIUM
 
 -- Cobra
 self.scorpion.stats.spread = 16
@@ -1716,25 +1718,31 @@ self.x_cobray.kick.crouching = self.new_mp5.kick.standing
 self.x_cobray.kick.steelsight = self.new_mp5.kick.standing
 
 -- Kross Vertex
+self.polymer.AMMO_PICKUP = {4, 6}
+self.polymer.damage_falloff = FALLOFF_TEMPLATE.SMG_FALL_HIGH
 self.polymer.stats.spread = 15
 self.polymer.AMMO_MAX = 120  
 self.x_polymer.AMMO_MAX = 150  
 self.polymer.kick.standing = self.new_mp5.kick.standing
 self.polymer.kick.crouching = self.new_mp5.kick.crouching
 self.polymer.kick.steelsight = self.new_mp5.kick.steelsight
+self.x_polymer.AMMO_PICKUP = {4, 6}
+self.x_polymer.damage_falloff = FALLOFF_TEMPLATE.AKI_SMG_FALL_HIGH
 self.x_polymer.kick = self.new_mp5.kick
 self.x_polymer.kick.crouching = self.x_polymer.kick.standing
 self.x_polymer.kick.steelsight = self.x_polymer.kick.standing
 
+
 -- Kobus 90
+self.p90.damage_falloff = FALLOFF_TEMPLATE.SMG_FALL_MEDIUM
 self.p90.has_description = true
-self.p90.AMMO_PICKUP = {2, 4}
+self.p90.AMMO_PICKUP = {4, 6}
 self.x_p90.has_description = true
-self.x_p90.AMMO_PICKUP = {2, 4}
+self.x_p90.AMMO_PICKUP = {4, 6}
 self.p90.stats.spread = 12
-self.x_p90.stats.spread = 12
-self.p90.stats.damage = 39
-self.x_p90.stats.damage = 39
+self.x_p90.stats.spread = 10
+self.p90.stats.damage = 50
+self.x_p90.stats.damage = 50
 self.p90.AMMO_MAX = 100
 self.x_p90.AMMO_MAX = 120
 self.p90.can_shoot_through_shield = true
@@ -1814,7 +1822,7 @@ self.x_mp7.kick.crouching = self.new_mp5.kick.standing
 self.x_mp7.kick.steelsight = self.new_mp5.kick.standing
 
 --Krinkov
-self.akmsu.AMMO_PICKUP = {3, 6.5}
+self.akmsu.AMMO_PICKUP = {4, 6}
 self.akmsu.AMMO_MAX = 100
 self.akmsu.stats.damage = 78
 self.akmsu.kick = {
@@ -1843,14 +1851,14 @@ self.x_akmsu.kick.crouching = self.akmsu.kick.standing
 self.x_akmsu.kick.steelsight = self.akmsu.kick.standing
 self.x_akmsu.AMMO_MAX = 120
 self.x_akmsu.stats.damage = 78
-self.x_akmsu.AMMO_PICKUP = {2, 5}
+self.x_akmsu.AMMO_PICKUP = {4, 6}
 
 --CR805B
-self.hajk.AMMO_PICKUP = {2, 5}
+self.hajk.AMMO_PICKUP = {4, 6}
 self.hajk.AMMO_MAX = 80 
 self.hajk.kick = self.akmsu.kick
 
-self.x_hajk.AMMO_PICKUP = {1, 4}
+self.x_hajk.AMMO_PICKUP = {4, 6}
 self.x_hajk.kick = self.akmsu.kick
 self.x_hajk.kick.crouching = self.akmsu.kick.standing
 self.x_hajk.kick.steelsight = self.akmsu.kick.standing
@@ -2651,13 +2659,13 @@ self.china.AMMO_MAX = 3
 self.sparrow.fire_mode_data.fire_rate = 0.13
 self.sparrow.AMMO_MAX = 100
 self.sparrow.stats.damage = 96
-self.sparrow.AMMO_PICKUP = {2.4, 4.5}
+self.sparrow.AMMO_PICKUP = {3, 5}
 
 --White Streak
 self.pl14.fire_mode_data.fire_rate = 0.13
 self.pl14.stats.recoil = 8
 self.pl14.AMMO_MAX = 80
-self.pl14.AMMO_PICKUP = {1.5, 3}
+self.pl14.AMMO_PICKUP = {3, 5}
 
 --Bernetti
 self.b92fs.fire_mode_data.fire_rate = 0.09
@@ -2717,19 +2725,19 @@ self.glock_17.AMMO_PICKUP = {6, 9}
 self.packrat.AMMO_MAX = 120
 self.packrat.stats.damage = 79
 self.packrat.fire_mode_data.fire_rate = 0.09
-self.packrat.AMMO_PICKUP = {3, 6}
+self.packrat.AMMO_PICKUP = {4, 6}
 
 --Interceptor
 self.usp.AMMO_MAX = 120
 self.usp.stats.damage = 79
 self.usp.fire_mode_data.fire_rate = 0.09
-self.usp.AMMO_PICKUP = {3, 6}
+self.usp.AMMO_PICKUP = {4, 6}
 
 --Signature 40
 self.p226.AMMO_MAX = 120
 self.p226.stats.damage = 79
 self.p226.fire_mode_data.fire_rate = 0.09
-self.p226.AMMO_PICKUP = {3, 6}
+self.p226.AMMO_PICKUP = {4, 6}
 
 --Chimano Compact
 self.g26.fire_mode_data.fire_rate = 0.09
@@ -2744,7 +2752,7 @@ standing = {
 	-1,
 	1
 },
-steelsight = {
+steelsiht = {
 	0.1,
 	0.4,
 	-0.5,
@@ -2762,20 +2770,20 @@ self.g26.AMMO_PICKUP = {6, 9}
 self.g22c.stats.damage = 79
 self.g22c.AMMO_MAX = 120
 self.g22c.fire_mode_data.fire_rate = 0.09
-self.g22c.AMMO_PICKUP = {3, 6}
+self.g22c.AMMO_PICKUP = {4, 6}
 
 --holt
 self.holt.stats.damage = 79
 self.holt.AMMO_MAX = 120
 self.holt.fire_mode_data.fire_rate = 0.09
-self.holt.AMMO_PICKUP = {3, 6}
+self.holt.AMMO_PICKUP = {4, 6}
 
 --Stryk
 self.glock_18c.stats.damage = 45
 self.glock_18c.stats.spread = 16
 self.glock_18c.stats.recoil = 6
 self.glock_18c.AMMO_MAX = 160
-self.glock_18c.AMMO_PICKUP = {4.5, 7.5}
+self.glock_18c.AMMO_PICKUP = {5, 8}
 
 --Automatic Bernetti
 self.beer.stats.damage = 36
@@ -2793,7 +2801,7 @@ self.czech.AMMO_MAX = 160
 self.czech.AMMO_PICKUP = {4, 8}
 self.x_czech.stats.damage = 59
 self.x_czech.AMMO_MAX = 180
-self.x_czech.AMMO_PICKUP = {3, 6}
+self.x_czech.AMMO_PICKUP = {4, 6}
 
 --Igor
 self.stech.AMMO_MAX = 100
@@ -2839,7 +2847,7 @@ self.ppk.AMMO_PICKUP = {6, 9}
 self.hs2000.AMMO_MAX = 120
 self.hs2000.stats.damage = 79
 self.hs2000.fire_mode_data.fire_rate = 0.09
-self.hs2000.AMMO_PICKUP = {3, 6}
+self.hs2000.AMMO_PICKUP = {4, 6}
 
 --Model 87
 self.model3.AMMO_MAX = 78
@@ -2847,26 +2855,26 @@ self.model3.upgrade_blocks = nil
 self.model3.AMMO_PICKUP = {1.5, 3}
 self.x_model3.AMMO_MAX = 90
 self.x_model3.upgrade_blocks = nil
-self.x_model3.AMMO_PICKUP = {1.5, 3}
+self.x_model3.AMMO_PICKUP = {2, 3}
 
 --Crosskill
 self.colt_1911.AMMO_MAX = 120
 self.colt_1911.stats.damage = 79
 self.colt_1911.fire_mode_data.fire_rate = 0.09
-self.colt_1911.AMMO_PICKUP = {3, 6}
+self.colt_1911.AMMO_PICKUP = {4, 6}
 
 --Deagle
 self.deagle.fire_mode_data.fire_rate = 0.166
 self.deagle.stats.recoil = 3
 self.deagle.stats.damage = 145
 self.deagle.AMMO_MAX = 70
-self.deagle.AMMO_PICKUP = {1.5, 3}
+self.deagle.AMMO_PICKUP = {2, 4}
 
 --Broomstick
 self.c96.AMMO_MAX = 100
 self.c96.stats.damage = 96
 self.c96.fire_mode_data.fire_rate = 0.13
-self.c96.AMMO_PICKUP = {1.8, 3.6}
+self.c96.AMMO_PICKUP = {2, 4}
 
 --5/7
 self.lemming.fire_mode_data.fire_rate = 0.13
@@ -2874,7 +2882,7 @@ self.lemming.stats.spread = 17
 self.lemming.AMMO_MAX = 90
 self.lemming.stats.recoil = 9
 self.lemming.stats.damage = 40
-self.lemming.AMMO_PICKUP = {1.15, 2.4}
+self.lemming.AMMO_PICKUP = {3, 6}
 
 --Peacemaker
 self.peacemaker.AMMO_MAX = 48
@@ -2882,16 +2890,16 @@ self.peacemaker.upgrade_blocks = nil
 self.peacemaker.fire_mode_data.fire_rate = 0.09
 self.peacemaker.stats.damage = 200
 self.peacemaker.stats_modifiers = {damage = 2}
-self.peacemaker.AMMO_PICKUP = {1, 2}
+self.peacemaker.AMMO_PICKUP = {2, 3}
 
 --Parabellum
 self.breech.fire_mode_data.fire_rate = 0.13
 self.x_breech.fire_mode_data.fire_rate = 0.13
 self.breech.AMMO_MAX = 54
-self.breech.AMMO_PICKUP = {1.5, 2.4}
+self.breech.AMMO_PICKUP = {2, 3}
 self.breech.stats.spread = 16
 self.breech.stats.recoil = 3
-self.x_breech.AMMO_PICKUP = {1.5, 2.4}
+self.x_breech.AMMO_PICKUP = {2, 3}
 self.x_breech.stats.recoil = 3
 self.x_breech.stats.spread = 16
 self.breech.stats.concealment = 25
@@ -2926,15 +2934,15 @@ crouching = {
 }}
 
 --Bronco
-self.new_raging_bull.AMMO_PICKUP = {1.5, 2.4}
+self.new_raging_bull.AMMO_PICKUP = {2, 4}
 self.new_raging_bull.upgrade_blocks = nil
 
 --Castigo
-self.chinchilla.AMMO_PICKUP = {1.5, 2.4}
+self.chinchilla.AMMO_PICKUP = {2, 3}
 self.chinchilla.upgrade_blocks = nil
 
 --Matever
-self.mateba.AMMO_PICKUP = {1.5, 3}
+self.mateba.AMMO_PICKUP = {3, 5}
 self.mateba.upgrade_blocks = nil
 
 --Crosskill Guard
@@ -3012,8 +3020,8 @@ self.type54_underbarrel.stats_modifiers = {
 self.rsh12.NR_CLIPS_MAX = 2
 self.rsh12.AMMO_MAX = self.rsh12.CLIP_AMMO_MAX * self.rsh12.NR_CLIPS_MAX
 self.rsh12.AMMO_PICKUP = {
-	0.6,
-	0.6
+	1,
+	2
 }
 
 -- AKIMBO PISTOLS--

@@ -2714,7 +2714,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 		end
-			
+
 		if has_criminals_closer then --open fire when enemies are in the current area we are in
 			if phase_is_anticipation then
 				pull_back = true
@@ -2743,8 +2743,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					objective_area = area_to_chk
 				end
 			else
-				objective_area = has_criminals_close
-				push = true
+				if not tactics_map or not tactics_map.ranged_fire and not tactics_map.elite_ranged_fire or #has_criminals_close.police.units < 8 or group.in_place_t and self._t - group.in_place_t > 8 then 
+					objective_area = has_criminals_close
+					push = true
+				else
+					objective_area = open_fire
+					push = true
+				end
 			end
 		else
 			approach = true --continue approaching if none of the conditions above apply
