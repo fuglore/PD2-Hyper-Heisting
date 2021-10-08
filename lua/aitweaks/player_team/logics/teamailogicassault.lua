@@ -113,6 +113,10 @@ function TeamAILogicAssault.update(data)
 
 		return
 	end
+	
+	if CopLogicAttack._chk_exit_non_walkable_area(data) then
+		return
+	end
 
 	if not data.attention_obj or data.attention_obj.reaction < REACT_AIM then
 		TeamAILogicAssault._upd_enemy_detection(data, true)

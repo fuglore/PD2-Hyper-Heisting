@@ -357,7 +357,9 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 
 	if not action_taken then
-		if want_to_take_cover then
+		if my_data.at_cover_shoot_pos then
+			move_to_cover = true
+		elseif want_to_take_cover then
 			if in_cover then
 				if my_data.attitude == "engage" then
 					if my_data.cover_test_step <= 2 then

@@ -737,7 +737,7 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 			if grp_objective.moving_out then
 				local done_moving = self:_chk_group_area_presence(group, area_to_chk)
 
-				if done_moving == true then
+				if done_moving then
 					grp_objective.moving_out = nil
 					group.in_place_t = self._t
 					grp_objective.moving_in = nil
@@ -1364,8 +1364,10 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 			local area_pos = self._current_objective_pos:with_z(0)
 			local primary_target_area_pos = self._task_data.assault.target_areas[1].pos:with_z(0)
 			mvec3_dir(area_pos, primary_target_area_pos, area_pos)
+			self._current_objective_dis = mvec3_dis_sq(primary_target_area_pos, area_pos)
 			self._current_objective_dir = area_pos
 		else
+			self._current_objective_dis = nil
 			self._current_objective_dir = nil
 		end
 	end
@@ -1781,10 +1783,12 @@ function GroupAIStateBesiege:_upd_assault_task()
 		if self._street then 
 			if self._current_objective_pos then
 				local area_pos = self._current_objective_pos:with_z(0)
-				local primary_target_area_pos = primary_target_area.pos:with_z(0)
+				local primary_target_area_pos = self._task_data.assault.target_areas[1].pos:with_z(0)
 				mvec3_dir(area_pos, primary_target_area_pos, area_pos)
+				self._current_objective_dis = mvec3_dis_sq(primary_target_area_pos, area_pos)
 				self._current_objective_dir = area_pos
 			else
+				self._current_objective_dis = nil
 				self._current_objective_dir = nil
 			end
 		end

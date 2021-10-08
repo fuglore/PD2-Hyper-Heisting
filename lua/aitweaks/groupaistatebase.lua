@@ -87,6 +87,7 @@ function GroupAIStateBase:set_current_objective_area(pos)
 	end
 	
 	self._current_objective_dir = nil
+	self._current_objective_dis = nil
 end
 
 function GroupAIStateBase:on_enemy_registered(unit)
