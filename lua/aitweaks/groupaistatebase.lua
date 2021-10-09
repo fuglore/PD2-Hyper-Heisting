@@ -1423,6 +1423,10 @@ function GroupAIStateBase:print_objective(objective)
 		
 		log(objective.type)
 		
+		if objective.is_default then
+			log("objective is default")
+		end
+		
 		if objective.stance then
 			log(objective.stance)
 		end
@@ -1433,6 +1437,14 @@ function GroupAIStateBase:print_objective(objective)
 		
 		if objective.path_style then
 			log(objective.path_style)
+		end
+		
+		if objective.action then
+			log("objective has action type " ..tostring(objective.action.type)..":"..tostring(objective.action.variant))
+		end
+		
+		if objective.element then
+			log("objective has element: " .. tostring(objective.element._id))
 		end
 	else
 		log("no objective")

@@ -8436,12 +8436,14 @@ Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", 
 	self.old_hoxton_mission.dodge = nil
 	self.old_hoxton_mission.crouch_move = false
 	self.old_hoxton_mission.suppression = nil
+	self.old_hoxton_mission.buddy = true
 	self.old_hoxton_mission.weapon = deep_clone(presets.weapon.fbigod)
 end)
 
 function CharacterTweakData:_init_spa_vip(presets)
 	self.spa_vip = deep_clone(self.old_hoxton_mission)
 	self.spa_vip.dodge = nil
+	self.spa_vip.buddy = true
 	self.spa_vip.move_speed = presets.move_speed.teamai
 	self.spa_vip.crouch_move = false
 	self.spa_vip.suppression = nil
@@ -8674,7 +8676,7 @@ function CharacterTweakData:_set_normal()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8831,7 +8833,7 @@ function CharacterTweakData:_set_hard()
 	self.chavez_boss.HEALTH_INIT = 600
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8996,7 +8998,7 @@ function CharacterTweakData:_set_overkill()
 	
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9176,7 +9178,7 @@ function CharacterTweakData:_set_overkill_145()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9290,7 +9292,7 @@ function CharacterTweakData:_set_easy_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9486,7 +9488,7 @@ function CharacterTweakData:_set_overkill_290()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9689,7 +9691,7 @@ function CharacterTweakData:_set_sm_wish()
 
 	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
 	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
-	self.presets.gang_member_damage.HEALTH_INIT = 400
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("anarchy")

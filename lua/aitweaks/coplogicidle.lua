@@ -450,7 +450,6 @@ function CopLogicIdle._upd_scan(data, my_data)
 				turned_around = true
 			end
 
-			----check
 			if not turned_around then
 				should_stare_at_beanbag_pos = nil
 
@@ -498,30 +497,22 @@ function CopLogicIdle._upd_scan(data, my_data)
 
 		turned_around = true
 	end
+	
+	if turned_around then
+		my_data.last_beanbag_pos = scan_pos
 
-	if not turned_around then
-		local set_attention = data.unit:movement():attention()
+		CopLogicBase._set_attention_on_pos(data, scan_pos)
 
-		if set_attention then
-			CopLogicBase._reset_attention(data)
+		if #beanbag == 1 then
+			my_data.scan_beanbag = nil
+		else
+			beanbag[lucky_i_pos] = beanbag[#beanbag]
+
+			table_remove(beanbag)
 		end
-
-		return
 	end
-
-	my_data.last_beanbag_pos = scan_pos
-
-	CopLogicBase._set_attention_on_pos(data, scan_pos)
-
-	if #beanbag == 1 then
-		my_data.scan_beanbag = nil
-	else
-		beanbag[lucky_i_pos] = beanbag[#beanbag]
-
-		table_remove(beanbag)
-	end
-
-	my_data.next_scan_t = data.t + math_random(3, 10)
+	
+	my_data.next_scan_t = data.t + math_random(6, 12)
 end
 
 function CopLogicIdle.damage_clbk(data, damage_info)
@@ -830,7 +821,7 @@ function CopLogicIdle._chk_stare_into_wall_1(data)
 	local my_tracker = data.unit:movement():nav_tracker()
 	local my_nav_seg = my_tracker:nav_segment()
 	local my_area = managers.groupai:state():get_area_from_nav_seg_id(my_nav_seg)
-	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")]
+	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
 	local found_areas = {
 		[my_area] = true
 	}
@@ -894,6 +885,7 @@ function CopLogicIdle._chk_stare_into_wall_1(data)
 	local ray_to_pos = tmp_vec1
 	local nav_manager = managers.navigation
 	local all_nav_segs = nav_manager._nav_segments
+	local mnseg = all_nav_segs[my_nav_seg]
 	local my_pos = my_tracker:field_position()
 	local walk_params = {
 		pos_from = my_pos
@@ -903,8 +895,29 @@ function CopLogicIdle._chk_stare_into_wall_1(data)
 	local path_tasks = {}
 
 	for area, _ in pairs(dangerous_near_areas) do
-		if not all_nav_segs[area.pos_nav_seg].disabled then
-			local seg_pos = nav_manager:find_random_position_in_segment(area.pos_nav_seg)
+		local area_nav_seg = all_nav_segs[area.pos_nav_seg]
+		
+		if not area_nav_seg.disabled then
+			for neighbour_nav_seg_id, door_list in pairs(area_nav_seg.neighbours) do
+				if my_area.nav_segs[neighbour_nav_seg_id] then
+					local random_door_id = door_list[math_random(#door_list)]
+
+					if type(random_door_id) == "number" then
+						seg_pos = nav_manager._room_doors[random_door_id].center
+					else
+						seg_pos = random_door_id:script_data().element:nav_link_end_pos()
+					end
+					
+					if seg_pos then
+						break
+					end
+				end
+			end
+			
+			if not seg_pos then
+				seg_pos = nav_manager:find_random_position_in_segment(area.pos_nav_seg)
+			end
+
 			local unobstructed_line = nil
 
 			if math_abs(my_pos.z - seg_pos.z) < 40 then
@@ -1222,7 +1235,9 @@ function CopLogicIdle._chk_relocate(data) ----keep fiddling with this, maybe it'
 	end
 
 	if data.objective.type == "follow" then
-		if data.is_converted then
+		local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
+		
+		if allied_with_criminals then
 			if TeamAILogicIdle._check_should_relocate(data, data.internal_data, data.objective) then
 				data.objective.in_place = nil
 

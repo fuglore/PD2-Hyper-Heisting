@@ -15,7 +15,10 @@ local level_objectives_table = {
 		[102367] = true,
 		[100437] = true,
 		[101621] = true
-	}
+	},
+	gallery = {
+		[100995] = true,
+	},
 }
 
 function ElementWaypoint:on_executed(instigator)
@@ -33,6 +36,7 @@ function ElementWaypoint:on_executed(instigator)
 	local ids = level_objectives_table[level]
 
 	if not self._values.only_in_civilian or managers.player:current_state() == "civilian" then
+		--log(tostring(self._id))
 		if ids then
 			if ids[self._id] then
 				managers.groupai:state():set_current_objective_area(self._values.position)

@@ -2522,7 +2522,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 
 		if not current_objective.moving_out and current_objective.area.neighbours[current_objective.target_area.id] then
 			local grp_objective = {
-				stance = "hos",
+				stance = "cbt",
 				scan = true,
 				pose = "stand",
 				type = "reenforce_area",
