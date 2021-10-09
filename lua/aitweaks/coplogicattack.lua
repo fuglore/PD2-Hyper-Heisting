@@ -357,7 +357,9 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 
 	if not action_taken then
-		if my_data.at_cover_shoot_pos then
+		if my_data.attitude ~= "engage" and not in_cover then
+			move_to_cover = true
+		elseif my_data.at_cover_shoot_pos then
 			move_to_cover = true
 		elseif want_to_take_cover then
 			if in_cover then
@@ -398,7 +400,7 @@ function CopLogicAttack._upd_combat_movement(data)
 				move_to_cover = true
 			end
 		else
-			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.moving_in or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown")then
+			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.open_fire or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown")then
 				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then
 					if my_data.charge_path then
 						local path = my_data.charge_path

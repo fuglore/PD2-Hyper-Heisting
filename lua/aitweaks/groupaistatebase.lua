@@ -24,6 +24,8 @@ local next_g = next
 local tostring_g = tostring
 local alive_g = alive
 
+
+
 -- Andole's dozer spawncap fix
 local origfunc3 = GroupAIStateBase._init_misc_data
 function GroupAIStateBase:_init_misc_data(...)
@@ -66,6 +68,7 @@ function GroupAIStateBase:_init_misc_data(...)
 		fbi = true
 	}
 	self._current_objective_pos = nil
+	self._registered_escorts = {}
 	
 	self._rolled_dramatalk_chance = nil
 end
@@ -88,6 +91,162 @@ function GroupAIStateBase:set_current_objective_area(pos)
 	
 	self._current_objective_dir = nil
 	self._current_objective_dis = nil
+end
+
+local invalid_player_bot_warp_states = {
+	jerry1 = true,
+	jerry2 = true,
+	driving = true
+}
+
+local teleport_SO_anims = {
+	e_so_teleport_var1 = true,
+	e_so_teleport_var2 = true,
+	e_so_teleport_var3 = true
+}
+
+function GroupAIStateBase:upd_team_AI_distance()
+	if not Network:is_server() then
+		return
+	end
+
+	local t = self._t
+	local check_t = self._team_ai_dist_t
+
+	if check_t and t < check_t then
+		return
+	end
+
+	self._team_ai_dist_t = t + 1
+
+	if not self:team_ai_enabled() then
+		return
+	end
+
+	local ai_criminals = self:all_AI_criminals()
+
+	if not next_g(ai_criminals) then
+		return
+	end
+
+	local player_criminals = self:all_player_criminals()
+
+	if not next_g(player_criminals) then
+		return
+	end
+
+	local teleport_distance = tweak_data.team_ai.stop_action.teleport_distance * tweak_data.team_ai.stop_action.teleport_distance
+	local nav_manager = managers.navigation
+	local find_cover_f = nav_manager.find_cover_in_nav_seg_3
+	local search_coarse_f = nav_manager.search_coarse
+
+	for ai_key, ai in pairs_g(ai_criminals) do
+		local unit = ai.unit
+		local ai_mov_ext = unit:movement()
+
+		if not ai_mov_ext:cool() then
+			local objective = unit:brain():objective()
+			local has_warp_objective = nil
+
+			if objective then
+				if objective.path_style == "warp" or teleport_SO_anims[objective.action]then
+					has_warp_objective = true
+				else
+					local followup = objective.followup_objective
+
+					if followup then
+						if followup.path_style == "warp" or teleport_SO_anims[followup.action] then
+							has_warp_objective = true
+						end
+					end
+				end
+			end
+
+			if not has_warp_objective then
+				if not ai_mov_ext:chk_action_forbidden("walk") then
+					local bot_pos = ai.m_pos
+					local valid_players = {}
+
+					for _, player in pairs_g(self:all_player_criminals()) do
+						if player.status ~= "dead" then
+							local distance = mvec3_dis_sq(bot_pos, player.m_pos)
+
+							if distance > teleport_distance then
+								valid_players[#valid_players + 1] = {player, distance}
+							else
+								valid_players = {}
+
+								break
+							end
+						end
+					end
+
+					local closest_distance, closest_player, closest_tracker = nil
+					local ai_tracker, ai_access = ai.tracker, ai.so_access
+
+					for i = 1, #valid_players do
+						local player = valid_players[i][1]
+						local tracker = player.tracker
+
+						if not tracker:obstructed() and not tracker:lost() then
+							local player_unit = player.unit
+							local player_mov_ext = player_unit:movement()
+
+							if not player_mov_ext:zipline_unit() then
+								local player_state = player_mov_ext:current_state_name()
+
+								if not invalid_player_bot_warp_states[player_state] then
+									local in_air = nil
+
+									if player_unit:base().is_local_player then
+										in_air = player_mov_ext:in_air() and true
+									else
+										in_air = player_mov_ext._in_air and true
+									end
+
+									if not in_air then
+										local distance = valid_players[i][2]
+
+										if not closest_distance or distance < closest_distance then
+											local params = {
+												from_tracker = ai_tracker,
+												to_seg = tracker:nav_segment(),
+												access = {
+													"walk"
+												},
+												id = "warp_coarse_check" .. tostring_g(ai_key),
+												access_pos = ai_access
+											}
+
+											local can_path = search_coarse_f(nav_manager, params) and true
+
+											if can_path then
+												closest_distance = distance
+												closest_player = player
+												closest_tracker = tracker
+											end
+										end
+									end
+								end
+							end
+						end
+					end
+
+					if closest_player then
+						local near_cover_point = find_cover_f(nav_manager, closest_tracker:nav_segment(), 1200, closest_tracker:field_position())
+						local position = near_cover_point and near_cover_point[1] or closest_player.m_pos
+						local action_desc = {
+							body_part = 1,
+							type = "warp",
+							position = mvec3_cpy(position)
+						}
+
+						ai_mov_ext:action_request(action_desc)
+					end
+				end
+			end
+		end
+	end
 end
 
 function GroupAIStateBase:on_enemy_registered(unit)

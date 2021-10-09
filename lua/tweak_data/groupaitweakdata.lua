@@ -8119,185 +8119,28 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		5
 	}
 	
-	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-		self.besiege.reenforce.groups = {
-			tac_swat_shotgun_rush = {
-				0, --22.5
-				0,
-				0
-			},
-			tac_swat_shotgun_flank = {
-				0, --20
-				0,
-				0
-			},
-			tac_swat_rifle = {
-				0, --22.5
-				0,
-				0
-			},
-			tac_swat_rifle_flank = {
-				0, --20
-				0,
-				0
-			},
-			recon_squad_B = {
-				0, --7.5
-				0,
-				0
-			},
-			punks_B = {
-				0, --7.5
-				0,
-				0
-			}
+	self.besiege.reenforce.groups = {
+		recon_squad_A = {
+			25,
+			25,
+			25
+		},
+		recon_squad_B = {
+			25,
+			25,
+			25
+		},
+		recon_squad_C = {
+			25, 
+			25,
+			25
+		},
+		recon_squad_D = {
+			25,
+			25,
+			25
 		}
-	elseif difficulty_index <= 2 then
-		self.besiege.reenforce.groups = {
-			punks_A = {
-				0,--25
-				0,--25
-				0 --25
-			},
-			tac_swat_shotgun_flank = {
-				0,--25
-				0,--25
-				0 --25
-			},
-			punks_B = {
-				0,--25
-				0,--25
-				0 --25
-			},
-			tac_swat_rifle_flank = {
-				0,--25
-				0,--25
-				0 --25
-			}
-		}
-	elseif difficulty_index == 3 then
-		self.besiege.reenforce.groups = {
-			tac_swat_shotgun_rush = {
-				0,--25
-				0,--25
-				0 --25
-			},
-			punks_C = {
-				0,--25
-				0,--25
-				0 --25
-			},
-			tac_swat_rifle = {
-				0,--25
-				0,--25
-				0 --25
-			},
-			punks_B = {
-				0,--25
-				0,--25
-				0 --25
-			}
-		}
-	elseif difficulty_index == 4 then
-		self.besiege.reenforce.groups = {
-			tac_swat_shotgun_rush = {
-				0, --22.5
-				0,
-				0
-			},
-			tac_swat_shotgun_flank = {
-				0, --20
-				0,
-				0
-			},
-			tac_swat_rifle = {
-				0, --22.5
-				0,
-				0
-			},
-			tac_swat_rifle_flank = {
-				0, --20
-				0,
-				0
-			},
-			recon_squad_B = {
-				0, --7.5
-				0,
-				0
-			},
-			punks_B = {
-				0, --7.5
-				0,
-				0
-			}
-		}
-	elseif difficulty_index == 5 then
-		self.besiege.reenforce.groups = {
-			tac_swat_shotgun_rush = {
-				0, --22.5
-				0,
-				0
-			},
-			tac_swat_shotgun_flank = {
-				0, --20
-				0,
-				0
-			},
-			tac_swat_rifle = {
-				0, --22.5
-				0,
-				0
-			},
-			tac_swat_rifle_flank = {
-				0, --20
-				0,
-				0
-			},
-			recon_squad_B = {
-				0, --7.5
-				0,
-				0
-			},
-			punks_B = {
-				0, --7.5
-				0,
-				0
-			}
-		}
-	else
-		self.besiege.reenforce.groups = {
-			tac_swat_shotgun_rush = {
-				0, --22.5
-				0,
-				0
-			},
-			tac_swat_shotgun_flank = {
-				0, --20
-				0,
-				0
-			},
-			tac_swat_rifle = {
-				0, --22.5
-				0,
-				0
-			},
-			tac_swat_rifle_flank = {
-				0, --20
-				0,
-				0
-			},
-			recon_squad_B = {
-				0, --7.5
-				0,
-				0
-			},
-			punks_B = {
-				0, --7.5
-				0,
-				0
-			}
-		}
-	end
+	}
 
 	self.besiege.recon.interval = {
 		10,
