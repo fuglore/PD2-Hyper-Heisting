@@ -172,7 +172,8 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 
 	local cone_radius = mvector3.distance(mvector3.copy(from_pos), mvector3.copy(tmp_vec_to)) / 4
 	local enemies_in_cone = self._unit:find_units("cone", from_pos, tmp_vec_to, cone_radius, managers.slot:get_mask("player_autoaim"))
-
+	local ignore_rng = nil
+	
 	for _, enemy in pairs(enemies_in_cone) do
 		local com = enemy:movement():m_head_pos()
 
@@ -186,12 +187,17 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 			local error_dot = mvec3_dot(direction, tar_vec)
 			local error_angle = math.acos(error_dot)
 			local dis_lerp = math.pow(tar_aim_dot / far_dis, 0.25)
-			local autohit_min_angle = math_lerp(autohit_near_angle, autohit_far_angle, dis_lerp)
+			local autohit_min_angle = math_lerp(1, autohit_far_angle, dis_lerp)
 
-			if error_angle < autohit_min_angle then
+			if error_angle <= autohit_min_angle then
+				if error_angle <= 1 then
+					ignore_rng = true
+				end
+				
 				local percent_error = error_angle / autohit_min_angle
 
 				if not closest_error or percent_error < closest_error then
+					ignore_rng = true
 					tar_vec_len = tar_vec_len + 100
 
 					mvec3_mul(tar_vec, tar_vec_len)
@@ -252,10 +258,9 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 				end
 			end
 		end
-	
 	end
 
-	return closest_ray
+	return closest_ray, ignore_rng
 end
 
 function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
@@ -286,7 +291,7 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 	if self._autoaim then
 		local weight = 0.1
 		
-		local auto_hit_candidate = not hit_enemy and self:check_autoaim(from_pos, direction)
+		local auto_hit_candidate, ignore_rng = not hit_enemy and self:check_autoaim(from_pos, direction)
 		
 		--log(tostring(self._autohit_current))
 		
@@ -298,7 +303,7 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 				autohit_chance = autohit_chance * autohit_mul
 			end
 
-			if math.random() < autohit_chance then
+			if math.random() < autohit_chance or ignore_rng then
 				self._autohit_current = self._autohit_data.MIN_RATIO
 
 				mvector3.set(mvec_to, from_pos)
@@ -315,8 +320,6 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 				
 				ray_hits, hit_enemy = self:_collect_hits(from_pos, mvec_to)
 			end
-			
-			
 		end
 
 		if hit_enemy then 
