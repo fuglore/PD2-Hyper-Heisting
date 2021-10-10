@@ -417,6 +417,9 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	
 	self.sub2000_crew.usage = "rifle"
 	self.sub2000_crew.anim_usage = "is_smg"
+	
+	self.baka_crew.usage = "is_smg"
+	self.baka_crew.anim_usage = "is_pistol"
 end)
 
 --TODO: it is done

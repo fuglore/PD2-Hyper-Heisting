@@ -8433,6 +8433,7 @@ end)
 
 Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", function(self, presets)
 	self.old_hoxton_mission.move_speed = presets.move_speed.teamai
+	self.old_hoxton_mission.detection = presets.detection.gang_member
 	self.old_hoxton_mission.dodge = nil
 	self.old_hoxton_mission.crouch_move = false
 	self.old_hoxton_mission.suppression = nil

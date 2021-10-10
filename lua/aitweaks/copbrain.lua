@@ -320,18 +320,10 @@ function CopBrain:set_objective(new_objective, params)
 			self._logic_data.check_crim_jobless = true
 		end
 		
-		managers.groupai:state():print_objective(new_objective)
+		--managers.groupai:state():print_objective(new_objective)
 
 		if new_objective.stance == "ntl" then
 			new_objective.stance = nil
-		end
-
-		if not ignore_followup and not new_objective.area then
-			local followup = managers.groupai:state():_determine_objective_for_criminal_AI(self._unit)
-				
-			if followup then
-				new_objective.followup_objective = followup
-			end
 		end
 	end
 	

@@ -29,6 +29,112 @@ function LevelsTweakData:init()
     self.chill_combat.group_ai_state = "besiege"
 	self.mad.package = {"packages/akanassets", "packages/lvl_mad"}	
 	
+	self.rvd1.teams = {
+		criminal1 = {
+			foes = {
+				law1 = true,
+				mobster1 = true
+			},
+			friends = {
+				converted_enemy = true
+			}
+		},
+		law1 = {
+			foes = {
+				converted_enemy = true,
+				criminal1 = true,
+				mobster1 = true
+			},
+			friends = {}
+		},
+		mobster1 = {
+			foes = {
+				converted_enemy = true,
+				law1 = true,
+				criminal1 = true
+			},
+			friends = {}
+		},
+		converted_enemy = {
+			foes = {
+				law1 = true,
+				mobster1 = true
+			},
+			friends = {
+				criminal1 = true
+			}
+		},
+		neutral1 = {
+			foes = {
+				law1 = true,
+				mobster1 = true
+			},
+			friends = {
+				converted_enemy = true
+			}
+		},
+		hacked_turret = {
+			foes = {
+				law1 = true,
+				mobster1 = true
+			},
+			friends = {}
+		}
+	}
+	self.rvd2.trigger_follower_behavior_element = {} --empty table means it just, wont
+	self.rvd2.teams = {
+		criminal1 = {
+			foes = {
+				law1 = true,
+				mobster1 = true
+			},
+			friends = {
+				converted_enemy = true
+			}
+		},
+		law1 = {
+			foes = {
+				converted_enemy = true,
+				criminal1 = true,
+				mobster1 = true
+			},
+			friends = {}
+		},
+		mobster1 = {
+			foes = {
+				converted_enemy = true,
+				law1 = true,
+				criminal1 = true
+			},
+			friends = {}
+		},
+		converted_enemy = {
+			foes = {
+				law1 = true,
+				mobster1 = true
+			},
+			friends = {
+				criminal1 = true
+			}
+		},
+		neutral1 = {
+			foes = {
+				law1 = true,
+				mobster1 = true
+			},
+			friends = {
+				converted_enemy = true
+			}
+		},
+		hacked_turret = {
+			foes = {
+				law1 = true,
+				mobster1 = true
+			},
+			friends = {}
+		}
+	}
+	
 	-- Murkywater Heists
 	self.shoutout_raid.package = {"packages/murkyassets", "packages/vlad_shout"}
 	self.shoutout_raid.ai_group_type = murkywater
