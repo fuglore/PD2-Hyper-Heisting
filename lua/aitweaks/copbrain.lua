@@ -259,6 +259,93 @@ function CopBrain:clbk_pathing_results(search_id, path)
     self:_add_pathing_result(search_id, path)
 end
 
+function CopBrain:is_available_for_assignment(objective)
+	return self._current_logic.is_available_for_assignment(self._logic_data, objective)
+end
+
+function CopBrain:_reset_logic_data()
+	self._logic_data = {
+		unit = self._unit,
+		brain = self,
+		active_searches = {},
+		m_pos = self._unit:movement():m_pos(),
+		char_tweak = tweak_data.character[self._unit:base()._tweak_table],
+		key = self._unit:key(),
+		pos_rsrv = {},
+		pos_rsrv_id = self._unit:movement():pos_rsrv_id(),
+		SO_access = self._SO_access,
+		SO_access_str = tweak_data.character[self._unit:base()._tweak_table].access,
+		detected_attention_objects = {},
+		attention_handler = self._attention_handler,
+		visibility_slotmask = managers.slot:get_mask("AI_visibility"),
+		enemy_slotmask = self._slotmask_enemies,
+		cool = self._unit:movement():cool(),
+		objective_complete_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_objective_complete"),
+		objective_failed_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_objective_failed")
+	}
+	
+	if self._logic_data.char_tweak.buddy then
+		self._logic_data.buddypalchum = true
+		
+		local level = Global.level_data and Global.level_data.level_id
+		
+		if tweak_data.levels[level].trigger_follower_behavior_element == nil then
+			--log("uuuh")
+			self._logic_data.check_crim_jobless = true
+		end
+	end
+end
+
+function CopBrain:set_objective(new_objective, params)
+	local old_objective = self._logic_data.objective
+	
+	if new_objective and self._logic_data.buddypalchum then
+		local level = Global.level_data and Global.level_data.level_id
+
+		if new_objective.element then
+			if tweak_data.levels[level] and tweak_data.levels[level].ignored_so_elements and tweak_data.levels[level].ignored_so_elements[new_objective.element._id] then
+				if new_objective.complete_clbk then
+					new_objective.complete_clbk(self._unit, self._logic_data)
+				end
+				
+				if new_objective.action_start_clbk then
+					new_objective.action_start_clbk(self._unit)
+				end
+				
+				return
+			end
+		end
+		
+		if tweak_data.levels[level].trigger_follower_behavior_element and new_objective.element and tweak_data.levels[level].trigger_follower_behavior_element[new_objective.element._id] then
+			self._logic_data.check_crim_jobless = true
+		end
+		
+		managers.groupai:state():print_objective(new_objective)
+
+		if new_objective.stance == "ntl" then
+			new_objective.stance = nil
+		end
+
+		if not ignore_followup and not new_objective.area then
+			local followup = managers.groupai:state():_determine_objective_for_criminal_AI(self._unit)
+				
+			if followup then
+				new_objective.followup_objective = followup
+			end
+		end
+	end
+	
+	self._logic_data.objective = new_objective
+
+	if new_objective and new_objective.followup_objective and new_objective.followup_objective.interaction_voice then
+		self._unit:network():send("set_interaction_voice", new_objective.followup_objective.interaction_voice)
+	elseif old_objective and old_objective.followup_objective and old_objective.followup_objective.interaction_voice then
+		self._unit:network():send("set_interaction_voice", "")
+	end
+
+	self._current_logic.on_new_objective(self._logic_data, old_objective, params)
+end
+
 function CopBrain:convert_to_criminal(mastermind_criminal)
 	if self._alert_listen_key then
 		managers.groupai:state():remove_alert_listener(self._alert_listen_key)

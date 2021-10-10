@@ -1427,6 +1427,10 @@ function GroupAIStateBase:print_objective(objective)
 			log("objective is default")
 		end
 		
+		if objective.forced then
+			log("forced objective")
+		end
+		
 		if objective.stance then
 			log(objective.stance)
 		end

@@ -61,7 +61,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	end
 
 	if old_internal_data then
-		my_data.old_action_started = old_internal_data.action_started
+		--my_data.old_action_started = old_internal_data.action_started
 		my_data.turning = old_internal_data.turning
 		my_data.firing = old_internal_data.firing
 		my_data.shooting = old_internal_data.shooting
@@ -165,10 +165,14 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	my_data.path_ahead = data.cool or objective.path_ahead or data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player")
 	local key_str = tostring(data.key)
 	
-	if not data.is_converted then
+	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
+	
+	if not allied_with_criminals then
 		my_data.upd_task_key = "CopLogicTravel.queued_update" .. key_str
 		CopLogicTravel.queue_update(data, my_data)
 	else
+		my_data.path_safely = nil
+		my_data.criminal = true
 		my_data.detection_task_key = "CopLogicTravel.queued_detection_update" .. key_str
 		CopLogicTravel.queue_detection_update(data, my_data)
 	end
@@ -216,7 +220,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 		})
 	end
 
-	if not data.is_converted then
+	if not allied_with_criminals then
 		data.brain:set_update_enabled_state(false)
 	end
 
@@ -353,9 +357,17 @@ function CopLogicTravel.upd_advance(data)
 	local objective = data.objective
 
 	if my_data.has_old_action then
+		if data.buddypalchum then
+			--log("uuugh")
+		end 
+		
 		CopLogicAttack._upd_stop_old_action(data, my_data)
 		
 		if my_data.has_old_action then
+			if data.buddypalchum then
+				--log("margh")
+			end 
+			
 			return
 		end
 	end
@@ -470,7 +482,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 	local objective = data.objective
 	local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
 	
-	if not objective or not data.is_converted or objective.type ~= "follow" then		
+	if not objective or not my_data.criminal or objective.type ~= "follow" then		
 		if allow_trans then
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
 
@@ -592,7 +604,7 @@ function CopLogicTravel._upd_pathing(data, my_data)
 				if should_shorten then
 					path = managers.navigation:shorten_coarse_through_dis(path)
 				end
-			
+				
 				my_data.coarse_path = path
 				my_data.coarse_path_index = 1
 				data.path_fail_t = nil
@@ -797,7 +809,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 						if not data.unit:movement():chk_action_forbidden("walk") then
 							if my_data.coarse_path_index == #my_data.coarse_path then
 								--CopLogicTravel._on_destination_reached(data) ----test
-							elseif data.important or data.is_converted or data.unit:in_slot(16) then
+							elseif data.important or my_data.criminal then
 								CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 							end
 						end
@@ -829,7 +841,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 						if not data.unit:movement():chk_action_forbidden("walk") then
 							if my_data.coarse_path_index == #my_data.coarse_path then
 								--CopLogicTravel._on_destination_reached(data) ----test
-							elseif data.important or data.is_converted or data.unit:in_slot(16) then
+							elseif data.important or my_data.criminal then
 								CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 							end
 						end
@@ -840,7 +852,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 			my_data.old_action_started = nil
 			CopLogicAttack._upd_aim(data, my_data)
 		elseif action:expired() then
-			if data.important or data.is_converted or data.unit:in_slot(16) then
+			if data.important or my_data.criminal then
 				CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
@@ -850,7 +862,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		data.internal_data.shooting = nil
 	elseif action_type == "reload" or action_type == "heal" then
 		if action:expired() then
-			if data.important or data.is_converted or data.unit:in_slot(16) then
+			if data.important or my_data.criminal then
 				CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
@@ -858,13 +870,13 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		if my_data.gesture_arrest then
 			my_data.gesture_arrest = nil
 		elseif action:expired() and not data.cool then
-			if data.important or data.is_converted or data.unit:in_slot(16) then
+			if data.important or my_data.criminal then
 				CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 	elseif action_type == "hurt" or action_type == "healed" then
 		if action:expired() then
-			if data.important or data.is_converted or data.unit:in_slot(16) then
+			if data.important or my_data.criminal then
 				if not CopLogicBase.chk_start_action_dodge(data, "hit") then
 					CopLogicAttack._upd_aim(data, my_data)
 				end
@@ -895,7 +907,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		end
 
 		if action:expired() then
-			if data.important or data.is_converted or data.unit:in_slot(16) then
+			if data.important or my_data.criminal then
 				CopLogicAttack._upd_aim(data, my_data)
 			end
 
@@ -1728,7 +1740,7 @@ function CopLogicTravel.queue_update(data, my_data, delay)
 		
 	local can_say_clear = not data.attention_obj or AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and clear_t_chk
 		
-	if not data.unit:base():has_tag("special") and can_say_clear and not data.is_converted then
+	if not data.unit:base():has_tag("special") and can_say_clear and not my_data.criminal then
 		if data.unit:movement():cool() and data.char_tweak.chatter and data.char_tweak.chatter.clear_whisper then  
 			local roll = math.rand(1, 100)
 			local whistle_chance = 50
@@ -1784,7 +1796,7 @@ function CopLogicTravel.queue_update(data, my_data, delay)
 	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
 	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
 	if not said_something then	
-		if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted then
+		if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not my_data.criminal then
 			if not data.unit:base():has_tag("special") and data.unit:base():has_tag("law") then
 				if managers.groupai:state():chk_assault_active_atm() then
 					if managers.groupai:state():_check_assault_panic_chatter() then
@@ -1995,7 +2007,7 @@ function CopLogicTravel._chk_close_to_criminal(data, my_data)
 		my_data.close_to_criminal = false
 	else
 		local verify_u_key = nil
-		local allied_with_criminals = data.is_converted or data.unit:in_slot(16)
+		local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
 
 		if not allied_with_criminals then
 			local player_team = tweak_data.levels:get_default_team_ID("player")
@@ -2135,7 +2147,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		return
 	end
 
-	local allied_with_criminals = data.is_converted or data.unit:in_slot(16)
+	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
 
 	if not allied_with_criminals then
 		local player_team = tweak_data.levels:get_default_team_ID("player")
@@ -2333,8 +2345,9 @@ function CopLogicTravel.get_pathing_prio(data)
 			end
 		end
 	end
+	
 
-	if data.is_converted or data.unit:in_slot(16) then
+	if data.is_converted or data.unit:in_slot(16) or data.internal_data.criminal then
 		prio = prio or 0
 
 		prio = prio + 2
@@ -2504,7 +2517,7 @@ function CopLogicTravel._needs_cover_at_destination(data, dest_area)
 	end
 
 	local verify_u_key = nil
-	local allied_with_criminals = data.is_converted or data.unit:in_slot(16)
+	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
 
 	if not allied_with_criminals then
 		local player_team = tweak_data.levels:get_default_team_ID("player")

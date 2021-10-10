@@ -182,7 +182,7 @@ function CopLogicAttack.update(data)
 
 	local groupai = managers.groupai:state()
 	
-	if data.is_converted then
+	if data.is_converted or data.check_crim_jobless then
 		if not data.objective or data.objective.type == "free" then
 			if not data.path_fail_t or data.t - data.path_fail_t > 6 then
 				groupai:on_criminal_jobless(data.unit)

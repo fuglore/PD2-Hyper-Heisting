@@ -1343,7 +1343,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 		end
 	end
 	
-	if not data.internal_data.action_started then
+	if not data.internal_data.action_started and not data.buddypalchum then
 		if not objective.pos and not objective.action and not objective.running then
 			if attention and REACT_COMBAT <= attention.reaction then
 				local good_types = {
@@ -1396,7 +1396,7 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 				end
 			end		
 		end
-		end
+	end
 	
 	if objective.interrupt_dis then
 		attention = attention or data.attention_obj

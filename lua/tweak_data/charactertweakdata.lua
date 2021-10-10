@@ -1956,7 +1956,7 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.rhythmsniper.is_rifle.FALLOFF = {
 		{
-			dmg_mul = 2.5,
+			dmg_mul = 5,
 			r = 10000,
 			acc = {
 				0,
@@ -1974,7 +1974,7 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		},
 		{
-			dmg_mul = 2.5,
+			dmg_mul = 5,
 			r = 20000,
 			acc = {
 				0,
@@ -8449,9 +8449,8 @@ function CharacterTweakData:_init_spa_vip(presets)
 	self.spa_vip.suppression = nil
 	self.spa_vip.weapon = deep_clone(presets.weapon.fbigod)
 	self.spa_vip.spotlight_important = 100
-	self.spa_vip.is_escort = true
-	self.spa_vip.escort_idle_talk = false
-	self.spa_vip.escort_scared_dist = 100
+	self.spa_vip.is_escort = nil
+	self.spa_vip.escort_idle_talk = nil
 end
 
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)

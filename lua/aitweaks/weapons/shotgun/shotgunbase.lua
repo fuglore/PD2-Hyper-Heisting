@@ -68,7 +68,7 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 	end
 
 	local damage = self:_get_current_damage(dmg_mul)
-	local autoaim, dodge_enemies = self:check_autoaim(from_pos, direction, 20000)
+	local autoaim, ignore_rng = self:check_autoaim(from_pos, direction, 20000)
 	local weight = 0.1
 	local enemy_died = false
 	local bullet_class = self._bullet_class
@@ -78,6 +78,7 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 	local pierce_enemies = self._can_shoot_through_enemy
 	local pierce_wall = self._can_shoot_through_wall
 	local use_tracers = self._can_shoot_through_shield or self._use_tracers
+	local autohit_hit_something = nil
 	
 	local ASTB_hit_enemy = pierce_shield or pierce_wall
 
@@ -147,18 +148,21 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 				autoaim = false
 			else
 				autoaim = false
-				local autohit = self:check_autoaim(from_pos, direction, 20000)
+				local autohit, ignore_rng = self:check_autoaim(from_pos, direction, 20000)
 
 				if autohit then
 					local autohit_chance = 1 - math_clamp((self._autohit_current - self._autohit_data.MIN_RATIO) / (self._autohit_data.MAX_RATIO - self._autohit_data.MIN_RATIO), 0, 1)
 
-					if math_random() < autohit_chance then
-						self._autohit_current = (self._autohit_current + weight) / (1 + weight)
-						hit_something = true
+					if ignore_rng or math_random() < autohit_chance then
+						
+						self._autohit_current = self._autohit_data.MIN_RATIO
+
+						mvector3.set(mvec_to, from_pos)
+						mvector3.add_scaled(mvec_to, auto_hit_candidate.ray, ray_distance)
+
+						mvector3.set(mvec_spread_direction, mvec_to)
 
 						hit_enemy(autohit)
-					else
-						self._autohit_current = self._autohit_current / (1 + weight)
 					end
 				elseif col_ray then
 					hit_something = true
@@ -260,12 +264,6 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 					kill_data.civilian_kills = kill_data.civilian_kills + 1
 				end
 			end
-		end
-	end
-
-	if dodge_enemies and self._suppression then
-		for enemy_data, dis_error in pairs_g(dodge_enemies) do
-			enemy_data.unit:character_damage():build_suppression(suppr_mul * dis_error * self._suppression, self._panic_suppression_chance)
 		end
 	end
 

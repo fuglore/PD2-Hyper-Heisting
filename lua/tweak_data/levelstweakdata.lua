@@ -57,6 +57,14 @@ function LevelsTweakData:init()
 	self.short2_stage1.package = {"packages/job_short2_stage1", "levels/narratives/dentist/mia/stage2/world_sounds"}
 	self.nightclub.package = {"packages/vlad_nightclub", "levels/narratives/dentist/mia/stage2/world_sounds"}
 	self.spa.package = {"packages/job_spa", "levels/narratives/dentist/mia/stage2/world_sounds"}
+	self.spa.ignored_so_elements = {
+		[101834] = true,
+		[135495] = true,
+		[103318] = true
+	}
+	self.spa.trigger_follower_behavior_element = {[135558] = true}
+	self.hox_2.ignored_so_elements = {[102290] = true}
+	
 	self.friend.package = {"levels/narratives/h_alex_must_die/stage_1/world_sounds", "packages/lvl_friend"}
 	self.cane.package = {"packages/cane", "levels/narratives/e_welcome_to_the_jungle/stage_1/world_sounds"}
 
