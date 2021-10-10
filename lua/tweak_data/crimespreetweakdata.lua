@@ -14,11 +14,11 @@ function CrimeSpreeTweakData:init_modifiers(tweak_data)
 				level = 50,
 				data = {
 					health = {
-						15,
+						5,
 						"add"
 					},
 					damage = {
-						15,
+						10,
 						"add"
 					}
 				}
