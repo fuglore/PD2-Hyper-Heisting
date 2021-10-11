@@ -1306,6 +1306,10 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	if data.unit:character_damage():dead() then
 		return true, true
 	end
+	
+	if objective.forced then
+		return
+	end
 
 	local health_ratio = data.unit:character_damage():health_ratio()
 

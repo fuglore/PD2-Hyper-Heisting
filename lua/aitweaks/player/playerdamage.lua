@@ -1423,20 +1423,10 @@ function PlayerDamage:_send_damage_drama(attack_data, health_subtracted, armor)
 		attacker = self._unit
 	end
 	
-	if attacker and attacker:movement() then
-		local network_percent = math.clamp(math.ceil(dmg_percent * 100), 1, 100)
-		
-		if armor then
-			network_percent = network_percent * 2
-		end
+	self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100))
 	
-		self._unit:network():send("criminal_hurt", attacker, math.clamp(network_percent, 1, 200))
-
-		if Network:is_server() then
-			managers.groupai:state():criminal_hurt_drama(self._unit, attacker, dmg_percent)
-		else
-			self._unit:network():send_to_host("damage_bullet", attacker, 1, 1, 1, 0, false)
-		end
+	if attacker and attacker:movement() then
+		managers.groupai:state():criminal_hurt_drama(self._unit, attacker, dmg_percent, armor)
 	end
 end
 
@@ -1642,13 +1632,55 @@ function PlayerDamage:_begin_akuma_snddedampen()
 	end
 end
 
-Hooks:PostHook(PlayerDamage, "_regenerate_armor", "hh_regenarmor", function(self, no_sound)
+function PlayerDamage:replenish()
+	if (Application:editor() or managers.platform:presence() == "Playing") and (self:arrested() or self:need_revive()) then
+		self:revive(true)
+	end
+
+	self:_regenerated()
+	self:_regenerate_armor(nil, true)
+	managers.hud:set_player_health({
+		current = self:get_real_health(),
+		total = self:_max_health(),
+		revives = Application:digest_value(self._revives, false)
+	})
+	SoundDevice:set_rtpc("shield_status", 100)
+	SoundDevice:set_rtpc("downed_state_progression", 0)
+end
+
+function PlayerDamage:_regenerate_armor(no_sound, is_replenish)
+	if self._unit:sound() and not no_sound then
+		self._unit:sound():play("shield_full_indicator")
+	end
+
+	self._regenerate_speed = nil
+	
+	if not is_replenish then
+		local max_armor = self:_max_armor()
+		local current_armor = self:get_real_armor()
+		local regenerated_armor = max_armor - current_armor
+		local lerp = regenerated_armor / max_armor
+		local dramavalues = tweak_data.drama.drama_actions.armor_regenerated
+		local drama_amount = math.lerp(dramavalues[1], dramavalues[2], lerp)
+		
+		if Network:is_server() then
+			managers.groupai:state():_add_drama(drama_amount)
+		else
+			managers.network:session():send_to_host("send_drama", drama_amount)
+		end
+	end
+	
+	self:set_armor(self:_max_armor())
+	self:_send_set_armor()
+
+	self._current_state = nil
+	
 	self._akuma_effect = nil
 	if self._akuma_dampen then
 		--self._is_damping = true
 		self:_begin_akuma_snddedampen()
 	end
-end)
+end
 
 function PlayerDamage:update(unit, t, dt)
 	if _G.IS_VR and self._heartbeat_t and t < self._heartbeat_t then

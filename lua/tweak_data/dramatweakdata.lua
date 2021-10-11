@@ -6,7 +6,8 @@ function DramaTweakData:init()
 		criminal_hurt_armor = 0.1,
 		criminal_dead = 0.6,
 		criminal_disabled = 0.2,
-		enemy_dead = 0.02
+		enemy_dead = 0.02,
+		armor_regenerated = {0, -0.2}
 	}
 	self.decay_period = 30
 	self.max_dis = 6000

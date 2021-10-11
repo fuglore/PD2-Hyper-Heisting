@@ -362,11 +362,15 @@ function GroupAIStateBase:criminal_hurt_drama(unit, attacker, dmg_percent, armor
 		end
 		
 		local dis_lerp = math.min(1, dis / max_dis)
-		dis_lerp = math.lerp(1, dis_mul, dis_lerp)
+		dis_lerp = math.lerp(dis_mul, 1, dis_lerp)
 		drama_amount = drama_amount * dis_lerp
 	end
-
-	self:_add_drama(drama_amount)
+	
+	if Network:is_server() then
+		self:_add_drama(drama_amount)
+	else
+		managers.network:session():send_to_host("send_drama", drama_amount)
+	end
 end
 
 function GroupAIStateBase:chk_area_leads_to_enemy(start_nav_seg_id, test_nav_seg_id, enemy_is_criminal)

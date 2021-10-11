@@ -1,18 +1,5 @@
 <?xml version="1.0"?>
 <tweaks>
-	<!--criminal hurt-->
-	<tweak name="settings/network" extension="network_settings">
-        <search>
-            <network/>
-            <rpc/>
-			<message name="criminal_hurt"/>
-            <param type="int" min="1" max="100" />
-        </search>
-        <target mode="attributes">
-            <attr name="max" value="200"/>
-        </target>
-    </tweak>
-
     <!--damage_bullet-->
     <tweak name="settings/network" extension="network_settings">
         <search>
@@ -198,6 +185,18 @@
         </search>
         <target mode="attributes">
             <attr name="delivery" value="ordered"/>
+        </target>
+    </tweak>
+	
+	<tweak name="settings/network" extension="network_settings">
+        <search>
+            <network/>
+            <rpc/>
+        </search>
+        <target mode="attach">
+			<message name="send_drama" delivery="ordered" receiver="unit" check="client_to_server">
+				<param type="float" min="-1" max="1" step="0.001" exact="true"/><!-- drama-->
+			</message>
         </target>
     </tweak>
 

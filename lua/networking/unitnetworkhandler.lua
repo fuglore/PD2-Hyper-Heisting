@@ -3,21 +3,22 @@ function UnitNetworkHandler:criminal_hurt(criminal_unit, attacker_unit, damage_r
 		return
 	end
 
-	if not alive(attacker_unit) or criminal_unit:key() == attacker_unit:key() then
-		attacker_unit = nil
-	end
-
 	managers.hud:set_mugshot_damage_taken(criminal_unit:unit_data().mugshot_id)
-	
-	if Network:is_server() then
-		local to_send = damage_ratio 
+end
 
-		if damage_ratio > 1 then
-			to_send = to_send * 0.5
-		end
-			
-		managers.groupai:state():criminal_hurt_drama(criminal_unit, attacker_unit, to_send * 0.005, damage_ratio > 1)
+
+function UnitNetworkHandler:send_drama(drama, sender)
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
+		return
 	end
+
+	local peer = self._verify_sender(sender)
+
+	if not peer then
+		return
+	end
+
+	managers.groupai:state():_add_drama(drama)
 end
 
 function UnitNetworkHandler:sync_add_doted_enemy(enemy_unit, variant, weapon_unit, dot_length, dot_damage, user_unit, is_molotov_or_hurt_animation, rpc)
