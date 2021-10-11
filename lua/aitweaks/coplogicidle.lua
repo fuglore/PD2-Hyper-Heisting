@@ -1179,7 +1179,7 @@ function CopLogicIdle.is_available_for_assignment(data, objective)
 
 	if data.objective and data.objective.action then
 		if my_data.action_started then
-			if not data.unit:anim_data().idle or not data.unit:anim_data().act_idle then
+			if data.unit:anim_data().act and not data.unit:anim_data().act_idle then
 				return
 			end
 		else
