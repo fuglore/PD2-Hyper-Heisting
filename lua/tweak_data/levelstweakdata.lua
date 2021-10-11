@@ -192,6 +192,70 @@ function LevelsTweakData:init()
 		self.help.ai_group_type = zombie
 	end
 	
+	--Meatgrinder Maps
+	self.sah.meatgrinder = true
+	self.born.meatgrinder = true
+	self.chew.meatgrinder = true
+	self.pines.meatgrinder = true
+	self.help.meatgrinder = true
+	self.peta.meatgrinder = true
+	self.hox_1.meatgrinder = true
+	self.mad.meatgrinder = true
+	self.glace.meatgrinder = true
+	self.nail.meatgrinder = true
+	self.watchdogs_1.meatgrinder = true
+	self.watchdogs_1_night.meatgrinder = true
+	self.crojob3.meatgrinder = true
+	self.crojob3_night.meatgrinder = true
+	self.hvh.meatgrinder = true
+	self.run.meatgrinder = true
+	self.arm_cro.meatgrinder = true
+	self.arm_und.meatgrinder = true
+	self.arm_hcm.meatgrinder = true
+	self.arm_par.meatgrinder = true
+	self.arm_fac.meatgrinder = true
+	self.mia_2.meatgrinder = true
+	self.rvd1.meatgrinder = true
+	self.rvd2.meatgrinder = true
+	self.nmh.meatgrinder = true
+	self.des.meatgrinder = true
+	self.mex.meatgrinder = true
+	self.mex_cooking.meatgrinder = true
+	self.bph.meatgrinder = true
+	self.spa.meatgrinder = true
+	self.chill_combat.meatgrinder = true
+	self.dinner.meatgrinder = true
+	self.mallcrasher.meatgrinder = true
+	self.moon.meatgrinder = true
+	self.cane.meatgrinder = true
+	
+	if self.nmh_hyper then
+		self.nmh_hyper.meatgrinder = true
+	end
+	
+	if self.physics_tower then
+		self.physics_tower.meatgrinder = true
+	end
+	
+	if self.physics_core then
+		self.physics_core.meatgrinder = true
+	end
+	
+	if self.mia_2_new then
+		self.mia_2_new.meatgrinder = true
+	end
+
+	--Street maps
+	self.hox_1.street = true
+	self.run.street = true
+	self.glace.street = true
+	self.rvd2.street = true
+	
+	--Over-Exposure maps
+	self.chill_combat.too_drama = true
+	self.hox_1.too_drama = true
+	self.run.too_drama = true
+	self.glace.too_drama = true
 end
 
 function LevelsTweakData:get_ai_group_type()

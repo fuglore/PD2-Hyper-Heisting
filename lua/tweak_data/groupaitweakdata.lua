@@ -7,6 +7,20 @@ function GroupAITweakData:init(tweak_data)
 	--print("[GroupAITweakData:init] difficulty", difficulty, "difficulty_index", difficulty_index)
 
 	self.ai_tick_rate = 0.016666666666666666
+	local level = Global.level_data and Global.level_data.level_id
+	local level_data = tweak_data.levels[level]
+	
+	if level_data then
+		self.small_map = level_data.meatgrinder
+		
+		if level == "haunted" then
+			self.haunted = true
+		end
+		
+		if level == "chill_combat" or level == "hvh" then
+			self._chill = true
+		end
+	end
 
 	self:_read_mission_preset(tweak_data)
 	self:_create_table_structure()
@@ -7082,19 +7096,6 @@ end)
 
 Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", function(self, difficulty_index, difficulty)
 	local is_console = SystemInfo:platform() ~= Idstring("WIN32")
-	local level = Global.level_data and Global.level_data.level_id
-	
-	if level == "sah" or level == "born" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "watchdogs_1" or level == "watchdogs_1_night" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" or level == "dinner" or level == "mallcrasher" or level == "moon" or level == "cane" or level == "physics_tower" or level == "physics_core" then
-		self.small_map = true
-	end
-	
-	if level == "haunted" then
-		self.nightmare = true
-	end
-	
-	if level == "chill_combat" or level == "hvh" then
-		self._chill = true
-	end
 	
 	self.max_nr_simultaneous_boss_types = 0
 	self.difficulty_curve_points = {
@@ -7383,8 +7384,8 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		self.besiege.assault.force_balance_mul = {
 			12,
 			16,
-			20,
-			20
+			24,
+			24
 		}
 		self.besiege.assault.force_pool_balance_mul = {
 			1,

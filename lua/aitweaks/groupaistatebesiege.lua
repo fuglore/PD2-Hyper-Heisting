@@ -40,14 +40,12 @@ function GroupAIStateBesiege:init(group_ai_state)
 	--self:set_drama_draw_state(true)
 	
 	self._tweak_data = tweak_data.group_ai[group_ai_state]
-	
+
 	local level = Global.level_data and Global.level_data.level_id
-		
-	local small_map = level == "sah" or level == "born" or level == "chew" or level == "pines" or level == "help" or level == "peta" or level == "hox_1" or level == "mad" or level == "glace" or level == "nail" or level == "watchdogs_1" or level == "watchdogs_1_night" or level == "crojob3" or level == "crojob3_night" or level == "hvh" or level == "run" or level == "arm_cro" or level == "arm_und" or level == "arm_hcm" or level == "arm_par" or level == "arm_fac" or level == "mia_2" or level == "mia2_new" or level == "rvd1" or level == "rvd2" or level == "nmh" or level == "nmh_hyper" or level == "des" or level == "mex" or level == "mex_cooking" or level == "bph" or level == "spa" or level == "chill_combat" or level == "dinner" or level == "mallcrasher" or level == "moon" or level == "cane" or level == "physics_tower" or level == "physics_core"
-	
-	self._small_map = small_map or nil
-	self._street = level == "hox_1" or level == "run" or level == "glace"
-	self._too_drama = level == "hox_1" or level == "run" or level == "glace" or level == "chill_combat"
+	local level_data = tweak_data.levels[level]
+	self._small_map = level_data.meatgrinder
+	self._street = level_data.street
+	self._too_drama = level_data.too_drama
 	
 	--log(tostring(self._small_map))
 	

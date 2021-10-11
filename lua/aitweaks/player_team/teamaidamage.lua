@@ -119,10 +119,6 @@ function TeamAIDamage:damage_bullet(attack_data)
 	self._last_received_dmg_t = t
 	self._last_received_dmg = health_subtracted
 
-	if health_subtracted > 0 then
-		self:_send_damage_drama(attack_data, health_subtracted)
-	end
-
 	if self._dead then
 		self:_unregister_unit()
 	end
@@ -134,26 +130,6 @@ function TeamAIDamage:damage_bullet(attack_data)
 end
 
 function TeamAIDamage:_send_damage_drama(attack_data, health_subtracted)
-	if not Network:is_server() then
-		return
-	end
-
-	local dmg_percent = health_subtracted / self._HEALTH_INIT
-	local attacker = attack_data.attacker_unit
-	
-	dmg_percent = dmg_percent * 0.25
-
-	if not attacker or attack_data.attacker_unit:id() == -1 then
-		attacker = self._unit
-	end
-	
-	if attacker and attacker:movement() then
-		local group_ai = managers.groupai:state()
-		self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100), nil)
-		
-		
-		group_ai:criminal_hurt_drama(self._unit, attacker, dmg_percent, true)
-	end
 end
 
 function TeamAIDamage:update(unit, t, dt)
@@ -255,10 +231,6 @@ function TeamAIDamage:damage_melee(attack_data)
 	local t = TimerManager:game():time()
 	self._next_allowed_dmg_t = t + self._dmg_interval
 	self._last_received_dmg_t = t
-
-	if health_subtracted > 0 then
-		self:_send_damage_drama(attack_data, health_subtracted)
-	end
 
 	if self._dead then
 		self:_unregister_unit()

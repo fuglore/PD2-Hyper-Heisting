@@ -1437,6 +1437,7 @@ function PlayerDamage:_calc_health_damage(attack_data)
 			attack_data.damage = attack_data.damage * 0.5
 		end
 	end
+	
 	self._next_allowed_dmg_t = self._old_next_allowed_dmg_t and Application:digest_value(self._old_next_allowed_dmg_t, true) or self._next_allowed_dmg_t
 	self._old_last_received_dmg = nil
 	self._old_next_allowed_dmg_t = nil
@@ -1450,6 +1451,10 @@ function PlayerDamage:_calc_health_damage(attack_data)
 		death_prevented = true
 	else
 		self:change_health(-attack_data.damage)
+	end
+	
+	if self:is_regenerating_armor() then
+		self._took_damage_while_regenerating = true
 	end
 
 	health_subtracted = health_subtracted - self:get_real_health()
@@ -1653,7 +1658,7 @@ function PlayerDamage:_regenerate_armor(no_sound, is_replenish)
 
 	self._regenerate_speed = nil
 	
-	if not is_replenish then
+	if not is_replenish and not self._took_damage_while_regenerating then
 		local max_armor = self:_max_armor()
 		local current_armor = self:get_real_armor()
 		local regenerated_armor = max_armor - current_armor
@@ -1672,6 +1677,7 @@ function PlayerDamage:_regenerate_armor(no_sound, is_replenish)
 	self:_send_set_armor()
 
 	self._current_state = nil
+	self._took_damage_while_regenerating = nil
 	
 	self._akuma_effect = nil
 	if self._akuma_dampen then

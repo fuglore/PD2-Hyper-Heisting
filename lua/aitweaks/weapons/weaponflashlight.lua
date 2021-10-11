@@ -64,7 +64,7 @@ function WeaponFlashLight:update_flicker_safehouse_nightmare(t, dt)
 				World:effect_manager():set_hidden(self._light_effect, false)
 			end
 		elseif math.random() > 0.9 then
-			self._flicker_off_t = t + math.lerp(0.3, 0.5, math.random())
+			self._flicker_off_t = t + math.lerp(0.01, 0.05, math.random())
 			self._current_light_multiplier = 0
 			World:effect_manager():set_hidden(self._light_effect, true)
 		else

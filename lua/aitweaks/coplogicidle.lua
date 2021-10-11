@@ -1179,7 +1179,7 @@ function CopLogicIdle.is_available_for_assignment(data, objective)
 
 	if data.objective and data.objective.action then
 		if my_data.action_started then
-			if data.unit:anim_data().act and not data.unit:anim_data().act_idle then
+			if not data.unit:anim_data().idle and not data.unit:anim_data().act_idle then
 				return
 			end
 		else
@@ -1220,7 +1220,7 @@ function CopLogicIdle.clbk_action_timeout(ignore_this, data)
 
 	local anim_data = data.unit:anim_data()
 
-	if anim_data.act and anim_data.needs_idle then
+	if anim_data.act and anim_data.needs_idle or anim_data.act_idle then
 		CopLogicIdle._start_idle_action_from_act(data)
 	end
 
@@ -2473,7 +2473,7 @@ function CopLogicIdle._upd_stop_old_action(data, my_data, objective)
 				type = "idle"
 			})
 		end
-	elseif data.unit:anim_data().act then
+	elseif data.unit:anim_data().act or data.unit:anim_data().act_idle or data.unit:anim_data().to_idle then
 		if not my_data.starting_idle_action_from_act then
 			my_data.starting_idle_action_from_act = true
 			CopLogicIdle._start_idle_action_from_act(data)
@@ -2487,7 +2487,7 @@ end
 
 function CopLogicIdle._chk_has_old_action(data, my_data)
 	local anim_data = data.unit:anim_data()
-	my_data.has_old_action = my_data.old_action_started or anim_data.to_idle or anim_data.act
+	my_data.has_old_action = anim_data.to_idle or anim_data.act
 	local lower_body_action = data.unit:movement()._active_actions[2]
 	my_data.advancing = lower_body_action and lower_body_action:type() == "walk" and lower_body_action
 end
