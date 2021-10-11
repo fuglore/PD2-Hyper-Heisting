@@ -1422,9 +1422,7 @@ function PlayerDamage:_send_damage_drama(attack_data, health_subtracted, armor)
 	if not attacker or attack_data.attacker_unit:id() == -1 then
 		attacker = self._unit
 	end
-	
-	self._unit:network():send("criminal_hurt", attacker, math.clamp(math.ceil(dmg_percent * 100), 1, 100))
-	
+
 	if attacker and attacker:movement() then
 		managers.groupai:state():criminal_hurt_drama(self._unit, attacker, dmg_percent, armor)
 	end

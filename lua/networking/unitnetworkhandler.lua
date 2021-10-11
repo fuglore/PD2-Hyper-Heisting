@@ -1,12 +1,3 @@
-function UnitNetworkHandler:criminal_hurt(criminal_unit, attacker_unit, damage_ratio, sender)
-	if not self._verify_gamestate(self._gamestate_filter.any_ingame) or not self._verify_character_and_sender(criminal_unit, sender) then
-		return
-	end
-
-	managers.hud:set_mugshot_damage_taken(criminal_unit:unit_data().mugshot_id)
-end
-
-
 function UnitNetworkHandler:send_drama(drama, sender)
 	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
 		return
