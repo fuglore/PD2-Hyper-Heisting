@@ -3016,8 +3016,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					objective_area = has_criminals_close
 					push = true
 				else
-					objective_area = open_fire
-					push = true
+					objective_area = area_to_chk
+					open_fire = true
 				end
 			end
 		else
