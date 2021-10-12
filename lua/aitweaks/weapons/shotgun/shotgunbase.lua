@@ -158,7 +158,7 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 						self._autohit_current = self._autohit_data.MIN_RATIO
 
 						mvector3.set(mvec_to, from_pos)
-						mvector3.add_scaled(mvec_to, auto_hit_candidate.ray, ray_distance)
+						mvector3.add_scaled(mvec_to, autohit.ray, ray_distance)
 
 						mvector3.set(mvec_spread_direction, mvec_to)
 

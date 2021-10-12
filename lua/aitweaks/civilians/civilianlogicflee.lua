@@ -157,13 +157,9 @@ end
 
 function CivilianLogicFlee.reset_actions(data)
 	data.brain:action_request({
-		variant = "idle",
+		variant = "cmf_so_surrender",
 		body_part = 1,
 		type = "act",
-		blocks = {
-			action = -1,
-			idle = -1,
-			walk = -1
-		}
+		clamp_to_graph = true
 	})
 end
