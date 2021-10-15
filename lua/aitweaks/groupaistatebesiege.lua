@@ -1460,7 +1460,7 @@ function GroupAIStateBesiege:_begin_new_tasks()
 				end
 			end
 			
-			if guard_current_objective_area > 0 then
+			if guard_current_objective_area then
 				table_insert(reenforce_candidates, self._current_objective_area)
 			end
 		end
