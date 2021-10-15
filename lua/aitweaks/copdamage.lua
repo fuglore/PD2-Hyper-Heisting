@@ -45,6 +45,31 @@ function CopDamage:init(...)
 		
 			managers.enemy:add_delayed_clbk("hitboxes" .. tostring(my_unit:key()), f, TimerManager:game():time())
 		end
+	else
+		self._head_body_name = "head"
+        self._ids_head_body_name = Idstring(self._head_body_name)
+        self._head_body_key = self._unit:body(self._head_body_name):key()
+		
+		local my_unit = self._unit
+		local base_ext = my_unit:base()
+
+		if base_ext.has_tag and base_ext:has_tag("protected") then
+			local function f()
+				if alive(my_unit) then
+					my_unit:body("head"):set_enabled(false)
+				end
+			end
+		
+			managers.enemy:add_delayed_clbk("disable_head_hitbox" .. tostring(my_unit:key()), f, TimerManager:game():time())
+		elseif not base_ext.has_tag or not base_ext:has_tag("fbi") then
+			local function f()
+				if alive(my_unit) then
+					my_unit:body("head"):set_sphere_radius(13)
+				end
+			end
+		
+			managers.enemy:add_delayed_clbk("hitboxes" .. tostring(my_unit:key()), f, TimerManager:game():time())
+		end
 	end
 end
 

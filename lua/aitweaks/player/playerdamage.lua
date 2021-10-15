@@ -438,7 +438,9 @@ function PlayerDamage:damage_melee(attack_data)
 					attack_data.ninjaed = true
 				end
 				
-				self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), melee_stun_t)
+				if self._unit:movement():current_state().on_melee_stun then
+					self._unit:movement():current_state():on_melee_stun(managers.player:player_timer():time(), melee_stun_t)
+				end
 			end
 		end
 	end

@@ -563,13 +563,6 @@ end
 
 function GroupAIStateBase:_add_drama(amount)
 	local drama_data = self._drama_data
-	
-	if drama_data.pulse then
-		if drama_data.amount + amount > drama_data.amount then
-			amount = amount * 0.5
-		end
-	end
-	
 	local new_val = math_clamp(drama_data.amount + amount, 0, 1)
 	drama_data.amount = new_val
 

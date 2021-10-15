@@ -330,15 +330,6 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 	
 		final_speed = final_speed * mul
 	end
-	
-	--log("speed is " .. final_speed .. "!")
-	self._cached_final_speed = self._cached_final_speed or 0
-	
-	if final_speed ~= self._cached_final_speed then
-		self._cached_final_speed = final_speed
-
-		self._ext_network:send("action_change_speed", final_speed)
-	end
 
 	return final_speed
 end
@@ -445,7 +436,7 @@ function PlayerStandard:_update_movement(t, dt)
 	self._headbob = self._headbob or 0
 	
 	local WALK_SPEED_MAX = self:_get_max_walk_speed(t)
-		
+
 	if self._running then
 		
 	elseif self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
@@ -466,6 +457,15 @@ function PlayerStandard:_update_movement(t, dt)
 			WALK_SPEED_MAX = 250
 		end
 	end
+	
+	self._cached_final_speed = self._cached_final_speed or 0
+		
+	if WALK_SPEED_MAX ~= self._cached_final_speed then
+		self._cached_final_speed = WALK_SPEED_MAX
+		
+		self._ext_network:send("action_change_speed", WALK_SPEED_MAX)
+	end
+	
 	
 	local acceleration = self:_get_max_walk_speed(t, true) * 8
 	local decceleration = acceleration * 0.7
@@ -504,7 +504,7 @@ function PlayerStandard:_update_movement(t, dt)
 		mvector3.set(mvec_move_dir_normalized, self._move_dir)
 		mvector3.normalize(mvec_move_dir_normalized)
 
-		local wanted_walk_speed = WALK_SPEED_MAX * math.min(1, self._move_dir:length())		
+		local wanted_walk_speed = WALK_SPEED_MAX * math.min(1, self._move_dir:length())	
 		local achieved_walk_vel = mvec_achieved_walk_vel
 		
 		if self._running and self._wave_dash_t then
@@ -1248,13 +1248,12 @@ function PlayerStandard:_start_action_jump(t, action_start_data)
 			self._last_velocity_xy = move_dir_clamp * action_start_data.jump_vel_xy
 			self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
 		end
-	elseif self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.2 or self._state_data.land_t and t - self._state_data.land_t > 0.1  then
+	elseif self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.2 or self._state_data.land_t and t - self._state_data.land_t > 0.1 then
 		self._last_velocity_xy = Vector3()
 	end
 
 	self:_perform_jump(jump_vec)
 	self._gnd_ray = false
-	self._is_jumping = true
 end
 
 local tmp_ground_from_vec = Vector3()
@@ -1344,28 +1343,11 @@ function PlayerStandard:_update_foley(t, input)
 		self._state_data.land_t = t 
 		
 		managers.rumble:play("land")
+	end
 	
+	if not self._state_data.in_air and self._state_data.land_t and t - self._state_data.land_t > 0.1 then
 		self._jump_t = nil
 		self._jump_vel_xy = nil
-	elseif self._jump_vel_xy and t - self._jump_t > 0.3 then
-		self._jump_vel_xy = nil
-		self._jump_t = nil
-		
-		if self._move_dir and self._running then -- if you're holding down a direction to move in and you were already sprinting, continue, otherwise, wait until landing to register anything
-			if self._setting_hold_to_run and input.btn_run_release then
-				self._running_wanted = false
-			else
-				self._running_wanted = true
-			end
-				
-			if not self._setting_hold_to_run and input.btn_run_press and self._running_wanted then
-				self._running_wanted = false
-			else
-				self._running_wanted = true
-			end
-		else
-			self._running_wanted = false
-		end
 	end
 
 	self:_check_step(t)
@@ -2300,8 +2282,12 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 		self._fall_damage_slow_t = nil
 	end
 	
-	if self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.1 then
-		self:_interupt_action_running(t)
+	if self._state_data.in_air_enter_t then
+		local t_in_air = t - self._state_data.in_air_enter_t
+		
+		if t_in_air > 0.1 then
+			self:_interupt_action_running(t)
+		end
 	end
 	
 	self:_update_interaction_timers(t)
