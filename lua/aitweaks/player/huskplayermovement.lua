@@ -117,6 +117,14 @@ function HuskPlayerMovement:_register_revive_SO()
 	end
 end
 
+function HuskPlayerMovement:_chk_floor_moving_pos(pos)
+	local ground_ray = self:_chk_ground_ray(pos, true)
+
+	if ground_ray then
+		return ground_ray.position.z
+	end
+end
+
 function HuskPlayerMovement:sync_action_walk_nav_point(pos, speed, action, params)
 	if pos then
 		self:_update_real_pos(pos)
