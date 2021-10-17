@@ -101,7 +101,7 @@
 	<object path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5" />
 	<model path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5" />	
 	<cooked_physics path="units/pd2_dlc_bex/characters/ene_swat_policia_federale_mp5/ene_swat_policia_federale_mp5"/>
-		
+
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_mp5_hat/ene_acc_mp5_hat" load="true"/>
 	
 	<!--FEDERALES FBI HEAVY SWAT SHOTGUNNER-->
@@ -112,7 +112,7 @@
 	<object path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh" />
 	<model path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh" />	
 	<cooked_physics path="units/pd2_dlc_bex/characters/ene_swat_heavy_policia_federale_fbi_r870_hh/ene_swat_heavy_policia_federale_fbi_r870_hh"/>
-		
+	
 	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_heavy_shotgunner_helmet/ene_acc_heavy_shotgunner_helmet" load="true"/>
 	
 	<!-- FEDERALES RIFLE MEDIC -->
@@ -245,6 +245,25 @@
 	<object path="units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper" force="true"/>
 	<material_config path="units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper" force="true"/>
 	<material_config path="units/pd2_dlc_bex/characters/ene_swat_policia_sniper/ene_swat_policia_sniper_contour" force="true"/>
+	
+	<!-- oper8tor tazer -->
+	<unit path="units/pd2_dlc_bex/characters/ene_tazer_1/ene_tazer_1" load="true"/>
+	<unit path="units/pd2_dlc_bex/characters/ene_tazer_1/ene_tazer_1_husk" load="true"/>
+	<object path="units/pd2_dlc_bex/characters/ene_tazer_1/ene_tazer_1" />
+	<model path="units/pd2_dlc_bex/characters/ene_tazer_1/ene_tazer_1" />	
+	<cooked_physics path="units/pd2_dlc_bex/characters/ene_tazer_1/ene_tazer_1"/>	
+	<material_config path="units/pd2_dlc_bex/characters/ene_tazer_1/ene_tazer_1"/>
+	<material_config path="units/pd2_dlc_bex/characters/ene_tazer_1/ene_tazer_1_contour" />
+	
+	<unit_mat path="units/pd2_dlc_bex/characters/ene_acc_tazer_helmet/ene_acc_tazer_helmet" load="true" />
+	<cooked_physics path="units/pd2_dlc_bex/characters/ene_acc_tazer_helmet/ene_acc_tazer_helmet"/>
+	
+	<texture path="units/pd2_dlc_bex/characters/shared_textures/taser_body_df"/>
+	<texture path="units/pd2_dlc_bex/characters/shared_textures/taser_body_nm"/>
+	<texture path="units/pd2_dlc_bex/characters/shared_textures/taser_head_df"/>
+	<texture path="units/pd2_dlc_bex/characters/shared_textures/taser_head_nm"/>
+	<texture path="units/pd2_dlc_bex/characters/shared_textures/taser_helmet_df"/>
+	<texture path="units/pd2_dlc_bex/characters/shared_textures/taser_helmet_nm"/>
 	
 	<!-- fuck off
 	<unit path="units/pd2_dlc_mad/characters/ene_akan_dozer_medic/ene_akan_dozer_medic" load="true"/>

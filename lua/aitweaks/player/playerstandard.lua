@@ -434,6 +434,7 @@ function PlayerStandard:_update_movement(t, dt)
 	local pos_new = nil
 	self._target_headbob = self._target_headbob or 0
 	self._headbob = self._headbob or 0
+	local update_velocity = true
 	
 	local WALK_SPEED_MAX = self:_get_max_walk_speed(t)
 
@@ -470,7 +471,7 @@ function PlayerStandard:_update_movement(t, dt)
 	local decceleration = acceleration * 0.7
 	
 	if self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
-		decceleration = 100
+		decceleration = 0
 	end
 	
 	local floor_moving_ray = self:_chk_floor_moving_pos()
@@ -544,7 +545,7 @@ function PlayerStandard:_update_movement(t, dt)
 				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, 1200 * dt)
 			else
 				mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed_air)
-				mvector3.step(achieved_walk_vel, self._last_velocity_xy, wanted_walk_speed_air * self._move_dir:normalized(), acceleration * dt)
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, mvec_move_dir_normalized, acceleration * dt)
 			end
 		else
 			mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed)
@@ -554,13 +555,9 @@ function PlayerStandard:_update_movement(t, dt)
 		if mvector3.is_zero(self._last_velocity_xy) then
 			mvector3.set_length(achieved_walk_vel, math.max(achieved_walk_vel:length(), 100))
 		end
-			
-		if floor_moving_vel then
-			mvector3.add(achieved_walk_vel, floor_moving_vel:with_z(0))
-		end
 
 		pos_new = mvec_pos_new
-
+		
 		mvector3.set(pos_new, achieved_walk_vel)
 		mvector3.multiply(pos_new, dt)
 		mvector3.add(pos_new, self._pos)
@@ -576,43 +573,37 @@ function PlayerStandard:_update_movement(t, dt)
 			local grad = decceleration
 			
 			local achieved_walk_vel = math.step(self._last_velocity_xy, Vector3(), grad * dt)
-
-			if floor_moving_vel then
-				mvector3.add(achieved_walk_vel, floor_moving_vel:with_z(0))
-			end
 			
 			pos_new = mvec_pos_new
 			
-			mvector3.set(pos_new, achieved_walk_vel)
+			mvector3.set(pos_new, achieved_walk_vel)			
 			mvector3.multiply(pos_new, dt)
 			mvector3.add(pos_new, self._pos)
 			self._target_headbob = 0
 		else
 			local achieved_walk_vel = mvec_achieved_walk_vel
 			mvector3.set(achieved_walk_vel, self._last_velocity_xy)
-
-			if floor_moving_vel then
-				mvector3.add(achieved_walk_vel, floor_moving_vel:with_z(0))
-			end
+			
+			pos_new = mvec_pos_new
+			
+			mvector3.set(pos_new, achieved_walk_vel)			
+			mvector3.multiply(pos_new, dt)
+			mvector3.add(pos_new, self._pos)
+		end 	
+	elseif self._moving or floor_moving_vel then
+		if floor_moving_vel then
+			local achieved_walk_vel = mvec_achieved_walk_vel
+			mvector3.set(achieved_walk_vel, floor_moving_vel)
 			
 			pos_new = mvec_pos_new
 			mvector3.set(pos_new, achieved_walk_vel)
 			mvector3.multiply(pos_new, dt)
 			mvector3.add(pos_new, self._pos)
 		end
-	elseif floor_moving_vel then
-		local achieved_walk_vel = mvec_achieved_walk_vel
-		mvector3.set(achieved_walk_vel, floor_moving_vel:with_z(0))
 		
-		pos_new = mvec_pos_new
-		mvector3.set(pos_new, achieved_walk_vel)
-		mvector3.multiply(pos_new, dt)
-		mvector3.add(pos_new, self._pos)
-	elseif self._moving then
-		self._target_headbob = 0
 		self._moving = false
+		self._target_headbob = 0
 		
-		--log("current speed is " .. math.abs(self._last_velocity_xy:length()) .. "!")
 
 		self:_update_crosshair_offset()
 	end
@@ -635,17 +626,22 @@ function PlayerStandard:_update_movement(t, dt)
 		end
 	
 		self._unit:movement():set_position(pos_new)
-		mvector3.set(self._last_velocity_xy, pos_new)
-		mvector3.subtract(self._last_velocity_xy, self._pos)
-
-		if not self._state_data.on_ladder and not self._state_data.on_zipline then
-			mvector3.set_z(self._last_velocity_xy, 0)
-		end
-
-		mvector3.divide(self._last_velocity_xy, dt)
 		
-		if self._jump_vel_xy and self._state_data.in_air then
-			mvector3.set(self._jump_vel_xy, self._last_velocity_xy)
+		if update_velocity then 
+			mvector3.set(self._last_velocity_xy, pos_new)		
+			mvector3.subtract(self._last_velocity_xy, self._pos)
+
+			if not self._state_data.on_ladder and not self._state_data.on_zipline then
+				mvector3.set_z(self._last_velocity_xy, 0)
+			end
+
+			mvector3.divide(self._last_velocity_xy, dt)
+		
+			if self._jump_vel_xy and self._state_data.in_air then
+				mvector3.set(self._jump_vel_xy, self._last_velocity_xy)
+			end
+		else
+			mvector3.set_static(self._last_velocity_xy, 0, 0, 0)
 		end
 	else
 		mvector3.set_static(self._last_velocity_xy, 0, 0, 0)
@@ -1280,7 +1276,7 @@ end
 local tmp_ground_from_vec = Vector3()
 local tmp_ground_to_vec = Vector3()
 local up_offset_vec = math.UP * 30
-local down_offset_vec = math.UP * -25
+local down_offset_vec = math.UP * -40
 
 function PlayerStandard:_update_ground_ray()
 	local hips_pos = tmp_ground_from_vec
@@ -1292,9 +1288,9 @@ function PlayerStandard:_update_ground_ray()
 	mvector3.add(down_pos, down_offset_vec)
 
 	if self._unit:movement():ladder_unit() then
-		self._gnd_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ignore_unit", self._unit:movement():ladder_unit(), "ray_type", "body mover", "sphere_cast_radius", 24, "report")
+		self._gnd_ray = self._unit:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ignore_unit", self._unit:movement():ladder_unit(), "ray_type", "body mover", "sphere_cast_radius", 29, "bundle", 9, "report")
 	else
-		self._gnd_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 24, "report")
+		self._gnd_ray = self._unit:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 29, "bundle", 9, "report")
 	end
 
 	self._gnd_ray_chk = true
@@ -1309,29 +1305,12 @@ function PlayerStandard:_chk_floor_moving_pos(pos)
 	mvector3.set(down_pos, hips_pos)
 	mvector3.add(down_pos, down_offset_vec)
 
-	local ground_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 24)
+	local ground_ray = self._unit:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 29, "bundle", 9)
 
 	if ground_ray then
 		return ground_ray
 	end
 end
-
-function PlayerStandard:_chk_floor_moving_z(pos)
-	local hips_pos = tmp_ground_from_vec
-	local down_pos = tmp_ground_to_vec
-
-	mvector3.set(hips_pos, self._pos)
-	mvector3.add(hips_pos, up_offset_vec)
-	mvector3.set(down_pos, hips_pos)
-	mvector3.add(down_pos, down_offset_vec)
-
-	local ground_ray = World:raycast("ray", hips_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 24)
-
-	if ground_ray then
-		return ground_ray.position.z
-	end
-end
-
 
 function PlayerStandard:_update_foley(t, input)
 	if self._state_data.on_zipline then
