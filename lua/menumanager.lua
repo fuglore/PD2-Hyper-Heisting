@@ -41,6 +41,125 @@ function MenuCallbackHandler:accept_skirmish_weekly_contract(item)
 	end
 end
 
+function MenuCallbackHandler:choice_crimenet_one_down(item)
+	local value = item:value() == "on" and item:value() or managers.mutators:get_enabled_active_mutator_category() == "event" and true
+	
+	managers.menu_component:set_crimenet_contract_one_down(value)
+end
+
+function MenuCallbackHandler:start_job(job_data)
+	if not managers.job:activate_job(job_data.job_id) then
+		return
+	end
+
+	Global.game_settings.level_id = managers.job:current_level_id()
+	Global.game_settings.mission = managers.job:current_mission()
+	Global.game_settings.world_setting = managers.job:current_world_setting()
+	Global.game_settings.difficulty = job_data.difficulty
+	Global.game_settings.one_down = managers.mutators:get_enabled_active_mutator_category() == "event" and true or job_data.one_down
+	Global.game_settings.weekly_skirmish = job_data.weekly_skirmish
+
+	if managers.platform then
+		managers.platform:update_discord_heist()
+	end
+
+	local matchmake_attributes = self:get_matchmake_attributes()
+
+	if Network:is_server() then
+		local job_id_index = tweak_data.narrative:get_index_from_job_id(managers.job:current_job_id())
+		local level_id_index = tweak_data.levels:get_index_from_level_id(Global.game_settings.level_id)
+		local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		local one_down = Global.game_settings.one_down
+		local weekly_skirmish = Global.game_settings.weekly_skirmish
+
+		managers.network:session():send_to_peers("sync_game_settings", job_id_index, level_id_index, difficulty_index, one_down, weekly_skirmish)
+		managers.network.matchmake:set_server_attributes(matchmake_attributes)
+		managers.mutators:update_lobby_info()
+		managers.menu_component:on_job_updated()
+		managers.menu:open_node("lobby")
+		managers.menu:active_menu().logic:refresh_node("lobby", true)
+	else
+		managers.network.matchmake:create_lobby(matchmake_attributes)
+	end
+
+	managers.platform:refresh_rich_presence()
+end
+
+
+function MenuCrimeNetContractInitiator:modify_node(original_node, data)
+	local node = deep_clone(original_node)
+
+	if Global.game_settings.single_player then
+		node:item("toggle_ai"):set_value(Global.game_settings.team_ai and Global.game_settings.team_ai_option or 0)
+	elseif data.smart_matchmaking then
+		-- Nothing
+	elseif not data.server then
+		node:item("lobby_job_plan"):set_value(Global.game_settings.job_plan)
+		node:item("lobby_kicking_option"):set_value(Global.game_settings.kick_option)
+		node:item("lobby_permission"):set_value(Global.game_settings.permission)
+		node:item("lobby_reputation_permission"):set_value(Global.game_settings.reputation_permission)
+		node:item("lobby_drop_in_option"):set_value(Global.game_settings.drop_in_option)
+		node:item("toggle_ai"):set_value(Global.game_settings.team_ai and Global.game_settings.team_ai_option or 0)
+		node:item("toggle_auto_kick"):set_value(Global.game_settings.auto_kick and "on" or "off")
+		node:item("toggle_allow_modded_players"):set_value(Global.game_settings.allow_modded_players and "on" or "off")
+
+		if tweak_data.quickplay.stealth_levels[data.job_id] then
+			local job_plan_item = node:item("lobby_job_plan")
+			local stealth_option = nil
+
+			for _, option in ipairs(job_plan_item:options()) do
+				if option:value() == 2 then
+					stealth_option = option
+
+					break
+				end
+			end
+
+			job_plan_item:clear_options()
+			job_plan_item:add_option(stealth_option)
+		end
+	end
+
+	if data.customize_contract then
+		node:set_default_item_name("buy_contract")
+
+		local job_data = data
+
+		if job_data and job_data.job_id then
+			local buy_contract_item = node:item("buy_contract")
+
+			if buy_contract_item then
+				local can_afford = managers.money:can_afford_buy_premium_contract(job_data.job_id, job_data.difficulty_id or 3)
+				buy_contract_item:parameters().text_id = can_afford and "menu_cn_premium_buy_accept" or "menu_cn_premium_cannot_buy"
+				buy_contract_item:parameters().disabled_color = Color(1, 0.6, 0.2, 0.2)
+
+				buy_contract_item:set_enabled(can_afford)
+			end
+		end
+		
+		local value = managers.mutators:get_enabled_active_mutator_category() == "event"
+		
+		if not value then
+			node:item("toggle_one_down"):set_value("off")
+		else
+			node:item("toggle_one_down"):set_value("on")
+			node:item("toggle_one_down"):set_enabled(false)
+		end
+	end
+
+	if tweak_data.narrative:is_job_locked(data.job_id) then
+		node:item("accept_contract"):set_enabled(false)
+	end
+
+	if data and data.back_callback then
+		table.insert(node:parameters().back_callback, data.back_callback)
+	end
+
+	node:parameters().menu_component_data = data
+
+	return node
+end
+
 Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 	local show_popup = nil
 	MenuCallbackHandler.callback_shin_toggle_overhaul_player = function(self,item) --toggle

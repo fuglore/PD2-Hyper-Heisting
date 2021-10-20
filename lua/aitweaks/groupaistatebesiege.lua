@@ -3699,8 +3699,6 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	if not Global.game_settings.one_down then
 		if managers.skirmish:is_skirmish() or self._small_map then
 			min_dis = 2250000
-		else
-			min_dis = 4000000
 		end
 	end
 	
@@ -3820,8 +3818,8 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	end
 	
 	if Global.game_settings.one_down then --LET'S GIVE INTO PAAAAAAIN
-		delays[1] = delays[1] * 0.5
-		delays[2] = delays[2] * 0.5
+		delays[1] = delays[1] * 0.25
+		delays[2] = delays[2] * 0.25
 	end
 
 	if total_dis == 0 then

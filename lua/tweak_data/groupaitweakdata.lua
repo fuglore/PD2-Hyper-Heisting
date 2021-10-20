@@ -21,6 +21,11 @@ function GroupAITweakData:init(tweak_data)
 			self._chill = true
 		end
 	end
+	
+	if managers.mutators and managers.mutators:is_mutator_active(MutatorBirthday) then
+		self._party = true
+		Global.game_settings.one_down = true
+	end
 
 	self:_read_mission_preset(tweak_data)
 	self:_create_table_structure()
@@ -497,7 +502,17 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		walk = true
 	}
 	
-	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then -- spicy
+	if self._party then
+		self.special_unit_spawn_limits = {
+			shield = 12,
+			medic = 8,
+			taser = 4,
+			tank = 4,
+			sniper = 3,						
+			spooc = 4,
+			fbi = 16
+		}
+	elseif managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then -- spicy
 		self.special_unit_spawn_limits = {
 			shield = 6,
 			medic = 8,
@@ -7393,7 +7408,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			4,
 			4
 		}
-	elseif self.small_map then
+	elseif not self._party and self.small_map then
 		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.assault.force_balance_mul = {
 				22,
@@ -7447,7 +7462,7 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			2,
 			2
 		}
-	elseif difficulty_index < 7 then
+	elseif not self._party and difficulty_index < 7 then
 		self.besiege.assault.force_balance_mul = {
 			16,
 			24,
@@ -7459,6 +7474,19 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			0.5,
 			1,
 			1
+		}
+	elseif self._party then
+		self.besiege.assault.force_balance_mul = {
+			48,
+			96,
+			108,
+			108
+		}
+		self.besiege.assault.force_pool_balance_mul = {
+			1,
+			2,
+			4,
+			4
 		}
 	else
 		self.besiege.assault.force_balance_mul = {
