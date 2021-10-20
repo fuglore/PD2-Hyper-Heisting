@@ -479,7 +479,7 @@ function PlayerStandard:_update_movement(t, dt)
 	
 	if floor_moving_ray then
 		floor_moving_vel = floor_moving_ray.body and floor_moving_ray.body:velocity() or nil
-		floor_moving_pos = floor_moving_ray.position
+		--floor_moving_pos = floor_moving_ray.position
 	end
 	
 	
@@ -1789,6 +1789,8 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 
 					dmg_mul = dmg_mul * managers.player:temporary_upgrade_value("temporary", "berserker_damage_multiplier", 1)
 					dmg_mul = dmg_mul * managers.player:get_property("trigger_happy", 1)
+					dmg_mul = dmg_mul * managers.player:get_temporary_property("birthday_multiplier", 1)
+					
 					local fired = nil
 
 					if fire_mode == "single" then

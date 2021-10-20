@@ -708,7 +708,7 @@ function GroupAIStateBesiege:_set_objective_to_enemy_group(group, grp_objective)
 	group.objective = grp_objective
 
 	if grp_objective.area then
-		if not self:_chk_group_area_presence(group, grp_objective.area) then
+		if grp_objective.type == "retire" or not self:_chk_group_area_presence(group, grp_objective.area) then
 			grp_objective.moving_out = true
 		else
 			grp_objective.moving_out = nil
@@ -1588,7 +1588,6 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 	end
 end
 
-
 function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	local assault_task = self._task_data.assault
 	self._skip_phase = nil
@@ -2265,47 +2264,6 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 	for i = 1, #spawn_group.spawn_pts do
 		local sp_data = spawn_group.spawn_pts[i]
 		sp_data.delay_t = self._t + math.random()
-	end
-	
-	if grp_objective.area and not grp_objective.coarse_path then
-		local long_path = nil
-		
-		local flank_groups = {
-			recon_squad_A = true,
-			recon_squad_B = true,
-			recon_squad_C = true,
-			recon_squad_D = true,
-			tac_swat_shotgun_flank = true,
-			tac_swat_rifle_flank = true,
-			tac_tazer_flanking = true
-		}
-		
-		if spawn_group_type == "FBI_spoocs" then
-			if math_random() < 0.5 then
-				long_path = true
-			end
-		elseif flank_groups[spawn_group_type] then
-			long_path = true
-		end
-		
-		local end_nav_seg = managers.navigation:get_nav_seg_from_pos(grp_objective.area.pos, true)
-		local search_params = {
-			id = "GroupAI_spawn",
-			from_seg = spawn_group.nav_seg,
-			to_seg = end_nav_seg,
-			access_pos = "swat",
-			long_path = long_path
-		}
-		local coarse_path = managers.navigation:search_coarse(search_params)
-		
-		if coarse_path then
-			--log("pog???")
-			grp_objective.coarse_path = coarse_path
-			grp_objective.area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1])
-		else
-			grp_objective.area = self:get_area_from_nav_seg_id(spawn_group.nav_seg)
-			grp_objective.coarse_path = {{spawn_group.nav_seg, spawn_group.area.pos}}
-		end
 	end
 
 	local spawn_task = {
