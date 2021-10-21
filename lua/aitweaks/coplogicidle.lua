@@ -823,7 +823,7 @@ function CopLogicIdle._chk_stare_into_wall_1(data)
 	local my_tracker = data.unit:movement():nav_tracker()
 	local my_nav_seg = my_tracker:nav_segment()
 	local my_area = managers.groupai:state():get_area_from_nav_seg_id(my_nav_seg)
-	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
+	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team and data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team and data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
 	local found_areas = {
 		[my_area] = true
 	}

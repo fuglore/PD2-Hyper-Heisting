@@ -496,7 +496,7 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		3
 	}
 	self.values.player.shot_shoulders_crowbar = {
-		1.5
+		1.25
 	}
 	self.definitions.player_shot_shoulders_basic = {
 		name_id = "menu_shot_shoulders_basic",

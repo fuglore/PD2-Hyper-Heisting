@@ -584,10 +584,10 @@ function SkillTreeTweakData:init()
 				},
 				{
 					"shotgun_cqb",
-					"shotgun_impact"
+					"far_away"
 				},
 				{
-					"far_away",
+					"shotgun_impact",
 					"close_by"
 				},
 				{

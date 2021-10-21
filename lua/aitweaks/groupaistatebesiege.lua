@@ -2950,6 +2950,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			end
 		elseif phase_is_anticipation and current_objective.open_fire then --if we were aggressive one update ago, start backing up away from the current objective area
 			pull_back = true
+		elseif not tactics_map or not tactics_map.ranged_fire and not tactics_map.elite_ranged_fire then
+			push = true
 		elseif not phase_is_anticipation and group.in_place_t and self._t - group.in_place_t > 10 or not self._street and self._hunt_mode or not self._street and phase_is_sustain then
 			push = true --various checks for sustain, plus one to make sure that if we're a ranged fire team who refused to push due to street, we will eventually push anyways
 		elseif has_criminals_close then
