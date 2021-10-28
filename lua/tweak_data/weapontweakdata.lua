@@ -1874,10 +1874,10 @@ self.rota.AMMO_MAX = 40
 self.x_rota.AMMO_MAX = 40
 self.x_rota.stats.damage = 130
 self.rota.stats.damage = 130
-self.rota.damage_near = 550
-self.rota.damage_far = 1050
-self.x_rota.damage_near = 550
-self.x_rota.damage_far = 1050
+self.rota.damage_near = 300
+self.rota.damage_far = 800
+self.x_rota.damage_near = 300
+self.x_rota.damage_far = 800
 self.x_rota.AMMO_PICKUP = {2, 5}
 self.rota.AMMO_PICKUP = {2, 5}
 self.rota.kick = {
@@ -1925,8 +1925,8 @@ crouching = {
 self.r870.fire_mode_data.fire_rate = 0.35294117647
 self.r870.stats.damage = 190
 self.r870.stats.spread = 12
-self.r870.damage_near = 650
-self.r870.damage_far = 1120
+self.r870.damage_near = 400
+self.r870.damage_far = 900
 self.r870.AMMO_PICKUP = {1.8, 2.9}
 self.r870.kick = {
 standing = {
@@ -1952,8 +1952,8 @@ crouching = {
 --Locomotive
 self.serbu.AMMO_MAX = 30
 self.serbu.stats.damage = 190
-self.serbu.damage_near = 500
-self.serbu.damage_far = 1050
+self.serbu.damage_near = 350
+self.serbu.damage_far = 800
 self.serbu.AMMO_PICKUP = {1.8, 2.9}
 self.serbu.fire_mode_data.fire_rate = 0.35294117647
 self.serbu.kick = {
@@ -1981,7 +1981,7 @@ crouching = {
 self.m1897.AMMO_MAX = 42
 self.m1897.fire_mode_data.fire_rate = 0.4 
 self.m1897.stats.damage = 190
-self.m1897.damage_near = 650
+self.m1897.damage_near = 450
 self.m1897.damage_far = 1120
 self.m1897.AMMO_PICKUP = {1.8, 2.9}
 self.m1897.kick = {
@@ -2007,8 +2007,8 @@ crouching = {
 
 --M1014
 self.benelli.stats.damage = 99
-self.benelli.damage_near = 650
-self.benelli.damage_far = 1120
+self.benelli.damage_near = 300
+self.benelli.damage_far = 900
 self.benelli.AMMO_PICKUP = {3, 5}
 self.benelli.fire_mode_data.fire_rate = 0.12
 self.benelli.AMMO_MAX = 50
@@ -2037,8 +2037,8 @@ crouching = {
 self.spas12.stats.damage = 128
 self.spas12.stats.spread = 10
 self.spas12.stats.spread_moving = 10
-self.spas12.damage_near = 650
-self.spas12.damage_far = 1120
+self.spas12.damage_near = 400
+self.spas12.damage_far = 1000
 self.spas12.AMMO_PICKUP = {2, 4}
 self.spas12.fire_mode_data.fire_rate = 0.14
 self.spas12.AMMO_MAX = 30
@@ -2093,7 +2093,7 @@ crouching = {
 --Raven
 self.ksg.rays = 10
 self.ksg.stats.damage = 190
-self.ksg.damage_near = 600
+self.ksg.damage_near = 500
 self.ksg.damage_far = 1100
 self.ksg.AMMO_PICKUP = {1.8, 2.9}
 self.ksg.kick = {
@@ -2121,11 +2121,11 @@ crouching = {
 self.x_basset.AMMO_MAX = 50
 self.x_basset.stats.damage = 85
 self.basset.stats.damage = 85
-self.basset.damage_near = 550
+self.basset.damage_near = 300
 self.basset.AMMO_MAX = 50
-self.basset.damage_far = 1050
-self.x_basset.damage_near = 550
-self.x_basset.damage_far = 1050
+self.basset.damage_far = 750
+self.x_basset.damage_near = 300
+self.x_basset.damage_far = 750
 self.basset.AMMO_PICKUP = {2, 5}
 self.x_basset.AMMO_PICKUP = {2, 5}
 self.basset.kick = {
@@ -2172,7 +2172,7 @@ crouching = {
 --Izhma
 self.saiga.stats.damage = 100
 self.saiga.stats.spread = 12
-self.saiga.damage_near = 500
+self.saiga.damage_near = 400
 self.saiga.damage_far = 1000
 self.saiga.AMMO_PICKUP = {2, 5}
 self.saiga.AMMO_MAX = 60
@@ -2203,8 +2203,8 @@ self.coach.stats_modifiers = {damage = 2}
 self.coach.stats.damage = 200
 self.coach.stats_modifiers = {damage = 2}
 self.coach.AMMO_MAX = 24
-self.coach.damage_near = 650
-self.coach.damage_far = 1120
+self.coach.damage_near = 700
+self.coach.damage_far = 1600
 self.coach.fire_mode_data.fire_rate = 0.075
 self.coach.kick = {
 standing = {
@@ -2231,8 +2231,8 @@ crouching = {
 self.huntsman.stats.damage = 200
 self.huntsman.stats_modifiers = {damage = 2}
 self.huntsman.fire_mode_data.fire_rate = 0.075
-self.huntsman.damage_near = 750
-self.huntsman.damage_far = 1450
+self.huntsman.damage_near = 900
+self.huntsman.damage_far = 1800
 self.huntsman.rays = 16
 self.huntsman.kick = {
 standing = {
@@ -2258,8 +2258,8 @@ crouching = {
 --Joceline
 self.b682.stats.damage = 200
 self.b682.stats_modifiers = {damage = 2}
-self.b682.damage_near = 750
-self.b682.damage_far = 1450
+self.b682.damage_near = 1100
+self.b682.damage_far = 2000
 self.b682.fire_mode_data.fire_rate = 0.075
 self.b682.stats.spread = 18
 self.b682.stats.spread_moving = 18
@@ -2296,13 +2296,14 @@ self.judge.stats.damage = 200
 self.judge.stats_modifiers = {damage = 2}
 self.x_judge.stats.damage = 200
 self.x_judge.stats_modifiers = {damage = 2}
-self.judge.damage_near = 400
-self.judge.damage_far = 900
-self.x_judge.damage_near = 400
-self.x_judge.damage_far = 900
-self.judge.AMMO_PICKUP = {0.28, 0.88}
+self.judge.damage_near = 300
+self.judge.damage_far = 800
+self.x_judge.damage_near = 300
+self.x_judge.damage_far = 800
+self.judge.AMMO_PICKUP = {0.5, 0.88}
 self.judge.AMMO_MAX = 25
 self.x_judge.AMMO_MAX = 35
+self.x_judge.AMMO_PICKUP = {0.5, 0.88}
 self.judge.kick = {
 standing = {
 		4,
@@ -2347,10 +2348,10 @@ crouching = {
 --Breaker
 self.boot.stats.damage = 200
 self.boot.stats_modifiers = {damage = 2}
-self.boot.damage_near = 650
-self.boot.damage_far = 1120
+self.boot.damage_near = 400
+self.boot.damage_far = 1000
 self.boot.AMMO_MAX = 30
-self.boot.AMMO_PICKUP = {0.32, 1.12}
+self.boot.AMMO_PICKUP = {0.52, 1.12}
 self.boot.kick = {
 standing = {
 		4,
@@ -2406,8 +2407,8 @@ crouching = {
 self.m37.AMMO_MAX = 24
 self.m37.stats.damage = 200
 self.m37.stats_modifiers = {damage = 2}
-self.m37.damage_near = 650
-self.m37.damage_far = 1120
+self.m37.damage_near = 400
+self.m37.damage_far = 900
 self.m37.kick = {
 standing = {
 		4,

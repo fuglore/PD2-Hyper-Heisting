@@ -25,7 +25,7 @@ function PlayerTweakData:_set_normal()
 		decay_start_delay = 1.5,
 		spread_mul = 3,
 		tolerance = 0,
-		max_value = 20,
+		max_value = 100,
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
@@ -47,7 +47,7 @@ function PlayerTweakData:_set_hard()
 		decay_start_delay = 1.5,
 		spread_mul = 3,
 		tolerance = 0,
-		max_value = 20,
+		max_value = 100,
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
@@ -68,7 +68,7 @@ function PlayerTweakData:_set_overkill()
 		decay_start_delay = 1.5,
 		spread_mul = 3,
 		tolerance = 0,
-		max_value = 20,
+		max_value = 100,
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
@@ -89,7 +89,7 @@ function PlayerTweakData:_set_overkill_145()
 		decay_start_delay = 1.5,
 		spread_mul = 3,
 		tolerance = 0,
-		max_value = 20,
+		max_value = 100,
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
@@ -111,7 +111,7 @@ function PlayerTweakData:_set_easy_wish()
 		decay_start_delay = 1.5,
 		spread_mul = 3,
 		tolerance = 0,
-		max_value = 20,
+		max_value = 100,
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
@@ -135,7 +135,7 @@ function PlayerTweakData:_set_overkill_290()
 		decay_start_delay = 1.5,
 		spread_mul = 3,
 		tolerance = 0,
-		max_value = 20,
+		max_value = 100,
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11
@@ -159,7 +159,7 @@ function PlayerTweakData:_set_sm_wish()
 		decay_start_delay = 1.5,
 		spread_mul = 3,
 		tolerance = 0,
-		max_value = 20,
+		max_value = 100,
 		autohit_chance_mul = 1
 	}
 	self.damage.TASED_TIME = 11

@@ -40,7 +40,9 @@ function CopLogicSniper._upd_aim(data, my_data)
 	if focus_enemy then
 		if focus_enemy.verified then
 			shoot = true
-			my_data.last_criminal_nav_seen = focus_enemy.unit:movement():nav_tracker():nav_segment()
+			if alive(focus_enemy.unit) and focus_enemy.unit:movement() then
+				my_data.last_criminal_nav_seen = focus_enemy.unit:movement():nav_tracker():nav_segment()
+			end
 		elseif my_data.wanted_stance == "cbt" then
 			aim = true
 		elseif focus_enemy.verified_t and data.t - focus_enemy.verified_t < 20 then
