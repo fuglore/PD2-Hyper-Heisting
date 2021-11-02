@@ -5260,7 +5260,7 @@ function CharacterTweakData:_presets(tweak_data)
 		range = {
 			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
 			far = 4000, 
-			close = 1600
+			close = 2000
 		},
 		autofire_rounds = { --yes.
 			30,
@@ -5749,9 +5749,9 @@ function CharacterTweakData:_presets(tweak_data)
 			2
 		},
 		range = { --leave untouched, long range weapon
-			optimal = 2000,
+			optimal = 3000,
 			far = 5000,
-			close = 1000
+			close = 2000
 		},
 		FALLOFF = {
 			{
@@ -6081,9 +6081,9 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 2000, --cant walk and shoot past this range
-			far = 4000, --40m cut off range.
-			close = 1000
+			optimal = 2500, --cant walk and shoot past this range
+			far = 3000, --30m cut off range.
+			close = 2000
 		},
 		FALLOFF = {
 			{
@@ -6215,7 +6215,7 @@ function CharacterTweakData:_presets(tweak_data)
 		range = {
 			optimal = 2000, --cant walk and shoot past this range
 			far = 3000, --30m cut off range.
-			close = 1000 --10m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 2000 --10m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
@@ -6353,7 +6353,7 @@ function CharacterTweakData:_presets(tweak_data)
 		range = {
 			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
 			far = 4000, 
-			close = 1600
+			close = 2000
 		},
 		autofire_rounds = { --yes.
 			30,
@@ -7469,6 +7469,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.no_retreat = nil
 	self.tank.no_arrest = true
 	self.tank.surrender = nil
+	self.tank.always_face_enemy = true
 	self.tank.ecm_vulnerability = 0 --no more dozer weirdness due to ecms, also a buff I guess.
 	self.tank.ecm_hurts = {
 		ears = {
@@ -7563,7 +7564,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_ftsu.weapon = presets.weapon.rhythmsniper
 	self.tank_ftsu.move_speed = presets.move_speed.mini_consistency
 	self.tank_ftsu.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
-	self.tank_ftsu.always_face_enemy = nil
+	self.tank_ftsu.always_face_enemy = true
 	
 	self.trolliam_epicson = deep_clone(self.tank) --trolliam
 	self.trolliam_epicson.tags = {

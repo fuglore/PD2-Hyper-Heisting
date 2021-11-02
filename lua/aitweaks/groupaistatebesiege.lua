@@ -1040,17 +1040,7 @@ function GroupAIStateBesiege:chk_assault_active_atm()
 end
 
 function GroupAIStateBesiege:is_detection_persistent()
-	if self._fake_assault_mode then
-		return true
-	end
-
-	local assault_task = self._task_data.assault
-	
-	if assault_task and assault_task.phase and assault_task.phase ~= "anticipation" then
-		return true
-	end
-	
-	return
+	return self._enemy_weapons_hot
 end
 
 function GroupAIStateBesiege:get_hostage_count_for_chatter()

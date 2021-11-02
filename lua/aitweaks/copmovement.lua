@@ -701,19 +701,25 @@ function CopMovement:on_suppressed(state)
 	self:enable_update()
 end
 
+local nonstags = {
+	dmg_rcv = true,
+	light_hurt = true
+}
+
 function CopMovement:damage_clbk(my_unit, damage_info)
 	local hurt_type = damage_info.result.type
 
 	if not hurt_type then
 		return
 	end
-
+	
+	local t = TimerManager:game():time()
+	
 	if hurt_type == "healed" then
 		self._ext_damage._health = self._ext_damage._HEALTH_INIT
 		self._ext_damage._health_ratio = 1
 
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-		local t = TimerManager:game():time()
 
 		if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self._ext_damage._invulnerability_t = t + 4
@@ -736,10 +742,6 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		end
 
 		self._unit:sound():say("x01a_any_3p")
-			
-		if damage_info.is_synced or self._tweak_data.ignore_medic_revive_animation then
-			return
-		end
 
 		return
 	elseif hurt_type == "death" and damage_info.is_synced then
@@ -818,6 +820,12 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 
 			if not hurt_type then
 				return
+			end
+		end
+		
+		if self._unit:base():has_tag("takedown") then
+			if not nonstags[hurt_type] then
+				self._ext_damage._next_stag_t = t + math.lerp(3, 6, math.random())
 			end
 		end
 	end

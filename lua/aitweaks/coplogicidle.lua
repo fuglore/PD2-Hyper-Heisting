@@ -1874,6 +1874,12 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 						if crim_record and crim_record.hostage_killed_pen then
 							weight_mul = weight_mul + crim_record.hostage_killed_pen
 						end
+						
+						if data.attention_obj and data.attention_obj.u_key == u_key then
+							if data.t - attention_data.acquire_t < 4 then --old enemy
+								weight_mul = weight_mul + 0.75
+							end
+						end
 
 						if weight_mul and weight_mul ~= 1 then
 							weight_mul = 1 / weight_mul
@@ -1923,98 +1929,6 @@ function CopLogicIdle._get_priority_attention(data, attention_objects, reaction_
 								target_priority_slot = target_priority_slot - 2
 							end
 						end]]
-
-						if data.attention_obj and data.attention_obj.u_key == u_key then
-							if not attention_data.acquire_t then
-								log("coplogicidle: no acquire_t defined somehow")
-
-								local my_unit = data.unit
-
-								if not alive(my_unit) then
-									log("coplogicidle: unit was destroyed!")
-								elseif my_unit:in_slot(0) then
-									log("coplogicidle: unit is being destroyed!")
-								else
-									log("coplogicidle: unit is still intact on the C side")
-
-									local my_base_ext = my_unit:base()
-
-									if not my_base_ext then
-										log("coplogicidle: unit has no base() extension")
-									elseif my_base_ext._tweak_table then
-										log("coplogicidle: unit has tweak table: " .. tostring(my_base_ext._tweak_table) .. "")
-									else
-										log("coplogicidle: unit has no tweak table")
-									end
-
-									local my_dmg_ext = my_unit:character_damage()
-
-									if not my_dmg_ext then
-										log("coplogicidle: unit has no character_damage() extension")
-									elseif my_dmg_ext.dead and my_dmg_ext:dead() then
-										log("coplogicidle: unit is dead")
-									end
-								end
-
-								local cur_logic_name = data.name
-
-								if cur_logic_name then
-									log("coplogicidle: logic name: " .. tostring(cur_logic_name) .. "")
-								end
-
-								local att_unit = data.attention_obj.unit
-
-								if not alive(att_unit) then
-									log("coplogicidle: attention unit was destroyed!")
-								elseif att_unit:in_slot(0) then
-									log("coplogicidle: attention unit is being destroyed!")
-								else
-									log("coplogicidle: attention unit is still intact on the C side")
-
-									local unit_name = att_unit.name and att_unit:name()
-
-									if unit_name then
-										--might be pure gibberish
-										log("coplogicidle: attention unit name: " .. tostring(unit_name) .. "")
-									end
-
-									if att_unit:id() == -1 then
-										log("coplogicidle: attention unit was detached from the network")
-									end
-
-									local att_base_ext = att_unit:base()
-
-									if not att_base_ext then
-										log("coplogicidle: attention unit has no base() extension")
-									elseif att_base_ext._tweak_table then
-										log("coplogicidle: attention unit has tweak table: " .. tostring(att_base_ext._tweak_table) .. "")
-									elseif att_base_ext.is_husk_player then
-										log("coplogicidle: attention unit was a player husk")
-									elseif att_base_ext.is_local_player then
-										log("coplogicidle: attention unit was the local player")
-									end
-
-									local att_dmg_ext = att_unit:character_damage()
-
-									if not att_dmg_ext then
-										log("coplogicidle: attention unit has no character_damage() extension")
-									elseif att_dmg_ext.dead and att_dmg_ext:dead() then
-										log("coplogicidle: attention unit is dead")
-									end
-								end
-
-								local cam_pos = managers.viewport:get_current_camera_position()
-
-								if cam_pos then
-									local from_pos = cam_pos + math.DOWN * 50
-
-									local brush = Draw:brush(Color.red:with_alpha(0.5), 10)
-									brush:cylinder(from_pos, my_unit:movement():m_com(), 10)
-								end
-							elseif data.t - attention_data.acquire_t < 4 then --old enemy
-								target_priority_slot = target_priority_slot - 3
-							end
-						end
 
 						if tunnel_enemy and u_key ~= tunnel_enemy then
 							target_priority_slot = target_priority_slot + 10

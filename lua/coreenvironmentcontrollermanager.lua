@@ -397,7 +397,7 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 	self._health_effect_value_diff = math.max(self._health_effect_value_diff - dt * 0.5, 0)
 	self._buff_effect_value = math.min(self._buff_effect_value + dt * 0.5, 0)
 	
-	mvector3.set(temp_vec_1, Vector3(math.clamp(self._health_effect_value_diff * 1.3 * (1 + hurt_mod * 1.3), 0, 1.2), 0, math.min(blur_zone_val + self._HE_blinding, 1)))
+	mvector3.set(temp_vec_1, Vector3(math.clamp(self._health_effect_value_diff * 1.3, 0, 1.2), 0, math.min(blur_zone_val + self._HE_blinding, 1)))
 	mvector3.add(temp_vec_1, Vector3(self._buff_effect_value, self._buff_effect_value, self._buff_effect_value, 0.5))
 	self._lut_modifier_material:set_variable(ids_LUT_settings_a, temp_vec_1)
 	

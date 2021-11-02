@@ -1923,7 +1923,7 @@ crouching = {
 
 --Reinfeld
 self.r870.fire_mode_data.fire_rate = 0.35294117647
-self.r870.stats.damage = 190
+self.r870.stats.damage = 110
 self.r870.stats.spread = 12
 self.r870.damage_near = 400
 self.r870.damage_far = 900
@@ -1951,7 +1951,7 @@ crouching = {
 
 --Locomotive
 self.serbu.AMMO_MAX = 30
-self.serbu.stats.damage = 190
+self.serbu.stats.damage = 110
 self.serbu.damage_near = 350
 self.serbu.damage_far = 800
 self.serbu.AMMO_PICKUP = {1.8, 2.9}
@@ -1980,7 +1980,7 @@ crouching = {
 --Reinfeld 88
 self.m1897.AMMO_MAX = 42
 self.m1897.fire_mode_data.fire_rate = 0.4 
-self.m1897.stats.damage = 190
+self.m1897.stats.damage = 110
 self.m1897.damage_near = 450
 self.m1897.damage_far = 1120
 self.m1897.AMMO_PICKUP = {1.8, 2.9}
@@ -2034,7 +2034,7 @@ crouching = {
 }
 
 --Predator
-self.spas12.stats.damage = 128
+self.spas12.stats.damage = 110
 self.spas12.stats.spread = 10
 self.spas12.stats.spread_moving = 10
 self.spas12.damage_near = 400
@@ -2064,7 +2064,7 @@ crouching = {
 }
 
 --Steakout
-self.aa12.stats.damage = 100
+self.aa12.stats.damage = 80
 self.aa12.damage_near = 300
 self.aa12.damage_far = 800
 self.aa12.AMMO_PICKUP = {2, 5}
@@ -2092,7 +2092,7 @@ crouching = {
 
 --Raven
 self.ksg.rays = 10
-self.ksg.stats.damage = 190
+self.ksg.stats.damage = 110
 self.ksg.damage_near = 500
 self.ksg.damage_far = 1100
 self.ksg.AMMO_PICKUP = {1.8, 2.9}
@@ -2119,8 +2119,8 @@ crouching = {
 
 --Grimm
 self.x_basset.AMMO_MAX = 50
-self.x_basset.stats.damage = 85
-self.basset.stats.damage = 85
+self.x_basset.stats.damage = 24
+self.basset.stats.damage = 24
 self.basset.damage_near = 300
 self.basset.AMMO_MAX = 50
 self.basset.damage_far = 750
@@ -2170,7 +2170,7 @@ crouching = {
 }
 
 --Izhma
-self.saiga.stats.damage = 100
+self.saiga.stats.damage = 80
 self.saiga.stats.spread = 12
 self.saiga.damage_near = 400
 self.saiga.damage_far = 1000
@@ -2198,8 +2198,6 @@ crouching = {
 }
 
 --Claire
-self.coach.stats.damage = 200
-self.coach.stats_modifiers = {damage = 2}
 self.coach.stats.damage = 200
 self.coach.stats_modifiers = {damage = 2}
 self.coach.AMMO_MAX = 24
@@ -2292,10 +2290,8 @@ self.b682.kick = {
 }
 
 --Judge
-self.judge.stats.damage = 200
-self.judge.stats_modifiers = {damage = 2}
-self.x_judge.stats.damage = 200
-self.x_judge.stats_modifiers = {damage = 2}
+self.judge.stats.damage = 160
+self.x_judge.stats.damage = 160
 self.judge.damage_near = 300
 self.judge.damage_far = 800
 self.x_judge.damage_near = 300
@@ -2346,8 +2342,7 @@ crouching = {
 }
 
 --Breaker
-self.boot.stats.damage = 200
-self.boot.stats_modifiers = {damage = 2}
+self.boot.stats.damage = 160
 self.boot.damage_near = 400
 self.boot.damage_far = 1000
 self.boot.AMMO_MAX = 30
@@ -2375,7 +2370,7 @@ crouching = {
 
 --Street Sweeper
 self.striker.has_magazine = true --balance issue
-self.striker.stats.damage = 130
+self.striker.stats.damage = 60
 self.striker.damage_near = 550
 self.striker.damage_far = 1050
 self.striker.AMMO_PICKUP = {2, 5}
@@ -2405,8 +2400,7 @@ crouching = {
 
 --GSPS
 self.m37.AMMO_MAX = 24
-self.m37.stats.damage = 200
-self.m37.stats_modifiers = {damage = 2}
+self.m37.stats.damage = 160
 self.m37.damage_near = 400
 self.m37.damage_far = 900
 self.m37.kick = {
@@ -2434,7 +2428,7 @@ crouching = {
 
 --KSP 58
 self.par.AMMO_PICKUP = {6, 14}
-self.par.stats.damage = 59
+self.par.stats.damage = 41
 self.par.stats.recoil = 12
 self.par.kick = {
 	standing = {
@@ -2460,7 +2454,7 @@ self.par.kick = {
 --M60
 self.m60.AMMO_MAX = 300 
 self.m60.AMMO_PICKUP = {2, 8}
-self.m60.stats.damage = 79
+self.m60.stats.damage = 59
 self.m60.stats.recoil = 10
 self.m60.kick = {
 	standing = {
@@ -2485,7 +2479,7 @@ self.m60.kick = {
 
 --KSP
 self.m249.AMMO_PICKUP = {6, 14}
-self.m249.stats.damage = 59
+self.m249.stats.damage = 41
 self.m249.stats.recoil = 9
 self.m249.kick = {
 	standing = {
@@ -2510,7 +2504,7 @@ self.m249.kick = {
 
 --Buzzsaw
 self.mg42.AMMO_PICKUP = {6, 14}
-self.mg42.stats.damage = 59
+self.mg42.stats.damage = 41
 self.mg42.stats.recoil = 9
 self.mg42.stats.spread = 15
 self.mg42.kick = {

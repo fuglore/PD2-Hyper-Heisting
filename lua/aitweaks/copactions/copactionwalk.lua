@@ -20,6 +20,7 @@ local REACT_SHOOT = AIAttentionObject.REACT_SHOOT
 local tmp_vec1 = Vector3()
 local tmp_vec2 = Vector3()
 local tmp_vec3 = Vector3()
+local tmp_vec4 = Vector3()
 
 local mrot_lookat = mrotation.set_look_at
 local mrot_set = mrotation.set_yaw_pitch_roll
@@ -261,7 +262,7 @@ function CopActionWalk:_init()
 		else
 			local nav_tracker = common_data.nav_tracker
 			local good_pos = nav_tracker:lost() and mvec3_cpy(common_data.nav_tracker:field_position()) or mvec3_cpy(common_data.pos)
-			local nr_iterations = self._stance.name == "ntl" and 2 or 1 --non-alerted units simplify paths twice
+			local nr_iterations = 2
 
 			--[[local line1 = Draw:brush(Color.red:with_alpha(0.5), 3)
 
@@ -789,8 +790,10 @@ function CopActionWalk._calculate_shortened_path(path)
 end
 
 local diagonals = {
-	tmp_vec1,
-	tmp_vec2
+    tmp_vec1,
+    tmp_vec2,
+    tmp_vec3,
+    tmp_vec4
 }
 
 function CopActionWalk._apply_padding_to_simplified_path(path)
@@ -804,6 +807,8 @@ function CopActionWalk._apply_padding_to_simplified_path(path)
 
 	mvec3_set_stat(tmp_vec1, dim_mag, dim_mag, 0)
 	mvec3_set_stat(tmp_vec2, dim_mag, -dim_mag, 0)
+	mvec3_set_stat(tmp_vec3, dim_mag, 0, 0)
+	mvec3_set_stat(tmp_vec4, 0, dim_mag, 0)
 
 	local index = 2
 	local offset = tmp_vec3

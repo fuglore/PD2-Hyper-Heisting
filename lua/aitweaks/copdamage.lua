@@ -292,6 +292,11 @@ function CopDamage:load(data)
 	end
 end
 
+local nonstags = {
+	dmg_rcv = true,
+	light_hurt = true
+}
+
 function CopDamage:get_damage_type(damage_percent, category, attack_data)
 	local hurt_table = self._char_tweak.damage.hurt_severity[category or "bullet"]
 	local dmg = damage_percent / self._HEALTH_GRANULARITY
@@ -302,8 +307,14 @@ function CopDamage:get_damage_type(damage_percent, category, attack_data)
 		--end
 	--end
 	
+	local t = TimerManager:game():time()
+	
 	if attack_data and self._char_tweak.damage.doom_hurt_type or self._char_tweak.damage.hurt_severity.doom_light then
 		local result = self:determine_doom_hurt_type(attack_data)
+		
+		if self._next_stag_t and self._next_stag_t > t and result and not nonstags[result] then
+			return "dmg_rcv"
+		end
 		
 		return result
 	end
