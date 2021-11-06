@@ -526,7 +526,7 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 		
 		if not self._too_drama then
 			if task_data.phase == "sustain" or self._hunt_mode then
-				local mul = 2
+				local mul = 1.5
 				
 				if self._danger_state then
 					mul = 1
