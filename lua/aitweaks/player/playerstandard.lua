@@ -1,3 +1,5 @@
+local temp_vec1 = Vector3()
+
 local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_set = mvector3.set
 local mvec3_set_z = mvector3.set_z
@@ -5,6 +7,7 @@ local mvec3_sub = mvector3.subtract
 local mvec3_add = mvector3.add
 local mvec3_mul = mvector3.multiply
 local mvec3_norm = mvector3.normalize
+local mvec3_dis_sq = mvector3.distance_sq
 
 Hooks:PostHook(PlayerStandard, "_calculate_standard_variables", "HH__calculate_standard_variables", function(self, t, dt)
 	self._setting_hold_to_jump = managers.user:get_setting("hold_to_jump")
@@ -2278,6 +2281,77 @@ function PlayerStandard:_get_input(t, dt, paused)
 	end
 	
 	return input
+end
+
+function PlayerStandard:_upd_nav_data()
+	if mvec3_dis_sq(self._m_pos, self._pos) > 4 then
+		if self._ext_movement:nav_tracker() then
+			self._ext_movement:nav_tracker():move(self._pos)
+
+			local nav_seg_id = self._ext_movement:nav_tracker():nav_segment()
+
+			if self._standing_nav_seg_id ~= nav_seg_id then
+				self._standing_nav_seg_id = nav_seg_id
+				local metadata = managers.navigation:get_nav_seg_metadata(nav_seg_id)
+				local location_id = metadata.location_id
+
+				managers.hud:set_player_location(location_id)
+				self._unit:base():set_suspicion_multiplier("area", metadata.suspicion_mul)
+				self._unit:base():set_detection_multiplier("area", metadata.detection_mul and 1 / metadata.detection_mul or nil)
+				managers.groupai:state():on_criminal_nav_seg_change(self._unit, nav_seg_id)
+			end
+		end
+
+		if self._pos_reservation then
+			managers.navigation:move_pos_rsrv(self._pos_reservation)
+
+			local slow_dist = 100
+
+			mvec3_set(temp_vec1, self._pos_reservation_slow.position)
+			mvec3_sub(temp_vec1, self._pos_reservation.position)
+
+			if slow_dist < mvec3_norm(temp_vec1) then
+				mvec3_mul(temp_vec1, slow_dist)
+				mvec3_add(temp_vec1, self._pos_reservation.position)
+				mvec3_set(self._pos_reservation_slow.position, temp_vec1)
+				managers.navigation:move_pos_rsrv(self._pos_reservation)
+			end
+		end
+
+		self._ext_movement:set_m_pos(self._pos)
+	end
+end
+
+
+function PlayerStandard:update(t, dt)
+	PlayerMovementState.update(self, t, dt)
+	self:_calculate_standard_variables(t, dt)
+	self:_update_ground_ray()
+	self:_update_fwd_ray()
+	self:_update_check_actions(t, dt)
+
+	if self._menu_closed_fire_cooldown > 0 then
+		self._menu_closed_fire_cooldown = self._menu_closed_fire_cooldown - dt
+	end
+
+	self:_update_movement(t, dt)
+	self:_upd_nav_data()
+	managers.hud:_update_crosshair_offset(t, dt)
+	self:_update_omniscience(t, dt)
+	self:_upd_stance_switch_delay(t, dt)
+
+	if self._last_equipped then
+		if self._last_equipped ~= self._equipped_unit then
+			self._equipped_visibility_timer = t + 0.1
+		end
+
+		if self._equipped_visibility_timer and self._equipped_visibility_timer < t and alive(self._equipped_unit) then
+			self._equipped_visibility_timer = nil
+			self._equipped_unit:base():set_visibility_state(true)
+		end
+	end
+
+	self._last_equipped = self._equipped_unit
 end
 
 function PlayerStandard:_update_check_actions(t, dt, paused)

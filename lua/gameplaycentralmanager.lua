@@ -1,3 +1,22 @@
+Hooks:PostHook(GamePlayCentralManager, "update", "post_update", function(self, t, dt)
+	if self._heist_timer.running then
+		if managers.blackmarket and managers.blackmarket._cached_weapons == nil then
+			managers.blackmarket:set_allow_cached_weapons(true)
+			--log("fuck me bro cash that shit")
+		end
+	end
+end)
+
+Hooks:PreHook(GamePlayCentralManager, "restart_the_game", "post_update", function()
+	managers.blackmarket:set_allow_cached_weapons()
+	--log("fuck me bro uncash that shit")
+end)
+
+Hooks:PreHook(GamePlayCentralManager, "stop_the_game", "post_update", function()
+	managers.blackmarket:set_allow_cached_weapons()
+	--log("fuck me bro uncash that shit")
+end)
+
 function GamePlayCentralManager:do_shotgun_push(unit, hit_pos, dir, distance, attacker)
 	if not distance then
 		return
