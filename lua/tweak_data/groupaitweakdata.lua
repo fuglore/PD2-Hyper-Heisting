@@ -5513,6 +5513,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5562,6 +5563,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				4
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5587,6 +5589,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				5
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5620,6 +5623,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				5
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5653,6 +5657,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				5
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5686,6 +5691,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5727,6 +5733,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5776,6 +5783,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5827,6 +5835,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				7
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5876,6 +5885,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				4
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5901,6 +5911,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				4
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5926,6 +5937,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				5
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -5959,6 +5971,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -6000,6 +6013,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -6041,6 +6055,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -6082,6 +6097,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				7
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -6133,6 +6149,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				6,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 3,
@@ -6174,6 +6191,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				4
 			},
+			special = "shield",
 			spawn = {{
 				amount_min = 4,
 				freq = 1,
@@ -6189,6 +6207,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				4
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -6214,6 +6233,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				4,
 				4
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 2,
@@ -6239,6 +6259,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				6,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 3,
@@ -6264,6 +6285,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				6,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 3,
@@ -6297,6 +6319,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				6,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 3,
@@ -6330,6 +6353,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				6,
 				6
 			},
+			special = "shield",
 			spawn = {
 				{
 					amount_min = 3,
@@ -6373,6 +6397,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				4
 			},
+			special = "taser",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6412,6 +6437,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "taser",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6427,6 +6453,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "taser",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6442,6 +6469,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "taser",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6457,6 +6485,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				4
 			},
+			special = "taser",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6480,6 +6509,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				4
 			},
+			special = "taser",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6517,6 +6547,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				4
 			},
+			special = "taser",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6556,6 +6587,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				4
 			},
+			special = "taser",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6597,6 +6629,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				5
 			},
+			special = "taser",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6642,6 +6675,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "taser",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6657,6 +6691,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "taser",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6672,6 +6707,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "taser",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6687,6 +6723,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "taser",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6702,6 +6739,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				3
 			},
+			special = "taser",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6734,6 +6772,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				5
 			},
+			special = "taser",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6782,6 +6821,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				5
 			},
+			special = "tank",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6821,6 +6861,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "tank",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6836,6 +6877,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "tank",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6851,6 +6893,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "tank",
 			spawn = {{
 				amount_min = 1,
 				freq = 1,
@@ -6866,6 +6909,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				2
 			},
+			special = "tank",
 			spawn = {
 			{
 				amount_min = 1,
@@ -6891,6 +6935,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				3
 			},
+			special = "tank",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6916,6 +6961,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				5
 			},
+			special = "tank",
 			spawn = {
 				{
 					amount_min = 1,
@@ -6982,6 +7028,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1 
 			},
+			special = "spooc",
 			spawn = {
 				{
 					freq = 1.25,
@@ -7009,6 +7056,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "spooc",
 			spawn = {
 				{
 					freq = 1,
@@ -7025,6 +7073,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "spooc",
 			spawn = {
 				{
 					freq = 1,
@@ -7040,6 +7089,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "spooc",
 			spawn = {
 				{
 					freq = 1.5,
@@ -7061,6 +7111,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1,
 				1
 			},
+			special = "spooc",
 			spawn = {
 				{
 					freq = 1.5,
@@ -7082,6 +7133,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				1, 
 				1
 			},
+			special = "spooc",
 			spawn = {
 				{
 					freq = 1.25,

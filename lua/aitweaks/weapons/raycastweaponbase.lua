@@ -156,6 +156,7 @@ local mvec1 = Vector3()
 function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_assist, autohit_override_data)
 	local autohit = use_aim_assist and self._aim_assist_data or self._autohit_data
 	autohit = autohit_override_data or autohit
+	local autohit_constant_angle = autohit.min_angle
 	local autohit_near_angle = autohit.near_angle
 	local autohit_far_angle = autohit.far_angle
 	local far_dis = autohit.far_dis
@@ -187,10 +188,10 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 			local error_dot = mvec3_dot(direction, tar_vec)
 			local error_angle = math.acos(error_dot)
 			local dis_lerp = math.pow(tar_aim_dot / far_dis, 0.25)
-			local autohit_min_angle = math_lerp(1, autohit_far_angle, dis_lerp)
+			local autohit_min_angle = math.max(autohit_constant_angle, math_lerp(autohit_near_angle, autohit_far_angle, dis_lerp))
 
 			if error_angle <= autohit_min_angle then
-				if error_angle <= 1 then
+				if error_angle <= autohit_constant_angle then
 					ignore_rng = true
 				end
 				
@@ -1155,7 +1156,7 @@ function RaycastWeaponBase:on_bull_event(aced)
 			local ammo_total = ammo_base:get_ammo_total()
 			local max_ammo_in_clip = ammo_base:get_ammo_max_per_clip()
 			local ammo_in_clip = ammo_base:get_ammo_remaining_in_clip()
-			local amount = ammo_in_clip + math.ceil(max_ammo_in_clip * 0.25)
+			local amount = ammo_in_clip + math.ceil(max_ammo_in_clip * 0.1)
 			
 			if aced then	
 				amount = amount + 1

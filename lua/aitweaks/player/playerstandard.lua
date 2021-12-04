@@ -1206,6 +1206,10 @@ function PlayerStandard:_start_action_melee(t, input, instant)
 	self._ext_camera:play_redirect(self:get_animation("melee_enter"), speed_multiplier, offset)
 end
 
+function PlayerStandard:_set_no_run_t(duration)
+	self._no_run_t = duration
+end
+
 function PlayerStandard:_check_action_run(t, input)
 	local valid_t = not self._start_running_t or t - self._start_running_t > 0.05
 	if self._setting_hold_to_run and input.btn_run_release or self._running and not self._move_dir then
@@ -1221,14 +1225,18 @@ function PlayerStandard:_check_action_run(t, input)
 	elseif not self._setting_hold_to_run and not self._move_dir then
 		self._running_wanted = false
 	elseif input.btn_run_press or self._running_wanted then
-		if not self._running or self._end_running_expire_t then
-			self:_start_action_running(t)
-		elseif self._running and valid_t and not self._setting_hold_to_run then
-			self:_end_action_running(t)
+		if not self._no_run_t then
+			if not self._running or self._end_running_expire_t then
+				self:_start_action_running(t)
+			elseif self._running and valid_t and not self._setting_hold_to_run then
+				self:_end_action_running(t)
 
-			if input.btn_steelsight_state and not self._state_data.in_steelsight then
-				self._steelsight_wanted = true
+				if input.btn_steelsight_state and not self._state_data.in_steelsight then
+					self._steelsight_wanted = true
+				end
 			end
+		else
+			self._running_wanted = true
 		end
 	end
 end
@@ -2322,7 +2330,6 @@ function PlayerStandard:_upd_nav_data()
 	end
 end
 
-
 function PlayerStandard:update(t, dt)
 	PlayerMovementState.update(self, t, dt)
 	self:_calculate_standard_variables(t, dt)
@@ -2372,6 +2379,18 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	
 	if self._fall_damage_slow_t and self._fall_damage_slow_t < t then
 		self._fall_damage_slow_t = nil
+	end
+	
+	if self._no_run_t then
+		if self._running then
+			self:_interupt_action_running(t)
+		end
+	
+		self._no_run_t = self._no_run_t - dt
+		
+		if self._no_run_t <= 0 then
+			self._no_run_t = nil
+		end
 	end
 	
 	if self._state_data.in_air_enter_t then
@@ -2439,7 +2458,9 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	new_action = new_action or self:_check_use_item(t, input)
 
 	self:_check_action_jump(t, input)
+	
 	self:_check_action_run(t, input)
+	
 	self:_check_action_ladder(t, input)
 	self:_check_action_zipline(t, input)
 	self:_check_action_cash_inspect(t, input)

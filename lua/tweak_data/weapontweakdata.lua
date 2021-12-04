@@ -1049,6 +1049,7 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 		far_angle = 3,
 		far_dis = 2500,
 		MIN_RATIO = 0,
+		min_angle = 0.7,
 		near_angle = 0
 	}
 	weapon_data.autohit_pistol_default = {
@@ -1057,6 +1058,7 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 		far_angle = 3,
 		far_dis = 2000,
 		MIN_RATIO = 0,
+		min_angle = 1,
 		near_angle = 0
 	}
 	weapon_data.autohit_shotgun_default = {
@@ -1065,6 +1067,7 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 		far_angle = 6,
 		far_dis = 5000,
 		MIN_RATIO = 0,
+		min_angle = 0.2,
 		near_angle = 0
 	}
 	weapon_data.autohit_lmg_default = {
@@ -1073,6 +1076,7 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 		far_angle = 3,
 		far_dis = 5000,
 		MIN_RATIO = 0,
+		min_angle = 0.6,
 		near_angle = 0
 	}
 	weapon_data.autohit_snp_default = {
@@ -1081,6 +1085,7 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 		far_angle = 4,
 		far_dis = 4000,
 		MIN_RATIO = 0,
+		min_angle = 1,
 		near_angle = 0
 	}
 	weapon_data.autohit_smg_default = {
@@ -1089,6 +1094,7 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 		far_angle = 3,
 		far_dis = 2500,
 		MIN_RATIO = 0,
+		min_angle = 0.8,
 		near_angle = 0
 	}
 	weapon_data.autohit_minigun_default = {
@@ -1097,6 +1103,7 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 		far_angle = 3,
 		far_dis = 6000,
 		MIN_RATIO = 0,
+		min_angle = 0.2,
 		near_angle = 0
 	}
 

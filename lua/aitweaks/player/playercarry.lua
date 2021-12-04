@@ -17,6 +17,18 @@ function PlayerCarry:_update_check_actions(t, dt)
 		self._fall_damage_slow_t = nil
 	end
 	
+	if self._no_run_t then
+		if self._running then
+			self:_interupt_action_running(t)
+		end
+	
+		self._no_run_t = self._no_run_t - dt
+		
+		if self._no_run_t <= 0 then
+			self._no_run_t = nil
+		end
+	end
+	
 	self:_update_interaction_timers(t)
 	self:_update_throw_projectile_timers(t, input)
 	self:_update_reload_timers(t, dt, input)
@@ -51,7 +63,6 @@ function PlayerCarry:_update_check_actions(t, dt)
 	new_action = new_action or self:_check_action_melee(t, input)
 	new_action = new_action or self:_check_action_reload(t, input)
 	new_action = new_action or self:_check_change_weapon(t, input)
-	
 
 	if not new_action then
 		new_action = self:_check_action_primary_attack(t, input)

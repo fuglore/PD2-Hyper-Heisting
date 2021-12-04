@@ -3824,11 +3824,10 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	local dis_limit = max_dis or 64000000 --80 meters
 	
 	for i, dis in pairs(valid_spawn_group_distances) do
-		local my_wgt = math_lerp(1, 0.2, math.min(1, dis / dis_limit)) * 5
 		local my_spawn_group = valid_spawn_groups[i]
 		local my_group_types = my_spawn_group.mission_element:spawn_groups()
 		my_spawn_group.distance = dis
-		total_weight = total_weight + self:_choose_best_groups(candidate_groups, my_spawn_group, my_group_types, allowed_groups, my_wgt)
+		total_weight = total_weight + self:_choose_best_groups(candidate_groups, my_spawn_group, my_group_types, allowed_groups)
 	end
 
 	if total_weight == 0 then
@@ -3842,26 +3841,35 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	return self:_choose_best_group(candidate_groups, total_weight, delays)
 end
 
-function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types, allowed_groups, weight)
+function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types, allowed_groups)
 	local total_weight = 0
 
 	for _, group_type in ipairs(group_types) do
 		if tweak_data.group_ai.enemy_spawn_groups[group_type] then
+			local group_tweak = tweak_data.group_ai.enemy_spawn_groups[group_type]
+			local special_type, spawn_limit, current_count = nil
 			local cat_weights = allowed_groups[group_type]
 
 			if cat_weights then
-				local cat_weight = cat_weights[1]
-				local mod_weight = cat_weight
+				if group_tweak.special then
+					special_type = group_tweak.special
+					current_count = self:_get_special_unit_type_count(special_type)
+					spawn_limit = managers.job:current_spawn_limit(special_type)
+				end
+			
+				if not special_type or spawn_limit >= current_count + 1 then
+					local cat_weight = cat_weights[1]
 
-				table.insert(best_groups, {
-					group = group,
-					group_type = group_type,
-					wght = mod_weight,
-					cat_weight = cat_weight,
-					dis_weight = cat_weight
-				})
+					table.insert(best_groups, {
+						group = group,
+						group_type = group_type,
+						wght = cat_weight,
+						cat_weight = cat_weight,
+						dis_weight = cat_weight
+					})
 
-				total_weight = total_weight + mod_weight
+					total_weight = total_weight + cat_weight
+				end
 			end
 		end
 	end
@@ -3872,15 +3880,27 @@ end
 function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delays)
 	local rand_wgt = total_weight * math_random()
 	local best_grp, best_grp_type = nil
-
+	
+	--log("group choosing time: ")
+	
 	for i = 1, #best_groups do
 		local candidate = best_groups[i]
+		
+		--log("candidate name: " .. tostring(candidate.group_type) .. "#" .. tostring(i))
+		
+		--log("candidate weight: " .. tostring(candidate.wght) .. "")
+		
+		--log("rand_wgt: " .. tostring(rand_wgt))
+		
 		rand_wgt = rand_wgt - candidate.wght
 		
 		if rand_wgt <= 0 then
+			--log("CANDIDATE CHOSEN!")
+		
 			if delays then
 				self._spawn_group_timers[spawn_group_id(candidate.group)] = TimerManager:game():time() + math_lerp(delays[1], delays[2], math_random())
 			end
+			
 			best_grp = candidate.group
 			best_grp_type = candidate.group_type
 			best_grp.delay_t = self._t + best_grp.interval
