@@ -16,6 +16,7 @@ local math_random = math.random
 local math_lerp = math.lerp
 local math_min = math.min
 
+local table_insert = table.insert
 local table_remove = table.remove
 local table_size = table.size
 
@@ -489,6 +490,198 @@ function GroupAIStateBase:get_assault_hud_state()
 	
 end
 
+function GroupAIStateBase:on_wgt_report_empty(u_key)
+	if u_key then
+		local e_data = self._police[u_key]
+
+		if e_data and e_data.importance > 0 then
+			--log("you're a cock")
+			
+			e_data.importance = 0
+			
+			for c_key, c_data in pairs_g(self._player_criminals) do
+				local imp_keys = c_data.important_enemies
+				
+				for i = 1, #imp_keys do
+					local test_e_key = imp_keys[i]
+
+					if test_e_key == u_key then
+						table_remove(imp_keys, i)
+						table_remove(c_data.important_dis, i)
+
+						break
+					end
+				end
+			end
+			
+			e_data.unit:brain():set_important(nil)
+		end
+	end
+end 
+
+function GroupAIStateBase:on_enemy_logic_intimidated(u_key)
+	if u_key then
+		local e_data = self._police[u_key]
+
+		if e_data and e_data.importance > 0 then
+			--log("you're a cock")
+			
+			e_data.importance = 0
+			
+			for c_key, c_data in pairs_g(self._player_criminals) do
+				local imp_keys = c_data.important_enemies
+				
+				for i = 1, #imp_keys do
+					local test_e_key = imp_keys[i]
+
+					if test_e_key == u_key then
+						table_remove(imp_keys, i)
+						table_remove(c_data.important_dis, i)
+
+						break
+					end
+				end
+			end
+			
+			e_data.unit:brain():set_important(nil)
+		end
+	end
+end
+
+function GroupAIStateBase:set_importance_weight(u_key, wgt_report)
+	if not wgt_report or #wgt_report == 0 then
+		self:on_wgt_report_empty(u_key)
+		
+		return
+	end
+
+	local t_rem = table_remove
+	local t_ins = table_insert
+	local max_nr_imp = self._nr_important_cops
+	local imp_adj = 0
+	local criminals = self._player_criminals
+	
+
+	for i_dis_rep = #wgt_report - 1, 1, -2 do
+		local c_key = wgt_report[i_dis_rep]
+		local c_dis = wgt_report[i_dis_rep + 1]
+		local c_record = criminals[c_key]
+		local imp_enemies = c_record.important_enemies
+		local imp_dis = c_record.important_dis
+		local was_imp = nil
+
+		for i_imp = #imp_enemies, 1, -1 do
+			if imp_enemies[i_imp] == u_key then
+				t_rem(imp_enemies, i_imp)
+				t_rem(imp_dis, i_imp)
+
+				was_imp = true
+
+				break
+			end
+		end
+
+		local i_imp = #imp_dis
+
+		while i_imp > 0 do
+			if imp_dis[i_imp] < c_dis then
+				break
+			end
+
+			i_imp = i_imp - 1
+		end
+
+		if i_imp < max_nr_imp then
+			i_imp = i_imp + 1
+
+			while max_nr_imp <= #imp_enemies do
+				local dump_e_key = imp_enemies[#imp_enemies]
+
+				self:_adjust_cop_importance(dump_e_key, -1)
+				t_rem(imp_enemies)
+				t_rem(imp_dis)
+			end
+
+			t_ins(imp_enemies, i_imp, u_key)
+			t_ins(imp_dis, i_imp, c_dis)
+
+			if not was_imp then
+				imp_adj = imp_adj + 1
+			end
+		elseif was_imp then
+			imp_adj = imp_adj - 1
+		end
+	end
+
+	if imp_adj ~= 0 then
+		self:_adjust_cop_importance(u_key, imp_adj)
+	end
+end
+
+function GroupAIStateBase:_draw_enemy_importancies()
+	for e_key, e_data in pairs_g(self._police) do
+		local imp = e_data.importance
+
+		while imp > 0 do
+			local tint_r = 1
+			local tint_g = 1
+			local tint_b = 1
+			
+			if e_data.unit:brain().active_searches and next(e_data.unit:brain().active_searches) then
+				tint_g = tint_g - 0.5
+			end
+			
+			if e_data.unit:brain()._logic_data and e_data.unit:brain()._logic_data.internal_data then
+				if e_data.unit:brain()._logic_data.internal_data.processing_cover_path then
+					tint_g = tint_g - 0.5
+				end
+				
+				if e_data.unit:brain()._logic_data.internal_data.want_to_take_cover and e_data.unit:brain()._logic_data.internal_data.in_cover then
+					tint_r = 0
+				end
+			end
+			
+			Application:draw_sphere(e_data.m_pos, 50 * imp, tint_r, tint_g, tint_b)
+
+			imp = imp - 1
+		end
+
+		if e_data.unit:brain()._important then
+			local tint_r = 0
+			local tint_g = 1
+			local tint_b = 0
+			
+			if e_data.unit:brain().active_searches and next(e_data.unit:brain().active_searches) then
+				tint_b = tint_b + 0.5
+			end
+			
+			if e_data.unit:brain()._logic_data and e_data.unit:brain()._logic_data.internal_data then
+				if e_data.unit:brain()._logic_data.internal_data.processing_cover_path then
+					tint_b = tint_b + 0.5
+				end
+				
+				if e_data.unit:brain()._logic_data.internal_data.want_to_take_cover and e_data.unit:brain()._logic_data.internal_data.in_cover then
+					tint_g = 0
+					tint_r = 1
+				end
+			end
+			
+			
+			Application:draw_cylinder(e_data.m_pos, e_data.m_pos + math_up * 300, 35, tint_r, tint_g, tint_b)
+		end
+	end
+
+	for c_key, c_data in pairs_g(self._player_criminals) do
+		local imp_enemies = c_data.important_enemies
+
+		for imp, e_key in ipairs(imp_enemies) do
+			local tint = math_clamp(1 - imp / self._nr_important_cops, 0, 1)
+
+			Application:draw_cylinder(self._police[e_key].m_pos, c_data.m_pos, 10, tint, 0, 0, 1 - tint)
+		end
+	end
+end
+
 --[[local draw_color = {
     [1] = Color.green:with_alpha(0.5),
     [2] = Color.blue:with_alpha(0.5),
@@ -627,6 +820,8 @@ function GroupAIStateBase:update(t, dt)
     end]]
 	
 	self._t = t
+	
+	--self:_draw_enemy_importancies()
 
 	self:_upd_criminal_suspicion_progress()
 	
