@@ -12,6 +12,11 @@ local temp_vec_2 = Vector3()
 Hooks:PostHook(CoreEnvironmentControllerManager, "init", "hhpost_env", function(self)
 	self._effect_manager = World:effect_manager()
 	self._base_chromatic_amount = -0.4
+	self._current_chrom = -0.4
+	self._chrom_lerp = 0
+	self._contrast_lerp = 0
+	self._base_contrast = -0
+	self._current_contrast = -0
 end)
 
 local san_other = {near_plane_x = 10, near_plane_y = 12, far_plane_x = 4000, far_plane_y = 5000}
@@ -360,10 +365,11 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 	end
 
 	self._material:set_variable(ids_radial_offset, Vector3((self._hit_left - self._hit_right) * 0.2, (self._hit_up - self._hit_down) * 0.2, self._hit_front - self._hit_back + blur_zone_flashbang * 0.1))
-	self._material:set_variable(Idstring("contrast"), self._base_contrast + self._hit_some * 0.25)
+	self._material:set_variable(Idstring("contrast"), self._current_contrast + self._hit_some * 0.25)
 
 	if self._chromatic_enabled then
-		self._material:set_variable(Idstring("chromatic_amount"), self._base_chromatic_amount + blur_zone_val * 0.3 + flash_1 * 0.5)
+		self._material:set_variable(Idstring("chromatic_amount"), self._current_chrom - blur_zone_val * 0.3 - flash_1)
+		--log(tostring(self._current_chrom - blur_zone_val * 0.3 - flash_1))
 	else
 		self._material:set_variable(Idstring("chromatic_amount"), 0)
 	end
@@ -410,8 +416,10 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 		self._effect_manager:set_simulator_var_float(self._hurt_effect, pain_flash_ids, opacity_ids, opacity_ids, painflash)
 	end
 
-	local last_life = 0
-
+	local last_life = 0	
+	
+	--self._last_life = true
+	
 	if self._last_life then
 		if self._hurt_effect then
 			last_life = math.clamp((hurt_mod - 0.5) * 2, 0, 0.75)
@@ -420,7 +428,13 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 		end
 	end
 	
-	mvector3.set(temp_vec_2, Vector3(last_life, flash_2 + math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15, 0))
+	local lerp_to_use = self._chromatic_enabled and self._chrom_lerp or self._contrast_lerp
+	local intensity_mul = math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15 + (math.abs(lerp_to_use) * 0.05)
+	local anti_mul = -1 + (math.clamp(hit_some_mod * 2, 0, 1) * 0.25)
+	anti_mul = anti_mul + last_life * 0.25
+	
+	intensity_mul = intensity_mul * anti_mul
+	mvector3.set(temp_vec_2, Vector3(last_life, flash_2 + math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15, intensity_mul))
 	
 	self._lut_modifier_material:set_variable(ids_LUT_settings_b, temp_vec_2)
 	self._lut_modifier_material:set_variable(ids_LUT_contrast, flashbang * 0.5)
@@ -548,11 +562,16 @@ function CoreEnvironmentControllerManager:set_contrast_value_lerp(lerp_value)
 	end
 
 	if self._material then
-		local high_contrast = lerp_value >= 0.99 and math.lerp(0.5, 0.6, math.random()) or 0.5
+		local high_contrast = lerp_value >= 0.9 and math.lerp(0.5, 0.6, math.random()) or 0.5
+		
 		if self._chromatic_enabled then
 			high_contrast = high_contrast * 0.5
 		end
-		local new_contrast_value = math.lerp(self._base_contrast, high_contrast, lerp_value)
+		
+		local lerp_value = lerp_value + math.lerp(0.01, -0.01, math.random())
+		local new_contrast_value = math.lerp(0, high_contrast, lerp_value)
+		self._current_contrast = new_contrast_value
+		self._contrast_lerp = lerp_value
 		self._material:set_variable(Idstring("contrast"), new_contrast_value)
 	end
 end
@@ -569,10 +588,13 @@ function CoreEnvironmentControllerManager:set_chromatic_value_lerp(lerp_value)
 	if self._material then
 		if self._chromatic_enabled then
 			--log("nice")
-			local high_chrom = lerp_value >= 0.99 and math.lerp(-0.85, -1.4, math.random()) or -0.85
+			local high_chrom = lerp_value >= 0.9 and math.lerp(-0.85, -1.4, math.random()) or -0.85
 			high_chrom = high_chrom - self._base_chromatic_amount
+			local lerp_value = lerp_value + math.lerp(0.01, -0.01, math.random())
 			local new_chrom_value = math.lerp(self._base_chromatic_amount, high_chrom, lerp_value)
 			self._material:set_variable(Idstring("chromatic_amount"), new_chrom_value)
+			self._chrom_lerp = lerp_value
+			self._current_chrom = new_chrom_value
 		end
 	end
 end
