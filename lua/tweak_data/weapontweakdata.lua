@@ -1116,11 +1116,10 @@ Hooks:PostHook(WeaponTweakData, "init", "gambyt_weapons", function(self)
 --RIFLES--
 
 --AMCAR
-self.amcar.stats.damage = 41
 self.amcar.AMMO_MAX = 180
 self.amcar.stats.spread = 15
 self.amcar.CLIP_AMMO_MAX = 30
-self.amcar.stats.damage = 49
+self.amcar.stats.damage = 59
 self.amcar.AMMO_PICKUP = {6, 10}
 self.amcar.kick = {
 standing = {
@@ -1273,6 +1272,7 @@ self.tecci.kick.steelsight = self.new_m4.kick.steelsight
 self.tecci.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_LOW
 
 --Union 5.56
+self.corgi.stats.damage = 49
 self.corgi.kick.standing = self.new_m4.kick.standing
 self.corgi.kick.crouching = self.new_m4.kick.crouching
 self.corgi.kick.steelsight = self.new_m4.kick.steelsight

@@ -1640,6 +1640,13 @@ function PlayerDamage:_upd_suppression(t, dt)
 
 	if data.value then
 		if data.decay_start_t < t then
+			self._akuma_effect = nil
+			
+			if self._akuma_dampen then
+				--self._is_damping = true
+				self:_begin_akuma_snddedampen()
+			end
+				
 			data.value = data.value - dt * tweak_data.player.suppression.max_value / 10
 
 			if data.value <= 0 then
@@ -1651,8 +1658,10 @@ function PlayerDamage:_upd_suppression(t, dt)
 					managers.environment_controller:set_contrast_value_lerp(0)
 				end
 			end
-		elseif data.value == tweak_data.player.suppression.max_value and self._regenerate_timer then
-			self._listener_holder:call("suppression_max")
+		else
+			if data.value == tweak_data.player.suppression.max_value and self._regenerate_timer then
+				self._listener_holder:call("suppression_max")
+			end
 		end
 		
 		local lerp = math.lerp(0.1, 0.3, self:suppression_ratio())
