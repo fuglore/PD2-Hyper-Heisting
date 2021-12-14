@@ -228,38 +228,6 @@ function CopBrain:sync_net_event(event_id, peer)
 	end
 end
 
-function CopBrain:_reset_logic_data()
-	self._logic_data = {
-		unit = self._unit,
-		brain = self,
-		brain_updating = false,
-		active_searches = {},
-		m_pos = self._unit:movement():m_pos(),
-		char_tweak = tweak_data.character[self._unit:base()._tweak_table],
-		key = self._unit:key(),
-		pos_rsrv = {},
-		pos_rsrv_id = self._unit:movement():pos_rsrv_id(),
-		SO_access = self._SO_access,
-		SO_access_str = tweak_data.character[self._unit:base()._tweak_table].access,
-		detected_attention_objects = {},
-		attention_handler = self._attention_handler,
-		visibility_slotmask = managers.slot:get_mask("AI_visibility"),
-		enemy_slotmask = self._slotmask_enemies,
-		cool = self._unit:movement():cool(),
-		objective_complete_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_objective_complete"),
-		objective_failed_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_objective_failed")
-	}
-end
-
-
-function CopBrain:set_update_enabled_state(state)
-	self._unit:set_extension_update_enabled(Idstring("brain"), state)
-	
-	if self._logic_data then
-		self._logic_data.brain_updating = state
-	end
-end
-
 function CopBrain:on_suppressed(state)
     self._logic_data.is_suppressed = state or nil
 	
@@ -299,6 +267,7 @@ function CopBrain:_reset_logic_data()
 	self._logic_data = {
 		unit = self._unit,
 		brain = self,
+		brain_updating = false,
 		active_searches = {},
 		m_pos = self._unit:movement():m_pos(),
 		char_tweak = tweak_data.character[self._unit:base()._tweak_table],
@@ -325,6 +294,14 @@ function CopBrain:_reset_logic_data()
 			--log("uuuh")
 			self._logic_data.check_crim_jobless = true
 		end
+	end
+end
+
+function CopBrain:set_update_enabled_state(state)
+	self._unit:set_extension_update_enabled(Idstring("brain"), state)
+	
+	if self._logic_data then
+		self._logic_data.brain_updating = state
 	end
 end
 

@@ -809,7 +809,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 			end
 		end
 
-		if player_importance_wgt and #player_importance_wgt == 0 and attention_info.is_human_player then
+		if player_importance_wgt and attention_info.is_human_player then
 			mvec3_set(tmp_vec1, attention_info.m_head_pos)
 			mvec3_sub(tmp_vec1, my_pos)
 			
