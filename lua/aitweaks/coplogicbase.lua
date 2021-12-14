@@ -818,7 +818,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 			local e_fwd = nil
 
-			if is_husk_player then
+			if attention_info.is_husk_player then
 				e_fwd = attention_info.unit:movement():detect_look_dir()
 			else
 				e_fwd = attention_info.unit:movement():m_head_rot():y()
