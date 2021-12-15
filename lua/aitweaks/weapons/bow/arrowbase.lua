@@ -289,7 +289,7 @@ function ArrowBase:_on_collision(col_ray)
 	local result = nil
 	
 	if not loose_shoot and alive(col_ray.unit) then
-		local client_damage = self._damage_class_string == "InstantExplosiveBulletBase" or alive(col_ray.unit) and col_ray.unit:id() ~= -1
+		local client_damage = self._damage_class.is_explosive_bullet or alive(col_ray.unit) and col_ray.unit:id() ~= -1
 
 		if Network:is_server() or client_damage then
 			result = self._damage_class:on_collision(col_ray, self._weapon_unit or self._unit, self._thrower_unit, self._damage * damage_mult, false, false)

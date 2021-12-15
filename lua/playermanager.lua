@@ -521,6 +521,27 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	elseif self:has_category_upgrade("player", "dark_metamorphosis_basic") then
 		damage_ext:restore_health(0.25, true)
 	end
+	
+	if self:has_activate_temporary_upgrade("temporary", "copr_ability") then
+		local kill_life_leech = self:upgrade_value_nil("player", "copr_kill_life_leech")
+		local static_damage_ratio = self:upgrade_value_nil("player", "copr_static_damage_ratio")
+
+		if kill_life_leech and static_damage_ratio and damage_ext then
+			self._copr_kill_life_leech_num = (self._copr_kill_life_leech_num or 0) + 1
+
+			if kill_life_leech <= self._copr_kill_life_leech_num then
+				self._copr_kill_life_leech_num = 0
+				local current_health_ratio = damage_ext:health_ratio()
+				local wanted_health_ratio = math.floor((current_health_ratio + 0.01 + static_damage_ratio) / static_damage_ratio) * static_damage_ratio
+				local health_regen = wanted_health_ratio - current_health_ratio
+
+				if health_regen > 0 then
+					damage_ext:restore_health(health_regen)
+					damage_ext:on_copr_killshot()
+				end
+			end
+		end
+	end
 
 	if self._on_killshot_t and t < self._on_killshot_t then
 		return effect_sync_index
