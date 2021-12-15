@@ -10,6 +10,7 @@ PD2THHSHIN.settings = {
 	toggle_hhassault = false,
 	toggle_hhskulldiff = false,
 	toggle_highpriorityglint = true,
+	toggle_screenFX = false,
 	toggle_suppression = true,
 	toggle_health_effect = true,
 	toggle_blurzonereduction = true,
@@ -46,6 +47,10 @@ end
 
 function PD2THHSHIN:GlintEnabled()
 	return self:GetSessionSetting("toggle_highpriorityglint")
+end
+
+function PD2THHSHIN:EXScreenFXenabled()
+	return self:GetSessionSetting("toggle_screenFX")
 end
 
 function PD2THHSHIN:SupEnabled()

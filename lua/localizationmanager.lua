@@ -381,7 +381,7 @@
 		["shin_toggle_hhassault_title"] = "Stylish Assault Corner!",
 		["shin_toggle_hhassault_desc"] = "Enhances the [POLICE ASSAULT IN PROGRESS] hud area by adding extra flavor! (Such as entirely unique assault text based on the faction you are fighting against!) NOTE: Requires restarting the heist if changed mid-game!",
 		
-		["shin_toggle_hhskulldiff_title"] = "Extreme Difficulty Names!",
+		["shin_toggle_hhskulldiff_title"] = "Hyper Difficulty Names!",
 		["shin_toggle_hhskulldiff_desc"] = "Changes the difficulty names to suit Hyper Heisting's style!",
 		
 		["shin_toggle_blurzonereduction_title"] = "Less Blurry Blurzones!",
@@ -390,7 +390,10 @@
 		["shin_toggle_highpriorityglint_title"] = "High Priority Tells!",
 		["shin_toggle_highpriorityglint_desc"] = "Adds a glint to high priority enemies when they're about to fire, and plays a *ding!* when they're within 3 meters to let you know your goose is cooked! (Note: All of this only applies if they're targeting you!)",
 		
-		["shin_toggle_suppression_title"] = "Extreme Visible Suppression!",
+		["shin_toggle_screenFX_title"] = "Ultra ScreenFX!",
+		["shin_toggle_screenFX_desc"] = "Adds various visual adjustments and additions to screen effects that are present in Vanilla! Note: Not recommended to those prone to epilepsy.",
+		
+		["shin_toggle_suppression_title"] = "X-treme Visible Suppression!",
 		["shin_toggle_suppression_desc"] = "Adds a unique visual effect to your screen for when you are being suppressed by enemies! (Looks more fancy if you have Chromatic Aberration on!)",
 		
 		["shin_toggle_health_effect_title"] = "Low Health Visuals!",
@@ -554,6 +557,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_deck17_5_desc"] = "You gain ##5%## more health.\n\nEnemies nearby will prefer targeting you, whenever possible, while the Injector effect is active.",
 			["menu_deck17_7_desc"] = "You gain ##5%## more health.\n\nThe amount of health received during the Injector effect is increased by ##25%## while below ##50%## health.",
 			["menu_deck17_9_desc"] = "You gain an additional ##5%## more health.\n\nFor every ##50## points of health gained during the Injector effect while at maximum health, the recharge time of the injector is reduced by ##1## second.",
+			
+			--Leech
+			["menu_deck22_1_desc"] = "Unlocks and equips the Leech Ampule.\n\nChanging to another perk deck will make the Leech Ampule unavailable again.\n\nThe Leech Ampule replaces your current throwable, is equipped in your throwable slot and can be switched out if desired.\n\nWhile in game you can use throwable key ##$BTN_ABILITY;## to activate the Leech Ampule.\n\nActivating the Leech Ampule will restore ##40%## health, drain all your stamina and disable your armor and your ability to sprint for the duration of the Leech Ampule.\n\nWhile the Leech Ampule is active your health is divided into segments of ##20%## and damage taken from enemies removes one segment.\n\nKilling ##2## enemies will restore one segment of your health and block damage for ##1## second.\n\nAnytime you take damage your teammates are healed for ##5%## of their health.\n\nThe Leech Ampule lasts ##6## seconds and has a cooldown of ##60## seconds.",
 			
 			["menu_second_chances_beta_desc"] = "BASIC: ##$basic##\nYou gain the ability to disable ##1## camera from detecting you and your crew. Effect lasts for ##25## seconds.\n\nACE: ##$pro##\nYou lockpick ##75%## faster. You also gain the ability to lockpick safes.",
 			

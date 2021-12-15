@@ -899,6 +899,7 @@
 	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/hurt_screen" />
 	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/hurt_screen_df" load="true"/>
 	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties" />
+	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties_pdth" />
 	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/floaties_df" load="true" />
 	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/mangle_screen" />
 	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/mangle_screen_df" load="true" />

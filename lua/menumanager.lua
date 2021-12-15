@@ -191,6 +191,11 @@ Hooks:Add("MenuManagerInitialize", "shin_initmenu", function(menu_manager)
 		PD2THHSHIN:ChangeSetting("toggle_highpriorityglint",item:value() == "on")
 	end
 	
+	MenuCallbackHandler.callback_shin_toggle_screenFX = function(self,item) --toggle
+		PD2THHSHIN:ChangeSetting("toggle_screenFX",item:value() == "on")
+		PD2THHSHIN.need_to_reset_visuals = true
+	end
+	
 	MenuCallbackHandler.callback_shin_toggle_suppression = function(self,item) --toggle
 		PD2THHSHIN:ChangeSetting("toggle_suppression",item:value() == "on")
 		PD2THHSHIN.need_to_reset_visuals = true

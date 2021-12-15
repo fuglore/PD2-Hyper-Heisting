@@ -1,6 +1,96 @@
 local world_g = World
 local temp_vec1 = Vector3()
 local mvec3_norm = mvector3.normalize
+local HH = PD2THHSHIN
+
+function PlayerManager:clbk_copr_ability_ended()
+	self:deactivate_temporary_upgrade("temporary", "copr_ability")
+
+	local player_unit = self:local_player()
+	local character_damage = alive(player_unit) and player_unit:character_damage()
+
+	if character_damage then
+		local out_of_health = character_damage:health_ratio() < self:upgrade_value("player", "copr_static_damage_ratio", 0)
+		local risen_from_dead = self:get_property("copr_risen", false) == true
+
+		character_damage:on_copr_ability_deactivated()
+
+		if out_of_health or risen_from_dead then
+			character_damage:force_into_bleedout(false, risen_from_dead)
+		end
+	end
+
+	self:set_property("copr_risen", nil)
+	
+	if HH:EXScreenFXenabled() then
+		managers.environment_controller:_copr_effect_toggle(false)
+	end
+	
+	managers.hud:set_copr_indicator(false)
+end
+
+function PlayerManager:_attempt_copr_ability()
+	if self:has_activate_temporary_upgrade("temporary", "copr_ability") then
+		return false
+	end
+
+	local character_damage = self:local_player():character_damage()
+	local character_movement = self:local_player():movement()
+	local current_state = character_movement:current_state()
+	local duration = self:upgrade_value("temporary", "copr_ability")[2]
+	local now = managers.game_play_central:get_heist_timer()
+
+	managers.network:session():send_to_peers("sync_ability_hud", now + duration, duration)
+
+	local is_downed = game_state_machine:verify_game_state(GameStateFilters.downed)
+
+	self:set_property("copr_risen", is_downed)
+
+	if is_downed then
+		character_damage:revive(true)
+	end
+	
+	if current_state._running then
+		current_state:_interupt_action_running(self:player_timer():time())
+	end
+	
+	character_movement:subtract_stamina(character_movement._stamina)
+	self:activate_temporary_upgrade("temporary", "copr_ability")
+
+	local expire_time = self:get_activate_temporary_expire_time("temporary", "copr_ability")
+
+	managers.enemy:add_delayed_clbk("copr_ability_active", callback(self, self, "clbk_copr_ability_ended"), expire_time)
+	managers.hud:activate_teammate_ability_radial(HUDManager.PLAYER_PANEL, duration)
+
+	local bonus_health = self:upgrade_value("player", "copr_activate_bonus_health_ratio", tweak_data.upgrades.values.player.copr_activate_bonus_health_ratio[1])
+
+	character_damage:restore_health(bonus_health)
+	character_damage:set_armor(0)
+	character_damage:send_set_status()
+
+	local speed_up_on_kill_time = self:upgrade_value("player", "copr_speed_up_on_kill", 0)
+
+	if speed_up_on_kill_time > 0 then
+		local function speed_up_on_kill_func()
+			managers.player:speed_up_grenade_cooldown(speed_up_on_kill_time)
+		end
+
+		self:register_message(Message.OnEnemyKilled, "speed_up_copr_ability", speed_up_on_kill_func)
+	end
+
+	character_damage:on_copr_ability_activated()
+
+	self._copr_kill_life_leech_num = 0
+	local static_damage_ratio = self:upgrade_value("player", "copr_static_damage_ratio", 0)
+
+	managers.hud:set_copr_indicator(true, static_damage_ratio)
+	
+	if HH:EXScreenFXenabled() then
+		managers.environment_controller:_copr_effect_toggle(true)
+	end
+
+	return true
+end
 
 function PlayerManager:_chk_fellow_crimin_proximity(unit)
 	local players_nearby = 0

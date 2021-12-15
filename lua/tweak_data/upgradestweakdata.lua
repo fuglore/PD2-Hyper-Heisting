@@ -86,6 +86,9 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	end
 	
+	--Leech cooldown
+	self.copr_ability_cooldown = 60
+	
 	self.values.player.body_armor.skill_max_health_store = {
 		8,
 		8,

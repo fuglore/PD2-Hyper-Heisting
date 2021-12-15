@@ -38,6 +38,14 @@
 		},
 		{
 			"type" : "toggle",
+			"id" : "shin_toggle_screenFX",
+			"title" : "shin_toggle_screenFX_title",
+			"description" : "shin_toggle_screenFX_desc",
+			"callback" : "callback_shin_toggle_screenFX",
+			"value" : "toggle_screenFX"
+		},
+		{
+			"type" : "toggle",
 			"id" : "shin_toggle_suppression",
 			"title" : "shin_toggle_suppression_title",
 			"description" : "shin_toggle_suppression_desc",

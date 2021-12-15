@@ -1233,7 +1233,7 @@ function PlayerStandard:_check_action_run(t, input)
 	elseif not self._setting_hold_to_run and not self._move_dir then
 		self._running_wanted = false
 	elseif input.btn_run_press or self._running_wanted then
-		if not self._no_run_t then
+		if not self._no_run_t and not managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
 			if not self._running or self._end_running_expire_t then
 				self:_start_action_running(t)
 			elseif self._running and valid_t and not self._setting_hold_to_run then

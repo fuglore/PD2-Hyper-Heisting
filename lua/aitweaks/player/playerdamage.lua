@@ -1637,6 +1637,11 @@ function PlayerDamage:build_suppression(amount)
 	--if self:_chk_suppression_too_soon(amount) then
 		--return
 	--end
+	
+	if HH:EXScreenFXenabled() then
+		--log("cuck")
+		managers.environment_controller:set_extra_exposure(0.03)
+	end
 
 	local data = self._supperssion_data
 	amount = amount * managers.player:upgrade_value("player", "suppressed_multiplier", 1)

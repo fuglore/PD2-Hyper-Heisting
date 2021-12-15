@@ -178,7 +178,7 @@ function PlayerMovement:update_stamina(t, dt, ignore_running)
 	
 	if not ignore_running and self._is_running and not managers.player._syringe_stam then
 		self:subtract_stamina(dt * tweak_data.player.movement_state.stamina.STAMINA_DRAIN_RATE)
-	elseif not self._state_data.in_air then
+	elseif not self._state_data.in_air and not managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
 		if self:_max_stamina() > self._stamina then
 			local regen = tweak_data.player.movement_state.stamina.STAMINA_REGEN_RATE
 			

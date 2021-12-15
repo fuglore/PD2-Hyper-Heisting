@@ -15,9 +15,22 @@ Hooks:PostHook(CoreEnvironmentControllerManager, "init", "hhpost_env", function(
 	self._current_chrom = -0.4
 	self._chrom_lerp = 0
 	self._contrast_lerp = 0
+	self._extra_exposure = 0
 	self._base_contrast = -0
 	self._current_contrast = -0
+	self._copr_effect = nil
+	self._copr_intro_done = true
+	self._copr_effect_chrom_add = 0
+	self._copr_effect_red_add = 0
+	self._pdth_conc = BLT.Mods:GetModByName("PDTH Contours") and true
 end)
+
+function CoreEnvironmentControllerManager:_copr_effect_toggle(state)
+	self._copr_effect = state
+	self._extra_exposure = 1
+	self._copr_intro_done = not state
+end
+
 
 local san_other = {near_plane_x = 10, near_plane_y = 12, far_plane_x = 4000, far_plane_y = 5000}
 local san_steel = {near_plane_x = 2500, near_plane_y = 2500, far_plane_x = 500, far_plane_y = 2000}
@@ -227,8 +240,20 @@ function CoreEnvironmentControllerManager:update(t, dt)
 	self:set_post_composite(t, dt)
 	
 	if self._concussion_effect and self._current_concussion <= 0.8 then
- 		self._effect_manager:fade_kill(self._concussion_effect)
-		self._concussion_effect = nil
+		if self._pdth_conc then
+			local lerp = self._current_concussion / 0.8
+			local value = math.lerp(0, 255, lerp)
+			
+			self._effect_manager:set_simulator_var_float(self._concussion_effect, blindness_ids, opacity_ids, opacity_ids, value)
+			
+			if value <= 0 then
+				self._effect_manager:fade_kill(self._concussion_effect)
+				self._concussion_effect = nil
+			end
+		else
+			self._effect_manager:fade_kill(self._concussion_effect)
+			self._concussion_effect = nil
+		end
 	end
 end
 
@@ -365,11 +390,44 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 	end
 
 	self._material:set_variable(ids_radial_offset, Vector3((self._hit_left - self._hit_right) * 0.2, (self._hit_up - self._hit_down) * 0.2, self._hit_front - self._hit_back + blur_zone_flashbang * 0.1))
-	self._material:set_variable(Idstring("contrast"), self._current_contrast + self._hit_some * 0.25)
+
+	if self._extra_exposure > 0 then
+		self._extra_exposure = self._extra_exposure - dt
+
+		if self._extra_exposure <= 0 then
+			self._extra_exposure = 0
+			self._copr_intro_done = true
+		end
+	end
+	
+	local exp_to_contrast = self._copr_effect and self._extra_exposure * math.lerp(2, 4, math.random()) or self._extra_exposure * 0.25
+
+	self._material:set_variable(Idstring("contrast"), self._current_contrast + exp_to_contrast + self._hit_some * 0.25)
 
 	if self._chromatic_enabled then
-		self._material:set_variable(Idstring("chromatic_amount"), self._current_chrom - blur_zone_val * 0.3 - flash_1)
-		--log(tostring(self._current_chrom - blur_zone_val * 0.3 - flash_1))
+		local chrom = math.abs(self._current_chrom) + blur_zone_val * 0.3 + flash_1 * 0.5
+		chrom = chrom + math.lerp(0, self._extra_exposure * 0.25, math.random())
+		
+		if HH:EXScreenFXenabled() then
+			if self._copr_effect then 
+				self._copr_effect_chrom_add = math.lerp(0.6, 1.2, math.random())
+			elseif self._copr_effect_chrom_add > 0 then
+				self._copr_effect_chrom_add = self._copr_effect_chrom_add - dt
+				
+				if self._copr_effect_chrom_add < 0 then
+					self._copr_effect_chrom_add = 0
+				end
+			end
+			
+			if self._last_life or self._downed_value > 0 then
+				chrom = chrom + math.lerp(0, 0.4, math.random())
+			end
+			
+			chrom = chrom + self._copr_effect_chrom_add
+		end
+		
+		chrom = chrom * -1
+		self._material:set_variable(Idstring("chromatic_amount"), chrom)
 	else
 		self._material:set_variable(Idstring("chromatic_amount"), 0)
 	end
@@ -403,37 +461,56 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 	self._health_effect_value_diff = math.max(self._health_effect_value_diff - dt * 0.5, 0)
 	self._buff_effect_value = math.min(self._buff_effect_value + dt * 0.5, 0)
 	
-	mvector3.set(temp_vec_1, Vector3(math.clamp(self._health_effect_value_diff * 1.3, 0, 1.2), 0, math.min(blur_zone_val + self._HE_blinding, 1)))
+	if self._copr_effect then
+		self._copr_effect_red_add = 0.5
+	elseif self._copr_effect_red_add > 0 then
+		self._copr_effect_red_add = self._copr_effect_red_add - dt
+		
+		if self._copr_effect_red_add < 0 then
+			self._copr_effect_red_add = 0
+		end
+	end
+	
+	local add_red = self._copr_effect_red_add
+	
+	mvector3.set(temp_vec_1, Vector3(math.clamp(add_red + self._health_effect_value_diff * (1 + hurt_mod), 0, 1), 0, math.min(blur_zone_val + self._HE_blinding, 1)))
 	mvector3.add(temp_vec_1, Vector3(self._buff_effect_value, self._buff_effect_value, self._buff_effect_value, 0.5))
 	self._lut_modifier_material:set_variable(ids_LUT_settings_a, temp_vec_1)
 	
 	if self._hurt_effect then
-		local value = self._health_effect_value
+		local value = self._copr_effect and self._health_effect_value / 4 or self._health_effect_value
 		local pain = math.lerp(200, 0, value)
 		local painflash = math.lerp(255, 0, value + value)
 		
 		self._effect_manager:set_simulator_var_float(self._hurt_effect, pain_ids, opacity_ids, opacity_ids, pain)
 		self._effect_manager:set_simulator_var_float(self._hurt_effect, pain_flash_ids, opacity_ids, opacity_ids, painflash)
 	end
+	
+	local last_life = 0
 
-	local last_life = 0	
-	
-	--self._last_life = true
-	
 	if self._last_life then
 		if self._hurt_effect then
 			last_life = math.clamp((hurt_mod - 0.5) * 2, 0, 0.75)
 		else
 			last_life = math.clamp((hurt_mod - 0.5) * 2, 0, 1)
 		end
+	else
+		if self._copr_effect then
+			last_life = 0.2 + self._extra_exposure
+			last_life = last_life * -1
+		end
 	end
 	
 	local lerp_to_use = self._chromatic_enabled and self._chrom_lerp or self._contrast_lerp
-	local intensity_mul = math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15 + (math.abs(lerp_to_use) * 0.05)
-	local anti_mul = -1 + (math.clamp(hit_some_mod * 2, 0, 1) * 0.25)
-	anti_mul = anti_mul + last_life * 0.25
+	local exposure = self._extra_exposure + math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15 + (math.abs(lerp_to_use) * 0.05)
+
+	if self._last_life then
+		exposure = exposure * math.lerp(1, 0.1, last_life)
+	end
 	
-	intensity_mul = intensity_mul * anti_mul
+	local anti_mul = -1 + (math.clamp(hit_some_mod * 2, 0, 1) * 0.25)
+	
+	local intensity_mul = exposure * anti_mul
 	mvector3.set(temp_vec_2, Vector3(last_life, flash_2 + math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15, intensity_mul))
 	
 	self._lut_modifier_material:set_variable(ids_LUT_settings_b, temp_vec_2)
@@ -462,12 +539,19 @@ function CoreEnvironmentControllerManager:set_flashbang(flashbang_pos, line_of_s
 	end
 	
 	if self._current_concussion > 1 and not self._concussion_effect then
-		--log("fuck")
-		self._concussion_effect = self._effect_manager:spawn({
-			effect = Idstring("effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties"),
-			position = Vector3(),
-			rotation = Rotation()
-		})
+		if self._pdth_conc then
+			self._concussion_effect = self._effect_manager:spawn({
+				effect = Idstring("effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties_pdth"),
+				position = Vector3(),
+				rotation = Rotation()
+			})
+		else
+			self._concussion_effect = self._effect_manager:spawn({
+				effect = Idstring("effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties"),
+				position = Vector3(),
+				rotation = Rotation()
+			})
+		end
 	end
 	
 	self._effect_manager:spawn({
@@ -556,6 +640,12 @@ function CoreEnvironmentControllerManager:set_chromatic_enabled(enabled)
 	end
 end
 
+function CoreEnvironmentControllerManager:set_extra_exposure(value)
+	if self._copr_intro_done then
+		self._extra_exposure = value
+	end
+end
+
 function CoreEnvironmentControllerManager:set_contrast_value_lerp(lerp_value)
 	if not lerp_value then
 		return
@@ -572,7 +662,6 @@ function CoreEnvironmentControllerManager:set_contrast_value_lerp(lerp_value)
 		local new_contrast_value = math.lerp(0, high_contrast, lerp_value)
 		self._current_contrast = new_contrast_value
 		self._contrast_lerp = lerp_value
-		self._material:set_variable(Idstring("contrast"), new_contrast_value)
 	end
 end
 
@@ -592,7 +681,6 @@ function CoreEnvironmentControllerManager:set_chromatic_value_lerp(lerp_value)
 			high_chrom = high_chrom - self._base_chromatic_amount
 			local lerp_value = lerp_value + math.lerp(0.01, -0.01, math.random())
 			local new_chrom_value = math.lerp(self._base_chromatic_amount, high_chrom, lerp_value)
-			self._material:set_variable(Idstring("chromatic_amount"), new_chrom_value)
 			self._chrom_lerp = lerp_value
 			self._current_chrom = new_chrom_value
 		end

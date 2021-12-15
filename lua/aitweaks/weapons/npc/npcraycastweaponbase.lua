@@ -191,8 +191,7 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 
 	local furthest_hit = unique_hits[#unique_hits]
 	local hit_player = nil
-	local nc_or_nothit_chk = nil
-
+	
 	if #unique_hits > 0 then
 		for _, hit in ipairs(unique_hits) do
 			if not hit_player and shoot_player and self._hit_player then
@@ -212,10 +211,6 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 				end
 			end
 
-			if hit.unit ~= target_unit then
-				nc_or_nothit_chk = true
-			end
-
 			char_hit = InstantBulletBase:on_collision(hit, self._unit, user_unit, damage)
 
 			if char_hit and char_hit.type and char_hit.type == "death" then
@@ -224,25 +219,12 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 				end
 			end
 		end
-	else
-		nc_or_nothit_chk = true
+	elseif shoot_player and self._hit_player then
+		local player_hit, player_ray_data = self:damage_player(nil, from_pos, direction, result)
 
-		if shoot_player and self._hit_player then
-			local player_hit, player_ray_data = self:damage_player(nil, from_pos, direction, result)
-
-			if player_hit then
-				hit_player = true
-				InstantBulletBase:on_hit_player(player_ray_data, self._unit, user_unit, damage)
-			end
-		end
-	end
-
-	if target_unit and not hit_player and nc_or_nothit_chk and target_unit:character_damage() and target_unit:character_damage().build_suppression then
-		local weaponname = tweak_data.weapon[self._name_id]
-
-		if weaponname.suppression and weaponname.suppression >= 5 then
-			target_unit:character_damage():build_suppression(math.max(tweak_data.weapon[self._name_id].suppression, 1))
-			shouldnt_suppress_on_hit = true
+		if player_hit then
+			hit_player = true
+			InstantBulletBase:on_hit_player(player_ray_data, self._unit, user_unit, damage)
 		end
 	end
 
