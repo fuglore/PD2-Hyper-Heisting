@@ -22,7 +22,7 @@ Hooks:PostHook(CoreEnvironmentControllerManager, "init", "hhpost_env", function(
 	self._copr_intro_done = true
 	self._copr_effect_chrom_add = 0
 	self._copr_effect_red_add = 0
-	self._pdth_conc = BLT.Mods:GetModByName("PDTH Contours") and true
+	--self._pdth_conc = BLT.Mods:GetModByName("PDTH Contours") and true
 end)
 
 function CoreEnvironmentControllerManager:_copr_effect_toggle(state)
@@ -235,6 +235,7 @@ function CoreEnvironmentControllerManager:set_mangle_effect_intensity(poison_int
 	self._effect_manager:set_simulator_var_float(self._mangled_effect, mangled_darkness_ids, opacity_ids, opacity_ids, darkness_intensity)
 end
 
+local blindness_ids = Idstring("blindness")
 function CoreEnvironmentControllerManager:update(t, dt)
 	self:_update_values(t, dt)
 	self:set_post_composite(t, dt)
@@ -400,7 +401,7 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 		end
 	end
 	
-	local exp_to_contrast = self._copr_effect and self._extra_exposure * math.lerp(2, 4, math.random()) or self._extra_exposure * 0.25
+	local exp_to_contrast = self._copr_effect and self._extra_exposure * math.lerp(0.25, 0.5, math.random()) or self._extra_exposure * 0.25
 
 	self._material:set_variable(Idstring("contrast"), self._current_contrast + exp_to_contrast + self._hit_some * 0.25)
 
