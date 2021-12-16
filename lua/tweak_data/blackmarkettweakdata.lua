@@ -24,16 +24,18 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 			}
 		}
 		
-		self.projectiles.frag.pickup_chance = 0.05
-		self.projectiles.frag_com.pickup_chance = 0.05
-		self.projectiles.dada_com.pickup_chance = 0.05
-		self.projectiles.dynamite.pickup_chance = 0.025
-		self.projectiles.molotov.pickup_chance = 0.02
+		self.projectiles.frag.base_cooldown = 60
+		self.projectiles.frag_com.base_cooldown = 60
+		self.projectiles.dada_com.base_cooldown = 60
+		self.projectiles.dynamite.base_cooldown = 90
+		self.projectiles.molotov.base_cooldown = 75
 		self.projectiles.molotov.max_amount = 2
-		self.projectiles.fir_com.pickup_chance = 0.03
+		self.projectiles.fir_com.base_cooldown = 71
 		self.projectiles.fir_com.max_amount = 3
-		self.projectiles.concussion.pickup_chance = 0.1
+		self.projectiles.concussion.base_cooldown = 53
 		self.projectiles.concussion.max_amount = 2
+		self.projectiles.wpn_gre_electric.base_cooldown = 90
+
 		self.projectiles.wpn_prj_four.pickup_chance = 0.1
 		--self.projectiles.wpn_prj_ace.damage = 100
 		self.projectiles.wpn_prj_ace.pickup_chance = 0.1
@@ -46,8 +48,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 		--self.projectiles.wpn_prj_jav.damage = 300
 		self.projectiles.wpn_prj_jav.pickup_chance = 0.03
 		self.projectiles.wpn_prj_jav.max_amount = 1
-		self.projectiles.wpn_gre_electric.pickup_chance = 0.025
-		self.projectiles.xmas_snowball.pickup_chance = 0.02
+		
+		--self.projectiles.xmas_snowball.pickup_chance = 0.02
 		
 	end
 end)

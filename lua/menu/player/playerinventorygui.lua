@@ -284,3 +284,28 @@ function PlayerInventoryGui:setup_player_stats(panel)
 		end
 	end
 end
+
+function PlayerInventoryGui:_update_info_throwable(name)
+	local throwable_id, amount = managers.blackmarket:equipped_projectile()
+	local projectile_data = throwable_id and tweak_data.blackmarket.projectiles[throwable_id]
+	local text_string = ""
+
+	if projectile_data then
+		text_string = text_string .. managers.localization:text(projectile_data.name_id) .. " (x" .. tostring(amount) .. ")" .. "\n\n"
+
+		if self:_should_show_description() then
+			local grenade_info = ""
+			if projectile_data.base_cooldown then
+				grenade_info = "\nBase Cooldown: " .. tostring(projectile_data.base_cooldown) .. "s \n"
+			elseif projectile_data.pickup_chance then
+				local pickup_chance = projectile_data.pickup_chance * 100
+				
+				grenade_info = "\nPickup Chance per Box: " .. tostring(pickup_chance) .. "% \n"
+			end
+			
+			text_string = text_string .. managers.localization:text(projectile_data.desc_id) .. "\n" .. grenade_info
+		end
+	end
+
+	self:set_info_text(text_string)
+end
