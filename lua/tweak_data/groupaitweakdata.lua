@@ -5026,7 +5026,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				},
 				{
 					amount_min = 0,
-					freq = 0.1,
+					freq = 0.25,
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_M4",
@@ -5038,7 +5038,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.tac_swat_rifle = {
 			amount = {
 				4,
-				4
+				5
 			},
 			spawn = {
 				{
@@ -5059,7 +5059,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				},
 				{
 					amount_min = 0,
-					freq = 0.15,
+					freq = 0.3,
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_M4",
@@ -5277,7 +5277,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.tac_swat_rifle_flank = {
 			amount = {
 				4,
-				4
+				5
 			},
 			spawn = {
 				{
@@ -5298,7 +5298,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				},
 				{
 					amount_min = 0,
-					freq = 0.1,
+					freq = 0.25,
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_M4",
@@ -5310,7 +5310,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 		self.enemy_spawn_groups.tac_swat_rifle_flank = {
 			amount = {
 				4,
-				4
+				5
 			},
 			spawn = {
 				{
@@ -5331,7 +5331,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 				},
 				{
 					amount_min = 0,
-					freq = 0.15,
+					freq = 0.3,
 					amount_max = 1,
 					rank = 2,
 					unit = "medic_M4",
@@ -6274,7 +6274,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 1,
 					amount_max = 3,
 					rank = 3,
-					unit = "FBI_swat_R870",
+					unit = "FBI_heavy_R870",
 					tactics = self._tactics.swat_shotgun_rush_civil
 				}
 			}
@@ -6300,7 +6300,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 1,
 					amount_max = 3,
 					rank = 2,
-					unit = "FBI_swat_M4",
+					unit = "FBI_heavy_R870",
 					tactics = self._tactics.shield_support_ranged
 				},
 				{
@@ -6334,7 +6334,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 1,
 					amount_max = 3,
 					rank = 2,
-					unit = "FBI_heavy_G36",
+					unit = "FBI_heavy_R870",
 					tactics = self._tactics.shield_support_ranged
 				},
 				{
@@ -6384,7 +6384,7 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 					freq = 2,
 					amount_max = 3,
 					rank = 2,
-					unit = "FBI_heavy_G36",
+					unit = "FBI_heavy_R870",
 					tactics = self._tactics.shield_support_ranged
 				}
 			}
@@ -7747,64 +7747,64 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	elseif difficulty_index == 4 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				14.5,
-				14.5,
-				14.5
+				14,
+				14,
+				14
 			},
 			tac_swat_shotgun_flank = {
+				14,
+				14,
+				14
+			},
+			tac_swat_rifle = {
 				14.5,
 				14.5,
 				14.5
 			},
-			tac_swat_rifle = {
-				15,
-				15,
-				15
-			},
 			tac_swat_rifle_flank = {
-				15,
-				15,
-				15
+				14.5,
+				14.5,
+				14.5
 			},
 			punks_A = {
-				4.5,
-				4.5,
-				4.5
+				4,
+				4,
+				4
 			},
 			punks_B = {
-				4.5,
-				4.5,
-				4.5
+				4,
+				4,
+				4
 			},
 			punks_C = {
-				4.5,
-				4.5,
-				4.5
+				4,
+				4,
+				4
 			},
 			tac_shield_wall_ranged = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall_charge = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_shield_wall = {
-				3,
-				3,
-				3
+				3.5,
+				3.5,
+				3.5
 			},
 			tac_tazer_flanking = {
-				4,
-				4,
-				4
+				5,
+				5,
+				5
 			},
 			tac_tazer_charge = {
-				4,
-				4,
-				4
+				5,
+				5,
+				5
 			},
 			FBI_spoocs = {
 				5,
