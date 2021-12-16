@@ -48,6 +48,7 @@ function PlayerManager:_attempt_copr_ability()
 
 	if is_downed then
 		character_damage:revive(true)
+		self:register_message("ability_activated", "copr_ability_downed_cooldown_add", callback(self, self, "add_cooldown_copr"))
 	end
 	
 	if current_state._running then
