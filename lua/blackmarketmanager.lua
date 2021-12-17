@@ -1,3 +1,10 @@
+function BlackMarketManager:equipped_grenade_allows_pickups()
+	local id = self:equipped_grenade()
+	local grenade_tweak = id and tweak_data.blackmarket.projectiles[id]
+
+	return grenade_tweak and grenade_tweak.throwable
+end
+
 function BlackMarketManager:equipped_melee_weapon_damage_info(lerp_value)
 	lerp_value = lerp_value or 0
 	local melee_entry = self:equipped_melee_weapon()

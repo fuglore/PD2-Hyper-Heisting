@@ -2936,7 +2936,11 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if phase_is_anticipation then
 				pull_back = true
 			else
-				open_fire = true
+				if group.in_place_t and self._t - group.in_place_t > 10 or not self._street and self._hunt_mode or not self._street and phase_is_sustain then
+					push = true
+				else
+					open_fire = true
+				end
 			end
 		elseif phase_is_anticipation and current_objective.open_fire then --if we were aggressive one update ago, start backing up away from the current objective area
 			pull_back = true
@@ -3687,13 +3691,6 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 	
 	max_dis = max_dis and max_dis * max_dis
 	local min_dis = nil
-	
-	if not Global.game_settings.one_down then
-		if managers.skirmish:is_skirmish() or self._small_map then
-			min_dis = 2250000
-		end
-	end
-	
 	local t = self._t
 	local valid_spawn_groups = {}
 	local valid_spawn_group_distances = {}
@@ -3820,8 +3817,7 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 
 	local total_weight = 0
 	local candidate_groups = {}
-	self._debug_weights = {}
-	local dis_limit = max_dis or 64000000 --80 meters
+	self._debug_weights = {} 
 	
 	for i, dis in pairs(valid_spawn_group_distances) do
 		local my_spawn_group = valid_spawn_groups[i]
