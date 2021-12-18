@@ -533,7 +533,7 @@ function CopLogicIntimidated._do_tied(data, aggressor_unit)
 
 	data.brain:set_update_enabled_state(false)
 	data.unit:inventory():destroy_all_items()
-	managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.surrender_destroy_all_items) ----
+	managers.network:session():send_to_peers_synched("sync_unit_event_id_16", data.unit, "brain", HuskCopBrain._NET_EVENTS.surrender_destroy_all_items)
 
 	data.brain:rem_pos_rsrv("stand")
 
@@ -548,10 +548,10 @@ function CopLogicIntimidated._do_tied(data, aggressor_unit)
 
 		my_data.nearest_cover = nil
 	end
-
-	--CopLogicIntimidated._chk_begin_alarm_pager(data)
-
-	if not data.brain:is_pager_started() and not managers.groupai:state():whisper_mode() then
+	
+	if managers.groupai:state():whisper_mode() then
+		data.brain:set_can_do_alarm_pager(true)
+	elseif not data.brain:is_pager_started() then
 		my_data.set_convert_interact = true
 
 		data.unit:interaction():set_tweak_data("hostage_convert")

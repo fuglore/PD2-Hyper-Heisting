@@ -1332,18 +1332,6 @@ function CopDamage:damage_melee(attack_data)
 
 			if is_civlian then
 				managers.money:civilian_killed()
-			else
-				mvec3_set(mvec_1, self._unit:position())
-				mvec3_sub(mvec_1, attack_data.attacker_unit:position())
-				mvec3_norm(mvec_1)
-				mvec3_set(mvec_2, self._unit:rotation():y())
-
-				local from_behind = mvec3_dot(mvec_1, mvec_2) >= 0
-
-				if self._unit:movement():cool() and from_behind then
-					snatch_pager = true
-					self._unit:unit_data().has_alarm_pager = false
-				end
 			end
 		elseif managers.groupai:state():is_unit_team_AI(attack_data.attacker_unit) then
 			local special_comment = self:_check_special_death_conditions(attack_data.variant, attack_data.col_ray.body, attack_data.attacker_unit, attack_data.name_id)

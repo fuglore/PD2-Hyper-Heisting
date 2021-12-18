@@ -25,23 +25,26 @@ local next_g = next
 local tostring_g = tostring
 local alive_g = alive
 
-
-
 -- Andole's dozer spawncap fix
 local origfunc3 = GroupAIStateBase._init_misc_data
 function GroupAIStateBase:_init_misc_data(...)
 	origfunc3(self, ...)
 	self._assault_was_hell = nil
+	self._stealth_strikes = 0
+	self._mass_pager_id = "GroupAIStateBase:HHSTEALTHMASSPAGER"
+	self._pager_timer_clbks = {}
 	self._next_allowed_enemykill_drama_t = nil
+	self._next_mass_pager_t = 3
 	self._in_mexico = nil
 	self._downleniency = 1
 	self._downs_during_assault = 0
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
-	self._guard_delay_deduction = 0
+	self._guard_delay_deduction = 1
 	self._last_killed_cop_t = 0
 	self._heat_bonus_count = 0
 	self._heat_bonus_clbk_id = "GroupAIStateBase:HEATBONUS"
+	self._client_ecm_data = {}
 	self._current_assault_state = "normal"
 	local drama_tweak = tweak_data.drama
 	self._drama_data = {
@@ -299,12 +302,13 @@ function GroupAIStateBase:on_simulation_started(...)
 	origfunc2(self, ...)
 	self._assault_was_hell = nil
 	self._next_allowed_enemykill_drama_t = nil
+	self._next_mass_pager_t = 10
 	self._in_mexico = nil
 	self._downleniency = 1
 	self._downs_during_assault = 0
 	self._downcountleniency = 0
 	self._guard_detection_mul = 1
-	self._guard_delay_deduction = 0
+	self._guard_delay_deduction = 1
 	self._last_killed_cop_t = 0
 	self._heat_bonus_count = 0
 	self._current_assault_state = "normal"
@@ -334,7 +338,7 @@ function GroupAIStateBase:on_simulation_started(...)
 end
 
 function GroupAIStateBase:chk_guard_detection_mul()
-	if self._hostages_killed then
+	if self._hostages_killed and self._hostages_killed > 0 then
 		return self._guard_detection_mul * (self._hostages_killed + 1)
 	else
 		return self._guard_detection_mul * 1
@@ -343,9 +347,9 @@ end
 
 function GroupAIStateBase:chk_guard_delay_deduction()
 	if self._hostages_killed then
-		return self._guard_delay_deduction * (self._hostages_killed * 0.25)
+		return self._guard_delay_deduction * (1 + self._hostages_killed * 0.5)
 	else
-		return self._guard_delay_deduction * 1
+		return self._guard_delay_deduction
 	end
 end
 
@@ -778,6 +782,333 @@ function GroupAIStateBase:_add_drama(amount)
 	end
 end
 
+local strikes = {
+	hung_up = "alarm_pager_hang_up",
+	unanswered = "alarm_pager_not_answered"
+}
+
+function GroupAIStateBase:register_strike(reason, do_not_change_t)
+	self._stealth_strikes = self._stealth_strikes + 1
+	
+	local num_strikes = self._stealth_strikes
+	
+	if num_strikes >= 4 then
+		if reason then 
+			if strikes[reason] then
+				local reason = strikes[reason]
+				self:on_police_called(reason)
+				
+			elseif self.BLAME_SYNC[reason] then
+				self:on_police_called(reason)
+			else
+				self:on_police_called("cop_alarm")
+			end
+		else
+			self:on_police_called("cop_alarm")
+		end
+	else
+		local strikes_left = 3 - num_strikes
+		local title_text = "ANSWER FAILED"
+		
+		if reason == "unanswered" then
+			title_text = "!!! PAGER CALL NOT ANSWERED !!!"
+		elseif reason == "hung_up" then
+			title_text = "!!! PAGER CALL HUNG UP !!!"
+		elseif reason == "camera" then
+			title_text = "!!! A CAMERA HAS DETECTED SUSPICIOUS ACTIVITY !!!"
+		end
+		
+		if strikes_left <= 0 then
+			managers.hud:present_mid_text({
+				title = title_text,
+				text = "!!! WARNING: THE NEXT STRIKE WILL SOUND THE ALARM !!!",
+				time = 2
+			})
+		else
+			managers.hud:present_mid_text({
+				title = title_text,
+				text = "NUMBER OF STRIKES LEFT: ".. tostring(strikes_left) .. "",
+				time = 2
+			})
+		end
+		
+		if not do_not_change_t then
+			self:start_mass_pager_timer(true)
+		end
+	end
+end
+
+function GroupAIStateBase:run_mass_pager()
+	local police = self._police
+	local running_mass_pager = nil
+	
+	for key, u_data in pairs_g(police) do
+		local unit = u_data.unit
+		
+		if alive(unit) then
+			if unit:unit_data().has_alarm_pager and unit:brain()._can_do_alarm_pager and not unit:brain():is_pager_started() then
+				unit:brain():begin_alarm_pager(true)
+				running_mass_pager = true
+			end
+		end
+	end
+	
+	local corpses = managers.enemy._enemy_data.corpses
+	
+	for key, u_data in pairs_g(corpses) do
+		local unit = u_data.unit
+		
+		if alive(unit) then
+			if unit:unit_data().has_alarm_pager and unit:brain()._can_do_alarm_pager and not unit:brain():is_pager_started() then
+				unit:brain():begin_alarm_pager(true)
+				running_mass_pager = true
+			end
+		end
+	end
+	
+	self._running_mass_pager = running_mass_pager
+	
+	if not running_mass_pager then
+		local timer, text = self:start_mass_pager_timer()
+		
+		managers.hud:present_mid_text({
+			title = "NO PAGERS TO ANSWER",
+			text = text,
+			time = 4
+		})
+	end
+end
+
+function GroupAIStateBase:check_mass_pager_done(t)
+	if self._stealth_strikes >= 4 then
+		return
+	end
+
+	if not self._running_mass_pager_chk_t or self._running_mass_pager_chk_t < t then
+		local police = self._police
+		local pager = nil
+		
+		for key, u_data in pairs_g(police) do
+			local unit = u_data.unit
+			
+			if alive(unit) then
+				if unit:unit_data().has_alarm_pager and unit:brain():is_pager_started() then
+					pager = true
+					break
+				end
+			end
+		end
+		
+		if not pager then
+			local corpses = managers.enemy._enemy_data.corpses
+	
+			for key, u_data in pairs_g(corpses) do
+				local unit = u_data.unit
+				
+				if alive(unit) then
+					if unit:unit_data().has_alarm_pager and unit:brain():is_pager_started() then
+						pager = true
+						break
+					end
+				end
+			end
+		end
+
+		if not pager then
+			local timer, text = self:start_mass_pager_timer()
+	
+			managers.hud:present_mid_text({
+				title = "ANSWER SUCCESSFUL",
+				text = text, 
+				time = 4
+			})
+		end
+		
+		self._running_mass_pager_chk_t = t + 2
+	end
+end
+
+function GroupAIStateBase:_send_next_call_immediately(t)
+	local timer_clbk_id_table = self._pager_timer_clbks
+	local enemy_manager = managers.enemy
+	local remove_clbk_f = managers.enemy.remove_delayed_clbk
+	
+	for i = 1, #timer_clbk_id_table do
+		local clbk_id = timer_clbk_id_table[i]
+		
+		remove_clbk_f(enemy_manager, clbk_id)
+	end
+
+	self._pager_timer_clbks = {}
+	
+	local clbk_time = TimerManager:game():time() + t
+	
+	enemy_manager:reschedule_delayed_clbk(self._mass_pager_id, clbk_time)
+end
+
+function GroupAIStateBase:stop_all_pagers()
+	local police = self._police
+
+	for key, u_data in pairs_g(police) do
+		local unit = u_data.unit
+		
+		if alive(unit) then
+			if unit:unit_data().has_alarm_pager then
+				unit:brain():end_alarm_pager()
+			end
+		end
+	end
+	
+	local corpses = managers.enemy._enemy_data.corpses
+	
+	for key, u_data in pairs_g(corpses) do
+		local unit = u_data.unit
+		
+		if alive(unit) then
+			if unit:unit_data().has_alarm_pager then
+				unit:brain():end_alarm_pager()
+			end
+		end
+	end
+end
+
+function GroupAIStateBase:start_mass_pager_timer(display_timer_text)
+	self:stop_all_pagers()
+
+	local timer = 720 / (table.size(self:all_player_criminals()) + self._stealth_strikes * 0.25)
+	timer = timer / self:chk_guard_delay_deduction()
+	timer = math.floor(timer)
+	local enemy_manager = managers.enemy
+	self._running_mass_pager = nil
+	local t = TimerManager:game():time()
+	local minutes = 0
+	local clbk_time = timer - 60
+	local add_delayed_clbk_f = managers.enemy.add_delayed_clbk
+	local hud_manager =	managers.hud
+	
+	enemy_manager:add_delayed_clbk(self._mass_pager_id, callback(self, self, "run_mass_pager"), t + timer)
+	
+	self._pager_timer_clbks = {}
+	local clbk_table = {}
+	
+	if timer > 20 then
+		local tensecstimer = timer - 10
+		local tensecs_id = "HHSTEALTHCALLIN10SECSPRESENTER"
+		clbk_table[#clbk_table + 1] = tensecs_id
+		
+		enemy_manager:add_delayed_clbk(tensecs_id, callback(hud_manager, hud_manager, "present_mid_text", {text = "NEXT PAGER CALL INCOMING IN 10 SECONDS"}), t + tensecstimer)
+	end
+
+	while clbk_time >= 0 do
+		clbk_time = clbk_time - 60
+		minutes = minutes + 1
+	end
+	
+	local text = nil
+	local seconds = clbk_time + 60
+	
+	if minutes > 0 then
+		local m_suffix = minutes == 1 and "" or "s"
+		local s_suffix = seconds == 1 and "" or "s"
+		
+		if seconds == 0 then
+			seconds = "00"
+		end
+		
+		text = "NEXT PAGER CALL INCOMING IN " .. minutes .. ":" .. seconds .. " MINUTE" .. m_suffix
+		
+		local callback_t = 60
+		
+		for i = 1, minutes do
+			local current_minute = minutes - i
+			local clbk_id = "HHSTEALTHCALLIN" .. i .. "MINUTESPRESENTER"
+			clbk_table[#clbk_table + 1] = clbk_id
+			local clbk_text = {text = "NEXT PAGER CALL INCOMING IN " .. current_minute .. " MINUTE"}
+			
+			if current_minute > 1 then
+				clbk_text.text = clbk_text.text .. "S"
+			end
+			
+			add_delayed_clbk_f(enemy_manager, clbk_id, callback(hud_manager, hud_manager, "present_mid_text", clbk_text), t + callback_t) --test.
+			callback_t = callback_t + 60
+		end
+	else
+		local s_suffix = timer == 1 and "" or "s"
+		text = "NEXT PAGER CALL INCOMING IN " .. seconds .. " SECOND" .. s_suffix
+	end
+	
+	self._pager_timer_clbks = clbk_table
+	
+	if display_timer_text then
+		managers.hud:present_mid_text({
+			text = text,
+			time = 4
+ 		})
+	end
+	
+	return timer, text
+end
+
+function GroupAIStateBase:is_ecm_jammer_active(medium)
+	if Network:is_server() then
+		for u_key, data in pairs(self._ecm_jammers) do
+			if data.settings[medium] then
+				return true
+			end
+		end
+	else
+		if self._client_ecm_data[medium] then
+			return true
+		end
+	end
+end
+
+function GroupAIStateBase:register_ecm_jammer(unit, jam_settings)
+	if not Network:is_server() then
+		return
+	end
+
+	local was_jammer_active = next(self._ecm_jammers) and true or false
+	self._ecm_jammers[unit:key()] = jam_settings and {
+		unit = unit,
+		settings = jam_settings
+	} or nil
+	local is_jammer_active = next(self._ecm_jammers) and true or false
+	
+	if was_jammer_active then
+		if not is_jammer_active then
+			managers.mission:call_global_event("ecm_jammer_off", unit)
+			
+			if managers.network:session() then
+				managers.network:session():send_to_peers_synched("set_client_groupai_ecm_data", false, false, false)
+			end
+		end
+	elseif is_jammer_active then
+		managers.mission:call_global_event("ecm_jammer_on", unit)
+		
+		if managers.network:session() then
+			managers.network:session():send_to_peers_synched("set_client_groupai_ecm_data", jam_settings.call, jam_settings.camera, jam_settings.pager)
+		end
+	end
+end
+
+function GroupAIStateBase:begin_HH_stealth()
+	managers.hud:present_mid_text({
+		text = "PAGER CALL INCOMING...",
+		time = 3
+	})
+		
+	self:run_mass_pager()
+	
+	self._stealth_has_begun = true
+end
+
+function GroupAIStateBase:_update_HH_stealth(t, dt)
+	if self._running_mass_pager then
+		self:check_mass_pager_done(t)
+	end
+end
+
 function GroupAIStateBase:update(t, dt)
     --[[local cam_pos = nil
     local player = managers.player:player_unit()
@@ -828,6 +1159,8 @@ function GroupAIStateBase:update(t, dt)
 	if self._enemy_weapons_hot then
 		self:_claculate_drama_value(t, dt)
 		--log("drama : " .. tostring(self._drama_data.amount))
+	elseif self._stealth_has_begun then
+		self:_update_HH_stealth(t, dt)
 	end
 	
 	--self:_draw_current_logics()
@@ -1534,8 +1867,7 @@ function GroupAIStateBase:on_enemy_unregistered(unit)
 	end
 	
 	if dead and managers.groupai:state():whisper_mode() then
-		self._guard_detection_mul = self._guard_detection_mul + 1
-		self._guard_delay_deduction = self._guard_delay_deduction + 0.2
+		self._guard_delay_deduction = self._guard_delay_deduction + 0.1
 	end
 	
 end

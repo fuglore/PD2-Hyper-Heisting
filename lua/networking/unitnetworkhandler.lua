@@ -12,6 +12,29 @@ function UnitNetworkHandler:send_drama(drama, sender)
 	managers.groupai:state():_add_drama(drama)
 end
 
+function UnitNetworkHandler:set_client_groupai_ecm_data(call, camera, pager)
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
+		return
+	end
+	
+	local ecm_settings = {call = call, camera = camera, pager = pager}
+
+	managers.groupai:state():_set_client_groupai_ecm_data(ecm_settings)
+end
+
+function UnitNetworkHandler:sync_alarm_to_host(camera_unit, detected_unit)
+	log("cuck")
+	
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
+		return
+	end
+	
+	if alive(camera_unit) then
+		camera_unit:base():_sound_the_alarm(detected_unit)
+	end
+end
+
+
 function UnitNetworkHandler:sync_add_doted_enemy(enemy_unit, variant, weapon_unit, dot_length, dot_damage, user_unit, is_molotov_or_hurt_animation, rpc)
 	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
 		return

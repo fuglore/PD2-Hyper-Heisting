@@ -28,6 +28,11 @@ function PlayerTweakData:_set_normal()
 		max_value = 100,
 		autohit_chance_mul = 1
 	}
+	self.suspicion = {
+		range_mul = 0.2,
+		max_value = 8,
+		buildup_mul = 0.2
+	}
 	self.damage.TASED_TIME = 11
 	self.damage.LIVES_INIT = 2
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
@@ -50,6 +55,11 @@ function PlayerTweakData:_set_hard()
 		max_value = 100,
 		autohit_chance_mul = 1
 	}
+	self.suspicion = {
+		range_mul = 0.2,
+		max_value = 8,
+		buildup_mul = 0.2
+	}
 	self.damage.TASED_TIME = 11
 	self.damage.LIVES_INIT = 2
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
@@ -70,6 +80,11 @@ function PlayerTweakData:_set_overkill()
 		tolerance = 0,
 		max_value = 100,
 		autohit_chance_mul = 1
+	}
+	self.suspicion = {
+		range_mul = 0.5,
+		max_value = 8,
+		buildup_mul = 0.5
 	}
 	self.damage.TASED_TIME = 11
 	self.damage.LIVES_INIT = 2
@@ -92,6 +107,11 @@ function PlayerTweakData:_set_overkill_145()
 		max_value = 100,
 		autohit_chance_mul = 1
 	}
+	self.suspicion = {
+		range_mul = 0.5,
+		max_value = 8,
+		buildup_mul = 0.5
+	}
 	self.damage.TASED_TIME = 11
 	self.damage.LIVES_INIT = 2
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
@@ -113,6 +133,11 @@ function PlayerTweakData:_set_easy_wish()
 		tolerance = 0,
 		max_value = 100,
 		autohit_chance_mul = 1
+	}
+	self.suspicion = {
+		range_mul = 0.8,
+		max_value = 8,
+		buildup_mul = 0.8
 	}
 	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
@@ -138,6 +163,11 @@ function PlayerTweakData:_set_overkill_290()
 		max_value = 100,
 		autohit_chance_mul = 1
 	}
+	self.suspicion = {
+		range_mul = 0.8,
+		max_value = 8,
+		buildup_mul = 0.8
+	}
 	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69
 	self.damage.LIVES_INIT = 2
@@ -161,6 +191,11 @@ function PlayerTweakData:_set_sm_wish()
 		tolerance = 0,
 		max_value = 100,
 		autohit_chance_mul = 1
+	}
+	self.suspicion = {
+		range_mul = 1,
+		max_value = 8,
+		buildup_mul = 1
 	}
 	self.damage.TASED_TIME = 11
 	self.damage.BLEED_OUT_HEALTH_INIT = 69

@@ -1,101 +1,24 @@
-function SecurityCamera:_upd_suspicion(t)
+local tmp_rot1 = Rotation()
 
-	local function _exit_func(attention_data)
-		attention_data.unit:movement():on_uncovered(self._unit)
-		self:_sound_the_alarm(attention_data)
+function SecurityCamera:update(unit, t, dt)
+	self:_update_tape_loop_restarting(unit, t, dt)
+	
+	if not Network:is_server() or Global.game_settings.difficulty ~= "sm_wish" and not managers.groupai:state()._stealth_has_begun then
+		return
 	end
 
-	local max_suspicion = 0
-
-	for u_key, attention_data in pairs(self._detected_attention_objects) do
-		if attention_data.identified and attention_data.reaction == AIAttentionObject.REACT_SUSPICIOUS then
-			if not attention_data.verified then
-				if attention_data.uncover_progress then
-					local dt = t - attention_data.last_suspicion_t
-					attention_data.uncover_progress = attention_data.uncover_progress - dt
-
-					if attention_data.uncover_progress <= 0 then
-						attention_data.uncover_progress = nil
-						attention_data.last_suspicion_t = nil
-
-						attention_data.unit:movement():on_suspicion(self._unit, false)
-						managers.groupai:state():on_criminal_suspicion_progress(attention_data.unit, self._unit, false)
-					else
-						max_suspicion = math.max(max_suspicion, attention_data.uncover_progress)
-
-						attention_data.unit:movement():on_suspicion(self._unit, attention_data.uncover_progress)
-
-						attention_data.last_suspicion_t = t
-					end
-				end
-			else
-				local dis = attention_data.dis
-				local susp_settings = attention_data.unit:base():suspicion_settings()
-				local suspicion_range = self._suspicion_range
-				local uncover_range = 0
-				local max_range = self._range
-
-				if attention_data.settings.uncover_range and dis < math.min(max_range, uncover_range) * susp_settings.range_mul then
-					attention_data.unit:movement():on_suspicion(self._unit, true)
-					managers.groupai:state():on_criminal_suspicion_progress(attention_data.unit, self._unit, true)
-					managers.groupai:state():criminal_spotted(attention_data.unit)
-
-					max_suspicion = 1
-
-					_exit_func(attention_data)
-				elseif suspicion_range and dis < math.min(max_range, suspicion_range) * susp_settings.range_mul then
-					if attention_data.last_suspicion_t then
-						local dt = t - attention_data.last_suspicion_t
-						local range_max = (suspicion_range - uncover_range) * susp_settings.range_mul
-						local range_min = uncover_range
-						local mul = 1 - (dis - range_min) / range_max
-						local progress = dt * 0.5 * mul * susp_settings.buildup_mul
-						attention_data.uncover_progress = (attention_data.uncover_progress or 0) + progress
-						max_suspicion = math.max(max_suspicion, attention_data.uncover_progress)
-
-						if attention_data.uncover_progress < 1 then
-							attention_data.unit:movement():on_suspicion(self._unit, attention_data.uncover_progress)
-
-							attention_data.last_suspicion_t = t
-						else
-							attention_data.unit:movement():on_suspicion(self._unit, true)
-							managers.groupai:state():on_criminal_suspicion_progress(attention_data.unit, self._unit, true)
-							managers.groupai:state():criminal_spotted(attention_data.unit)
-							_exit_func(attention_data)
-						end
-					else
-						attention_data.uncover_progress = 0
-
-						managers.groupai:state():on_criminal_suspicion_progress(attention_data.unit, self._unit, 0)
-
-						attention_data.last_suspicion_t = t
-					end
-				elseif attention_data.uncover_progress and attention_data.last_suspicion_t then
-					local dt = t - attention_data.last_suspicion_t
-					attention_data.uncover_progress = attention_data.uncover_progress - dt
-
-					if attention_data.uncover_progress <= 0 then
-						attention_data.uncover_progress = nil
-						attention_data.last_suspicion_t = nil
-
-						attention_data.unit:movement():on_suspicion(self._unit, false)
-						managers.groupai:state():on_criminal_suspicion_progress(attention_data.unit, self._unit, false)
-					else
-						attention_data.last_suspicion_t = t
-						max_suspicion = math.max(max_suspicion, attention_data.uncover_progress)
-
-						attention_data.unit:movement():on_suspicion(self._unit, attention_data.uncover_progress)
-					end
-				end
-			end
-		end
+	if managers.groupai:state():is_ecm_jammer_active("camera") or self._tape_loop_expired_clbk_id or self._tape_loop_restarting_t then
+		self:_destroy_all_detected_attention_object_data()
+		self:_stop_all_sounds()
+	else
+		self:_upd_detection(t)
 	end
 
-	self._suspicion = max_suspicion > 0 and max_suspicion
+	self:_upd_sound(unit, t)
 end
 
 function SecurityCamera:_upd_sound(unit, t)
-	if not self._detected_attention_objects then --if the camera is disabled, dont bother
+	if not self._detected_attention_objects then 
 		return
 	end
 
@@ -131,222 +54,46 @@ function SecurityCamera:_upd_sound(unit, t)
 	self:_set_suspicion_sound(suspicion_level)
 end
 
-function SecurityCamera:_sound_the_alarm(attention_info)
-	if self._alarm_sound then
-		return
-	end
+function SecurityCamera:_upd_detection(t)
+	local dt = t - self._last_detect_t
 
-	if Network:is_server() then
-		self:_send_net_event(self._NET_EVENTS.alarm_start)
+	self._last_detect_t = t
 
-		self._continue_detecting_clbk_id = "cam_restart_detection" .. tostring(self._unit:key())
+	if self.update_position then
+		self._yaw_obj:m_position(self._pos)
 
-		managers.enemy:add_delayed_clbk(self._continue_detecting_clbk_id, callback(self, self, "restart_detection"), Application:time() + 10)
-		
-		local pos = nil
-		
-		if attention_info.nav_tracker then
-			pos = attention_info.nav_tracker:field_position()
-		else
-			local unit_pos = attention_info.unit:position()
-			local temp_tracker = managers.navigation:create_nav_tracker(unit_pos, false)
-			pos = temp_tracker:field_position()
-
-			managers.navigation:destroy_nav_tracker(temp_tracker)	
-		end
-		
-		self:_register_investigate_SO(pos)
-		
-		self:_destroy_all_detected_attention_object_data()
-		managers.groupai:state():on_criminal_suspicion_progress(nil, self._unit, nil)
-		self:set_detection_enabled(false, nil, nil)
-	end
-
-	if self._suspicion_sound then
-		self._suspicion_sound = nil
-
-		self._unit:sound_source():post_event("camera_suspicious_signal_stop")
-	end
-
-	--self._alarm_sound = self._unit:sound_source():post_event("camera_alarm_signal")
-end
-
-function SecurityCamera:restart_detection()
-	if self._destroyed or self._destroying or not alive(self._unit) or managers.groupai:state():enemy_weapons_hot() or not managers.groupai:state():whisper_mode() then
-		return
-	end
-
-	self._continue_detecting_clbk_id = nil
-	self:set_detection_enabled(true, self._camera_settings or nil, nil)
-end
-
-function SecurityCamera:_register_investigate_SO(pos) --Ahah! I've spotted you!
-	if self._investigate_SO_data then
-		return
-	end
-
-	if not Network:is_server() or not managers.navigation:is_data_ready() then
-		return
-	end
-
-	local SO_category = "enemies"
-	local SO_filter = managers.navigation:convert_SO_AI_group_to_access(SO_category)
-	local nav_manager = managers.navigation
-	local f_get_nav_seg = nav_manager.get_nav_seg_from_pos
-	local nav_seg = f_get_nav_seg(nav_manager, pos)
-	local area = managers.groupai:state():get_area_from_nav_seg_id(nav_seg)
-	
-	local investigate_objective = {
-		pose = "stand",
-		type = "free",
-		interrupt_health = 1,
-		stance = "ntl",
-		haste = "run",
-		investigating = true,
-		interrupt_dis = -1,
-		area = area,
-		nav_seg = nav_seg,
-		pos = pos,
-		fail_clbk = callback(self, self, "on_investigate_SO_failed"),
-		complete_clbk = callback(self, self, "on_investigate_SO_completed"),
-		action_duration = math.lerp(2, 4, math.random())
-	}
-	local so_descriptor = {
-		interval = 0,
-		base_chance = 1,
-		AI_group = "enemies",
-		chance_inc = 0,
-		usage_amount = 1,
-		objective = investigate_objective,
-		search_pos = pos,
-		verification_clbk = callback(self, self, "clbk_investigate_SO_verification"),
-		admin_clbk = callback(self, self, "on_investigate_SO_administered")
-	}
-	local so_id = "Camera_investigate" .. tostring(self._unit:key())
-	self._investigate_SO_data = {
-		SO_registered = true,
-		SO_id = so_id,
-		SO_area = area
-	}
-
-	managers.groupai:state():add_special_objective(so_id, so_descriptor)
-end
-
-function SecurityCamera:_unregister_investigate_SO()
-	if not self._investigate_SO_data then
-		return
-	end
-
-	if self._investigate_SO_data.SO_registered then
-		managers.groupai:state():remove_special_objective(self._investigate_SO_data.SO_id)
-	elseif self._investigate_SO_data.receiver_unit then
-		local receiver_unit = self._investigate_SO_data.receiver_unit
-		self._investigate_SO_data.receiver_unit = nil
-
-		if alive(receiver_unit) then
-			if self._investigate_SO_data.old_objective and receiver_unit:movement():cool() then
-				receiver_unit:brain():set_objective(self._investigate_SO_data.old_objective)
-			else
-				receiver_unit:brain():set_objective(nil)
-			end
+		if self._look_fwd then
+			self._look_obj:m_rotation(tmp_rot1)
+			mrotation.y(tmp_rot1, self._look_fwd)
 		end
 	end
 
-	self._investigate_SO_data = nil
-end
+	if managers.groupai:state()._draw_enabled then
+		self._brush = self._brush or Draw:brush(Color(0.2, 1, 1, 1), self._detection_interval)
 
-function SecurityCamera:clbk_investigate_SO_verification(candidate_unit)
-	if not self._investigate_SO_data or not self._investigate_SO_data.SO_id then
-		return
-	end
+		self._look_obj:m_position(self._tmp_vec1)
 
-	if not candidate_unit:movement():cool() then
-		return
-	end
+		local cone_base = self._look_obj:rotation():y()
 
-	return true
-end
+		mvector3.multiply(cone_base, self._range)
+		mvector3.add(cone_base, self._tmp_vec1)
 
-function SecurityCamera:on_investigate_SO_administered(receiver_unit)
-	if alive(receiver_unit) and receiver_unit:brain() and receiver_unit:brain():objective() then
-		local objective = receiver_unit:brain():objective()
-		
-		if objective.type == "free" and not objective.investigating then
-			self._investigate_SO_data.old_objective = objective
-		end
-	end
-	
-	self._investigate_SO_data.receiver_unit = receiver_unit
-	self._investigate_SO_data.SO_registered = false
-end
+		local cone_base_rad = math.tan(self._cone_angle * 0.5) * self._range
 
-function SecurityCamera:on_investigate_SO_completed(receiver_unit)
-	if receiver_unit ~= self._investigate_SO_data.receiver_unit then
-		return
-	end
-	
-	--[[if self._investigate_SO_data.area then
-		local area = self._investigate_SO_data.area
-		
-		if not next(area.criminal.units) then
-			if self._investigate_SO_data.old_objective then
-				receiver_unit:brain():set_objective(self._investigate_SO_data.old_objective)
-			end
-		else		
-			local patrol_objective = {
-				pose = "stand",
-				type = "patrol",
-				area = area,
-				interrupt_health = 1,
-				stance = "ntl",
-				interrupt_dis = -1,
-				followup_objective = self._investigate_SO_data.old_objective
-			}
-			receiver_unit:brain():set_objective(patrol_objective)
-		end
-	end]]--
-	
-	if self._investigate_SO_data.old_objective then
-		receiver_unit:brain():set_objective(self._investigate_SO_data.old_objective)
-		self._investigate_SO_data.old_objective = nil
-	end
-	
-	local area = self._investigate_SO_data and self._investigate_SO_data.SO_area
-	self._investigate_SO_data = nil
-	
-	if next(area.criminal.units) then
-		for u_key, u_data in pairs(area.criminal.units) do
-			self:_register_investigate_SO(u_data.tracker:field_position())
-			
-			break
-		end
-	end
-end
-
-function SecurityCamera:on_investigate_SO_failed(receiver_unit)
-	if not self._investigate_SO_data.receiver_unit then
-		return
+		self._brush:cone(self._tmp_vec1, cone_base, cone_base_rad, 8)
 	end
 
-	if receiver_unit ~= self._investigate_SO_data.receiver_unit then
-		return
+	if not self._look_fwd then
+		self._look_obj:m_rotation(tmp_rot1)
+
+		self._look_fwd = Vector3()
+
+		mrotation.y(tmp_rot1, self._look_fwd)
 	end
-	
-	if self._investigate_SO_data.old_objective and receiver_unit:movement():cool() then
-		receiver_unit:brain():set_objective(self._investigate_SO_data.old_objective)
-		self._investigate_SO_data.old_objective = nil
-	end
-	
-	local area = self._investigate_SO_data and self._investigate_SO_data.SO_area
-	self._investigate_SO_data = nil
-	
-	if next(area.criminal.units) then
-		for u_key, u_data in pairs(area.criminal.units) do
-			self:_register_investigate_SO(u_data.tracker:field_position())
-			
-			break
-		end
-	end
+
+	self:_upd_acquire_new_attention_objects(t)
+	self:_upd_detect_attention_objects(t)
+	self:_upd_suspicion(t)
 end
 
 function SecurityCamera:set_detection_enabled(state, settings, mission_element)
@@ -357,12 +104,6 @@ function SecurityCamera:set_detection_enabled(state, settings, mission_element)
 	self:set_update_enabled(state)
 
 	self._mission_script_element = mission_element or self._mission_script_element
-	
-	if settings then
-		if not self._camera_settings or self._camera_settings ~= settings then
-			self._camera_settings = settings
-		end
-	end
 
 	if state then
 		self._u_key = self._unit:key()
@@ -380,6 +121,8 @@ function SecurityCamera:set_detection_enabled(state, settings, mission_element)
 			self._range = settings.detection_range
 			self._suspicion_range = settings.suspicion_range
 			self._team = managers.groupai:state():team_data(settings.team_id or tweak_data.levels:get_default_team_ID("combatant"))
+			
+			self._newest_settings = settings
 		end
 
 		self._detected_attention_objects = self._detected_attention_objects or {}
@@ -421,49 +164,261 @@ function SecurityCamera:set_detection_enabled(state, settings, mission_element)
 	managers.groupai:state():register_security_camera(self._unit, state)
 end
 
-function SecurityCamera:generate_cooldown(amount)
-	local mission_script_element = self._mission_script_element
+function SecurityCamera:_upd_detect_attention_objects(t)
+	local detected_obj = self._detected_attention_objects
+	local my_key = self._u_key
+	local my_pos = self._pos
+	local my_fwd = self._look_fwd
+	local det_delay = self._detection_delay or {0, 0}
 
-	self:set_detection_enabled(false)
-	managers.statistics:camera_destroyed()
-	
-	if self._continue_detecting_clbk_id then
-		managers.enemy:remove_delayed_clbk(self._continue_detecting_clbk_id)
+	for u_key, attention_info in pairs(detected_obj) do
+		if t >= attention_info.next_verify_t then
+			attention_info.next_verify_t = t + (attention_info.identified and attention_info.verified and attention_info.settings.verification_interval * 1.3 or attention_info.settings.verification_interval * 0.3)
 
-		self._continue_detecting_clbk_id = nil
+			if not attention_info.identified then
+				local noticable = nil
+				local angle, dis_multiplier = self:_detection_angle_and_dis_chk(my_pos, my_fwd, attention_info.handler, attention_info.settings, attention_info.handler:get_detection_m_pos())
+
+				if angle then
+					local attention_pos = attention_info.handler:get_detection_m_pos()
+					local vis_ray = self._unit:raycast("ray", my_pos, attention_pos, "slot_mask", self._visibility_slotmask, "ray_type", "ai_vision")
+
+					if not vis_ray or vis_ray.unit:key() == u_key then
+						noticable = true
+					end
+				end
+
+				local delta_prog = nil
+				local dt = t - attention_info.prev_notice_chk_t
+
+				if noticable then
+					if angle == -1 then
+						delta_prog = 1
+					else
+						local min_delay = det_delay[1]
+						local max_delay = det_delay[2]
+						local angle_mul_mod = 0.15 * math.min(angle / self._cone_angle, 1)
+						local dis_mul_mod = 0.85 * dis_multiplier
+						local notice_delay_mul = attention_info.settings.notice_delay_mul or 1
+
+						if attention_info.settings.detection and attention_info.settings.detection.delay_mul then
+							notice_delay_mul = notice_delay_mul * attention_info.settings.detection.delay_mul
+						end
+
+						local notice_delay_modified = math.lerp(min_delay * notice_delay_mul, max_delay, dis_mul_mod + angle_mul_mod)
+						delta_prog = notice_delay_modified > 0 and dt / notice_delay_modified or 1
+					end
+				else
+					delta_prog = det_delay[2] > 0 and -dt / det_delay[2] or -1
+				end
+
+				attention_info.notice_progress = attention_info.notice_progress + delta_prog
+
+				if attention_info.notice_progress > 1 then
+					attention_info.notice_progress = nil
+					attention_info.prev_notice_chk_t = nil
+					attention_info.identified = true
+					attention_info.release_t = t + attention_info.settings.release_delay
+					attention_info.identified_t = t
+					noticable = true
+
+					if AIAttentionObject.REACT_SCARED <= attention_info.settings.reaction then
+						managers.groupai:state():on_criminal_suspicion_progress(attention_info.unit, self._unit, true)
+					end
+				elseif attention_info.notice_progress < 0 then
+					self:_destroy_detected_attention_object_data(attention_info)
+
+					noticable = false
+				else
+					noticable = attention_info.notice_progress
+					attention_info.prev_notice_chk_t = t
+
+					if AIAttentionObject.REACT_SCARED <= attention_info.settings.reaction then
+						managers.groupai:state():on_criminal_suspicion_progress(attention_info.unit, self._unit, noticable)
+					end
+				end
+
+				if noticable ~= false and attention_info.settings.notice_clbk then
+					attention_info.settings.notice_clbk(self._unit, noticable)
+				end
+			end
+
+			if attention_info.identified then
+				attention_info.nearly_visible = nil
+				local verified, vis_ray = nil
+				local attention_pos = attention_info.handler:get_detection_m_pos()
+				local dis = mvector3.distance(my_pos, attention_info.m_pos)
+
+				if dis < self._range * 1.2 then
+					local detect_pos = nil
+
+					if attention_info.is_husk_player and attention_info.unit:anim_data().crouch then
+						detect_pos = self._tmp_vec1
+
+						mvector3.set(detect_pos, attention_info.m_pos)
+						mvector3.add(detect_pos, tweak_data.player.stances.default.crouched.head.translation)
+					else
+						detect_pos = attention_pos
+					end
+
+					local in_FOV = self:_detection_angle_chk(my_pos, my_fwd, detect_pos, 0.8)
+
+					if in_FOV then
+						vis_ray = self._unit:raycast("ray", my_pos, detect_pos, "slot_mask", self._visibility_slotmask, "ray_type", "ai_vision")
+
+						if not vis_ray or vis_ray.unit:key() == u_key then
+							verified = true
+						end
+					end
+
+					attention_info.verified = verified
+				end
+
+				attention_info.dis = dis
+
+				if verified then
+					attention_info.release_t = nil
+					attention_info.verified_t = t
+
+					mvector3.set(attention_info.verified_pos, attention_pos)
+
+					attention_info.last_verified_pos = mvector3.copy(attention_pos)
+					attention_info.verified_dis = dis
+				elseif attention_info.release_t and attention_info.release_t < t then
+					self:_destroy_detected_attention_object_data(attention_info)
+				else
+					attention_info.release_t = attention_info.release_t or t + attention_info.settings.release_delay
+				end
+			end
+		end
 	end
-
-	if mission_script_element then
-		mission_script_element:on_destroyed(self._unit)
-	end
-
-	if self._access_camera_mission_element then
-		self._access_camera_mission_element:access_camera_operation_destroy()
-	end
-
-	self._destroyed = true
 end
 
+function SecurityCamera:sync_alarm_to_host(unit)
+	managers.network:session():send_to_host("sync_alarm_to_host", self._unit, unit)
+end
+
+function SecurityCamera:_sound_the_alarm(detected_unit)
+	if self._alarm_sound then
+		return
+	end
+
+	if Network:is_server() then
+		self:_send_net_event(self._NET_EVENTS.alarm_start)
+		
+		if Global.game_settings.difficulty ~= "sm_wish" then
+			managers.groupai:state():_send_next_call_immediately(5)
+			managers.hud:present_mid_text({
+				title = "!!! A CAMERA HAS DETECTED SUSPICIOUS ACTIVITY !!! ",
+				text = "NEXT PAGER CALL INCOMING IN 5 SECONDS",
+				time = 4
+			})
+			
+			self._reenable_id = "cam_renable" .. tostring(self._unit:key())
+			managers.enemy:add_delayed_clbk(self._reenable_id, callback(self, self, "_clear_camera_detection"), Application:time() + 4)	
+		elseif managers.groupai:state()._stealth_strikes >= 3 then
+			if self._mission_script_element then
+				self._mission_script_element:on_alarm(self._unit)
+			end
+		
+			self._call_police_clbk_id = "cam_call_cops" .. tostring(self._unit:key())
+
+			managers.enemy:add_delayed_clbk(self._call_police_clbk_id, callback(self, self, "clbk_call_the_police"), Application:time() + 4)
+			
+			local reason_called = managers.groupai:state().analyse_giveaway("security_camera", detected_unit, {})
+			self._reason_called = managers.groupai:state():fetch_highest_giveaway(self._reason_called, reason_called)
+		else
+			managers.groupai:state():register_strike("camera", true)
+			
+			if managers.groupai:state()._stealth_has_begun then
+				managers.groupai:state():_send_next_call_immediately(10)
+				managers.hud:present_mid_text({
+					title = "!!! A CAMERA HAS DETECTED SUSPICIOUS ACTIVITY !!!",
+					text = "NEXT PAGER CALL INCOMING IN 10 SECONDS",
+					time = 4
+				})
+			end
+			
+			self._reenable_id = "cam_renable" .. tostring(self._unit:key())
+			managers.enemy:add_delayed_clbk(self._reenable_id, callback(self, self, "_clear_camera_detection"), Application:time() + 4)	
+		end
+
+		self:_destroy_all_detected_attention_object_data()
+		self:set_detection_enabled(false, nil, nil)
+	end
+
+	if self._suspicion_sound then
+		self._suspicion_sound = nil
+
+		self._unit:sound_source():post_event("camera_suspicious_signal_stop")
+	end
+	
+	self._alarm_sound = self._unit:sound_source():post_event("camera_alarm_signal")
+end
+
+function SecurityCamera:_clear_camera_detection()
+	self:_stop_all_sounds()
+	managers.groupai:state():on_criminal_suspicion_progress(nil, self._unit, nil)
+	
+	if self._reenable_id then
+		managers.enemy:add_delayed_clbk(self._reenable_id, callback(self, self, "_reenable_camera_detection"), Application:time() + 15)
+	end
+end
+
+function SecurityCamera:_reenable_camera_detection()
+	self:_stop_all_sounds()
+	managers.groupai:state():on_criminal_suspicion_progress(nil, self._unit, nil)
+	self:set_detection_enabled(true, self._newest_settings)
+	self._reenable_id = nil
+end
+
+function SecurityCamera:_stop_all_sounds()
+	if Network:is_server() and (self._alarm_sound or self._suspicion_sound) then
+		self:_send_net_event(self._NET_EVENTS.sound_off)
+	end
+
+	if self._alarm_sound or self._suspicion_sound then
+		self._alarm_sound = nil
+		self._suspicion_sound = nil
+
+		self._unit:sound_source():post_event("camera_silent")
+	end
+	
+	self._shut_up_id = nil
+
+	self._suspicion_lvl_sync = 0
+	self._suspicion_sound_lvl = 0
+end
 
 function SecurityCamera:destroy(unit)
 	table.delete(SecurityCamera.cameras, self._unit)
-	
-	self:_unregister_investigate_SO()
-	
+
 	self._destroying = true
 
 	self:set_detection_enabled(false)
 
-	if self._continue_detecting_clbk_id then
-		managers.enemy:remove_delayed_clbk(self._continue_detecting_clbk_id)
+	if self._call_police_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._call_police_clbk_id)
 
-		self._continue_detecting_clbk_id = nil
+		self._call_police_clbk_id = nil
 	end
 
 	if self._tape_loop_expired_clbk_id then
 		managers.enemy:remove_delayed_clbk(self._tape_loop_expired_clbk_id)
 
 		self._tape_loop_expired_clbk_id = nil
+	end
+	
+	if self._reenable_id then
+		managers.enemy:remove_delayed_clbk(self._reenable_id)
+
+		self._reenable_id = nil
+	end
+	
+	if self._shut_up_id then
+		managers.enemy:remove_delayed_clbk(self._shut_up_id)
+
+		self._shut_up_id = nil
 	end
 
 	if SecurityCamera.active_tape_loop_unit and SecurityCamera.active_tape_loop_unit == self._unit then
