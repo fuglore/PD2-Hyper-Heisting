@@ -360,16 +360,22 @@ function SecurityCamera:_clear_camera_detection()
 	self:_stop_all_sounds()
 	managers.groupai:state():on_criminal_suspicion_progress(nil, self._unit, nil)
 	
-	if self._reenable_id then
-		managers.enemy:add_delayed_clbk(self._reenable_id, callback(self, self, "_reenable_camera_detection"), Application:time() + 15)
+	
+	if managers.groupai:state():whisper_mode() then
+		if self._reenable_id then
+			managers.enemy:add_delayed_clbk(self._reenable_id, callback(self, self, "_reenable_camera_detection"), Application:time() + 15)
+		end
 	end
 end
 
 function SecurityCamera:_reenable_camera_detection()
 	self:_stop_all_sounds()
 	managers.groupai:state():on_criminal_suspicion_progress(nil, self._unit, nil)
-	self:set_detection_enabled(true, self._newest_settings)
-	self._reenable_id = nil
+	
+	if managers.groupai:state():whisper_mode() then
+		self:set_detection_enabled(true, self._newest_settings)
+		self._reenable_id = nil
+	end
 end
 
 function SecurityCamera:_stop_all_sounds()

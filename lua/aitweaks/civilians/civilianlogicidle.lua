@@ -52,3 +52,96 @@ function CivilianLogicIdle.on_alert(data, alert_data)
 		end
 	end
 end
+
+function CivilianLogicIdle._upd_outline_detection(data)
+	local my_data = data.internal_data
+
+	if data.been_outlined or data.has_outline then
+		return
+	end
+
+	local t = TimerManager:game():time()
+	local visibility_slotmask = managers.slot:get_mask("AI_visibility")
+	local seen = false
+	local seeing_unit = nil
+	local my_tracker = data.unit:movement():nav_tracker()
+	local chk_vis_func = my_tracker.check_visibility
+
+	for e_key, record in pairs(managers.groupai:state():all_criminals()) do
+		local enemy_pos = record.m_det_pos
+		local my_pos = data.unit:movement():m_head_pos()
+
+		if mvector3.distance_sq(enemy_pos, my_pos) < 1440000 then
+			local not_hit = World:raycast("ray", my_pos, enemy_pos, "slot_mask", visibility_slotmask, "ray_type", "ai_vision", "report")
+
+			if not not_hit then
+				seen = true
+				seeing_unit = record.unit
+
+				break
+			end
+		end
+	end
+
+	if seen then
+		CivilianLogicIdle._enable_outline(data)
+	else
+		CopLogicBase.queue_task(my_data, my_data.outline_detection_task_key, CivilianLogicIdle._upd_outline_detection, data, t + 0.33)
+	end
+end
+
+function CivilianLogicIdle._upd_detection(data)
+	managers.groupai:state():on_unit_detection_updated(data.unit)
+
+	data.t = TimerManager:game():time()
+	local my_data = data.internal_data
+	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+	local new_attention, new_reaction = CivilianLogicIdle._get_priority_attention(data, data.detected_attention_objects)
+
+	CivilianLogicIdle._set_attention_obj(data, new_attention, new_reaction)
+
+	if new_reaction and AIAttentionObject.REACT_SCARED <= new_reaction then
+		local objective = data.objective
+		local trans_objective = CivilianLogicIdle.is_obstructed(data, new_attention.unit)
+		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
+
+		if trans_objective then
+			local alert = {
+				"vo_cbt",
+				new_attention.m_head_pos,
+				[5] = new_attention.unit
+			}
+
+			CivilianLogicIdle.on_alert(data, alert)
+
+			if my_data ~= data.internal_data then
+				return
+			end
+		end
+	elseif not data.char_tweak.ignores_attention_focus then
+		CopLogicIdle._chk_focus_on_attention_object(data, my_data)
+	end
+
+	if not data.unit:movement():cool() and (not my_data.acting or not not data.unit:anim_data().act_idle) then
+		local objective = data.objective
+
+		if not objective or objective.interrupt_dis == -1 or objective.is_default then
+			local alert = {
+				"vo_cbt",
+				data.m_pos
+			}
+
+			CivilianLogicIdle.on_alert(data, alert)
+
+			if my_data ~= data.internal_data then
+				return
+			end
+		end
+	end
+
+	if CopLogicIdle._chk_relocate(data) then
+		return
+	end
+
+	CopLogicBase.queue_task(my_data, my_data.detection_task_key, CivilianLogicIdle._upd_detection, data, data.t + delay)
+end
