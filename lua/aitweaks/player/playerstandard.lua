@@ -370,15 +370,23 @@ function PlayerStandard:_check_action_jump(t, input)
 			local action_start_data = {}
 			local jump_vel_z = tweak_data.player.movement_state.standard.movement.jump_velocity.z
 			action_start_data.jump_vel_z = jump_vel_z
-
+			
 			if self._move_dir then
 				local is_running = self._running and self._unit:movement():is_above_stamina_threshold() and t - self._start_running_t > 0.4
 				local jump_vel_xy = 250
 					
 				if math.abs(self._last_velocity_xy:length()) > jump_vel_xy then
-					jump_vel_xy = math.abs(self._last_velocity_xy:length())
-				end
+					local fwd_dot = self._move_dir:normalized():dot(self._last_velocity_xy:normalized())
+					local dot_mul = math.max(0, fwd_dot)
+				
+					local max_walk_speed_hopping = self:_get_max_walk_speed(t, true) * 1.5
+					local mul = 1 + 125 / max_walk_speed_hopping
 					
+					--log(tostring(mul))
+					
+					jump_vel_xy = math.min(max_walk_speed_hopping, math.abs(self._last_velocity_xy:length()) * mul) * dot_mul
+				end
+				
 				action_start_data.jump_vel_xy = jump_vel_xy
 
 				if is_running then
@@ -390,6 +398,9 @@ function PlayerStandard:_check_action_jump(t, input)
 					
 					self._unit:movement():subtract_stamina(stamina_subtraction)
 				end
+			elseif not mvector3.is_zero(self._last_velocity_xy) then
+				local jump_vel_xy = math.abs(self._last_velocity_xy:length())				
+				action_start_data.jump_vel_xy = jump_vel_xy
 			end
 
 			new_action = self:_start_action_jump(t, action_start_data)
@@ -448,23 +459,10 @@ function PlayerStandard:_update_movement(t, dt)
 	local update_velocity = true
 	
 	local WALK_SPEED_MAX = self:_get_max_walk_speed(t)
-
-	if self._running then
 		
-	elseif self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
-		if self._jump_vel_xy and not mvector3.is_zero(self._jump_vel_xy) then
-			if math.abs(self._jump_vel_xy:length()) > WALK_SPEED_MAX then
-				WALK_SPEED_MAX = math.abs(self._jump_vel_xy:length())
-			end
-		end
-	end
-	
-	local air_acceleration = 250
-		
-	if self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
-		if math.abs(self._last_velocity_xy:length()) > 250 then
-			air_acceleration = math.abs(self._last_velocity_xy:length())
-			WALK_SPEED_MAX = math.abs(self._last_velocity_xy:length())
+	if self._state_data.in_air and self._jump_vel_xy then
+		if math.abs(self._jump_vel_xy:length()) > 250 then
+			WALK_SPEED_MAX = math.abs(self._jump_vel_xy:length())
 		else
 			WALK_SPEED_MAX = 250
 		end
@@ -479,7 +477,7 @@ function PlayerStandard:_update_movement(t, dt)
 	end
 	
 	local acceleration = self:_get_max_walk_speed(t, true) * 8
-	local decceleration = acceleration * 0.7
+	local decceleration = self._move_dir and acceleration * 0.7 or 2800
 	
 	if self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
 		decceleration = 0
@@ -489,7 +487,7 @@ function PlayerStandard:_update_movement(t, dt)
 	local floor_moving_vel, floor_moving_pos
 	
 	if floor_moving_ray then
-		floor_moving_vel = floor_moving_ray.body and floor_moving_ray.body:velocity() or nil
+		floor_moving_vel = floor_moving_ray.body and math.abs(floor_moving_ray.body:velocity():length()) > 0 and floor_moving_ray.body:velocity() or nil
 		--floor_moving_pos = floor_moving_ray.position
 	end
 	
@@ -529,7 +527,6 @@ function PlayerStandard:_update_movement(t, dt)
 		
 		if self._running and self._wave_dash_t then
 			acceleration = acceleration + wanted_walk_speed
-			decceleration = decceleration + wanted_walk_speed
 		end
 		
 		local lleration = acceleration
@@ -553,7 +550,7 @@ function PlayerStandard:_update_movement(t, dt)
 				local sustain_dot = (input_move_vec:normalized() * jump_vel):dot(jump_dir)
 				local new_move_vec = input_move_vec + jump_dir * (sustain_dot - fwd_dot)
 
-				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, 1200 * dt)
+				mvector3.step(achieved_walk_vel, self._last_velocity_xy, new_move_vec, acceleration * dt)
 			else
 				mvector3.multiply(mvec_move_dir_normalized, wanted_walk_speed_air)
 				mvector3.step(achieved_walk_vel, self._last_velocity_xy, mvec_move_dir_normalized, acceleration * dt)
@@ -580,7 +577,7 @@ function PlayerStandard:_update_movement(t, dt)
 			self._target_headbob = self._target_headbob * weapon_tweak_data.headbob.multiplier
 		end
 	elseif not mvector3.is_zero(self._last_velocity_xy) then
-		if not self._state_data.land_t or self._state_data.land_t and t - self._state_data.land_t > 0.1 then
+		if not self._state_data.land_t or self._state_data.land_t and t - self._state_data.land_t > 0.2 then
 			local grad = decceleration
 			
 			local achieved_walk_vel = math.step(self._last_velocity_xy, Vector3(), grad * dt)
@@ -638,7 +635,7 @@ function PlayerStandard:_update_movement(t, dt)
 	
 		self._unit:movement():set_position(pos_new)
 		
-		if update_velocity then 
+		if update_velocity then	
 			mvector3.set(self._last_velocity_xy, pos_new)		
 			mvector3.subtract(self._last_velocity_xy, self._pos)
 
@@ -647,10 +644,6 @@ function PlayerStandard:_update_movement(t, dt)
 			end
 
 			mvector3.divide(self._last_velocity_xy, dt)
-		
-			if self._jump_vel_xy and self._state_data.in_air then
-				mvector3.set(self._jump_vel_xy, self._last_velocity_xy)
-			end
 		else
 			mvector3.set_static(self._last_velocity_xy, 0, 0, 0)
 		end
@@ -1263,28 +1256,12 @@ function PlayerStandard:_start_action_jump(t, action_start_data)
 	self._unit:mover():jump()
 
 	if self._move_dir then
-		if not mvector3.is_zero(self._last_velocity_xy) then
-			local input_move_vec = action_start_data.jump_vel_xy * self._move_dir
-			local jump_dir = mvector3.copy(self._last_velocity_xy)
-			local jump_vel = mvector3.normalize(jump_dir)
-			local fwd_dot = jump_dir:dot(input_move_vec)
-
-			if fwd_dot < jump_vel then
-				local sustain_dot = (input_move_vec:normalized() * jump_vel):dot(jump_dir)
-				local new_move_vec = input_move_vec + jump_dir * (sustain_dot - fwd_dot)
-				
-				self._jump_vel_xy = mvector3.copy(new_move_vec)
-			else
-				local move_dir_clamp = self._move_dir:normalized() * math.min(1, self._move_dir:length())
-				self._last_velocity_xy = move_dir_clamp * self._last_velocity_xy:length()
-				self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
-			end
-		else
-			local move_dir_clamp = self._move_dir:normalized() * math.min(1, self._move_dir:length())
-			self._last_velocity_xy = move_dir_clamp * action_start_data.jump_vel_xy
-			self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
-		end
-	elseif self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.2 or self._state_data.land_t and t - self._state_data.land_t > 0.1 then
+		local move_dir_clamp = self._move_dir:normalized() * math.min(1, self._move_dir:length())
+		self._last_velocity_xy = move_dir_clamp * action_start_data.jump_vel_xy
+		self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
+	elseif not mvector3.is_zero(self._last_velocity_xy) then
+		self._jump_vel_xy = mvector3.copy(self._last_velocity_xy)
+	else
 		self._last_velocity_xy = Vector3()
 	end
 
@@ -1339,6 +1316,7 @@ function PlayerStandard:_update_foley(t, input)
 	if not self._gnd_ray and not self._state_data.on_ladder then
 		if not self._state_data.in_air then
 			self._state_data.in_air = true
+			
 			self._state_data.in_air_enter_t = t
 			self._state_data.enter_air_pos_z = self._pos.z
 

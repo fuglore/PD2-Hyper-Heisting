@@ -14,6 +14,7 @@ local mvec3_angle = mvector3.angle
 local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_step = mvector3.step
 local mvec3_set = mvector3.set
+local mvec3_set_z = mvector3.set_z
 local mvec3_norm = mvector3.normalize
 
 local math_lerp = math.lerp
@@ -31,6 +32,7 @@ function ArrowBase.throw_projectile(projectile_type, pos, dir, owner_peer_id, ho
 	
 	if homing then
 		unit:base()._should_home_in = world_g:play_physic_effect(anti_gravitate_idstr, unit)
+		self._homing_physics = true
 	end
 
 	if owner_peer_id and managers.network:session() then
@@ -91,7 +93,12 @@ function ArrowBase:throw(params)
 	
 	velocity = velocity * launch_speed
 	
-	velocity = Vector3(velocity.x, velocity.y, velocity.z - adjust_z)
+	if self._should_home_in then
+		velocity = Vector3(velocity.x, velocity.y, velocity.z - adjust_z)
+	else
+		velocity = Vector3(velocity.x, velocity.y, velocity.z + adjust_z)
+	end
+	
 	local mass_look_up_modifier = self._mass_look_up_modifier or 1
 	local mass = math.max(mass_look_up_modifier * (1 + math.min(0, params.dir.z)), 1)
 
@@ -133,7 +140,7 @@ end
 
 local medic_tag = "medic"
 
-function ArrowBase:_calculate_autohit_direction()
+function ArrowBase:_calculate_homing_dir()
 	local m_unit = self._unit
 	local pos = m_unit:position()
 	local dir = m_unit:rotation():y()
@@ -226,6 +233,45 @@ function ArrowBase:_calculate_autohit_direction()
 	end
 end
 
+function ArrowBase:_calculate_autohit_direction()
+	local enemies = managers.enemy:all_enemies()
+	local m_unit = self._unit
+	local pos = m_unit:position()
+	local dir = m_unit:rotation():y()
+	local closest_ang, closest_pos = nil
+	
+	local obstruction_mask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
+
+	for u_key, enemy_data in pairs(enemies) do
+		local enemy = enemy_data.unit
+		
+		if not enemy:in_slot(16) then
+			local com = enemy:movement():m_head_pos()
+			local obstructed = m_unit:raycast("ray", pos, com, "slot_mask", obstruction_mask, "report")
+			
+			if not obstructed then
+				mvec3_dir(tmp_vec1, pos, com)
+				mvec3_set_z(tmp_vec1, 0)
+
+				local angle = mvec3_angle(dir, tmp_vec1)
+
+				if angle < 30 then
+					if not closest_ang or angle < closest_ang then
+						closest_ang = angle
+						closest_pos = com
+					end
+				end
+			end
+		end
+	end
+
+	if closest_pos then
+		mvector3.direction(tmp_vec1, pos, closest_pos)
+
+		return tmp_vec1
+	end
+end
+
 local tmp_vel = Vector3()
 function ArrowBase:update(unit, t, dt)
 	if self._drop_in_sync_data then
@@ -248,9 +294,18 @@ function ArrowBase:update(unit, t, dt)
 
 	if not self._is_pickup then
 		if self._should_home_in then
-			local autohit_dir, target_dis = self:_calculate_autohit_direction()
+			if not self._homing_physics_t then
+				self._homing_physics_t = t + 5
+			end
+		
+			local autohit_dir, target_dis = self:_calculate_homing_dir()
 			
 			if autohit_dir then
+				if not self._homing_physics then
+					unit:base()._should_home_in = world_g:play_physic_effect(anti_gravitate_idstr, unit)
+					self._homing_physics = true
+				end
+			
 				local body = self._unit:body(0)
 
 				mvec3_set(tmp_vel, body:velocity())
@@ -264,8 +319,27 @@ function ArrowBase:update(unit, t, dt)
 				body:set_rotation(rot)
 				
 				body:set_velocity(tmp_vel * speed)
+			elseif self._homing_physics_t < t then
+				world_g:stop_physic_effect(self._should_home_in)
+				self._homing_physics = nil
+			end
+		else
+			local autohit_dir = self:_calculate_autohit_direction()
+
+			if autohit_dir then
+				local body = self._unit:body(0)
+
+				mvec3_set(tmp_vel, body:velocity())
+
+				local speed = mvector3.normalize(tmp_vel)
+
+				mvec3_step(tmp_vel, tmp_vel, autohit_dir, dt * 0.3)
 				
+				local rot = Rotation(tmp_vel, math.UP)
 				
+				body:set_rotation(rot)
+				
+				body:set_velocity(tmp_vel * speed)
 			end
 		end
 	elseif self._should_home_in then

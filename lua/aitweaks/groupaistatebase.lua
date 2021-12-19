@@ -952,7 +952,7 @@ end
 function GroupAIStateBase:_send_next_call_immediately(t)
 	local timer_clbk_id_table = self._pager_timer_clbks
 	local enemy_manager = managers.enemy
-	local remove_clbk_f = managers.enemy.remove_delayed_clbk
+	local remove_clbk_f = enemy_manager.remove_delayed_clbk
 	
 	for i = 1, #timer_clbk_id_table do
 		local clbk_id = timer_clbk_id_table[i]
@@ -1196,7 +1196,7 @@ function GroupAIStateBase:sync_client_whisper_strike_message(strike_reason, stri
 	
 	local timer_clbk_id_table = self._pager_timer_clbks
 	local enemy_manager = managers.enemy
-	local remove_clbk_f = managers.enemy.remove_delayed_clbk
+	local remove_clbk_f = enemy_manager.remove_delayed_clbk
 	
 	for i = 1, #timer_clbk_id_table do --timer usually gets synced after a strike, wipe clbks
 		local clbk_id = timer_clbk_id_table[i]
@@ -1210,7 +1210,7 @@ end
 function GroupAIStateBase:sync_client_whisper_wipe_clbks(display_camera_message) --sync this if things go loud so clients can wipe their asses
 	local timer_clbk_id_table = self._pager_timer_clbks
 	local enemy_manager = managers.enemy
-	local remove_clbk_f = managers.enemy.remove_delayed_clbk
+	local remove_clbk_f = enemy_manager.remove_delayed_clbk
 	
 	for i = 1, #timer_clbk_id_table do
 		local clbk_id = timer_clbk_id_table[i]
@@ -1226,6 +1226,105 @@ function GroupAIStateBase:sync_client_whisper_wipe_clbks(display_camera_message)
 			text = "NEXT PAGER CALL INCOMING IN 5 SECONDS",
 			time = 4
 		})
+	end
+end
+
+function GroupAIStateBase:kill_hh_stealth()
+	if managers.network:session() then
+		managers.network:session():send_to_peers_synched("sync_client_whisper_wipe_clbks", false)
+	end
+	
+	local enemy_manager = managers.enemy
+	
+	enemy_manager:remove_delayed_clbk(self._mass_pager_id)
+	
+	local timer_clbk_id_table = self._pager_timer_clbks
+	local remove_clbk_f = enemy_manager.remove_delayed_clbk
+	
+	for i = 1, #timer_clbk_id_table do
+		local clbk_id = timer_clbk_id_table[i]
+		
+		remove_clbk_f(enemy_manager, clbk_id)
+	end
+	
+	self._pager_timer_clbks = {}
+end
+
+function GroupAIStateBase:on_enemy_weapons_hot(is_delayed_callback)
+	if not self._ai_enabled then
+		return
+	end
+
+	if not is_delayed_callback and self._police_call_clbk_id then
+		managers.enemy:remove_delayed_clbk(self._police_call_clbk_id)
+	end
+
+	self._police_call_clbk_id = nil
+
+	if not self._enemy_weapons_hot then
+		self._police_called = true
+		self._enemy_weapons_hot = true
+
+		managers.music:post_event(tweak_data.levels:get_music_event("control"))
+		managers.enemy:add_delayed_clbk("notify_bain_weapons_hot", callback(self, self, "notify_bain_weapons_hot", self._called_reason), Application:time() + 0)
+
+		self:kill_hh_stealth()
+
+		if managers.network:session() then
+			managers.network:session():send_to_peers_synched("group_ai_event", self:get_sync_event_id("enemy_weapons_hot"), self:get_sync_blame_id(self._called_reason))
+		else
+			print("here it would crash before")
+		end
+
+		self._radio_clbk = callback(self, self, "_radio_chatter_clbk")
+
+		managers.enemy:add_delayed_clbk("_radio_chatter_clbk", self._radio_clbk, Application:time() + 30)
+
+		if not self._switch_to_not_cool_clbk_id then
+			self._switch_to_not_cool_clbk_id = "GroupAI_delayed_not_cool"
+
+			managers.enemy:add_delayed_clbk(self._switch_to_not_cool_clbk_id, callback(self, self, "_clbk_switch_enemies_to_not_cool"), self._t + 1)
+		end
+
+		if not self._hstg_hint_clbk then
+			self._first_hostage_hint = true
+			self._hstg_hint_clbk = callback(self, self, "_hostage_hint_clbk")
+
+			managers.enemy:add_delayed_clbk("_hostage_hint_clbk", self._hstg_hint_clbk, Application:time() + 45)
+		end
+
+		managers.mission:call_global_event("police_weapons_hot")
+		self:_call_listeners("enemy_weapons_hot")
+		managers.enemy:set_corpse_disposal_enabled(true)
+	end
+end
+
+function GroupAIStateBase:set_whisper_mode(enabled)
+	enabled = enabled and true or false
+
+	if enabled == self._whisper_mode then
+		return
+	end
+  
+	self._whisper_mode = enabled
+	self._whisper_mode_change_t = TimerManager:game():time()
+
+	self:set_ambience_flag()
+
+	if Network:is_server() and not enabled and not self._switch_to_not_cool_clbk_id then
+		self._switch_to_not_cool_clbk_id = "GroupAI_delayed_not_cool"
+
+		managers.enemy:add_delayed_clbk(self._switch_to_not_cool_clbk_id, callback(self, self, "_clbk_switch_enemies_to_not_cool"), self._t + 0.35)
+	end
+
+	self:_call_listeners("whisper_mode", enabled)
+
+	if not enabled then
+		if Network:is_server() then
+			self:kill_hh_stealth()
+		end
+		
+		self:_clear_criminal_suspicion_data()
 	end
 end
 

@@ -9,11 +9,11 @@
         </initializerstack>
         <simulatorstack>
             <worldtransform transform_rotations="true"/>
-            <trail size="20" mode="distance" distance="300"/>
+            <trail size="20" mode="distance" distance="10"/>
             <variableopacity name="opacity_1" opacity="1"/>
         </simulatorstack>
         <visualizerstack>
-            <trail size="20" trail_type="normal_locked" tesselation="1" curvature="0.019999999552965" tile_uv="false" tiles_per_meter="1" texture="effects/textures/misc/e_arrow_trail_df" intensity="identity" blend_mode="normal" render_template="effect_op_add" per_particle_age="false" color_input="constant" color="242.00001525879 250.00001525879 255" opacity_input="scaled_channel" width_input="constant" width="20" uv_size="1 1" uv_offset_input="constant" uv_offset="0 0">
+            <trail size="20" trail_type="normal_locked" tesselation="1" curvature="0.019999999552965" tile_uv="false" tiles_per_meter="10" texture="effects/textures/misc/e_arrow_trail_df" intensity="identity" blend_mode="normal" render_template="effect_op_add" per_particle_age="false" color_input="constant" color="242.00001525879 250.00001525879 255" opacity_input="scaled_channel" width_input="constant" width="20" uv_size="1 1" uv_offset_input="constant" uv_offset="0 0">
                 <color_multiplier_keys loop="false">
                     <key t="0" v="1 1 1"/>
                 </color_multiplier_keys>
@@ -27,7 +27,7 @@
                     <key t="60000" v="0"/>
                 </opacity_multiplier_keys>
             </trail>
-            <trail size="5" trail_type="normal_locked" tesselation="1" curvature="0.019999999552965" tile_uv="false" tiles_per_meter="1" texture="effects/textures/misc/e_arrow_trail_df" intensity="reddot" blend_mode="normal" render_template="effect_op_glow" per_particle_age="false" color_input="constant" color="216.00001525879 211.00001525879 160" opacity_input="scaled_channel" width_input="keys" uv_size="1 1" uv_offset_input="constant" uv_offset="0 0">
+            <trail size="5" trail_type="normal_locked" tesselation="1" curvature="0.019999999552965" tile_uv="false" tiles_per_meter="10" texture="effects/textures/misc/e_arrow_trail_df" intensity="reddot" blend_mode="normal" render_template="effect_op_glow" per_particle_age="false" color_input="constant" color="216.00001525879 211.00001525879 160" opacity_input="scaled_channel" width_input="keys" uv_size="1 1" uv_offset_input="constant" uv_offset="0 0">
                 <color_multiplier_keys loop="false">
                     <key t="0" v="1 1 1"/>
                 </color_multiplier_keys>
@@ -36,11 +36,11 @@
                 </opacity_scale_keys>
                 <opacity_multiplier_keys loop="false">
                     <key t="0" v="1"/>
-                    <key t="500" v="1"/>
-                    <key t="1000" v="1"/>
+                    <key t="1000" v="0"/>
                 </opacity_multiplier_keys>
                 <width_keys loop="false">
                     <key t="0" v="3"/>
+					<key t="1000" v="0"/>
                 </width_keys>
             </trail>
         </visualizerstack>
