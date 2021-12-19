@@ -12,6 +12,41 @@ function UnitNetworkHandler:send_drama(drama, sender)
 	managers.groupai:state():_add_drama(drama)
 end
 
+function UnitNetworkHandler:sync_begin_hh_stealth_message()
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
+		return
+	end
+
+	managers.hud:present_mid_text({
+		text = "PAGER CALL INCOMING...",
+		time = 3
+	})
+end
+
+function UnitNetworkHandler:sync_client_whisper_mass_pager_t(timer, title_message)
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
+		return
+	end
+
+	managers.groupai:state():sync_client_whisper_mass_pager_t(timer, title_message)
+end
+
+function UnitNetworkHandler:sync_client_whisper_strike_message(reason, count)
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
+		return
+	end
+
+	managers.groupai:state():sync_client_whisper_strike_message(reason, count)
+end
+
+function UnitNetworkHandler:sync_client_whisper_wipe_clbks(show_camera_message)
+	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
+		return
+	end
+
+	managers.groupai:state():sync_client_whisper_wipe_clbks(show_camera_message)
+end
+
 function UnitNetworkHandler:set_client_groupai_ecm_data(call, camera, pager)
 	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
 		return

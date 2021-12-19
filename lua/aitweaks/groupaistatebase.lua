@@ -806,16 +806,24 @@ function GroupAIStateBase:register_strike(reason, do_not_change_t)
 		else
 			self:on_police_called("cop_alarm")
 		end
+		
+		if managers.network:session() then
+			managers.network:session():send_to_peers_synched("sync_client_whisper_wipe_clbks", false)
+		end
 	else
 		local strikes_left = 3 - num_strikes
+		local sync_reason = 0
 		local title_text = "ANSWER FAILED"
 		
 		if reason == "unanswered" then
 			title_text = "!!! PAGER CALL NOT ANSWERED !!!"
+			sync_reason = 1
 		elseif reason == "hung_up" then
 			title_text = "!!! PAGER CALL HUNG UP !!!"
+			sync_reason = 2
 		elseif reason == "camera" then
 			title_text = "!!! A CAMERA HAS DETECTED SUSPICIOUS ACTIVITY !!!"
+			sync_reason = 3
 		end
 		
 		if strikes_left <= 0 then
@@ -830,6 +838,10 @@ function GroupAIStateBase:register_strike(reason, do_not_change_t)
 				text = "NUMBER OF STRIKES LEFT: ".. tostring(strikes_left) .. "",
 				time = 2
 			})
+		end
+		
+		if managers.network:session() then
+			managers.network:session():send_to_peers_synched("sync_client_whisper_strike_message", sync_reason, num_strikes)
 		end
 		
 		if not do_not_change_t then
@@ -870,6 +882,10 @@ function GroupAIStateBase:run_mass_pager()
 	
 	if not running_mass_pager then
 		local timer, text = self:start_mass_pager_timer()
+		
+		if managers.network:session() then
+			managers.network:session():send_to_peers_synched("sync_client_whisper_mass_pager_t", timer, 2)
+		end
 		
 		managers.hud:present_mid_text({
 			title = "NO PAGERS TO ANSWER",
@@ -915,8 +931,13 @@ function GroupAIStateBase:check_mass_pager_done(t)
 		end
 
 		if not pager then
+			self._running_mass_pager = nil
 			local timer, text = self:start_mass_pager_timer()
-	
+			
+			if managers.network:session() then
+				managers.network:session():send_to_peers_synched("sync_client_whisper_mass_pager_t", timer, 1)
+			end
+			
 			managers.hud:present_mid_text({
 				title = "ANSWER SUCCESSFUL",
 				text = text, 
@@ -1044,22 +1065,167 @@ function GroupAIStateBase:start_mass_pager_timer(display_timer_text)
 			text = text,
 			time = 4
  		})
+		
+		if managers.network:session() then
+			managers.network:session():send_to_peers_synched("sync_client_whisper_mass_pager_t", timer, 3)
+		end
 	end
 	
 	return timer, text
 end
 
-function GroupAIStateBase:is_ecm_jammer_active(medium)
-	if Network:is_server() then
-		for u_key, data in pairs(self._ecm_jammers) do
-			if data.settings[medium] then
-				return true
+function GroupAIStateBase:sync_client_whisper_mass_pager_t(timer, title_index)
+	local title_text = nil
+	
+	if title_index == 1 then
+		title_text = "ANSWER SUCCESSFUL"
+	elseif title_index == 2 then
+		title_text = "NO PAGERS TO ANSWER"
+	end
+	
+	local timer_clbk_id_table = self._pager_timer_clbks
+	local enemy_manager = managers.enemy
+	local remove_clbk_f = enemy_manager.remove_delayed_clbk
+	
+	for i = 1, #timer_clbk_id_table do --clients don't really have the timer value, so i just wipe the table whenever anything gets synced
+		local clbk_id = timer_clbk_id_table[i]
+		
+		remove_clbk_f(enemy_manager, clbk_id)
+	end
+
+	self._pager_timer_clbks = {}
+
+	local t = TimerManager:game():time()
+	local minutes = 0
+	local clbk_time = timer - 60
+	local add_delayed_clbk_f = enemy_manager.add_delayed_clbk
+	local hud_manager =	managers.hud
+	
+	self._pager_timer_clbks = {}
+	local clbk_table = {}
+	
+	if timer > 20 then
+		local tensecstimer = timer - 10
+		local tensecs_id = "HHSTEALTHCALLIN10SECSPRESENTER"
+		clbk_table[#clbk_table + 1] = tensecs_id
+		
+		enemy_manager:add_delayed_clbk(tensecs_id, callback(hud_manager, hud_manager, "present_mid_text", {text = "NEXT PAGER CALL INCOMING IN 10 SECONDS"}), t + tensecstimer)
+	end
+
+	while clbk_time >= 0 do
+		clbk_time = clbk_time - 60
+		minutes = minutes + 1
+	end
+	
+	local text = nil
+	local seconds = clbk_time + 60
+	
+	if minutes > 0 then
+		local m_suffix = minutes == 1 and "" or "s"
+		local s_suffix = seconds == 1 and "" or "s"
+		
+		if seconds == 0 then
+			seconds = "00"
+		end
+		
+		text = "NEXT PAGER CALL INCOMING IN " .. minutes .. ":" .. seconds .. " MINUTE" .. m_suffix
+		
+		local callback_t = 60
+		
+		for i = 1, minutes do
+			local current_minute = minutes - i
+			local clbk_id = "HHSTEALTHCALLIN" .. i .. "MINUTESPRESENTER"
+			clbk_table[#clbk_table + 1] = clbk_id
+			local clbk_text = {text = "NEXT PAGER CALL INCOMING IN " .. current_minute .. " MINUTE"}
+			
+			if current_minute > 1 then
+				clbk_text.text = clbk_text.text .. "S"
 			end
+			
+			add_delayed_clbk_f(enemy_manager, clbk_id, callback(hud_manager, hud_manager, "present_mid_text", clbk_text), t + callback_t) --test.
+			callback_t = callback_t + 60
 		end
 	else
-		if self._client_ecm_data[medium] then
-			return true
-		end
+		local s_suffix = timer == 1 and "" or "s"
+		text = "NEXT PAGER CALL INCOMING IN " .. seconds .. " SECOND" .. s_suffix
+	end
+	
+	self._pager_timer_clbks = clbk_table
+
+	managers.hud:present_mid_text({
+		title = title_text,
+		text = text,
+		time = 4
+	})
+end
+
+function GroupAIStateBase:sync_client_whisper_strike_message(strike_reason, strike_count)
+	local title_text = nil
+	
+	if strike_reason == 1 then
+		title_text = "!!! PAGER CALL NOT ANSWERED !!!"
+	elseif strike_reason == 2 then
+		title_text = "!!! PAGER CALL HUNG UP !!!"
+	elseif strike_reason == 3 then
+		title_text = "!!! A CAMERA HAS DETECTED SUSPICIOUS ACTIVITY !!!"
+	end
+
+	local strikes_left = 3 - strike_count
+
+	if strikes_left <= 0 then
+		managers.hud:present_mid_text({
+			title = title_text,
+			text = "!!! WARNING: THE NEXT STRIKE WILL SOUND THE ALARM !!!",
+			time = 2
+		})
+	else
+		managers.hud:present_mid_text({
+			title = title_text,
+			text = "NUMBER OF STRIKES LEFT: ".. tostring(strikes_left) .. "",
+			time = 2
+		})
+	end
+	
+	if strike_reason == 3 then
+		managers.hud:present_mid_text({
+			title = "!!! A CAMERA HAS DETECTED SUSPICIOUS ACTIVITY !!!",
+			text = "NEXT PAGER CALL INCOMING IN 10 SECONDS",
+			time = 4
+		})
+	end
+	
+	local timer_clbk_id_table = self._pager_timer_clbks
+	local enemy_manager = managers.enemy
+	local remove_clbk_f = managers.enemy.remove_delayed_clbk
+	
+	for i = 1, #timer_clbk_id_table do --timer usually gets synced after a strike, wipe clbks
+		local clbk_id = timer_clbk_id_table[i]
+		
+		remove_clbk_f(enemy_manager, clbk_id)
+	end
+
+	self._pager_timer_clbks = {}
+end
+
+function GroupAIStateBase:sync_client_whisper_wipe_clbks(display_camera_message) --sync this if things go loud so clients can wipe their asses
+	local timer_clbk_id_table = self._pager_timer_clbks
+	local enemy_manager = managers.enemy
+	local remove_clbk_f = managers.enemy.remove_delayed_clbk
+	
+	for i = 1, #timer_clbk_id_table do
+		local clbk_id = timer_clbk_id_table[i]
+		
+		remove_clbk_f(enemy_manager, clbk_id)
+	end
+	
+	self._pager_timer_clbks = {}
+	
+	if display_camera_message then
+		managers.hud:present_mid_text({
+			title = "!!! A CAMERA HAS DETECTED SUSPICIOUS ACTIVITY !!!",
+			text = "NEXT PAGER CALL INCOMING IN 5 SECONDS",
+			time = 4
+		})
 	end
 end
 
@@ -1092,6 +1258,28 @@ function GroupAIStateBase:register_ecm_jammer(unit, jam_settings)
 	end
 end
 
+function GroupAIStateBase:_set_client_groupai_ecm_data(ecm_settings)
+	if not ecm_settings then
+		return
+	end
+	
+	self._client_ecm_data = ecm_settings
+end
+
+function GroupAIStateBase:is_ecm_jammer_active(medium)
+	if Network:is_server() then
+		for u_key, data in pairs(self._ecm_jammers) do
+			if data.settings[medium] then
+				return true
+			end
+		end
+	else
+		if self._client_ecm_data[medium] then
+			return true
+		end
+	end
+end
+
 function GroupAIStateBase:begin_HH_stealth()
 	managers.hud:present_mid_text({
 		text = "PAGER CALL INCOMING...",
@@ -1101,6 +1289,10 @@ function GroupAIStateBase:begin_HH_stealth()
 	self:run_mass_pager()
 	
 	self._stealth_has_begun = true
+	
+	if managers.network:session() then
+		managers.network:session():send_to_peers_synched("sync_begin_hh_stealth_message")
+	end
 end
 
 function GroupAIStateBase:_update_HH_stealth(t, dt)

@@ -3038,7 +3038,6 @@ function CopActionWalk:stop()
 	--but the unit is waiting for idle_full_blend so it didn't fully start it yet
 	s_path = s_path or {}
 
-	local s_path = self._simplified_path
 	local last_nav_point = s_path[#s_path]
 
 	--the last nav_point is a nav_link. Normally this shouldn't be the case

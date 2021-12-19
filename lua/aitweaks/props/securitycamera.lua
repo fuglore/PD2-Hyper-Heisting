@@ -314,6 +314,10 @@ function SecurityCamera:_sound_the_alarm(detected_unit)
 				time = 4
 			})
 			
+			if managers.network:session() then
+				managers.network:session():send_to_peers_synched("sync_client_whisper_wipe_clbks", true)
+			end
+			
 			self._reenable_id = "cam_renable" .. tostring(self._unit:key())
 			managers.enemy:add_delayed_clbk(self._reenable_id, callback(self, self, "_clear_camera_detection"), Application:time() + 4)	
 		elseif managers.groupai:state()._stealth_strikes >= 3 then
