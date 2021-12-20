@@ -1652,7 +1652,7 @@ function GroupAIStateBase:chk_celebrate_heat(params)
 			local last_chosen_ukey = params.last_spoke_ukey
 			for u_key, u_data in pairs(self._criminals) do
 				if not last_chosen_ukey or last_chosen_ukey ~= u_key then
-					if not u_data.is_deployable and not u_data.unit:base().is_local_player and alive(u_data.unit) and not u_data.unit:movement():downed() and not u_data.unit:sound():speaking() then
+					if not u_data.is_deployable and not u_data.unit:base().is_local_player and alive(u_data.unit) and not u_data.unit:movement():downed() and not u_data.unit:sound():speaking(self._t) then
 						valid_crims[#valid_crims + 1] = u_data.unit
 					end
 				end

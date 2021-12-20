@@ -32,10 +32,6 @@ local table_remove = table.remove
 function GroupAIStateBesiege:init(group_ai_state)
 	GroupAIStateBesiege.super.init(self)
 
-	if Network:is_server() and managers.navigation:is_data_ready() then
-		self:_queue_police_upd_task()
-	end
-	
 	--self:set_debug_draw_state(true)
 	--self:set_drama_draw_state(true)
 	
@@ -66,6 +62,10 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._activeassaultnextbreak_t = nil
 	self._stopassaultbreak_t = nil
 	self._MAX_SIMULTANEOUS_SPAWNS = 3
+	
+	if Network:is_server() and managers.navigation:is_data_ready() then
+		self:_queue_police_upd_task()
+	end
 end
 
 function GroupAIStateBesiege:_draw_enemy_activity_client(t)
@@ -659,6 +659,7 @@ function GroupAIStateBesiege:_upd_police_activity()
 		self:_check_spawn_phalanx()
 		self:_check_phalanx_group_has_spawned()
 		self:_check_phalanx_damage_reduction_increase()
+		self:_upd_hostage_task()
 
 		if self._enemy_weapons_hot then
 			--self:_claculate_drama_value()
@@ -673,7 +674,7 @@ function GroupAIStateBesiege:_upd_police_activity()
 			self:_upd_groups()
 		end
 	end
-
+	
 	self:_queue_police_upd_task()
 end
 
@@ -747,6 +748,67 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 			self:_set_assault_objective_to_group(group, phase)
 		end
 	end
+end
+
+function GroupAIStateBesiege:_queue_police_upd_task()
+	if not self._police_upd_task_queued then
+		self._police_upd_task_queued = true
+		
+		managers.enemy:add_delayed_clbk("GroupAIStateBesiege._upd_police_activity", callback(self, self, "_upd_police_activity"), self._t + (next(self._spawning_groups) and 0.4 or 2))
+	end
+end
+
+function GroupAIStateBesiege:add_to_surrendered(unit, update)
+	local hos_data = self._hostage_data
+	local nr_entries = #hos_data
+	local entry = {
+		u_key = unit:key(),
+		clbk = update
+	}
+
+	table.insert(hos_data, entry)
+end
+
+function GroupAIStateBesiege:_upd_hostage_task()
+	if #self._hostage_data > 0 then
+		local hos_data = self._hostage_data
+		local first_entry = hos_data[1]
+
+		table.remove(hos_data, 1)
+		first_entry.clbk()
+	end
+end
+
+function GroupAIStateBesiege:remove_from_surrendered(unit)
+	local hos_data = self._hostage_data
+	local u_key = unit:key()
+
+	for i, entry in ipairs(hos_data) do
+		if u_key == entry.u_key then
+			table.remove(hos_data, i)
+
+			break
+		end
+	end
+end
+
+function GroupAIStateBesiege:force_end_assault_phase(force_regroup)
+	local task_data = self._task_data.assault
+
+	if task_data.active then
+		print("GroupAIStateBesiege:force_end_assault_phase()")
+
+		task_data.phase = "fade"
+		task_data.force_end = true
+
+		if force_regroup then
+			task_data.force_regroup = true
+
+			managers.enemy:reschedule_delayed_clbk(GroupAIStateBesiege._upd_police_activity, self._t)
+		end
+	end
+
+	self:set_assault_endless(false)
 end
 
 function GroupAIStateBesiege:update(t, dt)

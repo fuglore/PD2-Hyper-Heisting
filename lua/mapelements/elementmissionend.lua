@@ -14,7 +14,7 @@ function ElementMissionEnd:on_executed(instigator)
 					personal_win = alive(managers.player:player_unit())
 				})
 			else
-				managers.enemy:add_delayed_clbk("hh_mission_ended", callback(managers.game_play_central, managers.game_play_central, "end_heist", num_winners), Application:time() + 1)
+				managers.enemy:add_delayed_clbk("hh_mission_ended", callback(managers.game_play_central, managers.game_play_central, "end_heist", num_winners), Application:time() + 4)
 			end
 			
 		elseif self._values.state == "failed" then
