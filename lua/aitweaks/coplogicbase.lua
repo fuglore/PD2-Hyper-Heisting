@@ -329,6 +329,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 	local is_cool = data.cool
 	local within_any_acquire_range = nil
 	local player_importance_wgt = nil
+	local groupai_state_manager = managers.groupai:state()
 	
 	if not data.brain_updating then
 		if data.internal_data and not data.internal_data.is_hostage then
@@ -338,7 +339,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 		end
 	end
 	
-	local groupai_state_manager = managers.groupai:state()
+	
 	local is_stealth = use_metal_gear_detection and groupai_state_manager:whisper_mode()
 	local all_attention_objects = groupai_state_manager:get_AI_attention_objects_by_filter(data.SO_access_str, data.team)
 	local is_detection_persistent = groupai_state_manager:is_detection_persistent()

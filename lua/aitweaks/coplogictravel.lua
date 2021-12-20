@@ -1740,17 +1740,7 @@ function CopLogicTravel.queue_update(data, my_data, delay)
 	local can_say_clear = not data.attention_obj or AIAttentionObject.REACT_COMBAT <= data.attention_obj.reaction and clear_t_chk
 		
 	if not data.unit:base():has_tag("special") and can_say_clear and not my_data.criminal then
-		if data.unit:movement():cool() and data.char_tweak.chatter and data.char_tweak.chatter.clear_whisper then  
-			local roll = math.rand(1, 100)
-			local whistle_chance = 50
-			if roll <= whistle_chance then
-				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper_2" )
-				said_something = true
-			else
-				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear_whisper" )
-				said_something = true
-			end
-		elseif not data.unit:movement():cool() then
+		if not data.unit:movement():cool() then
 			if not managers.groupai:state():chk_assault_active_atm() then
 				if data.char_tweak.chatter and data.char_tweak.chatter.controlpanic then
 					local clearchk = math_random(0, 90)

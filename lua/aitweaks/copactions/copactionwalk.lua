@@ -80,7 +80,7 @@ function CopActionWalk:init(action_desc, common_data)
 	end
 	
 	self._no_walk = action_desc.no_walk
-	self._no_strafe = action_desc.no_strafe
+	self._no_strafe = self._haste == "walk" and self._unit:movement():cool() or action_desc.no_strafe
 	self._last_pos = mvec3_cpy(common_data.pos)
 	self._nav_path = action_desc.nav_path
 

@@ -15,6 +15,7 @@ local math_up = math.UP
 local math_random = math.random
 local math_lerp = math.lerp
 local math_min = math.min
+local math_abs = math.abs
 
 local table_insert = table.insert
 local table_remove = table.remove
@@ -29,6 +30,7 @@ local alive_g = alive
 local origfunc3 = GroupAIStateBase._init_misc_data
 function GroupAIStateBase:_init_misc_data(...)
 	origfunc3(self, ...)
+
 	self._assault_was_hell = nil
 	self._stealth_strikes = 0
 	self._mass_pager_id = "GroupAIStateBase:HHSTEALTHMASSPAGER"
@@ -1250,6 +1252,44 @@ function GroupAIStateBase:kill_hh_stealth()
 	self._pager_timer_clbks = {}
 end
 
+function GroupAIStateBase:whisper_chatter_clbk()
+	if self._ai_enabled and not self._enemy_weapons_hot then
+		local t = self._t
+		local optimal_dist = 500
+		local best_cop = nil
+		
+		for e_key, cop in pairs_g(self._police) do
+			local cop_unit = cop.unit
+			
+			if cop_unit:movement():cool() and not cop_unit:sound():speaking(t) then
+				local clear_whisper = cop.char_tweak.chatter.clear_whisper
+
+				if clear_whisper then
+					if not best_cop or math_random() > 0.5 then
+						best_cop = cop
+					end
+				end
+			end
+		end
+
+		if best_cop then	
+			local voiceline = math_random()
+			
+			if voiceline > 0.3 then
+				voiceline = "clear_whisper"
+			else
+				voiceline = "clear_whisper_2"
+			end
+		
+			self:chk_say_enemy_chatter(best_cop.unit, best_cop.m_pos, voiceline)
+		end
+		
+		self._radio_clbk = callback(self, self, "whisper_chatter_clbk")
+
+		managers.enemy:add_delayed_clbk("whisper_chatter_clbk", self._radio_clbk, t + math_random(0.5, 20))
+	end
+end
+
 function GroupAIStateBase:on_enemy_weapons_hot(is_delayed_callback)
 	if not self._ai_enabled then
 		return
@@ -1275,7 +1315,9 @@ function GroupAIStateBase:on_enemy_weapons_hot(is_delayed_callback)
 		else
 			print("here it would crash before")
 		end
-
+		
+		managers.enemy:remove_delayed_clbk("whisper_chatter_clbk")
+		
 		self._radio_clbk = callback(self, self, "_radio_chatter_clbk")
 
 		managers.enemy:add_delayed_clbk("_radio_chatter_clbk", self._radio_clbk, Application:time() + 30)
@@ -1442,6 +1484,10 @@ function GroupAIStateBase:update(t, dt)
     end]]
 	
 	self._t = t
+	
+	if not self._radio_clbk then
+		self:whisper_chatter_clbk()
+	end
 	
 	--self:_draw_enemy_importancies()
 
