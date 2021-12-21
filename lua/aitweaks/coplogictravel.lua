@@ -357,14 +357,14 @@ function CopLogicTravel.upd_advance(data)
 
 	if my_data.has_old_action then
 		if data.buddypalchum then
-			log("uuugh")
+			--log("uuugh")
 		end 
 		
 		CopLogicAttack._upd_stop_old_action(data, my_data)
 		
 		if my_data.has_old_action then
 			if data.buddypalchum then
-				log("margh")
+				--log("margh")
 			end 
 			
 			return
@@ -2293,19 +2293,7 @@ function CopLogicTravel._check_start_path_ahead(data)
 	end
 	
 	local to_pos = data.logic._get_exact_move_pos(data, next_index)
-	local unobstructed_line = nil
-
-	if math_abs(from_pos.z - to_pos.z) < 40 then
-		local ray_params = {
-			allow_entry = false,
-			pos_from = from_pos,
-			pos_to = to_pos
-		}
-
-		if not managers.navigation:raycast(ray_params) then
-			unobstructed_line = true
-		end
-	end
+	local unobstructed_line = CopLogicTravel._check_path_is_straight_line(from_pos, to_pos, data)
 
 	if unobstructed_line then
 		my_data.advance_path = {
@@ -2608,19 +2596,7 @@ end
 function CopLogicTravel._chk_start_pathing_to_next_nav_point(data, my_data)
 	local my_pos = data.unit:movement():nav_tracker():field_position()
 	local to_pos = CopLogicTravel._get_exact_move_pos(data, my_data.coarse_path_index + 1)
-	local unobstructed_line = nil
-
-	if math_abs(my_pos.z - to_pos.z) < 40 then
-		local ray_params = {
-			allow_entry = false,
-			pos_from = my_pos,
-			pos_to = to_pos
-		}
-
-		if not managers.navigation:raycast(ray_params) then
-			unobstructed_line = true
-		end
-	end
+	local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, to_pos, data)
 
 	if unobstructed_line then
 		my_data.advance_path = {
@@ -2729,6 +2705,36 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	local no_strafe = data.char_tweak.no_strafe or objective and objective.no_strafe
 
 	CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, haste, end_rot, no_strafe, pose, end_pose)
+end
+
+function CopLogicTravel._check_path_is_straight_line(pos_from, to_pos, u_data)
+	if math_abs(pos_from.z - to_pos.z) < 40 then
+		local ray_params = {
+			allow_entry = false,
+			pos_from = pos_from,
+			pos_to = to_pos
+		}
+
+		if not managers.navigation:raycast(ray_params) then
+			local slotmask = managers.slot:get_mask("world_geometry")
+			local ray_from = pos_from:with_z(pos_from.z + 30)
+			local ray_to = to_pos:with_z(to_pos.z + 30)
+			
+			if u_data then
+				if not u_data.unit:raycast("ray", ray_to, ray_from, "slot_mask", slotmask, "report") then					
+					return true
+				else
+					return
+				end
+			else
+				if not World:raycast("ray", ray_to, ray_from, "slot_mask", slotmask, "ray_type", "ai_vision", "report") then
+					return true
+				else
+					return
+				end
+			end
+		end
+	end
 end
 
 function CopLogicTravel._chk_stop_for_follow_unit(data, my_data)

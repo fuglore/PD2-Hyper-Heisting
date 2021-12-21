@@ -242,6 +242,7 @@ function StageEndScreenGui:init(saferect_ws, fullrect_ws, statistics_data)
 	self._enabled = true
 
 	if managers.job:stage_success() then
+		managers.briefing:_clear_event()
 		self._bain_debrief_t = TimerManager:main():time() + 1
 	end
 

@@ -1,3 +1,5 @@
+local mvec3_cpy = mvector3.copy
+
 function CivilianLogicTravel.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()
@@ -186,10 +188,6 @@ function CivilianLogicTravel.update(data)
 	elseif my_data.advance_path then
 		CopLogicAttack._correct_path_start_pos(data, my_data.advance_path)
 
-		if my_data.is_hostage then
-			my_data.advance_path = CivilianLogicTravel._optimize_path(my_data.advance_path)
-		end
-
 		local end_rot = nil
 
 		if my_data.coarse_path_index == #my_data.coarse_path - 1 then
@@ -239,10 +237,45 @@ function CivilianLogicTravel.update(data)
 				else
 					to_pos = coarse_path[cur_index + 1][2]
 				end
+				
+				local unobstructed_line = CopLogicTravel._check_path_is_straight_line(data.m_pos, to_pos, data)
+				
+				if unobstructed_line then
+					my_data.advance_path = {
+						mvec3_cpy(data.m_pos),
+						mvec3_cpy(to_pos)
+					}
+					
+					CopLogicAttack._correct_path_start_pos(data, my_data.advance_path)
 
-				my_data.processing_advance_path = true
+					local end_rot = nil
 
-				unit:brain():search_for_path(my_data.advance_path_search_id, to_pos)
+					if my_data.coarse_path_index == #my_data.coarse_path - 1 then
+						end_rot = objective and objective.rot
+					end
+
+					local haste = objective and objective.haste or "walk"
+					local new_action_data = {
+						type = "walk",
+						body_part = 2,
+						nav_path = my_data.advance_path,
+						variant = haste,
+						end_rot = end_rot
+					}
+					my_data.starting_advance_action = true
+					my_data.advancing = data.unit:brain():action_request(new_action_data)
+					my_data.starting_advance_action = false
+
+					if my_data.advancing then
+						my_data.advance_path = nil
+
+						data.brain:rem_pos_rsrv("path")
+					end
+				else
+					my_data.processing_advance_path = true
+
+					unit:brain():search_for_path(my_data.advance_path_search_id, to_pos)
+				end
 			end
 		else
 			local nav_seg = nil

@@ -91,7 +91,7 @@ function CharacterTweakData:_presets(tweak_data)
 			base_chance = 0
 		},
 		easy = {
-			base_chance = 0.1,
+			base_chance = 0,
 			reasons = {
 				pants_down = 1,
 				isolated = 0.25,
@@ -130,7 +130,7 @@ function CharacterTweakData:_presets(tweak_data)
 				weapon_down = 0.25,
 				health = {
 					[1.0] = 0.1,
-					[0.9] = 0.75
+					[0.9] = 0.5
 				}
 			},
 			factors = {

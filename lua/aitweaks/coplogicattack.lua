@@ -426,19 +426,7 @@ function CopLogicAttack._upd_combat_movement(data)
 
 						if my_data.charge_pos then
 							local my_pos = data.unit:movement():nav_tracker():field_position()
-							local unobstructed_line = nil
-
-							if math_abs(my_pos.z - my_data.charge_pos.z) < 40 then
-								local ray_params = {
-									allow_entry = false,
-									pos_from = my_pos,
-									pos_to = my_data.charge_pos
-								}
-
-								if not managers.navigation:raycast(ray_params) then
-									unobstructed_line = true
-								end
-							end
+							local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, my_data.charge_pos, data)
 
 							if unobstructed_line then
 								local path = {
@@ -483,19 +471,7 @@ function CopLogicAttack._upd_combat_movement(data)
 
 						if my_data.charge_pos then
 							local my_pos = data.unit:movement():nav_tracker():field_position()
-							local unobstructed_line = nil
-
-							if math_abs(my_pos.z - my_data.charge_pos.z) < 40 then
-								local ray_params = {
-									allow_entry = false,
-									pos_from = my_pos,
-									pos_to = my_data.charge_pos
-								}
-
-								if not managers.navigation:raycast(ray_params) then
-									unobstructed_line = true
-								end
-							end
+							local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, my_data.charge_pos, data)
 
 							if unobstructed_line then
 								local path = {
@@ -559,19 +535,7 @@ function CopLogicAttack._upd_combat_movement(data)
 
 					local my_pos = data.unit:movement():nav_tracker():field_position()
 					local to_cover_pos = my_data.best_cover[1][1]
-					local unobstructed_line = nil
-
-					if math_abs(my_pos.z - to_cover_pos.z) < 40 then
-						local ray_params = {
-							allow_entry = false,
-							pos_from = my_pos,
-							pos_to = to_cover_pos
-						}
-
-						if not managers.navigation:raycast(ray_params) then
-							unobstructed_line = true
-						end
-					end
+					local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, to_cover_pos, data)
 
 					if unobstructed_line then
 						local path = {
@@ -3049,19 +3013,7 @@ function MedicLogicAttack._upd_combat_movement(data)
 
 				local my_pos = data.unit:movement():nav_tracker():field_position()
 				local to_cover_pos = my_data.best_cover[1][1]
-				local unobstructed_line = nil
-
-				if math_abs(my_pos.z - to_cover_pos.z) < 40 then
-					local ray_params = {
-						allow_entry = false,
-						pos_from = my_pos,
-						pos_to = to_cover_pos
-					}
-
-					if not managers.navigation:raycast(ray_params) then
-						unobstructed_line = true
-					end
-				end
+				local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, to_cover_pos, data)
 
 				if unobstructed_line then
 					local path = {
@@ -3108,19 +3060,7 @@ function MedicLogicAttack._upd_combat_movement(data)
 				elseif not my_data.charge_path_search_id then
 					if my_data.charge_pos then
 						local my_pos = data.unit:movement():nav_tracker():field_position()
-						local unobstructed_line = nil
-
-						if math_abs(my_pos.z - my_data.charge_pos.z) < 40 then
-							local ray_params = {
-								allow_entry = false,
-								pos_from = my_pos,
-								pos_to = my_data.charge_pos
-							}
-
-							if not managers.navigation:raycast(ray_params) then
-								unobstructed_line = true
-							end
-						end
+						local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, my_data.charge_pos, data)
 
 						if unobstructed_line then
 							local path = {
