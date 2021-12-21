@@ -54,6 +54,8 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 	end
 end)
 
+if fuck then
+
 Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "hhmelee", function(self, tweak_data)
 	self.melee_weapons.weapon.stats = {
 		min_damage = 12,
@@ -269,3 +271,5 @@ Hooks:PostHook(BlackMarketTweakData, "_init_melee_weapons", "hhmelee", function(
 	
 	
 end)
+
+end

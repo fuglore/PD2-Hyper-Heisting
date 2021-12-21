@@ -1173,6 +1173,8 @@ function GroupAIStateBase:sync_client_whisper_strike_message(strike_reason, stri
 	end
 
 	local strikes_left = 3 - strike_count
+	
+	self._stealth_strikes = strike_count
 
 	if strikes_left <= 0 then
 		managers.hud:present_mid_text({
@@ -1229,6 +1231,10 @@ function GroupAIStateBase:sync_client_whisper_wipe_clbks(display_camera_message)
 			time = 4
 		})
 	end
+end
+
+function GroupAIStateBase:get_nr_successful_alarm_pager_bluffs() --used for the HUD, replacing it with strike data so it works with any compatible custom HUDs
+	return self._stealth_strikes
 end
 
 function GroupAIStateBase:kill_hh_stealth()

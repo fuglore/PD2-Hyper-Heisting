@@ -674,6 +674,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["bm_grenade_copr_ability_desc"] = "Activating the Leech ability requires you to break a small opaque glass ampule under your nose and take a deep breath. You're not quite sure what's in it, but it makes the world come into focus, and causes your adrenaline to spike.\n\nOne thing is certain; it sure as shit isn't smelling salts, if the faint wriggling shadow inside it doesn't spell it out.",
 			
+			["hud_stats_pagers_used"] = "STRIKES LEFT",
+			
 			--mutual perks
 			["menu_deckall_2"] = "Used To It",
 			["menu_deckall_2_desc"] = "You gain ##+50%## resistance to suppression.",
