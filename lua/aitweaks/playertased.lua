@@ -13,6 +13,11 @@ function PlayerTased:enter(state_data, enter_data)
 		--if Network:is_server() then
 		--	self:_register_revive_SO()
 		--end
+		
+		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or tweak_data:difficulty_to_index(Global.game_settings.difficulty) > 5 then
+			self._harsher_shake = true
+		end
+		
 		self._fatal_delayed_clbk = "PlayerTased_fatal_delayed_clbk"
 		local tased_time = 9999
 		--tased_time = managers.modifiers:modify_value("PlayerTased:TasedTime", tased_time)
@@ -89,7 +94,10 @@ function PlayerTased:_check_action_shock(t, input)
 		self._next_shock = t + 0.75
 
 		self._unit:camera():play_shaker("player_taser_shock", 1, 10)
-		self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * math.random(10))
+		
+		local shake = self._harsher_shake and math.random(30) or math.random(10)
+		
+		self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * shake)
 
 		self._unit:sound():play("tasered_shock")
 		managers.rumble:play("electric_shock")

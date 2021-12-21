@@ -3,14 +3,22 @@ local mvec3_set_z = mvector3.set_z
 local mvec3_dot = mvector3.dot
 local mvec3_copy = mvector3.copy
 local mvec3_norm = mvector3.normalize
+local mvec3_dir = mvector3.direction
+local mvec3_lerp = mvector3.lerp
 local math_min = math.min
 local math_lerp = math.lerp
 local math_up = math.UP
+local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
+local temp_vec3 = Vector3()
+local bezier_curve = {
+	0,
+	0,
+	1,
+	1
+}
 
 CopActionTase._ik_presets = CopActionShoot._ik_presets
-CopActionTase._get_transition_target_pos = CopActionShoot._get_transition_target_pos
-CopActionTase._get_target_pos = CopActionShoot._get_target_pos
 CopActionTase.set_ik_preset = CopActionShoot.set_ik_preset
 CopActionTase._begin_ik_spine = CopActionShoot._begin_ik_spine
 CopActionTase._get_blend_ik_spine = CopActionShoot._get_blend_ik_spine
@@ -89,19 +97,6 @@ function CopActionTase:init(action_desc, common_data)
 		self._ext_movement:set_stance_by_code(3)
 	else
 		self._turn_allowed = true
-		self._turn_speed = nil
-
-		local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-
-		if not self._ext_movement._anim_global == "tank" then
-			if difficulty_index == 8 then
-				self._turn_speed = 1.75
-			elseif difficulty_index == 6 or difficulty_index == 7 then
-				self._turn_speed = 1.5
-			else
-				self._turn_speed = 1.25
-			end
-		end
 	end
 
 	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or tweak_data:difficulty_to_index(Global.game_settings.difficulty) > 5 then
@@ -201,7 +196,7 @@ function CopActionTase:on_attention(attention)
 	local shoot_delay = 0.8
 
 	if self._shorter_tase_delay then
-		shoot_delay = 0.5
+		shoot_delay = 0.4
 	end
 	
 	self._num_shocks = 0
@@ -228,6 +223,93 @@ function CopActionTase:on_attention(attention)
 	if self._tasing_local_unit and self._tasing_player then
 		self._tasing_local_unit:movement():on_targetted_for_attack(true, self._unit)
 	end
+end
+
+function CopActionTase:_get_target_pos(shoot_from_pos, attention)
+	local target_pos, target_vec, target_dis, autotarget = nil
+	
+	if attention and attention.unit:base().is_local_player then
+		target_pos = temp_vec1
+
+		mvector3.set(target_pos, attention.unit:position() + math.UP * 140)
+
+		if self._shooting_player then
+			autotarget = true
+		end
+	elseif attention.handler then
+		target_pos = temp_vec1
+
+		mvector3.set(target_pos, attention.handler:get_attention_m_pos())
+
+		if self._shooting_player then
+			autotarget = true
+		end
+	elseif attention.unit then
+		if self._shooting_player then
+			autotarget = true
+		end
+
+		target_pos = temp_vec1
+
+		attention.unit:character_damage():shoot_pos_mid(target_pos)
+	else
+		target_pos = attention.pos
+	end
+
+	target_vec = temp_vec3
+	target_dis = mvec3_dir(target_vec, shoot_from_pos, target_pos)
+
+	return target_pos, target_vec, target_dis, autotarget
+end
+
+function CopActionShoot:_get_transition_target_pos(shoot_from_pos, attention, t)
+	local transition = self._aim_transition
+	local prog = (t - transition.start_t) / transition.duration
+
+	if prog > 1 then
+		self._aim_transition = nil
+		self._get_target_pos = nil
+
+		return self:_get_target_pos(shoot_from_pos, attention)
+	end
+
+	prog = math.bezier(bezier_curve, prog)
+	local target_pos, target_vec, target_dis, autotarget = nil
+
+	if attention.unit and attention.unit:base().is_local_player then
+		target_pos = temp_vec1
+
+		mvector3.set(target_pos, attention.unit:position() + math.UP * 140)
+
+		if self._shooting_player then
+			autotarget = true
+		end
+	elseif attention.handler then
+		target_pos = temp_vec1
+
+		mvector3.set(target_pos, attention.handler:get_attention_m_pos())
+
+		if self._shooting_player then
+			autotarget = true
+		end
+	elseif attention.unit then
+		if self._shooting_player then
+			autotarget = true
+		end
+
+		target_pos = temp_vec1
+
+		attention.unit:character_damage():shoot_pos_mid(target_pos)
+	else
+		target_pos = attention.pos
+	end
+
+	target_vec = temp_vec3
+	target_dis = mvec3_dir(target_vec, shoot_from_pos, target_pos)
+
+	mvec3_lerp(target_vec, transition.start_vec, target_vec, prog)
+
+	return target_pos, target_vec, target_dis, autotarget
 end
 
 function CopActionTase:on_exit()
