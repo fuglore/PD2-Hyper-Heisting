@@ -339,7 +339,7 @@
 		["loading_hh_15"] = "In Hyper Heisting, getting hit by an enemy melee attack will temporarily stagger you, and cause you to be unable to attack for a few moments!",
 		["loading_hh_16"] = "Punks are overconfident fodder enemies wielding revolvers, double barreled shotguns, and submachine guns. They will not hurt you much if you do not let them!",
 		["loading_hh_17"] = "In Hyper Heisting, Tasers tasing you into incapacitation and getting downed by Cloakers count as actual downs, which can send you into custody! Be careful around them!",
-		["loading_hh_18"] = "In Hyper Heisting, ammo pickups have a chance by default to give you one throwable back! This chance is based on which throwable you choose!",
+		["loading_hh_18"] = "In Hyper Heisting, certain throwables can get their ammo back just from pickups by default!",
 		["loading_hh_19"] = "In Hyper Heisting, being out of stamina does not cancel your sprint, but does cause it to be slower, and not apply sprinting-related bonuses or effects!",
 		["loading_hh_20"] = "In Hyper Heisting, a regular sprint consists of sprinting while above 10 stamina! Sprinting with lower stamina than that will cause sprint-related effects to not activate!",
 		["loading_hh_21"] = "Staying in cover is a great way to keep your armor constantly regenerating and intact! Just be careful with enemies pushing in!",
