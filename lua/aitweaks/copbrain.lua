@@ -775,3 +775,26 @@ function CopBrain:on_alarm_pager_interaction(status, player)
 		self:end_alarm_pager()
 	end
 end
+
+function CopBrain:on_intimidated(amount, aggressor_unit)
+	local interaction_voice = self:interaction_voice()
+
+	if interaction_voice then
+		self:set_objective(self._logic_data.objective.followup_objective)
+
+		return interaction_voice
+	else
+		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		
+		
+		if diff_index < 6 then
+			amount = amount * 80
+		elseif diff_index < 8 then
+			amount = amount * 70
+		else
+			amount = amount * 50
+		end
+	
+		self._current_logic.on_intimidated(self._logic_data, amount, aggressor_unit)
+	end
+end

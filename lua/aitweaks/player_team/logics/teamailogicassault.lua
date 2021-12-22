@@ -483,7 +483,11 @@ function TeamAILogicAssault.find_enemy_to_mark(data)
 									in_range = true
 								end
 							end
-						elseif not attention_info.char_tweak.priority_shout_max_dis or attention_info.dis < attention_info.char_tweak.priority_shout_max_dis then
+						elseif attention_info.char_tweak.priority_shout_max_dis then
+							if attention_info.dis < attention_info.char_tweak.priority_shout_max_dis then
+								in_range = true
+							end
+						elseif attention_info.dis < 3000 then
 							in_range = true
 						end
 
