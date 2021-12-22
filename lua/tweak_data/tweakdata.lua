@@ -15,6 +15,13 @@ if not tweak_data then
 	return 
 end
 
+tweak_data.projectiles.cs_grenade_quick = {
+	radius = 300,
+	radius_blurzone_multiplier = 0,
+	damage_tick_period = 0.35,
+	damage_per_tick = 1
+}
+
 --Why are projectile's damage stats handled here? I don't know! Fuck you Jules!
 tweak_data.projectiles.wpn_prj_ace.damage = 10
 tweak_data.projectiles.wpn_prj_jav.damage = 300
@@ -27,6 +34,11 @@ tweak_data.projectiles.fir_com.fire_dot_data = {
 	dot_trigger_max_distance = 3000,
 	dot_tick_period = 0.5
 }
+tweak_data.projectiles.west_arrow.launch_speed = 1250 --plainrider bow
+
+tweak_data.projectiles.long_arrow.launch_speed = 1500 --english longbow
+
+tweak_data.projectiles.elastic_arrow.launch_speed = 1500 --compound bow
 
 function TweakData:_set_normal()
 	self.player:_set_normal()
@@ -36,7 +48,7 @@ function TweakData:_set_normal()
 	self.weapon:_set_normal()
 	
 	self.medic.radius = 600
-	self.medic.cooldown = 1.5
+	self.medic.cooldown = 0
 	self.experience_manager.civilians_killed = 35
 	self.difficulty_name_id = self.difficulty_name_ids.normal
 	self.experience_manager.total_level_objectives = 2000
@@ -52,7 +64,7 @@ function TweakData:_set_hard()
 	self.weapon:_set_hard()
 	
 	self.medic.radius = 600
-	self.medic.cooldown = 1.5
+	self.medic.cooldown = 0
 	self.experience_manager.civilians_killed = 75
 	self.difficulty_name_id = self.difficulty_name_ids.hard
 	self.experience_manager.total_level_objectives = 2500
@@ -68,7 +80,7 @@ function TweakData:_set_overkill()
 	self.weapon:_set_overkill()
 	
 	self.medic.radius = 600
-	self.medic.cooldown = 1.5
+	self.medic.cooldown = 0
 	self.experience_manager.civilians_killed = 150
 	self.difficulty_name_id = self.difficulty_name_ids.overkill
 	self.experience_manager.total_level_objectives = 5000
@@ -84,7 +96,7 @@ function TweakData:_set_overkill_145()
 	self.weapon:_set_overkill_145()
 	
 	self.medic.radius = 600
-	self.medic.cooldown = 1.5
+	self.medic.cooldown = 0
 	self.experience_manager.civilians_killed = 550
 	self.difficulty_name_id = self.difficulty_name_ids.overkill_145
 	self.experience_manager.total_level_objectives = 5000
@@ -100,7 +112,7 @@ function TweakData:_set_easy_wish()
 	self.weapon:_set_easy_wish()
 	
 	self.medic.radius = 600
-	self.medic.cooldown = 1
+	self.medic.cooldown = 0
 	self.experience_manager.civilians_killed = 10000
 	self.difficulty_name_id = self.difficulty_name_ids.easy_wish
 	self.experience_manager.total_level_objectives = 5000
@@ -116,7 +128,7 @@ function TweakData:_set_overkill_290()
 	self.weapon:_set_overkill_290()
 	
 	self.medic.radius = 600
-	self.medic.cooldown = 1
+	self.medic.cooldown = 0
 	self.experience_manager.civilians_killed = 10000
 	self.difficulty_name_id = self.difficulty_name_ids.overkill_290
 	self.experience_manager.total_level_objectives = 5000

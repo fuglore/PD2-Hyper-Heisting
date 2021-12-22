@@ -16,11 +16,13 @@ Hooks:Add("BeardLibPreProcessScriptData", "HHCreateEnvironment", function(PackMa
 			"sky_2335_night_moon",
 			"sky_2100_moon",
 			"sky_1313_cloudy_dark",
+			"sky_2003_dusk_blue",
 			"sky_2003_dusk_blue_high_color_scale",
 			"sky_2335_night_moon"
 			
         }
-        for _, sky in ipairs(skies) do
+        for i = 1, #skies do
+			sky = skies[i]
             if not managers.dyn_resource:has_resource(Idstring("scene"), Idstring("core/environments/skies/" .. sky .. "/" .. sky), managers.dyn_resource.DYN_RESOURCES_PACKAGE) then
                 managers.dyn_resource:load(Idstring("scene"), Idstring("core/environments/skies/" .. sky .. "/" .. sky), managers.dyn_resource.DYN_RESOURCES_PACKAGE, nil)
             end
@@ -35,15 +37,30 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 	
 	local sex = Global.level_data and Global.level_data.level_id
 	
-	BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_day_hh.custom_xml", "custom_xml", "environments/pd2_env_mid_day/pd2_env_mid_day", "environment")
-	
 	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/sunset_hell.custom_xml", "custom_xml", "environments/pd2_env_mid_day/pd2_env_mid_day", "environment")
+	else
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_day_hh.custom_xml", "custom_xml", "environments/pd2_env_mid_day/pd2_env_mid_day", "environment")
+	end
+	
+	if sex == "haunted" then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/hellvoid.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
+	elseif diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/heated_confrontation.custom_xml", "custom_xml", "environments/pd2_env_hox1_01/pd2_env_hox1_01", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/heated_confrontation_garage.custom_xml", "custom_xml", "environments/pd2_env_hox1_02/pd2_env_hox1_02", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/hoxout_2_indoors.custom_xml", "custom_xml", "environments/pd2_env_hox_02/pd2_env_hox_02", "environment")
+		
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_ed2/pd2_env_ed2", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/calmbeforethestorm.custom_xml", "custom_xml", "environments/pd2_env_ed1/pd2_env_ed1", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_ed2/pd2_env_ed2", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_night/pd2_env_night", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_hlm1/pd2_hlm1", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_rat_night/pd2_env_rat_night", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_rat_night_stage_3/pd2_env_rat_night_stage_3", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_kosugi/pd2_kosugi", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/no_mercy_default.custom_xml", "custom_xml", "units/pd2_dlc_nmh/enviroments/nmh_enviroment_01", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/serious_moonlight.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
 	else
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/maybe_some_mercy.custom_xml", "custom_xml", "units/pd2_dlc_nmh/enviroments/nmh_enviroment_01", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_env_night/pd2_env_night", "environment")
@@ -51,7 +68,24 @@ Hooks:Add("BeardLibCreateScriptDataMods", "CustomEnvCallBeardLibSequenceFuncs", 
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_env_rat_night/pd2_env_rat_night", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_env_rat_night_stage_3/pd2_env_rat_night_stage_3", "environment")
 		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_kosugi/pd2_kosugi", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_env_framing_frame_stage_2/pd2_env_framing_frame_stage_2", "environment")
 	end
+	
+	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/finalsectionpbr.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_night/pd2_berry_outdoor_night", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/pbrconnectionanarchy.custom_xml", "custom_xml", "environments/pd2_berry_connection/pd2_berry_connection", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/pbrundergroundanarchy.custom_xml", "custom_xml", "environments/pd2_berry_underground/pd2_berry_underground", "environment")
+		
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_final_top_part/pd2_berry_outdoor_final_top_part", "environment")	
+	else
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/pd2_env_night_hh.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_night/pd2_berry_outdoor_night", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/pbrconnectionhh.custom_xml", "custom_xml", "environments/pd2_berry_connection/pd2_berry_connection", "environment")
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/pbrundergroundhh.custom_xml", "custom_xml", "environments/pd2_berry_underground/pd2_berry_underground", "environment")
+		
+		BeardLib:ReplaceScriptData(mod_path .. "scriptdata/btmountain/finalsectionpbr.custom_xml", "custom_xml", "environments/pd2_berry_outdoor_final_top_part/pd2_berry_outdoor_final_top_part", "environment")
+		
+	end
+	
 	
 	if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		if sex == "friend" then

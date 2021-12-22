@@ -1,3 +1,8 @@
+local world_g = World
+local mvec3_set = mvector3.set
+local mvec3_mul = mvector3.multiply
+local mvec3_add = mvector3.add
+
 function PlayerMovement:clbk_attention_notice_sneak(observer_unit, status, local_client_detection)
 	if alive(observer_unit) then
 		self:on_suspicion(observer_unit, status, local_client_detection)
@@ -87,7 +92,77 @@ function PlayerMovement:_calc_suspicion_ratio_and_sync(observer_unit, status, lo
 	end
 end
 
+function PlayerMovement:play_taser_boom(local_unit)
+	local pos = Vector3()
+	
+	if local_unit then
+		mvec3_set(pos, self._m_head_rot:y())
+		mvec3_mul(pos, 20)
+		mvec3_add(pos, self:m_head_pos())
+	else
+		mvec3_set(pos, self._unit:movement():m_pos())
+	end
+	
+	world_g:effect_manager():spawn({
+		effect = Idstring("effects/pd2_mod_hh/particles/weapons/explosion/electric_explosion"),
+		position = pos,
+		normal = math.UP
+	})
+	
+	self._unit:sound():play("c4_explode_metal")
+end
+
+function PlayerMovement:subtract_stamina(value)
+	if managers.player._syringe_stam then
+		return
+	end
+
+	if managers.player:has_category_upgrade("player", "stamina_ammo_refill_single") then
+		self._subtracted_stamina_single = (self._subtracted_stamina_single or 0) + math.abs(value)
+		local stamina_needed, ammo_refill = unpack(managers.player:upgrade_value("player", "stamina_ammo_refill_single"))
+
+		if stamina_needed < self._subtracted_stamina_single then
+			for i = 1, 2 do
+				local weapon = self._unit:inventory():unit_by_selection(i):base()
+
+				if weapon:fire_mode() == "single" then
+					local ammo = math.ceil(weapon:get_ammo_max() * ammo_refill)
+
+					weapon:add_ammo_to_pool(ammo, i)
+				end
+			end
+
+			self._subtracted_stamina_single = self._subtracted_stamina_single - stamina_needed
+		end
+	end
+
+	if managers.player:has_category_upgrade("player", "stamina_ammo_refill_auto") then
+		self._subtracted_stamina_auto = (self._subtracted_stamina_auto or 0) + math.abs(value)
+		local stamina_needed, ammo_refill = unpack(managers.player:upgrade_value("player", "stamina_ammo_refill_auto"))
+
+		if stamina_needed < self._subtracted_stamina_auto then
+			for i = 1, 2 do
+				local weapon = self._unit:inventory():unit_by_selection(i):base()
+
+				if weapon:fire_mode() == "auto" then
+					local ammo = math.ceil(weapon:get_ammo_max() * ammo_refill)
+
+					weapon:add_ammo_to_pool(ammo, i)
+				end
+			end
+
+			self._subtracted_stamina_auto = self._subtracted_stamina_auto - stamina_needed
+		end
+	end
+
+	self:_change_stamina(-math.abs(value))
+end
+
 function PlayerMovement:is_above_stamina_threshold()
+	if managers.player._syringe_stam then
+		return true
+	end
+
 	local threshold = tweak_data.player.movement_state.stamina.MIN_STAMINA_THRESHOLD
 	
 	if managers.player:has_category_upgrade("player", "start_action_stam_drain_reduct") then
@@ -97,6 +172,39 @@ function PlayerMovement:is_above_stamina_threshold()
 	return threshold < self._stamina
 end
 
+function PlayerMovement:update_stamina(t, dt, ignore_running)
+	local dt = self._last_stamina_regen_t and t - self._last_stamina_regen_t or dt
+	self._last_stamina_regen_t = t
+	
+	if not ignore_running and self._is_running and not managers.player._syringe_stam then
+		self:subtract_stamina(dt * tweak_data.player.movement_state.stamina.STAMINA_DRAIN_RATE)
+	elseif not self._state_data.in_air and not managers.player:has_activate_temporary_upgrade("temporary", "copr_ability") then
+		if self:_max_stamina() > self._stamina then
+			local regen = tweak_data.player.movement_state.stamina.STAMINA_REGEN_RATE
+			
+			if managers.player:has_category_upgrade("player", "stamina_regen_multiplier") then
+				regen = regen * 1.25
+			end
+			
+			self:add_stamina(dt * regen)
+		end
+	end
+
+	if _G.IS_VR then
+		managers.hud:set_stamina({
+			current = self._stamina,
+			total = self:_max_stamina()
+		})
+	end
+end
+
+local valid_spooc_states = {
+	standard = true,
+	carry = true,
+	bipod = true,
+	tased = true
+}
+
 function PlayerMovement:on_SPOOCed(enemy_unit)
 	if managers.player:has_category_upgrade("player", "counter_strike_spooc") and self._current_state.in_melee and self._current_state:in_melee() then
 		self._current_state:discharge_melee()
@@ -105,7 +213,7 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 	end
 
 	if self._unit:character_damage()._god_mode or self._unit:character_damage():get_mission_blocker("invulnerable") then
-		return
+		return true
 	end
 	
 	local push_mul = 2000
@@ -128,6 +236,14 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 		push_vel = push_vec * push_mul
 	}
 	self._unit:character_damage():damage_melee(attack_data)
+	
+	local state = managers.modifiers:modify_value("PlayerMovement:OnSpooked")
+	
+	if state then
+		if valid_spooc_states[self._current_state_name] then
+			managers.player:set_player_state(state)
+		end
+	end
 		
 	return true
 end

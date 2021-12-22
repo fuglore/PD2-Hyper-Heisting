@@ -187,6 +187,45 @@
             <attr name="delivery" value="ordered"/>
         </target>
     </tweak>
+	
+	<tweak name="settings/network" extension="network_settings">
+        <search>
+            <network/>
+            <rpc/>
+        </search>
+        <target mode="attach">
+			<message name="send_drama" delivery="ordered" receiver="unit" check="client_to_server">
+				<param type="float" min="-1" max="1" step="0.001" exact="true"/><!-- drama-->
+			</message>
+			
+			<message name="set_client_groupai_ecm_data" delivery="ordered" receiver="unit" check="server_to_client">
+				<param type="bool" /><!-- block calls -->
+				<param type="bool" /> <!-- block cameras -->
+				<param type="bool" /> <!-- block pagers -->
+			</message>
+			
+			<message name="sync_begin_hh_stealth_message" delivery="ordered" receiver="unit" check="server_to_client"/>
+			
+			<message name="sync_client_whisper_mass_pager_t" delivery="ordered" receiver="unit" check="server_to_client">
+				<param type="int" min="0" max="1024"/><!-- call in t -->
+				<param type="int" min="1 " max="3"/><!-- title_message, 3 corresponds to no title string -->
+			</message>
+			
+			<message name="sync_client_whisper_strike_message" delivery="ordered" receiver="unit" check="server_to_client">
+				<param type="int" min="1 " max="3"/><!-- strike reason -->
+				<param type="int" min="1 " max="3"/><!-- strike count -->
+			</message>
+
+			<message name="sync_client_whisper_wipe_clbks" delivery="ordered" receiver="unit" check="server_to_client">
+				<param type="bool" /> <!-- camera moment -->
+			</message>
+			
+			<message name="sync_alarm_to_host" delivery="ordered" receiver="unit" check="client_to_server">
+				<param type="unit" /> <!--camera unit-->
+				<param type="unit" /> <!--player unit-->
+			</message>
+        </target>
+    </tweak>
 
 	<!--colour grading-->
 	<tweak version="2" name="core/shaders/post_processor" extension="post_processor">
@@ -224,5 +263,17 @@
 		
 		</target>
 	</tweak>
+	
+	<tweak version="2" name="core/shaders/deferred_post_processor" extension="post_processor">
+        <search>
+			<?xml version="1.0" encoding="utf-8" ?>
+			<post_processor/>
+			<materials config_name="deferred_processor"/>
+			<material name="global_lighting"/>
+        </search>
+        <target>
+            <reflection_texture type="cubemap" global_texture="current_global_texture"/>
+        </target>
+    </tweak>
 	
 </tweaks>

@@ -10,6 +10,14 @@ function PlayerTased:enter(state_data, enter_data)
 
 		managers.enemy:add_delayed_clbk(self._recover_delayed_clbk, callback(self, self, "clbk_exit_to_std"), recover_time)
 	else
+		--if Network:is_server() then
+		--	self:_register_revive_SO()
+		--end
+		
+		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or tweak_data:difficulty_to_index(Global.game_settings.difficulty) > 5 then
+			self._harsher_shake = true
+		end
+		
 		self._fatal_delayed_clbk = "PlayerTased_fatal_delayed_clbk"
 		local tased_time = 9999
 		--tased_time = managers.modifiers:modify_value("PlayerTased:TasedTime", tased_time)
@@ -22,10 +30,6 @@ function PlayerTased:enter(state_data, enter_data)
 	self._num_shocks = 0
 
 	managers.groupai:state():on_criminal_disabled(self._unit, "electrified")
-
-	if Network:is_server() then
-		self:_register_revive_SO()
-	end
 
 	self._equipped_unit:base():on_reload()
 
@@ -85,31 +89,42 @@ function PlayerTased:enter(state_data, enter_data)
 end
 
 function PlayerTased:_check_action_shock(t, input)
-		
 	if self._next_shock < t then
-		
 		self._num_shocks = self._num_shocks + 1
 		self._next_shock = t + 0.75
 
 		self._unit:camera():play_shaker("player_taser_shock", 1, 10)
-		self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * math.random(10))
+		
+		local shake = self._harsher_shake and math.random(30) or math.random(10)
+		
+		self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * shake)
 
 		self._unit:sound():play("tasered_shock")
 		managers.rumble:play("electric_shock")
-		if self._unit:character_damage()._tase_data and not self._is_non_lethal then
-			local damage = 4.1
+		
+		if not self._is_non_lethal then
+			local tase_data = self._unit:character_damage()._tase_data
 			
-			if managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
-				damage = damage * 2
+			if tase_data then
+				if not tase_data.attacker_unit or not alive(tase_data.attacker_unit) then
+					self:on_tase_ended()
+				elseif self._num_shocks == 3 then
+					if not self._played_sound_this_once then
+						self._played_sound_this_once = true
+						self._unit:character_damage()._tase_data.attacker_unit:sound():say("post_tasing_taunt")
+					end
+				elseif self._num_shocks >= 4 then					
+					local attack_data = {
+						attacker_unit = self._unit:character_damage()._tase_data.attacker_unit,
+						is_taser_shock = true,
+						armor_piercing = true,
+						damage = 1
+					}
+					self._unit:movement():play_taser_boom(true)
+					self._unit:character_damage():damage_bullet(attack_data)
+					self:on_tase_ended()
+				end
 			end
-			
-			local attack_data = {
-				attacker_unit = self._unit:character_damage()._tase_data.attacker_unit,
-				is_taser_shock = true,
-				armor_piercing = true,
-				damage = damage
-			}
-			self._unit:character_damage():damage_bullet(attack_data)
 		end
 
 		if not alive(self._counter_taser_unit) then
@@ -312,7 +327,6 @@ function PlayerTased:_register_revive_SO()
 
 	managers.groupai:state():add_special_objective(so_id, so_descriptor)
 end
-
 
 function PlayerTased:on_tase_ended()
 	self._tase_ended = true

@@ -31,7 +31,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 
 	self._assault_mode = "normal"
 	self._assault_state = "normal"
-	self._assault_color = Color(1, 1, 1, 0)
+	
 	self._regular_assault_color = Color(1, 1, 1, 0)
 	self._danger_color = tweak_data.screen_colors.skirmish_color
 	self._clutch_color = Color(1, 1, 0.1, 0)
@@ -44,7 +44,8 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 
 
 	self._assault_survived_color = Color(1, 0.12549019607843137, 0.9019607843137255, 0.12549019607843137)
-	self._current_assault_color = self._assault_color
+	self._current_assault_color = self._regular_assault_color
+	self._assault_color = self._current_assault_color
 	local icon_assaultbox = assault_panel:bitmap({
 		texture = "guis/textures/pd2/hud_icon_assaultbox",
 		name = "icon_assaultbox",
@@ -159,7 +160,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		w = size,
 		x = self._hud_panel:w() - size
 	})
-	self._noreturn_color = Color(1, 1, 0, 0)
+	self._noreturn_data = self:_get_noreturn_data()
 	local icon_noreturnbox = point_of_no_return_panel:bitmap({
 		texture = "guis/textures/pd2/hud_icon_noreturnbox",
 		name = "icon_noreturnbox",
@@ -172,7 +173,9 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		halign = "right",
 		x = 0,
 		valign = "top",
-		color = self._noreturn_color
+		color = self._noreturn_data.color,
+		texture = self._noreturn_data.icon_texture,
+		texture_rect = self._noreturn_data.icon_texture_rect
 	})
 
 	icon_noreturnbox:set_right(icon_noreturnbox:parent():w())
@@ -184,7 +187,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		w = self._bg_box_size
 	}, {
 		blend_mode = "add",
-		color = self._noreturn_color
+		color = self._noreturn_data.color
 	})
 
 	self._noreturn_bg_box:set_right(icon_noreturnbox:left() - 3)
@@ -201,12 +204,12 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		y = 0,
 		x = 0,
 		layer = 1,
-		color = self._noreturn_color,
+		color = self._noreturn_data.color,
 		font_size = tweak_data.hud_corner.noreturn_size,
 		font = tweak_data.hud_corner.assault_font
 	})
 
-	point_of_no_return_text:set_text(utf8.to_upper(managers.localization:text("hud_assault_point_no_return_in", {
+	point_of_no_return_text:set_text(utf8.to_upper(managers.localization:text(self._noreturn_data.text_id, {
 		time = ""
 	})))
 	point_of_no_return_text:set_size(self._noreturn_bg_box:w(), self._noreturn_bg_box:h())
@@ -221,7 +224,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		y = 0,
 		x = 0,
 		layer = 1,
-		color = self._noreturn_color,
+		color = self._noreturn_data.color,
 		font_size = tweak_data.hud_corner.noreturn_size,
 		font = tweak_data.hud_corner.assault_font
 	})
@@ -230,6 +233,7 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 	point_of_no_return_timer:set_size(46, self._noreturn_bg_box:h())
 	point_of_no_return_timer:set_right(point_of_no_return_timer:parent():w())
 	point_of_no_return_text:set_right(math.round(point_of_no_return_timer:left()))
+	self:_update_noreturn()
 
 	if self._hud_panel:child("casing_panel") then
 		self._hud_panel:remove(self._hud_panel:child("casing_panel"))
@@ -327,9 +331,9 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local level = Global.level_data and Global.level_data.level_id
 	local cover_line_to_use = "hud_assault_cover"
 	local danger_line_to_use = "hud_assault_danger"
-	local FG_chance = math.random(1, 283)
-	local danger_chance = math.random(1, 32)
-	local heat_chance = math.random(1, 26)
+	local FG_chance = math.random(1, 325)
+	local danger_chance = math.random(1, 63)
+	local heat_chance = math.random(1, 48)
 	local versusline = "hud_assault_faction_swat"
 	
 	local faction = tweak_data.levels:get_ai_group_type()
@@ -337,9 +341,142 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local assaultline = "hud_assault_assault"
 	local heatbonus_line_to_use = "hud_heat_common"
 	
-	if faction then
-		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)				
-		if faction == "russia" then
+	
+	if level == "haunted" then
+		assaultline = "hud_assault_assault_nightmare"
+		cover_line_to_use = "hud_assault_cover_nightmare"
+		versusline = "hud_assault_faction_nightmare"
+		
+		if self._assault_mode == "normal" then
+			local ids_risk = Idstring("risk")
+			
+			if self._assault_state == "danger" or self._assault_state == "lastcrimstanding" then
+				if managers.job:current_difficulty_stars() > 0 then
+					return {
+						assaultline,
+						"hud_assault_end_line",
+						danger_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						ids_risk,
+						"hud_assault_end_line",
+						assaultline,
+						"hud_assault_end_line",
+						danger_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						ids_risk,
+						"hud_assault_end_line",
+					}
+				else
+					return {
+						assaultline,
+						"hud_assault_end_line",
+						danger_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+						assaultline,
+						"hud_assault_end_line",
+						danger_line_to_use,
+						"hud_assault_end_line",
+						versusline,
+						"hud_assault_end_line",
+					}
+				end
+			else		
+				if managers.job:current_difficulty_stars() > 0 then
+					if self._assault_state == "heat" then
+						return {
+							"hud_assault_heat",
+							"hud_assault_end_line",
+							heatbonus_line_to_use,
+							"hud_assault_end_line",
+							"hud_heat_gameplay",
+							"hud_assault_end_line",
+							ids_risk,
+							"hud_assault_end_line",
+							"hud_assault_heat",
+							"hud_assault_end_line",
+							heatbonus_line_to_use,
+							"hud_assault_end_line",
+							"hud_heat_gameplay",
+							"hud_assault_end_line",
+							ids_risk,
+							"hud_assault_end_line",
+						}
+					else
+						return {
+							assaultline,
+							"hud_assault_end_line",
+							cover_line_to_use,
+							"hud_assault_end_line",
+							versusline,
+							"hud_assault_end_line",
+							ids_risk,
+							"hud_assault_end_line",
+							assaultline,
+							"hud_assault_end_line",
+							cover_line_to_use,
+							"hud_assault_end_line",
+							versusline,
+							"hud_assault_end_line",
+							ids_risk,
+							"hud_assault_end_line",
+						}
+					end
+				else
+					if self._assault_state == "heat" then
+						return {
+							"hud_assault_heat",
+							"hud_assault_end_line",
+							heatbonus_line_to_use,
+							"hud_assault_end_line",
+							"hud_heat_gameplay",
+							"hud_assault_end_line",
+							assaultline,
+							"hud_assault_end_line",
+							heatbonus_line_to_use,
+							"hud_assault_end_line",
+							"hud_heat_gameplay",
+							"hud_assault_end_line",
+						}
+					else
+						return {
+							assaultline,
+							"hud_assault_end_line",
+							cover_line_to_use,
+							"hud_assault_end_line",
+							versusline,
+							"hud_assault_end_line",
+							assaultline,
+							"hud_assault_end_line",
+							cover_line_to_use,
+							"hud_assault_end_line",
+							versusline,
+							"hud_assault_end_line",
+						}
+					end
+				end
+			end
+		end
+	elseif faction then
+		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
+		if faction == "bo" then
+			if diff_index < 4 then
+				versusline = "hud_assault_faction_sbz"
+			elseif diff_index < 6 then
+				versusline = "hud_assault_faction_ovk"
+			elseif diff_index == 6 then
+				versusline = "hud_assault_faction_bofadeez"
+			elseif diff_index == 7 then
+				versusline = "hud_assault_faction_bofa"
+			else
+				versusline = "hud_assault_faction_zeal"
+			end
+		elseif faction == "russia" then
 			versusline = "hud_assault_faction_mad"
 			assaultline = "hud_assault_assaultrepers"			
 		elseif faction == "federales" then
@@ -387,7 +524,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end			
 	end
 	
-	if FG_chance <= 83 then
+	if FG_chance <= 124 then
 		cover_line_to_use = "hud_assault_FG_cover" .. FG_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
@@ -403,7 +540,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if danger_chance <= 31 then
+	if danger_chance <= 62 then
 		danger_line_to_use = "hud_assault_FG_danger" .. danger_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
@@ -411,11 +548,13 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if heat_chance <= 25 then
+	if heat_chance <= 48 then
 		heatbonus_line_to_use = "hud_heat_" .. heat_chance
 	end
 	
 	if self._assault_mode == "normal" then
+		local ids_risk = Idstring("risk")
+		
 		if self._assault_state == "danger" or self._assault_state == "lastcrimstanding" then
 			if managers.job:current_difficulty_stars() > 0 then
 				return {
@@ -425,15 +564,18 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 					"hud_assault_end_line",
 					versusline,
 					"hud_assault_end_line",
+					ids_risk,
+					"hud_assault_end_line",
 					assaultline,
 					"hud_assault_end_line",
 					danger_line_to_use,
 					"hud_assault_end_line",
 					versusline,
 					"hud_assault_end_line",
+					ids_risk,
+					"hud_assault_end_line",
 				}
 			else
-				local ids_risk = Idstring("risk")
 				return {
 					assaultline,
 					"hud_assault_end_line",
@@ -441,22 +583,16 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 					"hud_assault_end_line",
 					versusline,
 					"hud_assault_end_line",
-					ids_risk,
-					"hud_assault_end_line",
 					assaultline,
 					"hud_assault_end_line",
 					danger_line_to_use,
 					"hud_assault_end_line",
 					versusline,
 					"hud_assault_end_line",
-					ids_risk,
-					"hud_assault_end_line",
 				}
 			end
 		else		
 			if managers.job:current_difficulty_stars() > 0 then
-				local ids_risk = Idstring("risk")
-				
 				if self._assault_state == "heat" then
 					return {
 						"hud_assault_heat",
@@ -559,7 +695,103 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	end
 end)
 
-function HUDAssaultCorner:set_color_state(state)
+function HUDAssaultCorner:_start_assault(text_list)
+	text_list = text_list or {
+		""
+	}
+	local assault_panel = self._hud_panel:child("assault_panel")
+	local text_panel = assault_panel:child("text_panel")
+
+	self:_set_text_list(text_list)
+
+	local started_now = not self._assault
+	self._assault = true
+
+	if self._bg_box:child("text_panel") then
+		self._bg_box:child("text_panel"):stop()
+		self._bg_box:child("text_panel"):clear()
+	else
+		self._bg_box:panel({
+			name = "text_panel"
+		})
+	end
+
+	self._bg_box:child("bg"):stop()
+	assault_panel:set_visible(true)
+
+	local icon_assaultbox = assault_panel:child("icon_assaultbox")
+
+	icon_assaultbox:stop()
+	icon_assaultbox:animate(callback(self, self, "_show_icon_assaultbox"))
+
+	local config = {
+		attention_forever = true,
+		attention_color = self._current_assault_color ~= nil and self._current_assault_color or self._regular_assault_color,
+		attention_color_function = callback(self, self, "assault_attention_color_function")
+	}
+
+	self._bg_box:stop()
+	self._bg_box:animate(callback(nil, _G, "HUDBGBox_animate_open_left"), 0.75, self._bg_box_size, function ()
+	end, config)
+
+	local box_text_panel = self._bg_box:child("text_panel")
+
+	box_text_panel:stop()
+	box_text_panel:animate(callback(self, self, "_animate_text"), nil, nil, callback(self, self, "assault_attention_color_function"))
+	self:_set_feedback_color(config.color)
+
+	if alive(self._wave_bg_box) then
+		self._wave_bg_box:stop()
+		self._wave_bg_box:animate(callback(self, self, "_animate_wave_started"), self)
+	end
+
+	if managers.skirmish:is_skirmish() and started_now then
+		self:_popup_wave_started()
+	end
+end
+
+function HUDAssaultCorner:sync_set_assault_mode(mode)
+	if self._assault_mode == mode then
+		return
+	end
+
+	self._assault_mode = mode
+	local color = self._current_assault_color ~= nil and self._current_assault_color or self._regular_assault_color
+
+	if mode == "phalanx" then
+		color = self._vip_assault_color
+	end
+
+	self:_update_assault_hud_color(color)
+	self:_set_text_list(self:_get_assault_strings())
+
+	local assault_panel = self._hud_panel:child("assault_panel")
+	local icon_assaultbox = assault_panel:child("icon_assaultbox")
+	local image = mode == "phalanx" and "guis/textures/pd2/hud_icon_padlockbox" or "guis/textures/pd2/hud_icon_assaultbox"
+
+	icon_assaultbox:set_image(image)
+end
+
+function HUDAssaultCorner:sync_start_assault(assault_number)
+	if self._point_of_no_return or self._casing then
+		return
+	end
+
+	local color = self._current_assault_color ~= nil and self._current_assault_color or self._regular_assault_color
+
+	if self._assault_mode == "phalanx" then
+		color = self._vip_assault_color
+	end
+
+	self:_update_assault_hud_color(color)
+	self:set_assault_wave_number(assault_number)
+
+	self._start_assault_after_hostage_offset = true
+
+	self:_set_hostage_offseted(true)
+end
+
+function HUDAssaultCorner:set_color_state(state, dont_refresh_hud)
 	if not state then
 		return
 	end
@@ -568,31 +800,63 @@ function HUDAssaultCorner:set_color_state(state)
 		self._assault_state = "danger"
 		if self._current_assault_color ~= self._danger_color then
 			self:_update_assault_hud_color(self._danger_color)
-			self:_start_assault(self:_get_assault_strings())
 		end
 	elseif state == "normal" then
 		self._assault_state = "normal"
 		if self._current_assault_color ~= self._regular_assault_color then
 			self:_update_assault_hud_color(self._regular_assault_color)
-			self:_start_assault(self:_get_assault_strings())
 		end
 	elseif state == "lastcrimstanding" then
 		self._assault_state = "lastcrimstanding"
 		if self._current_assault_color ~= self._clutch_color then
 			self:_update_assault_hud_color(self._clutch_color)
-			self:_start_assault(self:_get_assault_strings())
 		end
 	elseif state == "heat" then
 		self._assault_state = "heat"
 		if self._current_assault_color ~= self._assault_survived_color then
 			self:_update_assault_hud_color(self._assault_survived_color)
-			self:_start_assault(self:_get_assault_strings())
 		end
 	else
 		log("HUDASSAULTCORNER: STATE DOES NOT MATCH ANY COLOR!!!")
 		self._assault_state = "normal"
 		self:_update_assault_hud_color(self._regular_assault_color)
 	end
+	
+	if not dont_refresh_hud then
+		self:_start_assault(self:_get_assault_strings())
+	end
+end
+
+function HUDAssaultCorner:_update_assault_hud_color(color)
+	self._current_assault_color = color
+	self._assault_color = self._current_assault_color
+
+	self._bg_box:child("left_top"):set_color(color)
+	self._bg_box:child("left_bottom"):set_color(color)
+	self._bg_box:child("right_top"):set_color(color)
+	self._bg_box:child("right_bottom"):set_color(color)
+
+	local assault_panel = self._hud_panel:child("assault_panel")
+	local icon_assaultbox = assault_panel:child("icon_assaultbox")
+
+	icon_assaultbox:set_color(color)
+end
+
+function HUDAssaultCorner:_close_assault_box()
+	local icon_assaultbox = self._hud_panel:child("assault_panel"):child("icon_assaultbox")
+
+	icon_assaultbox:stop()
+
+	local function close_done()
+		self._bg_box:set_visible(false)
+		icon_assaultbox:stop()
+		icon_assaultbox:animate(callback(self, self, "_hide_icon_assaultbox"))
+		self:sync_set_assault_mode("normal")
+		self:set_color_state(self._assault_state, true)
+	end
+
+	self._bg_box:stop()
+	self._bg_box:animate(callback(nil, _G, "HUDBGBox_animate_close_left"), close_done)
 end
 
 end

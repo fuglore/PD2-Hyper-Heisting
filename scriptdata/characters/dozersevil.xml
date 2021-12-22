@@ -4,6 +4,8 @@
 		<table damage="100" explosion="325"/>	
 	</table>
 	
+	<table search="unit/sequence;name=[['leg_arm_hitbox']]/body;name=[['head']]" mode="remove" />
+	
 	<table search="unit/body;name=[['body_helmet_glass']]" mode="replace">
 		<body name="'body_helmet_glass'">
 			<endurance damage="50" explosion="650">

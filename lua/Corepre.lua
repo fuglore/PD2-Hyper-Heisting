@@ -6,13 +6,19 @@ PD2THHSHIN._save_path = SavePath .. "shin_settings.txt"
 PD2THHSHIN.settings = {
 	toggle_overhaul_player = true,
 	enable_albanian_content = false,
-	toggle_helmet = false,
+	toggle_helmet = true,
 	toggle_hhassault = false,
 	toggle_hhskulldiff = false,
-	toggle_highpriorityglint = false,
+	toggle_highpriorityglint = true,
+	toggle_screenFX = false,
+	toggle_suppression = true,
+	toggle_health_effect = true,
 	toggle_blurzonereduction = true,
+	screenshakemult = 1,
+	toggle_noweirddof = false,
 	first_launch = true
 }
+
 PD2THHSHIN.session_settings = {} --leave empty; generated on load
 PD2THHSHIN.show_popup = nil
 
@@ -31,12 +37,24 @@ function PD2THHSHIN:SkullDiffEnabled()
 	return self:GetSessionSetting("toggle_hhskulldiff")
 end
 
+function PD2THHSHIN:DofEnabled()
+	return self:GetSessionSetting("toggle_noweirddof")
+end
+
 function PD2THHSHIN:BlurzoneEnabled()
 	return self:GetSessionSetting("toggle_blurzonereduction")
 end
 
 function PD2THHSHIN:GlintEnabled()
 	return self:GetSessionSetting("toggle_highpriorityglint")
+end
+
+function PD2THHSHIN:EXScreenFXenabled()
+	return self:GetSessionSetting("toggle_screenFX")
+end
+
+function PD2THHSHIN:SupEnabled()
+	return self:GetSessionSetting("toggle_suppression")
 end
 
 function PD2THHSHIN:IsFlavorAssaultEnabled()
@@ -159,24 +177,68 @@ if not _G.voiceline_framework then
 end
 
 Hooks:Add("NetworkReceivedData", "shin_receive_network_data", function(sender, message, data)
-    if message == "shin_sync_hud_assault_color" then 
-        if sender == 1 then
-            if data == "true" then 
-                managers.groupai:state()._activeassaultbreak = true
-				 managers.groupai:state():play_heat_bonus_dialog()
-            elseif data == "nil" then 
-               managers.groupai:state()._activeassaultbreak = nil
-			   managers.groupai:state()._said_heat_bonus_dialog = nil
-            end
-        end
-    end
-	
-	if message == "shin_sync_speed_mul" then 
-        if sender == 1 then
-            if data then
-				local number_data = tonumber(data)
-				managers.groupai:state()._enemy_speed_mul = number_data
+
+	if message == "shin_sync_post_assault_replenish" then
+		local pm = managers.player
+						
+		if pm then
+			if pm:player_unit() and alive(pm:player_unit()) then
+				local player = pm:player_unit()
+				local dmg_ext = player:character_damage()
+				
+				if not dmg_ext:dead() then
+					if not dmg_ext:need_revive() then --if your team didnt revive you in the first place, go eat a medic bag
+						dmg_ext:replenish() 
+					end
+				end
 			end
-        end
-    end
+		end
+	end
+
+	if managers and managers.groupai then	
+		if message == "shin_sync_hud_assault_color" then 
+			if sender == 1 then
+				if data == "true" then
+					managers.groupai:state()._activeassaultbreak = true
+					managers.groupai:state():play_heat_bonus_dialog()
+					managers.hud:show_heat_bonus_hints()
+					
+					local pm = managers.player
+						
+					if pm then
+						if pm:player_unit() and alive(pm:player_unit()) then
+							local player = pm:player_unit()
+							local dmg_ext = player:character_damage()
+							
+							if not dmg_ext:dead() then
+								if not dmg_ext:need_revive() and not dmg_ext:is_berserker() then
+									dmg_ext:restore_health(0.5, nil, nil, true) --50% health restored on heat bonus
+								end
+								
+								local inventory = player:inventory()
+										
+								if inventory then						
+									for i, weapon in pairs(inventory:available_selections()) do
+										weapon.unit:base():add_ratio_plus_ammo(0.5)
+									end
+								end
+							end
+						end
+					end					
+				elseif data == "nil" then 
+				   managers.groupai:state()._activeassaultbreak = nil
+				   managers.groupai:state()._said_heat_bonus_dialog = nil
+				end
+			end
+		end
+		
+		if message == "shin_sync_speed_mul" then 
+			if sender == 1 then
+				if data then
+					local number_data = tonumber(data)
+					managers.groupai:state()._enemy_speed_mul = number_data
+				end
+			end
+		end
+	end
 end)

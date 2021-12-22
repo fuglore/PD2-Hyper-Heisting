@@ -2,20 +2,50 @@
 	<!--New CGs-->
 	<dds path="core/textures/cg_rvsb"/>
 	
+	<scene path="core/environments/skies/sky_heated_avenue/sky_heated_avenue" load="true" />
+	<material_config path="core/environments/skies/sky_heated_avenue/sky_heated_avenue" load="true" />
+	<model path="core/environments/skies/sky_heated_avenue/sky_heated_avenue" load="true" />	
+	<texture path="core/environments/skies/sky_heated_avenue/sky_heated_avenue_df" />
+	
 	<scene path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
 	<material_config path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />
 	<model path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight" load="true" />	
 	<texture path="core/environments/skies/sky_danger_moonlight/danger_moon_df" />
 	<texture path="core/environments/skies/sky_danger_moonlight/sky_danger_moonlight_df" />
 	
+	<texture path="environments/sunset_hell_global_cubemap/cubemap" load="true"/>
+	
+	<texture path="environments/heated_hox_cubemap/outdoors" load="true"/>
+	
 	<!--Base Game Asset Replacements-->
+	<object path="units/payday2/weapons/wpn_npc_smg_mp9/wpn_npc_smg_mp9" force="true"/>
 	<material_config path="units/pd2_dlc_friend/nature/terrain/sfm_backdrop" force="true"/>
-	<texture path="guis/textures/characters/shared_textures/spook_il" force="true"/>
+	<texture path="units/payday2/characters/shared_textures/spook_il" force="true"/>
+	<texture path="effects/particles/weapons/flashlight/e_flare_01" force="true"/>
+	<texture path="effects/particles/weapons/flashlight/e_gradient_radial2" force="true"/>
 	<texture path="units/menu/menu_scene/menu_cylinder_logo" force="true" />
 	<texture path="guis/textures/game_small_logo" force="true"/>
 	<texture path="guis/textures/menu_title_screen" force="true"/>
 	
+	<!--head hitbox sizes for ninjas and other enemy types-->
+	<object path="units/payday2/characters/ene_fbi_1/ene_fbi_1" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_2/ene_fbi_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_3/ene_fbi_3" force="true"/>
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_hvh_1/ene_fbi_hvh_1" force="true"/>
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_hvh_2/ene_fbi_hvh_2" force="true"/>
+	<object path="units/pd2_dlc_hvh/characters/ene_fbi_hvh_3/ene_fbi_hvh_3" force="true"/>
 	
+	<object path="units/payday2/characters/ene_fbi_boss_1/ene_fbi_boss_1" force="true"/>
+	
+	<object path="units/payday2/characters/ene_fbi_female_1/ene_fbi_female_1" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_female_2/ene_fbi_female_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_female_4/ene_fbi_female_4" force="true"/>
+	
+	<object path="units/payday2/characters/ene_fbi_office_1/ene_fbi_office_1" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_office_2/ene_fbi_office_2" force="true"/>
+	<object path="units/payday2/characters/ene_fbi_office_4/ene_fbi_office_4" force="true"/>
 	
 	<!-- HH SWAT TIER REWORK-->
 	<material_config path="units/payday2/characters/ene_swat_1/ene_swat_1" force="true"/>
@@ -57,7 +87,7 @@
 
 	<!--Map Replacement Bullshit-->
 	<mission path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>  <!--this shit is rad!!! murky assault units will rappel from the chopper now, and most of the vehicle spawns are replaced by cool looking assault units!!! It's shit for balance but who cares, just shoot the pricks in the head!-->
-	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/> <!-- fuck you derma -->
+	<continent path="levels/narratives/classics/dinner/world/world" force="true" unload="true"/>
 
 	
 	<mission path="levels/narratives/classics/red2/world/world" force="true" unload="true"/> <!--Makes FWB Vault Guards Gensex ninjas-->
@@ -67,30 +97,18 @@
 	
 	<mission path="levels/instances/unique/pbr/pbr_plane_cargo/world/world" force="true" unload="true"/> <!--ADDS IN MURKY ASSAULT UNITS ON THE PLANE!!! FEATURING A FEW PUNKS!!!-->
 	
-	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/> 
+	<mission path="levels/narratives/e_framing_frame/stage_1/world/world" force="true" unload="true"/>
 	
-	<!-- <mission path="levels/narratives/locke/vit/world/world" force="true" unload="true"/> --> <!-- aigrouptype element is currently dysfunctional-->
+	<mission path="levels/narratives/locke/vit/world/world" force="true" unload="true"/>
 	
-	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/> <!--Now, give them hell.-->
+	<mission path="levels/instances/unique/wwh/wwh_hostage_spawn/world/world" force="true" unload="true"/>
 	
-	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/> 	
-	
-	<!--Disabled until further notice-->
-	
-	<!--<mission path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/> 
-	<continent path="levels/narratives/bain/shadow_raid/world/world" force="true" unload="true"/>--> 
-	<!--<cover_data path="levels/narratives/bain/shadow_raid/cover_data" force="true" unload="true"/>
-	<nav_data path="levels/narratives/bain/shadow_raid/nav_manager_data" force="true" unload="true"/> -->
+	<mission path="levels/instances/unique/pbr/pbr_plane_crew/world/world" force="true" unload="true"/>
 	
 	<mission path="levels/narratives/butcher/friend/world/world" force="true" unload="true"/> <!--Removes the shitty spawn van escape from Scarface. -->
 	
 	<mission path="levels/instances/shared/obj_skm/world/world" force="true" unload="true"/> <!-- replaces locke lines with negotiator lines -->
 	<mission path="levels/instances/shared/skm_negotiator/world/world" force="true" unload="true"/> <!-- same as above-->
-	
-	<mission path="levels/narratives/classics/dah/world/world" force="true" unload="true"/>
-	<continent path="levels/narratives/classics/dah/world/world" force="true" unload="true"/>
-	<cover_data path="levels/narratives/classics/dah/cover_data" force="true" unload="true"/>
-	<nav_data path="levels/narratives/classics/dah/nav_manager_data" force="true" unload="true"/>
 	
 	<cover_data path="levels/narratives/h_firestarter/stage_3/cover_data" force="true" unload="true"/>
 	<nav_data path="levels/narratives/h_firestarter/stage_3/nav_manager_data" force="true" unload="true"/>
@@ -175,6 +193,7 @@
 	<cooked_physics path="units/payday2/characters/ene_swat_3/ene_swat_3"/>
 
 	<!--NPC Mosconi less ugly-->
+	<unit path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/wpn_npc_sawnoff_shotgun" force="true"/>	
 	<model path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/wpn_npc_sawnoff_shotgun" force="true"/>	
 	<texture path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/sawnoff_df" force="true"/>
 	<texture path="units/payday2/weapons/wpn_npc_sawnoff_shotgun/sawnoff_nm" force="true"/>
@@ -493,10 +512,13 @@
 	
 	<!--ZEAL Dozer Material Configs and Textures-->
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer" force="true"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/ene_zeal_bulldozer_contour" force="true"/>
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer/bulldozer_df" force="true"/>
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2" force="true"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/ene_zeal_bulldozer_2_contour" force="true"/>
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_2/bulldozer_2_df" force="true"/>
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3" force="true"/>
+	<material_config path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/ene_zeal_bulldozer_3_contour" force="true"/>
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_bulldozer_3/bulldozer_3_df" force="true"/>
 
 	<!--Zeal Folk Textures-->	
@@ -529,8 +551,33 @@
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_df" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_il" load="true" />	
 	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_df" />	
-	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_il" load="true"/>	
+	<texture path="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_head_il" load="true"/>
+
+	<!-- ZEAL DOZER EVIL SATAN UWU HATS -->
+
+	<unit path="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa"/>
+	<object path="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa" />
+	<model path="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa" />
+	<texture path="units/pd2_mod_winters/ene_acc_zeal_green_santa/santa_hat_df" />	
 	
+	<unit path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa"/>
+	<object path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa" />
+	<model path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/ene_acc_zeal_saiga_santa" />
+	<texture path="units/pd2_mod_winters/ene_acc_zeal_saiga_santa/santa_hat_df" />	
+	
+	<unit path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa"/>
+	<object path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa" />
+	<model path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/ene_acc_zeal_skull_santa" />
+	<texture path="units/pd2_mod_winters/ene_acc_zeal_skull_santa/santa_hat_df" />	
+	
+	<unit path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa"/>
+	<object path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa" />
+	<model path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/ene_acc_zeal_mini_santa" />
+	<texture path="units/pd2_mod_winters/ene_acc_zeal_mini_santa/santa_hat_df" />	
 	
 	<!--FUCKING SCI-FI ROBOT GUNS-->	
 	<unit path="units/pd2_dlc_gitgud/weapons/wpn_npc_s553/wpn_npc_s553" load="true"/>
@@ -584,6 +631,26 @@
 
 	<df_nm path="units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire" />
 	
+	<unit path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil" load="true"/>
+	<material_config path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil"/>	
+	<object path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil" />
+	<model path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil" />	
+	<cooked_physics path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil"/>	
+	<sequence_manager path="units/payday2/weapons/wpn_npc_galil/wpn_npc_galil"/>
+
+	<texture path="units/payday2/weapons/wpn_npc_galil/galil_df" />
+	<texture path="units/payday2/weapons/wpn_npc_galil/galil_nm" />
+	
+	<unit path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu" load="true"/>
+	<material_config path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu"/>	
+	<object path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu" />
+	<model path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu" />	
+	<cooked_physics path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu"/>	
+	<sequence_manager path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu"/>
+
+	<texture path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/silserbu_df" />
+	<texture path="units/pd2_dlc_drm/weapons/wpn_npc_silserbu/silserbu_nm" />
+	
 	<unit path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" load="true"/>
 	<object path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />
 	<material_config path="units/pd2_dlc_gitgud/characters/ene_acc_glowstick/ene_acc_glowstick" />
@@ -593,8 +660,10 @@
 
 	<!--ZEAL/CRIME SPREE BULLDOZER MOTHAFUCKAS-->	
 	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic" force="true"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic_contour" force="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_medic/ene_bulldozer_medic_df" force="true"/>
 	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun" force="true"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_contour" force="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_df" force="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_bulldozer_minigun/ene_bulldozer_minigun_il" load="true"/>
 	
@@ -734,6 +803,35 @@
 	<texture path="units/pd2_dlc_drm/characters/ene_sniper_heavy/helmets_atlas_il" />
 	<!--Lol Trole-->
 
+	<!--OVK MC Mangler-->
+	<unit path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler" load="true"/>
+	<unit path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler" load="true"/>	
+	<material_config path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler"/>
+	<material_config path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler_contour"/>	
+	<object path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler" />
+	<model path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler" />	
+	<cooked_physics path="units/pd2_dlc_drm/characters/ene_ovk_mangler/ene_ovk_mangler"/>
+	<texture path="units/pd2_dlc_drm/characters/ene_ovk_mangler/mangler_body_df" />
+	<texture path="units/pd2_dlc_drm/characters/ene_ovk_mangler/mangler_helmet_df" />
+	
+	<unit path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37" load="true"/>
+	<material_config path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"/>	
+	<object path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37" />
+	<model path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37" />	
+	<cooked_physics path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"/>	
+	<sequence_manager path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"/>
+
+	<texture path="units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37_df" />
+	
+	<unit path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog" load="true"/>
+	<material_config path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"/>	
+	<object path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog" />
+	<model path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog" />	
+	<cooked_physics path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"/>	
+	<sequence_manager path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"/>
+
+	<texture path="units/pd2_mod_psc/weapons/wpn_npc_chernobog/chernobog_df" />
+	
 	<!--sniperdozer-->
 	<unit path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" load="true"/>
 	<sequence_manager path="units/pd2_dlc_drm/characters/ene_bulldozer_sniper/ene_bulldozer_sniper" />	
@@ -757,6 +855,8 @@
 	<texture path="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotusbody" load="true"/>
 	<texture path="units/pd2_dlc_drm/characters/ene_true_lotus_master/lotuseye" load="true"/>
 	
+	
+	
 	<unit path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" load="true"/>
 	<unit path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master_husk" load="true"/>	
 	<material_config path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master"/>
@@ -764,6 +864,12 @@
 	<object path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" />
 	<model path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master" />	
 	<cooked_physics path="units/pd2_dlc_drm/characters/ene_true_lotus_master/ene_true_lotus_master"/>
+	
+	<unit path="units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal" load="true"/>
+	<material_config path="units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal"/>
+	<object path="units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal" />
+	<model path="units/pd2_mod_winters/ene_acc_lotus_master_petal/ene_acc_lotus_master_petal" />
+	<texture path="units/pd2_mod_winters/ene_acc_lotus_master_petal/petals" />	
 	
 	<unit path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor" load="true"/>
 	<material_config path="units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"/>	
@@ -788,8 +894,25 @@
 	<texture path="effects/pd2_mod_hh/particles/textures/taser_glint" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/marauderspooc_glint" load="true" />
 	<texture path="effects/pd2_mod_hh/particles/textures/glint" load="true" />
+	<texture path="effects/pd2_mod_hh/particles/textures/shield" load="true" />
+	<texture path="units/lights/pd2_hh_flashlight_proj/flashlight_player" load="true" />
+	<effect path="effects/payday2/particles/weapons/arrow_trail" force="true"/>
+	<effect path="effects/payday2/particles/weapons/arrow_trail_homing"/>
+	<effect path="effects/particles/weapons/flashlight/flashlight" force="true"/>
+	<effect path="effects/particles/weapons/flashlight/flashlight_mp9" load="true"/>
+	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/literally_a_square" load="true"/>
+	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/hurt_screen" />
+	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/hurt_screen_df" load="true"/>
+	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties" />
+	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/conc_floaties_pdth" />
+	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/floaties_df" load="true" />
+	<effect path="effects/pd2_mod_hh/particles/character/playerscreen/mangle_screen" />
+	<texture path="effects/pd2_mod_hh/particles/character/playerscreen/textures/mangle_screen_df" load="true" />
+	<effect path="effects/pd2_mod_hh/particles/character/gore_explosion"/>
+	<effect path="effects/pd2_mod_hh/particles/character/shield_break"/>
 	<effect path="effects/pd2_mod_hh/particles/character/prefire_glint"/>
 	<effect path="effects/pd2_mod_hh/particles/character/pretase_glint"/>
+	<effect path="effects/pd2_mod_hh/particles/character/taser_warning"/>
 	<effect path="effects/pd2_mod_hh/particles/character/marauderspooc_glint"/>
 	<effect path="effects/pd2_mod_hh/particles/character/taser_hit"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/explosion/electric_explosion"/>
@@ -805,6 +928,7 @@
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/lotus_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/novis_streak"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/genstreaks/healstop_streak"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_b"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/smstreaks/long_streak_r"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle"/>
@@ -813,6 +937,9 @@
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_complexup"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/red_muzzle"/>
 	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/blue_muzzle"/>
+	<effect path="effects/pd2_mod_hh/particles/weapons/muzzles/hivis_muzzle_shotgun_mangler"/>
+	
+	<effect path="effects/pd2_mod_hh/particles/iconograph/deathresist"/>
 	
 	<texture path="guis/textures/loading/hints/hh_ninjas" force="false"/>
 	<texture path="guis/textures/loading/hints/hh_shotgunners" force="false"/>
@@ -832,42 +959,6 @@
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_difficultyspike" force="false"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_ftsudozer" force="false"/>
 	<texture path="guis/dlcs/drm/textures/pd2/crime_spree/modifier_bronconinja" force="false"/>
-
-	<!--SHADOW CLOACKERS-->	
-	
-	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true" load="true" />
-	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1_husk" force="true" load="true" />
-	<material_config path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true"/>	
-	<material_config path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true"/>		
-	<object path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1"  force="true"/>
-	<sequence_manager path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1"  force="true"/>	
-	<model path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1"  force="true"/>	
-	<cooked_physics path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_cloaker_1" force="true"/>	
-
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_df" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_nm" />
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/blue_mask_il" />		
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_blue_df" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_blue_il" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/eyes_blue_il" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_1/ene_shadow_body_nm" />	
-
-	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2" force="true" load="true" />
-	<unit path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2_husk" force="true" load="true" />
-	<material_config path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2" force="true"/>	
-	<material_config path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2" force="true"/>		
-	<object path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2"  force="true"/>
-	<sequence_manager path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2"  force="true"/>	
-	<model path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2"  force="true"/>	
-	<cooked_physics path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_cloaker_2" force="true"/>	
-
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/mask_red_df" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/mask_red_nm" />
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/mask_red_il" />		
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_red_df" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/ene_shadow_red_il" />	
-	<texture path="units/pd2_dlc_uno/characters/ene_shadow_cloaker_2/red_eyes_il" />
-	<!--SHADOW CLOACKERS End-->	
 
 	<!--Gensec Ninja M4-->
 	<unit path="units/pd2_mod_ftsu/characters/ene_gensec_fbigod_m4/ene_gensec_fbigod_m4" load="true"/>
@@ -1056,9 +1147,18 @@
 	<texture path="patterns/真_fv"/>
 
 	<!-- bullet impact fixes-->
-	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass" force="true" />		
-	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870" force="true" />	
-	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg" force="true" />	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass" force="true" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass" force="true" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_ak47_ass/ene_akan_cs_cop_ak47_ass_contour" force="true" />
+	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870" force="true" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870" force="true" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_r870/ene_akan_cs_cop_r870_contour" force="true" />
+	
+	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg" force="true" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg" force="true" />
+	<material_config path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_akmsu_smg/ene_akan_cs_cop_akmsu_smg_contour" force="true" />
+	
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_cop_asval_smg/ene_akan_cs_cop_asval_smg" force="true" />	
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_swat_ak47_ass/ene_akan_cs_swat_ak47_ass" force="true" />		
 	<object path="units/pd2_dlc_mad/characters/ene_akan_cs_swat_sniper_svd_snp/ene_akan_cs_swat_sniper_svd_snp" force="true" />
@@ -1094,4 +1194,20 @@
 	
 	<!--dumbass fucks at overkill made a typo-->
 	<material_config path="units/pd2_dlc_hvh/characters/ene_sniper_hvh_2/ene_sniper_hvh_2_contour" force="true"/> 
+	
+	<!--weapon mods-->
+	
+	<!--flamethrower long barrel-->
+	<texture path="units/mods/weapons/wpn_fps_fla_mk2_pts/smallnozzle_df"/>
+	<texture path="units/mods/weapons/wpn_fps_fla_mk2_pts/longheat_df"/>
+	<cooked_physics path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<model path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<object path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<unit path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<material_config path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long"/>
+	<material_config path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long_cc"/>
+	<material_config path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long_thq"/>
+	<material_config path="units/mods/weapons/wpn_fps_fla_mk2_pts/wpn_fps_fla_mk2_body_long_cc_thq"/>
+
+	<texture path="guis/dlcs/mods/textures/pd2/blackmarket/icons/mods/wpn_fps_fla_mk2_body_long"/>
 </table>

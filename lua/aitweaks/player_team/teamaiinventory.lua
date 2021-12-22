@@ -1,10 +1,17 @@
+local world_g = World
+
 function TeamAIInventory:add_unit_by_name(new_unit_name, equip)
-	local new_unit = World:spawn_unit(new_unit_name, Vector3(), Rotation())
+	local new_unit = world_g:spawn_unit(new_unit_name, Vector3(), Rotation())
+
+	managers.mutators:modify_value("CopInventory:add_unit_by_name", self)
+	self:_chk_spawn_shield(new_unit)
+
 	local setup_data = {
 		user_unit = self._unit,
 		ignore_units = {
 			self._unit,
-			new_unit
+			new_unit,
+			self._shield_unit
 		},
 		expend_ammo = false,
 		hit_slotmask = managers.slot:get_mask("bullet_impact_targets"),
@@ -20,5 +27,4 @@ function TeamAIInventory:add_unit_by_name(new_unit_name, equip)
 	end
 
 	self:add_unit(new_unit, equip)
-	new_unit:set_enabled(false)
 end

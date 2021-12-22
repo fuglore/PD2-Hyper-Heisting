@@ -1,24 +1,3 @@
-require("lib/units/enemies/cop/actions/lower_body/CopActionIdle")
-require("lib/units/enemies/cop/actions/lower_body/CopActionWalk")
-require("lib/units/enemies/cop/actions/full_body/CopActionAct")
-require("lib/units/enemies/cop/actions/lower_body/CopActionTurn")
-require("lib/units/enemies/cop/actions/full_body/CopActionHurt")
-require("lib/units/enemies/cop/actions/lower_body/CopActionStand")
-require("lib/units/enemies/cop/actions/lower_body/CopActionCrouch")
-require("lib/units/enemies/cop/actions/upper_body/CopActionShoot")
-require("lib/units/enemies/cop/actions/upper_body/CopActionReload")
-require("lib/units/enemies/cop/actions/upper_body/CopActionTase")
-require("lib/units/enemies/cop/actions/full_body/CopActionDodge")
-require("lib/units/enemies/cop/actions/full_body/CopActionWarp")
-require("lib/units/enemies/spooc/actions/lower_body/ActionSpooc")
-require("lib/units/civilians/actions/lower_body/CivilianActionWalk")
-require("lib/units/civilians/actions/lower_body/EscortWithSuitcaseActionWalk")
-require("lib/units/enemies/tank/actions/lower_body/TankCopActionWalk")
-require("lib/units/enemies/shield/actions/lower_body/ShieldCopActionWalk")
-require("lib/units/player_team/actions/lower_body/CriminalActionWalk")
-require("lib/units/enemies/cop/actions/upper_body/CopActionHealed")
-require("lib/units/enemies/medic/actions/upper_body/MedicActionHeal")
-
 local mvec3_set = mvector3.set
 local mvec3_set_z = mvector3.set_z
 local mvec3_lerp = mvector3.lerp
@@ -35,27 +14,52 @@ local mvec3_dot = mvector3.dot
 local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 local temp_vec3 = Vector3()
+local tmp_vec1 = Vector3()
+local zero_vel_vec = Vector3(0, 0, 0)
 
 local mrot_set = mrotation.set_yaw_pitch_roll
-
-local stance_ctl_pts = {
-	0,
-	0.34,
-	0.67,
-	1
-}
+local mrot_lookat = mrotation.set_look_at
+local tmp_rot_1 = Rotation()
 
 local math_abs = math.abs
 local math_min = math.min
 local math_max = math.max
 local math_random = math.random
-local math_UP = math.UP
+local math_up = math.UP
 local math_lerp = math.lerp
 
 local table_insert = table.insert
 local table_remove = table.remove
+local next_g = next
+local tostring_g = tostring
 
-local left_hand_str = Idstring("LeftHandMiddle2")
+local world_g = World
+local alive_g = alive
+local call_on_next_update_g = call_on_next_update
+
+local ids_func = Idstring
+local left_hand_str = ids_func("LeftHandMiddle2")
+local ids_movement = ids_func("movement")
+
+local action_variants = {
+	security = {
+		idle = CopActionIdle,
+		act = CopActionAct,
+		walk = CopActionWalk,
+		turn = CopActionTurn,
+		hurt = CopActionHurt,
+		stand = CopActionStand,
+		crouch = CopActionCrouch,
+		shoot = CopActionShoot,
+		reload = CopActionReload,
+		spooc = ActionSpooc,
+		tase = CopActionTase,
+		dodge = CopActionDodge,
+		warp = CopActionWarp,
+		healed = CopActionHealed
+	}
+}
+local security_variant = action_variants.security
 
 local old_init = CopMovement.init
 local action_variants = {
@@ -93,12 +97,13 @@ function CopMovement:init(unit)
 	CopMovement._action_variants.akuma = clone(security_variant)
 	CopMovement._action_variants.akuma.hurt = ShieldActionHurt
 	CopMovement._action_variants.akuma.walk = ShieldCopActionWalk
+	CopMovement._action_variants.shadow_taser = security_variant
+	CopMovement._action_variants.shadow_swat = security_variant
 	
 	old_init(self, unit)
 end
 
 function CopMovement:post_init()
-	local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	local unit = self._unit
 	self._ext_brain = unit:brain()
 	self._ext_network = unit:network()
@@ -107,13 +112,12 @@ function CopMovement:post_init()
 	self._ext_damage = unit:character_damage()
 	self._ext_inventory = unit:inventory()
 	self._tweak_data = tweak_data.character[self._ext_base._tweak_table]
-
 	tweak_data:add_reload_callback(self, self.tweak_data_clbk_reload)
+	self._machine = self._unit:anim_state_machine()
 	self._machine:set_callback_object(self)
-
 	self._stance = {
-		name = "ntl",
 		code = 1,
+		name = "ntl",
 		values = {
 			1,
 			0,
@@ -126,15 +130,15 @@ function CopMovement:post_init()
 		self._nav_tracker = managers.navigation:create_nav_tracker(self._m_pos)
 		self._pos_rsrv_id = managers.navigation:get_pos_reservation_id()
 	else
-		Application:error("[CopMovement:post_init] Spawned AI unit with incomplete navigation data.")
+		--Application:error("[CopMovement:post_init] Spawned AI unit with incomplete navigation data.")
 		self._unit:set_extension_update(ids_movement, false)
 	end
 
 	self._unit:kill_mover()
 	self._unit:set_driving("script")
-	
-	self._unit:unit_data().has_alarm_pager = nil
-	
+	self._unit:unit_data().has_alarm_pager = self._tweak_data.has_alarm_pager
+	self._unit:unit_data().ignore_ecm_for_pager = nil
+
 	local event_list = {
 		"bleedout",
 		"light_hurt",
@@ -151,32 +155,27 @@ function CopMovement:post_init()
 		"fatal",
 		"fire_hurt",
 		"poison_hurt",
-		"concussion"
+		"concussion",
+		"healed"
 	}
-
-	table.insert(event_list, "healed")
 	self._unit:character_damage():add_listener("movement", event_list, callback(self, self, "damage_clbk"))
-	self._unit:inventory():add_listener("movement", {
-		"equip",
-		"unequip"
-	}, callback(self, self, "clbk_inventory"))
+
+	self._unit:inventory():add_listener("movement", {"equip", "unequip"}, callback(self, self, "clbk_inventory"))
+
 	self:add_weapons()
 
-	if self._unit:inventory():is_selection_available(2) then
-		if managers.groupai:state():whisper_mode() or not self._unit:inventory():is_selection_available(1) then
-			self._unit:inventory():equip_selection(2, true)
-		else
-			self._unit:inventory():equip_selection(1, true)
-		end
-	elseif self._unit:inventory():is_selection_available(1) then
+	if self._unit:inventory():is_selection_available(1) then
 		self._unit:inventory():equip_selection(1, true)
+	elseif self._unit:inventory():is_selection_available(2) then
+		self._unit:inventory():equip_selection(2, true)
 	end
 
 	if self._ext_inventory:equipped_selection() == 2 and managers.groupai:state():whisper_mode() then
 		self._ext_inventory:set_weapon_enabled(false)
 	end
 
-	local weap_name = self._ext_base:default_weapon_name(managers.groupai:state():enemy_weapons_hot() and "primary" or "secondary")
+	self._ext_base:default_weapon_name(managers.groupai:state():enemy_weapons_hot() and "primary" or "secondary")
+
 	local fwd = self._m_rot:y()
 	self._action_common_data = {
 		stance = self._stance,
@@ -197,7 +196,7 @@ function CopMovement:post_init()
 		nav_tracker = self._nav_tracker,
 		active_actions = self._active_actions,
 		queued_actions = self._queued_actions,
-		look_vec = mvector3.copy(fwd)
+		look_vec = mvec3_cpy(fwd)
 	}
 
 	self:upd_ground_ray()
@@ -213,11 +212,139 @@ function CopMovement:is_taser_attack_allowed() --lol
 	return
 end
 
+function CopMovement:_chk_play_equip_weapon()
+	if self._stance.values[1] == 1 and not self._ext_anim.equip and not self._tweak_data.no_equip_anim and not self:chk_action_forbidden("action") then
+		local redir_res = self:play_redirect("equip")
+
+		if redir_res then
+			local weapon_unit = self._ext_inventory:equipped_unit()
+
+			if weapon_unit then
+				local weap_tweak = weapon_unit:base():weapon_tweak_data()
+				local weapon_hold = weap_tweak.hold
+
+				if type(weap_tweak.hold) == "table" then
+					local num = #weap_tweak.hold + 1
+
+					for i, hold_type in ipairs(weap_tweak.hold) do
+						self._machine:set_parameter(redir_res, "to_" .. hold_type, num - i)
+					end
+				else
+					self._machine:set_parameter(redir_res, "to_" .. weap_tweak.hold, 1)
+				end
+			end
+		end
+	end
+
+	self._ext_inventory:set_weapon_enabled(true)
+end
+
+function CopMovement:anim_clbk_enemy_spawn_melee_item()
+	local unit_name = self._melee_item_unit_name
+
+	if unit_name == false or unit_name and alive_g(self._melee_item_unit) then
+		return
+	end
+
+	if unit_name == nil then
+		local base_ext = self._ext_base
+		local melee_weapon = base_ext.melee_weapon and base_ext:melee_weapon()
+
+		if melee_weapon and melee_weapon ~= "weapon" then
+			local npc_melee_tweak_data = tweak_data.weapon.npc_melee[melee_weapon]
+
+			if npc_melee_tweak_data then
+				unit_name = npc_melee_tweak_data.unit_name
+				self._melee_item_unit_name = unit_name
+			else
+				local ms = managers
+				local melee_weapon_data = ms.blackmarket:get_melee_weapon_data(melee_weapon)
+
+				if melee_weapon_data then
+					local third_unit = melee_weapon_data.third_unit
+
+					if third_unit then
+						unit_name = ids_func(third_unit)
+						self._melee_item_unit_name = unit_name
+					end
+				end
+			end
+		end
+
+		if not unit_name then
+			self._melee_item_unit_name = false
+
+			return
+		end
+	end
+
+	local my_unit = self._unit
+	local align_obj_l_name = CopMovement._gadgets.aligns.hand_l
+	local align_obj_l = my_unit:get_object(align_obj_l_name)
+	local melee_unit = world_g:spawn_unit(unit_name, align_obj_l:position(), align_obj_l:rotation())
+
+	my_unit:link(align_obj_l:name(), melee_unit, melee_unit:orientation_object():name())
+
+	self._melee_item_unit = melee_unit
+end
+
+local pre_destroy_original = CopMovement.pre_destroy
+function CopMovement:pre_destroy()
+	pre_destroy_original(self)
+
+	local melee_unit = self._melee_item_unit
+
+	if alive_g(melee_unit) then
+		melee_unit:unlink()
+		world_g:delete_unit(melee_unit)
+
+		self._melee_item_unit = nil
+	end
+
+	if Network:is_server() then
+		self:throw_bag()
+	else
+		local carry_unit = self._carry_unit
+
+		if carry_unit then
+			carry_unit:carry_data():unlink()
+			self:sync_throw_bag(carry_unit)
+		end
+	end
+
+	self.update = self._upd_empty
+end
+
+function CopMovement:_upd_empty()
+	self._gnd_ray = nil
+
+	unit:set_extension_update_enabled(ids_movement, false)
+end
+
+function CopMovement:update(unit, t, dt)
+	local old_need_upd = self._need_upd
+	self._need_upd = false
+
+	self:_upd_actions(t)
+
+	if self._need_upd ~= old_need_upd then
+		unit:set_extension_update_enabled(ids_movement, self._need_upd)
+	end
+
+	if self._force_head_upd then
+		self._force_head_upd = nil
+
+		self:upd_m_head_pos()
+	end
+end
+
 function CopMovement:_upd_actions(t)
 	local a_actions = self._active_actions
 	local has_no_action = true
 
-	for i_action, action in ipairs(a_actions) do
+	for i = 1, #a_actions do
+		local action = a_actions[i]
+
 		if action then
 			if action.update then
 				action:update(t)
@@ -228,7 +355,7 @@ function CopMovement:_upd_actions(t)
 			end
 
 			if action.expired and action:expired() then
-				a_actions[i_action] = false
+				a_actions[i] = false
 
 				if action.on_exit then
 					action:on_exit()
@@ -236,240 +363,178 @@ function CopMovement:_upd_actions(t)
 
 				self._ext_brain:action_complete_clbk(action)
 				self._ext_base:chk_freeze_anims()
-
-				for _, action in ipairs(a_actions) do
-					if action then
-						has_no_action = nil
-
-						break
-					end
-				end
 			else
 				has_no_action = nil
 			end
 		end
 	end
 
-	if has_no_action and (not self._queued_actions or not next(self._queued_actions)) then
-		self:action_request({
-			body_part = 1,
-			type = "idle"
-		})
+	if has_no_action then
+		for i = 1, #a_actions do
+			local action = a_actions[i]
+
+			if action then
+				has_no_action = nil
+
+				break
+			end
+		end
 	end
 
-	if not a_actions[1] and not a_actions[2] and (not self._queued_actions or not next(self._queued_actions)) and not self:chk_action_forbidden("action") then
-		if a_actions[3] then
+	if has_no_action then
+		local queued_actions = self._queued_actions
+
+		if not queued_actions or not next_g(queued_actions) then
+			self:play_redirect("idle")
+
 			self:action_request({
-				body_part = 2,
+				body_part = 3,
 				type = "idle"
 			})
-		else
-			self:action_request({
-				body_part = 1,
-				type = "idle"
-			})
+		end
+	end
+
+	if not a_actions[1] then
+		local queued_actions = self._queued_actions
+
+		if not queued_actions or not next_g(queued_actions) then
+			if not a_actions[2] then
+				if not a_actions[3] and not self:chk_action_forbidden("action") then
+					self:action_request({
+						body_part = 3,
+						type = "idle"
+					})
+				end
+			elseif a_actions[2]:type() == "idle" then
+				if not a_actions[3] then
+					if not self:chk_action_forbidden("action") then
+						self:action_request({
+							body_part = 2,
+							type = "idle",
+							non_persistent = true,
+							client_interrupt = true
+						})
+
+						self:action_request({
+							body_part = 3,
+							type = "idle"
+						})
+					end
+				elseif a_actions[3]:type() == "idle" then
+					if not self:chk_action_forbidden("action") then
+						self:action_request({
+							body_part = 2,
+							type = "idle",
+							non_persistent = true,
+							client_interrupt = true
+						})
+					end
+				end
+			elseif not a_actions[3] and not self:chk_action_forbidden("action") then
+				self:action_request({
+					body_part = 3,
+					type = "idle"
+				})
+			end
 		end
 	end
 
 	self:_upd_stance(t)
 
-	self._need_upd = true
-end
+	if not self._need_upd then
+		local ext_anim = self._ext_anim
 
-function CopMovement:_change_stance(stance_code, instant)
-	if self._tweak_data.allowed_stances then
-		if stance_code == 1 and not self._tweak_data.allowed_stances.ntl then
-			return
-		elseif stance_code == 2 and not self._tweak_data.allowed_stances.hos then
-			return
-		elseif stance_code == 3 and not self._tweak_data.allowed_stances.cbt then
-			return
-		end
-	end
-
-	local stance = self._stance
-
-	if instant then
-		if stance.transition or stance.code ~= stance_code then
-			stance.transition = nil
-			stance.code = stance_code
-			stance.name = CopMovement._stance.names[stance_code]
-
-			for i = 1, 3, 1 do
-				stance.values[i] = 0
-			end
-
-			stance.values[stance_code] = 1
-
-			for i, v in ipairs(stance.values) do
-				self._machine:set_global(CopMovement._stance.names[i], v)
-			end
-		end
-	else
-		local end_values = {}
-
-		if stance_code == 4 then
-			if stance.transition then
-				end_values = stance.transition.end_values
-			else
-				for i, value in ipairs(stance.values) do
-					end_values[i] = value
-				end
-			end
-		elseif stance.transition then
-			end_values = {
-				0,
-				0,
-				0,
-				stance.transition.end_values[4]
-			}
-		else
-			end_values = {
-				0,
-				0,
-				0,
-				stance.values[4]
-			}
-		end
-
-		end_values[stance_code] = 1
-
-		if stance_code ~= 4 then
-			stance.code = stance_code
-			stance.name = CopMovement._stance.names[stance_code]
-		end
-
-		local delay = nil
-		local vis_state = self._ext_base:lod_stage()
-
-		if vis_state then
-			delay = CopMovement._stance.blend[stance_code]
-
-			if vis_state > 2 then
-				delay = delay * 0.5
-			end
-		else
-			stance.transition = nil
-
-			if stance_code ~= 1 then
-				self:_chk_play_equip_weapon()
-			end
-
-			local names = CopMovement._stance.names
-
-			for i, v in ipairs(end_values) do
-				if v ~= stance.values[i] then
-					stance.values[i] = v
-
-					self._machine:set_global(names[i], v)
-				end
-			end
-
-			return
-		end
-
-		local start_values = {}
-
-		for _, value in ipairs(stance.values) do
-			table.insert(start_values, value)
-		end
-
-		local t = TimerManager:game():time()
-		local transition = {
-			end_values = end_values,
-			start_values = start_values,
-			duration = delay,
-			start_t = t,
-			next_upd_t = t + 0.07
-		}
-		stance.transition = transition
-	end
-
-	if stance_code ~= 1 then
-		self:_chk_play_equip_weapon()
-	end
-
-	self:enable_update()
-end
-
-function CopMovement:_upd_stance(t)
-	if self._stance.transition then
-		local stance = self._stance
-		local transition = stance.transition
-
-		if transition.next_upd_t < t then
-			local values = stance.values
-			local progtransition_t = t - transition.start_t
-			local prog = progtransition_t / transition.duration
-
-			if prog < 1 then
-				local prog_smooth = math.clamp(math.bezier(stance_ctl_pts, prog), 0, 1)
-				local v_start = transition.start_values
-				local v_end = transition.end_values
-				local mlerp = math.lerp
-
-				for i, v in ipairs(v_start) do
-					values[i] = mlerp(v, v_end[i], prog_smooth)
-				end
-
-				transition.next_upd_t = t + 0.033
-			else
-				for i, v in ipairs(transition.end_values) do
-					values[i] = v
-				end
-
-				stance.transition = nil
-			end
-
-			local names = CopMovement._stance.names
-
-			for i, v in ipairs(values) do
-				self._machine:set_global(names[i], v)
-			end
-		end
-	end
-
-	if self._suppression.transition then
-		local suppression = self._suppression
-		local transition = suppression.transition
-
-		if transition.next_upd_t < t then
-			local progtransition_t = t - transition.start_t
-			local prog = progtransition_t / transition.duration
-
-			if prog < 1 then
-				local prog_smooth = math.clamp(math.bezier(stance_ctl_pts, prog), 0, 1)
-				local val = math.lerp(transition.start_val, transition.end_val, prog_smooth)
-				suppression.value = val
-
-				self._machine:set_global("sup", val)
-
-				transition.next_upd_t = t + 0.033
-			else
-				self._machine:set_global("sup", transition.end_val)
-
-				suppression.value = transition.end_val
-				suppression.transition = nil
-			end
+		if ext_anim.base_need_upd or ext_anim.upper_need_upd or ext_anim.fumble or self._stance.transition or self._suppression.transition then
+			self._need_upd = true
 		end
 	end
 end
 
-function CopMovement:anim_clbk_enemy_spawn_melee_item()
-	if alive(self._melee_item_unit) then
+function CopMovement:sync_action_act_start(index, blocks_hurt, clamp_to_graph, needs_full_blend, start_rot, start_pos)
+	if self._ext_damage:dead() then
 		return
 	end
 
-	local melee_weapon = self._unit:base().melee_weapon and self._unit:base():melee_weapon()
-	local unit_name = melee_weapon and melee_weapon ~= "weapon" and tweak_data.weapon.npc_melee[melee_weapon] and tweak_data.weapon.npc_melee[melee_weapon].unit_name or nil
+	local redir_name = self._actions.act:_get_act_name_from_index(index)
+	local body_part = 1
+	local blocks = nil
 
-	if unit_name then
-		local align_obj_l_name = CopMovement._gadgets.aligns.hand_l
-		local align_obj_l = self._unit:get_object(align_obj_l_name)
-
-		self._melee_item_unit = World:spawn_unit(unit_name, align_obj_l:position(), align_obj_l:rotation())
-		self._unit:link(align_obj_l:name(), self._melee_item_unit, self._melee_item_unit:orientation_object():name())
+	if redir_name == "suppressed_reaction" then
+		body_part = 2
+		blocks = {
+			walk = -1,
+			act = -1,
+			idle = -1,
+			dodge = -1
+		}
+	elseif redir_name == "gesture_stop" or redir_name == "arrest" or redir_name == "cmd_get_up" or redir_name == "cmd_down" or redir_name == "cmd_stop" or redir_name == "cmd_gogo" or redir_name == "cmd_point" then
+		body_part = 3
+		blocks = {
+			action = -1,
+			act = -1,
+			idle = -1
+		}
+	else
+		blocks = {
+			act = -1,
+			idle = -1,
+			action = -1,
+			walk = -1
+		}
 	end
+
+	local action_data = {
+		type = "act",
+		body_part = body_part,
+		variant = redir_name,
+		blocks = blocks,
+		start_rot = start_rot,
+		start_pos = start_pos,
+		clamp_to_graph = clamp_to_graph,
+		needs_full_blend = needs_full_blend
+	}
+
+	if blocks_hurt then
+		action_data.blocks.light_hurt = -1
+		action_data.blocks.hurt = -1
+		action_data.blocks.heavy_hurt = -1
+		action_data.blocks.expl_hurt = -1
+		action_data.blocks.fire_hurt = -1
+	end
+
+	self:action_request(action_data)
+end
+
+function CopMovement:sync_action_dodge_start(body_part, var, side, rot, speed, shoot_acc)
+	if self._ext_damage:dead() then
+		return
+	end
+
+	local action_data = {
+		type = "dodge",
+		body_part = body_part,
+		variation = CopActionDodge.get_variation_name(var),
+		direction = Rotation(rot):y(),
+		side = CopActionDodge.get_side_name(side),
+		speed = speed,
+		shoot_accuracy = shoot_acc / 10,
+		blocks = {
+			act = -1,
+			tase = -1,
+			bleedout = -1,
+			dodge = -1,
+			walk = -1,
+			action = body_part == 1 and -1 or nil,
+			aim = body_part == 1 and -1 or nil
+		}
+	}
+
+	if action_data.variation ~= "side_step" then
+		action_data.blocks.hurt = -1
+		action_data.blocks.heavy_hurt = -1
+	end
+
+	self:action_request(action_data)
 end
 
 function CopMovement:on_suppressed(state)
@@ -606,73 +671,18 @@ function CopMovement:on_suppressed(state)
 					end
 				end
 
-				if try_something_else and self._ext_anim.run and self._ext_anim.move_fwd and not self:chk_action_forbidden("act") and not is_shin_shootout then
-					local vec_from = temp_vec1
-					local vec_to = temp_vec2
-					local ray_params = {
-						allow_entry = false,
-						trace = true,
-						tracker_from = self:nav_tracker(),
-						pos_from = vec_from,
-						pos_to = vec_to
-					}
-
-					mvec3_set(ray_params.pos_from, self:m_pos())
-					mvec3_set(ray_params.pos_to, self:m_rot():y())
-					mvec3_mul(ray_params.pos_to, 380) --small offset from 4m
-					mvec3_add(ray_params.pos_to, self:m_pos())
-
-					if not managers.navigation:raycast(ray_params) then
-						local action_desc = {
-							clamp_to_graph = true,
-							type = "act",
-							body_part = 1,
-							variant = "e_nl_slide_fwd_4m",
-							blocks = {
-								action = -1,
-								act = -1,
-								tase = -1,
-								bleedout = -1,
-								dodge = -1,
-								walk = -1,
-								hurt = -1,
-								heavy_hurt = -1
-							}
-						}
-
-						if self:action_request(action_desc) then
-							try_something_else = false
-						end
-					end
-				end
-
 				if try_something_else and not self._tweak_data.no_suppression_reaction then
 					if self._ext_anim.idle then
 						if not self._active_actions[2] or self._active_actions[2]:type() == "idle" then
 							if not self:chk_action_forbidden("act") then
-								if diff_index >= 7 then
-									if not self._ext_anim.crouch then
-										local action_desc = {
-											clamp_to_graph = true,
-											type = "act",
-											body_part = 2,
-											variant = "suppressed_reaction", --they do an unique crouching animation instead of freezing.
-											blocks = {
-												walk = -1
-											}
-										}
-
-										self:action_request(action_desc)
-									end
-								else
+								if not self._ext_anim.crouch then
 									local action_desc = {
 										clamp_to_graph = true,
 										type = "act",
-										body_part = 1,
-										variant = "surprised", --they freeze in their spot and play the "surprised" animation.
+										body_part = 2,
+										variant = "suppressed_reaction", --they do an unique crouching animation instead of freezing.
 										blocks = {
-											walk = -1,
-											action = -1
+											walk = -1
 										}
 									}
 
@@ -691,32 +701,38 @@ function CopMovement:on_suppressed(state)
 	self:enable_update()
 end
 
+local nonstags = {
+	dmg_rcv = true,
+	light_hurt = true
+}
+
 function CopMovement:damage_clbk(my_unit, damage_info)
 	local hurt_type = damage_info.result.type
 
 	if not hurt_type then
 		return
 	end
-
+	
+	local t = TimerManager:game():time()
+	
 	if hurt_type == "healed" then
 		self._ext_damage._health = self._ext_damage._HEALTH_INIT
 		self._ext_damage._health_ratio = 1
 
 		local diff_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-		local t = TimerManager:game():time()
 
 		if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self._ext_damage._invulnerability_t = t + 4
 
 			if self._unit:contour() then
-				self._unit:contour():add("medic_heal_complex")
-				self._unit:contour():flash("medic_heal_complex", 0.15)
+				self._unit:contour():add("medic_heal_anarchy", 4)
+				self._unit:contour():flash("medic_heal_anarchy", 0.15)
 			end
 		else
 			self._ext_damage._invulnerability_t = t + 2
 
 			if self._unit:contour() then
-				self._unit:contour():add("medic_heal")
+				self._unit:contour():add("medic_heal", 2)
 				self._unit:contour():flash("medic_heal", 0.2)
 			end
 		end
@@ -726,10 +742,6 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		end
 
 		self._unit:sound():say("x01a_any_3p")
-			
-		if damage_info.is_synced or self._tweak_data.ignore_medic_revive_animation then
-			return
-		end
 
 		return
 	elseif hurt_type == "death" and damage_info.is_synced then
@@ -785,6 +797,7 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 			body_part = body_part,
 			blocks = blocks,
 			client_interrupt = Network:is_client(),
+			weapon_unit = damage_info.weapon_unit,
 			attacker_unit = damage_info.attacker_unit,
 			death_type = death_type,
 			ignite_character = damage_info.ignite_character,
@@ -807,6 +820,12 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 
 			if not hurt_type then
 				return
+			end
+		end
+		
+		if self._unit:base():has_tag("takedown") then
+			if not nonstags[hurt_type] then
+				self._ext_damage._next_stag_t = t + math.lerp(3, 6, math.random())
 			end
 		end
 	end
@@ -924,6 +943,7 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 		body_part = body_part,
 		blocks = blocks,
 		client_interrupt = client_interrupt,
+		weapon_unit = damage_info.weapon_unit,
 		attacker_unit = damage_info.attacker_unit,
 		death_type = death_type,
 		ignite_character = damage_info.ignite_character,
@@ -938,34 +958,150 @@ function CopMovement:damage_clbk(my_unit, damage_info)
 	end
 end
 
-function CopMovement:synch_attention(attention)
-	self:_remove_attention_destroy_listener(self._attention)
-	self:_add_attention_destroy_listener(attention)
+function CopMovement:sync_action_spooc_nav_point(pos, action_id)
+	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
 
-	if attention and attention.unit and not attention.destroy_listener_key then
-		self:synch_attention(nil)
+	if is_queued then
+		local stop_pos = spooc_action.stop_pos
+		local nr_exp_points = spooc_action.nr_expected_nav_points
 
-		return
+		if stop_pos and not nr_exp_points then
+			return
+		end
+
+		local path = spooc_action.nav_path
+
+		path[#path + 1] = pos
+
+		if nr_exp_points then
+			if nr_exp_points == 1 then
+				spooc_action.nr_expected_nav_points = nil
+
+				path[#path + 1] = stop_pos
+			else
+				spooc_action.nr_expected_nav_points = nr_exp_points - 1
+			end
+		end
+
+		spooc_action.nav_path = path
+	elseif spooc_action then
+		spooc_action:sync_append_nav_point(pos)
+	end
+end
+
+function CopMovement:sync_action_spooc_stop(pos, stop_nav_index, action_id)
+	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
+
+	if is_queued then
+		spooc_action.host_expired = true
+		spooc_action.stop_pos = mvec3_cpy(pos)
+
+		local host_stop_pos_i = spooc_action.host_stop_pos_inserted
+
+		if host_stop_pos_i then
+			stop_nav_index = stop_nav_index + host_stop_pos_i
+		end
+
+		local path = spooc_action.nav_path
+
+		if #path > stop_nav_index then
+			local new_path_table = {}
+
+			for i = 1, stop_nav_index do
+				new_path_table[#new_path_table + 1] = path[i]
+			end
+
+			path = new_path_table
+		end
+
+		if #path < stop_nav_index - 1 then
+			spooc_action.nr_expected_nav_points = stop_nav_index - #path + 1
+		else
+			path[#path + 1] = pos
+
+			local new_index = #path - 1
+			new_index = new_index < 1 and 1 or new_index
+
+			if new_index < spooc_action.path_index then
+				spooc_action.path_index = new_index
+			end
+		end
+
+		spooc_action.nav_path = path
+	elseif spooc_action then
+		spooc_action:sync_stop(pos, stop_nav_index)
+	end
+end
+
+function CopMovement:sync_action_spooc_strike(pos, action_id)
+	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
+
+	if is_queued then
+		local stop_pos = spooc_action.stop_pos
+		local nr_exp_points = spooc_action.nr_expected_nav_points
+
+		if stop_pos and not nr_exp_points then
+			return
+		end
+
+		spooc_action.strike = true
+
+		if spooc_action.flying_strike then
+			return
+		end
+
+		local path = spooc_action.nav_path
+		path[#path + 1] = pos
+
+		spooc_action.strike_nav_index = #path
+
+		if nr_exp_points then
+			if nr_exp_points == 1 then
+				spooc_action.nr_expected_nav_points = nil
+
+				path[#path + 1] = stop_pos
+			else
+				spooc_action.nr_expected_nav_points = nr_exp_points - 1
+			end
+		end
+
+		spooc_action.nav_path = path
+	elseif spooc_action then
+		spooc_action:sync_strike(pos)
+	end
+end
+
+function CopMovement:_get_latest_act_action()
+	if self._queued_actions then
+		for i = #self._queued_actions, 1, -1 do
+			if self._queued_actions[i].type == "act" and not self._queued_actions[i].host_expired then
+				return self._queued_actions[i], true, i
+			end
+		end
 	end
 
-	local old_attention = self._attention
-	self._attention = attention
-	self._action_common_data.attention = attention
-
-	for _, action in ipairs(self._active_actions) do
-		if action and action.on_attention then
-			action:on_attention(attention, old_attention)
+	for body_part, action in ipairs(self._active_actions) do
+		if action and action:type() == "act" then
+			return self._active_actions[body_part], false, body_part
 		end
 	end
 end
 
-local _equip_item_original = CopMovement._equip_item
-function CopMovement:_equip_item(item_type, align_place, droppable)
-	if item_type == "needle" then
-		align_place = "hand_l"
-	end
+function CopMovement:sync_action_act_end()
+	local act_action, queued, body_part = self:_get_latest_act_action()
 
-	_equip_item_original(self, item_type, align_place, droppable)
+	if queued then
+		act_action.host_expired = true
+	elseif act_action then
+		self._active_actions[body_part] = false
+
+		if act_action.on_exit then
+			act_action:on_exit()
+		end
+
+		self:_chk_start_queued_action()
+		self._ext_brain:action_complete_clbk(act_action)
+	end
 end
 
 function CopMovement:_get_latest_tase_action()
@@ -994,77 +1130,164 @@ function CopMovement:sync_taser_fire()
 	end
 end
 
-function CopMovement:sync_action_spooc_nav_point(pos, action_id)
-	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
+function CopMovement:sync_action_walk_nav_point(pos, explicit)
+	local walk_action, is_queued = self:_get_latest_walk_action(explicit)
 
 	if is_queued then
-		if spooc_action.stop_pos and not spooc_action.nr_expected_nav_points then
-			return
+		walk_action.nav_path[#walk_action.nav_path + 1] = pos
+	elseif walk_action then
+		walk_action:append_nav_point(pos)
+	end
+end
+
+function CopMovement:sync_action_walk_nav_link(pos, rot, anim_index, from_idle)
+	local nav_link = self._actions.walk.synthesize_nav_link(pos, rot, self._actions.act:_get_act_name_from_index(anim_index), from_idle)
+	local walk_action, is_queued = self:_get_latest_walk_action()
+
+	if is_queued then
+		function nav_link.element.value(element, name)
+			return element[name]
 		end
 
-		table.insert(spooc_action.nav_path, pos)
+		function nav_link.element.nav_link_wants_align_pos(element)
+			return element.from_idle
+		end
 
-		if spooc_action.nr_expected_nav_points then
-			if spooc_action.nr_expected_nav_points == 1 then
-				spooc_action.nr_expected_nav_points = nil
+		walk_action.nav_path[#walk_action.nav_path + 1] = nav_link
+	elseif walk_action then
+		walk_action:append_nav_point(nav_link)
+	end
+end
 
-				table.insert(spooc_action.nav_path, spooc_action.stop_pos)
-			else
-				spooc_action.nr_expected_nav_points = spooc_action.nr_expected_nav_points - 1
+function CopMovement:sync_action_walk_stop(explicit)
+	local walk_action, is_queued = self:_get_latest_walk_action()
+
+	if is_queued then
+		walk_action.persistent = nil
+	elseif walk_action then
+		walk_action:stop()
+	end
+end
+
+function CopMovement:synch_attention(attention)
+	self:_remove_attention_destroy_listener(self._attention)
+	self:_add_attention_destroy_listener(attention)
+
+	if attention and attention.unit and not attention.destroy_listener_key then
+		self:synch_attention(nil)
+
+		return
+	end
+
+	local old_attention = self._attention
+	self._attention = attention
+	self._action_common_data.attention = attention
+
+	for _, action in ipairs(self._active_actions) do
+		if action and action.on_attention then
+			action:on_attention(attention, old_attention)
+		end
+	end
+end
+
+function CopMovement:clbk_sync_attention(attention)
+	if not alive_g(self._unit) then
+		return
+	end
+
+	if self._attention ~= attention then
+		return
+	end
+
+	attention = self._attention
+
+	if attention.handler then
+		if attention.handler:unit():id() ~= -1 then
+			self._ext_network:send("set_attention", attention.handler:unit(), attention.reaction)
+		else
+			self._ext_network:send("cop_set_attention_pos", mvec3_cpy(attention.handler:get_attention_m_pos()))
+		end
+	elseif attention.unit then
+		if attention.unit:id() ~= -1 then
+			self._ext_network:send("set_attention", attention.unit, AIAttentionObject.REACT_IDLE)
+		else
+			self._ext_network:send("cop_set_attention_pos", mvec3_cpy(attention.handler:get_attention_m_pos()))
+		end
+	end
+end
+
+function CopMovement:get_hold_type(hold_type)
+	if not hold_type then
+		return
+	end
+
+	if type(hold_type) == "table" then
+		for _, hold in ipairs(hold_type) do
+			if HuskPlayerMovement.reload_times[hold] then
+				return hold
 			end
 		end
-	elseif spooc_action then
-		spooc_action:sync_append_nav_point(pos)
+
+		return
+	elseif HuskPlayerMovement.reload_times[hold_type] then
+		return hold_type
+	else
+		return
 	end
 end
 
-function CopMovement:sync_action_spooc_stop(pos, nav_index, action_id)
-	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
+function CopMovement:anim_clbk_start_reload_looped()
+	local weapon_unit = self._ext_inventory:equipped_unit()
 
-	if is_queued then
-		spooc_action.host_expired = true
+	if not weapon_unit then
+		return
+	end
 
-		if spooc_action.host_stop_pos_inserted then
-			nav_index = nav_index + spooc_action.host_stop_pos_inserted
+	local weap_tweak = weapon_unit:base():weapon_tweak_data()
+	local weapon_usage_tweak = self._tweak_data.weapon[weap_tweak.usage]
+	local anim_multiplier = weapon_usage_tweak.RELOAD_SPEED or 1
+	local hold_type = self:get_hold_type(weap_tweak.hold)
+
+	if weap_tweak.looped_reload_speed then
+		anim_multiplier = anim_multiplier * weap_tweak.looped_reload_speed
+	end
+
+	local redir_res = self:play_redirect("reload_looped")
+
+	if redir_res then
+		self._machine:set_speed(redir_res, anim_multiplier)
+
+		if hold_type then
+			self._machine:set_parameter(redir_res, hold_type, 1)
 		end
-
-		local nav_path = spooc_action.nav_path
-
-		while nav_index < #nav_path do
-			table.remove(nav_path)
-		end
-
-		spooc_action.stop_pos = pos
-
-		if #nav_path < nav_index - 1 then
-			spooc_action.nr_expected_nav_points = nav_index - #nav_path + 1
-		else
-			table.insert(nav_path, pos)
-
-			spooc_action.path_index = math.max(1, math.min(spooc_action.path_index, #nav_path - 1))
-		end
-	elseif spooc_action then
-		spooc_action:sync_stop(pos, nav_index)
 	end
 end
 
-function CopMovement:sync_action_spooc_strike(pos, action_id)
-	local spooc_action, is_queued = self:_get_latest_spooc_action(action_id)
-
-	if is_queued then
-		if spooc_action.stop_pos and not spooc_action.nr_expected_nav_points then
-			return
-		end
-
-		table.insert(spooc_action.nav_path, pos)
-
-		spooc_action.strike_nav_index = #spooc_action.nav_path
-		spooc_action.strike = true
-	elseif spooc_action then
-		spooc_action:sync_strike(pos)
-	end
+function CopMovement:anim_clbk_reload_exit()
+	self:anim_clbk_hide_magazine_in_hand()
 end
 
+local _equip_item_original = CopMovement._equip_item
+function CopMovement:_equip_item(item_type, align_place, droppable)
+	if item_type == "needle" then
+		align_place = "hand_l"
+	end
+
+	_equip_item_original(self, item_type, align_place, droppable)
+end
+
+--used by clients
+function CopMovement:sync_reload_weapon(empty_reload, reload_speed_multiplier)
+	local reload_action = {
+		body_part = 3,
+		type = "reload",
+		idle_reload = empty_reload ~= 0 and empty_reload or nil
+	}
+
+	self:action_request(reload_action)
+end
+
+--stealth corpse position syncing
 function CopMovement:sync_fall_position(pos, rot)
 	if self._nr_synced then
 		self._nr_synced = self._nr_synced + 1
@@ -1086,15 +1309,6 @@ function CopMovement:sync_fall_position(pos, rot)
 	end
 end
 
-function CopMovement:anim_clbk_reload_exit()
-	if self._ext_inventory:equipped_unit() then
-		self._ext_inventory:equipped_unit():base():on_reload()
-	end
-
-	--if the reload animation is exited/interrupted, make the weapon's magazine visible again + despawn the magazine on the unit's hand (if it's still attached there)
-	self:anim_clbk_hide_magazine_in_hand()
-end
-
 function CopMovement:anim_clbk_spawn_dropped_magazine()
 	if not self:allow_dropped_magazines() then
 		return
@@ -1102,7 +1316,7 @@ function CopMovement:anim_clbk_spawn_dropped_magazine()
 
 	local equipped_weapon = self._unit:inventory():equipped_unit()
 
-	if alive(equipped_weapon) and not equipped_weapon:base()._assembly_complete then
+	if alive_g(equipped_weapon) and not equipped_weapon:base()._assembly_complete then
 		return
 	end
 
@@ -1118,9 +1332,9 @@ function CopMovement:anim_clbk_spawn_dropped_magazine()
 
 		self:anim_clbk_show_magazine_in_hand()
 
-		if not self._magazine_data then --prevent the function from going any further if no data was defined with self:anim_clbk_show_magazine_in_hand()
+		if not self._magazine_data then
 			return
-		elseif not alive(self._magazine_data.unit) then --prevent the function from going any further + delete the data if the magazine unit somehow didn't spawn
+		elseif not alive_g(self._magazine_data.unit) then
 			self._magazine_data = nil
 
 			return
@@ -1140,7 +1354,7 @@ function CopMovement:anim_clbk_spawn_dropped_magazine()
 		allow_throw = false
 	end
 
-	if self._magazine_data and alive(self._magazine_data.unit) then
+	if self._magazine_data and alive_g(self._magazine_data.unit) then
 		ref_unit = ref_unit or self._magazine_data.unit
 
 		self._magazine_data.unit:set_visible(false)
@@ -1162,7 +1376,7 @@ function CopMovement:anim_clbk_spawn_dropped_magazine()
 		mvec3_set(temp_vec2, pos)
 		mvec3_add(temp_vec2, temp_vec1)
 
-		local dropped_col = World:spawn_unit(CopMovement.magazine_collisions[mag_size][1], temp_vec2, rot)
+		local dropped_col = world_g:spawn_unit(CopMovement.magazine_collisions[mag_size][1], temp_vec2, rot)
 
 		dropped_col:link(CopMovement.magazine_collisions[mag_size][2], dropped_mag)
 
@@ -1181,7 +1395,7 @@ function CopMovement:anim_clbk_spawn_dropped_magazine()
 			local reload_speed_multiplier = 1
 			local w_td_crew = self:_equipped_weapon_crew_tweak_data()
 
-			if w_td_crew then --vanilla never sets this properly in this file
+			if w_td_crew then
 				local weapon_usage_tweak = self._tweak_data.weapon[w_td_crew.usage]
 				reload_speed_multiplier = weapon_usage_tweak.RELOAD_SPEED or 1
 			end
@@ -1190,10 +1404,200 @@ function CopMovement:anim_clbk_spawn_dropped_magazine()
 
 			mvec3_set(temp_vec1, equipped_weapon:rotation():z())
 			mvec3_mul(temp_vec1, math_lerp(math_random(65, 80), math_random(140, 160), _t))
-			mvec3_mul(temp_vec1, math_random() < 0.0005 and 10 or -1) --0.0005% chance to send the magazine flying upwards (it's normally like this, just pointing it out)
+			mvec3_mul(temp_vec1, math_random() < 0.0005 and 10 or -1)
 			dropped_col:push(throw_force, temp_vec1)
 		end
 
 		managers.enemy:add_magazine(dropped_mag, dropped_col)
+	end
+end
+
+function CopMovement:carrying_bag()
+	return self._carry_unit and true or false
+end
+
+function CopMovement:set_carrying_bag(unit)
+	self._carry_unit = unit or nil
+
+	self:set_carry_speed_modifier()
+end
+
+function CopMovement:carry_id()
+	return self._carry_unit and self._carry_unit:carry_data():carry_id()
+end
+
+function CopMovement:carry_data()
+	return self._carry_unit and self._carry_unit:carry_data()
+end
+
+function CopMovement:carry_tweak()
+	return self:carry_id() and tweak_data.carry.types[tweak_data.carry[self:carry_id()].type]
+end
+
+function CopMovement:throw_bag(target_unit, reason)
+	if not self:carrying_bag() then
+		return
+	end
+
+	local carry_unit = self._carry_unit
+	self._was_carrying = {
+		unit = carry_unit,
+		reason = reason
+	}
+
+	carry_unit:carry_data():unlink()
+
+	if Network:is_server() then
+		self:sync_throw_bag(carry_unit, target_unit)
+		managers.network:session():send_to_peers_synched("sync_ai_throw_bag", self._unit, carry_unit, target_unit)
+	end
+end
+
+function CopMovement:was_carrying_bag()
+	return self._was_carrying
+end
+
+function CopMovement:sync_throw_bag(carry_unit, target_unit)
+	if not alive_g(target_unit) then
+		return
+	end
+
+	local dynamic_bodies = {}
+	local nr_bodies = carry_unit:num_bodies()
+
+	for i = 0, nr_bodies - 1 do
+		local body = carry_unit:body(i)
+
+		if body:dynamic() then
+			body:set_keyframed()
+
+			dynamic_bodies[#dynamic_bodies + 1] = body
+		end
+	end
+
+	call_on_next_update_g(function ()
+		if not alive_g(carry_unit) or not alive_g(target_unit) or not alive_g(self._unit) then
+			return
+		end
+
+		local spine_pos = Vector3()
+		self._obj_spine:m_position(spine_pos)
+
+		local target_pos = tmp_vec1
+		local carry_rot = tmp_rot_1
+		mvec3_set(target_pos, target_unit:movement():m_head_pos())
+
+		local dir = target_pos - spine_pos
+		mrot_lookat(carry_rot, dir, math_up)
+
+		local set_z = dir:length() * 0.75
+		target_pos = target_pos:with_z(target_pos.z + set_z)
+		dir = target_pos - spine_pos
+
+		carry_unit:set_position(spine_pos)
+		carry_unit:set_velocity(zero_vel_vec)
+		carry_unit:set_rotation(carry_rot)
+
+		call_on_next_update_g(function ()
+			if not alive_g(carry_unit) or not alive_g(target_unit) or not alive_g(self._unit) then
+				return
+			end
+
+			for i = 1, #dynamic_bodies do
+				local body = dynamic_bodies[i]
+
+				body:set_dynamic()
+			end
+
+			call_on_next_update_g(function ()
+				if not alive_g(carry_unit) or not alive_g(target_unit) or not alive_g(self._unit) then
+					return
+				end
+
+				local throw_distance_multiplier = tweak_data.carry.types[tweak_data.carry[carry_unit:carry_data():carry_id()].type].throw_distance_multiplier
+
+				carry_unit:push(tweak_data.ai_carry.throw_force, dir * throw_distance_multiplier)
+			end)
+		end)
+	end)
+end
+
+function CopMovement:set_carry_speed_modifier()
+	local tweak = self:carry_tweak()
+
+	if tweak then
+		local speed_mod = tweak.move_speed_modifier
+
+		if speed_mod and speed_mod < 1 then
+			self._carry_speed_modifier = speed_mod
+
+			return
+		end
+	end
+
+	self._carry_speed_modifier = nil
+end
+
+function CopMovement:set_hostage_speed_modifier(enable)
+	if enable then
+		local char_tweak_mul = self._tweak_data.hostage_move_speed or 1
+		local hostage_mul = char_tweak_mul + managers.player:team_upgrade_value("player", "civilian_hostage_speed_bonus", 1) - 1
+
+		if hostage_mul ~= 1 then
+			self._hostage_speed_modifier = hostage_mul
+
+			return
+		end
+	end
+
+	self._hostage_speed_modifier = nil
+end
+
+function CopMovement:speed_modifier()
+	local speed_modifier = not self:cool() and self._tweak_data.speed_mul or 1
+	local add_modifier = 1
+	
+	local carry_modifier = self._carry_speed_modifier
+
+	if carry_modifier then
+		add_modifier = add_modifier * carry_modifier
+	end
+
+	local hostage_modifier = self._hostage_speed_modifier
+
+	if hostage_modifier then
+		add_modifier = add_modifier * hostage_modifier
+	end
+	
+	add_modifier = add_modifier - 1
+
+	return speed_modifier + add_modifier
+end
+
+local original_save = CopMovement.save
+function CopMovement:save(save_data)
+	original_save(self, save_data)
+
+	save_data.movement.has_bag = self:carrying_bag()
+end
+
+local original_load = CopMovement.load
+function CopMovement:load(load_data)
+	original_load(self, load_data)
+
+	local mov_load_data = load_data.movement
+
+	if not mov_load_data or not mov_load_data.has_bag or not Network:is_client() then
+		return
+	end
+
+	managers.network:session():send_to_host("request_carried_bag_unit", self._unit)
+end
+
+function CopMovement:outside_worlds_bounding_box()
+	local my_unit = self._unit
+
+	if Network:is_server() or my_unit:id() == -1 then
+		my_unit:base():set_slot(my_unit, 0)
 	end
 end

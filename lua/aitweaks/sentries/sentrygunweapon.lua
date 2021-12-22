@@ -1,5 +1,11 @@
 local mvec_to = Vector3()
 
+function SentryGunWeapon:_apply_dmg_mul(damage, col_ray, from_pos)
+	local damage_out = damage * self._current_damage_mul
+
+	return damage_out
+end
+
 function SentryGunWeapon:_fire_raycast(from_pos, direction, shoot_player, target_unit)
 	local result = {}
 	local hit_unit, col_ray = nil

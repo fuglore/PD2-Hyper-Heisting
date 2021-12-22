@@ -1,3 +1,15 @@
+function GamePlayCentralManager:end_heist(num_winners)
+	if not num_winners then
+		num_winners = 1
+	end
+
+	managers.network:session():send_to_peers("mission_ended", true, num_winners)
+	game_state_machine:change_state_by_name("victoryscreen", {
+		num_winners = num_winners,
+		personal_win = alive(managers.player:player_unit())
+	})
+end
+
 function GamePlayCentralManager:do_shotgun_push(unit, hit_pos, dir, distance, attacker)
 	if not distance then
 		return

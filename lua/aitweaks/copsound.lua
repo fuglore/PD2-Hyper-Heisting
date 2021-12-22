@@ -1,8 +1,18 @@
 function CopSound:init(unit)
 	self._unit = unit
+	self._chatter = {}
 	self._speak_expire_t = 0
 	unit:base():post_init()
 	self._prefix = self:get_appropriate_unit_sound_prefix()
+	
+	if self._unit:base():char_tweak().spawn_sound_event then
+		self._unit:sound():play(self._unit:base():char_tweak().spawn_sound_event, nil, nil)
+	end	
+		
+	if self._unit:base():char_tweak().spawn_scream then
+		self._unit:sound():say(self._unit:base():char_tweak().spawn_scream, nil, nil)
+	end
+	
 end
 
 function CopSound:get_appropriate_unit_sound_prefix()
@@ -283,7 +293,7 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 					if faction == "russia" then
 						full_sound = "rclk_x02a_any_3p"
 					elseif faction == "federales" then
-						full_sound = "Mclk_x02a_any_3p"					
+						full_sound = "mclk_x02a_any_3p"					
 					else
 						full_sound = "clk_x02a_any_3p"
 					end
@@ -329,12 +339,17 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 						full_sound = "tsr_x01a_any_3p"
 					end
 				end
+				
 				if self._unit:base():has_tag("tank") then
 					full_sound = "bdz_x01a_any_3p"
+				elseif self._unit:base():has_tag("medic") then
+					if faction == "federales" then
+						full_sound = "mmdc_x01a_any_3p"
+					else
+						full_sound = "mdc_x01a_any_3p"
+					end
 				end
-				if self._unit:base():has_tag("medic") and not self._unit:base():has_tag("tank") then
-					full_sound = "mdc_x01a_any_3p"
-				end
+				
 			end
 		end
 
@@ -356,14 +371,18 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 		if self._prefix == "z1n_" or self._prefix == "z2n_" or self._prefix == "z3n_" or self._prefix == "z4n_" then
 			if sound_name == "x02a_any_3p" then
 				full_sound = "shd_x02a_any_3p_01"
-			end
-
-			if sound_name == "x01a_any_3p" then
+			elseif sound_name == "x01a_any_3p" then
 				full_sound = "bdz_x01a_any_3p"
-			end
-
-			if sound_name ~= "x01a_any_3p" and sound_name ~= "x02a_any_3p" then
-				sound_name = "g90"
+			elseif sound_name ~= "x01a_any_3p" and sound_name ~= "x02a_any_3p" then
+				local sounds = {
+					"g90",
+					"mov",
+					"rdy",
+					"c01",
+					"d01"
+					
+				}
+				sound_name = sounds[math.random(#sounds)]
 			end
 		end
 			

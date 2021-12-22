@@ -1,0 +1,74 @@
+<table directory="assets">
+	<!--rifle ghost-->	
+	<unit path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle" load="true"/>
+	<unit path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle_husk" load="true"/>
+	<material_config path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle"/>	
+	<material_config path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle_contour"/>		
+	<object path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle" />
+	<model path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle" />	
+	<sequence_manager path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/ene_true_zeal_rifle"/>
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/blue_mask_il" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/blue_eyes_il" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_rifle/blue_body_il" />
+	<effect path="units/pd2_mod_zmansion/effects/blue_eyes"/>
+	
+	<!--taser ghost-->
+	<unit path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser" load="true"/>
+	<unit path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser_husk" load="true"/>
+	<material_config path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser"/>	
+	<material_config path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser_contour"/>		
+	<object path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser" />
+	<model path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser" />	
+	<sequence_manager path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/ene_true_zeal_taser"/>
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_body_df" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_body_il" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_eye_il" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_head_df" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_taser/taser_head_il" />
+	<effect path="units/pd2_mod_zmansion/effects/yellow_eyes"/>
+	
+	<unit path="units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_tazerlazer" load="true"/>
+	<material_config path="units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_tazerlazer"/>	
+	<object path="units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_tazerlazer" />
+	<model path="units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_tazerlazer" />	
+	<cooked_physics path="units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_tazerlazer"/>	
+	<sequence_manager path="units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_tazerlazer"/>
+	<texture path="units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_smoke_df" />
+	<texture path="units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_smoke_il" />
+	
+	<!--shotgun ghost-->
+	<unit path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun" load="true"/>
+	<unit path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun_husk" load="true"/>
+	<material_config path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun"/>	
+	<material_config path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun_contour"/>		
+	<object path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun" />
+	<model path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun" />	
+	<sequence_manager path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/ene_true_zeal_shotgun"/>
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/red_mask_il" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/red_eyes_il" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_shotgun/red_body_il" />
+	<effect path="units/pd2_mod_zmansion/effects/red_eyes"/>
+	
+	<!--cloaker ghost-->
+	<unit path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker" load="true"/>
+	<unit path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker_husk" load="true"/>
+	<material_config path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker"/>	
+	<material_config path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker_contour"/>		
+	<object path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker" />
+	<model path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker" />	
+	<sequence_manager path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/ene_true_zeal_cloaker"/>
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/spook_body_df" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/spook_eyes_il" />
+	<texture path="units/pd2_mod_zmansion/characters/ene_true_zeal_cloaker/spook_head_df" />
+	<effect path="units/pd2_mod_zmansion/effects/green_eyes"/>
+	
+	<effect path="units/pd2_mod_zmansion/effects/smoke_trail/smoke_distorted"/>
+	<effect path="units/pd2_mod_zmansion/effects/smoke_trail/smoke_distorted_small"/>
+	<effect path="units/pd2_mod_zmansion/effects/smoke_trail/smoke_puff"/>
+	<effect path="units/pd2_mod_zmansion/effects/smoke_trail/smoke_trail_small"/>
+	
+	<!--shared textures -->
+	<texture path="units/pd2_mod_zmansion/characters/shared_textures/material_mask_1_df" />
+	<texture path="units/pd2_mod_zmansion/characters/shared_textures/material_mask_2_df" />
+	<texture path="units/pd2_mod_zmansion/characters/shared_textures/zeal_body_df" />
+</table>

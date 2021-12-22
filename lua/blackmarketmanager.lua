@@ -1,3 +1,10 @@
+function BlackMarketManager:equipped_grenade_allows_pickups()
+	local id = self:equipped_grenade()
+	local grenade_tweak = id and tweak_data.blackmarket.projectiles[id]
+
+	return grenade_tweak and grenade_tweak.throwable
+end
+
 function BlackMarketManager:equipped_melee_weapon_damage_info(lerp_value)
 	lerp_value = lerp_value or 0
 	local melee_entry = self:equipped_melee_weapon()
@@ -5,8 +12,6 @@ function BlackMarketManager:equipped_melee_weapon_damage_info(lerp_value)
 	local primary = self:equipped_primary()
 	local bayonet_id = self:equipped_bayonet(primary.weapon_id)
 	local player = managers.player:player_unit()
-	
-
 
 	if bayonet_id and player:movement():current_state()._equipped_unit:base():selection_index() == 2 and melee_entry == "weapon" then
 		stats = tweak_data.weapon.factory.parts[bayonet_id].stats
@@ -26,6 +31,70 @@ function BlackMarketManager:equipped_melee_weapon_damage_info(lerp_value)
 	local dmg_effect = dmg * math.lerp(stats.min_damage_effect, stats.max_damage_effect, lerp_value)
 
 	return dmg, dmg_effect
+end
+
+function BlackMarketManager:recoil_addend(name, categories, recoil_index, silencer, blueprint, current_state, is_single_shot)
+	local addend = 0
+
+	if recoil_index and recoil_index >= 1 and recoil_index <= #tweak_data.weapon.stats.recoil then
+		local index = recoil_index
+		index = index + managers.player:upgrade_value("weapon", "recoil_index_addend", 0)
+		index = index + managers.player:upgrade_value("player", "stability_increase_bonus_1", 0)
+		index = index + managers.player:upgrade_value("player", "stability_increase_bonus_2", 0)
+		index = index + managers.player:upgrade_value(name, "recoil_index_addend", 0)
+
+		for i = 1, #categories do
+			local category = categories[i]
+			index = index + managers.player:upgrade_value(category, "recoil_index_addend", 0)
+			
+			if category == "shotgun" then 
+				index = index + managers.player:upgrade_value("player", "shot_shoulders_recoil_addend", 0)
+			end
+		end
+		
+		if managers.player:player_unit() and managers.player:player_unit():character_damage():is_suppressed() then
+			for _, category in ipairs(categories) do
+				if managers.player:has_team_category_upgrade(category, "suppression_recoil_index_addend") then
+					index = index + managers.player:team_upgrade_value(category, "suppression_recoil_index_addend", 0)
+				end
+			end
+
+			if managers.player:has_team_category_upgrade("weapon", "suppression_recoil_index_addend") then
+				index = index + managers.player:team_upgrade_value("weapon", "suppression_recoil_index_addend", 0)
+			end
+		else
+			for _, category in ipairs(categories) do
+				if managers.player:has_team_category_upgrade(category, "recoil_index_addend") then
+					index = index + managers.player:team_upgrade_value(category, "recoil_index_addend", 0)
+				end
+			end
+
+			if managers.player:has_team_category_upgrade("weapon", "recoil_index_addend") then
+				index = index + managers.player:team_upgrade_value("weapon", "recoil_index_addend", 0)
+			end
+		end
+
+		if silencer then
+			index = index + managers.player:upgrade_value("weapon", "silencer_recoil_index_addend", 0)
+
+			for _, category in ipairs(categories) do
+				index = index + managers.player:upgrade_value(category, "silencer_recoil_index_addend", 0)
+			end
+		end
+
+		if blueprint and self:is_weapon_modified(managers.weapon_factory:get_factory_id_by_weapon_id(name), blueprint) then
+			index = index + managers.player:upgrade_value("weapon", "modded_recoil_index_addend", 0)
+		end
+
+		index = math.clamp(index, 1, #tweak_data.weapon.stats.recoil)
+
+		if index ~= recoil_index then
+			local diff = tweak_data.weapon.stats.recoil[index] - tweak_data.weapon.stats.recoil[recoil_index]
+			addend = addend + diff
+		end
+	end
+
+	return addend
 end
 
 function BlackMarketManager:damage_multiplier(name, categories, silencer, detection_risk, current_state, blueprint)

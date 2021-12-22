@@ -20,7 +20,6 @@ end
 function CharacterTweakData:_presets(tweak_data)
 	local presets = origin_presets(self, tweak_data)
 	
-	
 	--replace existing suppression presets with lighter and consistent ones to accomodate for lack of immediate enemy suppression
 	presets.suppression = {
 		easy = {
@@ -49,8 +48,8 @@ function CharacterTweakData:_presets(tweak_data)
 				1
 			},
 			brown_point = {
-				6,
-				6
+				3,
+				3
 			}
 		},
 		hard_agg = {
@@ -61,11 +60,11 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			react_point = {
 				3,
-				4
+				3
 			},
 			brown_point = {
-				6,
-				6
+				4,
+				4
 			}
 		},
 		no_supress = {
@@ -92,7 +91,7 @@ function CharacterTweakData:_presets(tweak_data)
 			base_chance = 0
 		},
 		easy = {
-			base_chance = 0.1,
+			base_chance = 0,
 			reasons = {
 				pants_down = 1,
 				isolated = 0.25,
@@ -131,7 +130,7 @@ function CharacterTweakData:_presets(tweak_data)
 				weapon_down = 0.25,
 				health = {
 					[1.0] = 0.1,
-					[0.9] = 0.75
+					[0.9] = 0.5
 				}
 			},
 			factors = {
@@ -214,8 +213,323 @@ function CharacterTweakData:_presets(tweak_data)
     }
 	
 	--Dodge presets begin here.
+	presets.dodge = {
+		poor = {
+			speed = 0.8,
+			occasions = {
+				scared = {
+					chance = 0.5,
+					check_timeout = {
+						1,
+						2
+					},
+					variations = {
+						side_step = {
+							chance = 1,
+							timeout = {
+								2,
+								3
+							}
+						}
+					}
+				}
+			}
+		},
+		average = {
+			speed = 0.9,
+			occasions = {
+				scared = {
+					chance = 0.4,
+					check_timeout = {
+						4,
+						7
+					},
+					variations = {
+						side_step = {
+							chance = 1,
+							timeout = {
+								5,
+								8
+							}
+						}
+					}
+				},
+				hit = {
+					chance = 0.5,
+					check_timeout = {
+						1,
+						2
+					},
+					variations = {
+						side_step = {
+							chance = 1,
+							timeout = {
+								2,
+								3
+							}
+						}
+					}
+				}
+			}
+		},
+		heavy = {
+			speed = 1,
+			occasions = {
+				hit = {
+					chance = 0.75,
+					check_timeout = {
+						0,
+						0
+					},
+					variations = {
+						side_step = {
+							chance = 7,
+							shoot_chance = 0.8,
+							shoot_accuracy = 0.5,
+							timeout = {
+								0,
+								7
+							}
+						},
+						roll = {
+							chance = 3,
+							timeout = {
+								8,
+								10
+							}
+						}
+					}
+				},
+				preemptive = {
+					chance = 0.1,
+					check_timeout = {
+						1,
+						7
+					},
+					variations = {
+						side_step = {
+							chance = 1,
+							shoot_chance = 1,
+							shoot_accuracy = 0.7,
+							timeout = {
+								1,
+								7
+							}
+						}
+					}
+				},
+				scared = {
+					chance = 0.8,
+					check_timeout = {
+						1,
+						2
+					},
+					variations = {
+						side_step = {
+							chance = 5,
+							shoot_chance = 0.5,
+							shoot_accuracy = 0.4,
+							timeout = {
+								1,
+								2
+							}
+						},
+						dive = {
+							chance = 1,
+							timeout = {
+								8,
+								10
+							}
+						}
+					}
+				}
+			}
+		},
+		athletic = {
+			speed = 1.2,
+			occasions = {
+				hit = {
+					chance = 0.9,
+					check_timeout = {
+						0,
+						0
+					},
+					variations = {
+						side_step = {
+							chance = 5,
+							shoot_chance = 0.8,
+							shoot_accuracy = 0.5,
+							timeout = {
+								1,
+								3
+							}
+						},
+						roll = {
+							chance = 1,
+							timeout = {
+								3,
+								4
+							}
+						}
+					}
+				},
+				preemptive = {
+					chance = 0.35,
+					check_timeout = {
+						2,
+						3
+					},
+					variations = {
+						side_step = {
+							chance = 3,
+							shoot_chance = 1,
+							shoot_accuracy = 0.7,
+							timeout = {
+								1,
+								2
+							}
+						},
+						roll = {
+							chance = 1,
+							timeout = {
+								3,
+								4
+							}
+						}
+					}
+				},
+				scared = {
+					chance = 0.4,
+					check_timeout = {
+						1,
+						2
+					},
+					variations = {
+						side_step = {
+							chance = 6,
+							shoot_chance = 0.5,
+							shoot_accuracy = 0.4,
+							timeout = {
+								1,
+								2
+							}
+						},
+						dive = {
+							chance = 4,
+							timeout = {
+								3,
+								5
+							}
+						}
+					}
+				}
+			}
+		},
+		ninja = {
+			speed = 1.3,
+			occasions = {
+				hit = {
+					chance = 0.9,
+					check_timeout = {
+						0,
+						3
+					},
+					variations = {
+						side_step = {
+							chance = 3,
+							shoot_chance = 1,
+							shoot_accuracy = 0.7,
+							timeout = {
+								1,
+								2
+							}
+						},
+						roll = {
+							chance = 1,
+							timeout = {
+								1.2,
+								2
+							}
+						},
+						wheel = {
+							chance = 2,
+							timeout = {
+								1.2,
+								2
+							}
+						}
+					}
+				},
+				preemptive = {
+					chance = 0.6,
+					check_timeout = {
+						0,
+						3
+					},
+					variations = {
+						side_step = {
+							chance = 3,
+							shoot_chance = 1,
+							shoot_accuracy = 0.8,
+							timeout = {
+								1,
+								2
+							}
+						},
+						roll = {
+							chance = 1,
+							timeout = {
+								1.2,
+								2
+							}
+						},
+						wheel = {
+							chance = 2,
+							timeout = {
+								1.2,
+								2
+							}
+						}
+					}
+				},
+				scared = {
+					chance = 0.9,
+					check_timeout = {
+						0,
+						3
+					},
+					variations = {
+						side_step = {
+							chance = 0.33,
+							shoot_chance = 0.8,
+							shoot_accuracy = 0.6,
+							timeout = {
+								1,
+								2
+							}
+						},
+						roll = {
+							chance = 0.34,
+							timeout = {
+								1.2,
+								2
+							}
+						},
+						wheel = {
+							chance = 0.33,
+							timeout = {
+								1.2,
+								2
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
 	presets.dodge.heavy_complex = {
-		speed = 1.3,
+		speed = 1.2,
 		occasions = {
 			hit = {
 				chance = 1,
@@ -225,7 +539,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 1,
+						chance = 0.5,
 						shoot_chance = 1,
 						shoot_accuracy = 1,
 						timeout = {
@@ -233,20 +547,18 @@ function CharacterTweakData:_presets(tweak_data)
 							2
 						}
 					},
-					roll = {
-						chance = 1,
+					dive = {
+						chance = 0.25,
 						timeout = {
-							0.7,
-							1
+							1,
+							2
 						}
 					},
-					dive = {
-						chance = 1,
-						shoot_chance = 1,
-						shoot_accuracy = 0.9,
+					roll = {
+						chance = 0.25,
 						timeout = {
-							2,
-							3
+							1,
+							2
 						}
 					}
 				}
@@ -259,14 +571,14 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					roll = {
-						chance = 1,
+						chance = 0.5,
 						timeout = {
 							0.7,
 							1
 						}
 					},
-					dive = {
-						chance = 2,
+					side_step = {
+						chance = 0.5,
 						shoot_chance = 1,
 						shoot_accuracy = 0.9,
 						timeout = {
@@ -283,29 +595,18 @@ function CharacterTweakData:_presets(tweak_data)
 					0
 				},
 				variations = {
-					side_step = {
-						chance = 1,
-						shoot_chance = 0.8,
-						shoot_accuracy = 0.6,
+					dive = {
+						chance = 0.5,
 						timeout = {
-							1,
-							1.5
+							2,
+							2
 						}
 					},
 					roll = {
-						chance = 1,
+						chance = 0.5,
 						timeout = {
-							0.7,
-							1
-						}
-					},
-					dive = {
-						chance = 1,
-						shoot_chance = 0.6,
-						shoot_accuracy = 0.4,
-						timeout = {
-							0.75,
-							1
+							1,
+							2
 						}
 					}
 				}
@@ -313,7 +614,7 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.dodge.athletic_complex = {
-		speed = 1.5,
+		speed = 1.4,
 		occasions = {
 			hit = {
 				chance = 1,
@@ -323,7 +624,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 1,
+						chance = 0.5,
 						shoot_chance = 1,
 						shoot_accuracy = 1,
 						timeout = {
@@ -332,16 +633,7 @@ function CharacterTweakData:_presets(tweak_data)
 						}
 					},
 					roll = {
-						chance = 2,
-						timeout = {
-							0.5,
-							0.5
-						}
-					},
-					dive = {
-						chance = 2,
-						shoot_chance = 1,
-						shoot_accuracy = 0.9,
+						chance = 0.5,
 						timeout = {
 							0.5,
 							0.5
@@ -356,14 +648,7 @@ function CharacterTweakData:_presets(tweak_data)
 					2
 				},
 				variations = {
-					roll = {
-						chance = 2,
-						timeout = {
-							0.5,
-							0.5
-						}
-					},
-					dive = {
+					side_step = {
 						chance = 1,
 						shoot_chance = 1,
 						shoot_accuracy = 1,
@@ -382,7 +667,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				variations = {
 					side_step = {
-						chance = 1,
+						chance = 0.4,
 						shoot_chance = 1,
 						shoot_accuracy = 0.6,
 						timeout = {
@@ -391,16 +676,7 @@ function CharacterTweakData:_presets(tweak_data)
 						}
 					},
 					roll = {
-						chance = 1,
-						timeout = {
-							0.5,
-							0.5
-						}
-					},
-					dive = {
-						chance = 2,
-						shoot_chance = 1,
-						shoot_accuracy = 0.6,
+						chance = 0.6,
 						timeout = {
 							0.5,
 							0.5
@@ -411,7 +687,7 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.dodge.ninja_complex = {
-			speed = 2,
+			speed = 1.6,
 			occasions = {
 				hit = {
 					chance = 1,
@@ -420,17 +696,8 @@ function CharacterTweakData:_presets(tweak_data)
 						0
 					},
 					variations = {
-							dive = {
-							chance = 1,
-							shoot_chance = 1,
-							shoot_accuracy = 1,
-							timeout = {
-								0.5,
-								0.5
-							}
-						},
 						roll = {
-							chance = 1,
+							chance = 0.5,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -439,7 +706,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						wheel = {
-							chance = 2,
+							chance = 0.5,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -456,8 +723,8 @@ function CharacterTweakData:_presets(tweak_data)
 						0
 					},
 					variations = {
-							dive = {
-							chance = 1,
+						side_step = {
+							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -466,7 +733,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						roll = {
-							chance = 1,
+							chance = 0.33,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -475,7 +742,7 @@ function CharacterTweakData:_presets(tweak_data)
 							}
 						},
 						wheel = {
-							chance = 2,
+							chance = 0.34,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -492,26 +759,8 @@ function CharacterTweakData:_presets(tweak_data)
 						0
 					},
 					variations = {
-						dive = {
-							chance = 1,
-							shoot_chance = 1,
-							shoot_accuracy = 1,
-							timeout = {
-								0.5,
-								0.5
-							}
-						},
-						roll = {
-							chance = 1,
-							shoot_chance = 1,
-							shoot_accuracy = 1,
-							timeout = {
-								0.5,
-								0.5
-							}
-						},
 						wheel = {
-							chance = 3,
+							chance = 1,
 							shoot_chance = 1,
 							shoot_accuracy = 1,
 							timeout = {
@@ -524,246 +773,23 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	
-	--custom shield move speed presets, escalates with difficulty as it should, starting from normal-based speeds to very_fast
-	presets.move_speed.shield_sim = {
-		stand = {
-			walk = {
-				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				},
-				hos = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				},
-				cbt = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				}
-			},
-			run = {
-				hos = {
-					strafe = 450,
-					fwd = 450,
-					bwd = 450
-				},
-				cbt = {
-					strafe = 450,
-					fwd = 450,
-					bwd = 450
-				}
-			}
-		},
-		crouch = {
-			walk = {
-				hos = {
-					strafe = 230,
-					fwd = 230,
-					bwd = 230
-				},
-				cbt = {
-					strafe = 230,
-					fwd = 230,
-					bwd = 230
-				}
-			},
-			run = {
-				hos = {
-					strafe = 460,
-					fwd = 460,
-					bwd = 460
-				},
-				cbt = {
-					strafe = 460,
-					fwd = 460,
-					bwd = 460
-				}
-			}
-		}
-	}
-	presets.move_speed.shield_civ = {
-		stand = {
-			walk = {
-				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				},
-				hos = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
-				},
-				cbt = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
-				}
-			},
-			run = {
-				hos = {
-					strafe = 518,
-					fwd = 518,
-					bwd = 518
-				},
-				cbt = {
-					strafe = 518,
-					fwd = 518,
-					bwd = 518
-				}
-			}
-		},
-		crouch = {
-			walk = {
-				hos = {
-					strafe = 263,
-					fwd = 263,
-					bwd = 263
-				},
-				cbt = {
-					strafe = 263,
-					fwd = 263,
-					bwd = 263
-				}
-			},
-			run = {
-				hos = {
-					strafe = 528,
-					fwd = 528,
-					bwd = 528
-				},
-				cbt = {
-					strafe = 528,
-					fwd = 528,
-					bwd = 528
-				}
-			}
-		}
-	}
-	presets.move_speed.shield_com = {
-		stand = {
-			walk = {
-				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				},
-				hos = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
-				},
-				cbt = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
-				}
-			},
-			run = {
-				hos = {
-					strafe = 540,
-					fwd = 540,
-					bwd = 540
-				},
-				cbt = {
-					strafe = 540,
-					fwd = 540,
-					bwd = 540
-				}
-			}
-		},
-		crouch = {
-			walk = {
-				hos = {
-					strafe = 274,
-					fwd = 274,
-					bwd = 274
-				},
-				cbt = {
-					strafe = 274,
-					fwd = 274,
-					bwd = 274
-				}
-			},
-			run = {
-				hos = {
-					strafe = 550,
-					fwd = 550,
-					bwd = 550
-				},
-				cbt = {
-					strafe = 550,
-					fwd = 550,
-					bwd = 550
-				}
-			}
-		}
-	}
-	presets.move_speed.shield_anarch = {
-		stand = {
-			walk = {
-				ntl = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
-				},
-				hos = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
-				},
-				cbt = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
-				}
-			},
-			run = {
-				hos = {
-					strafe = 562,
-					fwd = 562,
-					bwd = 562
-				},
-				cbt = {
-					strafe = 562,
-					fwd = 562,
-					bwd = 562
-				}
-			}
-		},
-		crouch = {
-			walk = {
-				hos = {
-					strafe = 285,
-					fwd = 285,
-					bwd = 285
-				},
-				cbt = {
-					strafe = 285,
-					fwd = 285,
-					bwd = 285
-				}
-			},
-			run = {
-				hos = {
-					strafe = 572,
-					fwd = 572,
-					bwd = 572
-				},
-				cbt = {
-					strafe = 572,
-					fwd = 572,
-					bwd = 572
-				}
-			}
-		}
-	}	
-	
+	for preset_name, preset_data in pairs(presets.dodge) do
+		for reason_name, reason_data in pairs(preset_data.occasions) do
+			local total_w = 0
+
+			for variation_name, variation_data in pairs(reason_data.variations) do
+				total_w = total_w + variation_data.chance
+			end
+
+			if total_w > 0 then
+				for variation_name, variation_data in pairs(reason_data.variations) do
+					variation_data.chance = variation_data.chance / total_w
+				end
+			end
+		end
+	end
 		
-	--Custom move speedds start here to keep enemy approaches and movement consistent.
+	--Custom move speeds start here to keep enemy approaches and movement consistent.
 	presets.move_speed.simple_consistency = {
 		stand = {
 			walk = {
@@ -773,57 +799,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 100
 				},
 				hos = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 285,
+					fwd = 285,
+					bwd = 285
 				},
 				cbt = {
-					strafe = 220,
-					fwd = 220,
-					bwd = 220
+					strafe = 285,
+					fwd = 285,
+					bwd = 285
 				}
 			},
 			run = {
 				hos = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
+					strafe = 670,
+					fwd = 670,
+					bwd = 670
 				},
 				cbt = {
-					strafe = 350,
-					fwd = 350,
-					bwd = 350
+					strafe = 670,
+					fwd = 670,
+					bwd = 670
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 210,
-					fwd = 210,
-					bwd = 210
+					strafe = 255,
+					fwd = 255,
+					bwd = 255
 				},
 				cbt = {
-					strafe = 210,
-					fwd = 210,
-					bwd = 210
+					strafe = 255,
+					fwd = 255,
+					bwd = 255
 				}
 			},
 			run = {
 				hos = {
-					strafe = 250,
-					fwd = 250,
-					bwd = 250
+					strafe = 357,
+					fwd = 357,
+					bwd = 357
 				},
 				cbt = {
-					strafe = 250,
-					fwd = 250,
-					bwd = 250
+					strafe = 357,
+					fwd = 357,
+					bwd = 357
 				}
 			}
 		}
 	}
-	-- 15% faster
+	--1.1x mul
 	presets.move_speed.civil_consistency = {
 		stand = {
 			walk = {
@@ -833,57 +859,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 100
 				},
 				hos = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
+					strafe = 313,
+					fwd = 313,
+					bwd = 313
 				},
 				cbt = {
-					strafe = 253,
-					fwd = 253,
-					bwd = 253
+					strafe = 313,
+					fwd = 313,
+					bwd = 313
 				}
 			},
 			run = {
 				hos = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
+					strafe = 737,
+					fwd = 737,
+					bwd = 737
 				},
 				cbt = {
-					strafe = 402,
-					fwd = 402,
-					bwd = 402
+					strafe = 737,
+					fwd = 737,
+					bwd = 737
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 242,
-					fwd = 242,
-					bwd = 242
+					strafe = 280,
+					fwd = 280,
+					bwd = 280
 				},
 				cbt = {
-					strafe = 242,
-					fwd = 242,
-					bwd = 242
+					strafe = 280,
+					fwd = 280,
+					bwd = 280
 				}
 			},
 			run = {
 				hos = {
-					strafe = 288,
-					fwd = 288,
-					bwd = 288
+					strafe = 393,
+					fwd = 393,
+					bwd = 393
 				},
 				cbt = {
-					strafe = 288,
-					fwd = 288,
-					bwd = 288
+					strafe = 393,
+					fwd = 393,
+					bwd = 393
 				}
 			}
 		}
 	}
-	--20% faster
+	--1.15x mul
 	presets.move_speed.complex_consistency = {
 		stand = {
 			walk = {
@@ -893,57 +919,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 100
 				},
 				hos = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
+					strafe = 327,
+					fwd = 327,
+					bwd = 327
 				},
 				cbt = {
-					strafe = 264,
-					fwd = 264,
-					bwd = 264
+					strafe = 327,
+					fwd = 327,
+					bwd = 327
 				}
 			},
 			run = {
 				hos = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
+					strafe = 770,
+					fwd = 770,
+					bwd = 770
 				},
 				cbt = {
-					strafe = 420,
-					fwd = 420,
-					bwd = 420
+					strafe = 770,
+					fwd = 770,
+					bwd = 770
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 252,
-					fwd = 252,
-					bwd = 252
+					strafe = 293,
+					fwd = 293,
+					bwd = 293
 				},
 				cbt = {
-					strafe = 252,
-					fwd = 252,
-					bwd = 252
+					strafe = 293,
+					fwd = 293,
+					bwd = 293
 				}
 			},
 			run = {
 				hos = {
-					strafe = 300,
-					fwd = 300,
-					bwd = 300
+					strafe = 410,
+					fwd = 410,
+					bwd = 410
 				},
 				cbt = {
-					strafe = 300,
-					fwd = 300,
-					bwd = 300
+					strafe = 410,
+					fwd = 410,
+					bwd = 410
 				}
 			}
 		}
 	}
-	--25% faster, climax
+	--1.2x mul
 	presets.move_speed.anarchy_consistency = {
 		stand = {
 			walk = {
@@ -953,56 +979,57 @@ function CharacterTweakData:_presets(tweak_data)
 					bwd = 100
 				},
 				hos = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
+					strafe = 342,
+					fwd = 342,
+					bwd = 342
 				},
 				cbt = {
-					strafe = 275,
-					fwd = 275,
-					bwd = 275
+					strafe = 342,
+					fwd = 342,
+					bwd = 342
 				}
 			},
 			run = {
 				hos = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
+					strafe = 804,
+					fwd = 804,
+					bwd = 804
 				},
 				cbt = {
-					strafe = 438,
-					fwd = 438,
-					bwd = 438
+					strafe = 804,
+					fwd = 804,
+					bwd = 804
 				}
 			}
 		},
 		crouch = {
 			walk = {
 				hos = {
-					strafe = 262,
-					fwd = 262,
-					bwd = 262
+					strafe = 306,
+					fwd = 306,
+					bwd = 306
 				},
 				cbt = {
-					strafe = 262,
-					fwd = 262,
-					bwd = 262
+					strafe = 306,
+					fwd = 306,
+					bwd = 306
 				}
 			},
 			run = {
 				hos = {
-					strafe = 312,
-					fwd = 312,
-					bwd = 312
+					strafe = 428,
+					fwd = 428,
+					bwd = 428
 				},
 				cbt = {
-					strafe = 312,
-					fwd = 312,
-					bwd = 312
+					strafe = 428,
+					fwd = 428,
+					bwd = 428
 				}
 			}
 		}
 	}
+	
 	--preset for dozers
 	presets.move_speed.slow_consistency = {
 		stand = {
@@ -1265,14 +1292,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			run = {
 				hos = {
-					strafe = 661,
-					fwd = 661,
-					bwd = 661
+					strafe = 862.50,
+					fwd = 862.50,
+					bwd = 862.50
 				},
 				cbt = {
-					strafe = 661,
-					fwd = 661,
-					bwd = 661
+					strafe = 862.50,
+					fwd = 862.50,
+					bwd = 862.50
 				}
 			}
 		},
@@ -1303,10 +1330,15 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+		
+	--making base-game presets clone my new set of movespeed presets
+	presets.move_speed.slow = deep_clone(presets.move_speed.slow_consistency)
+	presets.move_speed.very_slow = deep_clone(presets.move_speed.mini_consistency)
+	presets.move_speed.normal = deep_clone(presets.move_speed.simple_consistency)
+	presets.move_speed.fast = deep_clone(presets.move_speed.simple_consistency)
+	presets.move_speed.very_fast = deep_clone(presets.move_speed.civil_consistency)
 	
 	--prevents Application has crashed: C++ exception[string "core/lib/utils/coretable.lua"]:32: bad argument #1 to 'pairs' (table expected, got nil)
-	
-	
 	for speed_preset_name, poses in pairs(presets.move_speed) do
 		for pose, hastes in pairs(poses) do
 			hastes.run.ntl = hastes.run.hos
@@ -1317,13 +1349,6 @@ function CharacterTweakData:_presets(tweak_data)
 		poses.panic = poses.stand
 	end
 	
-	--making base-game presets clone my new set of movespeed presets
-	presets.move_speed.slow = deep_clone(presets.move_speed.slow_consistency)
-	presets.move_speed.very_slow = deep_clone(presets.move_speed.mini_consistency)
-	presets.move_speed.normal = deep_clone(presets.move_speed.simple_consistency)
-	presets.move_speed.fast = deep_clone(presets.move_speed.civil_consistency)
-	presets.move_speed.very_fast = deep_clone(presets.move_speed.complex_consistency)
-	
 	--detection preset for regular enemies so they are fully capable of identifying players during loud	
 	presets.detection.enemymook = { 
 		idle = {},
@@ -1333,50 +1358,52 @@ function CharacterTweakData:_presets(tweak_data)
 		ntl = {}
 	}
 	presets.detection.enemymook.idle.dis_max = 10000
-	presets.detection.enemymook.idle.angle_max = 360
+	presets.detection.enemymook.idle.angle_max = 110
 	presets.detection.enemymook.idle.delay = {
 		0,
 		0
 	}
 	presets.detection.enemymook.idle.use_uncover_range = true
 	presets.detection.enemymook.combat.dis_max = 10000
-	presets.detection.enemymook.combat.angle_max = 360
+	presets.detection.enemymook.combat.angle_max = 110
 	presets.detection.enemymook.combat.delay = {
 		0,
 		0
 	}
 	presets.detection.enemymook.combat.use_uncover_range = true
 	presets.detection.enemymook.recon.dis_max = 10000
-	presets.detection.enemymook.recon.angle_max = 360
+	presets.detection.enemymook.recon.angle_max = 110
 	presets.detection.enemymook.recon.delay = {
 		0,
 		0
 	}
 	presets.detection.enemymook.recon.use_uncover_range = true
 	presets.detection.enemymook.guard.dis_max = 10000
-	presets.detection.enemymook.guard.angle_max = 360
+	presets.detection.enemymook.guard.angle_max = 110
 	presets.detection.enemymook.guard.delay = {
 		0,
 		0
 	}
+	presets.detection.enemymook.ntl.use_uncover_range = nil
 	presets.detection.enemymook.ntl.dis_max = 1500
-	presets.detection.enemymook.ntl.angle_max = 55
+	presets.detection.enemymook.ntl.angle_max = 60
 	presets.detection.enemymook.ntl.delay = {
-		0.7,
-		0.7
+		0.5,
+		2
 	}
 	presets.detection.civilian.cbt.dis_max = 10000
-	presets.detection.civilian.cbt.angle_max = 360
+	presets.detection.civilian.cbt.angle_max = 110
 	presets.detection.civilian.cbt.delay = {
 		0,
 		0
 	}
 	presets.detection.civilian.cbt.use_uncover_range = true
+	presets.detection.civilian.ntl.use_uncover_range = nil
 	presets.detection.civilian.ntl.dis_max = 1500
-	presets.detection.civilian.ntl.angle_max = 55
+	presets.detection.civilian.ntl.angle_max = 60
 	presets.detection.civilian.ntl.delay = {
-		0.7,
-		0.7
+		0.5,
+		2
 	}
 	
 	presets.detection.enemyspooc = { 
@@ -1387,43 +1414,85 @@ function CharacterTweakData:_presets(tweak_data)
 		ntl = {}
 	}
 	presets.detection.enemyspooc.idle.dis_max = 10000
-	presets.detection.enemyspooc.idle.angle_max = 360
+	presets.detection.enemyspooc.idle.angle_max = 110
 	presets.detection.enemyspooc.idle.delay = {
 		0,
 		0
 	}
 	presets.detection.enemyspooc.idle.use_uncover_range = true
 	presets.detection.enemyspooc.combat.dis_max = 10000
-	presets.detection.enemyspooc.combat.angle_max = 360
+	presets.detection.enemyspooc.combat.angle_max = 110
 	presets.detection.enemyspooc.combat.delay = {
 		0,
 		0
 	}
 	presets.detection.enemyspooc.combat.use_uncover_range = true
 	presets.detection.enemyspooc.recon.dis_max = 10000
-	presets.detection.enemyspooc.recon.angle_max = 360
+	presets.detection.enemyspooc.recon.angle_max = 110
 	presets.detection.enemyspooc.recon.delay = {
 		0,
 		0
 	}
 	presets.detection.enemyspooc.recon.use_uncover_range = true
 	presets.detection.enemyspooc.guard.dis_max = 10000
-	presets.detection.enemyspooc.guard.angle_max = 360
+	presets.detection.enemyspooc.guard.angle_max = 110
 	presets.detection.enemyspooc.guard.delay = {
 		0,
 		0
 	}
+	presets.detection.enemyspooc.ntl.use_uncover_range = nil
 	presets.detection.enemyspooc.ntl.dis_max = 3000
-	presets.detection.enemyspooc.ntl.angle_max = 55
+	presets.detection.enemyspooc.ntl.angle_max = 80
 	presets.detection.enemyspooc.ntl.delay = {
-		0.7,
-		0.7
+		0.5,
+		2
 	}
+	presets.detection.gang_member = { 
+		idle = {},
+		combat = {},
+		recon = {},
+		guard = {},
+		ntl = {}
+	}
+	presets.detection.gang_member.idle.dis_max = 20000
+	presets.detection.gang_member.idle.angle_max = 360
+	presets.detection.gang_member.idle.delay = {
+		0,
+		0
+	}
+	presets.detection.gang_member.idle.use_uncover_range = true
+	presets.detection.gang_member.combat.dis_max = 20000
+	presets.detection.gang_member.combat.angle_max = 360
+	presets.detection.gang_member.combat.delay = {
+		0,
+		0
+	}
+	presets.detection.gang_member.combat.use_uncover_range = true
+	presets.detection.gang_member.recon.dis_max = 20000
+	presets.detection.gang_member.recon.angle_max = 360
+	presets.detection.gang_member.recon.delay = {
+		0,
+		0
+	}
+	presets.detection.gang_member.recon.use_uncover_range = true
+	presets.detection.gang_member.guard.dis_max = 20000
+	presets.detection.gang_member.guard.angle_max = 360
+	presets.detection.gang_member.guard.delay = {
+		0,
+		0
+	}
+	presets.detection.gang_member.ntl.use_uncover_range = true
+	presets.detection.gang_member.ntl.dis_max = 1500
+	presets.detection.gang_member.ntl.angle_max = 360
+	presets.detection.gang_member.ntl.delay = {
+		0,
+		0
+	}
+	
 	
 	--make normal clone my new preset to keep enemies not currently set here capable of detecting people too
 	presets.detection.normal = deep_clone(presets.detection.enemymook)
 	presets.detection.guard = deep_clone(presets.detection.enemymook)
-	presets.detection.gang_member = deep_clone(presets.detection.enemymook)
 	
 	--custom hurt severities start here, focus on less enemy down time as enemy health goes up 
 	--satisfying staggering behavior, burying full auto rounds into enemies faces eventually makes them fall over and squirm, anything that deals immediate large damage staggers enemies consistently. 
@@ -1812,6 +1881,52 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	
+	presets.hurt_severities.no_hurts = { --due to overkill's recent updates, i have to do this now, apparently >:c
+		tase = true,
+		bullet = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		explosion = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		melee = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		fire = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		},
+		poison = {
+			health_reference = 1,
+			zones = {
+				{
+					none = 1
+				}
+			}
+		}
+	}
+	presets.hurt_severities.no_hurts_no_tase = deep_clone(presets.hurt_severities.no_hurts)
+	presets.hurt_severities.no_hurts_no_tase.tase = false
+	
 	--special no_tase hurt severities based on specialenemy, possibly used on taser.
 	presets.hurt_severities.no_tase_special = deep_clone(presets.hurt_severities.specialenemy)
 	presets.hurt_severities.no_tase_special.tase = false
@@ -1833,15 +1948,16 @@ function CharacterTweakData:_presets(tweak_data)
 	--Custom sniper preset to make them work differently, they work as a mini turret of sorts, dealing big damage with good accuracy, standing in their line of fire isn't wise as they'll suppress the shit out of you and take off armor very quickly.
 	presets.weapon.rhythmsniper = deep_clone(presets.weapon.sniper)
 	presets.weapon.rhythmsniper.is_rifle.autofire_rounds = nil	
-	presets.weapon.rhythmsniper.is_rifle.focus_delay = 2  
+	presets.weapon.rhythmsniper.is_rifle.focus_delay = 0.8
+	presets.weapon.rhythmsniper.is_rifle.fireline_t = 3 --how long it takes for enemies to reset their focus and aim delay.
 	presets.weapon.rhythmsniper.is_rifle.aim_delay = {
-		0.3,
-		0.3
+		0,
+		0
 	}
 	presets.weapon.rhythmsniper.is_rifle.FALLOFF = {
 		{
-			dmg_mul = 2.5,
-			r = 700,
+			dmg_mul = 5,
+			r = 10000,
 			acc = {
 				0,
 				1
@@ -1858,47 +1974,11 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		},
 		{
-			dmg_mul = 2.5,
-			r = 3500,
+			dmg_mul = 5,
+			r = 20000,
 			acc = {
 				0,
-				0.75
-			},
-			recoil = {
-				0.8,
-				0.8
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 2.5,
-			r = 6000,
-			acc = {
-				0,
-				0.3
-			},
-			recoil = {
-				0.8,
-				0.8
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 1,
-			r = 9000,
-			acc = {
-				0,
-				0.1
+				0.5
 			},
 			recoil = {
 				0.8,
@@ -3085,14 +3165,14 @@ function CharacterTweakData:_presets(tweak_data)
 	--civil begins here, noteworthy change being increases in attack rate along with less falloff, plus the increase of focus delay minimum starting range
 	presets.weapon.civil.is_pistol = {
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.6,
+			0.6
 		},
-		focus_delay = 2, --halved focus delay, still a lot, but pistols have good accuracy, so it's fair
-		focus_dis = 500,
+		focus_delay = 1.5,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 0.9, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -3100,40 +3180,22 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --increased average damage for vh and ovk, increases immediate threat of enemy fire from pistol cops
-				r = 100,
+				dmg_mul = 3,
+				r = 500,
 				acc = {
-					0.1, --focus delay build up
+					0.2,
 					0.9
 				},
 				recoil = {
 					0.25,
 					0.35
 				},
-				mode = { --tap fire like crazy
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0.1,
-					0.85
-				},
-				recoil = {
-					0.35,
-					0.35
-				},
 				mode = {
 					1,
 					0,
@@ -3142,33 +3204,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --moderate falloff begins, still ok.
+				dmg_mul = 1.5, 
 				r = 1000,
-				acc = {
-					0,
-					0.55
-				},
-				recoil = {
-					0.4,
-					0.5
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1,
-				r = 2000,
 				acc = {
 					0,
 					0.45
 				},
-				recoil = { --reduced from simple, keeps them still moderately effective at this range
-					0.5,
-					0.6
+				recoil = {
+					0.3,
+					0.4
 				},
 				mode = {
 					1,
@@ -3178,33 +3222,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
 				r = 3000,
 				acc = {
 					0,
-					0.2
-				},
-				recoil = {
-					0.6,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
 					0
-				}
-			},
-			{
-				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
-				r = 4000,
-				acc = {
-					0,
-					0.01
 				},
 				recoil = {
-					0.6,
-					1.2
+					0.4,
+					1
 				},
 				mode = {
 					1,
@@ -3217,14 +3243,14 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.6,
+			0.6
 		},
-		focus_delay = 2, --halved focus delay, still a lot, but pistols have good accuracy, so it's fair
-		focus_dis = 500,
+		focus_delay = 1.5,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 0.9, --cops will reload their weapons slower, and realistically, no tweaks from simple to this one
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -3232,40 +3258,22 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --increased average damage for vh and ovk, increases immediate threat of enemy fire from pistol cops
-				r = 100,
+				dmg_mul = 3,
+				r = 500,
 				acc = {
-					0.1, --focus delay build up
+					0.2,
 					0.9
 				},
 				recoil = {
 					0.25,
 					0.35
 				},
-				mode = { --tap fire like crazy
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0.1,
-					0.85
-				},
-				recoil = {
-					0.35,
-					0.35
-				},
 				mode = {
 					1,
 					0,
@@ -3274,51 +3282,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --moderate falloff begins, still ok.
+				dmg_mul = 1.5, 
 				r = 1000,
-				acc = {
-					0,
-					0.55
-				},
-				recoil = {
-					0.4,
-					0.5
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1,
-				r = 2000,
 				acc = {
 					0,
 					0.45
 				},
-				recoil = { --reduced from simple, keeps them still moderately effective at this range
-					0.5,
-					0.6
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
-				r = 3000,
-				acc = {
-					0,
-					0.2
-				},
 				recoil = {
-					0.6,
-					1
+					0.3,
+					0.4
 				},
 				mode = {
 					1,
@@ -3329,14 +3301,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
-				r = 4000,
+				r = 3000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					0.6,
-					1.2
+					0.4,
+					1
 				},
 				mode = {
 					1,
@@ -3346,47 +3318,47 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
-	}
+	}	
 	presets.weapon.civil.is_rifle = {
 		aim_delay = {
-			0.35,
-			0.35
+			0.7,
+			0.7
 		},
-		focus_delay = 3, --3 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
-		focus_dis = 500, --focus delay starts after 5m
-		spread = 30, --lowered slightly from simple
-		miss_dis = 1,
-		RELOAD_SPEED = 1.25, --lowered slightly from simple
+		focus_delay = 1.25, 
+		focus_dis = 100,
+		spread = 28, 
+		miss_dis = 40, 
+		RELOAD_SPEED = 1,
 		melee_speed = 0.5,
-		melee_dmg = 10, --100 damage on melee, no joke
+		melee_dmg = 10, --100 damage on melee
 		melee_retry_delay = {
 			1,
 			1
 		},
-		tase_distance = 1500, 
+		tase_distance = 1500,
 		aim_delay_tase = {
 			0,
 			0
 		},
 		tase_sphere_cast_radius = 5,
 		range = {
-			optimal = 3000,
-			far = 4000, --longer range style firing patterns begin, enemy movement gets complexer due to the close range being increased
-			close = 2000
+			optimal = 3000,--optimal range increased, enemies start firing sooner before 30m, but not in a way where they'll fire too much past 40 either
+			far = 4000, 
+			close = 1600
 		},
-		autofire_rounds = { --autofire rounds match to 8-16, with low recoil to boot, should make hitting players consistent with 10 or more units at range
-			15,
-			20
+		autofire_rounds = { --yes.
+			30,
+			60
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5,
-				r = 100,
+				dmg_mul = 3,
+				r = 400,
 				acc = { 
 					0,
-					0.2
+					0.9
 				},
-				recoil = {
+				recoil = { 
 					0.2,
 					0.2
 				},
@@ -3398,33 +3370,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4,
-				r = 400,
-				acc = { 
-					0,
-					0.2
-				},
-				recoil = {
-					0.2,
-					0.2 
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
 				dmg_mul = 3,
 				r = 800,
 				acc = { 
 					0,
-					0.1
+					0.9
 				},
 				recoil = { 
 					0.25,
-					0.3 --slightly decreased from civil, from 0.35 to 0.3
+					0.3
 				},
 				mode = {
 					0,
@@ -3435,10 +3389,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 2,
-				r = 1500,
+				r = 1200,
 				acc = {
 					0,
-					0.05
+					0.7
 				},
 				recoil = {
 					0.25,
@@ -3453,10 +3407,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1,
-				r = 3000,
+				r = 2000,
 				acc = {
 					0,
-					0.025
+					0.5
 				},
 				recoil = {
 					0.25,
@@ -3470,15 +3424,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0,
+				dmg_mul = 1,
 				r = 4000,
 				acc = {
 					0,
-					0
+					0.05
 				},
 				recoil = {
-					1,
-					2
+					0.4,
+					0.6
 				},
 				mode = {
 					0,
@@ -3491,37 +3445,38 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.civil.is_bullpup = presets.weapon.civil.is_rifle
 	presets.weapon.civil.is_shotgun_pump = {
-		aim_delay = { --aim delay changed to match PDTH style aim-delay
-			0.6,
-			0.6
+		aim_delay = {
+			0.9,
+			0.9
 		},
-		focus_delay = 5, --quicker focus delay build from simple, accuracy remains mostly the same
-		focus_dis = 500, --focus delay only starts past 5m, cqc maps become dangerous fun houses while long-range maps encourage players to kite and keep enemies away
+		focus_delay = 1.25, --focus delay change here.
+		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 0.8, --lowered reload speed
+		RELOAD_SPEED = 1.4, --HOW? ARE THEY JUST PILING ALL THE SHELLS ON THEIR HAND AND JUST SHOVING IT IN THERE LIKE CANDY INTO A BOWL???? either way, quite powerful
 		melee_speed = 0.5,
-		melee_dmg = 10, --100 damage on melee, no joke, keep as is
+		melee_dmg = 15, --100 damage on melee, no joke, keep as is from civil and up
 		melee_retry_delay = {
 			1,
 			1
 		},
 		range = {
-			optimal = 1000,
+			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 800 
+			close = 1200,
+			aggressive = 600
 		},
 		FALLOFF = {
 			{
 				dmg_mul = 2,
-				r = 100,
+				r = 400,
 				acc = {
-					0,
-					0.75
+					0.6,
+					1
 				},
-				recoil = {
-					1,
-					1.15
+				recoil = { --slightly lowered recoil from civil, lower end has more variance
+					0.8,
+					1
 				},
 				mode = {
 					1,
@@ -3531,15 +3486,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, 
-				r = 600,
+				dmg_mul = 1.5,
+				r = 800,
 				acc = { 
-					0,
-					0.6
+					0.2,
+					0.9
 				},
-				recoil = {
-					1.15,
-					1.25
+				recoil = { --reduced massively from civil
+					1,
+					1.2
 				},
 				mode = {
 					1,
@@ -3553,11 +3508,11 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 1000,
 				acc = {
 					0,
-					0.3
+					0.75
 				},
 				recoil = {
-					1.2,
-					1.4
+					1.1,
+					1.3
 				},
 				mode = {
 					1,
@@ -3568,14 +3523,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1, 
-				r = 1500,
+				r = 1200,
 				acc = {
 					0,
-					0.1
+					0.25
 				},
-				recoil = {
-					1.6,
-					1.6
+				recoil = { --recoil is ok though, said the slut who is designing this mess
+					1.1,
+					1.3
 				},
 				mode = {
 					1,
@@ -3586,7 +3541,7 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 0,
-				r = 2000,
+				r = 3000,
 				acc = {
 					0,
 					0
@@ -3604,215 +3559,181 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.civil.is_shotgun_mag = { --a mix of both shotgun and rifle, its a jack of all trades!
+	presets.weapon.civil.is_shotgun_mag = { --yeehaw
 		aim_delay = {
-			0.6,
-			0.6
+			0,
+			0
 		},
-		focus_delay = 3, --shotgun-like focus delay
-		focus_dis = 500, --im sure its unescessary for me to keep commenting this now.
-		spread = 20, --increased spread from regular shotgun
+		focus_delay = 1.4,
+		focus_dis = 100, --unchanged from civil.
+		spread = 20, 
 		miss_dis = 20,
-		RELOAD_SPEED = 1.25, --saiga only has 7 shots per clip which forces a reload animation once depleted, justifying the rather quick reload
+		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
-		melee_dmg = 15,
+		melee_dmg = 23,
+		fireline_t = 0.35, --how long it takes for enemies to reset their focus and aim delay.
 		melee_retry_delay = {
 			1,
 			2
 		},
 		range = {
-			optimal = 1500, --halfway point between shotguns and rifles, higher than shotgun, lower than rifle
-			far = 3000,
-			close = 800
+			optimal = 2500,
+			far = 4000,
+			close = 1000,
+			aggressive = 400
 		},
-		autofire_rounds = { --autofire rounds
-			4,
-			4
+		autofire_rounds = { --not used anymore
+			16,
+			32
 		},
-		--before i start falloff, if you can, go watch that one video of that one terrorist war crime guy eating a cyanide pill mid-trial to express my frustration at overkill simply cloning shotgun_pump for shotgun_mag 
+		--wow remember when i thought i was a he that shit was wack lol
 		FALLOFF = {
 			{
-				dmg_mul = 1.5, --the danger isnt just damage or accuracy, its the fact that its a split between shotgun and rifle in damage, firerate and falloff, saiga starts at 75 damage per hit with this preset, complex will increase its range and autofire rounds!
-				r = 100,
+				dmg_mul = 2,
+				r = 400,
 				acc = {
 					0,
-					0.12
+					0.9
 				},
 				recoil = {
-					0.05,
-					0.1
+					0.4,
+					0.5
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1 --ugh fill me with that lead big boy
-				}
-			},
-			{
-				dmg_mul = 1.5,
-				r = 500,
-				acc = {
-					0,
-					0.12
-				},
-				recoil = {
-					0.1,
-					0.2
-				},
-				mode = {
-					0,
-					3,
-					3,
-					1
-				}
-			},
-			{
-				dmg_mul = 1, --50 damage at this range, its short-ranged like rifles, and yet, technically more powerful
-				r = 1000,
-				acc = {
-					0,
-					0.057
-				},
-				recoil = {
-					0.2,
-					0.3
-				},
-				mode = {
-					0,
-					3,
-					3,
-					1
-				}
-			},
-			{
-				dmg_mul = 0,
-				r = 1500,
-				acc = {
 					0,
 					0
-				},
-				recoil = {
-					1,
-					2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			}
-		}
-	}
-	presets.weapon.civil.is_smg = { --used by hrts, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
-		aim_delay = {
-			0.28,
-			0.28
-		},
-		focus_delay = 4,
-		focus_dis = 500, --then again, so was destroying all the spawngroups in housewarming update
-		spread = 15,
-		miss_dis = 20,
-		RELOAD_SPEED = 1.5,
-		melee_speed = 0.5,
-		melee_dmg = 10,
-		melee_retry_delay = {
-			1,
-			1
-		},
-		range = {
-			optimal = 2000,
-			far = 4000,
-			close = 1000 --light weight weapon, allows run'n gun, shortened since cloakers exist, will revise later per difficulty
-		},
-		autofire_rounds = { --defined autofire for smgs.
-			16,
-			24
-		},
-		FALLOFF = {
-			{
-				dmg_mul = 4, --damage unchanged from simple
-				r = 100,
-				acc = { 
-					0,
-					0.1
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
 				}
 			},
 			{
-				dmg_mul = 4,
-				r = 500,
+				dmg_mul = 1.7, --80 counts one less hit on ICTV
+				r = 800,
 				acc = {
 					0,
-					0.1
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 1000,
-				acc = { --low accuracy compared to rifles, auto-fire makes up for it
-					0,
-					0.05
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 1, --start dropping damage, hard, accuracy hits a low point
-				r = 2000,
-				acc = {
-					0,
-					0.01
+					0.5
 				},
 				recoil = {
 					0.6,
-					1.2
+					0.8
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
-				dmg_mul = 0, -- no longer a threat, gun stops working
+				dmg_mul = 1,
+				r = 1500,
+				acc = {
+					0,
+					0.25
+				},
+				recoil = {
+					0.7,
+					1.4
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 1, 
 				r = 3000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					1.5,
-					3
+					1.05,
+					1.75
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			}
+		}
+	}
+	presets.weapon.civil.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
+		aim_delay = {
+			0.6,
+			0.6
+		},
+		focus_delay = 1.2,
+		focus_dis = 100, 
+		spread = 25,
+		miss_dis = 40,
+		RELOAD_SPEED = 1.5, --whew.
+		melee_speed = 0.5,
+		melee_dmg = 15,
+		melee_retry_delay = {
+			1,
+			1
+		},
+		range = {
+			optimal = 3500,
+			far = 4000,
+			close = 1000 --light weight weapon, allows run'n gun, shortened since cloakers exist, will revise later per difficulty
+		},
+		autofire_rounds = { --extended mags a ton, pretty hazardous and continuous
+			32,
+			60
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 2,
+				r = 500,
+				acc = {
+					0,
+					0.75
+				},
+				recoil = { 
+					0.2,
+					0.2
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 1000,
+				acc = { --low accuracy compared to rifles, auto-fire makes up for it
+					0,
+					0.5
+				},
+				recoil = {
+					0.2,
+					0.2
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0.5,
+				r = 3000,
+				acc = {
+					0,
+					0.025
+				},
+				recoil = {
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -3823,16 +3744,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.civil.is_revolver = { --might be used later for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops
-		aim_delay = { --aim delay
-			0.4,
-			0.4
+	presets.weapon.civil.is_revolver = { --used by punks and beat police
+		aim_delay = {
+			0.6,
+			0.6
 		},
-		focus_delay = 5, --5 second focus delay, justified due to increased accuracy of the weapon along with damage scale
-		focus_dis = 200,
-		spread = 20,
-		miss_dis = 50,
-		RELOAD_SPEED = 1.4, --faster reloads than shotguns
+		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
+		focus_dis = 100,
+		spread = 10,
+		miss_dis = 10,
+		RELOAD_SPEED = 1.4,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -3846,51 +3767,33 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 3, --120 damage start.
-				r = 100,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.8,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.8,
-					1.1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 2.5, --120, range remains excellent
+				dmg_mul = 2,
 				r = 1000,
+				acc = {
+					0,
+					0.9
+				},
+				recoil = {
+					1,
+					1.2
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 2000,
 				acc = {
 					0,
 					0.85
 				},
-				recoil = {
-					0.8,
-					1.1
+				recoil = { --lowered slightly from normal for the higher end, was 1.3, is 1.2
+					1.2,
+					1.4
 				},
 				mode = {
 					1,
@@ -3900,47 +3803,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2.5,
-				r = 2000,
-				acc = {
-					0,
-					0.7
-				},
-				recoil = { --lowered slightly from normal for the higher end, was 1.3, is 1.1
-					1,
-					1.1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1, --40, lower end of the accuracy scale with very little chance to hit anything unless in high numbers (which wont happen anytime soon)
+				dmg_mul = 0,
 				r = 3000,
 				acc = {
 					0,
-					0.2 --slightly increased from simple .15 to .2
-				},
-				recoil = {
-					1,
-					1.3 --slightly decreased from simple
-				},
-				mode = {
-					1,
-					0,
-					0,
 					0
-				}
-			},
-			{
-				dmg_mul = 0.2, --8 damage, acc, recoil and falloff destroy themselves past 4000 no matter what weapon, to keep maps like birth of sky bearable and make open areas less of a pain in the fucking ass 
-				r = 4000,
-				acc = {
-					0,
-					0.01
 				},
 				recoil = {
 					4,
@@ -3955,15 +3822,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.civil.mini = { --only used in crimespree, mostly based on complex with a few tweaks, also, blame overkill for making the minigun dozer look like shit, i really, really want to love it, its design is cool, it's mechanics are awesome, it works to solve lack of movement and encourages smart gameplay for once, and they kinda messed IT ALL UP, BY NOT GIVING IT A PROPER MINIGUN HOLDING ANIMATION BECAUSE YOU CANT GET YOUR PEOPLE TO MAKE NEW 3RD PERSON ANIMATIONS AND YET WE HAD A 3RD PERSON ANIMATIONS UPDATE MONTHS AGO HECK HECK HEEEEEEEEEEEEEEECK
+	presets.weapon.civil.mini = { --my wrath is finally............gone...........
+		spread_only = true,
 		aim_delay = {
 			0.9,
 			0.9
 		},
-		focus_delay = 3,
+		focus_delay = 2,
 		focus_dis = 100,
-		spread = 80, --bigger spread from anarchy
-		miss_dis = 5, --reduced miss dis to make it easier than complex
+		spread = 60,
+		miss_dis = 10,
 		RELOAD_SPEED = 0.5,
 		melee_speed = 0.5,
 		melee_dmg = 25,
@@ -3972,8 +3840,8 @@ function CharacterTweakData:_presets(tweak_data)
 			2
 		},
 		range = {
-			optimal = 1500,
-			far = 3000,
+			optimal = 1500, --overall short range, but continues shooting often
+			far = 10000,
 			close = 1000
 		},
 		autofire_rounds = { --absolutely in awe of the size of this lad, absolute unit
@@ -3982,33 +3850,15 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5, --100 damage start
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					2.7,
-					2.7
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4, --80
+				dmg_mul = 10, --200 damage start, get the fuck out of its way.
 				r = 1000,
 				acc = {
-					1,
-					1
+					120,
+					60
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -4018,15 +3868,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --60
+				dmg_mul = 5, --80
 				r = 2000,
 				acc = {
-					1,
-					1
+					120,
+					60
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -4037,14 +3887,32 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 2,
-				r = 3000,
+				r = 10000,
 				acc = {
-					0.5,
-					0.5
+					140,
+					80
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 20000,
+				acc = {
+					140,
+					80
+				},
+				recoil = {
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -4054,55 +3922,39 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
-	}	
-	presets.weapon.civil.is_lmg = { --unused at this difficulty outside of crime spree, based on complex
+	}
+	presets.weapon.civil.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
+		spread_only = true,
 		aim_delay = {
-			0.5,
-			0.5
+			0.7,
+			0.7
 		},
-		focus_delay = 0,
-		focus_dis = 200,
-		spread = 40,
-		miss_dis = 1,
-		RELOAD_SPEED = 0.6,
+		focus_delay = 3, 
+		focus_dis = 100,
+		spread = 20,
+		miss_dis = 10,
+		RELOAD_SPEED = 1, --theres 200 ammo in the fucking thing, it'll take time to empty
 		melee_speed = 0.5,
-		melee_dmg = 15,
+		melee_dmg = 20,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
 			far = 4000,
-			close = 1000
+			close = 1000,
+			aggressive = 500
 		},
-		autofire_rounds = {20, 180}, --bullet hose, kinda scary, fires in random, long bursts though
+		autofire_rounds = {80, 140}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
-			{
-				dmg_mul = 3, --60, keeps the gun scarier than rifles.
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					1.7,
-					1.7
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
 			{
 				dmg_mul = 3,
 				r = 500,
-				acc = { --lessened accuracy, firerate keeps it scary
-					1,
-					1
+				acc = {
+					40,
+					9
 				},
 				recoil = {
-					1.7,
-					1.7
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4112,15 +3964,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
+				dmg_mul = 3, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					1,
-					1
+					40,
+					9
 				},
 				recoil = {
-					1.7,
-					1.7
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4130,15 +3982,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
+				dmg_mul = 2, 
 				r = 2000,
 				acc = {
-					1,
-					1
+					40,
+					9
 				},
 				recoil = {
-					1.7,
-					1.7
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4148,15 +4000,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1,
+				dmg_mul = 1, 
 				r = 3000,
 				acc = {
-					1,
-					1
+					50,
+					12
 				},
 				recoil = {
-					1.7,
-					1.7
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4169,12 +4021,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0, --range limit reach, gun stops working, higher recoil than rifles to compensate for the full auto
 				r = 4000,
 				acc = {
-					0,
-					0
+					50,
+					12
 				},
 				recoil = {
-					2,
-					3
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -4190,14 +4042,14 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	presets.weapon.complex.is_pistol = {
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.5,
+			0.5
 		},
-		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
-		focus_dis = 500,
+		focus_delay = 1,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 1,
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -4205,38 +4057,20 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
-			{
-				dmg_mul = 3, --unchanged from civil
-				r = 100,
-				acc = {
-					0.1,
-					0.9
-				},
-				recoil = {
-					0.25,
-					0.25
-				},
-				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					0,
-					0,
-					0
-				}
-			},
 			{
 				dmg_mul = 3,
 				r = 500,
 				acc = {
-					0.1,
-					0.85
+					0.2,
+					0.9
 				},
 				recoil = {
-					0.3,
+					0.25,
 					0.35
 				},
 				mode = {
@@ -4247,11 +4081,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --falloff does not begin, save it for 20m, the harsh drop is kept ofc
+				dmg_mul = 2, 
 				r = 1000,
 				acc = {
 					0,
-					0.6 --increased slightly from .55 to .6
+					0.6
 				},
 				recoil = {
 					0.3,
@@ -4265,15 +4099,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1,
+				dmg_mul = 1, --harsh drop slightly reduced, 
 				r = 2000,
 				acc = {
 					0,
 					0.45
 				},
 				recoil = { 
-					0.35,
-					0.4 --reduced from civil by .1, shouldnt matter too much but keeps a certain feeling of noteworthyness
+					0.3,
+					0.45
 				},
 				mode = {
 					1,
@@ -4283,29 +4117,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
+				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
 				r = 3000,
 				acc = {
 					0,
-					0.25 --slight increase from .2 to .25, matters, due to fbi gunslingers being quite the nuisance
-				},
-				recoil = {
-					0.35,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
 					0
-				}
-			},
-			{
-				dmg_mul = 0.1, --no longer a threat past this range, merely a warning shot
-				r = 4000,
-				acc = {
-					0,
-					0.01
 				},
 				recoil = {
 					0.4,
@@ -4322,14 +4138,14 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.complex.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
-			0.35,
-			0.35
+			0.5,
+			0.5
 		},
-		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
-		focus_dis = 500,
+		focus_delay = 1,
+		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
-		RELOAD_SPEED = 1,
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -4337,38 +4153,20 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
-			{
-				dmg_mul = 3, --unchanged from civil
-				r = 100,
-				acc = {
-					0.1,
-					0.9
-				},
-				recoil = {
-					0.25,
-					0.25
-				},
-				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					0,
-					0,
-					0
-				}
-			},
 			{
 				dmg_mul = 3,
 				r = 500,
 				acc = {
-					0.1,
-					0.85
+					0.2,
+					0.9
 				},
 				recoil = {
-					0.3,
+					0.25,
 					0.35
 				},
 				mode = {
@@ -4379,11 +4177,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --falloff does not begin, save it for 20m, the harsh drop is kept ofc
+				dmg_mul = 2, 
 				r = 1000,
 				acc = {
 					0,
-					0.6 --increased slightly from .55 to .6
+					0.6
 				},
 				recoil = {
 					0.3,
@@ -4397,33 +4195,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1,
+				dmg_mul = 1, --harsh drop slightly reduced, 
 				r = 2000,
 				acc = {
 					0,
 					0.45
 				},
 				recoil = { 
-					0.35,
-					0.4 --reduced from civil by .1, shouldnt matter too much but keeps a certain feeling of noteworthyness
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 1, --still dangerous, acc drops hard, but not recoil or firing pattern
-				r = 3000,
-				acc = {
-					0,
-					0.25 --slight increase from .2 to .25, matters, due to fbi gunslingers being quite the nuisance
-				},
-				recoil = {
-					0.35,
-					1
+					0.3,
+					0.45
 				},
 				mode = {
 					1,
@@ -4434,10 +4214,10 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 0, --no longer a threat past this range, merely a warning shot
-				r = 4000,
+				r = 3000,
 				acc = {
 					0,
-					0.01
+					0
 				},
 				recoil = {
 					0.4,
@@ -4451,19 +4231,19 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
-	}
+	}	
 	presets.weapon.complex.is_rifle = {
 		aim_delay = {
-			0.25,
-			0.25
+			0.6,
+			0.6
 		},
-		focus_delay = 2, --2 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
-		focus_dis = 500, --focus delay starts after 5m
-		spread = 20, --lowered slightly from civil
-		miss_dis = 5,
-		RELOAD_SPEED = 1.1,
+		focus_delay = 1.25,
+		focus_dis = 100,
+		spread = 20, 
+		miss_dis = 20,
+		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
-		melee_dmg = 15, --100 damage on melee, no joke
+		melee_dmg = 10, --100 damage on melee
 		melee_retry_delay = {
 			1,
 			1
@@ -4476,22 +4256,22 @@ function CharacterTweakData:_presets(tweak_data)
 		tase_sphere_cast_radius = 5,
 		range = {
 			optimal = 3000,
-			far = 4000, --longer range style firing patterns begin, enemy movement gets complexer due to the close range being increased
-			close = 2000
+			far = 4000, 
+			close = 1600
 		},
-		autofire_rounds = { --fires massive bursts of 16 to 30 shots, weapontweakdata increases max clip for rifles at mayhem and above
-			16,
-			30
+		autofire_rounds = { --yes.
+			30,
+			60
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 5,
-				r = 100,
+				dmg_mul = 4.5,
+				r = 400,
 				acc = { 
 					0,
-					0.2
+					0.9
 				},
-				recoil = {
+				recoil = { 
 					0.2,
 					0.2
 				},
@@ -4503,33 +4283,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4.5,
-				r = 400,
-				acc = { 
-					0,
-					0.2
-				},
-				recoil = {
-					0.2,
-					0.2 
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 800,
 				acc = { 
 					0,
-					0.1
+					0.9
 				},
 				recoil = { 
 					0.25,
-					0.3 --slightly decreased from civil, from 0.35 to 0.3
+					0.3
 				},
 				mode = {
 					0,
@@ -4539,11 +4301,29 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3,
-				r = 1500,
+				dmg_mul = 2,
+				r = 1200,
 				acc = {
 					0,
-					0.05
+					0.7
+				},
+				recoil = {
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 2,
+				r = 2000,
+				acc = {
+					0,
+					0.5
 				},
 				recoil = {
 					0.25,
@@ -4561,7 +4341,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 3000,
 				acc = {
 					0,
-					0.025
+					0.3
 				},
 				recoil = {
 					0.25,
@@ -4575,15 +4355,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0,
+				dmg_mul = 1,
 				r = 4000,
 				acc = {
 					0,
-					0
+					0.05
 				},
 				recoil = {
-					1,
-					2
+					0.4,
+					0.6
 				},
 				mode = {
 					0,
@@ -4596,15 +4376,15 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.complex.is_bullpup = presets.weapon.complex.is_rifle
 	presets.weapon.complex.is_shotgun_pump = {
-		aim_delay = { --no aim delay for complex, focus delay increases significantly
-			0.5,
-			0.5
+		aim_delay = {
+			0.8,
+			0.8
 		},
-		focus_delay = 3, --significantly quicker focus delay build from civil, peek first, verify, shoot later
-		focus_dis = 500, --focus delay only starts past 5m, unchanged from civil
+		focus_delay = 1, --focus delay change here.
+		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
-		RELOAD_SPEED = 1, --lowered reload speed greatly from civil, shit starts getting dangerous
+		RELOAD_SPEED = 1.4, --HOW? ARE THEY JUST PILING ALL THE SHELLS ON THEIR HAND AND JUST SHOVING IT IN THERE LIKE CANDY INTO A BOWL???? either way, quite powerful
 		melee_speed = 0.5,
 		melee_dmg = 15, --100 damage on melee, no joke, keep as is from civil and up
 		melee_retry_delay = {
@@ -4612,21 +4392,22 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 2000, --increased from civil, shotgun types will run'n gun which makes them significantly more hazardous
+			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 1500 
+			close = 1200,
+			aggressive = 600
 		},
 		FALLOFF = {
 			{
 				dmg_mul = 3,
-				r = 100,
+				r = 400,
 				acc = {
-					0.1,
-					0.8
+					0.9,
+					1
 				},
 				recoil = { --slightly lowered recoil from civil, lower end has more variance
 					0.8,
-					1
+					0.9
 				},
 				mode = {
 					1,
@@ -4636,15 +4417,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3,
-				r = 600,
-				acc = {
-					0,
-					0.6
+				dmg_mul = 3, --150 damage remains, yes, yes, y e s.
+				r = 800,
+				acc = { 
+					0.3,
+					0.9
 				},
-				recoil = {
-					1,
-					1.2
+				recoil = { --reduced massively from civil
+					0.9,
+					1
 				},
 				mode = {
 					1,
@@ -4657,30 +4438,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2,
 				r = 1000,
 				acc = {
-					0,
-					0.4
+					0.1,
+					0.75
 				},
 				recoil = {
-					1.2,
-					1.4
-				},
-				mode = {
 					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 2, 
-				r = 1500,
-				acc = {
-					0,
-					0.2
-				},
-				recoil = {
-					1.4,
-					1.5
+					1.3
 				},
 				mode = {
 					1,
@@ -4691,14 +4454,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1, 
-				r = 2000,
+				r = 1500, --max 15m range on Ultra Spicy/Scorching Hot
 				acc = {
 					0,
-					0.175
+					0.25
 				},
-				recoil = { --recoil is ok though, said the slut who is designing this mess
-					1.5,
-					1.5
+				recoil = {
+					1.1,
+					1.3
 				},
 				mode = {
 					1,
@@ -4727,135 +4490,119 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.is_shotgun_mag = { --a mix of both shotgun and rifle, its a jack of all trades, HAZARDOUS FOR THAT PRECISE REASON.
-		aim_delay = { --no more aim delay on complex.
-			0.5,
-			0.5
+	presets.weapon.complex.is_shotgun_mag = { --yeehaw
+		aim_delay = {
+			0,
+			0
 		},
-		focus_delay = 4, --focus delay unchanged from civil.
-		focus_dis = 500, --unchanged from civil.
-		spread = 20, --spread unchanged from civil.
+		focus_delay = 1.05,
+		focus_dis = 100, --unchanged from civil.
+		spread = 20, 
 		miss_dis = 20,
-		RELOAD_SPEED = 1.25, --saiga no longer has 7 shots per clip, but the animation is still justified because this is "complex"
+		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
-		melee_dmg = 20,
+		melee_dmg = 23,
+		fireline_t = 0.35, --how long it takes for enemies to reset their focus and aim delay.
 		melee_retry_delay = {
 			1,
 			2
 		},
 		range = {
-			optimal = 2500, --more run'n gun
+			optimal = 2500,
 			far = 4000,
-			close = 1500
+			close = 1000,
+			aggressive = 400
 		},
-		autofire_rounds = { --this difficulty partially increases the saiga mag-capacity, so this gets increased too
-			8,
-			16
+		autofire_rounds = { --not used anymore
+			16,
+			32
 		},
-		--before i start falloff, if you can, go watch that one video of that one terrorist war crime guy eating a cyanide pill mid-trial to express my frustration at overkill simply cloning shotgun_pump for shotgun_mag, and yes, if you're reading this so far, this isnt copy paste, i have willingly chosen to let this message be known every time shotgun mag falloff is ever mentioned in this fucking lua file
+		--wow remember when i thought i was a he that shit was wack lol
 		FALLOFF = {
 			{
-				dmg_mul = 2, --anarchy further increases range and autofire rounds, maintain this one easy to comphrehend
-				r = 100,
-				acc = {
-					0,
-					0.12
-				},
-				recoil = {
-					0.05,
-					0.05
-				},
-				mode = {
-					0,
-					3,
-					3,
-					1 --ugh fill me with that lead big boy
-				}
-			},
-			{
 				dmg_mul = 2,
-				r = 500,
+				r = 400,
 				acc = {
-					0,
-					0.12
+					0.25,
+					0.9
 				},
 				recoil = {
-					0.05,
-					0.1
+					0.4,
+					0.5
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					0,
+					0
 				}
 			},
 			{
-				dmg_mul = 1.5, --75 damage
+				dmg_mul = 1.7, --80 counts one less hit on ICTV
 				r = 1000,
 				acc = {
-					0,
-					0.07
+					0.1,
+					0.5
 				},
 				recoil = {
-					0.1,
-					0.15
+					0.6,
+					0.7
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					0,
+					0
 				}
 			},
 			{
-				dmg_mul = 1, --50 damage, lower end of the falloff scale
-				r = 1500,
+				dmg_mul = 1,
+				r = 2000,
 				acc = {
 					0,
-					0.05
+					0.25
 				},
 				recoil = {
-					0.1,
-					0.2
+					0.7,
+					1.4
 				},
 				mode = {
+					1,
 					0,
-					3,
-					3,
-					1
+					0,
+					0
 				}
 			},
 			{
-				dmg_mul = 0,
-				r = 2000,
+				dmg_mul = 1, 
+				r = 3000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					1,
-					2
+					1.05,
+					1.75
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			}
 		}
 	}
-	presets.weapon.complex.is_smg = { --used by hrts, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
-		aim_delay = { --aim delay kept, the intent of the weapon is just to build suppression on the player and be generally annoying, its damage isnt worth too much consideration most of the time...MOST of the time.
-			0.28,
-			0.28
+	presets.weapon.complex.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
+		aim_delay = {
+			0.5,
+			0.5
 		},
-		focus_delay = 4,
-		focus_dis = 500, 
-		spread = 15,
-		miss_dis = 20,
-		RELOAD_SPEED = 1.5,
+		focus_delay = 1.1,
+		focus_dis = 100, 
+		spread = 25,
+		miss_dis = 30,
+		RELOAD_SPEED = 1.5, --whew.
 		melee_speed = 0.5,
 		melee_dmg = 15,
 		melee_retry_delay = {
@@ -4863,41 +4610,23 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 2000,
+			optimal = 3500,
 			far = 4000,
 			close = 1000 --light weight weapon, allows run'n gun, shortened since cloakers exist, will revise later per difficulty
 		},
-		autofire_rounds = { --defined autofire for smgs, their mag capacity is increased at this difficulty, so auto-fire has to be increased too
-			24,
-			32
+		autofire_rounds = { --extended mags a ton, pretty hazardous and continuous
+			32,
+			60
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --damage unchanged from civil, keep as is.
-				r = 100,
-				acc = { 
-					0,
-					0.1
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 500,
 				acc = {
-					0,
-					0.1
+					0.2,
+					0.75
 				},
-				recoil = {
+				recoil = { 
 					0.2,
 					0.2
 				},
@@ -4909,11 +4638,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3,
+				dmg_mul = 2,
 				r = 1000,
-				acc = { --low accuracy compared to rifles, auto-fire makes up for it
-					0,
-					0.05
+				acc = {
+					0.05,
+					0.6
 				},
 				recoil = {
 					0.2,
@@ -4928,14 +4657,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1, --start dropping damage, hard, accuracy hits a low point
-				r = 2000,
+				r = 1500,
 				acc = {
 					0,
-					0.02
+					0.4
 				},
 				recoil = {
-					0.6,
-					1.2
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -4945,15 +4674,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, -- no longer a threat, gun stops working
+				dmg_mul = 0.5, -- no longer a threat, gun stops working
 				r = 3000,
 				acc = {
 					0,
-					0
+					0.05
 				},
 				recoil = {
-					1.5,
-					3
+					0.2,
+					0.2
 				},
 				mode = {
 					0,
@@ -4964,16 +4693,16 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.is_revolver = { --might be used later for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops, mostly unchanged from civil outside of no aim delay, a little bit of increased range and reduced focus delay
+	presets.weapon.complex.is_revolver = { --used by punks and beat police
 		aim_delay = {
-			0.4,
-			0.4
+			0.5,
+			0.5
 		},
-		focus_delay = 4, --4 second focus delay, justified due to increased accuracy of the weapon along with damage scale
-		focus_dis = 200,
-		spread = 20,
-		miss_dis = 50,
-		RELOAD_SPEED = 1.4, --FAST reload.
+		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
+		focus_dis = 100,
+		spread = 10,
+		miss_dis = 10,
+		RELOAD_SPEED = 1.8, --FAST reload.
 		melee_speed = 0.5,
 		melee_dmg = 10,
 		melee_retry_delay = {
@@ -4987,51 +4716,33 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --160 damage start.
-				r = 100,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.8,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 4,
-				r = 500,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.8,
-					1.1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 4, --120, range remains excellent.
+				dmg_mul = 3, --120, range remains excellent.
 				r = 1000,
+				acc = {
+					0,
+					0.9
+				},
+				recoil = {
+					1,
+					1.2
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 2.5,
+				r = 2000,
 				acc = {
 					0,
 					0.85
 				},
-				recoil = {
-					0.8,
-					1.1
+				recoil = { --lowered slightly from normal for the higher end, was 1.3, is 1.2
+					1.2,
+					1.4
 				},
 				mode = {
 					1,
@@ -5041,33 +4752,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --120, great.
-				r = 2000,
-				acc = {
-					0,
-					0.7
-				},
-				recoil = { --lowered slightly from normal for the higher end, was 1.3, is 1
-					1,
-					1.
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 2, --80, lower end of the accuracy scale with very little chance to hit anything unless in high numbers (which wont happen anytime soon)
+				dmg_mul = 1.88, --75, lower end of the accuracy scale with very little chance to hit anything unless in high numbers (which wont happen anytime soon)
 				r = 3000,
 				acc = {
 					0,
-					0.3 --increased from civil from 0.2 to 0.3
+					0.25 --slightly increased from civil from 0.2 to 0.25
 				},
 				recoil = {
-					1,
-					1.1
+					1.4,
+					1.6 
 				},
 				mode = {
 					1,
@@ -5077,11 +4770,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.3, --12 damage, acc, recoil and falloff destroy themselves past 4000 no matter what weapon, to keep maps like birth of sky bearable and make open areas less of a pain in the fucking ass 
+				dmg_mul = 0,
 				r = 4000,
 				acc = {
 					0,
-					0.01
+					0
 				},
 				recoil = {
 					4,
@@ -5096,14 +4789,15 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.complex.mini = { --yes
+	presets.weapon.complex.mini = { --my wrath is finally............gone...........
+		spread_only = true,
 		aim_delay = {
 			0.8,
 			0.8
 		},
-		focus_delay = 0.7,
+		focus_delay = 2,
 		focus_dis = 100,
-		spread = 80, --weapon is mechanically different from every single other npc weapon in the game, works separate from the acc system
+		spread = 60,
 		miss_dis = 10,
 		RELOAD_SPEED = 0.5,
 		melee_speed = 0.5,
@@ -5114,7 +4808,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		range = {
 			optimal = 1500, --overall short range, but continues shooting often
-			far = 3000,
+			far = 10000,
 			close = 1000
 		},
 		autofire_rounds = { --absolutely in awe of the size of this lad, absolute unit
@@ -5124,32 +4818,14 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 10, --200 damage start, get the fuck out of its way.
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					2.7,
-					2.7
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4, --80
 				r = 1000,
 				acc = {
-					1,
-					1
+					120,
+					60
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -5159,15 +4835,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4 , --80
+				dmg_mul = 5, --80
 				r = 2000,
 				acc = {
-					0.75,
-					0.75
+					120,
+					60
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -5178,14 +4854,32 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 2,
-				r = 3000,
+				r = 10000,
 				acc = {
-					0.5,
-					0.5
+					140,
+					80
 				},
 				recoil = {
-					2.7,
-					2.7
+					2,
+					2
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 20000,
+				acc = {
+					140,
+					80
+				},
+				recoil = {
+					2,
+					2
 				},
 				mode = {
 					0,
@@ -5197,53 +4891,37 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.complex.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
+		spread_only = true,
 		aim_delay = {
-			0.35,
-			0.35
+			0.6,
+			0.6
 		},
-		focus_delay = 0, --higher than rifles at this preset to show it as a suppressing bullet hose at longer ranges
-		focus_dis = 200,
+		focus_delay = 3, 
+		focus_dis = 100,
 		spread = 20,
-		miss_dis = 5,
-		RELOAD_SPEED = 0.9, --decently long pause after burst
+		miss_dis = 10,
+		RELOAD_SPEED = 1, --theres 200 ammo in the fucking thing, it'll take time to empty
 		melee_speed = 0.5,
 		melee_dmg = 20,
 		melee_retry_delay = presets.weapon.expert.is_lmg.melee_retry_delay,
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
 			far = 4000,
-			close = 1000
+			close = 1000,
+			aggressive = 500
 		},
-		autofire_rounds = {100, 200}, --bullet hose, kinda scary, fires in random, long bursts though
+		autofire_rounds = {80, 140}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
-			{
-				dmg_mul = 3, --60, keeps the gun scarier than rifles.
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					1.4,
-					1.4
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
 			{
 				dmg_mul = 3,
 				r = 500,
-				acc = { --lessened accuracy, firerate keeps it scary
-					1,
-					1
+				acc = {
+					40,
+					9
 				},
 				recoil = {
-					1.4,
-					1.4
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5256,12 +4934,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					1,
-					1
+					40,
+					9
 				},
 				recoil = {
-					1.4,
-					1.4
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5271,15 +4949,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
+				dmg_mul = 2, 
 				r = 2000,
 				acc = {
-					1,
-					1
+					40,
+					9
 				},
 				recoil = {
-					1.4,
-					1.4
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5289,15 +4967,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --increased slightly from complex, 20 to 40
+				dmg_mul = 1, 
 				r = 3000,
 				acc = {
-					1,
-					1
+					50,
+					12
 				},
 				recoil = {
-					1.4,
-					1.4
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5310,12 +4988,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0, --range limit reach, gun stops working, higher recoil than rifles to compensate for the full auto
 				r = 4000,
 				acc = {
-					0,
-					0
+					50,
+					12
 				},
 				recoil = {
-					2,
-					3
+					0.8,
+					0.8
 				},
 				mode = {
 					0,
@@ -5325,17 +5003,16 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			}
 		}
-	
 	}
 	
 	--anarchy begins here, all damage increased slightly, firing ranges are increased dramatically, and gun damage is mostly flat until a sudden skydive at 40m, minor acc or recoil changes, none of that is particularly as bad as the zeal spawngroups in this difficulty however, which can, and will, tear out your asshole through your mouth
 	
 	presets.weapon.anarchy.is_pistol = {
 		aim_delay = { --no aim delay
-			0.25,
-			0.25
+			0.4,
+			0.4
 		},
-		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
+		focus_delay = 1,
 		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
@@ -5347,35 +5024,17 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 4000, --cant walk and shoot past this range
+			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
-			{
-				dmg_mul = 4, --increased from complex
-				r = 100,
-				acc = {
-					0, --focus delay build up, unchanged from civil
-					0.9
-				},
-				recoil = {
-					0.2,
-					0.25
-				},
-				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					0,
-					0,
-					0
-				}
-			},
 			{
 				dmg_mul = 4,
 				r = 500,
 				acc = {
-					0,
-					0.85
+					0.2,
+					0.9
 				},
 				recoil = {
 					0.25,
@@ -5464,10 +5123,10 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.anarchy.akimbo_pistol = { --akimbos cosmetic
 		aim_delay = { --no aim delay
-			0.25,
-			0.25
+			0.4,
+			0.4
 		},
-		focus_delay = 5, --focus delay for pistols unchanged, they do a good enough job.
+		focus_delay = 1,
 		focus_dis = 100,
 		spread = 25,
 		miss_dis = 30,
@@ -5481,33 +5140,15 @@ function CharacterTweakData:_presets(tweak_data)
 		range = {
 			optimal = 4000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 1000
 		},
 		FALLOFF = {
-			{
-				dmg_mul = 4, --increased from complex
-				r = 100,
-				acc = {
-					0, --focus delay build up, unchanged from civil
-					0.9
-				},
-				recoil = {
-					0.2,
-					0.25
-				},
-				mode = { --tap fire like crazy, unchanged from civil
-					1,
-					0,
-					0,
-					0
-				}
-			},
 			{
 				dmg_mul = 4,
 				r = 500,
 				acc = {
-					0,
-					0.85
+					0.2,
+					0.9
 				},
 				recoil = {
 					0.25,
@@ -5596,16 +5237,16 @@ function CharacterTweakData:_presets(tweak_data)
 	}	
 	presets.weapon.anarchy.is_rifle = {
 		aim_delay = {
-			0.25,
-			0.25
+			0.5,
+			0.5
 		},
-		focus_delay = 2, --2 sec focus delay build up, accuracy is based of number of enemies on the map, not on the assumption you're squaring off against a single enemy, being outnumbered does not equal being in trouble automatically, but rather, being outnumbered with enemies CLOSE to you is
+		focus_delay = 1,
 		focus_dis = 100,
 		spread = 20, 
-		miss_dis = 5, --experimental change, might make damage feel less forced with the reduced accuracy now
+		miss_dis = 10,
 		RELOAD_SPEED = 1.4, --DW style.
 		melee_speed = 0.5,
-		melee_dmg = 15, --100 damage on melee
+		melee_dmg = 15,
 		melee_retry_delay = {
 			1,
 			1
@@ -5628,10 +5269,10 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 6,
-				r = 100,
+				r = 400,
 				acc = { 
-					0,
-					0.4
+					0.3,
+					0.9
 				},
 				recoil = { --increased recoil a tiiiiny bit to make sure it doesn't get too ballistic
 					0.2,
@@ -5645,29 +5286,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5.5, --light damage, recoil and acc falloff begins, really good still, powerful, even
-				r = 400,
-				acc = { 
-					0,
-					0.2
-				},
-				recoil = {
-					0.2,
-					0.2 
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 4, --light falloff, just enough to count 5 hits on ICTV armor
+				dmg_mul = 5, --light falloff, just enough to count 5 hits on ICTV armor
 				r = 800,
 				acc = { 
 					0,
-					0.1
+					0.9
 				},
 				recoil = { 
 					0.25,
@@ -5681,11 +5304,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 3, --drop damage by 10, player survivability should be a bit higher now at 6 hits
-				r = 1500,
+				dmg_mul = 4,
+				r = 1200,
 				acc = {
 					0,
-					0.05 --acc drops
+					0.7
 				},
 				recoil = {
 					0.25,
@@ -5699,15 +5322,69 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, --young man, theres no need to get downed, i said, young man, get the fuck off the ground, because, young man, there are cops all around, and the FUCK. ING. DRILL. IS. JAMMED UP.
+				dmg_mul = 4,
+				r = 2000,
+				acc = {
+					0,
+					0.5
+				},
+				recoil = {
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3, --eat shit.
+				r = 3000,
+				acc = {
+					0,
+					0.3
+				},
+				recoil = {
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 3,
 				r = 4000,
 				acc = {
 					0,
-					0
+					0.1
 				},
 				recoil = {
-					1,
-					2
+					0.25,
+					0.35
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 2, --young man, theres no need to get downed, i said, young man, get the fuck off the ground, because, young man, there are cops all around, and the FUCK. ING. DRILL. IS. JAMMED UP.
+				r = 5000,
+				acc = {
+					0,
+					0.05
+				},
+				recoil = {
+					0.4,
+					0.6
 				},
 				mode = {
 					0,
@@ -5721,10 +5398,10 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.anarchy.is_bullpup = presets.weapon.anarchy.is_rifle
 	presets.weapon.anarchy.is_shotgun_pump = {
 		aim_delay = {
-			0.4,
-			0.4
+			0.7,
+			0.7
 		},
-		focus_delay = 2, --focus delay change here.
+		focus_delay = 0.8, --focus delay change here.
 		focus_dis = 100, --focus delay only starts past 5m
 		spread = 15,
 		miss_dis = 20,
@@ -5738,19 +5415,20 @@ function CharacterTweakData:_presets(tweak_data)
 		range = {
 			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
-			close = 1500 
+			close = 1200,
+			aggressive = 600 --makes it so shotgun enemies approach players extremely close if possible
 		},
 		FALLOFF = {
 			{
 				dmg_mul = 3,
-				r = 100,
+				r = 400,
 				acc = {
-					0.2,
+					0.9,
 					1
 				},
-				recoil = { --slightly lowered recoil from civil, lower end has more variance
-					0.8,
-					1
+				recoil = {
+					0.65,
+					0.8
 				},
 				mode = {
 					1,
@@ -5761,14 +5439,14 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 3, --150 damage remains, yes, yes, y e s.
-				r = 600,
-				acc = { --unchanged, they're too powerful for higher accuracy at this point, changing this would have negative effects
-					0,
-					0.75
+				r = 800,
+				acc = { 
+					0.3,
+					0.9
 				},
-				recoil = { --reduced massively from civil
-					1,
-					1.2
+				recoil = {
+					0.7,
+					0.9
 				},
 				mode = {
 					1,
@@ -5781,12 +5459,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --100 damage, lower end of the falloff scale for shotgunners, should remain mostly unchanged acc and damage-wise as increasing their range has negative effects on gameplay and causes too many "who just destroyed all my armor in one shot" situations 
 				r = 1000,
 				acc = {
-					0,
-					0.5
+					0.15,
+					0.75
 				},
 				recoil = {
-					1.1,
-					1.3
+					0.8,
+					1
 				},
 				mode = {
 					1,
@@ -5799,12 +5477,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, 
 				r = 1500,
 				acc = {
-					0,
-					0.25
+					0.05,
+					0.5
 				},
 				recoil = {
-					1.1,
-					1.3
+					0.9,
+					1.1
 				},
 				mode = {
 					1,
@@ -5818,10 +5496,10 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = {
 					0,
-					0.175
+					0.25
 				},
-				recoil = { --recoil is ok though, said the slut who is designing this mess
-					1.1,
+				recoil = {
+					1,
 					1.3
 				},
 				mode = {
@@ -5853,131 +5531,115 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.anarchy.is_shotgun_mag = { --JUGGERNAUT RHGHGHGHGHG
 		aim_delay = {
-			0.4,
-			0.4
+			0,
+			0
 		},
-		focus_delay = 1.5, --reduced from 2 to 1.5, dozers are priority, you'll see them coming.
+		focus_delay = 0.7,
 		focus_dis = 100, --unchanged from civil.
-		spread = 20, --spread unchanged from civil.
-		miss_dis = 20,
+		spread = 20, 
+		miss_dis = 80,
 		RELOAD_SPEED = 1.4, --whew.
 		melee_speed = 0.5,
 		melee_dmg = 23,
+		fireline_t = 0.35, --how long it takes for enemies to reset their focus and aim delay.
 		melee_retry_delay = {
 			1,
 			2
 		},
 		range = {
-			optimal = 2500, --more run'n gun
+			optimal = 2500,
 			far = 4000,
-			close = 1500
+			close = 1000,
+			aggressive = 400
 		},
-		autofire_rounds = { --increased from complex, yes, it's terrifying.
+		autofire_rounds = { --not used anymore
 			16,
 			32
 		},
-		--before i start falloff, please be aware that, current fuglore has been without internet for quite a few days now, his decision to work on this is probably motivated more from insanity than because he wants to.
+		--wow remember when i thought i was a he that shit was wack lol
 		FALLOFF = {
 			{
-				dmg_mul = 2, --damage unchanged, focus is on increasing frequency of fire and range.
-				r = 100,
-				acc = {
-					0,
-					0.12
-				},
-				recoil = {
-					0.05,
-					0.05
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1 --ugh fill me with that lead big boy
-				}
-			},
-			{
 				dmg_mul = 2,
-				r = 500,
+				r = 600,
 				acc = {
-					0,
-					0.12
+					0.25,
+					0.9
 				},
 				recoil = {
-					0.05,
-					0.05
+					0.36,
+					0.36
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
 				dmg_mul = 1.7, --80 counts one less hit on ICTV
-				r = 1000,
+				r = 1200,
 				acc = {
-					0,
-					0.11
+					0.1,
+					0.5
 				},
 				recoil = {
-					0.05,
-					0.1
+					0.36,
+					1.05
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
 				dmg_mul = 1,
-				r = 2000,
+				r = 2500,
 				acc = {
 					0,
-					0.08
+					0.25
 				},
 				recoil = {
-					0.15,
-					0.2
+					0.6,
+					1.4
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			},
 			{
-				dmg_mul = 0, 
-				r = 2500,
+				dmg_mul = 1, 
+				r = 3000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					4,
-					4.2
+					0.6,
+					1.75
 				},
 				mode = {
+					1,
 					0,
 					0,
-					0,
-					1
+					0
 				}
 			}
 		}
 	}
 	presets.weapon.anarchy.is_smg = { --used by hrts, light swats, cloakers and other sneaky buggers, generally not too scary damage-wise but does hella suppressive fire
 		aim_delay = {
-			0.28,
-			0.28
+			0.4,
+			0.4
 		},
-		focus_delay = 2,
+		focus_delay = 1,
 		focus_dis = 100, 
-		spread = 15,
+		spread = 20,
 		miss_dis = 20,
 		RELOAD_SPEED = 2, --whew.
 		melee_speed = 0.5,
@@ -5997,29 +5659,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 4, --damage unchanged from civil, keep as is.
-				r = 100,
-				acc = { 
-					0,
-					0.15
-				},
-				recoil = {
-					0.2,
-					0.2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
 				dmg_mul = 4,
 				r = 500,
 				acc = {
-					0,
-					0.15
+					0.2,
+					0.75
 				},
 				recoil = { 
 					0.2,
@@ -6036,8 +5680,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 1000,
 				acc = { --low accuracy compared to rifles, auto-fire makes up for it
-					0,
-					0.1
+					0.05,
+					0.6
 				},
 				recoil = {
 					0.2,
@@ -6055,7 +5699,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 2000,
 				acc = {
 					0,
-					0.04
+					0.4
 				},
 				recoil = {
 					0.2,
@@ -6069,11 +5713,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, -- no longer a threat, gun stops working
+				dmg_mul = 1, -- no longer a threat, gun stops working
 				r = 3000,
 				acc = {
 					0,
-					0
+					0.1
 				},
 				recoil = {
 					0.2,
@@ -6088,15 +5732,15 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
-	presets.weapon.anarchy.is_revolver = { --used for custom revolver-wielding fbis, currently given a similar role to shotguns but with more applied individuality, makes them good joker cops, gains reasonable reduction in recoil to make it more dangerous
+	presets.weapon.anarchy.is_revolver = { --used for by punks, and beat police
 		aim_delay = {
 			0.4,
 			0.4
 		},
 		focus_delay = 3, --3 second focus delay, justified due to increased accuracy of the weapon along with damage scale
 		focus_dis = 100,
-		spread = 20,
-		miss_dis = 50,
+		spread = 10,
+		miss_dis = 10,
 		RELOAD_SPEED = 1.8, --FAST reload.
 		melee_speed = 0.5,
 		melee_dmg = 10,
@@ -6105,47 +5749,11 @@ function CharacterTweakData:_presets(tweak_data)
 			2
 		},
 		range = { --leave untouched, long range weapon
-			optimal = 2000,
+			optimal = 3000,
 			far = 5000,
-			close = 1000
+			close = 2000
 		},
 		FALLOFF = {
-			{
-				dmg_mul = 3, --120 damage start.
-				r = 100,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.64,
-					1
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
-			{
-				dmg_mul = 3,
-				r = 500,
-				acc = {
-					0,
-					0.9
-				},
-				recoil = {
-					0.64,
-					1.05
-				},
-				mode = {
-					1,
-					0,
-					0,
-					0
-				}
-			},
 			{
 				dmg_mul = 3, --120, range remains excellent.
 				r = 1000,
@@ -6154,8 +5762,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.9
 				},
 				recoil = {
-					0.7,
-					1.1
+					0.64,
+					1
 				},
 				mode = {
 					1,
@@ -6221,13 +5829,14 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.mini = { --my wrath is finally............gone...........
+		spread_only = true,
 		aim_delay = {
 			0.7,
 			0.7
 		},
-		focus_delay = 0.7,
+		focus_delay = 1.25,
 		focus_dis = 100,
-		spread = 60, --weapon is mechanically different from every single other npc weapon in the game, works separate from the acc system
+		spread = 60,
 		miss_dis = 10,
 		RELOAD_SPEED = 0.5,
 		melee_speed = 0.5,
@@ -6238,7 +5847,7 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		range = {
 			optimal = 1500, --overall short range, but continues shooting often
-			far = 3000,
+			far = 10000,
 			close = 1000
 		},
 		autofire_rounds = { --absolutely in awe of the size of this lad, absolute unit
@@ -6248,28 +5857,10 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 10, --200 damage start, get the fuck out of its way.
-				r = 100,
-				acc = {
-					1,
-					1
-				},
-				recoil = {
-					2,
-					2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 5, --100
 				r = 1000,
 				acc = {
-					1,
-					1
+					50,
+					30
 				},
 				recoil = {
 					2,
@@ -6283,11 +5874,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4 , --80
+				dmg_mul = 5, --80
 				r = 2000,
 				acc = {
-					1,
-					1
+					80,
+					50
 				},
 				recoil = {
 					2,
@@ -6301,11 +5892,29 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2,
-				r = 3000,
+				dmg_mul = 5,
+				r = 10000, --satan said he was a big fan of this idea. i agreed.
 				acc = {
-					1,
+					90,
+					60
+				},
+				recoil = {
+					2,
+					2
+				},
+				mode = {
+					0,
+					0,
+					0,
 					1
+				}
+			},
+			{
+				dmg_mul = 0,
+				r = 20000,
+				acc = {
+					90,
+					60
 				},
 				recoil = {
 					2,
@@ -6321,11 +5930,12 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.anarchy.is_lmg = { --LMG dozer, usage defined on weapontweakdata to suit it
+		spread_only = true,
 		aim_delay = {
-			0.35,
-			0.35
+			0.5,
+			0.5
 		},
-		focus_delay = 0, --higher than rifles, set to 3.
+		focus_delay = 3, 
 		focus_dis = 100,
 		spread = 20,
 		miss_dis = 10,
@@ -6336,7 +5946,8 @@ function CharacterTweakData:_presets(tweak_data)
 		range = { --cant walk and shoot at ranges beyond 10 meters, pretty good.
 			optimal = 1500,
 			far = 4000,
-			close = 1000
+			close = 1000,
+			aggressive = 500
 		},
 		autofire_rounds = {100, 200}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
@@ -6344,8 +5955,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --60, keeps the gun scarier than rifles.
 				r = 100,
 				acc = {
-					1,
-					1
+					20,
+					3
 				},
 				recoil = {
 					0.8,
@@ -6361,9 +5972,9 @@ function CharacterTweakData:_presets(tweak_data)
 			{
 				dmg_mul = 3,
 				r = 500,
-				acc = { --lessened accuracy, firerate keeps it scary
-					1,
-					1
+				acc = {
+					20,
+					3
 				},
 				recoil = {
 					0.8,
@@ -6380,8 +5991,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3, --accuracy and recoil drop begins, no falloff yet to keep it suppressive and scary
 				r = 1000,
 				acc = {
-					1,
-					1
+					20,
+					3
 				},
 				recoil = {
 					0.8,
@@ -6398,8 +6009,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2, --little to no falloff, can suppress through misses though, which makes it pressure players for long periods of time
 				r = 2000,
 				acc = {
-					1,
-					1
+					20,
+					6
 				},
 				recoil = {
 					0.8,
@@ -6413,11 +6024,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 2, --increased slightly from complex, 20 to 40
+				dmg_mul = 2,
 				r = 3000,
 				acc = {
-					1,
-					1
+					30,
+					9
 				},
 				recoil = {
 					0.8,
@@ -6434,8 +6045,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0, --range limit reach, gun stops working, higher recoil than rifles to compensate for the full auto
 				r = 4000,
 				acc = {
-					0,
-					0
+					30,
+					12
 				},
 				recoil = {
 					2,
@@ -6455,13 +6066,13 @@ function CharacterTweakData:_presets(tweak_data)
 	
 	presets.weapon.fbigod.is_pistol = { --Only used by FBIs on Anarchy, they're tough guys.
 		aim_delay = {
-			0.28,
-			0.28
+			0.6,
+			0.6
 		},
-		focus_delay = 2, --focus delay.
+		focus_delay = 0.7, --focus delay.
 		focus_dis = 500,
-		spread = 25,
-		miss_dis = 10,
+		spread = 10,
+		miss_dis = 5,
 		RELOAD_SPEED = 2.1, --Fast reloads.
 		melee_speed = 0.75,
 		melee_dmg = 22,
@@ -6470,9 +6081,9 @@ function CharacterTweakData:_presets(tweak_data)
 			1
 		},
 		range = {
-			optimal = 3000, --cant walk and shoot past this range
-			far = 4000, --40m cut off range.
-			close = 2000 --20m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			optimal = 2500, --cant walk and shoot past this range
+			far = 3000, --30m cut off range.
+			close = 2000
 		},
 		FALLOFF = {
 			{
@@ -6586,14 +6197,14 @@ function CharacterTweakData:_presets(tweak_data)
 		}
 	}
 	presets.weapon.fbigod.akimbo_pistol = { --oh boy why didnt i do this earlier
-		aim_delay = { --no aim delay
-			0.28,
-			0.28
+		aim_delay = {
+			0.6,
+			0.6
 		},
-		focus_delay = 2, --focus delay.
+		focus_delay = 0.7, --focus delay.
 		focus_dis = 500,
-		spread = 25,
-		miss_dis = 10,
+		spread = 10,
+		miss_dis = 5,
 		RELOAD_SPEED = 2.1, --Fast reloads.
 		melee_speed = 0.75,
 		melee_dmg = 22,
@@ -6604,7 +6215,7 @@ function CharacterTweakData:_presets(tweak_data)
 		range = {
 			optimal = 2000, --cant walk and shoot past this range
 			far = 3000, --30m cut off range.
-			close = 1000 --10m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
+			close = 2000 --10m close range means they'll aim at players consistently, pistols are light weight weapons and dont deal much damage
 		},
 		FALLOFF = {
 			{
@@ -6719,13 +6330,13 @@ function CharacterTweakData:_presets(tweak_data)
 	}
 	presets.weapon.fbigod.is_rifle = {
 		aim_delay = {
-			0.28,
-			0.28
+			0.6,
+			0.6
 		},
 		focus_delay = 0.7,
-		focus_dis = 500, --focus delay starts after 5m
-		spread = 20, 
-		miss_dis = 10, --experimental change, might make damage feel less forced with the reduced accuracy now
+		focus_dis = 500, --focus displacement punishment starts after 5m
+		spread = 10, 
+		miss_dis = 0,
 		RELOAD_SPEED = 1.8, --DW style.
 		melee_speed = 0.75,
 		melee_dmg = 22, --100 damage on melee
@@ -6750,29 +6361,11 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		FALLOFF = {
 			{
-				dmg_mul = 7.5, --75 damage for vet boyes
-				r = 100,
-				acc = { 
-					0,
-					0.8
-				},
-				recoil = { --increased recoil a tiiiiny bit to make sure it doesn't get too ballistic
-					0.2,
-					0.2
-				},
-				mode = { --full auto
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
 				dmg_mul = 7.5,
 				r = 500,
 				acc = {
-					0,
-					0.8
+					0.2,
+					1
 				},
 				recoil = {
 					0.2,
@@ -6840,15 +6433,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0, --young man, theres no need to get downed, i said, young man, get the fuck off the ground, because, young man, there are cops all around, and the FUCK. ING. DRILL. IS. JAMMED UP.
+				dmg_mul = 0,
 				r = 4000,
 				acc = {
 					0,
 					0
 				},
 				recoil = {
-					1,
-					2
+					0.25,
+					0.35
 				},
 				mode = {
 					1,
@@ -6873,18 +6466,22 @@ function CharacterTweakData:_presets(tweak_data)
 		0.2,
 		0.3
 	}
-	presets.weapon.gang_member.is_pistol.focus_delay = 1
+	presets.weapon.gang_member.is_pistol.focus_delay = 1.2
 	presets.weapon.gang_member.is_pistol.focus_dis = 200
-	presets.weapon.gang_member.is_pistol.spread = 25
+	presets.weapon.gang_member.is_pistol.spread = 3
 	presets.weapon.gang_member.is_pistol.miss_dis = 20
 	presets.weapon.gang_member.is_pistol.RELOAD_SPEED = 1.5
-	presets.weapon.gang_member.is_pistol.melee_speed = 3
-	presets.weapon.gang_member.is_pistol.melee_dmg = 3
+	presets.weapon.gang_member.is_pistol.melee_speed = 2
+	presets.weapon.gang_member.is_pistol.melee_dmg = 45
 	presets.weapon.gang_member.is_pistol.melee_retry_delay = presets.weapon.normal.is_pistol.melee_retry_delay
-	presets.weapon.gang_member.is_pistol.range = presets.weapon.normal.is_pistol.range
+	presets.weapon.gang_member.is_pistol.range = {
+		optimal = 4000,
+		far = 6000, 
+		close = 3000
+	}
 	presets.weapon.gang_member.is_pistol.FALLOFF = {
 		{
-			dmg_mul = 1,
+			dmg_mul = 6,
 			r = 300,
 			acc = {
 				1,
@@ -6927,22 +6524,22 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 1,
 		focus_dis = 100,
-		spread = 25,
+		spread = 3,
 		miss_dis = 10,
 		RELOAD_SPEED = 1,
 		melee_speed = 2,
-		melee_dmg = 3,
+		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_rifle.melee_retry_delay,
 		range = {
-			optimal = 2500,
-			far = 6000,
-			close = 1500
+			optimal = 4000,
+			far = 6000, 
+			close = 3000
 		},
 		autofire_rounds = {45, 45},
 		FALLOFF = {
 			{
-				dmg_mul = 4,
-				r = 300,
+				dmg_mul = 3,
+				r = 400,
 				acc = {
 					1,
 					1
@@ -6953,84 +6550,84 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				mode = {
 					0,
-					0.25,
-					0.25,
-					0.5
+					0,
+					0,
+					1
 				}
 			},
 			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 1000,
 				acc = {
-					0.9,
+					0.3,
 					0.9
 				},
 				recoil = {
 					0.3,
-					0.3
+					0.9
 				},
 				mode = {
 					0,
-					0.25,
-					0.25,
-					0.5
+					0,
+					0,
+					1
 				}
 			},
 			{
-				dmg_mul = 4,
+				dmg_mul = 3,
 				r = 2000,
 				acc = {
-					0.5,
+					0.2,
 					0.5
 				},
 				recoil = {
-					0.3,
-					0.8
+					0.6,
+					1
 				},
 				mode = {
-					0,
 					0.25,
 					0.5,
-					0.25
+					0.25,
+					0
 				}
 			},
 			{
-				dmg_mul = 4,
-				r = 6000,
+				dmg_mul = 3,
+				r = 4000,
 				acc = {
 					0,
 					0.25
 				},
 				recoil = {
-					0.4,
-					0.8
+					0.6,
+					1.2
 				},
 				mode = {
-					0,
+					0.25,
 					0.5,
 					0.25,
-					0.25
+					0
 				}
 			},
 		}
 	}
 	presets.weapon.gang_member.is_sniper = {
 		aim_delay = {
-			0.25,
+			0.35,
 			1
 		},
 		focus_delay = 1.5,
 		focus_dis = 200,
-		spread = 25,
+		spread = 1,
 		miss_dis = 10,
 		RELOAD_SPEED = 1,
 		melee_speed = 2,
-		melee_dmg = 3,
+		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_rifle.melee_retry_delay,
 		range = {
 			optimal = 4000,
 			far = 6000,
-			close = 2000
+			close = 3000
 		},
 		FALLOFF = {
 			{
@@ -7128,29 +6725,30 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.gang_member.is_lmg = {
 		aim_delay = {
 			0.35,
-			0.35
+			1
 		},
 		focus_delay = 1,
-		focus_dis = 100,
-		spread = 30,
+		focus_dis = 200,
+		spread = 3,
 		miss_dis = 10,
-		RELOAD_SPEED = 0.7,
+		RELOAD_SPEED = 0.3,
 		melee_speed = 2,
-		melee_dmg = 3,
+		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_lmg.melee_retry_delay,
 		range = {
-			optimal = 2500,
+			optimal = 4000,
 			far = 6000,
-			close = 1500
+			close = 3000
 		},
 		autofire_rounds = {100, 200},
+		spread_only = true,
 		FALLOFF = {
 			{
-				dmg_mul = 8.4,
-				r = 100,
+				dmg_mul = 4.2,
+				r = 400,
 				acc = {
-					1,
-					1
+					20,
+					6
 				},
 				recoil = {
 					2.5,
@@ -7164,11 +6762,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 8.4,
+				dmg_mul = 4.2,
 				r = 1000,
 				acc = {
-					0.6,
-					0.6
+					20,
+					6
 				},
 				recoil = {
 					2.5,
@@ -7185,8 +6783,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4.2,
 				r = 2000,
 				acc = {
-					0.3,
-					0.3
+					20,
+					10
 				},
 				recoil = {
 					2.5,
@@ -7200,51 +6798,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1,
+				dmg_mul = 4.2,
 				r = 3000,
 				acc = {
-					0.2,
-					0.2
+					20,
+					10
 				},
 				recoil = {
 					2.5,
 					3.5
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 0.4,
-				r = 4000,
-				acc = {
-					0.1,
-					0.1
-				},
-				recoil = {
-					1,
-					2
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 0.25,
-				r = 6000,
-				acc = {
-					0.01,
-					0.1
-				},
-				recoil = {
-					2,
-					3
 				},
 				mode = {
 					0,
@@ -7262,19 +6824,23 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 3,
 		focus_dis = 100,
-		spread = 15,
+		spread = 3,
 		miss_dis = 10,
 		RELOAD_SPEED = 2,
 		melee_speed = 2,
-		melee_dmg = 3,
+		melee_dmg = 45,
 		melee_retry_delay = presets.weapon.normal.is_shotgun_pump.melee_retry_delay,
-		range = presets.weapon.normal.is_shotgun_pump.range,
+		range = {
+			optimal = 4000,
+			far = 6000,
+			close = 3000
+		},
 		FALLOFF = {
 			{
 				dmg_mul = 3,
-				r = 300,
+				r = 1000,
 				acc = {
-					1,
+					0.5,
 					1
 				},
 				recoil = {
@@ -7290,9 +6856,9 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 1.5,
-				r = 1500,
+				r = 2000,
 				acc = {
-					1,
+					0,
 					1
 				},
 				recoil = {
@@ -7310,7 +6876,7 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 0.5,
 				r = 3000,
 				acc = {
-					0.5,
+					0,
 					0.75
 				},
 				recoil = {
@@ -7333,13 +6899,17 @@ function CharacterTweakData:_presets(tweak_data)
 		},
 		focus_delay = 1,
 		focus_dis = 200,
-		spread = 18,
+		spread = 3,
 		miss_dis = 10,
 		RELOAD_SPEED = 1.6,
 		melee_speed = 2,
 		melee_dmg = 3,
 		melee_retry_delay = presets.weapon.normal.is_shotgun_mag.melee_retry_delay,
-		range = presets.weapon.normal.is_shotgun_mag.range,
+		range = {
+			optimal = 4000,
+			far = 6000,
+			close = 3000
+		},
 		autofire_rounds = {
 			4,
 			8
@@ -7347,9 +6917,9 @@ function CharacterTweakData:_presets(tweak_data)
 		FALLOFF = {
 			{
 				dmg_mul = 4.2,
-				r = 100,
+				r = 400,
 				acc = {
-					1,
+					0.6,
 					1
 				},
 				recoil = {
@@ -7365,9 +6935,9 @@ function CharacterTweakData:_presets(tweak_data)
 			},
 			{
 				dmg_mul = 4.2,
-				r = 500,
+				r = 800,
 				acc = {
-					1,
+					0,
 					1
 				},
 				recoil = {
@@ -7385,7 +6955,7 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3.8,
 				r = 1000,
 				acc = {
-					0.85,
+					0,
 					0.95
 				},
 				recoil = {
@@ -7403,8 +6973,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 2,
 				r = 2000,
 				acc = {
-					0.75,
-					0.9
+					0,
+					0.6
 				},
 				recoil = {
 					0.25,
@@ -7418,11 +6988,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.5,
+				dmg_mul = 2,
 				r = 3000,
 				acc = {
-					0.4,
-					0.7
+					0,
+					0.3
 				},
 				recoil = {
 					0.4,
@@ -7432,24 +7002,6 @@ function CharacterTweakData:_presets(tweak_data)
 					4,
 					2,
 					1,
-					0
-				}
-			},
-			{
-				dmg_mul = 0.1,
-				r = 5000,
-				acc = {
-					0.05,
-					0.2
-				},
-				recoil = {
-					0.5,
-					1
-				},
-				mode = {
-					2,
-					1,
-					0,
 					0
 				}
 			}
@@ -7467,16 +7019,52 @@ function CharacterTweakData:_presets(tweak_data)
 			dmg_mul = 10,
 			r = 300,
 			acc = {
+				0.6,
+				1
+			},
+			recoil = {
+				0.25,
+				0.3
+			},
+			mode = {
+				1,
+				0,
+				0,
+				0
+			}
+		},
+		{
+			dmg_mul = 10,
+			r = 1000,
+			acc = {
+				0.4,
+				1
+			},
+			recoil = {
+				0.3,
+				0.5
+			},
+			mode = {
+				1,
+				0,
+				0,
+				0
+			}
+		},
+		{
+			dmg_mul = 10,
+			r = 2000,
+			acc = {
 				0,
 				1
 			},
 			recoil = {
-				0.45,
-				1
+				0.5,
+				0.8
 			},
 			mode = {
-				0.5,
-				0.5,
+				1,
+				0,
 				0,
 				0
 			}
@@ -7486,29 +7074,11 @@ function CharacterTweakData:_presets(tweak_data)
 			r = 3000,
 			acc = {
 				0,
-				1
+				0.6
 			},
 			recoil = {
-				0.45,
-				1.25
-			},
-			mode = {
-				0.5,
-				0.5,
-				0,
-				0
-			}
-		},
-		{
-			dmg_mul = 2.5,
-			r = 10000,
-			acc = {
-				0,
+				0.6,
 				1
-			},
-			recoil = {
-				2,
-				3
 			},
 			mode = {
 				1,
@@ -7657,15 +7227,28 @@ function CharacterTweakData:_presets(tweak_data)
 			cuffed = true
 		},
 		cop = {
+			entry = true,
 			aggressive = true,
-			contact = true,
 			enemyidlepanic = true,
 			controlpanic = true,
+			retreat = true,
+			contact = true,
+			clear = true,
 			clear_whisper = true,
+			go_go = true,
+			push = true,
+			reload = true,
+			look_for_angle = true,
 			ecm = true,
 			saw = true,
 			trip_mines = true,
 			sentry = true,
+			ready = true,
+			smoke = true,
+			flash_grenade = true,
+			follow_me = true,
+			deathguard = true,
+			open_fire = true,
 			suppress = true,
 			dodge = true,
 			cuffed = true
@@ -7698,7 +7281,7 @@ function CharacterTweakData:_presets(tweak_data)
 			cuffed = true
 		},
 		shield = {
-            entry = true,
+			entry = true,
 			aggressive = true,
 			enemyidlepanic = true,
 			controlpanic = true,
@@ -7715,10 +7298,13 @@ function CharacterTweakData:_presets(tweak_data)
 			trip_mines = true,
 			sentry = true,
 			ready = true,
+			smoke = true,
+			flash_grenade = true,
 			follow_me = true,
 			deathguard = true,
 			open_fire = true,
 			suppress = true,
+			dodge = true,
 			cuffed = true
         },
 		bulldozer = {
@@ -7754,51 +7340,18 @@ function CharacterTweakData:_presets(tweak_data)
 end
 
 function CharacterTweakData:_set_characters_weapon_preset(preset)
-	local all_units = {
-		"security",
-		"security_undominatable",
-		"mute_security_undominatable",
-		"cop",
-		"cop_scared",
-		"cop_female",
-		"gensec",
-		"swat",
-		"heavy_swat",
-		"heavy_swat_sniper",
-		"fbi_swat",
-		"fbi_heavy_swat",
-		"city_swat",
-		"gangster",
-		"biker",
-		"biker_escape",
-		"mobster",
-		"bolivian",
-		"bolivian_indoors",
-		"bolivian_indoors_mex",
-		"tank",
-		"tank_hw",
-		"tank_medic",
-		"tank_mini",
-		"spooc",
-		"spooc_heavy",
-		"shadow_spooc",
-		"trolliam_epicson",		
-		"medic",
-		"gangster_ninja",		
-		"taser",
-		"shield",
-		"mobster_boss",
-		"biker_boss",
-		"chavez_boss",
-		"hector_boss",
-		"hector_boss_no_armor",
-		"drug_lord_boss",
-		"drug_lord_boss_stealth"
-	}
-
-	for _, name in ipairs(all_units) do
-		self[name].weapon = self.presets.weapon[preset]
+	local presets = self.presets
+	
+	for i = 1, #self._enemy_list do
+		local name = self._enemy_list[i]
+		
+		self[name].weapon = presets.weapon[preset]
 	end
+	
+	self.sniper.weapon = presets.weapon.rhythmsniper
+	self.heavy_swat_sniper.weapon = presets.weapon.rhythmsniper
+	self.armored_sniper.weapon = presets.weapon.rhythmsniper
+	self.tank_ftsu.weapon = presets.weapon.rhythmsniper
 end
 
 function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, heavy_swat_chance, common_chance)
@@ -7813,15 +7366,20 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 		"city_swat"
 	}
 	
-	local common_units = {
+	local punks_units = {
 		"security",
 		"security_undominatable",
+		"security_mex",
+		"security_mex_no_pager",
+		"security_undominatable",
 		"mute_security_undominatable",
+		"gensec",
 		"cop",
-		"cop_female",
+		"cop_moss",
 		"cop_scared",
 		"gangster",
 		"bolivian",
+		"triad",
 		"mobster",
 		"biker",
 		"mobster",
@@ -7829,30 +7387,54 @@ function CharacterTweakData:_set_characters_crumble_chance(light_swat_chance, he
 		"bolivian_indoors_mex"
 	}
 
-	for _, cname in ipairs(common_units) do
+	for _, cname in ipairs(punks_units) do
 		self[cname].crumble_chance = common_chance
 		self[cname].allow_pass_out = true
-		self[cname].damage.fire_damage_mul = 4
+		self[cname].damage.fire_damage_mul = 18
+	end
+	
+	if self.security_no_pager then
+		self.security_no_pager.crumble_chance = common_chance
+		self.security_no_pager.allow_pass_out = true
+		self.security_no_pager.damage.fire_damage_mul = 18
 	end
 	
 	for _, lname in ipairs(light_units) do
 		self[lname].crumble_chance = light_swat_chance
 		self[lname].allow_pass_out = true
-		self[lname].damage.fire_damage_mul = 4
+		self[lname].damage.fire_damage_mul = 12
 	end
 	
 	for _, hname in ipairs(heavy_units) do
 		self[hname].crumble_chance = heavy_swat_chance
-		self[hname].damage.fire_damage_mul = 3
+		self[hname].damage.fire_damage_mul = 6
 	end
+end
+
+function CharacterTweakData:_init_captain(presets)
+	self.captain = deep_clone(self.gangster)
+	self.captain.calls_in = true
+	self.captain.immune_to_knock_down = true
+	self.captain.immune_to_concussion = true
+	self.captain.no_retreat = true
+	self.captain.no_arrest = true
+	self.captain.surrender = nil
+	self.captain.damage.hurt_severity = presets.hurt_severities.no_hurts_no_tase
+	self.captain.flammable = false
+	self.captain.can_be_tased = false
+	self.captain.suppression = nil
+
+	table.insert(self._enemy_list, "captain") --wrong in vanilla, fixed here
 end
 
 function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't make this a post hook due to the melee glitch fix, figure something out later to fix it WITH posthooks if possible.
 	self.tank = deep_clone(presets.base)
 	self.tank.tags = {
 		"law",
+		"takedown",
 		"tank",
 		"special",
+		"frontliner",
 		"protected"
 	}
 	self.tank.experience = {}
@@ -7868,7 +7450,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	}
 	self.tank.weapon = deep_clone(presets.weapon.civil)
 	self.tank.detection = presets.detection.enemymook
-	self.tank.HEALTH_INIT = 450
+	self.tank.HEALTH_INIT = 502.5
 	self.tank.headshot_dmg_mul = 64
 	self.tank.damage.explosion_damage_mul = 1.75 --nngh.
 	self.tank.damage.fire_damage_mul = 2
@@ -7887,6 +7469,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.no_retreat = nil
 	self.tank.no_arrest = true
 	self.tank.surrender = nil
+	self.tank.always_face_enemy = true
 	self.tank.ecm_vulnerability = 0 --no more dozer weirdness due to ecms, also a buff I guess.
 	self.tank.ecm_hurts = {
 		ears = {
@@ -7924,15 +7507,17 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_hw = deep_clone(self.tank)
 	self.tank_hw.tags = {
 		"law",
+		"takedown",
 		"tank",
-		"special"
+		"special",
+		"ohfuck"
 	}
-	self.tank_hw.move_speed = presets.move_speed.slow_consistency --lol stop
+	self.tank_hw.move_speed = presets.move_speed.mini_consistency --lol stop
 	self.tank_hw.HEALTH_INIT = 100 --3200 on top difficulty, encourage teamfire against these guys since they're gonna be on the halloween maps
 	self.tank_hw.headshot_dmg_mul = 1
 	self.tank_hw.ignore_headshot = true
-	self.tank_hw.damage.explosion_damage_mul = 8 --explosives can eliminate them very easily
-	self.tank_hw.damage.fire_damage_mul = 8
+	self.tank_hw.damage.explosion_damage_mul = 1
+	self.tank_hw.damage.fire_damage_mul = 1
 	self.tank_hw.use_animation_on_fire_damage = false
 	self.tank_hw.flammable = true
 	self.tank_hw.can_be_tased = false
@@ -7944,6 +7529,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_medic.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_medic.tags = {
 		"law",
+		"backliner",
 		"tank",
 		"medic",
 		"special",
@@ -7951,7 +7537,16 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	}
 
 	self.tank_mini = deep_clone(self.tank)
-	self.tank_mini.weapon.mini = {}
+	self.tank_mini.tags = {
+		"law",
+		"frontliner",
+		"takedown",
+		"tank",
+		"protected",
+		"special",
+		"ohfuck",
+		"no_run"
+	}
 	self.tank_mini.move_speed = presets.move_speed.mini_consistency --New movement presets.
 	self.tank_mini.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
 	self.tank_mini.always_face_enemy = true
@@ -7963,12 +7558,13 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank_ftsu.tags = {
 		"law",
 		"tank",
-		"special"
+		"special",
+		"no_run"
 	}
 	self.tank_ftsu.weapon = presets.weapon.rhythmsniper
 	self.tank_ftsu.move_speed = presets.move_speed.mini_consistency
 	self.tank_ftsu.spawn_sound_event = self._prefix_data_p1.bulldozer() .. "_entrance_elite"
-	self.tank_ftsu.always_face_enemy = nil
+	self.tank_ftsu.always_face_enemy = true
 	
 	self.trolliam_epicson = deep_clone(self.tank) --trolliam
 	self.trolliam_epicson.tags = {
@@ -7996,11 +7592,6 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 		3
 	}
 	
-
-	table.insert(self._enemy_list, "tank")
-	table.insert(self._enemy_list, "tank_hw")
-	table.insert(self._enemy_list, "tank_medic")
-	table.insert(self._enemy_list, "tank_mini")
 	table.insert(self._enemy_list, "tank_ftsu")
 	table.insert(self._enemy_list, "trolliam_epicson")	
 end
@@ -8011,17 +7602,19 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 		"law",
 		"spooc",
 		"special",
+		"backliner",
 		"takedown"
 	}
 	self.spooc.experience = {}
 	self.spooc.weapon = deep_clone(presets.weapon.civil)
 	self.spooc.detection = presets.detection.enemyspooc
-	self.spooc.HEALTH_INIT = 20
-	self.spooc.headshot_dmg_mul = 6
-	self.spooc.damage.fire_damage_mul = 4
+	self.spooc.HEALTH_INIT = 8
+	self.spooc.headshot_dmg_mul = 7
+	self.spooc.damage.fire_damage_mul = 8
 	self.spooc.move_speed = presets.move_speed.lightning_constant
 	self.spooc.no_retreat = nil
 	self.spooc.no_arrest = true
+	self.spooc.always_face_enemy = true
 	self.spooc.damage.doom_hurt_type = "doom"
 	self.spooc.damage.hurt_severity = presets.hurt_severities.specialenemy
 	self.spooc.surrender_break_time = {
@@ -8083,7 +7676,6 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 	self.spooc_heavy = deep_clone(self.spooc)
 	self.spooc_heavy.special_deaths = nil
 
-	table.insert(self._enemy_list, "spooc")
 	table.insert(self._enemy_list, "spooc_heavy")
 end
 
@@ -8095,10 +7687,11 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	}
 	self.shadow_spooc.experience = {}
 	self.shadow_spooc.weapon = deep_clone(presets.weapon.fbigod)
-	self.shadow_spooc.detection = presets.detection.normal
-	self.shadow_spooc.HEALTH_INIT = 50
-	self.shadow_spooc.headshot_dmg_mul = 4
+	self.shadow_spooc.detection = presets.detection.enemymook
+	self.shadow_spooc.HEALTH_INIT = 10
+	self.shadow_spooc.headshot_dmg_mul = 8
 	self.shadow_spooc.move_speed = presets.move_speed.lightning_constant
+	self.shadow_spooc.spooc_vanish = true
 	self.shadow_spooc.no_retreat = true
 	self.shadow_spooc.no_arrest = true
 	self.shadow_spooc.no_fumbling = true
@@ -8130,11 +7723,11 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	self.shadow_spooc.speech_prefix_count = nil
 	self.shadow_spooc.access = "spooc"
 	self.shadow_spooc.use_radio = nil
-	self.shadow_spooc.use_animation_on_fire_damage = false
-	self.shadow_spooc.flammable = false
+	self.shadow_spooc.use_animation_on_fire_damage = nil
+	self.shadow_spooc.flammable = true
 	self.shadow_spooc.dodge = presets.dodge.ninja_complex
 	self.shadow_spooc.chatter = presets.enemy_chatter.no_chatter
-	self.shadow_spooc.do_not_drop_ammo = true
+	self.shadow_spooc.do_not_drop_ammo = nil
 	self.shadow_spooc.steal_loot = nil
 	self.shadow_spooc.spawn_sound_event = "uno_cloaker_presence_loop"
 	self.shadow_spooc.die_sound_event = "uno_cloaker_presence_stop"
@@ -8144,8 +7737,17 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 		taunt_after_assault = "",
 		detect = "uno_cloaker_detect"
 	}
-
-	table.insert(self._enemy_list, "shadow_spooc")
+	self.shadow_swat = deep_clone(self.shadow_spooc)
+	self.shadow_swat.health = 5
+	self.shadow_swat.headshot_dmg_mul = 1
+	self.shadow_swat.spawn_sound_event = nil
+	self.shadow_swat.die_sound_event = nil
+	self.shadow_swat.move_speed = presets.move_speed.anarchy_consistency
+	
+	self.shadow_taser = deep_clone(self.shadow_swat)
+	
+	table.insert(self._enemy_list, "shadow_swat")
+	table.insert(self._enemy_list, "shadow_taser")
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(self, presets) --TODO: Nothing yet.
@@ -8154,13 +7756,15 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 		"law",
 		"shield",
 		"special",
+		"frontliner",
 		"dense"
 	}
 	self.shield.experience = {}
 	self.shield.weapon = presets.weapon.simple
 	self.shield.detection = presets.detection.enemymook
-	self.shield.HEALTH_INIT = 14
+	self.shield.HEALTH_INIT = 6
 	self.shield.headshot_dmg_mul = 6
+	self.shield.speed_mul = 0.85
 	self.shield.allowed_stances = {
 		cbt = true
 	}
@@ -8169,7 +7773,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	}
 	self.shield.cannot_throw_grenades = true
 	self.shield.always_face_enemy = true
-	self.shield.move_speed = presets.move_speed.shield_sim
+	self.shield.move_speed = presets.move_speed.simple_consistency
 	self.shield.no_run_start = true
 	self.shield.no_run_stop = true
 	self.shield.no_retreat = nil
@@ -8196,11 +7800,9 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.chatter = presets.enemy_chatter.shield
 	self.shield.announce_incomming = "incomming_shield"
 	self.shield.steal_loot = nil
-	self.shield.use_animation_on_fire_damage = false
-
-	table.insert(self._enemy_list, "shield")
 	
 	self.akuma = deep_clone(self.shield)
+	self.akuma.speed_mul = 1.1
 	self.akuma.weapon = presets.weapon.akuma
 	self.akuma.move_speed = presets.move_speed.lightning_constant
 	self.akuma.use_lotus_effect = true
@@ -8221,12 +7823,13 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.tags = {
 		"law",
 		"medic",
+		"backliner",
 		"special",
 		"dense"
 	}
 	self.medic.weapon = presets.weapon.civil
 	self.medic.detection = presets.detection.enemymook
-	self.medic.HEALTH_INIT = 18 --health lowered slightly to keep medics less tanky, tanky medics create unsolvable situations and aren't too fun.
+	self.medic.HEALTH_INIT = 8
 	self.medic.headshot_dmg_mul = 6
 	self.medic.damage.doom_hurt_type = "doom"
 	self.medic.damage.hurt_severity = presets.hurt_severities.specialenemy
@@ -8236,19 +7839,19 @@ Hooks:PostHook(CharacterTweakData, "_init_medic", "hhpost_medic", function(self,
 	self.medic.no_suppression_reaction = true
 	self.medic.no_retreat = nil
 	self.medic.surrender = presets.surrender.special
-	self.medic.move_speed = presets.move_speed.civil_consistency
+	self.medic.move_speed = presets.move_speed.simple_consistency
 	self.medic.surrender_break_time = {
 		7,
 		12
 	}
-	self.medic.ecm_vulnerability = 1
+	self.medic.ecm_vulnerability = 0
 	self.medic.ecm_hurts = {
 		ears = {
 			max_duration = 10,
 			min_duration = 8
 		}
 	}
-	self.medic.damage.fire_damage_mul = 4
+	self.medic.damage.fire_damage_mul = 8
 	self.medic.chatter = presets.enemy_chatter.medic
 	self.medic.experience.cable_tie = "tie_swat"
 	self.medic.speech_prefix_p1 = self._prefix_data_p1.medic()
@@ -8272,23 +7875,24 @@ Hooks:PostHook(CharacterTweakData, "_init_taser", "hhpost_taser", function(self,
 	}
 	self.taser.weapon = presets.weapon.simple
 	self.taser.detection = presets.detection.enemymook
-	self.taser.HEALTH_INIT = 25
+	self.taser.HEALTH_INIT = 20
 	self.taser.headshot_dmg_mul = 2
+	self.taser.speed_mul = 0.9
 	self.taser.damage.doom_hurt_type = "doom"
-	self.taser.damage.fire_damage_mul = 0.5
+	self.taser.damage.fire_damage_mul = 0.25
 	self.taser.damage.hurt_severity = presets.hurt_severities.specialenemy
-	self.taser.move_speed = presets.move_speed.civil_consistency
+	self.taser.move_speed = presets.move_speed.simple_consistency
 	self.taser.suppression = presets.suppression.stalwart_nil
 	self.taser.no_fumbling = true
 	self.taser.no_suppression_reaction = true
 	self.taser.no_retreat = nil
 	self.taser.no_arrest = true
 	self.taser.surrender = presets.surrender.special
-	self.taser.ecm_vulnerability = 0.9
+	self.taser.ecm_vulnerability = 0
 	self.taser.ecm_hurts = {
 		ears = {
-			max_duration = 8,
-			min_duration = 6
+			max_duration = 3,
+			min_duration = 1
 		}
 	}
 	self.taser.surrender_break_time = {
@@ -8327,12 +7931,19 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	}
 	self.swat.weapon = presets.weapon.simple
 	self.swat.detection = presets.detection.enemymook
-	self.swat.HEALTH_INIT = 10
-	self.swat.headshot_dmg_mul = 6
+	self.swat.HEALTH_INIT = 6
+	self.swat.headshot_dmg_mul = 4
+	self.swat.ecm_vulnerability = 1
+	self.swat.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 	self.swat.move_speed = presets.move_speed.simple_consistency
 	self.swat.damage.doom_hurt_type = "light"
 	self.swat.damage.hurt_severity = presets.hurt_severities.hordemook
-	self.swat.suppression = presets.suppression.hard_agg
+	self.swat.suppression = presets.suppression.hard_def
 	self.swat.surrender = presets.surrender.easy
 	self.swat.experience.cable_tie = "tie_swat"
 	self.swat.speech_prefix_p1 = self._prefix_data_p1.swat()
@@ -8347,35 +7958,35 @@ Hooks:PostHook(CharacterTweakData, "_init_swat", "hhpost_swat", function(self, p
 	self.swat.steal_loot = true
 	self.swat.silent_priority_shout = "f37"
 
-	table.insert(self._enemy_list, "swat")
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, presets)
 	self.fbi = deep_clone(presets.base)
 	self.fbi.tags = {
 		"law",
+		"fbi",
 		"takedown",
 		"dense"
 	}
 	self.fbi.experience = {}
-	self.fbi.weapon = presets.weapon.complex
+	self.fbi.weapon = presets.weapon.fbigod
 	self.fbi.detection = presets.detection.enemymook
 	self.fbi.no_fumbling = true
 	self.fbi.no_suppression_reaction = true
 	self.fbi.no_retreat = nil
-	self.fbi.HEALTH_INIT = 16
+	self.fbi.HEALTH_INIT = 8
 	self.fbi.headshot_dmg_mul = 9
-	self.fbi.move_speed = presets.move_speed.civil_consistency
+	self.fbi.move_speed = presets.move_speed.simple_consistency
 	self.fbi.damage.no_suppression_crouch = true
 	self.fbi.suppression = presets.suppression.stalwart_nil
 	self.fbi.surrender = presets.surrender.special
 	self.fbi.damage.doom_hurt_type = "doom"
 	self.fbi.damage.hurt_severity = presets.hurt_severities.specialenemy
-	self.fbi.ecm_vulnerability = 1
+	self.fbi.ecm_vulnerability = 0
 	self.fbi.ecm_hurts = {
 		ears = {
-			max_duration = 10,
-			min_duration = 8
+			max_duration = 3,
+			min_duration = 1
 		}
 	}
 	self.fbi.weapon_voice = "2"
@@ -8384,20 +7995,25 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 	self.fbi.speech_prefix_p2 = "n"
 	self.fbi.speech_prefix_count = 4
 	self.fbi.silent_priority_shout = "f37"
-	self.fbi.access = "fbi"
 	self.fbi.melee_weapon = "fists"
 	self.fbi.dodge = presets.dodge.athletic
 	self.fbi.deathguard = true
-	self.fbi.no_arrest = true
+	self.fbi.no_arrest = nil
 	self.fbi.chatter = presets.enemy_chatter.swat
 	self.fbi.steal_loot = true
+	if level == "kosugi" or level == "kosugi_hh" then
+		-- log("wow")
+		self.fbi.access = "security"
+	else
+		self.fbi.access = "spooc"	
+	end		
 	self.fbi_pager = deep_clone(self.fbi)
 	local level = Global.level_data and Global.level_data.level_id
-	if level == "kosugi" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("wow")
 		self.fbi_pager.access = "security"
 	else
-		self.fbi_pager.access = "fbi"	
+		self.fbi_pager.access = "spooc"	
 	end				
 	self.fbi_pager.has_alarm_pager = true
 	table.insert(self._enemy_list, "fbi_pager")
@@ -8437,7 +8053,15 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi", "hhpost_fbi", function(self, pre
 		self.gangster_ninja.speech_prefix_count = 2
 	end		
 	self.gangster_ninja.challenges = {type = "gangster"}
-	table.insert(self._enemy_list, "gangster_ninja")		
+	table.insert(self._enemy_list, "gangster_ninja")
+	
+	self.fbi_girl = deep_clone(self.fbi) --replaces cop_female, these spawns are extremely scripted and semi-rare so it feels right to make them all ninjas
+	self.fbi_girl.speech_prefix_p1 = "fl"
+	self.fbi_girl.speech_prefix_p2 = "n"
+	self.fbi_girl.speech_prefix_count = 1
+	table.insert(self._enemy_list, "fbi_girl")
+	
+	self.cop_female = deep_clone(self.fbi_girl) --re-clone, therefore, preserving unit functionality
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(self, presets) --TODO: Nothing right now.
@@ -8449,12 +8073,24 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.experience = {}
 	self.heavy_swat.weapon = presets.weapon.simple
 	self.heavy_swat.detection = presets.detection.enemymook
-	self.heavy_swat.HEALTH_INIT = 20
-	self.heavy_swat.headshot_dmg_mul = 4
+	self.heavy_swat.HEALTH_INIT = 10
+	self.heavy_swat.speed_mul = 0.9
+	self.heavy_swat.headshot_dmg_mul = 6
+	self.heavy_swat.ecm_vulnerability = 1
+	self.heavy_swat.resist_death = {
+		bullet = true
+	}
+	self.heavy_swat.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 	self.heavy_swat.damage.explosion_damage_mul = 1
 	self.heavy_swat.damage.doom_hurt_type = "heavy"
 	self.heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
+	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.heavy_swat.suppression = presets.suppression.hard_agg
 	self.heavy_swat.surrender = presets.surrender.easy
 	self.heavy_swat.experience.cable_tie = "tie_swat"
@@ -8463,7 +8099,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.speech_prefix_count = 4
 	self.heavy_swat.melee_weapon = "fists"
 	local level = Global.level_data and Global.level_data.level_id
-	if level == "kosugi" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("damn daniel")
 		self.heavy_swat.access = "security"
 	else
@@ -8478,8 +8114,6 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat_sniper = deep_clone(self.heavy_swat)
 	self.heavy_swat_sniper.weapon = presets.weapon.rhythmsniper --TODO: Custom assault sniper set up, that doesn't suck dick and make the game unfun.
 
-	table.insert(self._enemy_list, "heavy_swat")
-	table.insert(self._enemy_list, "heavy_swat_sniper")
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(self, presets)
@@ -8489,8 +8123,15 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	}
 	self.fbi_swat.weapon = presets.weapon.civil
 	self.fbi_swat.detection = presets.detection.enemymook
-	self.fbi_swat.HEALTH_INIT = 10
-	self.fbi_swat.headshot_dmg_mul = 6
+	self.fbi_swat.HEALTH_INIT = 6
+	self.fbi_swat.headshot_dmg_mul = 4
+	self.fbi_swat.ecm_vulnerability = 1
+	self.fbi_swat.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 	self.fbi_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_swat.suppression = presets.suppression.hard_def
 	self.fbi_swat.surrender = presets.surrender.easy
@@ -8508,16 +8149,14 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	self.fbi_swat.silent_priority_shout = "f37"
 
 	local level = Global.level_data and Global.level_data.level_id
-	if level == "kosugi" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("damn daniel")
 		self.fbi_swat.access = "security"
 	else
 		-- log("wew")
 		self.fbi_swat.access = "swat"	
 	end
-	
-	table.insert(self._enemy_list, "fbi_swat")
-	
+
 	self.armored_swat = deep_clone(self.fbi_swat)
 	self.armored_swat.tags = {
 		"law",
@@ -8526,7 +8165,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(se
 	}
 	self.armored_swat.HEALTH_INIT = 200
 	self.armored_swat.headshot_dmg_mul = 12
-	self.armored_swat.move_speed = presets.move_speed.civil_consistency
+	self.armored_swat.move_speed = presets.move_speed.simple_consistency
 	self.armored_swat.damage.doom_hurt_type = "doom"
 	self.armored_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
 	self.armored_swat.surrender = presets.surrender.hard
@@ -8541,19 +8180,31 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	}
 	self.fbi_heavy_swat.weapon = presets.weapon.civil
 	self.fbi_heavy_swat.detection = presets.detection.enemymook
-	self.fbi_heavy_swat.HEALTH_INIT = 20
-	self.fbi_heavy_swat.headshot_dmg_mul = 4
+	self.fbi_heavy_swat.HEALTH_INIT = 10
+	self.fbi_heavy_swat.speed_mul = 0.9
+	self.fbi_heavy_swat.headshot_dmg_mul = 6
+	self.fbi_heavy_swat.ecm_vulnerability = 1
+	self.fbi_heavy_swat.resist_death = {
+		bullet = true
+	}
+	self.fbi_heavy_swat.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 	self.fbi_heavy_swat.damage.explosion_damage_mul = 1
 	self.fbi_heavy_swat.move_speed = presets.move_speed.simple_consistency
 	self.fbi_heavy_swat.damage.doom_hurt_type = "heavy"
 	self.fbi_heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
+	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.fbi_heavy_swat.suppression = presets.suppression.hard_agg
 	self.fbi_heavy_swat.surrender = presets.surrender.easy
 	self.fbi_heavy_swat.speech_prefix_p1 = self._prefix_data_p1.heavy_swat()
 	self.fbi_heavy_swat.speech_prefix_p2 = "n"
 	self.fbi_heavy_swat.speech_prefix_count = 4
 	local level = Global.level_data and Global.level_data.level_id	
-	if level == "kosugi" then
+	if level == "kosugi" or level == "kosugi_hh" then
 		-- log("damn daniel")
 		self.fbi_heavy_swat.access = "security"
 	else
@@ -8577,8 +8228,15 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	}
 	self.city_swat.weapon = presets.weapon.civil
 	self.city_swat.detection = presets.detection.enemymook
-	self.city_swat.HEALTH_INIT = 10
-	self.city_swat.headshot_dmg_mul = 6	
+	self.city_swat.HEALTH_INIT = 6
+	self.city_swat.headshot_dmg_mul = 4
+	self.city_swat.ecm_vulnerability = 1
+	self.city_swat.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 	self.city_swat.move_speed = presets.move_speed.simple_consistency
 	self.city_swat.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.city_swat.suppression = presets.suppression.hard_def
@@ -8618,11 +8276,11 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.sniper.no_move_and_shoot = true
 	self.sniper.move_and_shoot_cooldown = 1
 	self.sniper.suppression = nil --i dont want to put stalwart versions of suppression here due to it hampering the sniper's ability to hold down areas properly.
-	self.sniper.ecm_vulnerability = 1
+	self.sniper.ecm_vulnerability = 0
 	self.sniper.ecm_hurts = {
 		ears = {
-			max_duration = 10,
-			min_duration = 8
+			max_duration = 3,
+			min_duration = 1
 		}
 	}
 	self.sniper.weapon_voice = "1"
@@ -8638,8 +8296,7 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.sniper.steal_loot = nil
 	self.sniper.rescue_hostages = false
 	self.sniper.die_sound_event = "shd_x02a_any_3p_01"
-	self.sniper.spawn_sound_event = "mga_deploy_snipers"			
-	table.insert(self._enemy_list, "sniper")
+	self.sniper.spawn_sound_event = "mga_deploy_snipers"
 	
 	self.armored_sniper = deep_clone(self.sniper)
 	self.armored_sniper.HEALTH_INIT = 6
@@ -8653,16 +8310,17 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.assault_sniper.HEALTH_INIT = 20
 	self.assault_sniper.headshot_dmg_mul = 6
 	self.assault_sniper.dodge = presets.dodge.athletic
-	self.assault_sniper.damage.fire_damage_mul = 2
+	self.assault_sniper.damage.fire_damage_mul = 24
 	table.insert(self._enemy_list, "assault_sniper")
 	
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_gangster", "hhpost_gangster", function(self, presets)
 	local job = Global.level_data and Global.level_data.level_id
-	self.gangster.HEALTH_INIT = 6
+	self.gangster.HEALTH_INIT = 4
 	self.gangster.headshot_dmg_mul = 12
 	self.gangster.ecm_vulnerability = 0
+	self.gangster.speed_mul = 0.7
 	if job == "nightclub" or job == "short2_stage1" or job == "jolly" or job == "spa" then
 		self.gangster.speech_prefix_p1 = "rt"
 		self.gangster.speech_prefix_p2 = nil
@@ -8692,9 +8350,10 @@ end)
 
 Hooks:PostHook(CharacterTweakData, "_init_mobster", "hhpost_mobster", function(self, presets)
 	local job = Global.level_data and Global.level_data.level_id
-	self.mobster.HEALTH_INIT = 6
+	self.mobster.HEALTH_INIT = 4
 	self.mobster.headshot_dmg_mul = 12
 	self.mobster.ecm_vulnerability = 0
+	self.mobster.speed_mul = 0.7
 	self.mobster.speech_prefix_p1 = "rt"
 	self.mobster.speech_prefix_p2 = nil
 	self.mobster.speech_prefix_count = 2
@@ -8709,12 +8368,13 @@ Hooks:PostHook(CharacterTweakData, "_init_mobster", "hhpost_mobster", function(s
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_biker", "hhpost_biker", function(self, presets)
-	self.biker.HEALTH_INIT = 6
+	self.biker.HEALTH_INIT = 4
 	self.biker.headshot_dmg_mul = 12
 	self.biker.speech_prefix_p1 = "bik"
 	self.biker.speech_prefix_p2 = nil
 	self.biker.speech_prefix_count = 2	
 	self.biker.ecm_vulnerability = 0
+	self.biker.speed_mul = 0.7
 	self.biker.chatter = {
 		aggressive = true,
 		retreat = true,
@@ -8732,12 +8392,13 @@ Hooks:PostHook(CharacterTweakData, "_init_biker", "hhpost_biker", function(self,
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", function(self, presets)
-	self.bolivian.HEALTH_INIT = 6
+	self.bolivian.HEALTH_INIT = 4
 	self.bolivian.headshot_dmg_mul = 12
 	self.bolivian.speech_prefix_p1 = "lt"
 	self.bolivian.speech_prefix_p2 = nil
 	self.bolivian.speech_prefix_count = 2
 	self.bolivian.ecm_vulnerability = 0
+	self.bolivian.speed_mul = 0.7
 	self.bolivian.chatter = {
 		aggressive = true,
 		retreat = true,
@@ -8752,6 +8413,7 @@ Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", functi
 	self.bolivian_indoors.speech_prefix_p2 = nil
 	self.bolivian_indoors.speech_prefix_count = 2
 	self.bolivian_indoors.ecm_vulnerability = 0
+	self.bolivian_indoors.speed_mul = 0.7
 	self.bolivian_indoors.chatter = {
 		aggressive = true,
 		retreat = true,
@@ -8771,22 +8433,57 @@ Hooks:PostHook(CharacterTweakData, "_init_bolivians", "hhpost_bolivians", functi
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_old_hoxton_mission", "hhpost_hoxton", function(self, presets)
-	self.old_hoxton_mission.move_speed = presets.move_speed.very_fast
+	self.old_hoxton_mission.move_speed = presets.move_speed.teamai
+	self.old_hoxton_mission.detection = presets.detection.gang_member
+	self.old_hoxton_mission.dodge = nil
 	self.old_hoxton_mission.crouch_move = false
-	self.old_hoxton_mission.suppression = presets.suppression.stalwart_nil
+	self.old_hoxton_mission.suppression = nil
+	self.old_hoxton_mission.buddy = true
 	self.old_hoxton_mission.weapon = deep_clone(presets.weapon.fbigod)
 end)
 
+function CharacterTweakData:_init_spa_vip(presets)
+	self.spa_vip = deep_clone(self.old_hoxton_mission)
+	self.spa_vip.dodge = nil
+	self.spa_vip.buddy = true
+	self.spa_vip.move_speed = presets.move_speed.teamai
+	self.spa_vip.crouch_move = false
+	self.spa_vip.suppression = nil
+	self.spa_vip.weapon = deep_clone(presets.weapon.fbigod)
+	self.spa_vip.spotlight_important = 100
+	self.spa_vip.is_escort = nil
+	self.spa_vip.escort_idle_talk = nil
+end
+
 Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, presets)
-	self.cop.HEALTH_INIT = 15
-	self.cop.headshot_dmg_mul = 16
-	self.cop.access = "swat"	
+	self.cop.HEALTH_INIT = 4
+	self.cop.headshot_dmg_mul = 4
+	if level == "kosugi" or level == "kosugi_hh" then
+		self.cop.access = "security"
+	else
+		self.cop.access = "swat"
+	end
+	self.cop.ecm_vulnerability = 1
+	self.cop.speed_mul = 0.85
+	self.cop.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 	self.cop.damage.hurt_severity = presets.hurt_severities.hordemook
 	self.cop_moss = deep_clone(self.cop)
 	self.cop_moss.tags = {
 		"law",
 		"punk_rage"
 	}
+	
+	if level == "kosugi" or level == "kosugi_hh" then
+		self.cop_moss.access = "security"
+	else
+		self.cop_moss.access = "swat"
+	end
+	
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
 		if faction == "america" then
@@ -8800,26 +8497,61 @@ Hooks:PostHook(CharacterTweakData, "_init_cop", "hhpost_cop", function(self, pre
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_gensec", "hhpost_gensec", function(self, presets)
-	self.gensec.HEALTH_INIT = 6
-	self.gensec.headshot_dmg_mul = 16
+	self.gensec.HEALTH_INIT = 4
+	self.gensec.speed_mul = 0.85
+	self.gensec.headshot_dmg_mul = 4
 	self.gensec.chatter = presets.enemy_chatter.security
+	self.gensec.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_security", "hhpost_secsec", function(self, presets)
-	self.security.HEALTH_INIT = 6
-	self.security.headshot_dmg_mul = 16
+	self.security.HEALTH_INIT = 4
+	self.security.headshot_dmg_mul = 4
+	self.security.speed_mul = 0.85
 	self.security.chatter = presets.enemy_chatter.security
+	self.security.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 	-- if i fucked something i'm going to kill
-	self.security_undominatable.HEALTH_INIT = 6
-	self.security_undominatable.headshot_dmg_mul = 16
+	self.security_undominatable.HEALTH_INIT = 4
+	self.security_undominatable.headshot_dmg_mul = 4
+	self.security_undominatable.speed_mul = 0.85
 	self.security_undominatable.chatter = presets.enemy_chatter.security
-	self.mute_security_undominatable.HEALTH_INIT = 6
-	self.mute_security_undominatable.headshot_dmg_mul = 16
+	self.security_undominatable.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
+	self.mute_security_undominatable.HEALTH_INIT = 4
+	self.mute_security_undominatable.headshot_dmg_mul = 4
+	self.mute_security_undominatable.speed_mul = 0.85
 	self.mute_security_undominatable.chatter = presets.enemy_chatter.security
+	self.mute_security_undominatable.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 	-- why
-	self.security_mex.HEALTH_INIT = 6
-	self.security_mex.headshot_dmg_mul = 16
-	self.security_mex.chatter = presets.enemy_chatter.security	
+	self.security_mex.HEALTH_INIT = 4
+	self.security_mex.headshot_dmg_mul = 4
+	self.security_mex.speed_mul = 0.85
+	self.security_mex.chatter = presets.enemy_chatter.security
+	self.security_mex.ecm_hurts = {
+		ears = {
+			max_duration = 2,
+			min_duration = 2
+		}
+	}
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_mobster_boss", "hhpost_mboss", function(self, presets)
@@ -8843,7 +8575,7 @@ end)
 --difficulty tweaks begin here.
 
 function CharacterTweakData:_set_normal()
-	self:_multiply_all_hp(2, 1.5)
+	self:_multiply_all_hp(2, 1)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.5, 0.3, 0.9)
 
@@ -8943,9 +8675,9 @@ function CharacterTweakData:_set_normal()
 	self.mobster_boss.HEALTH_INIT = 600
 	self.biker_boss.HEALTH_INIT = 600
 	self.chavez_boss.HEALTH_INIT = 600
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -8978,18 +8710,15 @@ function CharacterTweakData:_set_normal()
 		end
 	end
 	
-	--Sniper tweak
-	self.sniper.weapon.is_rifle.focus_delay = 6
-	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
-	self.fbi.weapon = self.presets.weapon.complex
-	self.fbi.move_speed = self.presets.move_speed.civil_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.complex
-	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency	
-	self.fbi_pager.weapon = self.presets.weapon.complex
-	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency	
-	--Cop health tweak
-	self.cop_female.HEALTH_INIT = 15
+	self.fbi.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi.speed_mul = 1.1
+	self.fbi_girl.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_girl.speed_mul = 1.1
+	self.gangster_ninja.move_speed = self.presets.move_speed.simple_consistency
+	self.gangster_ninja.speed_mul = 1.1	
+	self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_pager.speed_mul = 1.1
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
 		0.35,
 		0.35
@@ -9003,7 +8732,7 @@ end
 --HARD setup begins here, landmark (POW)
 
 function CharacterTweakData:_set_hard()
-	self:_multiply_all_hp(2, 1.5)
+	self:_multiply_all_hp(2, 1)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.5, 0.3, 0.9)
 	
@@ -9103,9 +8832,9 @@ function CharacterTweakData:_set_hard()
 	self.mobster_boss.HEALTH_INIT = 600
 	self.biker_boss.HEALTH_INIT = 600
 	self.chavez_boss.HEALTH_INIT = 600
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9139,18 +8868,15 @@ function CharacterTweakData:_set_hard()
 		end
 	end
 	
-	--Sniper tweak
-	self.sniper.weapon.is_rifle.focus_delay = 6
-	self.armored_sniper.weapon.is_rifle.focus_delay = 6
 	--FBI tweak
-	self.fbi.weapon = self.presets.weapon.complex
-	self.fbi.move_speed = self.presets.move_speed.civil_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.complex
-	self.gangster_ninja.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_pager.weapon = self.presets.weapon.complex
-	self.fbi_pager.move_speed = self.presets.move_speed.civil_consistency		
-	--Cop health tweak
-	self.cop_female.HEALTH_INIT = 15
+	self.fbi.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi.speed_mul = 1.1
+	self.fbi_girl.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_girl.speed_mul = 1.1
+	self.gangster_ninja.move_speed = self.presets.move_speed.simple_consistency
+	self.gangster_ninja.speed_mul = 1.1	
+	self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_pager.speed_mul = 1.1
 	self.shadow_spooc.shadow_spooc_attack_timeout = {
 		0.35,
 		0.35
@@ -9163,7 +8889,7 @@ end
 
 --VH setup, landmark (DOG)
 function CharacterTweakData:_set_overkill()
-	self:_multiply_all_hp(4, 1.5)
+	self:_multiply_all_hp(4, 1)
 	self:_multiply_all_speeds(1, 1)
 	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
@@ -9271,9 +8997,9 @@ function CharacterTweakData:_set_overkill()
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 800
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
 	
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9313,42 +9039,36 @@ function CharacterTweakData:_set_overkill()
 	end
 	
 	--fbi setup.
-	self.fbi.weapon = self.presets.weapon.complex
-	self.fbi.dodge = self.presets.dodge.heavy_complex
-	self.fbi.move_speed = self.presets.move_speed.complex_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.complex
-	self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
-	self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency	
-	self.fbi_pager.weapon = self.presets.weapon.complex
-	self.fbi_pager.dodge = self.presets.dodge.heavy_complex
-	self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency	
-	self.fbi_xc45.weapon = self.presets.weapon.complex
-	self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
-	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
-	--sniper setup.
-	self.sniper.weapon.is_rifle.focus_delay = 2
-	self.armored_sniper.weapon.is_rifle.focus_delay = 2
+	self.fbi.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi.speed_mul = 1.1
+	self.fbi_xc45.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_xc45.speed_mul = 1.1	
+	self.fbi_girl.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_girl.speed_mul = 1.1
+	self.gangster_ninja.move_speed = self.presets.move_speed.simple_consistency
+	self.gangster_ninja.speed_mul = 1.1	
+	self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_pager.speed_mul = 1.1
 	--Shield speed setup
-	self.shield.move_speed = self.presets.move_speed.shield_civ
+	self.shield.move_speed = self.presets.move_speed.simple_consistency
 	--Movespeed setups.
-	self.swat.move_speed = self.presets.move_speed.civil_consistency
-	self.city_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
-	self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
+	self.swat.move_speed = self.presets.move_speed.simple_consistency
+	self.city_swat.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_swat.move_speed = self.presets.move_speed.simple_consistency
+	self.heavy_swat.move_speed = self.presets.move_speed.simple_consistency
+	self.fbi_heavy_swat.move_speed = self.presets.move_speed.simple_consistency
 	--special movespeed
-	self.taser.move_speed = self.presets.move_speed.civil_consistency
-	self.medic.move_speed = self.presets.move_speed.civil_consistency
-	--cop health
-	self.cop_female.HEALTH_INIT = 15
-	self.flashbang_multiplier = 1.75
+	self.taser.move_speed = self.presets.move_speed.simple_consistency
+	self.medic.move_speed = self.presets.move_speed.simple_consistency
+	
+	self.flashbang_multiplier = 1
 	self.concussion_multiplier = 1
 end
 
 --OVK setup, landmark (QBY)
 
 function CharacterTweakData:_set_overkill_145()	
-	self:_multiply_all_hp(4, 1.5)
+	self:_multiply_all_hp(4, 1)
 	self:_set_characters_crumble_chance(0.4, 0.2, 0.9)
 	
 	self.tank_mini.HEALTH_INIT = 4000
@@ -9457,9 +9177,9 @@ function CharacterTweakData:_set_overkill_145()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("civil")
@@ -9497,190 +9217,58 @@ function CharacterTweakData:_set_overkill_145()
 			self.city_swat.spawn_scream = "g90"
 		end
 	end
+
 	
 	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		--fbi setup
-		
 		self.fbi.dodge = self.presets.dodge.ninja_complex
-		self.fbi.weapon = self.presets.weapon.fbigod
 		self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+		self.fbi_girl.dodge = self.presets.dodge.ninja_complex
+		self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
 		self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
-		self.gangster_ninja.weapon = self.presets.weapon.fbigod
 		self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
 		self.fbi_pager.dodge = self.presets.dodge.ninja_complex
-		self.fbi_pager.weapon = self.presets.weapon.fbigod
 		self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
-		self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 		self.fbi_xc45.weapon = self.presets.weapon.fbigod
 		self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
-		--sniper setup
-		self.sniper.weapon.is_rifle.focus_delay = 1.5
-		self.sniper.weapon.is_rifle.aim_delay = {0, 0}
-		self.sniper.weapon.is_rifle.FALLOFF = {
-			{
-				dmg_mul = 3.75,
-				r = 700,
-				acc = {
-					0,
-					1
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3.75,
-				r = 3500,
-				acc = {
-					0,
-					0.75
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3.75,
-				r = 6000,
-				acc = {
-					0,
-					0.5
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			}
-		}
-		self.armored_sniper.weapon.is_rifle.focus_delay = 1.5
-		self.armored_sniper.weapon.is_rifle.aim_delay = {0, 0}
-		self.armored_sniper.weapon.is_rifle.FALLOFF = {
-			{
-				dmg_mul = 3.75,
-				r = 700,
-				acc = {
-					0,
-					1
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3.75,
-				r = 3500,
-				acc = {
-					0,
-					0.75
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			},
-			{
-				dmg_mul = 3.75,
-				r = 6000,
-				acc = {
-					0,
-					0.5
-				},
-				recoil = {
-					0.64,
-					0.64
-				},
-				mode = {
-					0,
-					0,
-					0,
-					1
-				}
-			}
-		}		
-		--Movespeed setups.
-		self.swat.move_speed = self.presets.move_speed.anarchy_consistency
-		self.city_swat.move_speed = self.presets.move_speed.anarchy_consistency
-		self.fbi_swat.move_speed = self.presets.move_speed.anarchy_consistency
-		self.heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
-		self.armored_sniper.move_speed = self.presets.move_speed.anarchy_consistency
-		self.fbi_heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
-		--special movespeed
-		self.taser.move_speed = self.presets.move_speed.anarchy_consistency
-		self.medic.move_speed = self.presets.move_speed.anarchy_consistency
-		self.shield.move_speed = self.presets.move_speed.shield_anarch
+		
+		--movespeed setup	
+		self.sniper.move_speed = self.presets.move_speed.lightning_constant
+		
 		--dodge setup.
 		self.swat.dodge = self.presets.dodge.athletic_complex
 		self.fbi_swat.dodge = self.presets.dodge.athletic_complex
 		self.city_swat.dodge = self.presets.dodge.athletic_complex
 		self.heavy_swat.dodge = self.presets.dodge.heavy_complex
 		self.fbi_heavy_swat.dodge = self.presets.dodge.heavy_complex
-		self.armored_sniper.dodge = self.presets.dodge.heavy_complex
 		self.spooc.dodge = self.presets.dodge.ninja_complex
-		self.flashbang_multiplier = 2
+		self.flashbang_multiplier = 1.5
 		self.concussion_multiplier = 1
 	else
 		--fbi setup.
-		self.fbi.weapon = self.presets.weapon.complex
-		self.fbi.dodge = self.presets.dodge.heavy_complex
-		self.fbi.move_speed = self.presets.move_speed.complex_consistency
-		self.gangster_ninja.weapon = self.presets.weapon.complex
-		self.gangster_ninja.dodge = self.presets.dodge.heavy_complex
-		self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency
-		self.fbi_pager.weapon = self.presets.weapon.complex
-		self.fbi_pager.dodge = self.presets.dodge.heavy_complex
-		self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency
-		self.fbi_xc45.dodge = self.presets.dodge.heavy_complex
-		self.fbi_xc45.weapon = self.presets.weapon.complex
-		self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
-		--sniper setup.
-		self.sniper.weapon.is_rifle.focus_delay = 2
-		self.armored_sniper.weapon.is_rifle.focus_delay = 2
+		self.fbi.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi.speed_mul = 1.1
+		self.fbi_xc45.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_xc45.speed_mul = 1.1	
+		self.fbi_girl.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_girl.speed_mul = 1.1
+		self.gangster_ninja.move_speed = self.presets.move_speed.simple_consistency
+		self.gangster_ninja.speed_mul = 1.1	
+		self.fbi_pager.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_pager.speed_mul = 1.1
 		--Shield speed setup
-		self.shield.move_speed = self.presets.move_speed.shield_civ
+		self.shield.move_speed = self.presets.move_speed.simple_consistency
 		--Movespeed setups.
-		self.swat.move_speed = self.presets.move_speed.civil_consistency
-		self.city_swat.move_speed = self.presets.move_speed.civil_consistency
-		self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
-		self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
-		self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
-		self.armored_sniper.move_speed = self.presets.move_speed.civil_consistency		
+		self.swat.move_speed = self.presets.move_speed.simple_consistency
+		self.city_swat.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_swat.move_speed = self.presets.move_speed.simple_consistency
+		self.heavy_swat.move_speed = self.presets.move_speed.simple_consistency
+		self.fbi_heavy_swat.move_speed = self.presets.move_speed.simple_consistency
+		self.armored_sniper.move_speed = self.presets.move_speed.simple_consistency		
 		--special movespeed
-		self.taser.move_speed = self.presets.move_speed.civil_consistency
-		self.medic.move_speed = self.presets.move_speed.civil_consistency
-		self.flashbang_multiplier = 1.75
+		self.taser.move_speed = self.presets.move_speed.simple_consistency
+		self.medic.move_speed = self.presets.move_speed.simple_consistency
+		self.flashbang_multiplier = 1.25
 		self.concussion_multiplier = 1
 	end
 	
@@ -9703,9 +9291,9 @@ function CharacterTweakData:_set_easy_wish()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9720,34 +9308,25 @@ function CharacterTweakData:_set_easy_wish()
 	}
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
-	self.security_mex.HEALTH_INIT = 16
 	self.security_mex.no_arrest = true	
-	self.security_undominatable.HEALTH_INIT = 16
 	self.security_undominatable.no_arrest = true		
-	self.mute_security_undominatable.HEALTH_INIT = 16
-	self.mute_security_undominatable.no_arrest = true	
-	self.cop.HEALTH_INIT = 16
+	self.mute_security_undominatable.no_arrest = true
+	self.fbi_girl.no_arrest = true
 	self.cop.no_arrest = true
-	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
 	--fbi setup
-	self.fbi.weapon = self.presets.weapon.anarchy
 	self.fbi.dodge = self.presets.dodge.athletic_complex
-	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.anarchy
+	self.fbi.move_speed = self.presets.move_speed.complex_consistency
+	self.fbi_girl.dodge = self.presets.dodge.athletic_complex
+	self.fbi_girl.move_speed = self.presets.move_speed.complex_consistency
 	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
-	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_pager.weapon = self.presets.weapon.anarchy
+	self.gangster_ninja.move_speed = self.presets.move_speed.complex_consistency
 	self.fbi_pager.dodge = self.presets.dodge.athletic_complex
-	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_xc45.weapon = self.presets.weapon.anarchy
+	self.fbi_pager.move_speed = self.presets.move_speed.complex_consistency
 	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
-	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
-	--sniper setup
-	self.sniper.weapon.is_rifle.focus_delay = 2
-	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
+	self.fbi_xc45.move_speed = self.presets.move_speed.complex_consistency
+
 	if self.tweak_data and self.tweak_data.levels then
 		local faction = self.tweak_data.levels:get_ai_group_type()
 		if faction == "federales" then
@@ -9777,15 +9356,15 @@ function CharacterTweakData:_set_easy_wish()
 		end
 	end
 	--Movespeed setups.
-	self.swat.move_speed = self.presets.move_speed.complex_consistency
-	self.city_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.heavy_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_heavy_swat.move_speed = self.presets.move_speed.complex_consistency
+	self.swat.move_speed = self.presets.move_speed.civil_consistency
+	self.city_swat.move_speed = self.presets.move_speed.civil_consistency
+	self.fbi_swat.move_speed = self.presets.move_speed.civil_consistency
+	self.heavy_swat.move_speed = self.presets.move_speed.civil_consistency
+	self.fbi_heavy_swat.move_speed = self.presets.move_speed.civil_consistency
 	--special movespeed
-	self.taser.move_speed = self.presets.move_speed.complex_consistency
-	self.medic.move_speed = self.presets.move_speed.complex_consistency
-	self.shield.move_speed = self.presets.move_speed.shield_com
+	self.taser.move_speed = self.presets.move_speed.civil_consistency
+	self.medic.move_speed = self.presets.move_speed.civil_consistency
+	self.shield.move_speed = self.presets.move_speed.civil_consistency
 	--dodge setups.
 	self.swat.dodge = self.presets.dodge.heavy_complex
 	self.fbi_swat.dodge = self.presets.dodge.heavy_complex
@@ -9798,7 +9377,7 @@ function CharacterTweakData:_set_easy_wish()
 	self.phalanx_vip.HEALTH_INIT = 800
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 800
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
-	self.flashbang_multiplier = 2
+	self.flashbang_multiplier = 1.25
 	self.concussion_multiplier = 1
 end
 
@@ -9908,9 +9487,9 @@ function CharacterTweakData:_set_overkill_290()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("complex")
@@ -9926,33 +9505,24 @@ function CharacterTweakData:_set_overkill_290()
 	
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
-	self.security_mex.HEALTH_INIT = 16
-	self.security_mex.no_arrest = true
-	self.security_undominatable.HEALTH_INIT = 16
-	self.security_undominatable.no_arrest = true			
-	self.mute_security_undominatable.HEALTH_INIT = 16
-	self.mute_security_undominatable.no_arrest = true		
-	self.cop.HEALTH_INIT = 16
+	self.security_mex.no_arrest = true	
+	self.security_undominatable.no_arrest = true		
+	self.mute_security_undominatable.no_arrest = true
+	self.fbi_girl.no_arrest = true
 	self.cop.no_arrest = true
-	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
-	--sniper stuff
-	self.sniper.weapon.is_rifle.focus_delay = 2
-	self.sniper.weapon.is_rifle.aim_delay = {0, 0}
+	
 	--fbi setup
-	self.fbi.weapon = self.presets.weapon.anarchy
-	self.fbi.dodge = self.presets.dodge.athletic_complex
+	self.fbi.dodge = self.presets.dodge.ninja_complex
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
-	self.gangster_ninja.weapon = self.presets.weapon.anarchy
-	self.gangster_ninja.dodge = self.presets.dodge.athletic_complex
+	self.fbi_girl.dodge = self.presets.dodge.ninja_complex
+	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
+	self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_pager.weapon = self.presets.weapon.anarchy
-	self.fbi_pager.dodge = self.presets.dodge.athletic_complex
+	self.fbi_pager.dodge = self.presets.dodge.ninja_complex
 	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
-	self.fbi_xc45.weapon = self.presets.weapon.anarchy
-	self.fbi_xc45.dodge = self.presets.dodge.athletic_complex
+	self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
 	--MFR has radio static in this difficulty.
 	if self.tweak_data and self.tweak_data.levels then
@@ -9984,19 +9554,22 @@ function CharacterTweakData:_set_overkill_290()
 		end
 	end
 	--Movespeed setups.
-	self.swat.move_speed = self.presets.move_speed.complex_consistency
-	self.city_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.heavy_swat.move_speed = self.presets.move_speed.complex_consistency
-	self.fbi_heavy_swat.move_speed = self.presets.move_speed.complex_consistency
+	self.swat.move_speed = self.presets.move_speed.anarchy_consistency
+	self.city_swat.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_swat.move_speed = self.presets.move_speed.anarchy_consistency
+	self.heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_heavy_swat.move_speed = self.presets.move_speed.anarchy_consistency
 	--special movespeed
-	self.taser.move_speed = self.presets.move_speed.complex_consistency
-	self.medic.move_speed = self.presets.move_speed.complex_consistency
-	self.shield.move_speed = self.presets.move_speed.shield_com
+	self.taser.move_speed = self.presets.move_speed.anarchy_consistency
+	self.medic.move_speed = self.presets.move_speed.anarchy_consistency
+	self.shield.move_speed = self.presets.move_speed.anarchy_consistency
 	--dodge setups.
-	self.swat.dodge = self.presets.dodge.heavy_complex
-	self.fbi_swat.dodge = self.presets.dodge.heavy_complex
-	self.city_swat.dodge = self.presets.dodge.heavy_complex
+	self.swat.dodge = self.presets.dodge.athletic_complex
+	self.fbi_swat.dodge = self.presets.dodge.athletic_complex
+	self.city_swat.dodge = self.presets.dodge.athletic_complex
+	self.heavy_swat.dodge = self.presets.dodge.heavy_complex
+	self.fbi_heavy_swat.dodge = self.presets.dodge.heavy_complex
+	self.spooc.dodge = self.presets.dodge.ninja_complex
 	--Shield explosive resist
 	self.shield.damage.explosion_damage_mul = 0.5
 	self.phalanx_minion.HEALTH_INIT = 200
@@ -10005,7 +9578,7 @@ function CharacterTweakData:_set_overkill_290()
 	self.phalanx_vip.HEALTH_INIT = 800
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 800
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
-	self.flashbang_multiplier = 2
+	self.flashbang_multiplier = 1.25
 	self.concussion_multiplier = 1
 end
 
@@ -10117,9 +9690,9 @@ function CharacterTweakData:_set_sm_wish()
 
 	self:_multiply_all_speeds(1, 1)
 
-	self.presets.gang_member_damage.REGENERATE_TIME = 15
-	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 10
-	self.presets.gang_member_damage.HEALTH_INIT = 800
+	self.presets.gang_member_damage.REGENERATE_TIME = 7.5
+	self.presets.gang_member_damage.REGENERATE_TIME_AWAY = 7.5
+	self.presets.gang_member_damage.HEALTH_INIT = 500
 	self.presets.gang_member_damage.MIN_DAMAGE_INTERVAL = 0.35
 
 	self:_set_characters_weapon_preset("anarchy")
@@ -10135,108 +9708,26 @@ function CharacterTweakData:_set_sm_wish()
 	
 	--STEALTH CHANGES WOO
 	self.city_swat.no_arrest = true
-	self.security.HEALTH_INIT = 16
 	self.security.no_arrest = true
-	self.security_undominatable.HEALTH_INIT = 16
-	self.security_undominatable.no_arrest = true			
-	self.mute_security_undominatable.HEALTH_INIT = 16
-	self.mute_security_undominatable.no_arrest = true		
-	self.security_mex.HEALTH_INIT = 16
-	self.security_mex.no_arrest = true
+	self.security_mex.no_arrest = true	
+	self.security_undominatable.no_arrest = true		
+	self.mute_security_undominatable.no_arrest = true
+	self.fbi_girl.no_arrest = true
 	self.cop.no_arrest = true
-	self.cop.HEALTH_INIT = 16
-	self.gensec.HEALTH_INIT = 16
 	self.gensec.no_arrest = true
+	
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.ninja_complex
-	self.fbi.weapon = self.presets.weapon.fbigod
 	self.fbi.move_speed = self.presets.move_speed.anarchy_consistency
+	self.fbi_girl.dodge = self.presets.dodge.ninja_complex
+	self.fbi_girl.move_speed = self.presets.move_speed.anarchy_consistency
 	self.gangster_ninja.dodge = self.presets.dodge.ninja_complex
-	self.gangster_ninja.weapon = self.presets.weapon.fbigod
 	self.gangster_ninja.move_speed = self.presets.move_speed.anarchy_consistency
 	self.fbi_pager.dodge = self.presets.dodge.ninja_complex
-	self.fbi_pager.weapon = self.presets.weapon.fbigod
 	self.fbi_pager.move_speed = self.presets.move_speed.anarchy_consistency
 	self.fbi_xc45.weapon = self.presets.weapon.fbigod
-	self.fbi_xc45.dodge = self.presets.dodge.ninja_complex
 	self.fbi_xc45.move_speed = self.presets.move_speed.anarchy_consistency
-	--sniper setup
-	self.sniper.weapon.is_rifle.focus_delay = 1.5
-	self.sniper.weapon.is_rifle.aim_delay = {0.64, 0.64}
-	self.sniper.weapon.is_rifle.FALLOFF = {
-		{
-			dmg_mul = 3.75,
-			r = 700,
-			acc = {
-				0,
-				1
-			},
-			recoil = {
-				0.64,
-				0.64
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 3.75,
-			r = 3500,
-			acc = {
-				0,
-				0.75
-			},
-			recoil = {
-				0.64,
-				0.64
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 3.75,
-			r = 6000,
-			acc = {
-				0,
-				0.3
-			},
-			recoil = {
-				0.64,
-				0.64
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		},
-		{
-			dmg_mul = 1,
-			r = 9000,
-			acc = {
-				0,
-				0.1
-			},
-			recoil = {
-				0.64,
-				0.64
-			},
-			mode = {
-				0,
-				0,
-				0,
-				1
-			}
-		}
-	}
+
 	--Anti-Fire DOT setup
 	self.taser.DAMAGE_CLAMP_FIREDOT = 5 --Tasers and Shields need significant resistance to fire.
 	self.tank.DAMAGE_CLAMP_FIREDOT = 10
@@ -10300,7 +9791,7 @@ function CharacterTweakData:_set_sm_wish()
 	--special movespeed
 	self.taser.move_speed = self.presets.move_speed.anarchy_consistency
 	self.medic.move_speed = self.presets.move_speed.anarchy_consistency
-	self.shield.move_speed = self.presets.move_speed.shield_anarch
+	self.shield.move_speed = self.presets.move_speed.anarchy_consistency
 	--dodge setup.
 	self.swat.dodge = self.presets.dodge.athletic_complex
 	self.fbi_swat.dodge = self.presets.dodge.athletic_complex
@@ -10310,16 +9801,9 @@ function CharacterTweakData:_set_sm_wish()
 	self.spooc.dodge = self.presets.dodge.ninja_complex
 	--Explosive resist for certain enemies.
 	self.shield.damage.explosion_damage_mul = 0.25
-	self.heavy_swat.damage.explosion_damage_mul = 0.5
-	self.fbi_heavy_swat.damage.explosion_damage_mul = 0.5
 	self.tank.damage.explosion_damage_mul = 0.7
 	self.tank_medic.damage.explosion_damage_mul = 0.7
 	self.tank_mini.damage.explosion_damage_mul = 0.7
-	--heavy swat health clamping for guaranteed two-shot-to-kill ratios
-	self.heavy_swat.DAMAGE_CLAMP_BULLET = 79
-	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 30
-	self.fbi_heavy_swat.DAMAGE_CLAMP_BULLET = 79
-	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 30
 	
 	self.phalanx_minion.HEALTH_INIT = 300
 	self.phalanx_minion.DAMAGE_CLAMP_BULLET = 40
@@ -10327,7 +9811,7 @@ function CharacterTweakData:_set_sm_wish()
 	self.phalanx_vip.HEALTH_INIT = 80
 	self.phalanx_vip.DAMAGE_CLAMP_BULLET = 80
 	self.phalanx_vip.DAMAGE_CLAMP_EXPLOSION = self.phalanx_vip.DAMAGE_CLAMP_BULLET
-	self.flashbang_multiplier = 2.25
+	self.flashbang_multiplier = 1.5
 	self.concussion_multiplier = 1
 end
 
@@ -10477,9 +9961,12 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"smoke",
 		"s553_zeal",
 		"lazer",
+		"tazerlazer",
 		"blazter",
 		"bayou_spas",
 		"quagmire",
+		"galil",
+		"silserbu",
 		"em_disruptor",
 		"xkill",
 		"x_xkill",
@@ -10489,7 +9976,9 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"x_kmtac",
 		"trolliam_sidearm",
 		"degle",
-		"m60"
+		"m60",
+		"m37",
+		"chernobog"
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -10526,9 +10015,12 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_uno/weapons/wpn_npc_smoke/wpn_npc_smoke"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_s553/wpn_npc_s553"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_lazer/wpn_npc_lazer"),
+		Idstring("units/pd2_mod_zmansion/weapons/wpn_npc_tazerlazer/wpn_npc_tazerlazer"),
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_blazter/wpn_npc_blazter"),
 		Idstring("units/payday2/weapons/wpn_npc_bayou/wpn_npc_bayou"),
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_quagmire/wpn_npc_quagmire"),
+		Idstring("units/payday2/weapons/wpn_npc_galil/wpn_npc_galil"),
+		Idstring("units/pd2_dlc_drm/weapons/wpn_npc_silserbu/wpn_npc_silserbu"),
 		Idstring("units/pd2_dlc_drm/weapons/wpn_em_disruptor/wpn_em_disruptor"),
 		Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_xkill"),
 		Idstring("units/payday2/weapons/wpn_npc_xkill/wpn_npc_x_xkill"),
@@ -10538,12 +10030,23 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_dlc_gitgud/weapons/wpn_npc_kmtac/wpn_npc_x_kmtac"),	
 		Idstring("units/pd2_mod_epictroll/weapons/trolliamsidearm/trolliamsidearm"),
 		Idstring("units/payday2/weapons/wpn_npc_degle/wpn_npc_degle"),
-		Idstring("units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60")
+		Idstring("units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60"),
+		Idstring("units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"),
+		Idstring("units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog")
 	}
 end
 
 function CharacterTweakData:character_map()
 	local char_map = origin_charmap(self)
+	char_map.ghosts = {
+		path = "units/pd2_mod_zmansion/characters/",
+		list = {
+			"ene_true_zeal_cloaker",
+			"ene_true_zeal_rifle",
+			"ene_true_zeal_shotgun",
+			"ene_true_zeal_taser"
+		}
+	}
 	char_map.additions = {
 		path = "units/payday2/characters/",
 		list = {
@@ -10596,7 +10099,8 @@ function CharacterTweakData:character_map()
 			"ene_medic_heavy_r870",
 			"ene_city_swat_saiga",
 			"ene_medic_carkdown",
-			"ene_true_lotus_master"
+			"ene_true_lotus_master",
+			"ene_ovk_mangler"
 		}
 	}
 	char_map.gitgud = {
@@ -10633,14 +10137,7 @@ function CharacterTweakData:character_map()
 			"ene_murky_light_rifle",
 			"ene_murky_heavy_scar",
 			"ene_murky_NH_rifle",
-			"ene_murky_NH_r870",
-			"ene_murkywater_tazer",
-			"ene_murkywater_bulldozer_1",
-			"ene_murkywater_bulldozer_2",
-			"ene_murkywater_bulldozer_3",
-			"ene_murkywater_bulldozer_4",
-			"ene_murkywater_bulldozer_medic",
-			"ene_murkywater_sniper",							
+			"ene_murky_NH_r870",						
 			"ene_murky_light_r870",
 			"ene_murky_heavy_r870",
 			"ene_murky_light_ump",
@@ -10654,7 +10151,27 @@ function CharacterTweakData:character_map()
 			"ene_murky_punk_bronco",
 			"ene_murky_punk_mp5",
 			"ene_murky_punk_moss",
-			"ene_murky_cloaker"
+			"ene_murky_cloaker",
+			"ene_murkywater_medic",
+			"ene_murkywater_medic_r870",
+			"ene_murkywater_tazer",
+			"ene_murkywater_cloaker",
+			"ene_murkywater_bulldozer_1",
+			"ene_murkywater_bulldozer_2",
+			"ene_murkywater_bulldozer_3",
+			"ene_murkywater_bulldozer_4",
+			"ene_murkywater_bulldozer_medic",
+			"ene_murkywater_shield",
+			"ene_murkywater_sniper",
+			"ene_murkywater_heavy",
+			"ene_murkywater_heavy_shotgun",
+			"ene_murkywater_heavy_g36",
+			"ene_murkywater_light_city",
+			"ene_murkywater_light_city_r870",
+			"ene_murkywater_light_fbi_r870",
+			"ene_murkywater_light_fbi",
+			"ene_murkywater_light",
+			"ene_murkywater_light_r870"
 		}
 	}
 	char_map.ftsu = {
@@ -10749,163 +10266,137 @@ function CharacterTweakData:character_map()
 end
 
 function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
+	--punks
+	self.security.HEALTH_INIT = self.security.HEALTH_INIT * hp_mul
+	self.security_undominatable.HEALTH_INIT = self.security.HEALTH_INIT
+	
+	if self.security_no_pager then
+		self.security_no_pager.HEALTH_INIT = self.security.HEALTH_INIT
+	end
+	
+	self.mute_security_undominatable.HEALTH_INIT = self.security.HEALTH_INIT
+	self.security_mex.HEALTH_INIT = self.security.HEALTH_INIT
+	self.security_mex_no_pager.HEALTH_INIT = self.security.HEALTH_INIT
+	self.gensec.HEALTH_INIT = self.security.HEALTH_INIT
+	
+	self.gangster.HEALTH_INIT = self.security.HEALTH_INIT
+	self.mobster.HEALTH_INIT = self.security.HEALTH_INIT
+	self.biker.HEALTH_INIT = self.security.HEALTH_INIT
+	self.triad.HEALTH_INIT = self.security.HEALTH_INIT
+	self.bolivian.HEALTH_INIT = self.security.HEALTH_INIT
+	self.bolivian_indoors.HEALTH_INIT = self.security.HEALTH_INIT
+	self.bolivian_indoors_mex.HEALTH_INIT = self.security.HEALTH_INIT
+	
+	self.cop.HEALTH_INIT = self.security.HEALTH_INIT
+	self.cop_moss.HEALTH_INIT = self.security.HEALTH_INIT
+	self.cop_scared.HEALTH_INIT = self.security.HEALTH_INIT
+	
+	--ninjas
 	self.fbi.HEALTH_INIT = self.fbi.HEALTH_INIT * hp_mul
-	self.gangster_ninja.HEALTH_INIT = self.gangster_ninja.HEALTH_INIT * hp_mul
-	self.fbi_pager.HEALTH_INIT = self.fbi_pager.HEALTH_INIT * hp_mul
+	self.cop_female.HEALTH_INIT = self.fbi.HEALTH_INIT
+	self.fbi_girl.HEALTH_INIT = self.fbi.HEALTH_INIT
+	self.gangster_ninja.HEALTH_INIT = self.fbi.HEALTH_INIT
+	self.fbi_pager.HEALTH_INIT = self.fbi.HEALTH_INIT
+	self.fbi_xc45.HEALTH_INIT = self.fbi.HEALTH_INIT
+	
+	--lights
 	self.swat.HEALTH_INIT = self.swat.HEALTH_INIT * hp_mul
+	self.fbi_swat.HEALTH_INIT = self.swat.HEALTH_INIT
+	self.city_swat.HEALTH_INIT = self.swat.HEALTH_INIT
+	
+	--heavies
 	self.heavy_swat.HEALTH_INIT = self.heavy_swat.HEALTH_INIT * hp_mul
-	self.fbi_heavy_swat.HEALTH_INIT = self.fbi_heavy_swat.HEALTH_INIT * hp_mul
-	self.sniper.HEALTH_INIT = self.sniper.HEALTH_INIT * hp_mul
-	self.armored_sniper.HEALTH_INIT = self.armored_sniper.HEALTH_INIT * hp_mul
-	self.gangster.HEALTH_INIT = self.gangster.HEALTH_INIT * hp_mul
-	self.biker.HEALTH_INIT = self.biker.HEALTH_INIT * hp_mul
+	self.fbi_heavy_swat.HEALTH_INIT = self.heavy_swat.HEALTH_INIT
+	
+	--dozers
 	self.tank.HEALTH_INIT = self.tank.HEALTH_INIT * hp_mul
+	self.tank_hw.HEALTH_INIT = self.tank_hw.HEALTH_INIT * hp_mul
 	self.tank_mini.HEALTH_INIT = self.tank_mini.HEALTH_INIT * hp_mul
 	self.tank_ftsu.HEALTH_INIT = self.tank_ftsu.HEALTH_INIT * hp_mul
 	self.trolliam_epicson.HEALTH_INIT = self.trolliam_epicson.HEALTH_INIT * hp_mul	
 	self.tank_medic.HEALTH_INIT = self.tank_medic.HEALTH_INIT * hp_mul
+	
+	--cloakers
 	self.spooc.HEALTH_INIT = self.spooc.HEALTH_INIT * hp_mul
 	self.spooc_heavy.HEALTH_INIT = self.spooc_heavy.HEALTH_INIT * hp_mul
-	self.shadow_spooc.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT * hp_mul
+	
+	--shields
 	self.shield.HEALTH_INIT = self.shield.HEALTH_INIT * hp_mul
 	self.phalanx_minion.HEALTH_INIT = self.phalanx_minion.HEALTH_INIT * hp_mul
 	self.phalanx_vip.HEALTH_INIT = self.phalanx_vip.HEALTH_INIT * hp_mul
+	
+	--taser
 	self.taser.HEALTH_INIT = self.taser.HEALTH_INIT * hp_mul
-	self.city_swat.HEALTH_INIT = self.city_swat.HEALTH_INIT * hp_mul
+	
 	self.biker_escape.HEALTH_INIT = self.biker_escape.HEALTH_INIT * hp_mul
-	self.fbi_swat.HEALTH_INIT = self.fbi_swat.HEALTH_INIT * hp_mul
-	self.tank_hw.HEALTH_INIT = self.tank_hw.HEALTH_INIT * hp_mul
+	
 	self.medic.HEALTH_INIT = self.medic.HEALTH_INIT * hp_mul
-	self.bolivian.HEALTH_INIT = self.bolivian.HEALTH_INIT * hp_mul
-	self.bolivian_indoors.HEALTH_INIT = self.bolivian_indoors.HEALTH_INIT * hp_mul
+	
+	--misc
 	self.drug_lord_boss.HEALTH_INIT = self.drug_lord_boss.HEALTH_INIT * hp_mul
 	self.drug_lord_boss_stealth.HEALTH_INIT = self.drug_lord_boss_stealth.HEALTH_INIT * hp_mul
-	self.fbi_xc45.HEALTH_INIT = self.fbi_xc45.HEALTH_INIT * hp_mul
+	
+	self.sniper.HEALTH_INIT = self.sniper.HEALTH_INIT * hp_mul
+	self.armored_sniper.HEALTH_INIT = self.armored_sniper.HEALTH_INIT * hp_mul
+	self.shadow_spooc.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT * hp_mul
+	self.shadow_taser.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT
+	self.shadow_swat.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT
 
-	if self.security.headshot_dmg_mul then
-		self.security.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
+	--HEADSHOT MULS
+
+	--punks
+	self.security.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
+	
+	if self.security_no_pager then
+		self.security_no_pager.headshot_dmg_mul = self.security.headshot_dmg_mul
 	end
 	
-	if self.security_mex.headshot_dmg_mul then
-		self.security_mex.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
-	end
+	self.security_undominatable.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.mute_security_undominatable.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.security_mex.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.security_mex_no_pager.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.gensec.headshot_dmg_mul = self.security.headshot_dmg_mul
 	
-	if self.mute_security_undominatable.headshot_dmg_mul then
-		self.mute_security_undominatable.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
-	end
-
-	if self.security_undominatable.headshot_dmg_mul then
-		self.security_undominatable.headshot_dmg_mul = self.security.headshot_dmg_mul * hs_mul
-	end	
-
-	if self.cop.headshot_dmg_mul then
-		self.cop.headshot_dmg_mul = self.cop.headshot_dmg_mul * hs_mul
-	end
-
-	if self.fbi.headshot_dmg_mul then
-		self.fbi.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
-	end
+	self.gangster.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.mobster.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.biker.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.triad.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.bolivian.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.bolivian_indoors.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.bolivian_indoors_mex.headshot_dmg_mul = self.security.headshot_dmg_mul
 	
-	if self.fbi_pager.headshot_dmg_mul then
-		self.fbi_pager.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
-	end
+	self.cop.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.cop_moss.headshot_dmg_mul = self.security.headshot_dmg_mul
+	self.cop_scared.headshot_dmg_mul = self.security.headshot_dmg_mul
 	
-	if self.gangster_ninja.headshot_dmg_mul then
-		self.gangster_ninja.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
-	end
-
-	if self.swat.headshot_dmg_mul then
-		self.swat.headshot_dmg_mul = self.swat.headshot_dmg_mul * hs_mul
-	end
-
-	if self.heavy_swat.headshot_dmg_mul then
-		self.heavy_swat.headshot_dmg_mul = self.heavy_swat.headshot_dmg_mul * hs_mul
-	end
-
-	if self.fbi_heavy_swat.headshot_dmg_mul then
-		self.fbi_heavy_swat.headshot_dmg_mul = self.fbi_heavy_swat.headshot_dmg_mul * hs_mul
-	end
-
-	if self.sniper.headshot_dmg_mul then
-		self.sniper.headshot_dmg_mul = self.sniper.headshot_dmg_mul * hs_mul
-	end
 	
-	if self.armored_sniper.headshot_dmg_mul then
-		self.armored_sniper.headshot_dmg_mul = self.armored_sniper.headshot_dmg_mul * hs_mul
-	end
-
-	if self.gangster.headshot_dmg_mul then
-		self.gangster.headshot_dmg_mul = self.gangster.headshot_dmg_mul * hs_mul
-	end
-
-	if self.biker.headshot_dmg_mul then
-		self.biker.headshot_dmg_mul = self.biker.headshot_dmg_mul * hs_mul
-	end
-
+	--ninjas
+	self.fbi.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
+	
+	self.cop_female.headshot_dmg_mul = self.fbi.headshot_dmg_mul
+	self.fbi_girl.headshot_dmg_mul = self.fbi.headshot_dmg_mul
+	self.gangster_ninja.headshot_dmg_mul = self.fbi.headshot_dmg_mul
+	self.fbi_pager.headshot_dmg_mul = self.fbi.headshot_dmg_mul
+	self.fbi_xc45.headshot_dmg_mul = self.fbi.headshot_dmg_mul
+	
+	--lights
+	self.swat.headshot_dmg_mul = self.swat.headshot_dmg_mul * hs_mul
+	self.fbi_swat.headshot_dmg_mul = self.swat.headshot_dmg_mul
+	self.city_swat.headshot_dmg_mul = self.swat.headshot_dmg_mul
+	
+	--heavies
+	self.heavy_swat.headshot_dmg_mul = self.heavy_swat.headshot_dmg_mul * hs_mul
+	self.fbi_heavy_swat.headshot_dmg_mul = self.fbi_heavy_swat.headshot_dmg_mul * hs_mul
+	
+	--dozers
 	if self.tank.headshot_dmg_mul then
 		self.tank.headshot_dmg_mul = self.tank.headshot_dmg_mul * hs_mul
-	end
-
-	if self.shadow_spooc.headshot_dmg_mul then
-		self.shadow_spooc.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul * hs_mul
-	end
-
-	if self.spooc.headshot_dmg_mul then
-		self.spooc.headshot_dmg_mul = self.spooc.headshot_dmg_mul * hs_mul
-	end
-	
-	if self.spooc_heavy.headshot_dmg_mul then
-		self.spooc_heavy.headshot_dmg_mul = self.spooc_heavy.headshot_dmg_mul * hs_mul
-	end
-	
-	if self.shield.headshot_dmg_mul then
-		self.shield.headshot_dmg_mul = self.shield.headshot_dmg_mul * hs_mul
-	end
-
-	if self.phalanx_minion.headshot_dmg_mul then
-		self.phalanx_minion.headshot_dmg_mul = self.phalanx_minion.headshot_dmg_mul * hs_mul
-	end
-
-	if self.phalanx_vip.headshot_dmg_mul then
-		self.phalanx_vip.headshot_dmg_mul = self.phalanx_vip.headshot_dmg_mul * hs_mul
-	end
-
-	if self.taser.headshot_dmg_mul then
-		self.taser.headshot_dmg_mul = self.taser.headshot_dmg_mul * hs_mul
-	end
-
-	if self.biker_escape.headshot_dmg_mul then
-		self.biker_escape.headshot_dmg_mul = self.biker_escape.headshot_dmg_mul * hs_mul
-	end
-
-	if self.city_swat.headshot_dmg_mul then
-		self.city_swat.headshot_dmg_mul = self.city_swat.headshot_dmg_mul * hs_mul
-	end
-
-	if self.fbi_swat.headshot_dmg_mul then
-		self.fbi_swat.headshot_dmg_mul = self.fbi_swat.headshot_dmg_mul * hs_mul
 	end
 
 	if self.tank_hw.headshot_dmg_mul then
 		self.tank_hw.headshot_dmg_mul = self.tank_hw.headshot_dmg_mul * hs_mul
 	end
-
-	if self.medic.headshot_dmg_mul then
-		self.medic.headshot_dmg_mul = self.medic.headshot_dmg_mul * hs_mul
-	end
-
-	if self.drug_lord_boss.headshot_dmg_mul then
-		self.drug_lord_boss.headshot_dmg_mul = self.drug_lord_boss.headshot_dmg_mul * hs_mul
-	end
-
-	if self.bolivian.headshot_dmg_mul then
-		self.bolivian.headshot_dmg_mul = self.bolivian.headshot_dmg_mul * hs_mul
-	end
-
-	if self.bolivian_indoors.headshot_dmg_mul then
-		self.bolivian_indoors.headshot_dmg_mul = self.bolivian_indoors.headshot_dmg_mul * hs_mul
-	end
-
+	
 	if self.tank_medic.headshot_dmg_mul then
 		self.tank_medic.headshot_dmg_mul = self.tank_medic.headshot_dmg_mul * hs_mul
 	end
@@ -10922,8 +10413,52 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 		self.trolliam_epicson.headshot_dmg_mul = self.trolliam_epicson.headshot_dmg_mul * hs_mul
 	end
 	
-	if self.fbi_xc45.headshot_dmg_mul then
-		self.fbi_xc45.headshot_dmg_mul = self.fbi_xc45.headshot_dmg_mul * hs_mul
+	--cloakers
+	if self.spooc.headshot_dmg_mul then
+		self.spooc.headshot_dmg_mul = self.spooc.headshot_dmg_mul * hs_mul
 	end
 	
+	if self.spooc_heavy.headshot_dmg_mul then
+		self.spooc_heavy.headshot_dmg_mul = self.spooc_heavy.headshot_dmg_mul * hs_mul
+	end
+	
+	--shields
+	if self.shield.headshot_dmg_mul then
+		self.shield.headshot_dmg_mul = self.shield.headshot_dmg_mul * hs_mul
+	end
+
+	if self.phalanx_minion.headshot_dmg_mul then
+		self.phalanx_minion.headshot_dmg_mul = self.phalanx_minion.headshot_dmg_mul * hs_mul
+	end
+
+	if self.phalanx_vip.headshot_dmg_mul then
+		self.phalanx_vip.headshot_dmg_mul = self.phalanx_vip.headshot_dmg_mul * hs_mul
+	end
+
+	--taser
+	if self.taser.headshot_dmg_mul then
+		self.taser.headshot_dmg_mul = self.taser.headshot_dmg_mul * hs_mul
+	end
+	
+	--medic
+	if self.medic.headshot_dmg_mul then
+		self.medic.headshot_dmg_mul = self.medic.headshot_dmg_mul * hs_mul
+	end
+
+	if self.biker_escape.headshot_dmg_mul then
+		self.biker_escape.headshot_dmg_mul = self.biker_escape.headshot_dmg_mul * hs_mul
+	end
+
+	if self.drug_lord_boss.headshot_dmg_mul then
+		self.drug_lord_boss.headshot_dmg_mul = self.drug_lord_boss.headshot_dmg_mul * hs_mul
+	end
+
+	self.sniper.headshot_dmg_mul = self.sniper.headshot_dmg_mul * hs_mul
+	self.armored_sniper.headshot_dmg_mul = self.armored_sniper.headshot_dmg_mul * hs_mul
+	
+	if self.shadow_spooc.headshot_dmg_mul then
+		self.shadow_spooc.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul * hs_mul
+		self.shadow_swat.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul
+		self.shadow_taser.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul
+	end
 end

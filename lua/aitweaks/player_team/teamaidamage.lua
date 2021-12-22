@@ -20,30 +20,27 @@ TeamAIDamage._HEALTH_GRANULARITY = CopDamage._HEALTH_GRANULARITY
 TeamAIDamage.set_invulnerable = CopDamage.set_invulnerable
 TeamAIDamage._hurt_severities = CopDamage._hurt_severities
 TeamAIDamage.get_damage_type = CopDamage.get_damage_type
+local alive_g = alive
+
 
 function TeamAIDamage:on_recon()
 	self:_regenerated()
 end
 
-function TeamAIDamage:damage_tase(attack_data)
-	local diff_index = Global.game_settings and tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-	local tase_down_time = nil
-	
-	if diff_index <= 7 then
-		tase_down_time = 5
-	else
-		tase_down_time = 4
-	end
-	
-	if tase_down_time and Global.mutators and managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
-		tase_down_time = tase_down_time * 0.5
-	end
-	
-	if attack_data ~= nil and PlayerDamage.is_friendly_fire(self, attack_data.attacker_unit) then
-		self:friendly_fire_hit()
+function TeamAIDamage:is_friendly_fire(unit)
+	return PlayerDamage.is_friendly_fire(self, unit)
+end
 
-		return
-	end
+function TeamAIDamage:damage_tase(attack_data)	
+	if not attack_data or not alive_g(attack_data.attacker_unit) then
+        return
+    end
+
+    if PlayerDamage.is_friendly_fire(self, attack_data.attacker_unit) then
+        self:friendly_fire_hit()
+
+        return
+    end
 
 	if self:_cannot_take_damage() then
 		return
@@ -71,9 +68,11 @@ function TeamAIDamage:damage_tase(attack_data)
 		if not self._to_incapacitated_clbk_id then
 			self._to_incapacitated_clbk_id = "TeamAIDamage_to_incapacitated" .. tostring(self._unit:key())
 
-			managers.enemy:add_delayed_clbk(self._to_incapacitated_clbk_id, callback(self, self, "clbk_exit_to_incapacitated"), TimerManager:game():time() + tase_down_time)
+			managers.enemy:add_delayed_clbk(self._to_incapacitated_clbk_id, callback(self, self, "clbk_exit_to_incapacitated"), TimerManager:game():time() + 9999)
 		end
 	end
+	
+	self._taser_unit = attack_data.attacker_unit
 
 	self:_call_listeners(damage_info)
 
@@ -82,6 +81,138 @@ function TeamAIDamage:damage_tase(attack_data)
 	end
 
 	return damage_info
+end
+
+function TeamAIDamage:damage_bullet(attack_data)
+	local result = {
+		type = "none",
+		variant = "bullet"
+	}
+	attack_data.result = result
+
+	if self:_cannot_take_damage() then
+		self:_call_listeners(attack_data)
+
+		return
+	elseif PlayerDamage._chk_dmg_too_soon(self, attack_data.damage) and not attack_data.is_taser_shock then
+		self:_call_listeners(attack_data)
+
+		return
+	elseif PlayerDamage.is_friendly_fire(self, attack_data.attacker_unit) then
+		self:friendly_fire_hit()
+
+		return
+	end
+	
+	if attack_data.is_taser_shock then
+		local damage = self._HEALTH_INIT / 4
+		if managers.modifiers and managers.modifiers:check_boolean("lightningbolt") then
+			damage = damage * 2
+		end
+		
+		attack_data.damage = damage
+	end
+
+	local damage_percent, health_subtracted = self:_apply_damage(attack_data, result)
+	local t = TimerManager:game():time()
+	self._next_allowed_dmg_t = t + self._dmg_interval
+	self._last_received_dmg_t = t
+	self._last_received_dmg = health_subtracted
+
+	if self._dead then
+		self:_unregister_unit()
+	end
+
+	self:_call_listeners(attack_data)
+	self:_send_bullet_attack_result(attack_data, 0)
+
+	return result
+end
+
+function TeamAIDamage:_send_damage_drama(attack_data, health_subtracted)
+end
+
+function TeamAIDamage:update(unit, t, dt)
+	local group_ai = managers.groupai:state()
+	
+	if group_ai._drama_data.amount < group_ai._drama_data.high_p then
+		if self._regenerate_t then
+			if self._regenerate_t < t then
+				self:_regenerated()
+			end
+		end
+	elseif self._arrested_timer and self._arrested_paused_counter == 0 then
+		self._arrested_timer = self._arrested_timer - dt
+
+		if self._arrested_timer <= 0 then
+			self._arrested_timer = nil
+			local action_data = {
+				variant = "stand",
+				body_part = 1,
+				type = "act",
+				blocks = {
+					heavy_hurt = -1,
+					hurt = -1,
+					action = -1,
+					aim = -1,
+					walk = -1
+				}
+			}
+			local res = self._unit:movement():action_request(action_data)
+
+			self._unit:brain():on_recovered(self._unit)
+			self._unit:network():send("from_server_unit_recovered")
+			group_ai:on_criminal_recovered(self._unit)
+			managers.hud:set_mugshot_normal(self._unit:unit_data().mugshot_id)
+		end
+	end
+
+	if self._revive_reminder_line_t and self._revive_reminder_line_t < t then
+		self._unit:sound():say("f11e_plu", true)
+
+		self._revive_reminder_line_t = nil
+	end
+	
+	if self._unit:movement():tased() then
+		if not self._num_shocks then
+			self._num_shocks = 0
+			self._next_shock_t = t + 0.75
+		else
+			if self._num_shocks >= 4 then
+				if not alive_g(self._taser_unit) then					
+					if Network:is_server() then
+						self._num_shocks = nil
+						self._next_shock_t = nil
+						self._unit:movement():on_tase_ended()
+					end
+				else
+					self._unit:movement():play_taser_boom()
+					if Network:is_server() then
+						local attack_data = {
+							attacker_unit = self._taser_unit,
+							pos = self._unit:movement():m_pos(),
+							is_taser_shock = true,
+							armor_piercing = true,
+							damage = 1
+						}
+						self._num_shocks = nil
+						self._next_shock_t = nil
+						self._unit:movement():on_tase_ended()
+						self._unit:character_damage():damage_bullet(attack_data)
+					end
+				end
+				
+				self._taser_unit = nil
+			elseif self._next_shock_t < t then
+				self._num_shocks = self._num_shocks + 1
+				self._next_shock_t = t + 0.75
+			end
+		end
+	else
+		self._num_shocks = nil
+		self._next_shock_t = nil
+	end
+	
 end
 
 function TeamAIDamage:damage_melee(attack_data)
@@ -100,10 +231,6 @@ function TeamAIDamage:damage_melee(attack_data)
 	local t = TimerManager:game():time()
 	self._next_allowed_dmg_t = t + self._dmg_interval
 	self._last_received_dmg_t = t
-
-	if health_subtracted > 0 then
-		self:_send_damage_drama(attack_data, health_subtracted)
-	end
 
 	if self._dead then
 		self:_unregister_unit()

@@ -1,17 +1,212 @@
+local world_g = World
+local temp_vec1 = Vector3()
+local mvec3_norm = mvector3.normalize
+local HH = PD2THHSHIN
+
+function PlayerManager:clbk_copr_ability_ended()
+	self:deactivate_temporary_upgrade("temporary", "copr_ability")
+
+	local player_unit = self:local_player()
+	local character_damage = alive(player_unit) and player_unit:character_damage()
+
+	if character_damage then
+		local out_of_health = character_damage:health_ratio() < self:upgrade_value("player", "copr_static_damage_ratio", 0)
+		local risen_from_dead = self:get_property("copr_risen", false) == true
+
+		character_damage:on_copr_ability_deactivated()
+
+		if out_of_health or risen_from_dead then
+			character_damage:force_into_bleedout(false, risen_from_dead)
+		end
+	end
+
+	self:set_property("copr_risen", nil)
+	
+	if HH:EXScreenFXenabled() then
+		managers.environment_controller:_copr_effect_toggle(false)
+	end
+	
+	managers.hud:set_copr_indicator(false)
+end
+
+function PlayerManager:_attempt_copr_ability()
+	if self:has_activate_temporary_upgrade("temporary", "copr_ability") then
+		return false
+	end
+
+	local character_damage = self:local_player():character_damage()
+	local character_movement = self:local_player():movement()
+	local current_state = character_movement:current_state()
+	local duration = self:upgrade_value("temporary", "copr_ability")[2]
+	local now = managers.game_play_central:get_heist_timer()
+
+	managers.network:session():send_to_peers("sync_ability_hud", now + duration, duration)
+
+	local is_downed = game_state_machine:verify_game_state(GameStateFilters.downed)
+
+	self:set_property("copr_risen", is_downed)
+
+	if is_downed then
+		character_damage:revive(true)
+		self:register_message("ability_activated", "copr_ability_downed_cooldown_add", callback(self, self, "add_cooldown_copr"))
+	end
+	
+	if current_state._running then
+		current_state:_interupt_action_running(self:player_timer():time())
+	end
+	
+	character_movement:subtract_stamina(character_movement._stamina)
+	self:activate_temporary_upgrade("temporary", "copr_ability")
+
+	local expire_time = self:get_activate_temporary_expire_time("temporary", "copr_ability")
+
+	managers.enemy:add_delayed_clbk("copr_ability_active", callback(self, self, "clbk_copr_ability_ended"), expire_time)
+	managers.hud:activate_teammate_ability_radial(HUDManager.PLAYER_PANEL, duration)
+
+	local bonus_health = self:upgrade_value("player", "copr_activate_bonus_health_ratio", tweak_data.upgrades.values.player.copr_activate_bonus_health_ratio[1])
+
+	character_damage:restore_health(bonus_health)
+	character_damage:set_armor(0)
+	character_damage:send_set_status()
+
+	local speed_up_on_kill_time = self:upgrade_value("player", "copr_speed_up_on_kill", 0)
+
+	if speed_up_on_kill_time > 0 then
+		local function speed_up_on_kill_func()
+			managers.player:speed_up_grenade_cooldown(speed_up_on_kill_time)
+		end
+
+		self:register_message(Message.OnEnemyKilled, "speed_up_copr_ability", speed_up_on_kill_func)
+	end
+
+	character_damage:on_copr_ability_activated()
+
+	self._copr_kill_life_leech_num = 0
+	local static_damage_ratio = self:upgrade_value("player", "copr_static_damage_ratio", 0)
+
+	managers.hud:set_copr_indicator(true, static_damage_ratio)
+	
+	if HH:EXScreenFXenabled() then
+		managers.environment_controller:_copr_effect_toggle(true)
+	end
+
+	return true
+end
+
 function PlayerManager:_chk_fellow_crimin_proximity(unit)
 	local players_nearby = 0
 		
-	local enemies = World:find_units_quick(unit, "sphere", unit:position(), 1500, managers.slot:get_mask("criminals_no_deployables"))
+	local enemies = world_g:find_units_quick(unit, "sphere", unit:position(), 1500, managers.slot:get_mask("criminals_no_deployables"))
 
-	for _, enemy in ipairs(enemies) do
-		players_nearby = players_nearby + 1
-	end
-		
-	if players_nearby <= 0 then
-		--log("uhohstinky")
-	end
+	players_nearby = #enemies
 		
 	return players_nearby
+end
+
+function PlayerManager:movement_speed_multiplier(speed_state, bonus_multiplier, upgrade_level, health_ratio)
+	local multiplier = 1
+	local armor_penalty = self:mod_movement_penalty(self:body_armor_value("movement", upgrade_level, 1))
+	multiplier = multiplier + armor_penalty - 1
+
+	if bonus_multiplier then
+		multiplier = multiplier + bonus_multiplier - 1
+	end
+
+	if speed_state then
+		multiplier = multiplier + self:upgrade_value("player", speed_state .. "_speed_multiplier", 1) - 1
+	end
+	
+	if managers.player:has_category_upgrade("player", "perkdeck_movespeed_mult") then
+		multiplier = multiplier * managers.player:upgrade_value("player", "perkdeck_movespeed_mult", 1)
+	end
+		
+	if managers.player:has_category_upgrade("player", "criticalmode") then
+		multiplier = multiplier * 1.25
+	end
+
+	multiplier = multiplier + self:get_hostage_bonus_multiplier("speed") - 1
+	multiplier = multiplier + self:upgrade_value("player", "movement_speed_multiplier", 1) - 1
+
+	if self:num_local_minions() > 0 then
+		multiplier = multiplier + self:upgrade_value("player", "minion_master_speed_multiplier", 1) - 1
+	end
+
+	if self:has_category_upgrade("player", "secured_bags_speed_multiplier") then
+		local bags = 0
+		bags = bags + (managers.loot:get_secured_mandatory_bags_amount() or 0)
+		bags = bags + (managers.loot:get_secured_bonus_bags_amount() or 0)
+		multiplier = multiplier + bags * (self:upgrade_value("player", "secured_bags_speed_multiplier", 1) - 1)
+	end
+
+	if managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") then
+		multiplier = multiplier * (tweak_data.upgrades.berserker_movement_speed_multiplier or 1)
+	end
+
+	if health_ratio then
+		local damage_health_ratio = self:get_damage_health_ratio(health_ratio, "movement_speed")
+		multiplier = multiplier * (1 + managers.player:upgrade_value("player", "movement_speed_damage_health_ratio_multiplier", 0) * damage_health_ratio)
+	end
+
+	local damage_speed_multiplier = managers.player:temporary_upgrade_value("temporary", "damage_speed_multiplier", managers.player:temporary_upgrade_value("temporary", "team_damage_speed_multiplier_received", 1))
+	multiplier = multiplier * damage_speed_multiplier
+
+	return multiplier
+end
+
+function PlayerManager:health_skill_multiplier()
+	local multiplier = 1
+	multiplier = multiplier + self:upgrade_value("player", "health_multiplier", 1) - 1
+	multiplier = multiplier + self:upgrade_value("player", "passive_health_multiplier", 1) - 1
+	multiplier = multiplier + self:team_upgrade_value("health", "passive_multiplier", 1) - 1
+	multiplier = multiplier + self:get_hostage_bonus_multiplier("health") - 1
+	
+	if self:num_local_minions() > 0 then
+		multiplier = multiplier + self:upgrade_value("player", "minion_master_health_multiplier", 1) - 1
+	end
+	
+	multiplier = multiplier - self:upgrade_value("player", "health_decrease", 0)
+
+	return multiplier
+end
+
+function PlayerManager:health_skill_addend()
+	local addend = 0
+	addend = addend + self:upgrade_value("team", "crew_add_health", 0)
+	
+	addend = addend + self:upgrade_value("player", "health_increase", 0) --Iron Man'ced, need to figure out a way to make this show up in menus
+
+	if table.contains(self._global.kit.equipment_slots, "thick_skin") then
+		addend = addend + self:upgrade_value("player", "thick_skin", 0)
+	end
+
+	return addend
+end
+
+function PlayerManager:max_health()
+	local base_health = PlayerDamage._HEALTH_INIT
+	local health = (base_health + self:health_skill_addend()) * self:health_skill_multiplier()
+	health = health * self:upgrade_value("player", "health_decrease_2_decrease_harder", 1)
+	
+	return health
+end
+
+function PlayerManager:body_armor_skill_addend(override_armor)
+	local addend = 0
+	addend = addend + self:upgrade_value("player", tostring(override_armor or managers.blackmarket:equipped_armor(true, true)) .. "_armor_addend", 0)
+
+	if self:has_category_upgrade("player", "armor_conversion") then
+		local health_multiplier = self:health_skill_multiplier()
+		local max_health = (PlayerDamage._HEALTH_INIT + self:health_skill_addend()) * health_multiplier
+
+		local conversion_mult = 0 + self:upgrade_value("player", "armor_conversion", 0)
+		local to_add = max_health * conversion_mult
+		
+		addend = addend + to_add
+	end
+
+	addend = addend + self:upgrade_value("team", "crew_add_armor", 0)
+
+	return addend
 end
 
 function PlayerManager:skill_dodge_chance(running, crouching, on_zipline, override_armor, detection_risk)
@@ -32,7 +227,7 @@ function PlayerManager:skill_dodge_chance(running, crouching, on_zipline, overri
 	if player_unit then
 		local wavedash_active = player_unit:movement():current_state()._wave_dash_t
 		
-		if wavedash_active then
+		if wavedash_active and player_unit:movement():is_above_stamina_threshold() then
 			chance = chance + 0.05
 		end
 	end
@@ -44,7 +239,7 @@ function PlayerManager:skill_dodge_chance(running, crouching, on_zipline, overri
 	chance = chance + dodge_shot_gain
 	chance = chance + self:upgrade_value("player", "tier_dodge_chance", 0)
 
-	if running then
+	if running and player_unit:movement():is_above_stamina_threshold() then
 		chance = chance + self:upgrade_value("player", "run_dodge_chance", 0)
 	end
 
@@ -64,7 +259,6 @@ function PlayerManager:skill_dodge_chance(running, crouching, on_zipline, overri
 
 	return chance
 end
-
 
 function PlayerManager:speak(message, arg1, arg2)
 	if self:player_unit() and self:player_unit():sound() then
@@ -131,8 +325,57 @@ function PlayerManager:damage_reduction_skill_multiplier(damage_type, sneakier_a
 	return multiplier
 end
 
+function PlayerManager:drop_carry(zipline_unit)
+	local carry_data = self:get_my_carry_data()
+
+	if not carry_data then
+		return
+	end
+
+	self._carry_blocked_cooldown_t = Application:time() + 0.2
+	local player = self:player_unit()
+
+	if player then
+		player:sound():play("Play_bag_generic_throw", nil, false)
+	end
+
+	local camera_ext = player:camera()
+	local dye_initiated = carry_data.dye_initiated
+	local has_dye_pack = carry_data.has_dye_pack
+	local dye_value_multiplier = carry_data.dye_value_multiplier
+	local throw_distance_multiplier_upgrade_level = managers.player:upgrade_level("carry", "throw_distance_multiplier", 0)
+	local position = camera_ext:position()
+	local rotation = camera_ext:rotation()
+	local forward = player:camera():forward()
+
+	if _G.IS_VR then
+		local active_hand = player:hand():get_active_hand("bag")
+
+		if active_hand then
+			position = active_hand:position()
+			rotation = active_hand:rotation()
+			forward = rotation:y()
+		end
+	end
+
+	if Network:is_client() then
+		managers.network:session():send_to_host("server_drop_carry", carry_data.carry_id, carry_data.multiplier, dye_initiated, has_dye_pack, dye_value_multiplier, position, rotation, forward, throw_distance_multiplier_upgrade_level, zipline_unit)
+	else
+		self:server_drop_carry(carry_data.carry_id, carry_data.multiplier, dye_initiated, has_dye_pack, dye_value_multiplier, position, rotation, forward, throw_distance_multiplier_upgrade_level, zipline_unit, managers.network:session():local_peer())
+	end
+
+	managers.hud:remove_teammate_carry_info(HUDManager.PLAYER_PANEL)
+	managers.hud:temp_hide_carry_bag()
+	self:update_removed_synced_carry_to_peers()
+
+	if self._current_state == "carry" then
+		managers.player:set_player_state("standard")
+	end
+end
+
 function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	local player_unit = self:player_unit()
+	local effect_sync_index = nil
 
 	if not player_unit then
 		return
@@ -159,17 +402,85 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 
 	self._message_system:notify(Message.OnEnemyKilled, nil, equipped_unit, variant, killed_unit)
 	
-	if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
-		if self:has_category_upgrade("player", "panic_suppression") then --let's make this fuckin' happen
-			local equipped_unit = self:get_current_state()._equipped_unit:base()
-			local suppression_amount = equipped_unit._suppression
-			--local sup_chance = equipped_unit._panic_suppression_chance * 1.75
-			local pos = killed_unit:position()
-			local enemies = World:find_units_quick("sphere", pos, 600, 12, 21)
-				
-			for i, unit in ipairs(enemies) do
-				if unit:character_damage() and unit:character_damage().build_suppression then
-					unit:character_damage():build_suppression(suppression_amount, 50, nil)
+	local equipped_unit = self:get_current_state()._equipped_unit:base()
+		
+	if self:has_category_upgrade("player", "panic_suppression") then --let's make this fuckin' happen
+		local suppression_amount = equipped_unit._suppression
+		local pos = killed_unit:position()
+		local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, 600, 12, 21)
+			
+		for i = 1, #enemies do
+			local unit = enemies[i]
+			
+			if unit:character_damage() and unit:character_damage().build_suppression then
+				unit:character_damage():build_suppression(suppression_amount, 50, nil)
+			end
+		end
+	end
+	
+	local bull = self:has_category_upgrade("player", "ridethebull_basic")
+	local aced_bull = self:has_category_upgrade("player", "ridethebull_basic")
+	
+	if bull then
+		if aced_bull and variant == "melee" or equipped_unit:fire_mode() == "auto" then
+			equipped_unit:on_bull_event(aced_bull)
+		end
+	end
+	
+	if headshot and self:has_category_upgrade("player", "fineredmist_basic") and equipped_unit:fire_mode() == "single" then
+		--THANK YOU FOR IMPROVING ALL OF THIS HOXI AAAAAAAAAAAAAAAAAAAA <33333333
+		local pos = killed_unit:movement():m_head_pos()
+
+		--hopefully ill get this working in a pretty way
+		world_g:effect_manager():spawn({
+			effect = Idstring("effects/pd2_mod_hh/particles/character/gore_explosion"),
+			position = pos,
+			normal = math.UP
+		})
+
+		--split_gen_body
+
+		player_unit:sound():play("expl_gen_head", nil, nil)
+
+		local damage = 30
+		local range = 200
+
+		if self:has_category_upgrade("player", "fineredmist_aced") then
+			range = 400
+
+			effect_sync_index = 2
+
+			player_unit:sound():play("split_gen_body", nil, nil) --play both of these at once if aced for extra impact
+		else
+			effect_sync_index = 1
+		end
+
+		local enemies = world_g:find_units_quick(killed_unit, "sphere", pos, range, managers.slot:get_mask("enemies", "civilians"))
+		local obstruction_slotmask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
+		local weap_unit = self:get_current_state()._equipped_unit
+
+		for i = 1, #enemies do
+			local enemy = enemies[i]
+			local dmg_ext = enemy:character_damage()
+
+			if dmg_ext and dmg_ext.damage_simple then
+				local center_of_mass = enemy:movement():m_com()
+				local obstructed = enemy:raycast("ray", pos, center_of_mass, "slot_mask", obstruction_slotmask, "report")
+
+				if not obstructed then
+					local attack_dir = center_of_mass - pos
+					mvec3_norm(attack_dir)
+
+					local attack_data = {
+						damage = damage,
+						attacker_unit = player_unit,
+						guaranteed_stagger = true,
+						pos = center_of_mass,
+						attack_dir = attack_dir,
+						weapon_unit = weap_unit
+					}
+
+					dmg_ext:damage_simple(attack_data)
 				end
 			end
 		end
@@ -186,9 +497,11 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 				local area = skill.area
 				local chance = skill.chance
 				local amount = skill.amount
-				local enemies = World:find_units_quick("sphere", pos, area, 12, 21)
-
-				for i, unit in ipairs(enemies) do
+				local enemies = world_g:find_units_quick("sphere", pos, area, 12, 21)
+				
+				for i = 1, #enemies do
+					local unit = enemies[i]
+					
 					if unit:character_damage() and unit:character_damage().build_suppression then
 						unit:character_damage():build_suppression(amount, chance, true)
 					end
@@ -231,8 +544,50 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	end
 
 	local t = Application:time()
+	
+	if variant ~= "melee" then
+		if self:has_category_upgrade("player", "cool_hunting_aced") then
+			local equipped_unit = self:get_current_state()._equipped_unit:base()
+
+			if equipped_unit:is_category("shotgun") then
+
+				--https://media.discordapp.net/attachments/737554686139170866/878072580421087282/FB_IMG_1629413974581.png
+				if not self._cool_chain_t or self._cool_chain_t < t then
+					self._cool_chain_t = t + 0.8
+					self._cool_chain_kills = 1
+				else
+					self._cool_chain_t = t + 0.8
+					self._cool_chain_kills = self._cool_chain_kills + 1
+				end
+				
+				if self._cool_chain_kills >= 2 then					
+					if self._cool_chain_mul then
+						self._cool_chain_mul = self._cool_chain_mul - 0.05
+					else
+						self._cool_chain_mul = 0.95
+					end
+					
+					self._cool_hunting_t = t + 3
+					self._cool_chain_kills = nil
+					self._cool_chain_t = nil
+				end
+			end
+		end
+	end
+	
 	local damage_ext = player_unit:character_damage()
 
+	if damage_ext._armor_grinding then
+		if self:has_category_upgrade("player", "armor_grinding_regen_t_on_kill") then
+			local elaps_div =  managers.player:upgrade_value("player", "armor_grinding_regen_t_on_kill", 1)
+			local target_tick = damage_ext._armor_grinding.target_tick
+			local elaps_add = target_tick / elaps_div
+			--log("a " .. tostring(elaps_add) .. "")
+			
+			damage_ext._armor_grinding.elapsed = damage_ext._armor_grinding.elapsed + elaps_add
+		end
+	end
+	
 	if self:has_category_upgrade("player", "kill_change_regenerate_speed") then
 		local amount = self:body_armor_value("skill_kill_change_regenerate_speed", nil, 1)
 		local multiplier = self:upgrade_value("player", "kill_change_regenerate_speed", 0)
@@ -251,15 +606,43 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 			self._throw_regen_kills = 0
 		end
 	end
+	
+	if self:has_category_upgrade("player", "dark_metamorphosis_aced") then
+		damage_ext:restore_health(0.5, true)
+	elseif self:has_category_upgrade("player", "dark_metamorphosis_basic") then
+		damage_ext:restore_health(0.25, true)
+	end
+	
+	if self:has_activate_temporary_upgrade("temporary", "copr_ability") then
+		local kill_life_leech = self:upgrade_value_nil("player", "copr_kill_life_leech")
+		local static_damage_ratio = self:upgrade_value_nil("player", "copr_static_damage_ratio")
+
+		if kill_life_leech and static_damage_ratio and damage_ext then
+			self._copr_kill_life_leech_num = (self._copr_kill_life_leech_num or 0) + 1
+
+			if kill_life_leech <= self._copr_kill_life_leech_num then
+				self._copr_kill_life_leech_num = 0
+				local current_health_ratio = damage_ext:health_ratio()
+				local wanted_health_ratio = math.floor((current_health_ratio + 0.01 + static_damage_ratio) / static_damage_ratio) * static_damage_ratio
+				local health_regen = wanted_health_ratio - current_health_ratio
+
+				if health_regen > 0 then
+					damage_ext:restore_health(health_regen)
+					damage_ext:on_copr_killshot()
+				end
+			end
+		end
+	end
 
 	if self._on_killshot_t and t < self._on_killshot_t then
-		return
+		return effect_sync_index
 	end
 
 	local regen_armor_bonus = self:upgrade_value("player", "killshot_regen_armor_bonus", 0)
-	local dist_sq = mvector3.distance_sq(player_unit:movement():m_pos(), killed_unit:movement():m_pos())
+	
 	local close_combat_sq = tweak_data.upgrades.close_combat_distance * tweak_data.upgrades.close_combat_distance
-
+	local dist_sq = mvector3.distance_sq(player_unit:movement():m_pos(), killed_unit:movement():m_pos())
+	
 	if dist_sq <= close_combat_sq then
 		regen_armor_bonus = regen_armor_bonus + self:upgrade_value("player", "killshot_close_regen_armor_bonus", 0)
 		local panic_chance = self:upgrade_value("player", "killshot_close_panic_chance", 0)
@@ -267,7 +650,7 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 
 		if panic_chance > 0 or panic_chance == -1 then
 			local slotmask = managers.slot:get_mask("enemies")
-			local units = World:find_units_quick("sphere", player_unit:movement():m_pos(), tweak_data.upgrades.killshot_close_panic_range, slotmask)
+			local units = world_g:find_units_quick("sphere", player_unit:movement():m_pos(), tweak_data.upgrades.killshot_close_panic_range, slotmask)
 
 			for e_key, unit in pairs(units) do
 				if alive(unit) and unit:character_damage() and not unit:character_damage():dead() then
@@ -300,6 +683,8 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 
 		player_unit:movement():add_stamina(stamina_regen)
 	end
+	
+	return effect_sync_index
 end
 
 function PlayerManager:update(t, dt)
@@ -347,17 +732,99 @@ function PlayerManager:update(t, dt)
 		end
 	end
 	
-	if self._max_messiah_charges > 0 then
-		if self._messiah_charges < self._max_messiah_charges then
-			if not self._messiah_recharge_t then
-				self._messiah_recharge_t = t + 120
-			elseif self._messiah_recharge_t < t then
-				self:_on_messiah_recharge_event()
+	
+	if alive(self:player_unit()) then
+		if self:has_category_upgrade("player", "pop_pop") then
+			self:upd_pop_pop(t)
+		end
+		
+		if self._magic_bullet_aced_t then
+			if self._magic_bullet_aced_t < t then
+				self._magic_bullet_aced_t = nil
+			end
+		end
+		
+		if self._syringe_t then
+			if self._syringe_t < t then
+				self._syringe_stam = nil
+				self._syringe_t = nil
+			end
+		end
+		
+		if self._cool_hunting_t then
+			if self._cool_hunting_t < t then
+				self._cool_chain_mul = nil
+				self._cool_hunting_t = nil
+			end
+		end
+		
+		if self._max_messiah_charges > 0 then
+			if self._messiah_charges < self._max_messiah_charges then
+				if not self._messiah_recharge_t then
+					self._messiah_recharge_t = t + 240
+				elseif self._messiah_recharge_t < t then
+					self:_on_messiah_recharge_event()
+				end
 			end
 		end
 	end
 
 	self:update_smoke_screens(t, dt)
+end
+
+function PlayerManager:activate_heal_upgrades(token, syringebasic, syringeaced)
+	if not self._docbag_token then
+		local player_unit = self:player_unit()
+		player_unit:character_damage():activate_docbag_token()
+	end
+	
+	if syringebasic then
+		local t = Application:time()
+		self._syringe_t = t + 15
+		self._syringe_stam = syringeaced 
+	end
+end
+
+function PlayerManager:upd_pop_pop(t)
+	--log("hmm")
+	local player_unit = self:player_unit()
+
+	if not player_unit then
+		--log("how")
+		self._pop_pop_mul = nil
+		return
+	end
+	
+	if not player_unit:movement():current_state()._shooting_t_pop then
+		--log("hmm")
+		self._pop_pop_mul = nil
+		return
+	end
+	
+	local weapon_unit = self:equipped_weapon_unit()
+	
+	if not weapon_unit or weapon_unit:base():fire_mode() == "single" then
+		--log("nani")
+		return
+	end
+	
+	local state = player_unit:movement():current_state()
+	
+	if state._shooting_t_pop then
+		local pop_t = state._shooting_t_pop - t
+		pop_t = math.max(pop_t, 0)
+		--log("pop_t is " .. tostring(pop_t) .. "")
+		local lerp_value = math.clamp(pop_t, 0, 3) / 3
+		local pop_mul = math.lerp(0.25, 0, lerp_value)
+		
+		self._pop_pop_mul = 0 - pop_mul
+		
+		--log("pop is " .. tostring(self._pop_pop_mul) .. "")
+	else
+		--log("aargh")
+		self._pop_pop_mul = nil
+	end
+		
 end
 
 function PlayerManager:on_headshot_dealt()
@@ -377,7 +844,7 @@ function PlayerManager:on_headshot_dealt()
 
 	if damage_ext and regen_armor_bonus > 0 and regen_armor_t_chk then
 		damage_ext:restore_armor(regen_armor_bonus)
-		self._on_headshot_dealt_t = t + (tweak_data.upgrades.on_headshot_dealt_cooldown or 0)
+		self._on_headshot_dealt_t = t + 5
 	end
 	
 	if damage_ext and self:has_category_upgrade("player", "jackpot_safety") and not damage_ext:has_jackpot_token() and player_unit:movement() then	
@@ -388,6 +855,57 @@ function PlayerManager:on_headshot_dealt()
 			if not self._safety_headshot_t or self._safety_headshot_t and self._safety_headshot_t < t then
 				damage_ext:activate_jackpot_token()
 				self._safety_headshot_t = t + 5
+			end
+		end
+	end
+	
+	local weapon_unit = self:equipped_weapon_unit()
+	
+	if self:has_category_upgrade("player", "magic_bullet_basic") then
+		if weapon_unit and weapon_unit:base():is_category("pistol", "smg", "assault_rifle", "snp") then
+			self:on_ammo_increase(1)
+		end
+	end
+	
+	if self:has_category_upgrade("player", "magic_bullet_aced") then
+		if weapon_unit and weapon_unit:base():is_category("pistol", "smg", "assault_rifle", "snp") then
+			self._magic_bullet_aced_t = t + 2
+		end
+	end
+	
+end
+
+function PlayerManager:do_comeback_blast()
+	local player_unit = self:player_unit()
+	
+	if not player_unit then
+		return
+	end
+	
+	local pos = player_unit:movement():m_head_pos()
+	
+	local enemies = world_g:find_units_quick(player_unit, "sphere", pos, 400, managers.slot:get_mask("enemies"))
+	
+	for _, enemy in ipairs(enemies) do
+		local dmg_ext = enemy:character_damage()
+
+		if dmg_ext and dmg_ext.damage_simple then
+			local center_of_mass = enemy:movement():m_com()
+			local obstructed = enemy:raycast("ray", pos, center_of_mass, "slot_mask", obstruction_slotmask, "report")
+
+			if not obstructed then
+				local attack_dir = center_of_mass - pos
+				mvec3_norm(attack_dir)
+
+				local attack_data = {
+					damage = 0,
+					attacker_unit = player_unit,
+					guaranteed_knockdown = true,
+					pos = center_of_mass,
+					attack_dir = attack_dir
+				}
+
+				dmg_ext:damage_simple(attack_data)
 			end
 		end
 	end

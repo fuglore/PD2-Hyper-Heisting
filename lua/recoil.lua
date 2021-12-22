@@ -9,5 +9,9 @@ if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 		self._recoil_kick.to_reduce = 0
 		self._recoil_kick.h.to_reduce = 0
 		self._recoil_wait = nil
+		self._recoil_kick.current = 0
+		self._recoil_kick.h.current = 0
+		self._recoil_kick.accumulated = 0
+		self._recoil_kick.h.accumulated = 0
 	end
 end

@@ -1,3 +1,5 @@
+local mvec3_cpy = mvector3.copy
+
 function CivilianLogicTravel.action_complete_clbk(data, action)
 	local my_data = data.internal_data
 	local action_type = action:type()
@@ -28,9 +30,6 @@ function CivilianLogicTravel.action_complete_clbk(data, action)
 				local high_ray = CopLogicTravel._chk_cover_height(data, my_data.best_cover[1], data.visibility_slotmask)
 				my_data.best_cover[4] = high_ray
 				my_data.in_cover = true
-				local cover_wait_time = 0
-
-				my_data.cover_leave_t = data.t + cover_wait_time
 			else
 				managers.navigation:release_cover(my_data.moving_to_cover[1])
 
@@ -98,3 +97,217 @@ function CivilianLogicTravel.action_complete_clbk(data, action)
 end
 
 CivilianLogicTravel.action_complete_clbk = CivilianLogicTravel.action_complete_clbk
+
+function CivilianLogicTravel.update(data)
+	local my_data = data.internal_data
+	local unit = data.unit
+	local objective = data.objective
+	local t = data.t
+
+	if my_data.has_old_action then
+		CivilianLogicTravel._upd_stop_old_action(data, my_data)
+		
+		if my_data.has_old_action then
+			return
+		end
+	end
+	
+	if my_data.warp_pos then
+		local action_desc = {
+			body_part = 1,
+			type = "warp",
+			position = mvector3.copy(objective.pos),
+			rotation = objective.rot
+		}
+
+		if unit:movement():action_request(action_desc) then
+			CivilianLogicTravel._on_destination_reached(data)
+		end
+	elseif my_data.processing_advance_path or my_data.processing_coarse_path then
+		CivilianLogicEscort._upd_pathing(data, my_data)
+		
+		if my_data.advance_path then
+			CopLogicAttack._correct_path_start_pos(data, my_data.advance_path)
+
+			local end_rot = nil
+
+			if my_data.coarse_path_index == #my_data.coarse_path - 1 then
+				end_rot = objective and objective.rot
+			end
+
+			local haste = objective and objective.haste or "walk"
+			local new_action_data = {
+				type = "walk",
+				body_part = 2,
+				nav_path = my_data.advance_path,
+				variant = haste,
+				end_rot = end_rot
+			}
+			my_data.starting_advance_action = true
+			my_data.advancing = data.unit:brain():action_request(new_action_data)
+			my_data.starting_advance_action = false
+
+			if my_data.advancing then
+				my_data.advance_path = nil
+
+				data.brain:rem_pos_rsrv("path")
+			end
+		elseif my_data.coarse_path then
+			local coarse_path = my_data.coarse_path
+			local cur_index = my_data.coarse_path_index
+			local total_nav_points = #coarse_path
+
+			if cur_index >= total_nav_points then
+				objective.in_place = true
+
+				if objective.type ~= "escort" and objective.type ~= "act" and objective.type ~= "follow" and not objective.action_duration then
+					data.objective_complete_clbk(unit, objective)
+				else
+					CivilianLogicTravel.on_new_objective(data)
+				end
+
+				return
+			else
+				data.brain:rem_pos_rsrv("path")
+
+				local to_pos = nil
+
+				if cur_index == total_nav_points - 1 then
+					to_pos = CivilianLogicTravel._determine_exact_destination(data, objective)
+				else
+					to_pos = coarse_path[cur_index + 1][2]
+				end
+
+				my_data.processing_advance_path = true
+
+				unit:brain():search_for_path(my_data.advance_path_search_id, to_pos)
+			end
+		end
+	elseif my_data.advancing then
+		-- Nothing
+	elseif my_data.advance_path then
+		CopLogicAttack._correct_path_start_pos(data, my_data.advance_path)
+
+		local end_rot = nil
+
+		if my_data.coarse_path_index == #my_data.coarse_path - 1 then
+			end_rot = objective and objective.rot
+		end
+
+		local haste = objective and objective.haste or "walk"
+		local new_action_data = {
+			type = "walk",
+			body_part = 2,
+			nav_path = my_data.advance_path,
+			variant = haste,
+			end_rot = end_rot
+		}
+		my_data.starting_advance_action = true
+		my_data.advancing = data.unit:brain():action_request(new_action_data)
+		my_data.starting_advance_action = false
+
+		if my_data.advancing then
+			my_data.advance_path = nil
+
+			data.brain:rem_pos_rsrv("path")
+		end
+	elseif objective then
+		if my_data.coarse_path then
+			local coarse_path = my_data.coarse_path
+			local cur_index = my_data.coarse_path_index
+			local total_nav_points = #coarse_path
+
+			if cur_index >= total_nav_points then
+				objective.in_place = true
+
+				if objective.type ~= "escort" and objective.type ~= "act" and objective.type ~= "follow" and not objective.action_duration then
+					data.objective_complete_clbk(unit, objective)
+				else
+					CivilianLogicTravel.on_new_objective(data)
+				end
+
+				return
+			else
+				data.brain:rem_pos_rsrv("path")
+
+				local to_pos = nil
+
+				if cur_index == total_nav_points - 1 then
+					to_pos = CivilianLogicTravel._determine_exact_destination(data, objective)
+				else
+					to_pos = coarse_path[cur_index + 1][2]
+				end
+				
+				local unobstructed_line = CopLogicTravel._check_path_is_straight_line(data.m_pos, to_pos, data)
+				
+				if unobstructed_line then
+					my_data.advance_path = {
+						mvec3_cpy(data.m_pos),
+						mvec3_cpy(to_pos)
+					}
+					
+					CopLogicAttack._correct_path_start_pos(data, my_data.advance_path)
+
+					local end_rot = nil
+
+					if my_data.coarse_path_index == #my_data.coarse_path - 1 then
+						end_rot = objective and objective.rot
+					end
+
+					local haste = objective and objective.haste or "walk"
+					local new_action_data = {
+						type = "walk",
+						body_part = 2,
+						nav_path = my_data.advance_path,
+						variant = haste,
+						end_rot = end_rot
+					}
+					my_data.starting_advance_action = true
+					my_data.advancing = data.unit:brain():action_request(new_action_data)
+					my_data.starting_advance_action = false
+
+					if my_data.advancing then
+						my_data.advance_path = nil
+
+						data.brain:rem_pos_rsrv("path")
+					end
+				else
+					my_data.processing_advance_path = true
+
+					unit:brain():search_for_path(my_data.advance_path_search_id, to_pos)
+				end
+			end
+		else
+			local nav_seg = nil
+
+			if objective.follow_unit then
+				nav_seg = objective.follow_unit:movement():nav_tracker():nav_segment()
+			else
+				nav_seg = objective.nav_seg
+			end
+
+			if unit:brain():search_for_coarse_path(my_data.coarse_path_search_id, nav_seg) then
+				my_data.processing_coarse_path = true
+			end
+		end
+	else
+		CopLogicBase._exit(data.unit, "idle")
+	end
+end
+
+function CivilianLogicTravel._determine_exact_destination(data, objective)
+	if objective.pos then
+		return objective.pos
+	elseif objective.type == "follow" then
+		local follow_pos, follow_nav_seg = nil
+		local follow_unit_objective = objective.follow_unit:brain() and objective.follow_unit:brain():objective()
+		follow_pos = objective.follow_unit:movement():nav_tracker():field_position()
+		follow_nav_seg = objective.follow_unit:movement():nav_tracker():nav_segment()
+		local distance = objective.distance and math.lerp(objective.distance * 0.5, objective.distance * 0.9, math.random()) or 700
+		local to_pos = CopLogicTravel._get_pos_on_wall(follow_pos, distance)
+
+		return to_pos
+	else
+		return CopLogicTravel._find_near_free_pos(managers.navigation._nav_segments[objective.nav_seg].pos, 700)
+	end
+end

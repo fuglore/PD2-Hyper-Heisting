@@ -53,6 +53,70 @@ function HuskPlayerMovement:_calculate_m_pose()
 	self._obj_head:m_position(self._m_head_pos)
 end
 
+function HuskPlayerMovement:_register_revive_SO()
+	local followup_objective = {
+		scan = true,
+		type = "act",
+		action = {
+			variant = "crouch",
+			body_part = 1,
+			type = "act",
+			blocks = {
+				heavy_hurt = -1,
+				hurt = -1,
+				action = -1,
+				aim = -1,
+				walk = -1
+			}
+		}
+	}
+	local objective = {
+		type = "revive",
+		called = true,
+		scan = true,
+		destroy_clbk_key = false,
+		follow_unit = self._unit,
+		nav_seg = self._unit:movement():nav_tracker():nav_segment(),
+		fail_clbk = callback(self, self, "on_revive_SO_failed"),
+		complete_clbk = callback(self, self, "on_revive_SO_completed"),
+		action = {
+			align_sync = true,
+			type = "act",
+			body_part = 1,
+			variant = self._state == "arrested" and "untie" or "revive",
+			blocks = {
+				light_hurt = -1,
+				hurt = -1,
+				action = -1,
+				heavy_hurt = -1,
+				aim = -1,
+				walk = -1
+			}
+		},
+		action_duration = tweak_data.interaction[self._state == "arrested" and "free" or "revive"].timer,
+		followup_objective = followup_objective
+	}
+	local so_descriptor = {
+		interval = 0,
+		AI_group = "friendlies",
+		base_chance = 1,
+		chance_inc = 0,
+		usage_amount = 1,
+		objective = objective,
+		search_pos = self._unit:position(),
+		admin_clbk = callback(self, self, "on_revive_SO_administered"),
+		verification_clbk = callback(HuskPlayerMovement, HuskPlayerMovement, "rescue_SO_verification", self._unit)
+	}
+	local so_id = "PlayerHusk_revive" .. tostring(self._unit:key())
+	self._revive_SO_id = so_id
+
+	managers.groupai:state():add_special_objective(so_id, so_descriptor)
+
+	if not self._deathguard_SO_id then
+		self._deathguard_SO_id = PlayerBleedOut._register_deathguard_SO(self._unit)
+	end
+end
+
 function HuskPlayerMovement:sync_action_walk_nav_point(pos, speed, action, params)
 	if pos then
 		self:_update_real_pos(pos)
@@ -66,7 +130,7 @@ function HuskPlayerMovement:sync_action_walk_nav_point(pos, speed, action, param
 
 	if not pos then
 		if path_len <= 0 or self._movement_path[path_len].pos then
-			pos = mvec3_cpy(self._m_pos)
+			pos = mvec3_cpy(self:m_pos())
 		end
 	end
 
@@ -200,24 +264,6 @@ function HuskPlayerMovement:sync_action_change_pose(pose_code, pos)
 	self:_update_real_pos(pos, pose_code)
 end
 
-function HuskPlayerMovement:_update_air_time(t, dt)
-	if self._in_air then
-		self._air_time = self._air_time or 0
-		self._air_time = self._air_time + dt
-
-		if self._air_time > 1 then
-			local on_ground = self:_chk_ground_ray(self._m_pos)
-
-			if on_ground then
-				self._in_air = false
-				self._air_time = 0
-			end
-		end
-	else
-		self._air_time = 0
-	end
-end
-
 function HuskPlayerMovement:_update_zipline_sled(t, dt)
 	if self._zipline and self._zipline.attached then
 		local zipline = self._zipline and self._zipline.zipline_unit and self._zipline.zipline_unit:zipline()
@@ -332,6 +378,105 @@ function HuskPlayerMovement:anim_clbk_spawn_dropped_magazine()
 		end
 
 		managers.enemy:add_magazine(dropped_mag, dropped_col)
+	end
+end
+
+function HuskPlayerMovement:_get_max_move_speed(run)
+	local my_tweak = tweak_data.player.movement_state.standard
+	local move_speed = nil
+
+	if self._synced_max_speed then
+		move_speed = self._synced_max_speed
+	elseif self._pose_code == 2 then
+		move_speed = my_tweak.movement.speed.CROUCHING_MAX * (self._unit:base():upgrade_value("player", "crouch_speed_multiplier") or 1)
+	elseif run then
+		move_speed = my_tweak.movement.speed.RUNNING_MAX * (self._unit:base():upgrade_value("player", "run_speed_multiplier") or 1)
+	else
+		move_speed = my_tweak.movement.speed.STANDARD_MAX * (self._unit:base():upgrade_value("player", "walk_speed_multiplier") or 1)
+	end
+
+	if self._in_air then
+		local t = self._air_time or 0
+		local air_speed = math.exp(t * self:gravity() / self:terminal_velocity())
+		air_speed = air_speed * self:gravity()
+		air_speed = math.abs(air_speed)
+		move_speed = math.max(move_speed, air_speed)
+		move_speed = math.min(move_speed, math.abs(self:terminal_velocity()))
+	end
+
+	local zipline = self._zipline and self._zipline.enabled and self._zipline.zipline_unit and self._zipline.zipline_unit:zipline()
+
+	if zipline then
+		local step = 100
+		local t = math.clamp((self._zipline.t or 0) / zipline:total_time(), 0, 1)
+		local speed = 1.1 * zipline:speed_at_time(t, 1 / step) / step
+		move_speed = math.max(speed * zipline:speed(), move_speed)
+	end
+
+	local path_length = #self._movement_path - tweak_data.network.player_path_interpolation
+
+	if path_length > 0 then
+		local speed_boost = 1 + path_length / tweak_data.network.player_tick_rate
+		move_speed = move_speed * math.clamp(speed_boost, 1, 3)
+	end
+
+	return move_speed
+end
+
+function HuskPlayerMovement:_chk_ground_ray(check_pos, return_ray)
+	local mover_radius = 60
+	local up_pos = tmp_vec1
+
+	mvec3_set(up_pos, math.UP)
+	mvec3_mul(up_pos, 30)
+	mvec3_add(up_pos, check_pos or self._m_pos)
+
+	local down_pos = tmp_vec2
+
+	mvec3_set(down_pos, math.UP)
+	mvec3_mul(down_pos, -40)
+	mvec3_add(down_pos, check_pos or self._m_pos)
+
+	if return_ray then
+		return World:raycast("ray", up_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 29, "bundle", 9)
+	else
+		return World:raycast("ray", up_pos, down_pos, "slot_mask", self._slotmask_gnd_ray, "ray_type", "body mover", "sphere_cast_radius", 29, "bundle", 9, "report")
+	end
+end
+
+function HuskPlayerMovement:_update_air_time(t, dt)
+	if self._in_air then
+		self._check_air_time = 0
+		self._air_time = self._air_time or 0
+		self._air_time = self._air_time + dt
+
+		if self._air_time > 0.5 then
+			local on_ground = self:_chk_ground_ray(self._m_pos)
+
+			if on_ground then
+				self._in_air = false
+				self._air_time = 0
+			end
+		end
+	else
+		self._air_time = 0
+		
+		self._check_air_time = self._check_air_time or 0
+		self._check_air_time = self._check_air_time - dt
+		
+		if not self._check_air_time or self._check_air_time <= 0 then
+			self._check_air_time = 1 / tweak_data.network.player_tick_rate
+			
+			local on_ground = self:_chk_ground_ray(self._m_pos)
+
+			if not on_ground then
+				if not self._bleedout then
+					self:play_redirect("jump")
+				end
+				
+				self._in_air = true
+			end
+		end
 	end
 end
 

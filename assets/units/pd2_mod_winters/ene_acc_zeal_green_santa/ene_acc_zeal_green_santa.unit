@@ -1,0 +1,6 @@
+<unit type="gen" slot="30" >
+    <object file="units/pd2_mod_winters/ene_acc_zeal_green_santa/ene_acc_zeal_green_santa" />
+    <extensions>
+        <extension class="ScriptUnitData" name="unit_data" />
+    </extensions>
+</unit>
