@@ -106,18 +106,6 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	local key_str = tostring(data.key)
 	my_data.detection_task_key = "CopLogicAttack._upd_enemy_detection" .. key_str
 
-	CopLogicBase.queue_task(my_data, my_data.detection_task_key, CopLogicAttack._upd_enemy_detection, data, data.t, data.important and true)
-
-	if objective then
-		if objective.action_duration or objective.action_timeout_t and data.t < objective.action_timeout_t then
-			my_data.action_timeout_clbk_id = "CopLogicIdle_action_timeout" .. key_str
-			local action_timeout_t = objective.action_timeout_t or data.t + objective.action_duration
-			objective.action_timeout_t = action_timeout_t
-
-			CopLogicBase.add_delayed_clbk(my_data, my_data.action_timeout_clbk_id, callback(CopLogicIdle, CopLogicIdle, "clbk_action_timeout", data), action_timeout_t)
-		end
-	end
-
 	my_data.attitude = objective and objective.attitude or "avoid"
 	my_data.weapon_range = clone_g(data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range)
 	
@@ -132,6 +120,23 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 			my_data.weapon_range.optimal = my_data.weapon_range.optimal * 1.5
 		end
 	end
+	
+	CopLogicAttack._upd_enemy_detection(data)
+	
+	if my_data ~= data.internal_data then
+		return
+	end
+
+	if objective then
+		if objective.action_duration or objective.action_timeout_t and data.t < objective.action_timeout_t then
+			my_data.action_timeout_clbk_id = "CopLogicIdle_action_timeout" .. key_str
+			local action_timeout_t = objective.action_timeout_t or data.t + objective.action_duration
+			objective.action_timeout_t = action_timeout_t
+
+			CopLogicBase.add_delayed_clbk(my_data, my_data.action_timeout_clbk_id, callback(CopLogicIdle, CopLogicIdle, "clbk_action_timeout", data), action_timeout_t)
+		end
+	end
+	
 	
 	if data.unit:base():has_tag("special") then
 		my_data.use_brain = true

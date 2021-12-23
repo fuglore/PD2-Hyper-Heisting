@@ -265,7 +265,16 @@ end
 
 function CopLogicIntimidated.update(data)
 	--data.t = TimerManager:game():time()
+	local my_data = data.internal_data
 	local anim_data = data.unit:anim_data()
+	
+	if my_data.has_old_action then
+		CopLogicAttack._upd_stop_old_action(data, my_data)
+
+		if my_data.has_old_action then
+			return
+		end
+	end
 
 	if anim_data.hands_tied then
 		data.brain:set_update_enabled_state(false)
