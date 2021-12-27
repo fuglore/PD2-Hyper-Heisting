@@ -157,15 +157,6 @@ function CivilianLogicFlee.on_rescue_SO_administered(ignore_this, data, receiver
 	managers.groupai:state():unregister_rescueable_hostage(data.key)
 end
 
-function CivilianLogicFlee.reset_actions(data)
-	data.brain:action_request({
-		variant = "cmf_so_surrender",
-		body_part = 1,
-		type = "act",
-		clamp_to_graph = true
-	})
-end
-
 function CivilianLogicFlee.update(data)
 	local exit_state = nil
 	local unit = data.unit

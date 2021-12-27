@@ -2464,6 +2464,44 @@ function PlayerStandard:_update_check_actions(t, dt, paused)
 	self:_find_pickups(t)
 end
 
+function PlayerStandard:_add_unit_to_char_table(char_table, unit, unit_type, interaction_dist, interaction_through_walls, tight_area, priority, my_head_pos, cam_fwd, ray_ignore_units, ray_types)
+	if unit:unit_data().disable_shout and not unit:brain():interaction_voice() then
+		return
+	end
+
+	local u_head_pos = unit_type == 3 and unit:base():get_mark_check_position() or unit:movement():m_head_pos() + math.UP * 30
+	local vec = u_head_pos - my_head_pos
+	local dis = mvector3.normalize(vec)
+	local max_dis = interaction_dist
+
+	if dis < max_dis then
+		local max_angle = math.max(8, math.lerp(tight_area and 30 or 90, tight_area and 10 or 30, dis / max_dis))
+		local angle = vec:angle(cam_fwd)
+
+		if angle < max_angle then
+			local ing_wgt = dis * dis * (1 - vec:dot(cam_fwd)) / priority
+
+			if interaction_through_walls then
+				table.insert(char_table, {
+					unit = unit,
+					inv_wgt = ing_wgt,
+					unit_type = unit_type
+				})
+			else
+				local ray = self._unit:raycast("ray", my_head_pos, u_head_pos, "slot_mask", self._slotmask_AI_visibility, "ray_type", ray_types or "ai_vision", "ignore_unit", ray_ignore_units or {})
+
+				if not ray or mvector3.distance_sq(ray.position, u_head_pos) < 900 then
+					table.insert(char_table, {
+						unit = unit,
+						inv_wgt = ing_wgt,
+						unit_type = unit_type
+					})
+				end
+			end
+		end
+	end
+end
+
 function PlayerStandard:_action_interact_forbidden()
 	local action_forbidden = self:chk_action_forbidden("interact") or self._unit:base():stats_screen_visible() or self:_interacting() or self._ext_movement:has_carry_restriction() or self:is_deploying() or self._melee_stunned
 

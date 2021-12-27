@@ -97,8 +97,8 @@ function CharacterTweakData:_presets(tweak_data)
 				isolated = 0.25,
 				weapon_down = 0.25,
 				health = {
-					[1.0] = 0.1,
-					[0.9] = 0.75
+					[1.0] = 0,
+					[0.8] = 0.75
 				}
 			},
 			factors = {
@@ -112,14 +112,26 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		},
 		normal = {
-			base_chance = 0.15,
+			base_chance = 0,
+			significant_chance = 0.1,
 			reasons = {
+				pants_down = 1,
+				isolated = 0.25,
+				weapon_down = 0.25,
 				health = {
-					[1.0] = 0.1,
-					[0.999] = 0.9
+					[1.0] = 0,
+					[0.6] = 0.75
 				}
 			},
-			factors = {}
+			factors = {
+				unaware_of_aggressor = 0.075,
+				enemy_weap_cold = 0.5,
+				flanked = 0.5,
+				aggressor_dis = {
+					[300.0] = 0.2,
+					[1000.0] = 0
+				}
+			}
 		},
 		hard = {
 			base_chance = 0.1,
@@ -129,8 +141,8 @@ function CharacterTweakData:_presets(tweak_data)
 				isolated = 0.25,
 				weapon_down = 0.25,
 				health = {
-					[1.0] = 0.1,
-					[0.9] = 0.5
+					[1.0] = 0,
+					[0.8] = 0.5
 				}
 			},
 			factors = {
@@ -8092,7 +8104,7 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
 	self.heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.heavy_swat.suppression = presets.suppression.hard_agg
-	self.heavy_swat.surrender = presets.surrender.easy
+	self.heavy_swat.surrender = presets.surrender.normal
 	self.heavy_swat.experience.cable_tie = "tie_swat"
 	self.heavy_swat.speech_prefix_p1 = self._prefix_data_p1.heavy_swat()
 	self.heavy_swat.speech_prefix_p2 = "n"
@@ -8199,7 +8211,7 @@ Hooks:PostHook(CharacterTweakData, "_init_fbi_heavy_swat", "hhpost_fhswat", func
 	self.fbi_heavy_swat.damage.hurt_severity = presets.hurt_severities.heavyhordemook
 	self.fbi_heavy_swat.DAMAGE_CLAMP_FIREDOT = 10
 	self.fbi_heavy_swat.suppression = presets.suppression.hard_agg
-	self.fbi_heavy_swat.surrender = presets.surrender.easy
+	self.fbi_heavy_swat.surrender = presets.surrender.normal
 	self.fbi_heavy_swat.speech_prefix_p1 = self._prefix_data_p1.heavy_swat()
 	self.fbi_heavy_swat.speech_prefix_p2 = "n"
 	self.fbi_heavy_swat.speech_prefix_count = 4

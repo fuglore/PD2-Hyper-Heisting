@@ -1,3 +1,5 @@
+local tmp_vec1 = Vector3()
+
 function CivilianLogicSurrender.on_intimidated(data, amount, aggressor_unit, skip_delay)
 	if data.is_tied then
 		return
@@ -12,6 +14,82 @@ function CivilianLogicSurrender.on_intimidated(data, amount, aggressor_unit, ski
 	local my_data = data.internal_data
 
 	CivilianLogicSurrender._delayed_intimidate_clbk(nil, {data, amount, aggressor_unit})
+end
+
+function CivilianLogicSurrender._update_enemy_detection(data, my_data)
+	managers.groupai:state():on_unit_detection_updated(data.unit)
+
+	local t = TimerManager:game():time()
+	local delta_t = t - my_data.last_upd_t
+	local my_pos = data.unit:movement():m_head_pos()
+	local enemies = managers.groupai:state():all_criminals()
+	local visible, closest_dis, closest_enemy = nil
+	my_data.inside_intimidate_aura = nil
+	local my_tracker = data.unit:movement():nav_tracker()
+	local chk_vis_func = my_tracker.check_visibility
+
+	for e_key, u_data in pairs(enemies) do
+		if not u_data.is_deployable and chk_vis_func(my_tracker, u_data.tracker) then
+			local enemy_unit = u_data.unit
+			local enemy_pos = u_data.m_det_pos
+			local my_vec = tmp_vec1
+			local dis = mvector3.direction(my_vec, enemy_pos, my_pos)
+			local inside_aura = nil
+
+			if u_data.unit:base().is_local_player then
+				if managers.player:has_category_upgrade("player", "intimidate_aura") and dis < managers.player:upgrade_value("player", "intimidate_aura", 0) then
+					inside_aura = true
+				end
+			elseif u_data.unit:base().is_husk_player and u_data.unit:base():upgrade_value("player", "intimidate_aura") and dis < u_data.unit:base():upgrade_value("player", "intimidate_aura") then
+				inside_aura = true
+			end
+
+			if (inside_aura or dis < 700) and (not closest_dis or dis < closest_dis) then
+				closest_dis = dis
+				closest_enemy = enemy_unit
+			end
+
+			if inside_aura then
+				my_data.inside_intimidate_aura = true
+			elseif dis < 700 then
+				local look_dir = enemy_unit:movement():m_head_rot():y()
+
+				if mvector3.dot(my_vec, look_dir) > 0.65 then
+					visible = true
+				end
+			end
+		end
+	end
+
+	local attention = data.unit:movement():attention()
+	local attention_unit = attention and attention.unit or nil
+
+	if not attention_unit then
+		if closest_enemy and closest_dis < 700 and data.unit:anim_data().ik_type then
+			CopLogicBase._set_attention_on_unit(data, closest_enemy)
+		end
+	elseif mvector3.distance(my_pos, attention_unit:movement():m_head_pos()) > 900 or not data.unit:anim_data().ik_type then
+		CopLogicBase._reset_attention(data)
+	end
+
+	if managers.navigation:get_nav_seg_metadata(my_tracker:nav_segment()).force_civ_submission then
+		my_data.submission_meter = my_data.submission_max
+	elseif my_data.inside_intimidate_aura then
+		my_data.submission_meter = math.max(0, my_data.submission_meter + delta_t)
+	elseif not visible then
+		my_data.submission_meter = math.max(0, my_data.submission_meter - delta_t)
+	end
+
+	if managers.groupai:state():rescue_state() and managers.groupai:state():is_nav_seg_safe(data.unit:movement():nav_tracker():nav_segment()) then
+		if not my_data.rescue_active then
+			CivilianLogicFlee._add_delayed_rescue_SO(data, my_data)
+		end
+	elseif my_data.rescue_active then
+		CivilianLogicFlee._unregister_rescue_SO(data, my_data)
+	end
+
+	my_data.scare_meter = math.max(0, my_data.scare_meter - delta_t)
+	my_data.last_upd_t = t
 end
 
 function CivilianLogicSurrender._delayed_intimidate_clbk(ignore_this, params)
@@ -30,8 +108,10 @@ function CivilianLogicSurrender._delayed_intimidate_clbk(ignore_this, params)
 
 	local amount = params[2]
 	local anim_data = data.unit:anim_data()
-	local adj_sumbission = amount * data.char_tweak.submission_intimidate
+	local adj_sumbission = amount
+
 	my_data.submission_meter = math.min(my_data.submission_max, my_data.submission_meter + adj_sumbission)
+	
 	local adj_scare = amount * data.char_tweak.scare_intimidate
 	my_data.scare_meter = math.max(0, my_data.scare_meter + adj_scare)
 

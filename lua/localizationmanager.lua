@@ -2,6 +2,8 @@
 	LocalizationManager:add_localized_strings({
 		["hhmenu_hold_to_jump"] = "AUTO-JUMP",
 		["hhmenu_hold_to_jump_help"] = "Allow consecutive jumps by simply holding the jump button!",
+		["hhmenu_staticrecoil"] = "Static Recoil",
+		["hhmenu_staticrecoil_help"] = "Disables the automatic recoil compensation, making you have to manually pull down on the mouse to adjust your aim after you stop firing.",
 	
 		["hud_assault_FG_cover1"] = "KILL EACHOTHER, BUT IT'S GOOD INVERSES",
 		["hud_assault_FG_cover2"] = "UNADULTERATED MADNESS",

@@ -168,7 +168,6 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	
 	if not allied_with_criminals then
 		my_data.upd_task_key = "CopLogicTravel.queued_update" .. key_str
-		CopLogicTravel.queue_update(data, my_data)
 	else
 		my_data.path_safely = nil
 		my_data.criminal = true
@@ -217,10 +216,6 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 		data.brain:set_attention_settings({
 			cbt = true
 		})
-	end
-
-	if not allied_with_criminals then
-		data.brain:set_update_enabled_state(false)
 	end
 
 	local path_style = objective.path_style
@@ -283,6 +278,11 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 				my_data.coarse_path_index = CopLogicTravel.complete_coarse_path(data, my_data, my_data.coarse_path)
 			end
 		end
+	end
+	
+	if not allied_with_criminals then
+		CopLogicTravel.queued_update(data, my_data)
+		data.brain:set_update_enabled_state(false)
 	end
 end
 
