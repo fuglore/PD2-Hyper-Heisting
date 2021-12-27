@@ -28,6 +28,10 @@ local medium_font_size = tweak_data.menu.pd2_medium_font_size
 local small_font_size = tweak_data.menu.pd2_small_font_size
 local tiny_font_size = tweak_data.menu.pd2_tiny_font_size
 
+local function format_round(num, round_value)
+	return round_value and tostring(math.round(num)) or string.format("%.1f", num):gsub("%.?0+$", "")
+end
+
 function BlackMarketGui:damage_falloff_to_string(damage_falloff)
 
 	if damage_falloff then
