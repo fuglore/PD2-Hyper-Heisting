@@ -367,7 +367,7 @@ function CopLogicTravel.upd_advance(data)
 				--log("margh")
 			end 
 			
-			return
+		 	return
 		end
 	end
 	
@@ -1278,9 +1278,12 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 				radius = objective.radius
 			}
 		else
+			local my_data = data.internal_data
 			local near_pos = objective.follow_unit and objective.follow_unit:movement():nav_tracker():field_position()
-			local dest_nav_seg = objective.nav_seg
-			local cover = CopLogicTravel._find_cover(data, dest_nav_seg, near_pos)
+			local dest_nav_seg_id = my_data.coarse_path[#my_data.coarse_path][1]
+			local dest_area = managers.groupai:state():get_area_from_nav_seg_id(dest_nav_seg_id)
+			local should_take_cover = my_data.want_to_take_cover or CopLogicTravel._needs_cover_at_destination(data, dest_area)
+			local cover = should_take_cover and CopLogicTravel._find_cover(data, dest_nav_seg_id)
 
 			if cover then
 				local cover_entry = {
@@ -2155,7 +2158,7 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		optimal_threat_dis = data.internal_data.weapon_range.optimal
 	end
 
-	near_pos = near_pos or search_area.pos
+	near_pos = near_pos or data.m_pos
 
 	if not allied_with_criminals then
 		local groupai_manager = managers.groupai:state()
@@ -2450,7 +2453,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 
 		if cover then
 			cover = nil
-			cover = managers.navigation:find_cover_in_nav_seg_1(area.nav_segs)
+			cover = CopLogicTravel._find_cover(data, nav_seg)
 		end
 
 		if my_data.moving_to_cover then
@@ -2460,6 +2463,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 		end
 
 		if cover then
+			--log("nice cock")
 			to_pos = cover[1]
 
 			if data.char_tweak.wall_fwd_offset then
@@ -2552,6 +2556,15 @@ function CopLogicTravel._needs_cover_at_destination(data, dest_area)
 	else
 		for _, nbr in pairs_g(dest_area.neighbours) do
 			if next_g(nbr.criminal.units) then
+				return true
+			end
+		end
+		
+		if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+			local my_data = data.internal_data
+			local dis = my_data.weapon_range.optimal
+			
+			if data.attention_obj.dis < dis then
 				return true
 			end
 		end
