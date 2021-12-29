@@ -298,20 +298,7 @@ end
 
 function StageEndScreenGui:bain_debrief_end_callback(instant)
 	if instant then
-		if managers.job:on_last_stage() then
-			local job_data = managers.job:current_job_data()
-
-			if job_data and job_data.debrief_event then
-				managers.briefing:post_event(job_data.debrief_event)
-
-				if managers.menu:is_console() then
-					managers.briefing:add_listener({
-						marker = true,
-						clbk = callback(self, self, "console_subtitle_callback")
-					})
-				end
-			end
-		end
+		self._contact_debrief_t = 0
 	else
 		self._contact_debrief_t = TimerManager:main():time() + 1.5
 	end

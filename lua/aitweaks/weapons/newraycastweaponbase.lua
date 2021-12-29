@@ -141,11 +141,14 @@ function NewRaycastWeaponBase:calculate_ammo_max_per_clip()
 			added = added * 2
 		end
 	elseif self:is_category("smg", "assault_rifle", "lmg") then
-		added = managers.player:upgrade_value("player", "automatic_mag_increase", 0)
-
-		if self:is_category("akimbo") then
-			added = added * 2
-		end
+		local mag_mul = managers.player:upgrade_value("player", "lead_demi_basic", 1)
+		local to_add = weapon_tweak_data.CLIP_AMMO_MAX * mag_mul
+		
+		to_add = to_add - weapon_tweak_data.CLIP_AMMO_MAX 
+		
+		to_add = math.ceil(to_add)
+		
+		added = added + to_add
 	end
 	
 	local ammo = tweak_data.weapon[self._name_id].CLIP_AMMO_MAX + added

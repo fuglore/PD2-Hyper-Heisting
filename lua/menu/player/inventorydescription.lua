@@ -78,11 +78,19 @@ function WeaponDescription._get_skill_stats(name, category, slot, base_stats, mo
 
 					add_modifier = true
 				elseif is_weapon_category(weapon_tweak, "smg", "assault_rifle", "lmg") then
-					skill_stats[stat.name].value = skill_stats[stat.name].value + managers.player:upgrade_value("player", "automatic_mag_increase", 0)
-					add_modifier = managers.player:has_category_upgrade("player", "automatic_mag_increase")
-
-					if primary_category == "akimbo" then
-						skill_stats[stat.name].value = skill_stats[stat.name].value * 2
+					local mag_mul = managers.player:upgrade_value("player", "lead_demi_basic", 1)
+					
+					if mag_mul > 1 then
+						local to_add = weapon_tweak.CLIP_AMMO_MAX * mag_mul
+						to_add = to_add - weapon_tweak.CLIP_AMMO_MAX
+						
+						to_add = math.ceil(to_add)
+						
+						if to_add >= 1 then
+							add_modifier = true
+						
+							skill_stats[stat.name].value = skill_stats[stat.name].value + to_add
+						end
 					end
 				end
 

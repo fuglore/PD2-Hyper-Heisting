@@ -638,6 +638,19 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	}
 	
+	self.values.player.lead_demi_basic = {
+		1.5
+	}
+	self.definitions.player_lead_demi_basic = {
+		name_id = "menu_lead_demi_basic",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "lead_demi_basic",
+			category = "player"
+		}
+	}
+	
 	self.values.player.pop_pop = { --pop pop aced
 		true
 	}
