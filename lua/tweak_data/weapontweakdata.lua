@@ -1705,9 +1705,12 @@ self.x_scorpion.kick.crouching = self.baka.kick.standing
 self.x_scorpion.kick.steelsight = self.baka.kick.standing
 
 -- CMP
+self.mp9.stats.damage = 56
+self.x_mp9.stats.damage = 56
+
 self.mp9.stats.spread = 16
 self.mp9.AMMO_MAX = 150
-self.mp9.stats.damage = 49
+
 self.x_mp9.AMMO_MAX = 200
 self.mp9.kick = self.amcar.kick
 self.x_mp9.kick = self.amcar.kick
@@ -1800,9 +1803,12 @@ self.x_shepheard.kick.crouching = self.new_mp5.kick.standing
 self.x_shepheard.kick.steelsight = self.new_mp5.kick.standing
 
 -- Uzi
+self.uzi.stats.damage = 58
+self.x_uzi.stats.damage = 58
+
 self.uzi.AMMO_MAX = 150
-self.uzi.stats.damage = 49
 self.x_uzi.AMMO_MAX = 200
+
 self.uzi.kick = self.amcar.kick
 
 self.x_uzi.kick = self.amcar.kick
@@ -1811,6 +1817,9 @@ self.x_uzi.kick.steelsight = self.amcar.kick.standing
 
 
 -- Mark 10
+self.mac10.stats.damage = 49  
+self.x_mac10.stats.damage = 49
+  
 self.mac10.AMMO_MAX = 120  
 self.x_mac10.AMMO_MAX = 150  
 self.mac10.kick.standing = self.new_mp5.kick.standing

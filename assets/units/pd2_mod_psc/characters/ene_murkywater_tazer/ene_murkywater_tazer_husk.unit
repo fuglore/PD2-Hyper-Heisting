@@ -4,8 +4,6 @@
 	<object file="units/pd2_mod_psc/characters/ene_murkywater_tazer/ene_murkywater_tazer" />
 
 	<dependencies>
-		
-		<depends_on effect="effects/payday2/particles/character/taser_thread" />
 		<depends_on bnk="soundbanks/regular_vox" />
 		<depends_on unit="units/pd2_mod_psc/characters/ene_acc_murkywater_tazer_helmet/ene_acc_murkywater_tazer_helmet" />
 	</dependencies>

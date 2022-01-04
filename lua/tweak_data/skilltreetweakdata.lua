@@ -105,7 +105,7 @@ function SkillTreeTweakData:init()
 	self.skills.heavy_impact[1].upgrades = {"player_muscle_memory_basic"}	
 	self.skills.heavy_impact[2].upgrades = {"player_muscle_memory_aced"}
 	
-	self.skills.fast_fire[1].upgrades = {"player_automatic_mag_increase_1"}	
+	self.skills.fast_fire[1].upgrades = {"player_lead_demi_basic"}	
 	self.skills.fast_fire[2].upgrades = {"player_pop_pop"}
 	
 	self.skills.body_expertise[1].upgrades = {"player_ridethebull_basic"}	
