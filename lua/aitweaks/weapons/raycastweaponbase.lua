@@ -24,6 +24,7 @@ local pairs_g = pairs
 local table_insert = table.insert
 local table_contains = table.contains
 
+local math_acos = math.acos
 local math_ceil = math.ceil
 local math_random = math.random
 local math_clamp = math.clamp
