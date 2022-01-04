@@ -4,9 +4,6 @@
 	<object file="units/pd2_dlc_gitgud/characters/ene_zeal_tazer_hh/ene_zeal_tazer_hh" />
 
 	<dependencies>
-		
-		<depends_on effect="effects/payday2/particles/character/taser_thread" />
-		<depends_on bnk="soundbanks/regular_vox" />
 		<depends_on unit="units/pd2_dlc_gitgud/characters/ene_acc_zeal_tazer_helmet_hh/ene_acc_zeal_tazer_helmet_hh" />
 	</dependencies>
 

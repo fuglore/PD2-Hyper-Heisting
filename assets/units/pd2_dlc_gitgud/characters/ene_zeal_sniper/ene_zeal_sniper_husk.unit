@@ -4,10 +4,6 @@
 	<object file="units/pd2_dlc_gitgud/characters/ene_zeal_sniper/ene_zeal_sniper" />
 
 	<dependencies>
-		
-		<depends_on bnk="soundbanks/regular_vox" />
-		<depends_on unit="units/pd2_dlc_gitgud/characters/ene_acc_snipercap/ene_acc_snipercap" />				
-		<depends_on unit="units/payday2/weapons/wpn_npc_sniper/wpn_npc_sniper" />
 	</dependencies>
 
 	<extensions>
