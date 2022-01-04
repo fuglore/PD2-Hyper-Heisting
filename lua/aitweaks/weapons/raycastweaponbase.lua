@@ -5,6 +5,7 @@ local mvec3_sub = mvector3.subtract
 local mvec3_mul = mvector3.multiply
 local mvec3_norm = mvector3.normalize
 local mvec3_dis = mvector3.distance
+local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_dir = mvector3.direction
 local mvec3_set_l = mvector3.set_length
 local mvec3_len = mvector3.length
@@ -832,7 +833,7 @@ function RaycastWeaponBase:_check_alert(rays, fire_pos, direction, user_unit)
 	
 	local t = TimerManager:game():time()
 	local exp_t = t + 1.5
-	local mvec3_dis = mvector3.distance_sq
+	local mvec3_dis = mvec3_dis_sq
 	local all_alerts = self._alert_events
 	local alert_rad = self._alert_size / 4
 	local from_pos = mvec_from_pos
