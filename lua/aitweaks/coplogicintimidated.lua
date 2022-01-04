@@ -714,11 +714,13 @@ end
 
 function CopLogicIntimidated._unregister_rescue_SO(data, my_data)
 	if my_data.rescuer then
-		local objective = my_data.rescuer:brain():objective()
-		local rescuer = my_data.rescuer
-		my_data.rescuer = nil
+		if alive(my_data.rescuer:brain()) then
+			local objective = my_data.rescuer:brain():objective()
+			local rescuer = my_data.rescuer
+			my_data.rescuer = nil
 
-		managers.groupai:state():on_objective_failed(rescuer, objective)
+			managers.groupai:state():on_objective_failed(rescuer, objective)
+		end
 	elseif my_data.rescue_SO_id then
 		managers.groupai:state():remove_special_objective(my_data.rescue_SO_id)
 
