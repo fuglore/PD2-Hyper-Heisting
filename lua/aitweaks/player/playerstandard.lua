@@ -352,11 +352,11 @@ function PlayerStandard:_check_action_jump(t, input)
 	if action_wanted then
 		local action_forbidden = self._jump_t and t < self._jump_t + 0.55
 		
-		if self._state_data.land_t and t - self._state_data.land_t < 0.1 then
+		if self._state_data.land_t and t - self._state_data.land_t < 0.05 then
 			action_forbidden = nil
 		end
 		
-		action_forbidden = action_forbidden or self._unit:base():stats_screen_visible() or self._state_data.in_air_enter_t and self._jump_t and t < self._jump_t + 0.55 or self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.1 or self:_interacting() or self:_on_zipline() or self:_does_deploying_limit_movement() or self:_is_using_bipod()
+		action_forbidden = action_forbidden or self._unit:base():stats_screen_visible() or self._state_data.in_air_enter_t and self._jump_t and t < self._jump_t + 0.55 or self._state_data.in_air_enter_t and t - self._state_data.in_air_enter_t > 0.05 or self:_interacting() or self:_on_zipline() or self:_does_deploying_limit_movement() or self:_is_using_bipod()
 
 		if not action_forbidden then
 			if self._state_data.ducking then
@@ -429,6 +429,18 @@ function PlayerStandard:_check_action_duck(t, input)
 		elseif self._state_data.ducking then
 			self:_end_action_ducking(t)
 		end
+		
+		local a = nil
+		
+		if a then
+			if not self._melee_stunned and self._state_data.in_air then
+				if self._unit:mover():velocity().z < -99 then
+					self._unit:mover():set_velocity(Vector3(0, 0, -1400))
+					mvector3.set_static(self._last_velocity_xy, 0, 0, 0)
+					self._state_data.diving = true
+				end
+			end
+		end
 	end
 end
 
@@ -479,7 +491,7 @@ function PlayerStandard:_update_movement(t, dt)
 	local acceleration = self:_get_max_walk_speed(t, true) * 8
 	local decceleration = self._move_dir and acceleration * 0.7 or 2800
 	
-	if self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.1 then
+	if self._state_data.in_air or self._state_data.land_t and t - self._state_data.land_t < 0.05 then
 		decceleration = 0
 	end
 	
@@ -577,7 +589,7 @@ function PlayerStandard:_update_movement(t, dt)
 			self._target_headbob = self._target_headbob * weapon_tweak_data.headbob.multiplier
 		end
 	elseif not mvector3.is_zero(self._last_velocity_xy) then
-		if not self._state_data.land_t or self._state_data.land_t and t - self._state_data.land_t > 0.2 then
+		if not self._state_data.land_t or self._state_data.land_t and t - self._state_data.land_t >= 0.05 then
 			local grad = decceleration
 			
 			local achieved_walk_vel = math.step(self._last_velocity_xy, Vector3(), grad * dt)
@@ -1092,8 +1104,8 @@ function PlayerStandard:_activate_mover(mover, velocity)
 	end
 
 	if self._is_jumping then
-		self._unit:mover():jump()
 		self._unit:mover():set_velocity(velocity)
+		self._unit:mover():jump()
 	end
 end
 
@@ -1328,13 +1340,13 @@ function PlayerStandard:_update_foley(t, input)
 		self._state_data.in_air = false
 		self._is_jumping = nil
 		
-		local from = self._pos + math.UP * 10
-		local to = self._pos - math.UP * 60
-		local material_name, pos, norm = World:pick_decal_material(from, to, self._slotmask_bullet_impact_targets)
-		local height = self._state_data.enter_air_pos_z - self._pos.z
-		self._unit:sound():play_land(material_name)
-		
-		if t - self._state_data.in_air_enter_t > 0.2 then
+		if t - self._state_data.in_air_enter_t > 0.02 then
+			local from = self._pos + math.UP * 10
+			local to = self._pos - math.UP * 60
+			local material_name, pos, norm = World:pick_decal_material(from, to, self._slotmask_bullet_impact_targets)
+			local height = self._state_data.enter_air_pos_z - self._pos.z
+			self._unit:sound():play_land(material_name)
+			
 			if self._unit:character_damage():damage_fall({
 				height = height
 			}) then
@@ -1348,17 +1360,33 @@ function PlayerStandard:_update_foley(t, input)
 				self:on_melee_stun(t, 1)
 				--self:_start_action_ducking(t)
 			else
-				self._ext_camera:play_shaker("player_land", 0.5)
+				if self._state_data.diving then					
+					self._fall_damage_slow_t = t + 0.4
+					managers.rumble:play("hard_land")
+					self._ext_camera:play_shaker("player_fall_damage", 1)
+					self._ext_camera:play_shaker("player_land", 1)
+					
+					self._state_data.diving = nil
+				else
+					self._ext_camera:play_shaker("player_land", 0.5)
+				end
 			end
+		elseif self._state_data.diving then					
+			self._fall_damage_slow_t = t + 0.4
+			managers.rumble:play("hard_land")
+			self._ext_camera:play_shaker("player_fall_damage", 1)
+			self._ext_camera:play_shaker("player_land", 1)
+			
+			self._state_data.diving = nil
 		end
-		
+
 		self._state_data.in_air_enter_t = nil
 		self._state_data.land_t = t 
 		
 		managers.rumble:play("land")
 	end
 	
-	if not self._state_data.in_air and self._state_data.land_t and t - self._state_data.land_t > 0.1 then
+	if not self._state_data.in_air and self._state_data.land_t and t - self._state_data.land_t >= 0.05 then
 		self._jump_t = nil
 		self._jump_vel_xy = nil
 	end
@@ -2319,7 +2347,16 @@ end
 function PlayerStandard:update(t, dt)
 	PlayerMovementState.update(self, t, dt)
 	self:_calculate_standard_variables(t, dt)
-	self:_update_ground_ray()
+	
+	local vel_z = math.clamp(math.abs(self._unit:mover():velocity().z + 100), 0.01, 1)
+
+	if vel_z >= 0.2 then
+		self:_update_ground_ray()
+	else
+		self._gnd_ray = true
+		self._gnd_ray_chk = true
+	end
+	
 	self:_update_fwd_ray()
 	self:_update_check_actions(t, dt)
 
