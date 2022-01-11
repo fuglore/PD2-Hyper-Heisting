@@ -1430,8 +1430,8 @@ self.galil.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 --M308
 self.new_m14.AMMO_PICKUP = {1, 2.7}
 self.new_m14.AMMO_MAX = 60
-self.new_m14.fire_mode_data.fire_rate = 0.085
-self.new_m14.single.fire_rate = 0.085
+self.new_m14.fire_mode_data.fire_rate = 0.08
+self.new_m14.single.fire_rate = 0.2
 self.new_m14.stats.recoil = 12
 self.new_m14.stats.spread = 18
 self.new_m14.stats.spread_moving = 18
@@ -1459,8 +1459,8 @@ self.new_m14.stats.damage = 120
 
 --Galant
 self.ching.has_description = true
-self.ching.fire_mode_data.fire_rate = .16
-self.ching.single.fire_rate = .16
+self.ching.fire_mode_data.fire_rate = 0.24
+self.ching.single.fire_rate = 0.16
 self.ching.AMMO_PICKUP = {2, 3}
 self.ching.stats.recoil = 8
 self.ching.armor_piercing_chance = 1
@@ -1478,8 +1478,8 @@ self.ching.timers = {
 }
 
 --Cavity
-self.sub2000.fire_mode_data.fire_rate = .1
-self.sub2000.single.fire_rate = .1
+self.sub2000.fire_mode_data.fire_rate = 0.2
+self.sub2000.single.fire_rate = .2
 self.sub2000.AMMO_PICKUP = {1, 3}
 self.sub2000.stats.damage = 140
 self.sub2000.stats.recoil = 15
@@ -1886,6 +1886,7 @@ self.x_hajk.AMMO_MAX = 90
 --SHOTGUNS--
 
 --Goliath
+self.rota.fire_mode_data.fire_rate = 0.4
 self.rota.AMMO_MAX = 40
 self.x_rota.AMMO_MAX = 40
 self.x_rota.stats.damage = 130
@@ -1938,7 +1939,7 @@ crouching = {
 }
 
 --Reinfeld
-self.r870.fire_mode_data.fire_rate = 0.35294117647
+self.r870.fire_mode_data.fire_rate = 0.5
 self.r870.stats.damage = 110
 self.r870.stats.spread = 12
 self.r870.damage_near = 400
@@ -1971,7 +1972,7 @@ self.serbu.stats.damage = 110
 self.serbu.damage_near = 350
 self.serbu.damage_far = 800
 self.serbu.AMMO_PICKUP = {1.8, 2.9}
-self.serbu.fire_mode_data.fire_rate = 0.35294117647
+self.serbu.fire_mode_data.fire_rate = 0.5
 self.serbu.kick = {
 standing = {
 		3,
@@ -1995,7 +1996,7 @@ crouching = {
 
 --Reinfeld 88
 self.m1897.AMMO_MAX = 42
-self.m1897.fire_mode_data.fire_rate = 0.4 
+self.m1897.fire_mode_data.fire_rate = 0.5
 self.m1897.stats.damage = 110
 self.m1897.damage_near = 450
 self.m1897.damage_far = 1120
@@ -2026,7 +2027,7 @@ self.benelli.stats.damage = 99
 self.benelli.damage_near = 300
 self.benelli.damage_far = 900
 self.benelli.AMMO_PICKUP = {3, 5}
-self.benelli.fire_mode_data.fire_rate = 0.12
+self.benelli.fire_mode_data.fire_rate = 0.2
 self.benelli.AMMO_MAX = 50
 self.benelli.kick = {
 standing = {
@@ -2056,7 +2057,7 @@ self.spas12.stats.spread_moving = 10
 self.spas12.damage_near = 400
 self.spas12.damage_far = 1000
 self.spas12.AMMO_PICKUP = {2, 4}
-self.spas12.fire_mode_data.fire_rate = 0.14
+self.spas12.fire_mode_data.fire_rate = 0.4
 self.spas12.AMMO_MAX = 30
 self.spas12.kick = {
 standing = {
@@ -2132,6 +2133,7 @@ crouching = {
 		0.2
 }
 }
+self.ksg.fire_mode_data.fire_rate = 0.6
 
 --Grimm
 self.x_basset.AMMO_MAX = 50
@@ -2219,7 +2221,7 @@ self.coach.stats_modifiers = {damage = 2}
 self.coach.AMMO_MAX = 24
 self.coach.damage_near = 700
 self.coach.damage_far = 1600
-self.coach.fire_mode_data.fire_rate = 0.075
+self.coach.fire_mode_data.fire_rate = 0.2
 self.coach.kick = {
 standing = {
 		4,
@@ -2244,7 +2246,7 @@ crouching = {
 --Mosconi
 self.huntsman.stats.damage = 200
 self.huntsman.stats_modifiers = {damage = 2}
-self.huntsman.fire_mode_data.fire_rate = 0.075
+self.huntsman.fire_mode_data.fire_rate = 0.2
 self.huntsman.damage_near = 900
 self.huntsman.damage_far = 1800
 self.huntsman.rays = 16
@@ -2274,7 +2276,7 @@ self.b682.stats.damage = 200
 self.b682.stats_modifiers = {damage = 2}
 self.b682.damage_near = 1100
 self.b682.damage_far = 2000
-self.b682.fire_mode_data.fire_rate = 0.075
+self.b682.fire_mode_data.fire_rate = 0.2
 self.b682.stats.spread = 18
 self.b682.stats.spread_moving = 18
 self.b682.timers = {
@@ -2306,6 +2308,8 @@ self.b682.kick = {
 }
 
 --Judge
+self.judge.fire_mode_data.fire_rate = 0.3
+self.x_judge.fire_mode_data.fire_rate = 0.3
 self.judge.stats.damage = 160
 self.x_judge.stats.damage = 160
 self.judge.damage_near = 300
@@ -2358,6 +2362,7 @@ crouching = {
 }
 
 --Breaker
+self.boot.fire_mode_data.fire_rate = 0.6
 self.boot.stats.damage = 160
 self.boot.damage_near = 400
 self.boot.damage_far = 1000
@@ -2390,7 +2395,7 @@ self.striker.stats.damage = 60
 self.striker.damage_near = 550
 self.striker.damage_far = 1050
 self.striker.AMMO_PICKUP = {2, 5}
-self.striker.fire_mode_data.fire_rate = 0.10695187165
+self.striker.fire_mode_data.fire_rate = 0.25
 self.striker.AMMO_MAX = 36
 self.striker.kick = {
 standing = {
@@ -2415,6 +2420,7 @@ crouching = {
 
 
 --GSPS
+self.m37.fire_mode_data.fire_rate = 0.5
 self.m37.AMMO_MAX = 24
 self.m37.stats.damage = 160
 self.m37.damage_near = 400
@@ -2669,20 +2675,38 @@ self.china.AMMO_MAX = 3
 
 --PISTOLS--
 
+--Deagle
+self.deagle.fire_mode_data.fire_rate = 0.3
+self.deagle.stats.recoil = 3
+self.deagle.stats.damage = 145
+self.deagle.AMMO_MAX = 70
+self.deagle.AMMO_PICKUP = {2, 4}
+
 --Baby Deagle
-self.sparrow.fire_mode_data.fire_rate = 0.13
+self.sparrow.fire_mode_data.fire_rate = 0.25
 self.sparrow.AMMO_MAX = 100
 self.sparrow.stats.damage = 96
 self.sparrow.AMMO_PICKUP = {3, 5}
 
 --White Streak
-self.pl14.fire_mode_data.fire_rate = 0.13
+self.pl14.fire_mode_data.fire_rate = 0.3
 self.pl14.stats.recoil = 8
 self.pl14.AMMO_MAX = 80
 self.pl14.AMMO_PICKUP = {3, 5}
 
+--CHUNKY CROSSKILL
+self.m1911.AMMO_MAX = 51
+self.m1911.fire_mode_data.fire_rate = 0.25
+self.m1911.AMMO_PICKUP = {3, 5}
+self.m1911.fire_mode_data = {
+	fire_rate = 0.2
+}
+self.m1911.single = {
+	fire_rate = 0.2
+}
+
 --Bernetti
-self.b92fs.fire_mode_data.fire_rate = 0.09
+self.b92fs.fire_mode_data.fire_rate = 0.16
 self.b92fs.stats.damage = 59
 self.b92fs.stats.spread = 17
 self.b92fs.AMMO_MAX = 150
@@ -2711,7 +2735,7 @@ self.b92fs.AMMO_PICKUP = {6, 9}
 --Chimano 88
 self.glock_17.stats.spread = 17
 self.glock_17.stats.damage = 59
-self.glock_17.fire_mode_data.fire_rate = 0.09
+self.glock_17.fire_mode_data.fire_rate = 0.16
 self.glock_17.AMMO_MAX = 150
 self.glock_17.stats.recoil = 19
 self.glock_17.kick = {
@@ -2738,23 +2762,23 @@ self.glock_17.AMMO_PICKUP = {6, 9}
 --Contractor 9mm
 self.packrat.AMMO_MAX = 120
 self.packrat.stats.damage = 79
-self.packrat.fire_mode_data.fire_rate = 0.09
+self.packrat.fire_mode_data.fire_rate = 0.2
 self.packrat.AMMO_PICKUP = {4, 6}
 
 --Interceptor
 self.usp.AMMO_MAX = 120
 self.usp.stats.damage = 79
-self.usp.fire_mode_data.fire_rate = 0.09
+self.usp.fire_mode_data.fire_rate = 0.2
 self.usp.AMMO_PICKUP = {4, 6}
 
 --Signature 40
 self.p226.AMMO_MAX = 120
 self.p226.stats.damage = 79
-self.p226.fire_mode_data.fire_rate = 0.09
+self.p226.fire_mode_data.fire_rate = 0.2
 self.p226.AMMO_PICKUP = {4, 6}
 
 --Chimano Compact
-self.g26.fire_mode_data.fire_rate = 0.09
+self.g26.fire_mode_data.fire_rate = 0.16
 self.g26.stats.recoil = 19
 self.g26.stats.spread = 16
 self.g26.stats.damage = 59
@@ -2766,7 +2790,7 @@ standing = {
 	-1,
 	1
 },
-steelsiht = {
+steelsight = {
 	0.1,
 	0.4,
 	-0.5,
@@ -2783,13 +2807,13 @@ self.g26.AMMO_PICKUP = {6, 9}
 --Chimano Custom
 self.g22c.stats.damage = 79
 self.g22c.AMMO_MAX = 120
-self.g22c.fire_mode_data.fire_rate = 0.09
+self.g22c.fire_mode_data.fire_rate = 0.2
 self.g22c.AMMO_PICKUP = {4, 6}
 
 --holt
 self.holt.stats.damage = 79
 self.holt.AMMO_MAX = 120
-self.holt.fire_mode_data.fire_rate = 0.09
+self.holt.fire_mode_data.fire_rate = 0.2
 self.holt.AMMO_PICKUP = {4, 6}
 
 --Stryk
@@ -2830,7 +2854,7 @@ self.x_stech.AMMO_MAX = 110
 self.x_stech.AMMO_PICKUP = {2.4, 4.5}
 
 --Gruber Kurz
-self.ppk.fire_mode_data.fire_rate = 0.09
+self.ppk.fire_mode_data.fire_rate = 0.16
 self.ppk.stats.spread = 15
 self.ppk.AMMO_MAX = 150
 self.ppk.stats.damage = 59
@@ -2860,38 +2884,23 @@ self.ppk.AMMO_PICKUP = {6, 9}
 --LEO
 self.hs2000.AMMO_MAX = 120
 self.hs2000.stats.damage = 79
-self.hs2000.fire_mode_data.fire_rate = 0.09
+self.hs2000.fire_mode_data.fire_rate = 0.2
 self.hs2000.AMMO_PICKUP = {4, 6}
-
---Model 87
-self.model3.AMMO_MAX = 78
-self.model3.upgrade_blocks = nil
-self.model3.AMMO_PICKUP = {1.5, 3}
-self.x_model3.AMMO_MAX = 90
-self.x_model3.upgrade_blocks = nil
-self.x_model3.AMMO_PICKUP = {2, 3}
 
 --Crosskill
 self.colt_1911.AMMO_MAX = 120
 self.colt_1911.stats.damage = 79
-self.colt_1911.fire_mode_data.fire_rate = 0.09
+self.colt_1911.fire_mode_data.fire_rate = 0.2
 self.colt_1911.AMMO_PICKUP = {4, 6}
-
---Deagle
-self.deagle.fire_mode_data.fire_rate = 0.166
-self.deagle.stats.recoil = 3
-self.deagle.stats.damage = 145
-self.deagle.AMMO_MAX = 70
-self.deagle.AMMO_PICKUP = {2, 4}
 
 --Broomstick
 self.c96.AMMO_MAX = 100
 self.c96.stats.damage = 96
-self.c96.fire_mode_data.fire_rate = 0.13
+self.c96.fire_mode_data.fire_rate = 0.25
 self.c96.AMMO_PICKUP = {2, 4}
 
 --5/7
-self.lemming.fire_mode_data.fire_rate = 0.13
+self.lemming.fire_mode_data.fire_rate = 0.2
 self.lemming.stats.spread = 17
 self.lemming.AMMO_MAX = 90
 self.lemming.stats.recoil = 9
@@ -2901,14 +2910,14 @@ self.lemming.AMMO_PICKUP = {3, 6}
 --Peacemaker
 self.peacemaker.AMMO_MAX = 48
 self.peacemaker.upgrade_blocks = nil
-self.peacemaker.fire_mode_data.fire_rate = 0.09
+self.peacemaker.fire_mode_data.fire_rate = 0.2
 self.peacemaker.stats.damage = 200
 self.peacemaker.stats_modifiers = {damage = 2}
 self.peacemaker.AMMO_PICKUP = {2, 3}
 
 --Parabellum
-self.breech.fire_mode_data.fire_rate = 0.13
-self.x_breech.fire_mode_data.fire_rate = 0.13
+self.breech.fire_mode_data.fire_rate = 0.2
+self.x_breech.fire_mode_data.fire_rate = 0.2
 self.breech.AMMO_MAX = 54
 self.breech.AMMO_PICKUP = {2, 3}
 self.breech.stats.spread = 16
@@ -2924,7 +2933,7 @@ self.legacy.stats.damage = 60
 self.legacy.stats.spread = 18
 self.legacy.AMMO_MAX = 120
 self.legacy.AMMO_PICKUP = {6, 9}
-self.legacy.fire_mode_data.fire_rate = 0.09
+self.legacy.fire_mode_data.fire_rate = 0.16
 self.legacy.CLIP_AMMO_MAX = 22
 self.legacy.stats.recoil = 19
 self.legacy.kick = {
@@ -2949,20 +2958,32 @@ crouching = {
 
 --Bronco
 self.new_raging_bull.AMMO_PICKUP = {2, 4}
+self.new_raging_bull.fire_mode_data.fire_rate = 0.33
 self.new_raging_bull.upgrade_blocks = nil
 
 --Castigo
 self.chinchilla.AMMO_PICKUP = {2, 3}
+self.chinchilla.fire_mode_data.fire_rate = 0.3
 self.chinchilla.upgrade_blocks = nil
 
 --Matever
 self.mateba.AMMO_PICKUP = {3, 5}
+self.mateba.fire_mode_data.fire_rate = 0.33
 self.mateba.upgrade_blocks = nil
+
+--Model 87
+self.model3.AMMO_MAX = 66
+self.model3.upgrade_blocks = nil
+self.model3.AMMO_PICKUP = {3, 5}
+self.model3.fire_mode_data.fire_rate = 0.33
+self.x_model3.AMMO_MAX = 66
+self.x_model3.upgrade_blocks = nil
+self.x_model3.AMMO_PICKUP = {3, 5}
 
 --Crosskill Guard
 self.shrew.stats.damage = 59
 self.shrew.stats.recoil = 19
-self.shrew.fire_mode_data.fire_rate = 0.09
+self.shrew.fire_mode_data.fire_rate = 0.16
 self.shrew.stats.spread = 18
 self.shrew.AMMO_MAX = 150
 self.shrew.AMMO_PICKUP = {6, 9}
@@ -2993,6 +3014,7 @@ self.type54.kick = {
 }
 self.type54.kick.crouching = self.type54.kick.standing
 self.type54.kick.steelsight = self.type54.kick.standing
+self.type54.fire_mode_data.fire_rate = 0.18
 self.type54.stats = {
 	zoom = 1,
 	total_ammo_mod = 21,
@@ -3037,23 +3059,24 @@ self.rsh12.AMMO_PICKUP = {
 	1,
 	2
 }
+self.rsh12.fire_mode_data.fire_rate = 0.5
 
 -- AKIMBO PISTOLS--
 
 --Baby Deagle
-self.x_sparrow.fire_mode_data.fire_rate = 0.13
+self.x_sparrow.fire_mode_data.fire_rate = 0.25
 self.x_sparrow.AMMO_MAX = 120
 self.x_sparrow.stats.damage = 96
 self.x_sparrow.AMMO_PICKUP = self.sparrow.AMMO_PICKUP
 
 --White Streak
-self.x_pl14.fire_mode_data.fire_rate = 0.13
+self.x_pl14.fire_mode_data.fire_rate = 0.3
 self.x_pl14.stats.recoil = 8
 self.x_pl14.AMMO_MAX = 100
 self.x_pl14.AMMO_PICKUP = self.x_pl14.AMMO_PICKUP
 
 --Bernetti
-self.x_b92fs.fire_mode_data.fire_rate = 0.09
+self.x_b92fs.fire_mode_data.fire_rate = 0.16
 self.x_b92fs.stats.damage = 59
 self.x_b92fs.stats.spread = 17
 self.x_b92fs.AMMO_MAX = 160
@@ -3082,7 +3105,7 @@ self.x_b92fs.AMMO_PICKUP = self.x_b92fs.AMMO_PICKUP
 --Chimano 88
 self.x_g17.stats.spread = 17
 self.x_g17.stats.damage = 59
-self.x_g17.fire_mode_data.fire_rate = 0.09
+self.x_g17.fire_mode_data.fire_rate = 0.16
 self.x_g17.AMMO_MAX = 160
 self.x_g17.stats.recoil = 19
 self.x_g17.kick = {
@@ -3109,29 +3132,29 @@ self.x_g17.AMMO_PICKUP = self.glock_17.AMMO_PICKUP
 --Contractor 9mm
 self.x_packrat.AMMO_MAX = 130
 self.x_packrat.stats.damage = 79
-self.x_packrat.fire_mode_data.fire_rate = 0.09
+self.x_packrat.fire_mode_data.fire_rate = 0.2
 self.x_packrat.AMMO_PICKUP = self.packrat.AMMO_PICKUP
 
 --Interceptor
 self.x_usp.AMMO_MAX = 130
 self.x_usp.stats.damage = 79
-self.x_usp.fire_mode_data.fire_rate = 0.09
+self.x_usp.fire_mode_data.fire_rate = 0.2
 self.x_usp.AMMO_PICKUP = self.usp.AMMO_PICKUP
 
 --holt
 self.x_holt.AMMO_MAX = 130
 self.x_holt.stats.damage = 79
-self.x_holt.fire_mode_data.fire_rate = 0.09
+self.x_holt.fire_mode_data.fire_rate = 0.2
 self.x_holt.AMMO_PICKUP = self.holt.AMMO_PICKUP
 
 --Signature 40
 self.x_p226.AMMO_MAX = 130
 self.x_p226.stats.damage = 79
-self.x_p226.fire_mode_data.fire_rate = 0.09
+self.x_p226.fire_mode_data.fire_rate = 0.2
 self.x_p226.AMMO_PICKUP = self.p226.AMMO_PICKUP
 
 --Chimano Compact
-self.jowi.fire_mode_data.fire_rate = 0.09
+self.jowi.fire_mode_data.fire_rate = 0.16
 self.jowi.stats.recoil = 19
 self.jowi.stats.spread = 16
 self.jowi.stats.damage = 59
@@ -3160,7 +3183,7 @@ self.jowi.AMMO_PICKUP = self.g26.AMMO_PICKUP
 --Chimano Custom
 self.x_g22c.stats.damage = 79
 self.x_g22c.AMMO_MAX = 130
-self.x_g22c.fire_mode_data.fire_rate = 0.09
+self.x_g22c.fire_mode_data.fire_rate = 0.2
 self.x_g22c.AMMO_PICKUP = self.g22c.AMMO_PICKUP
 
 --Stryk
@@ -3171,7 +3194,7 @@ self.x_g18c.AMMO_MAX = 180
 self.x_g18c.AMMO_PICKUP = self.glock_18c.AMMO_PICKUP
 
 --Gruber Kurz
-self.x_ppk.fire_mode_data.fire_rate = 0.09
+self.x_ppk.fire_mode_data.fire_rate = 0.16
 self.x_ppk.stats.spread = 15
 self.x_ppk.AMMO_MAX = 160
 self.x_ppk.stats.damage = 59
@@ -3201,17 +3224,17 @@ self.x_ppk.AMMO_PICKUP = self.ppk.AMMO_PICKUP
 --LEO
 self.x_hs2000.AMMO_MAX = 130
 self.x_hs2000.stats.damage = 79
-self.x_hs2000.fire_mode_data.fire_rate = 0.09
+self.x_hs2000.fire_mode_data.fire_rate = 0.2
 self.x_hs2000.AMMO_PICKUP = self.hs2000.AMMO_PICKUP
 
 --Crosskill
 self.x_1911.AMMO_MAX = 130
 self.x_1911.stats.damage = 79
-self.x_1911.fire_mode_data.fire_rate = 0.09
+self.x_1911.fire_mode_data.fire_rate = 0.2
 self.x_1911.AMMO_PICKUP = self.colt_1911.AMMO_PICKUP
 
 --Deagle
-self.x_deagle.fire_mode_data.fire_rate = 0.166
+self.x_deagle.fire_mode_data.fire_rate = 0.3
 self.x_deagle.stats.recoil = 3
 self.x_deagle.stats.damage = 145
 self.x_deagle.AMMO_MAX = 70
@@ -3220,7 +3243,7 @@ self.x_deagle.AMMO_PICKUP = self.deagle.AMMO_PICKUP
 --Broomstick
 self.x_c96.AMMO_MAX = 110
 self.x_c96.stats.damage = 96
-self.x_c96.fire_mode_data.fire_rate = 0.13
+self.x_c96.fire_mode_data.fire_rate = 0.25
 self.x_c96.AMMO_PICKUP = self.c96.AMMO_PICKUP
 
 --Parabellum
@@ -3231,7 +3254,7 @@ self.x_breech.AMMO_PICKUP = self.breech.AMMO_PICKUP
 self.x_legacy.stats.damage = 60
 self.x_legacy.stats.spread = 18
 self.x_legacy.AMMO_MAX = 160
-self.x_legacy.fire_mode_data.fire_rate = 0.09
+self.x_legacy.fire_mode_data.fire_rate = 0.16
 self.x_legacy.CLIP_AMMO_MAX = 44
 self.x_legacy.stats.recoil = 19
 self.x_legacy.kick = {
@@ -3256,21 +3279,24 @@ crouching = {
 self.x_legacy.AMMO_PICKUP = self.legacy.AMMO_PICKUP
 
 --Bronco
+self.x_rage.fire_mode_data.fire_rate = 0.428
 self.x_rage.AMMO_PICKUP = self.new_raging_bull.AMMO_PICKUP
 self.x_rage.upgrade_blocks = nil
 
 --Castigo
+self.x_chinchilla.fire_mode_data.fire_rate = 0.33
 self.x_chinchilla.AMMO_PICKUP = self.chinchilla.AMMO_PICKUP
 self.x_chinchilla.upgrade_blocks = nil
 
 --Matever
+self.x_2006m.fire_mode_data.fire_rate = 0.428
 self.x_2006m.AMMO_PICKUP = self.mateba.AMMO_PICKUP
 self.x_2006m.upgrade_blocks = nil
 
 --Crosskill Guard
 self.x_shrew.stats.damage = 59
 self.x_shrew.stats.recoil = 19
-self.x_shrew.fire_mode_data.fire_rate = 0.09
+self.x_shrew.fire_mode_data.fire_rate = 0.16
 self.x_shrew.stats.spread = 18
 self.x_shrew.AMMO_MAX = 160
 self.x_shrew.kick = {
@@ -3294,6 +3320,8 @@ crouching = {
 }}
 self.x_shrew.AMMO_PICKUP = self.shrew.AMMO_PICKUP
 
+--KANG Arms
+self.x_type54.fire_mode_data.fire_rate = 0.2
 self.x_type54.stats = {
 	zoom = 1,
 	total_ammo_mod = 21,

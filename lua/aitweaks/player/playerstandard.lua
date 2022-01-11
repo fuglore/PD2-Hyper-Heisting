@@ -1747,10 +1747,6 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 						end
 
 						self._equipped_unit:base():tweak_data_anim_stop("fire")
-					elseif fire_mode == "single" then
-						if input.btn_primary_attack_press or self._equipped_unit:base().should_reload_immediately and self._equipped_unit:base():should_reload_immediately() then
-							self:_start_action_reload_enter(t)
-						end
 					else
 						new_action = true
 
@@ -1760,9 +1756,9 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 					self:_interupt_action_running(t)
 				else
 					if not self._shooting then
-						if weap_base:start_shooting_allowed() then
+						if weap_base:start_shooting_allowed() then							
 							local start = fire_mode == "single" and input.btn_primary_attack_press
-							start = start or fire_mode ~= "single" and input.btn_primary_attack_state
+							start = start or input.btn_primary_attack_state
 							start = start and not fire_on_release
 							start = start or fire_on_release and input.btn_primary_attack_release
 
@@ -1819,7 +1815,7 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 					local fired = nil
 
 					if fire_mode == "single" then
-						if input.btn_primary_attack_press and start_shooting then
+						if (input.btn_primary_attack_press or input.btn_primary_attack_state) and start_shooting then
 							fired = weap_base:trigger_pressed(self:get_fire_weapon_position(), self:get_fire_weapon_direction(), dmg_mul, nil, spread_mul, autohit_mul, suppression_mul)
 						elseif fire_on_release then
 							if input.btn_primary_attack_release then
