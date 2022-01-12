@@ -585,7 +585,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_carbon_blade_beta_desc"] = "BASIC: ##$basic##\nYour saws no longer wear down on damage to enemies. Your saws deal ##100%## more damage.\n\n##Don't forget, huh, I mean for real, my saws all rule, with the world, with appeal!## \n\nACE: ##$pro##\nYou can now saw through shields with your OVE9000 portable saw. When killing an enemy with the saw, you have a ##50%## chance to cause nearby enemies in a ##10m## radius to panic. Panic will make enemies go into short bursts of uncontrollable fear.",
 			
 			["menu_single_shot_ammo_return_beta"] = "Strange Bandolier",
-			["menu_single_shot_ammo_return_beta_desc"] = "BASIC: ##$basic##\nGetting a headshot will refund ##1## bullet to your used weapon.\n\nThis can only be triggered by Pistols, SMGs, Assault Rifles and Sniper Rifles.\n\nACE: ##$pro##\nGetting a headshot will increase your firerate by ##20%## for ##2## seconds.\n\nThis can only be activated by Pistols, SMGs, Assault Rifles and Sniper Rifles.\n\n##The internal mechanisms of your weapons appear to have been re-shapen into mobius strips...##",
+			["menu_single_shot_ammo_return_beta_desc"] = "BASIC: ##$basic##\nGetting a headshot will refund ##1## bullet to your used weapon.\n\nThis can only be triggered by Pistols, SMGs, Assault Rifles and Sniper Rifles.\n\nACE: ##$pro##\nGetting a headshot will increase your firerate by ##20%## for ##5## seconds.\n\nThis can only be activated by Pistols, SMGs, Assault Rifles and Sniper Rifles.\n\n##The internal mechanisms of your weapons appear to have been re-shapen into mobius strips...##",
 			
 			["menu_sniper_graze_damage"] = "Fine Red Mist",
 			["menu_sniper_graze_damage_desc"] = "BASIC: ##$basic##\nSuccessfully killing an enemy with a headshot will cause a ##massive blood explosion## that ##staggers## enemies and deals ##300## damage within a ##2m## radius of the victim.\n\nThis can only be activated by weapons fired in their ##single-fire## mode.\n\nACE: ##$pro##\nFine Red Mist's blood explosion range is increased to ##4 meters##.\n\n##Thanks for standing still, wanker!##",
@@ -597,7 +597,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_shotgun_impact_beta_desc"] = "BASIC: ##$basic##\nYour shotguns gain ##+12## stability.\n\nACE: ##$pro##\nYour shotguns deal ##+25%## damage to ##healthy enemies##.\n\n##FLASHYN!##",
 			
 			["menu_close_by_beta"] = "Cool Hunting",
-			["menu_close_by_beta_desc"] = "BASIC: ##$basic##\nYour shotguns gain ##+25%## increased magazine capacity.\n\nIn addition, your shotguns with magazines have their magazine size increased by ##+8##.\n\nACE: ##$pro##\nYour shotguns gain a ##+0.5%## increase to firerate when you kill multiple enemies in quick succession.\n\nThe buff lasts ##3## seconds, and can be stacked ##infinitely##, with each activation ##refreshing it's duration##.\n\n##Problem solved!##",
+			["menu_close_by_beta_desc"] = "BASIC: ##$basic##\nYour shotguns gain ##+25%## increased magazine capacity.\n\nIn addition, your shotguns with magazines have their magazine size increased by ##+8##.\n\nACE: ##$pro##\nYour shotguns gain a ##+0.5%## increase to firerate when you kill an enemy.\n\nThe buff lasts ##2## seconds, and can be stacked ##infinitely##, with each activation ##refreshing it's duration##.\n\n##Problem solved!##",
 			
 			["menu_iron_man_beta_desc"] = "BASIC: ##$basic##\nIncreases the armor recovery rate for you and your crew by ##25%##.\n\nACE: ##$pro##\nYour Melee Weapons can now ##stagger shields##.",
 			

@@ -550,27 +550,13 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 			local equipped_unit = self:get_current_state()._equipped_unit:base()
 
 			if equipped_unit:is_category("shotgun") then
-
-				--https://media.discordapp.net/attachments/737554686139170866/878072580421087282/FB_IMG_1629413974581.png
-				if not self._cool_chain_t or self._cool_chain_t < t then
-					self._cool_chain_t = t + 0.8
-					self._cool_chain_kills = 1
+				if self._cool_chain_mul then
+					self._cool_chain_mul = self._cool_chain_mul - 0.05
 				else
-					self._cool_chain_t = t + 0.8
-					self._cool_chain_kills = self._cool_chain_kills + 1
+					self._cool_chain_mul = 0.95
 				end
-				
-				if self._cool_chain_kills >= 2 then					
-					if self._cool_chain_mul then
-						self._cool_chain_mul = self._cool_chain_mul - 0.05
-					else
-						self._cool_chain_mul = 0.95
-					end
 					
-					self._cool_hunting_t = t + 3
-					self._cool_chain_kills = nil
-					self._cool_chain_t = nil
-				end
+				self._cool_hunting_t = t + 2
 			end
 		end
 	end
@@ -869,7 +855,7 @@ function PlayerManager:on_headshot_dealt()
 	
 	if self:has_category_upgrade("player", "magic_bullet_aced") then
 		if weapon_unit and weapon_unit:base():is_category("pistol", "smg", "assault_rifle", "snp") then
-			self._magic_bullet_aced_t = t + 2
+			self._magic_bullet_aced_t = t + 5
 		end
 	end
 	

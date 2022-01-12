@@ -126,7 +126,7 @@ if do_this_shit then
 function CopBase:_chk_spawn_gear()
 	local tweak = managers.job:current_level_data()
 	local unit_name = self._unit:name()
-	local HOLIDAY_SPIRIT = true --overkill's fucking stinky so im gonna start manually activating this myself
+	local HOLIDAY_SPIRIT = nil --overkill's fucking stinky so im gonna start manually activating this myself
 	
 	if HOLIDAY_SPIRIT then
 		if self._tweak_table == "akuma" then
