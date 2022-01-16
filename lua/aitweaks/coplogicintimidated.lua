@@ -713,7 +713,7 @@ function CopLogicIntimidated.rescue_SO_verification(ignore_this, data, unit)
 end
 
 function CopLogicIntimidated._unregister_rescue_SO(data, my_data)
-	if my_data.rescuer then
+	if my_data.rescuer and alive(my_data.rescuer) then
 		if my_data.rescuer.brain and my_data.rescuer:brain() and alive(my_data.rescuer:brain()) then
 			local objective = my_data.rescuer:brain():objective()
 			local rescuer = my_data.rescuer
