@@ -2344,7 +2344,11 @@ function PlayerStandard:update(t, dt)
 	PlayerMovementState.update(self, t, dt)
 	self:_calculate_standard_variables(t, dt)
 	
-	local vel_z = math.clamp(math.abs(self._unit:mover():velocity().z + 100), 0.01, 1)
+	local vel_z = 0
+
+	if self._unit:mover() then
+		vel_z = math.clamp(math.abs(self._unit:mover():velocity().z + 100), 0.01, 1) or 1
+	end
 
 	if vel_z >= 0.2 then
 		self:_update_ground_ray()
