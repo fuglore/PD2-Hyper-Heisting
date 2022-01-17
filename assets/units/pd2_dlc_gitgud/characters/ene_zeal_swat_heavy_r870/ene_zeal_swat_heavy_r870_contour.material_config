@@ -15,53 +15,71 @@
     </material>
 
     <material name="mtr_head_lod_2" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
-        <bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_hh/swat_heavy_head_nm" mip="4"/>
+        <bump_normal_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/swat_heavy_head_nm" mip="4"/>
         <diffuse_texture 	file="units/pd2_dlc_gitgud/characters/shared_textures/zeal_heavy_head_df" mip="4"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
 <!-- BODY MATS-->
-    <material name="mtr_city_swat" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+    <material name="mtr_city_swat" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM:SKINNED_3WEIGHTS" unique="true" version="2" >
         <bump_normal_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer_nm"/>
         <diffuse_texture file="units/pd2_dlc_gitgud/characters/shared_textures/zeal_heavy_df"/>
+		<self_illumination_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/swat_heavy_il"/>
+		<variable type="scalar" name="il_bloom" value="10"/>
+		<variable type="scalar" name="il_multiplier" value="sun"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
 
-    <material name="mtr_city_swat_lod_1" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
-        <bump_normal_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer_nm" mip="2"/>
+    <material name="mtr_city_swat_lod_1" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM:SKINNED_3WEIGHTS" unique="true" version="2" >
+        <bump_normal_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer_nm" mip="1"/>
         <diffuse_texture file="units/pd2_dlc_gitgud/characters/shared_textures/zeal_heavy_df" mip="1"/>
+		<self_illumination_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/swat_heavy_il" mip="1"/>
+		<variable type="scalar" name="il_bloom" value="10"/>
+		<variable type="scalar" name="il_multiplier" value="sun"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
-    <material name="mtr_city_swat_lod_2" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+    <material name="mtr_city_swat_lod_2" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM:SKINNED_3WEIGHTS" unique="true" version="2" >
         <bump_normal_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_tazer/ene_zeal_tazer_nm" mip="4"/>
         <diffuse_texture file="units/pd2_dlc_gitgud/characters/shared_textures/zeal_heavy_df" mip="4"/>
+		<self_illumination_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/swat_heavy_il" mip="4"/>
+		<variable type="scalar" name="il_bloom" value="10"/>
+		<variable type="scalar" name="il_multiplier" value="sun"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
 <!--HELMET MATS-->
-    <material name="mtr_helmet" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP" unique="true" version="2" >
+    <material name="mtr_helmet" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" unique="true" version="2" >
         <bump_normal_texture    file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/swat_heavy_head_nm"/>
         <diffuse_texture        file="units/pd2_dlc_gitgud/characters/shared_textures/zeal_heavy_head_df"/>
+		<self_illumination_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_il"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
-    <material name="mtr_helmet_lod_1" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP" unique="true" version="2" >
-        <bump_normal_texture    file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/swat_heavy_head_nm" mip="2"/>
+    <material name="mtr_helmet_lod_1" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" unique="true" version="2" >
+        <bump_normal_texture    file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/swat_heavy_head_nm" mip="1"/>
         <diffuse_texture        file="units/pd2_dlc_gitgud/characters/shared_textures/zeal_heavy_head_df" mip="1"/>
+		<self_illumination_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_il" mip="1"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
-    <material name="mtr_helmet_lod_2" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP" unique="true" version="2" >
+    <material name="mtr_helmet_lod_2" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" unique="true" version="2" >
         <bump_normal_texture    file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy/swat_heavy_head_nm" mip="4"/>
         <diffuse_texture        file="units/pd2_dlc_gitgud/characters/shared_textures/zeal_heavy_head_df" mip="4"/>
+		<self_illumination_texture 	file="units/pd2_dlc_gitgud/characters/ene_zeal_swat_heavy_r870/helmets_atlas_il" mip="4"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
