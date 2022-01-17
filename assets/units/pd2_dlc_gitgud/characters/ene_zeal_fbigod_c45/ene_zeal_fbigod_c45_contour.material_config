@@ -1,21 +1,30 @@
 <materials version="3" group="ene_zeal_swat">
-    <material name="mtr_head" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+    <material name="mtr_head" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM:SKINNED_3WEIGHTS" unique="true" version="2" >
         <bump_normal_texture    file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_nm"/>
         <diffuse_texture        file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_df"/>
+		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/mask_il"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
-    <material name="mtr_helmet" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP" unique="true" version="2" >
+    <material name="mtr_helmet" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM" unique="true" version="2" >
         <bump_normal_texture    file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_nm"/>
         <diffuse_texture        file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_head_df"/>
+		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/mask_il"/>
+        <variable type="scalar" name="il_bloom" value="5"/>
+        <variable type="scalar" name="il_multiplier" value="reddot"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>
 
-    <material name="mtr_swat" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SKINNED_3WEIGHTS" unique="true" version="2" >
+    <material name="mtr_swat" render_template="generic:CONTOUR:DIFFUSE_TEXTURE:NORMALMAP:SELF_ILLUMINATION:SELF_ILLUMINATION_BLOOM:SKINNED_3WEIGHTS" unique="true" version="2" >
         <bump_normal_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_nm"/>
         <diffuse_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/ene_zeal_swat_df"/>
+		<self_illumination_texture file="units/pd2_dlc_gitgud/characters/ene_zeal_fbigod_c45/body_il"/>
+        <variable type="scalar" name="il_bloom" value="10"/>
+        <variable type="scalar" name="il_multiplier" value="sun"/>
         <variable value="1 1 1" type="vector3" name="contour_color"/>
         <variable value="0" type="scalar" name="contour_opacity"/>
     </material>   

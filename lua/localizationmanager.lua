@@ -466,8 +466,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 		LocalizationManager:add_localized_strings({	
 			--SPEED IS WAR
 			["bm_menu_movement"] = "M/S",
-			
-			
+
 			--Rogue
 			["menu_deck4_1_desc"] = "Your chance to dodge is increased by ##5%##.",
 			["menu_deck4_5_desc"] = "Your chance to dodge is increased by ##10%##.",

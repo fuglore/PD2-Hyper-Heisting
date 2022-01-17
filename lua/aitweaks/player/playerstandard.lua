@@ -1102,10 +1102,9 @@ function PlayerStandard:_activate_mover(mover, velocity)
 		self._unit:mover():set_gravity(Vector3(0, 0, -982)) --sets the actual gravity, you can set this to funny values if you want moon-jumping or something
 		self._unit:mover():set_damping(self._tweak_data.gravity / self._tweak_data.terminal_velocity) --sets how fast the player accelerates downwards in the air, i have no clue what the value for this actually represents since its something like 0.14-ish.
 	end
-
+	
 	if self._is_jumping then
 		self._unit:mover():set_velocity(velocity)
-		self._unit:mover():jump()
 	end
 end
 
@@ -2344,9 +2343,13 @@ function PlayerStandard:update(t, dt)
 	PlayerMovementState.update(self, t, dt)
 	self:_calculate_standard_variables(t, dt)
 	
-	local vel_z = math.clamp(math.abs(self._unit:mover():velocity().z + 100), 0.01, 1)
+	local vel_z = 1
 
-	if vel_z >= 0.2 then
+	if self._unit:mover() then
+		vel_z = math.clamp(math.abs(self._unit:mover():velocity().z + 100), 0.01, 1)
+	end
+
+	if vel_z >= 0.2 or self._is_jumping then
 		self:_update_ground_ray()
 	else
 		self._gnd_ray = true
