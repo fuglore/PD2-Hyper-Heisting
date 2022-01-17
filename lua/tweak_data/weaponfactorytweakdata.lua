@@ -57,6 +57,49 @@ self.parts.wpn_fps_smg_pm9_m_quick.desc_id = "bm_GEN_decorative_strap"
 self.parts.wpn_fps_smg_pm9_m_quick.stats.reload = nil
 self.parts.wpn_fps_smg_pm9_m_quick.stats.concealment= nil
 
+--peacemaker
+self.parts.wpn_fps_pis_peacemaker_b_long = {
+		texture_bundle_folder = "west",
+		dlc = "west",
+		type = "slide",
+		name_id = "bm_wp_peacemaker_barrel_long",
+		a_obj = "a_b",
+		unit = "units/pd2_dlc_west/weapons/wpn_fps_pis_peacemaker_pts/wpn_fps_pis_peacemaker_b_long",
+		pcs = {
+			10,
+			20,
+			30,
+			40
+		},
+		stats = {
+			spread = 1,
+			spread_moving = 1,
+			value = 1,
+			concealment = -2
+		}
+	}
+self.parts.wpn_fps_pis_peacemaker_b_short = {
+	texture_bundle_folder = "west",
+	dlc = "west",
+	type = "slide",
+	name_id = "bm_wp_peacemaker_barrel_short",
+	a_obj = "a_b",
+	unit = "units/pd2_dlc_west/weapons/wpn_fps_pis_peacemaker_pts/wpn_fps_pis_peacemaker_b_short",
+	pcs = {
+		10,
+		20,
+		30,
+		40
+	},
+	stats = {
+		spread = -1,
+		spread_moving = -1,
+		value = 1,
+		recoil = 4,
+		concealment = 2
+	}
+}
+
 self.parts.wpn_fps_pis_c96_b_long.stats = { value = 2, damage = 0, total_ammo_mod = 0, extra_ammo= 0, spread = 1}
 self.parts.wpn_fps_pis_c96_b_long.custom_stats = nil
 self.parts.wpn_fps_smg_shepheard_mag_extended.stats = { value = 2, extra_ammo= 5}
