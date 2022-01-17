@@ -1055,11 +1055,11 @@ function WeaponTweakData:_init_new_weapons(weapon_data)
 	weapon_data.autohit_pistol_default = {
 		INIT_RATIO = 0,
 		MAX_RATIO = 0.6,
-		far_angle = 3,
+		far_angle = 4,
 		far_dis = 2000,
 		MIN_RATIO = 0,
-		min_angle = 1,
-		near_angle = 0
+		min_angle = 1.5,
+		near_angle = 1
 	}
 	weapon_data.autohit_shotgun_default = {
 		INIT_RATIO = 0,
