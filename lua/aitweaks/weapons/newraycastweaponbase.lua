@@ -3,6 +3,10 @@ Hooks:PostHook(NewRaycastWeaponBase, "init", "hhpost_shieldknock", function(self
 end)
 
 function NewRaycastWeaponBase:get_damage_falloff(damage, col_ray, user_unit)
+	if self._near_mul == 0 then
+		return damage
+	end
+
 	local distance = col_ray.distance or mvector3.distance(col_ray.unit:position(), user_unit:position())
 	local near_dist = self._near_falloff
 	local far_dist = self._far_falloff

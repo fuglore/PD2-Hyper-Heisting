@@ -248,20 +248,20 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		},
 		average = {
-			speed = 0.9,
+			speed = 1,
 			occasions = {
 				scared = {
 					chance = 0.4,
 					check_timeout = {
-						4,
-						7
+						0.8,
+						0.8
 					},
 					variations = {
 						side_step = {
 							chance = 1,
 							timeout = {
-								5,
-								8
+								1,
+								2
 							}
 						}
 					}
@@ -269,8 +269,8 @@ function CharacterTweakData:_presets(tweak_data)
 				hit = {
 					chance = 0.5,
 					check_timeout = {
-						1,
-						2
+						0.6,
+						0.6
 					},
 					variations = {
 						side_step = {
@@ -290,8 +290,8 @@ function CharacterTweakData:_presets(tweak_data)
 				hit = {
 					chance = 0.75,
 					check_timeout = {
-						0,
-						0
+						0.8,
+						0.8
 					},
 					variations = {
 						side_step = {
@@ -313,10 +313,10 @@ function CharacterTweakData:_presets(tweak_data)
 					}
 				},
 				preemptive = {
-					chance = 0.1,
+					chance = 0.6,
 					check_timeout = {
 						1,
-						7
+						4
 					},
 					variations = {
 						side_step = {
@@ -331,7 +331,7 @@ function CharacterTweakData:_presets(tweak_data)
 					}
 				},
 				scared = {
-					chance = 0.8,
+					chance = 0.6,
 					check_timeout = {
 						1,
 						2
@@ -363,8 +363,8 @@ function CharacterTweakData:_presets(tweak_data)
 				hit = {
 					chance = 0.9,
 					check_timeout = {
-						0,
-						0
+						0.5,
+						0.5
 					},
 					variations = {
 						side_step = {
@@ -386,10 +386,10 @@ function CharacterTweakData:_presets(tweak_data)
 					}
 				},
 				preemptive = {
-					chance = 0.35,
+					chance = 0.75,
 					check_timeout = {
-						2,
-						3
+						0.6,
+						0.6
 					},
 					variations = {
 						side_step = {
@@ -411,10 +411,10 @@ function CharacterTweakData:_presets(tweak_data)
 					}
 				},
 				scared = {
-					chance = 0.4,
+					chance = 0.6,
 					check_timeout = {
-						1,
-						2
+						0.8,
+						0.8
 					},
 					variations = {
 						side_step = {
@@ -443,8 +443,8 @@ function CharacterTweakData:_presets(tweak_data)
 				hit = {
 					chance = 0.9,
 					check_timeout = {
-						0,
-						3
+						0.6,
+						0.6
 					},
 					variations = {
 						side_step = {
@@ -473,10 +473,10 @@ function CharacterTweakData:_presets(tweak_data)
 					}
 				},
 				preemptive = {
-					chance = 0.6,
+					chance = 0.9,
 					check_timeout = {
-						0,
-						3
+						0.6,
+						0.6
 					},
 					variations = {
 						side_step = {
@@ -507,8 +507,8 @@ function CharacterTweakData:_presets(tweak_data)
 				scared = {
 					chance = 0.9,
 					check_timeout = {
-						0,
-						3
+						0.8,
+					    0.8
 					},
 					variations = {
 						side_step = {

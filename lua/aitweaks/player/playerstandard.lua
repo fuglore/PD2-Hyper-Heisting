@@ -11,6 +11,7 @@ local mvec3_dis_sq = mvector3.distance_sq
 
 Hooks:PostHook(PlayerStandard, "_calculate_standard_variables", "HH__calculate_standard_variables", function(self, t, dt)
 	self._setting_hold_to_jump = managers.user:get_setting("hold_to_jump")
+	self._setting_hold_to_fire = managers.user:get_setting("holdtofire")
 end)
 
 
@@ -1757,7 +1758,8 @@ function PlayerStandard:_check_action_primary_attack(t, input)
 					if not self._shooting then
 						if weap_base:start_shooting_allowed() then							
 							local start = fire_mode == "single" and input.btn_primary_attack_press
-							start = start or input.btn_primary_attack_state
+							start = start or self._setting_hold_to_fire and input.btn_primary_attack_state
+							start = start or fire_mode ~= "single" and input.btn_primary_attack_state
 							start = start and not fire_on_release
 							start = start or fire_on_release and input.btn_primary_attack_release
 

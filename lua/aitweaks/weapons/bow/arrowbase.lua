@@ -32,7 +32,7 @@ function ArrowBase.throw_projectile(projectile_type, pos, dir, owner_peer_id, ho
 	
 	if homing then
 		unit:base()._should_home_in = world_g:play_physic_effect(anti_gravitate_idstr, unit)
-		self._homing_physics = true
+		unit:base()._homing_physics = true
 	end
 
 	if owner_peer_id and managers.network:session() then

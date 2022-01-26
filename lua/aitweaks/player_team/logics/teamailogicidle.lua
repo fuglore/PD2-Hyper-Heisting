@@ -90,6 +90,7 @@ function TeamAILogicIdle.enter(data, new_logic_name, enter_params)
 
 			local success = nil
 			local revive_unit = objective.follow_unit
+			local revive_char_dmg_ext = revive_unit:character_damage()
 
 			if revive_unit:interaction() then
 				if revive_unit:interaction():active() and data.unit:brain():action_request(objective.action) then
@@ -97,14 +98,14 @@ function TeamAILogicIdle.enter(data, new_logic_name, enter_params)
 
 					success = true
 				end
-			elseif revive_unit:character_damage():arrested() then
+			elseif revive_char_dmg_ext:arrested() then
 				if data.unit:brain():action_request(objective.action) then
-					revive_unit:character_damage():pause_arrested_timer()
+					revive_char_dmg_ext:pause_arrested_timer()
 
 					success = true
 				end
-			elseif revive_unit:character_damage():need_revive() and data.unit:brain():action_request(objective.action) then
-				revive_unit:character_damage():pause_downed_timer()
+			elseif revive_char_dmg_ext:need_revive() and data.unit:brain():action_request(objective.action) then
+				revive_char_dmg_ext:pause_downed_timer()
 
 				success = true
 			end
@@ -118,40 +119,32 @@ function TeamAILogicIdle.enter(data, new_logic_name, enter_params)
 
 				CopLogicBase.add_delayed_clbk(my_data, my_data.revive_complete_clbk_id, callback(TeamAILogicIdle, TeamAILogicIdle, "clbk_revive_complete", data), revive_t)
 
-				local voiceline = math_random() < 0.25 and "s09a" or "s09b"
+				if not revive_char_dmg_ext:arrested() then
+					local suffix = "a"
 
-				if revive_unit:base().is_local_player then
-					if not revive_unit:character_damage():arrested() then
-						if revive_unit:movement():current_state_name() == "incapacitated" then --tased/cloaked
-							voiceline = "s08x_sin" --"let me help you up"
+					if revive_char_dmg_ext.get_revives then
+						local amount_revives = revive_char_dmg_ext:get_revives()
+
+						if amount_revives == 1 then
+							suffix = "c"
+						elseif amount_revives == 2 then
+							suffix = "b"
+						else
+							local first_down_nr_chk = revive_char_dmg_ext:get_revives_max() - 1
+
+							if amount_revives < first_down_nr_chk then
+								suffix = "b"
+							end
 						end
+					end
 
-						data.unit:sound():say(voiceline, true)
-					end
-				elseif revive_unit:base().is_husk_player then
-					if not revive_unit:character_damage():arrested() then
-						if revive_unit:movement():current_state_name() == "incapacitated" then
-							voiceline = "s08x_sin" --"let me help you up"
-						end
-
-						data.unit:sound():say(voiceline, true)
-					end
-				else
-					if not revive_unit:character_damage():arrested() then
-						data.unit:sound():say(voiceline, true) --doesn't really matter for bots, but some variation could be added if desired
-					end
+					data.unit:sound():say("s09" .. suffix, true)
 				end
 			else
 				data.unit:brain():set_objective()
 
 				return
 			end
-		--[[elseif objective.type == "throw_bag" then
-			data.unit:movement():throw_bag(objective.unit)
-
-			data._ignore_first_travel_order = true
-
-			data.unit:brain():set_objective()]]
 		else
 			if objective.action_duration then
 				my_data.action_timeout_clbk_id = "TeamAILogicIdle_action_timeout" .. key_str

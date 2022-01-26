@@ -348,6 +348,10 @@ function ElementSpawnEnemyDummy:init(...)
 	
 	if ai_type == "america" then
 		if difficulty_index == 8 and table.contains(intense_heists, Global.level_data.level_id) then
+			if sm_wish[self._values.enemy] then
+				self._values.enemy = sm_wish[self._values.enemy]
+			end
+		
 			if sm_wish_intense[self._values.enemy] then
 				self._values.enemy = sm_wish_intense[self._values.enemy]
 			end

@@ -1,9 +1,11 @@
 ﻿Hooks:Add("LocalizationManagerPostInit", "shin_loc", function(loc)
 	LocalizationManager:add_localized_strings({
 		["hhmenu_hold_to_jump"] = "AUTO-JUMP",
-		["hhmenu_hold_to_jump_help"] = "Allow consecutive jumps by simply holding the jump button!",
+		["hhmenu_hold_to_jump_help"] = "Allow consecutive jumps by simply holding the jump button.",
 		["hhmenu_staticrecoil"] = "Static Recoil",
 		["hhmenu_staticrecoil_help"] = "Disables the automatic recoil compensation, making you have to manually pull down on the mouse to adjust your aim after you stop firing.",
+		["hhmenu_holdtofire"] = "HOLD TO FIRE SINGLE-FIRE WEAPONS",
+		["hhmenu_holdtofire_help"] = "Allows players to fire single-fire weapons at their maximum firerate by Fire button.",
 	
 		["hud_assault_FG_cover1"] = "KILL EACHOTHER, BUT IT'S GOOD INVERSES",
 		["hud_assault_FG_cover2"] = "UNADULTERATED MADNESS",
@@ -692,14 +694,29 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["bm_wp_upg_a_piercing_desc"] = "Pierces through enemy armor.",
 			["bm_wp_upg_a_custom_desc"] = "Gives your shotgun rounds fancy tracer effects! Purely aesthetic!",
 			
-			["bm_w_p90"] = "Kobus 90 A/P Submachine Gun",
+			["bm_w_p90"] = "Kobus 90 Piercer Submachine Gun",
 			["bm_w_p90_desc"] = "Piercer Rounds that penetrate Walls, Enemies, Shields and Body Armor!",
-			["bm_w_asval"] = "Valkyria AP Rifle",
+			["bm_w_asval"] = "Valkyria Piercer Rifle",
 			["bm_w_asval_desc"] = "Piercer Rounds that penetrate Walls, Enemies, Shields and Body Armor!",
 			["des_shak12"] = "Heavy Rounds that pierce Enemies and Body Armor!",
 			["bm_w_shak12_desc"] = "Heavy Rounds that pierce Enemies and Body Armor!",
 			["des_ching"] = "High-Caliber Rounds that pierce Enemies, Shields and Body Armor!",
 			["bm_w_ching_desc"] = "High-Caliber Rounds that pierce Enemies, Shields and Body Armor!",
+			["des_akm"] = "AP Rounds that pierce Body Armor!",
+			["bm_w_akm_desc"] = "AP Rounds that pierce Body Armor!",
+			["des_scar"] = "AP Rounds that pierce Body Armor!",
+			["bm_w_scar_desc"] = "AP Rounds that pierce Body Armor!",
+			["des_akm_gold"] = "AP Rounds that pierce Body Armor!",
+			["bm_w_akm_gold_desc"] = "AP Rounds that pierce Body Armor!",
+			["des_flint"] = "AP Rounds that pierce Body Armor!",
+			["bm_w_flint_desc"] = "AP Rounds that pierce Body Armor!",
+			["des_ak12"] = "AP Rounds that pierce Body Armor!",
+			["bm_w_ak12_desc"] = "AP Rounds that pierce Body Armor!",
+			["des_fal"] = "AP Rounds that pierce Body Armor!",
+			["bm_w_fal_desc"] = "AP Rounds that pierce Body Armor!",
+			["des_m16"] = "AP Rounds that pierce Body Armor!",
+			["bm_w_m16_desc"] = "AP Rounds that pierce Body Armor!",
+
 			
 			--DMR KITS
 			["bm_GEN_light_DMR_desc"] = "Grants your weapon Heavy Rounds that pierce Enemies and Body Armor! Reduces your Rate Of Fire!",
