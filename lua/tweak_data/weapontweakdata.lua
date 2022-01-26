@@ -1176,48 +1176,53 @@ self.g3.AMMO_PICKUP = {4, 7}
 self.g3.stats.recoil = 17
 self.g3.kick = {
 	standing = {
-			1.15,
-			1.75,
-			-1.1,
-			1.1
+			0.8,
+			1.2,
+			-0.7,
+			0.7
 	},
 	steelsight = {
+			0.8,
 			1,
-			1.25,
-			-0.6,
-			0.6
+			-0.5,
+			0.5
 	},
 	crouching = {
+			0.8,
 			1,
-			1.25,
-			-0.6,
-			0.6
+			-0.5,
+			0.5
 	}
 }
 self.g3.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 
 --AK 762
+self.akm.has_description = true
+self.akm.armor_piercing_chance = 1
 self.akm.AMMO_PICKUP = {4, 6}
 self.akm.AMMO_MAX = 100
+self.akm.fire_mode_data.fire_rate = 0.16666
+self.akm.auto.fire_rate = 0.16666
+
 self.akm.kick = {
 	standing = {
+			1.25,
 			1.5,
-			2,
-			-1.9,
-			1.9
+			-1,
+			1
 	},
 	steelsight = {
 			1,
-			1.5,
-			-1.2,
-			1.2
+			1.25,
+			-0.8,
+			0.8
 	},
 	crouching = {
 			1,
-			1.5,
-			-1.2,
-			1.2
+			1.25,
+			-0.8,
+			0.8
 	}
 }
 self.akm.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
@@ -1342,9 +1347,9 @@ self.asval.stats.damage = 61
 self.asval.can_shoot_through_shield = true
 self.asval.can_shoot_through_enemy = true
 self.asval.can_shoot_through_wall = true
-self.asval.kick.standing = self.akm.kick.standing
-self.asval.kick.crouching = self.akm.kick.crouching
-self.asval.kick.steelsight = self.akm.kick.steelsight
+self.asval.kick.standing = self.new_m4.kick.standing
+self.asval.kick.crouching = self.new_m4.kick.crouching
+self.asval.kick.steelsight = self.new_m4.kick.steelsight
 self.asval.AMMO_PICKUP = {4, 6}
 self.asval.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
@@ -1359,38 +1364,33 @@ self.komodo.kick.steelsight = self.new_m4.kick.steelsight
 self.komodo.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_MEDIUM
 
 --Eagle Heavy
+self.scar.has_description = true
+self.scar.armor_piercing_chance = 1
 self.scar.CLIP_AMMO_MAX = 30
 self.scar.AMMO_MAX = 100
 self.scar.AMMO_PICKUP = {4, 6}
-self.scar.kick = {
-standing = {
-		1.3,
-		2.5,
-		-1.2,
-		1
-},
-steelsight = {
-		0.7,
-		1.6,
-		-0.8,
-		0.6
-},
-crouching = {
-		0.7,
-		1.6,
-		-0.8,
-		0.6
-}
-}
+self.scar.fire_mode_data.fire_rate = 0.16666
+self.scar.auto.fire_rate = 0.16666
+self.scar.kick.standing = self.akm.kick.standing
+self.scar.kick.crouching = self.akm.kick.crouching
+self.scar.kick.steelsight = self.akm.kick.steelsight
 self.scar.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Gold AK
+self.akm_gold.has_description = true
+self.akm_gold.armor_piercing_chance = 1
+self.akm_gold.fire_mode_data.fire_rate = 0.16666
+self.akm_gold.auto.fire_rate = 0.16666
 self.akm_gold.AMMO_PICKUP = {4, 6}
 self.akm_gold.AMMO_MAX = 100
 self.akm_gold.kick = self.akm.kick
 self.akm_gold.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --AK17
+self.flint.has_description = true
+self.flint.armor_piercing_chance = 1
+self.flint.fire_mode_data.fire_rate = 0.16666
+self.flint.auto.fire_rate = 0.16666
 self.flint.AMMO_PICKUP = {4, 6}
 self.flint.AMMO_MAX = 100
 self.flint.CLIP_AMMO_MAX = 30
@@ -1398,11 +1398,19 @@ self.flint.kick = self.akm.kick
 self.flint.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --Falcon
+self.fal.has_description = true
+self.fal.armor_piercing_chance = 1
+self.fal.fire_mode_data.fire_rate = 0.16666
+self.fal.auto.fire_rate = 0.16666
 self.fal.AMMO_PICKUP = {4, 6}
 self.fal.kick = self.akm.kick
 self.fal.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --AMR16
+self.m16.has_description = true
+self.m16.armor_piercing_chance = 1
+self.m16.fire_mode_data.fire_rate = 0.16666
+self.m16.auto.fire_rate = 0.16666
 self.m16.AMMO_PICKUP = {4, 6}
 self.m16.AMMO_MAX = 100
 self.m16.kick = self.akm.kick
@@ -1423,14 +1431,14 @@ self.galil.stats.spread = 13
 self.galil.stats.damage = 79
 self.galil.AMMO_PICKUP = {4, 7}
 self.galil.stats.recoil = 18
-self.galil.kick = self.akm.kick
+self.galil.kick = self.g3.kick
 self.galil.CLIP_AMMO_MAX = 25
 self.galil.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --M308
 self.new_m14.AMMO_PICKUP = {1, 2.7}
 self.new_m14.AMMO_MAX = 60
-self.new_m14.fire_mode_data.fire_rate = 0.08
+self.new_m14.fire_mode_data.fire_rate = 0.2
 self.new_m14.single.fire_rate = 0.2
 self.new_m14.stats.recoil = 12
 self.new_m14.stats.spread = 18
@@ -1460,7 +1468,7 @@ self.new_m14.stats.damage = 120
 --Galant
 self.ching.has_description = true
 self.ching.fire_mode_data.fire_rate = 0.24
-self.ching.single.fire_rate = 0.16
+self.ching.single.fire_rate = 0.24
 self.ching.AMMO_PICKUP = {2, 3}
 self.ching.stats.recoil = 8
 self.ching.armor_piercing_chance = 1
@@ -1606,29 +1614,10 @@ self.sterling.stats.damage = 128
 self.sterling.stats.spread = 16
 self.sterling.AMMO_PICKUP = {3, 4}
 self.sterling.AMMO_MAX = 60
-self.sterling.kick = {
-standing = {
-		1.6,
-		2.4,
-		-1.6,
-		1.6
-},
-steelsight = {
-		0.8,
-		1.9,
-		-1.2,
-		1.2
-},
-crouching = {
-		0.8,
-		1.9,
-		-1.2,
-		1.2
-}
-}
+self.sterling.kick = self.akm.kick
 
 self.x_sterling.stats.damage = 128
-self.x_sterling.stats.spread = 17
+self.x_sterling.stats.spread = 16
 self.x_sterling.AMMO_PICKUP = {3, 4}
 self.x_sterling.AMMO_MAX = 50
 self.x_sterling.kick = self.sterling.kick
@@ -1764,12 +1753,12 @@ self.p90.can_shoot_through_wall = true
 self.x_p90.can_shoot_through_shield = true
 self.x_p90.can_shoot_through_enemy = true
 self.x_p90.can_shoot_through_wall = true
-self.p90.kick.standing = self.akm.kick.standing
-self.p90.kick.crouching = self.akm.kick.crouching
-self.p90.kick.steelsight = self.akm.kick.steelsight
-self.x_p90.kick = self.akm.kick
-self.x_p90.kick.crouching = self.akm.kick.standing
-self.x_p90.kick.steelsight = self.akm.kick.standing
+self.p90.kick.standing = self.g3.kick.standing
+self.p90.kick.crouching = self.g3.kick.crouching
+self.p90.kick.steelsight = self.g3.kick.steelsight
+self.x_p90.kick = self.g3.kick
+self.x_p90.kick.crouching = self.g3.kick.standing
+self.x_p90.kick.steelsight = self.g3.kick.standing
 
 -- Blaster 9mm
 self.tec9.stats.spread = 16
@@ -1846,22 +1835,22 @@ self.akmsu.AMMO_MAX = 100
 self.akmsu.stats.damage = 78
 self.akmsu.kick = {
 standing = {
-		1.15,
-		1.5,
-		-1.2,
-		1.2
+		1,
+		1.25,
+		-0.8,
+		0.8
 },
 steelsight = {
-		0.7,
-		1.2,
-		-1,
-		1
+		0.8,
+		1,
+		-0.5,
+		0.5
 },
 crouching = {
-		0.7,
-		1.2,
-		-0.8,
-		0.6
+		0.8,
+		1,
+		-0.5,
+		0.5
 }
 }
 
