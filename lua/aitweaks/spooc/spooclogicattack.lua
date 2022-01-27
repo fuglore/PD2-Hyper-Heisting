@@ -288,7 +288,7 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		return
 	end
 
-	if not data.is_converted and data.spooc_attack_timeout_t and data.spooc_attack_timeout_t >= data.t then
+	if not data.is_converted and data.spooc_attack_timeout_t and data.spooc_attack_timeout_t > data.t then
 		return
 	end
 
@@ -430,8 +430,8 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 	elseif action_type == "turn" then
 		my_data.turning = nil
 	elseif action_type == "spooc" then
-		data.spooc_attack_timeout_t = TimerManager:game():time() + math.lerp(data.char_tweak.spooc_attack_timeout[1], data.char_tweak.spooc_attack_timeout[2], math.random())
-
+		data.spooc_attack_timeout_t = data.t + 5
+		
 		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math.random() <= data.char_tweak.spooc_attack_use_smoke_chance and managers.groupai:state():is_smoke_grenade_active() then
 			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)
 		end

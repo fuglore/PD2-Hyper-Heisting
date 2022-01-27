@@ -1,6 +1,7 @@
 local mvec3_dis_sq = mvector3.distance_sq
 local mvec3_cpy = mvector3.copy
 
+local math_up = math.UP
 local math_lerp = math.lerp
 local math_random = math.random
 local math_min = math.min
@@ -269,7 +270,7 @@ function TeamAILogicAssault._upd_combat_movement(data)
 				local height = nil
 
 				if in_cover[4] then --has obstructed high_ray
-					height = 150
+					height = 180
 				else
 					height = 80
 				end
@@ -377,7 +378,7 @@ function TeamAILogicAssault._upd_enemy_detection(data, is_synchronous)
 	if data.objective and data.objective.type == "follow" and not data.unit:movement():chk_action_forbidden("walk") and TeamAILogicIdle._check_should_relocate(data, my_data, data.objective) then
 		data.objective.in_place = nil
 
-		if new_prio_slot and new_prio_slot > 5 then
+		if new_prio_slot and new_prio_slot > 3 then
 			data.objective.called = true
 		end
 
