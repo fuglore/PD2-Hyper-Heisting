@@ -7568,14 +7568,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				13.05
 			},
 			tac_swat_rifle = {
-				13.1,
-				13.1,
-				13.1
+				13.2,
+				13.2,
+				13.2
 			},
 			tac_swat_rifle_flank = {
-				13.15,
-				13.15,
-				13.15
+				13.2,
+				13.2,
+				13.2
 			},
 			punks_A = {
 				5.25,
@@ -7608,19 +7608,19 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				3
 			},
 			tac_tazer_flanking = {
-				4.95,
-				4.95,
-				4.95
+				5,
+				5,
+				5
 			},
 			tac_tazer_charge = {
-				4.95,
-				4.95,
-				4.95
+				5,
+				5,
+				5
 			},
 			FBI_spoocs = {
-				6.5,
-				6.5,
-				6.5
+				6.25,
+				6.25,
+				6.25
 			},
 			tac_bull_rush = {
 				6.50,
@@ -7747,54 +7747,54 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	elseif difficulty_index == 4 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				14,
-				14,
-				14
+				13.05,
+				13.05,
+				13.05
 			},
 			tac_swat_shotgun_flank = {
-				14,
-				14,
-				14
+				13.05,
+				13.05,
+				13.05
 			},
 			tac_swat_rifle = {
-				14.5,
-				14.5,
-				14.5
+				13.2,
+				13.2,
+				13.2
 			},
 			tac_swat_rifle_flank = {
-				14.5,
-				14.5,
-				14.5
+				13.2,
+				13.2,
+				13.2
 			},
 			punks_A = {
-				4,
-				4,
-				4
+				5.25,
+				5.25,
+				5.25
 			},
 			punks_B = {
-				4,
-				4,
-				4
+				5.25,
+				5.25,
+				5.25
 			},
 			punks_C = {
-				4,
-				4,
-				4
+				5.25,
+				5.25,
+				5.25
 			},
 			tac_shield_wall_ranged = {
-				3.5,
-				3.5,
-				3.5
+				3,
+				3,
+				3
 			},
 			tac_shield_wall_charge = {
-				3.5,
-				3.5,
-				3.5
+				3,
+				3,
+				3
 			},
 			tac_shield_wall = {
-				3.5,
-				3.5,
-				3.5
+				3,
+				3,
+				3
 			},
 			tac_tazer_flanking = {
 				5,
@@ -7807,52 +7807,53 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				5
 			},
 			FBI_spoocs = {
-				5,
-				5,
-				5
+				6.25,
+				6.25,
+				6.25
 			},
 			tac_bull_rush = {
-				5.5,
-				5.5,
-				5.5,
+				6.50,
+				6.50,
+				6.50
 			}
 		}
+	
 	elseif difficulty_index == 5 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
-				13,
-				13,
-				13
+				13.05,
+				13.05,
+				13.05
 			},
 			tac_swat_shotgun_flank = {
-				13,
-				13,
-				13
+				13.05,
+				13.05,
+				13.05
 			},
 			tac_swat_rifle = {
-				13.1,
-				13.1,
-				13.1
+				13.2,
+				13.2,
+				13.2
 			},
 			tac_swat_rifle_flank = {
-				13.1,
-				13.1,
-				13.1
+				13.2,
+				13.2,
+				13.2
 			},
 			punks_A = {
-				5.2,
-				5.2,
-				5.2
+				5.25,
+				5.25,
+				5.25
 			},
 			punks_B = {
-				5.2,
-				5.2,
-				5.2
+				5.25,
+				5.25,
+				5.25
 			},
 			punks_C = {
-				5.2,
-				5.2,
-				5.2
+				5.25,
+				5.25,
+				5.25
 			},
 			tac_shield_wall_ranged = {
 				3,
@@ -7870,9 +7871,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				3
 			},
 			tac_tazer_flanking = {
-				4.95,
-				4.95,
-				4.95
+				5,
+				5,
+				5
 			},
 			tac_tazer_charge = {
 				5,
@@ -7880,16 +7881,17 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				5
 			},
 			FBI_spoocs = {
-				6.5,
-				6.5,
-				6.5
+				6.25,
+				6.25,
+				6.25
 			},
 			tac_bull_rush = {
-				6.8,
-				6.8,
-				6.8
+				6.50,
+				6.50,
+				6.50
 			}
 		}
+	
 	elseif difficulty_index == 6 then
 		self.besiege.assault.groups = {
 			tac_swat_shotgun_rush = {
@@ -8049,14 +8051,14 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				13.05
 			},
 			tac_swat_rifle = {
-				13.1,
-				13.1,
-				13.1
+				13.2,
+				13.2,
+				13.2
 			},
 			tac_swat_rifle_flank = {
-				13.15,
-				13.15,
-				13.15
+				13.2,
+				13.2,
+				13.2
 			},
 			punks_A = {
 				5.25,
@@ -8089,19 +8091,19 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 				3
 			},
 			tac_tazer_flanking = {
-				4.95,
-				4.95,
-				4.95
+				5,
+				5,
+				5
 			},
 			tac_tazer_charge = {
-				4.95,
-				4.95,
-				4.95
+				5,
+				5,
+				5
 			},
 			FBI_spoocs = {
-				6.5,
-				6.5,
-				6.5
+				6.25,
+				6.25,
+				6.25
 			},
 			tac_bull_rush = {
 				6.50,

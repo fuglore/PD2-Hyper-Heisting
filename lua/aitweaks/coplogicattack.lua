@@ -368,9 +368,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	if not action_taken then
 		if my_data.attitude ~= "engage" and not in_cover then
 			move_to_cover = true
-		elseif my_data.at_cover_shoot_pos then
-			move_to_cover = true
-		elseif want_to_take_cover then
+		elseif want_to_take_cover or my_data.at_cover_shoot_pos then
 			if in_cover then
 				if my_data.attitude == "engage" then
 					if my_data.cover_test_step <= 2 then
@@ -398,19 +396,19 @@ function CopLogicAttack._upd_combat_movement(data)
 						want_flank_cover = true
 					end
 				elseif not my_data.walking_to_cover_shoot_pos then
-					if my_data.at_cover_shoot_pos then
+					if my_data.at_cover_shoot_pos and focus_enemy.verified then
 						move_to_cover = true
 					else
 						move_to_cover = true
 						want_flank_cover = true
 					end
 				end
-			else
+			elseif my_data.at_cover_shoot_pos and focus_enemy.verified or not enemy_visible_soft then
 				move_to_cover = true
 			end
 		else
-			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.open_fire or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown")then
-				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then
+			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.moving_in or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown")then
+				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 2 then
 					if my_data.charge_path then
 						local path = my_data.charge_path
 						my_data.charge_path = nil
@@ -463,7 +461,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			elseif my_data.flank_cover and my_data.flank_cover.failed then
 				want_flank_cover = true
 
-				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 3 then --not gonna bother renaming and adding stuff to be used as flank_path as well, so I'm sharing the name even though they're kinda different
+				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 2 then --not gonna bother renaming and adding stuff to be used as flank_path as well, so I'm sharing the name even though they're kinda different
 					my_data.flank_cover = nil
 
 					if my_data.charge_path then
@@ -570,7 +568,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	end
 	
 	if not action_taken then
-		if want_to_take_cover and want_to_take_cover ~= true then
+		if want_to_take_cover then
 			action_taken = CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, my_data.attitude == "engage" and not data.is_suppressed)
 		end
 	end
@@ -1746,19 +1744,19 @@ function CopLogicAttack._upd_aim(data, my_data)
 						if time_since_verification < math_lerp(5, 1, dis_lerp) then
 							aim = true
 						end
-					elseif time_since_verification < 5 then
+					elseif time_since_verification < 7 then
 						aim = true
 					end
 
 					if aim and my_data.shooting and REACT_SHOOT <= focus_enemy.reaction then
 						if running then
 							local look_pos = focus_enemy.last_verified_pos or focus_enemy.verified_pos
-							local same_height = math_abs(look_pos.z - data.m_pos.z) < 250
+							local same_height = math_abs(look_pos.z - data.unit:movement():m_head_pos().z) < 250
 
-							if same_height and time_since_verification < 2 then
+							if same_height and time_since_verification < 5 then
 								shoot = true
 							end
-						elseif time_since_verification < 3 then
+						elseif time_since_verification < 7 then
 							shoot = true
 						end
 					end
@@ -1839,7 +1837,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 	if aim or shoot then
 		local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
 		
-		if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification <= 0.3 then
+		if focus_enemy.verified or focus_enemy.nearly_visible then
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)
 
@@ -1853,8 +1851,8 @@ function CopLogicAttack._upd_aim(data, my_data)
 		else
 			local look_pos = nil
 			
-			if time_since_verification and time_since_verification <= 2 or focus_enemy.dis < 400 then
-				look_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
+			if time_since_verification and time_since_verification <= 7 or focus_enemy.dis < 400 then
+				look_pos = focus_enemy.verified_pos or my_data.expected_pos
 			end
 
 			if not look_pos then
@@ -1868,7 +1866,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 					local pos = managers.navigation:find_random_position_in_segment(seg)
 					
 					if mvec3_dis_sq(data.m_pos, pos) > 360000 then
-						if math_abs(data.unit:movement():m_head_pos().z - pos.z) < 200 then
+						if math_abs(data.unit:movement():m_head_pos().z - pos.z) < 250 then
 							mvec3_set_z(pos, data.unit:movement():m_head_pos().z)
 						end
 						
