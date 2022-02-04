@@ -334,6 +334,10 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 		end
 	end
 	
+	if not force_run and self.tased then
+		multiplier = multiplier * 0.2
+	end
+	
 	local final_speed = movement_speed * multiplier
 	
 	if self._fall_damage_slow_t then

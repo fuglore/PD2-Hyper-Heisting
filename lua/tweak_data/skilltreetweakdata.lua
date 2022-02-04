@@ -18,8 +18,7 @@ function SkillTreeTweakData:init()
 		},
 		{
 			upgrades = {
-				"player_taser_self_shock",
-				"player_escape_taser_1"
+				"player_move_while_tased"
 			},
 			cost = self.costs.hightierpro
 		},

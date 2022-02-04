@@ -480,6 +480,169 @@ function HuskPlayerMovement:_update_air_time(t, dt)
 	end
 end
 
+function HuskPlayerMovement:_start_bleedout(event_desc)
+	local redir_res = self:play_redirect("bleedout")
+
+	if not redir_res then
+		print("[HuskPlayerMovement:_start_bleedout] redirect failed in", self._machine:segment_state(self._ids_base), self._unit)
+
+		return
+	end
+
+	self._unit:set_slot(3)
+	managers.hud:set_mugshot_downed(self._unit:unit_data().mugshot_id)
+	managers.groupai:state():on_criminal_disabled(self._unit)
+	self._unit:interaction():set_tweak_data("revive")
+	self:set_need_revive(true, event_desc.down_time)
+
+	if self._atention_on then
+		self._machine:forbid_modifier(self._look_modifier_name)
+		self._machine:forbid_modifier(self._head_modifier_name)
+		self._machine:forbid_modifier(self._arm_modifier_name)
+		self._machine:forbid_modifier(self._mask_off_modifier_name)
+
+		self._atention_on = false
+	end
+
+	return true
+end
+
+function HuskPlayerMovement:_start_tased(event_desc)
+	local redir_res = self:play_redirect("tased")
+
+	if not redir_res then
+		print("[HuskPlayerMovement:_start_tased] redirect failed in", self._machine:segment_state(self._ids_base), self._unit)
+
+		return
+	end
+
+	self._unit:set_slot(3)
+	self:set_need_revive(false)
+	managers.hud:set_mugshot_tased(self._unit:unit_data().mugshot_id)
+	managers.groupai:state():on_criminal_disabled(self._unit, "electrified")
+
+	self._tase_effect = World:effect_manager():spawn(self._tase_effect_table)
+
+	self:set_need_assistance(true)
+
+	if self._atention_on then
+		self._machine:forbid_modifier(self._look_modifier_name)
+		self._machine:forbid_modifier(self._head_modifier_name)
+		self._machine:forbid_modifier(self._arm_modifier_name)
+		self._machine:forbid_modifier(self._mask_off_modifier_name)
+
+		self._atention_on = false
+	end
+
+	return true
+end
+
+function HuskPlayerMovement:_start_fatal(event_desc)
+	local redir_res = self:play_redirect("fatal")
+
+	if not redir_res then
+		print("[HuskPlayerMovement:_start_fatal] redirect failed in", self._machine:segment_state(self._ids_base), self._unit)
+
+		return
+	end
+
+	self._unit:set_slot(5)
+	managers.hud:set_mugshot_downed(self._unit:unit_data().mugshot_id)
+	managers.groupai:state():on_criminal_neutralized(self._unit)
+	self._unit:interaction():set_tweak_data("revive")
+	self:set_need_revive(true, event_desc.down_time)
+
+	if self._atention_on then
+		self._machine:forbid_modifier(self._look_modifier_name)
+		self._machine:forbid_modifier(self._head_modifier_name)
+		self._machine:forbid_modifier(self._arm_modifier_name)
+		self._machine:forbid_modifier(self._mask_off_modifier_name)
+
+		self._atention_on = false
+	end
+
+	return true
+end
+
+function HuskPlayerMovement:_start_incapacitated(event_desc)
+	local redir_res = self:play_redirect("incapacitated")
+
+	if not redir_res then
+		print("[HuskPlayerMovement:_start_incapacitated] redirect failed in", self._machine:segment_state(self._ids_base), self._unit)
+
+		return
+	end
+
+	self:set_need_revive(true)
+
+	if self._atention_on then
+		self._machine:forbid_modifier(self._look_modifier_name)
+		self._machine:forbid_modifier(self._head_modifier_name)
+		self._machine:forbid_modifier(self._arm_modifier_name)
+		self._machine:forbid_modifier(self._mask_off_modifier_name)
+
+		self._atention_on = false
+	end
+
+	return true
+end
+
+function HuskPlayerMovement:_start_dead(event_desc)
+	local redir_res = self:play_redirect("death")
+
+	if not redir_res then
+		print("[HuskPlayerMovement:_start_dead] redirect failed in", self._machine:segment_state(self._ids_base), self._unit)
+
+		return
+	end
+
+	if self._atention_on then
+		local blend_out_t = 0.15
+
+		self._machine:set_modifier_blend(self._look_modifier_name, blend_out_t)
+		self._machine:set_modifier_blend(self._head_modifier_name, blend_out_t)
+		self._machine:set_modifier_blend(self._arm_modifier_name, blend_out_t)
+		self._machine:forbid_modifier(self._look_modifier_name)
+		self._machine:forbid_modifier(self._head_modifier_name)
+		self._machine:forbid_modifier(self._arm_modifier_name)
+		self._machine:forbid_modifier(self._mask_off_modifier_name)
+
+		self._atention_on = false
+	end
+
+	return true
+end
+
+function HuskPlayerMovement:_start_arrested(event_desc)
+	if not self._ext_anim.hands_tied then
+		local redir_res = self:play_redirect("tied")
+
+		if not redir_res then
+			print("[HuskPlayerMovement:_start_arrested] redirect failed in", self._machine:segment_state(self._ids_base), self._unit)
+
+			return
+		end
+	end
+
+	self._unit:set_slot(5)
+	managers.hud:set_mugshot_cuffed(self._unit:unit_data().mugshot_id)
+	managers.groupai:state():on_criminal_neutralized(self._unit)
+	self._unit:interaction():set_tweak_data("free")
+	self:set_need_revive(true)
+
+	if self._atention_on then
+		self._machine:forbid_modifier(self._look_modifier_name)
+		self._machine:forbid_modifier(self._head_modifier_name)
+		self._machine:forbid_modifier(self._arm_modifier_name)
+		self._machine:forbid_modifier(self._mask_off_modifier_name)
+
+		self._atention_on = false
+	end
+
+	return true
+end
+
+
 --[[local draw_player_newest_pos = nil
 local draw_player_detect_pos = nil
 
