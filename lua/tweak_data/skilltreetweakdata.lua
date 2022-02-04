@@ -9,6 +9,28 @@ function SkillTreeTweakData:init()
 	table.insert(self.default_upgrades, "player_run_and_reload")
 	table.insert(self.default_upgrades, "first_aid_kit_deploy_time_multiplier")
 	
+	self.skills.insulation = { --The Rubber
+		{
+			upgrades = {
+				"player_resist_firing_tased"
+			},
+			cost = self.costs.hightier
+		},
+		{
+			upgrades = {
+				"player_taser_self_shock",
+				"player_escape_taser_1"
+			},
+			cost = self.costs.hightierpro
+		},
+		name_id = "menu_insulation_beta",
+		desc_id = "menu_insulation_beta_desc",
+		icon_xy = {
+			3,
+			5
+		}
+	}
+	
 	self.skills.spotter_teamwork = {
 		{
 			upgrades = {

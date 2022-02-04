@@ -2,6 +2,8 @@ function PlayerTased:enter(state_data, enter_data)
 	PlayerTased.super.enter(self, state_data, enter_data)
 	self:_start_action_tased(managers.player:player_timer():time(), state_data.non_lethal_electrocution)
 
+	self._taser_resist = managers.player:has_category_upgrade("player", "resist_firing_tased")
+
 	if state_data.non_lethal_electrocution then
 		state_data.non_lethal_electrocution = nil
 		self._is_non_lethal = true
@@ -89,13 +91,17 @@ function PlayerTased:enter(state_data, enter_data)
 end
 
 function PlayerTased:_check_action_shock(t, input)
+	local tase_shake_mul = self._taser_resist and 0.5 or 1
+
 	if self._next_shock < t then
 		self._num_shocks = self._num_shocks + 1
 		self._next_shock = t + 0.75
 
-		self._unit:camera():play_shaker("player_taser_shock", 1, 10)
+		self._unit:camera():play_shaker("player_taser_shock", 1 * tase_shake_mul, 10 * tase_shake_mul)
 		
 		local shake = self._harsher_shake and math.random(30) or math.random(10)
+		
+		shake = shake * tase_shake_mul
 		
 		self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * shake)
 
@@ -130,18 +136,20 @@ function PlayerTased:_check_action_shock(t, input)
 		if not alive(self._counter_taser_unit) then
 			self._camera_unit:base():start_shooting()
 			
-			self._recoil_t = t + 0.5
+			self._recoil_t = t + 0.75
 			
-			if not managers.player:has_category_upgrade("player", "resist_firing_tased") then
+			if not self._taser_resist then
 				input.btn_primary_attack_state = true
 				input.btn_primary_attack_press = true
 			end
+			
+			local shake = 5 * tase_shake_mul
 
-			self._camera_unit:base():recoil_kick(-5, 5, -5, 5)
+			self._camera_unit:base():recoil_kick(-shake, shake, -shake, shake)
 			self._unit:camera():play_redirect(self:get_animation("tased_boost"))
 		end
 	elseif self._recoil_t then
-		if not managers.player:has_category_upgrade("player", "resist_firing_tased") then
+		if not self._taser_resist then
 			input.btn_primary_attack_state = true
 		end
 

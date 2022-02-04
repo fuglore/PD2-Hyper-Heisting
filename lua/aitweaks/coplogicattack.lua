@@ -1726,10 +1726,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 						end
 
 						aim = aim or shoot
-
-						if not aim and focus_enemy.verified_dis < firing_range then
-							aim = true
-						end
 					else
 						aim = true
 					end
@@ -1741,10 +1737,10 @@ function CopLogicAttack._upd_aim(data, my_data)
 					if running then
 						local dis_lerp = math_clamp((focus_enemy.verified_dis - 500) / 600, 0, 1)
 
-						if time_since_verification < math_lerp(5, 1, dis_lerp) then
+						if time_since_verification < math_lerp(4, 0.5, dis_lerp) then
 							aim = true
 						end
-					elseif time_since_verification < 7 then
+					elseif time_since_verification < 4 then
 						aim = true
 					end
 
@@ -1753,10 +1749,10 @@ function CopLogicAttack._upd_aim(data, my_data)
 							local look_pos = focus_enemy.last_verified_pos or focus_enemy.verified_pos
 							local same_height = math_abs(look_pos.z - data.unit:movement():m_head_pos().z) < 250
 
-							if same_height and time_since_verification < 5 then
+							if same_height and time_since_verification < 1.75 then
 								shoot = true
 							end
-						elseif time_since_verification < 7 then
+						elseif time_since_verification < 3.5 then
 							shoot = true
 						end
 					end

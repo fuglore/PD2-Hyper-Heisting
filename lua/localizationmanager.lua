@@ -636,7 +636,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_sprinter_beta"] = "High Vigour",
 			["menu_sprinter_beta_desc"] = "BASIC: ##$basic##\nYour stamina regenerates ##25%## faster.\n\nACE: ##$pro##\nYou gain ##+10## ##Dodge##. ##Dodge## gives you a random chance to ##completely negate damage##.\n\nUpon successfully ##dodging## an attack, regain ##5## stamina.",
 			
-			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nWhen tased, the effect has a ##25%## chance to ##backfire## on the Taser, knocking them back.\n\nACE: ##$pro##\nWhen tased, you are able to ##free yourself from the Taser## by looking at the Taser and pressing your interact key within ##0.4## seconds of getting tased.",
+			["menu_insulation_beta"] = "The Rubber",
+			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nYou ##no longer uncontrollably fire your weapons## while being electrocuted. Your camera shake while being electrocuted is reduced by ##50%##.\n\nACE: ##$pro##\nWhen tased, you are able to ##free yourself from the Taser## by looking at the Taser and pressing your interact key within ##0.4## seconds of getting tased.\n\n##Never engage without protection.##",
 			
 			--BASIC: When tased, you can now withstand being ##shocked## ##2## more times before you explode with electricity.
 			--ACED: When tased, ##you can now free yourself from the Taser## by completing a ##Quick Time Event##.\n\nPressing the Interact key just as a Taser ##shocks## you three times in a row will free you.\n\nFailing to press the Interact key or pressing it at the wrong time cancels the skill.
