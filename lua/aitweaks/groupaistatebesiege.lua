@@ -3076,48 +3076,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if next(search_area.criminal.units) then
 				local assault_from_here = true
 				
-				if not push then
-					if tactics_map and tactics_map.flank then
-						local assault_from_area = found_areas[search_area]
-
-						if assault_from_area ~= "init" then
-							local cop_units = assault_from_area.police.units
-
-							for u_key, u_data in pairs_g(cop_units) do
-								if u_data.group and u_data.group ~= group and u_data.group.objective.type == "assault_area" then
-									assault_from_here = false
-									
-									if not alternate_assault_area or math_random() < 0.5 then
-										local search_params = {
-											id = "GroupAI_assault",
-											from_seg = current_objective.area.pos_nav_seg,
-											to_seg = search_area.pos_nav_seg,
-											access_pos = self._get_group_acces_mask(group),
-											long_path = true
-										}
-										alternate_assault_path = managers.navigation:search_coarse(search_params)
-										
-										if alternate_assault_path then
-											--log("pog")
-											self:_merge_coarse_path_by_area(alternate_assault_path)
-
-											alternate_assault_area = search_area
-											alternate_assault_area_from = assault_from_area
-										end
-									else
-										alternate_assault_area = search_area
-										alternate_assault_area_from = assault_from_area
-									end
-
-									found_areas[search_area] = nil
-
-									break
-								end
-							end
-						end
-					end
-				end
-
 				if assault_from_here then
 					local search_params = {
 						id = "GroupAI_assault",
@@ -3154,7 +3112,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			assault_path = alternate_assault_path
 		end
 
-		if assault_area and assault_path then
+		if assault_area and assault_path then	
 			local used_grenade = nil
 	
 			if push then
