@@ -218,6 +218,8 @@ function CopLogicAttack.update(data)
 	CopLogicAttack._process_pathing_results(data, my_data)
 	
 	if not my_data.tasing then
+		CopLogicAttack.check_chatter(data, my_data, data.objective)
+	
 		if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
 			my_data.attitude = data.objective and data.objective.attitude or "avoid"
 			
@@ -403,11 +405,11 @@ function CopLogicAttack._upd_combat_movement(data)
 						want_flank_cover = true
 					end
 				end
-			elseif my_data.at_cover_shoot_pos and focus_enemy.verified or not enemy_visible_soft then
+			elseif want_to_take_cover or not enemy_visible_soft then
 				move_to_cover = true
 			end
 		else
-			if not data.objective or not data.objective.grp_objective or data.objective.grp_objective.moving_in or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown")then
+			if data.objective and data.objective.grp_objective and data.objective.grp_objective.moving_in or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown") then
 				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 2 then
 					if my_data.charge_path then
 						local path = my_data.charge_path
@@ -720,6 +722,154 @@ function CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 			}
 
 			return CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
+		end
+	end
+end
+
+function CopLogicAttack.check_chatter(data, my_data, objective)
+	if not objective then
+		return
+	end
+
+	local said_something = nil
+	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
+	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter
+
+	if hostage_count > 0 then --make sure the hostage count is actually above zero before replacing any of the lines
+		if hostage_count > 3 then  -- hostage count needs to be above 3
+			if math_random() < 0.4 then --40% chance for regular panic if hostages are present
+				chosen_panic_chatter = "controlpanic"
+			else
+				chosen_panic_chatter = "hostagepanic2" --more panicky "GET THOSE HOSTAGES OUT RIGHT NOW!!!" line for when theres too many hostages on the map
+			end
+		else
+			if math_random() < 0.4 then
+				chosen_panic_chatter = "controlpanic"
+			else
+				chosen_panic_chatter = "hostagepanic1" --less panicky "Delay the assault until those hostages are out." line
+			end
+		end
+
+		if managers.groupai:state():chk_has_civilian_hostages() then
+			--log("they got sausages!")
+			if math_random() < 0.5 then
+				chosen_panic_chatter = chosen_panic_chatter
+			else
+				chosen_panic_chatter = "civilianpanic"
+			end
+		end
+	elseif managers.groupai:state():chk_had_hostages() then
+		if math_random() < 0.4 then
+			chosen_panic_chatter = "controlpanic"
+		else
+			chosen_panic_chatter = "hostagepanic3" -- no more hostages!!! full force!!!
+		end
+	end
+
+	local chosen_sabotage_chatter = "sabotagegeneric" --set default sabotage chatter for variety's sake
+	local skirmish_map = managers.skirmish:is_skirmish()--these shouldnt play on holdout
+	local ignore_radio_rules = nil
+
+	if objective and objective.bagjob then
+		--log("oh, worm")
+		chosen_sabotage_chatter = "sabotagebags"
+		ignore_radio_rules = true
+	elseif objective and objective.hostagejob then
+		--log("sausage removal squadron")
+		chosen_sabotage_chatter = "sabotagehostages"
+		ignore_radio_rules = true 
+	else
+		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
+	end
+
+	local clear_t_chk = not data.attention_obj or not data.attention_obj.verified_t or data.t - data.attention_obj.verified_t > math_random(2.5, 5)	
+
+	local can_say_clear = not data.attention_obj or REACT_COMBAT <= data.attention_obj.reaction and clear_t_chk
+
+	if not data.unit:base():has_tag("special") and can_say_clear and not data.is_converted then
+		if not data.unit:movement():cool() then
+			if not managers.groupai:state():chk_assault_active_atm() then
+				if data.char_tweak.chatter and data.char_tweak.chatter.controlpanic then
+					local clearchk = math_random(0, 90)
+					local say_clear = 30
+					if clearchk > 60 then
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
+						said_something = true
+					elseif clearchk > 30 then
+						if not skirmish_map and my_data.radio_voice or not skirmish_map and ignore_radio_rules then
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+							said_something = true
+						else
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
+							said_something = true
+						end
+					else
+						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
+						said_something = true
+					end
+				elseif data.char_tweak.chatter and data.char_tweak.chatter.clear then
+					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
+					said_something = true
+				end
+			end
+		end
+	end
+
+	if not said_something then 
+		if data.unit:base():has_tag("special") and can_say_clear then
+			if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
+				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
+				said_something = true
+			elseif data.unit:base()._tweak_table == "shield" then
+				--fuck off
+			elseif data.unit:base()._tweak_table == "akuma" then
+				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "lotusapproach" )
+				said_something = true
+			end
+		end
+	end
+	
+	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
+	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
+
+	if not said_something then
+		if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted then
+			if not data.unit:base():has_tag("special") and data.unit:base():has_tag("law") then
+				if managers.groupai:state():chk_assault_active_atm() then
+					if managers.groupai:state():_check_assault_panic_chatter() then
+						if data.attention_obj and data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj and data.attention_obj.verified then
+							local roll = math_random(1, 100)
+							local chance_suppanic = 50
+
+							if roll <= chance_suppanic then
+								if roll <= chance_suppanic then
+									managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed1" )
+								else
+									managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed2" )
+								end
+							else
+								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+							end
+						else
+							if math_random() < 0.2 then
+								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+							else
+								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
+							end
+						end
+					else
+						local clearchk = math_random(0, 90)
+
+						if clearchk > 60 then
+							if not skirmish_map and my_data.radio_voice or not skirmish_map and ignore_radio_rules then
+								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
+							end
+						elseif chosen_panic_chatter == "civilianpanic" then
+							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
+						end
+					end
+				end
+			end	
 		end
 	end
 end
@@ -1157,10 +1307,6 @@ function CopLogicAttack._update_cover(data)
 							dis_mul = dis_mul + 0.2
 						end	
 					end
-				end
-				
-				if not data.tactics or data.tactics.aggressor then
-					dis_mul = dis_mul * 0.2
 				end
 				
 				if data.tactics and data.tactics.charge then
@@ -1729,6 +1875,8 @@ function CopLogicAttack._upd_aim(data, my_data)
 					else
 						aim = true
 					end
+				elseif firing_range < focus_enemy.dis then
+					aim = true
 				end
 			else
 				local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
@@ -2327,148 +2475,6 @@ end
 function CopLogicAttack.queue_update(data, my_data)
 	local delay = data.important and 0 or 0.5
 
-	local said_something = nil
-	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
-	local chosen_panic_chatter = "controlpanic" --set default generic assault break chatter
-
-	if hostage_count > 0 then --make sure the hostage count is actually above zero before replacing any of the lines
-		if hostage_count > 3 then  -- hostage count needs to be above 3
-			if math_random() < 0.4 then --40% chance for regular panic if hostages are present
-				chosen_panic_chatter = "controlpanic"
-			else
-				chosen_panic_chatter = "hostagepanic2" --more panicky "GET THOSE HOSTAGES OUT RIGHT NOW!!!" line for when theres too many hostages on the map
-			end
-		else
-			if math_random() < 0.4 then
-				chosen_panic_chatter = "controlpanic"
-			else
-				chosen_panic_chatter = "hostagepanic1" --less panicky "Delay the assault until those hostages are out." line
-			end
-		end
-
-		if managers.groupai:state():chk_has_civilian_hostages() then
-			--log("they got sausages!")
-			if math_random() < 0.5 then
-				chosen_panic_chatter = chosen_panic_chatter
-			else
-				chosen_panic_chatter = "civilianpanic"
-			end
-		end
-	elseif managers.groupai:state():chk_had_hostages() then
-		if math_random() < 0.4 then
-			chosen_panic_chatter = "controlpanic"
-		else
-			chosen_panic_chatter = "hostagepanic3" -- no more hostages!!! full force!!!
-		end
-	end
-
-	local chosen_sabotage_chatter = "sabotagegeneric" --set default sabotage chatter for variety's sake
-	local skirmish_map = managers.skirmish:is_skirmish()--these shouldnt play on holdout
-	local ignore_radio_rules = nil
-
-	if objective and objective.bagjob then
-		--log("oh, worm")
-		chosen_sabotage_chatter = "sabotagebags"
-		ignore_radio_rules = true
-	elseif objective and objective.hostagejob then
-		--log("sausage removal squadron")
-		chosen_sabotage_chatter = "sabotagehostages"
-		ignore_radio_rules = true 
-	else
-		chosen_sabotage_chatter = "sabotagegeneric" --if none of these levels are the current one, use a generic "Break their gear!" line
-	end
-
-	local clear_t_chk = not data.attention_obj or not data.attention_obj.verified_t or data.t - data.attention_obj.verified_t > math_random(2.5, 5)	
-
-	local can_say_clear = not data.attention_obj or REACT_COMBAT <= data.attention_obj.reaction and clear_t_chk
-
-	if not data.unit:base():has_tag("special") and can_say_clear and not data.is_converted then
-		if not data.unit:movement():cool() then
-			if not managers.groupai:state():chk_assault_active_atm() then
-				if data.char_tweak.chatter and data.char_tweak.chatter.controlpanic then
-					local clearchk = math_random(0, 90)
-					local say_clear = 30
-					if clearchk > 60 then
-						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
-						said_something = true
-					elseif clearchk > 30 then
-						if not skirmish_map and my_data.radio_voice or not skirmish_map and ignore_radio_rules then
-							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
-							said_something = true
-						else
-							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
-							said_something = true
-						end
-					else
-						managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
-						said_something = true
-					end
-				elseif data.char_tweak.chatter and data.char_tweak.chatter.clear then
-					managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "clear" )
-					said_something = true
-				end
-			end
-		end
-	end
-
-	if not said_something then 
-		if data.unit:base():has_tag("special") and can_say_clear then
-			if data.unit:base():has_tag("tank") or data.unit:base():has_tag("taser") then
-				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "approachingspecial" )
-				said_something = true
-			elseif data.unit:base()._tweak_table == "shield" then
-				--fuck off
-			elseif data.unit:base()._tweak_table == "akuma" then
-				managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "lotusapproach" )
-				said_something = true
-			end
-		end
-	end
-	
-	--mid-assault panic for cops based on alerts instead of opening fire, since its supposed to be generic action lines instead of for opening fire and such
-	--I'm adding some randomness to these since the delays in groupaitweakdata went a bit overboard but also arent able to really discern things proper
-
-	if not said_something then
-		if data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.enemyidlepanic and not data.is_converted then
-			if not data.unit:base():has_tag("special") and data.unit:base():has_tag("law") then
-				if managers.groupai:state():chk_assault_active_atm() then
-					if managers.groupai:state():_check_assault_panic_chatter() then
-						if data.attention_obj and data.attention_obj.verified and data.attention_obj.dis <= 500 or data.is_suppressed and data.attention_obj and data.attention_obj.verified then
-							local roll = math_random(1, 100)
-							local chance_suppanic = 50
-
-							if roll <= chance_suppanic then
-								if roll <= chance_suppanic then
-									managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed1" )
-								else
-									managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanicsuppressed2" )
-								end
-							else
-								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
-							end
-						else
-							if math_random() < 0.2 then
-								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
-							else
-								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "assaultpanic" )
-							end
-						end
-					else
-						local clearchk = math_random(0, 90)
-
-						if clearchk > 60 then
-							if not skirmish_map and my_data.radio_voice or not skirmish_map and ignore_radio_rules then
-								managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_sabotage_chatter )
-							end
-						elseif chosen_panic_chatter == "civilianpanic" then
-							managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, chosen_panic_chatter )
-						end
-					end
-				end
-			end	
-		end
-	end
-	
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, data.important and true)
 end
 
