@@ -46,32 +46,6 @@ function GamePlayCentralManager:do_shotgun_push(unit, hit_pos, dir, distance, at
 	end
 end
 
-function GamePlayCentralManager:_do_shotgun_push(unit, hit_pos, dir, distance, attacker)
-	if unit:movement()._active_actions[1] and unit:movement()._active_actions[1]:type() == "hurt" then
-		unit:movement()._active_actions[1]:force_ragdoll(true)
-	end
-
-	local scale = math.clamp(1 - distance / self:get_shotgun_push_range(), 0.5, 1)
-	local push_vel = 1200
-	push_vel = push_vel * scale
-	mvec3_mul(dir, push_vel)
-	local nr_u_bodies = unit:num_bodies()
-	local i_u_body = 0
-	
-	while nr_u_bodies > i_u_body do
-		local u_body = unit:body(i_u_body)
-
-		if u_body:enabled() and u_body:dynamic() then
-			local body_mass = u_body:mass()
-			
-			u_body:push_at(body_mass, dir, hit_pos)
-			managers.mutators:notify(Message.OnShotgunPush, unit, hit_pos, dir, distance, attacker)
-		end
-
-		i_u_body = i_u_body + 1
-	end
-end
-
 local update_original = GamePlayCentralManager.update
 function GamePlayCentralManager:update(t, dt)
 	update_original(self, t, dt)
