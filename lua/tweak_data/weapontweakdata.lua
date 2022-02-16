@@ -1653,6 +1653,12 @@ self.x_baka.kick = self.baka.kick
 self.x_baka.kick.crouching = self.baka.kick.standing
 self.x_baka.kick.steelsight = self.baka.kick.standing
 
+-- Wasp-DS
+self.fmg9.stats.damage = 32
+self.fmg9.stats.concealment = 27
+self.fmg9.stats.spread = 12
+self.fmg9.kick = self.baka.kick
+
 -- Swedish K
 self.m45.AMMO_MAX = 80
 self.x_m45.AMMO_MAX = 90
@@ -1931,6 +1937,7 @@ crouching = {
 }
 
 --Reinfeld
+self.r870.CLIP_AMMO_MAX = 8
 self.r870.fire_mode_data.fire_rate = 0.5
 self.r870.stats.damage = 110
 self.r870.stats.spread = 12
@@ -2126,6 +2133,14 @@ crouching = {
 }
 }
 self.ksg.fire_mode_data.fire_rate = 0.6
+
+--Argos III
+self.ultima.NR_CLIPS_MAX = 3
+self.ultima.AMMO_MAX = 21
+self.ultima.fire_mode_data.fire_rate = 0.25
+self.ultima.damage_near = 350
+self.ultima.damage_far = 800
+self.ultima.AMMO_PICKUP = {1.8, 2.9}
 
 --Grimm
 self.x_basset.AMMO_MAX = 50
@@ -2673,6 +2688,9 @@ self.deagle.stats.recoil = 3
 self.deagle.stats.damage = 145
 self.deagle.AMMO_MAX = 70
 self.deagle.AMMO_PICKUP = {2, 4}
+self.deagle.do_shotgun_push = true
+self.deagle.desc_id = "des_GEN_shotgun_push"
+self.deagle.has_description = true
 
 --Baby Deagle
 self.sparrow.fire_mode_data.fire_rate = 0.25
@@ -2685,15 +2703,44 @@ self.pl14.fire_mode_data.fire_rate = 0.3
 self.pl14.stats.recoil = 8
 self.pl14.AMMO_MAX = 80
 self.pl14.AMMO_PICKUP = {3, 5}
+self.pl14.do_shotgun_push = true
+self.pl14.desc_id = "des_GEN_shotgun_push"
+self.pl14.has_description = true
 
 --CHUNKY CROSSKILL
 self.m1911.AMMO_MAX = 51
 self.m1911.fire_mode_data.fire_rate = 0.25
 self.m1911.AMMO_PICKUP = {3, 5}
+self.x_m1911.AMMO_PICKUP = {3, 5}
 self.m1911.fire_mode_data = {
 	fire_rate = 0.2
 }
 self.m1911.single = {
+	fire_rate = 0.2
+}
+self.x_m1911.fire_mode_data = {
+	fire_rate = 0.2
+}
+self.x_m1911.single = {
+	fire_rate = 0.2
+}
+
+--Gecko M2 Pistol
+self.maxim9.AMMO_MAX = 51
+self.maxim9.fire_mode_data.fire_rate = 0.25
+self.maxim9.AMMO_PICKUP = {3, 5}
+self.x_maxim9.AMMO_PICKUP = {3, 5}
+self.maxim9.fire_mode_data = {
+	fire_rate = 0.2
+}
+self.maxim9.single = {
+	fire_rate = 0.2
+}
+self.maxim9.kick = self.m1911.kick
+self.x_maxim9.fire_mode_data = {
+	fire_rate = 0.2
+}
+self.x_maxim9.single = {
 	fire_rate = 0.2
 }
 
@@ -2705,7 +2752,7 @@ self.b92fs.AMMO_MAX = 150
 self.b92fs.stats.recoil = 19
 self.b92fs.kick = {
 standing = {
-	-0.2,
+	0.2,
 	0.4,
 	-1,
 	1
@@ -2906,6 +2953,9 @@ self.peacemaker.fire_mode_data.fire_rate = 0.2
 self.peacemaker.stats.damage = 200
 self.peacemaker.stats_modifiers = {damage = 2}
 self.peacemaker.AMMO_PICKUP = {2, 3}
+self.peacemaker.desc_id = "des_GEN_shotgun_push"
+self.peacemaker.has_description = true
+self.peacemaker.do_shotgun_push = true
 
 --Parabellum
 self.breech.fire_mode_data.fire_rate = 0.2
@@ -2952,25 +3002,40 @@ crouching = {
 self.new_raging_bull.AMMO_PICKUP = {2, 4}
 self.new_raging_bull.fire_mode_data.fire_rate = 0.33
 self.new_raging_bull.upgrade_blocks = nil
+self.new_raging_bull.do_shotgun_push = true
+self.new_raging_bull.desc_id = "des_GEN_shotgun_push"
+self.new_raging_bull.has_description = true
 
 --Castigo
 self.chinchilla.AMMO_PICKUP = {2, 3}
 self.chinchilla.fire_mode_data.fire_rate = 0.3
 self.chinchilla.upgrade_blocks = nil
+self.chinchilla.do_shotgun_push = true
+self.chinchilla.desc_id = "des_GEN_shotgun_push"
+self.chinchilla.has_description = true
 
 --Matever
 self.mateba.AMMO_PICKUP = {3, 5}
 self.mateba.fire_mode_data.fire_rate = 0.33
 self.mateba.upgrade_blocks = nil
+self.mateba.do_shotgun_push = true
+self.mateba.desc_id = "des_GEN_shotgun_push"
+self.mateba.has_description = true
 
 --Model 87
 self.model3.AMMO_MAX = 66
 self.model3.upgrade_blocks = nil
 self.model3.AMMO_PICKUP = {3, 5}
 self.model3.fire_mode_data.fire_rate = 0.33
+self.model3.do_shotgun_push = true
+self.model3.desc_id = "des_GEN_shotgun_push"
+self.model3.has_description = true
 self.x_model3.AMMO_MAX = 66
 self.x_model3.upgrade_blocks = nil
 self.x_model3.AMMO_PICKUP = {3, 5}
+self.x_model3.do_shotgun_push = true
+self.x_model3.desc_id = "des_GEN_shotgun_push"
+self.model3.has_description = true
 
 --Crosskill Guard
 self.shrew.stats.damage = 59
@@ -3231,6 +3296,8 @@ self.x_deagle.stats.recoil = 3
 self.x_deagle.stats.damage = 145
 self.x_deagle.AMMO_MAX = 70
 self.x_deagle.AMMO_PICKUP = self.deagle.AMMO_PICKUP
+self.x_deagle.desc_id = "des_GEN_shotgun_push"
+self.x_deagle.do_shotgun_push = true
 
 --Broomstick
 self.x_c96.AMMO_MAX = 110

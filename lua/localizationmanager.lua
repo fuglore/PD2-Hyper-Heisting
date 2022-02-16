@@ -689,6 +689,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			-- weapon stuff below
 			["bm_GEN_speed_strap"] = "Gonzalez Magazine",
 			["bm_GEN_decorative_strap"] = "Adds a useless decorative thingymajig to your weapon for style purposes! Makes you FEEL like you're reloading faster!",--bye bye power creep
+			["bm_GEN_fmg9_speed_strap"] = "Celebrity X9 Magazine",
+			["bm_GEN_fmg9_speed_strap_desc"] = "Used by famous celebrity rapper X9 during a stage performance before he was arrested, Makes you FEEL like you're reloading faster!",
+			
 			["bm_wp_g3_b_short"] = "Short Barrel",
 			["bm_wp_g3_b_sniper"] = "Long Barrel",
 			
@@ -717,6 +720,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["bm_w_fal_desc"] = "AP Rounds that pierce Body Armor!",
 			["des_m16"] = "AP Rounds that pierce Body Armor!",
 			["bm_w_m16_desc"] = "AP Rounds that pierce Body Armor!",
+			
+			["des_GEN_shotgun_push"] = "This weapon has shotgun push functionality.",
 
 			
 			--DMR KITS

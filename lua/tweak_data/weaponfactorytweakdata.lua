@@ -37,6 +37,13 @@ self.parts.wpn_fps_smg_mac10_m_quick.stats.extra_ammo = nil
 self.parts.wpn_fps_smg_mac10_m_quick.stats.reload = nil
 self.parts.wpn_fps_smg_mac10_m_quick.stats.concealment = nil
 
+self.parts.wpn_fps_smg_fmg9_m_speed.name_id = "bm_GEN_fmg9_speed_strap"
+self.parts.wpn_fps_smg_fmg9_m_speed.has_description = true
+self.parts.wpn_fps_smg_fmg9_m_speed.desc_id = "bm_GEN_fmg9_speed_strap_desc"
+self.parts.wpn_fps_smg_fmg9_m_speed.stats = {
+	value = 1
+}
+
 self.wpn_fps_smg_x_mac10.override.wpn_fps_smg_mac10_m_quick = nil
 
 self.parts.wpn_fps_smg_sr2_m_quick.name_id = "bm_GEN_speed_strap"
