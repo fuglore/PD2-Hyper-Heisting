@@ -1,13 +1,3 @@
-local mvec3_set = mvector3.set
-local mvec3_mul = mvector3.multiply
-local mvec3_add = mvector3.add
-local mvec3_neg = mvector3.negate
-local mvec3_lerp = mvector3.lerp
-local mvec3_spread = mvector3.spread
-local mvec3_dist_sq = mvector3.distance_sq
-local mvec3_dist = mvector3.distance
-local mvec3_dot = mvector3.dot
-
 function GamePlayCentralManager:end_heist(num_winners)
 	if not num_winners then
 		num_winners = 1
@@ -43,6 +33,33 @@ function GamePlayCentralManager:do_shotgun_push(unit, hit_pos, dir, distance, at
 		end
 
 		self:_do_shotgun_push(unit, hit_pos, dir, distance, attacker)
+	end
+end
+
+function GamePlayCentralManager:_do_shotgun_push(unit, hit_pos, dir, distance, attacker)
+	if unit:movement()._active_actions[1] and unit:movement()._active_actions[1]:type() == "hurt" then
+		unit:movement()._active_actions[1]:force_ragdoll(true)
+	end
+
+	local scale = math.clamp(1 - distance / self:get_shotgun_push_range(), 0.5, 1)
+	local height = mvector3.distance(hit_pos, unit:position()) - 100
+	local twist_dir = math.random(2) == 1 and 1 or -1
+	local rot_acc = (dir:cross(math.UP) + math.UP * 0.5 * twist_dir) * -1000 * math.sign(height)
+	local rot_time = 1 + math.rand(2)
+	local nr_u_bodies = unit:num_bodies()
+	local i_u_body = 0
+
+	while nr_u_bodies > i_u_body do
+		local u_body = unit:body(i_u_body)
+
+		if u_body:enabled() and u_body:dynamic() then
+			local body_mass = u_body:mass()
+
+			World:play_physic_effect(Idstring("physic_effects/shotgun_hit"), u_body, Vector3(dir.x, dir.y, dir.z + 0.5) * 600 * scale, 4 * body_mass / math.random(2), rot_acc, rot_time)
+			managers.mutators:notify(Message.OnShotgunPush, unit, hit_pos, dir, distance, attacker)
+		end
+
+		i_u_body = i_u_body + 1
 	end
 end
 
