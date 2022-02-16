@@ -1,5 +1,13 @@
 function PlayerTased:enter(state_data, enter_data)
 	PlayerTased.super.enter(self, state_data, enter_data)
+
+	self._taser_movement = managers.player:has_category_upgrade("player", "move_while_tased")
+	self._taser_resist = managers.player:has_category_upgrade("player", "resist_firing_tased")
+	
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or tweak_data:difficulty_to_index(Global.game_settings.difficulty) > 5 then
+		self._harsher_shake = true
+	end
+
 	self:_start_action_tased(managers.player:player_timer():time(), state_data.non_lethal_electrocution)
 
 	if state_data.non_lethal_electrocution then
@@ -13,10 +21,6 @@ function PlayerTased:enter(state_data, enter_data)
 		--if Network:is_server() then
 		--	self:_register_revive_SO()
 		--end
-		
-		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") or tweak_data:difficulty_to_index(Global.game_settings.difficulty) > 5 then
-			self._harsher_shake = true
-		end
 		
 		self._fatal_delayed_clbk = "PlayerTased_fatal_delayed_clbk"
 		local tased_time = 9999
@@ -88,14 +92,104 @@ function PlayerTased:enter(state_data, enter_data)
 	}, callback(self, self, "_on_tased_event"))
 end
 
+function PlayerTased:_start_action_tased(t, non_lethal)
+	self:_interupt_action_running(t)
+	self:_stance_entered()
+	self:_update_crosshair_offset()
+	self._unit:camera():play_redirect(self:get_animation("tased"))
+	self._unit:sound():play("tasered_loop")
+	managers.hint:show_hint(non_lethal and "hint_been_electrocuted" or "hint_been_tasered")
+	
+	local tase_shake_mul = self._taser_resist and 0.5 or 1
+	
+	self._unit:camera():play_shaker("player_taser_shock", 1 * tase_shake_mul, 10 * tase_shake_mul)
+		
+	local shake = self._harsher_shake and math.random(30) or math.random(10)
+	
+	shake = shake * tase_shake_mul
+	
+	self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * shake)
+
+	self._unit:sound():play("tasered_shock")
+	managers.rumble:play("electric_shock")
+
+	if not alive(self._counter_taser_unit) then
+		self._camera_unit:base():start_shooting()
+
+		local shake = 40 * tase_shake_mul
+
+		self._camera_unit:base():recoil_kick(-shake, shake, -shake, shake)
+		self._unit:camera():play_redirect(self:get_animation("tased_boost"))
+	end
+end
+
+
+function PlayerTased:_update_movement(t, dt)
+	if self._taser_movement then
+		PlayerTased.super._update_movement(self, t, dt)
+	else
+		self:_update_network_position(t, dt, self._unit:position())
+	end
+end
+
+function PlayerTased:_update_check_actions(t, dt)
+	local input = self:_get_input(t, dt)
+	self:_update_foley(t, input)
+
+	self:_determine_move_direction()
+	
+	if self._wave_dash_t and self._wave_dash_t < t then
+		self._wave_dash_t = nil
+		self._speed_is_wavedash_boost = nil
+	end
+	
+	if self._fall_damage_slow_t and self._fall_damage_slow_t < t then
+		self._fall_damage_slow_t = nil
+	end
+
+	self:_check_action_shock(t, input)
+
+	self._taser_value = math.step(self._taser_value, 0.8, dt / 4)
+
+	managers.environment_controller:set_taser_value(self._taser_value)
+
+	local shooting = self:_check_action_primary_attack(t, input)
+
+	if self._unequip_weapon_expire_t and self._unequip_weapon_expire_t <= t then
+		self._unequip_weapon_expire_t = nil
+
+		self:_start_action_equip_weapon(t)
+	end
+
+	if self._equip_weapon_expire_t and self._equip_weapon_expire_t <= t then
+		self._equip_weapon_expire_t = nil
+	end
+
+	if input.btn_stats_screen_press then
+		self._unit:base():set_stats_screen_visible(true)
+	elseif input.btn_stats_screen_release then
+		self._unit:base():set_stats_screen_visible(false)
+	end
+
+	local new_action = nil
+
+	self:_check_action_interact(t, input)
+
+	local new_action = nil
+end
+
 function PlayerTased:_check_action_shock(t, input)
+	local tase_shake_mul = self._taser_resist and 0.5 or 1
+
 	if self._next_shock < t then
 		self._num_shocks = self._num_shocks + 1
 		self._next_shock = t + 0.75
 
-		self._unit:camera():play_shaker("player_taser_shock", 1, 10)
+		self._unit:camera():play_shaker("player_taser_shock", 1 * tase_shake_mul, 10 * tase_shake_mul)
 		
 		local shake = self._harsher_shake and math.random(30) or math.random(10)
+		
+		shake = shake * tase_shake_mul
 		
 		self._unit:camera():camera_unit():base():set_target_tilt((math.random(2) == 1 and -1 or 1) * shake)
 
@@ -130,18 +224,20 @@ function PlayerTased:_check_action_shock(t, input)
 		if not alive(self._counter_taser_unit) then
 			self._camera_unit:base():start_shooting()
 			
-			self._recoil_t = t + 0.5
+			self._recoil_t = t + 0.25
 			
-			if not managers.player:has_category_upgrade("player", "resist_firing_tased") then
+			if not self._taser_resist then
 				input.btn_primary_attack_state = true
 				input.btn_primary_attack_press = true
 			end
+			
+			local shake = 40 * tase_shake_mul
 
-			self._camera_unit:base():recoil_kick(-5, 5, -5, 5)
+			self._camera_unit:base():recoil_kick(-shake, shake, -shake, shake)
 			self._unit:camera():play_redirect(self:get_animation("tased_boost"))
 		end
 	elseif self._recoil_t then
-		if not managers.player:has_category_upgrade("player", "resist_firing_tased") then
+		if not self._taser_resist then
 			input.btn_primary_attack_state = true
 		end
 
@@ -198,6 +294,11 @@ function PlayerTased:_check_action_primary_attack(t, input)
 
 					local suppression_ratio = self._unit:character_damage():effective_suppression_ratio()
 					local spread_mul = math.lerp(1, tweak_data.player.suppression.spread_mul, suppression_ratio)
+					
+					if not self._taser_movement then
+						spread_mul = 6 * spread_mul
+					end
+					
 					local autohit_mul = math.lerp(1, tweak_data.player.suppression.autohit_chance_mul, suppression_ratio)
 					local suppression_mul = managers.blackmarket:threat_multiplier()
 					local dmg_mul = managers.player:temporary_upgrade_value("temporary", "dmg_multiplier_outnumbered", 1)
@@ -245,6 +346,11 @@ function PlayerTased:_check_action_primary_attack(t, input)
 					if fired then
 						local weap_tweak_data = tweak_data.weapon[weap_base:get_name_id()]
 						local recoil_multiplier = weap_base:recoil() * weap_base:recoil_multiplier() + weap_base:recoil_addend()
+						
+						if not self._taser_movement then
+							recoil_multiplier = 5 * recoil_multiplier
+						end
+						
 						local up, down, left, right = unpack(weap_tweak_data.kick[self._state_data.in_steelsight and "steelsight" or self._state_data.ducking and "crouching" or "standing"])
 
 						self._camera_unit:base():recoil_kick(up * recoil_multiplier, down * recoil_multiplier, left * recoil_multiplier, right * recoil_multiplier)

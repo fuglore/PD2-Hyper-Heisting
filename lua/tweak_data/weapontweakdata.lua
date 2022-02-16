@@ -1202,8 +1202,8 @@ self.akm.has_description = true
 self.akm.armor_piercing_chance = 1
 self.akm.AMMO_PICKUP = {4, 6}
 self.akm.AMMO_MAX = 100
-self.akm.fire_mode_data.fire_rate = 0.16666
-self.akm.auto.fire_rate = 0.16666
+self.akm.fire_mode_data.fire_rate = 0.1224
+self.akm.auto.fire_rate = 0.1224
 
 self.akm.kick = {
 	standing = {
@@ -1344,6 +1344,7 @@ self.asval.AMMO_MAX = 100
 self.asval.stats.spread = 18
 self.asval.stats.recoil = 16
 self.asval.stats.damage = 61
+self.asval.armor_piercing_chance = 1
 self.asval.can_shoot_through_shield = true
 self.asval.can_shoot_through_enemy = true
 self.asval.can_shoot_through_wall = true
@@ -1369,8 +1370,8 @@ self.scar.armor_piercing_chance = 1
 self.scar.CLIP_AMMO_MAX = 30
 self.scar.AMMO_MAX = 100
 self.scar.AMMO_PICKUP = {4, 6}
-self.scar.fire_mode_data.fire_rate = 0.16666
-self.scar.auto.fire_rate = 0.16666
+self.scar.fire_mode_data.fire_rate = 0.1224
+self.scar.auto.fire_rate = 0.1224
 self.scar.kick.standing = self.akm.kick.standing
 self.scar.kick.crouching = self.akm.kick.crouching
 self.scar.kick.steelsight = self.akm.kick.steelsight
@@ -1379,8 +1380,8 @@ self.scar.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 --Gold AK
 self.akm_gold.has_description = true
 self.akm_gold.armor_piercing_chance = 1
-self.akm_gold.fire_mode_data.fire_rate = 0.16666
-self.akm_gold.auto.fire_rate = 0.16666
+self.akm_gold.fire_mode_data.fire_rate = 0.1224
+self.akm_gold.auto.fire_rate = 0.1224
 self.akm_gold.AMMO_PICKUP = {4, 6}
 self.akm_gold.AMMO_MAX = 100
 self.akm_gold.kick = self.akm.kick
@@ -1389,8 +1390,8 @@ self.akm_gold.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 --AK17
 self.flint.has_description = true
 self.flint.armor_piercing_chance = 1
-self.flint.fire_mode_data.fire_rate = 0.16666
-self.flint.auto.fire_rate = 0.16666
+self.flint.fire_mode_data.fire_rate = 0.1224
+self.flint.auto.fire_rate = 0.1224
 self.flint.AMMO_PICKUP = {4, 6}
 self.flint.AMMO_MAX = 100
 self.flint.CLIP_AMMO_MAX = 30
@@ -1400,7 +1401,7 @@ self.flint.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 --Falcon
 self.fal.has_description = true
 self.fal.armor_piercing_chance = 1
-self.fal.fire_mode_data.fire_rate = 0.16666
+self.fal.fire_mode_data.fire_rate = 0.1224
 self.fal.auto.fire_rate = 0.16666
 self.fal.AMMO_PICKUP = {4, 6}
 self.fal.kick = self.akm.kick
@@ -1409,8 +1410,8 @@ self.fal.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 --AMR16
 self.m16.has_description = true
 self.m16.armor_piercing_chance = 1
-self.m16.fire_mode_data.fire_rate = 0.16666
-self.m16.auto.fire_rate = 0.16666
+self.m16.fire_mode_data.fire_rate = 0.1224
+self.m16.auto.fire_rate = 0.1224
 self.m16.AMMO_PICKUP = {4, 6}
 self.m16.AMMO_MAX = 100
 self.m16.kick = self.akm.kick
@@ -1652,6 +1653,12 @@ self.x_baka.kick = self.baka.kick
 self.x_baka.kick.crouching = self.baka.kick.standing
 self.x_baka.kick.steelsight = self.baka.kick.standing
 
+-- Wasp-DS
+self.fmg9.stats.damage = 32
+self.fmg9.stats.concealment = 27
+self.fmg9.stats.spread = 12
+self.fmg9.kick = self.baka.kick
+
 -- Swedish K
 self.m45.AMMO_MAX = 80
 self.x_m45.AMMO_MAX = 90
@@ -1747,9 +1754,11 @@ self.p90.stats.damage = 50
 self.x_p90.stats.damage = 50
 self.p90.AMMO_MAX = 100
 self.x_p90.AMMO_MAX = 120
+self.p90.armor_piercing_chance = 1
 self.p90.can_shoot_through_shield = true
 self.p90.can_shoot_through_enemy = true
 self.p90.can_shoot_through_wall = true
+self.x_p90.armor_piercing_chance = 1
 self.x_p90.can_shoot_through_shield = true
 self.x_p90.can_shoot_through_enemy = true
 self.x_p90.can_shoot_through_wall = true
@@ -1928,6 +1937,7 @@ crouching = {
 }
 
 --Reinfeld
+self.r870.CLIP_AMMO_MAX = 8
 self.r870.fire_mode_data.fire_rate = 0.5
 self.r870.stats.damage = 110
 self.r870.stats.spread = 12
@@ -2123,6 +2133,14 @@ crouching = {
 }
 }
 self.ksg.fire_mode_data.fire_rate = 0.6
+
+--Argos III
+self.ultima.NR_CLIPS_MAX = 3
+self.ultima.AMMO_MAX = 21
+self.ultima.fire_mode_data.fire_rate = 0.25
+self.ultima.damage_near = 350
+self.ultima.damage_far = 800
+self.ultima.AMMO_PICKUP = {1.8, 2.9}
 
 --Grimm
 self.x_basset.AMMO_MAX = 50
@@ -2670,6 +2688,9 @@ self.deagle.stats.recoil = 3
 self.deagle.stats.damage = 145
 self.deagle.AMMO_MAX = 70
 self.deagle.AMMO_PICKUP = {2, 4}
+self.deagle.do_shotgun_push = true
+self.deagle.desc_id = "des_GEN_shotgun_push"
+self.deagle.has_description = true
 
 --Baby Deagle
 self.sparrow.fire_mode_data.fire_rate = 0.25
@@ -2682,15 +2703,44 @@ self.pl14.fire_mode_data.fire_rate = 0.3
 self.pl14.stats.recoil = 8
 self.pl14.AMMO_MAX = 80
 self.pl14.AMMO_PICKUP = {3, 5}
+self.pl14.do_shotgun_push = true
+self.pl14.desc_id = "des_GEN_shotgun_push"
+self.pl14.has_description = true
 
 --CHUNKY CROSSKILL
 self.m1911.AMMO_MAX = 51
 self.m1911.fire_mode_data.fire_rate = 0.25
 self.m1911.AMMO_PICKUP = {3, 5}
+self.x_m1911.AMMO_PICKUP = {3, 5}
 self.m1911.fire_mode_data = {
 	fire_rate = 0.2
 }
 self.m1911.single = {
+	fire_rate = 0.2
+}
+self.x_m1911.fire_mode_data = {
+	fire_rate = 0.2
+}
+self.x_m1911.single = {
+	fire_rate = 0.2
+}
+
+--Gecko M2 Pistol
+self.maxim9.AMMO_MAX = 51
+self.maxim9.fire_mode_data.fire_rate = 0.25
+self.maxim9.AMMO_PICKUP = {3, 5}
+self.x_maxim9.AMMO_PICKUP = {3, 5}
+self.maxim9.fire_mode_data = {
+	fire_rate = 0.2
+}
+self.maxim9.single = {
+	fire_rate = 0.2
+}
+self.maxim9.kick = self.m1911.kick
+self.x_maxim9.fire_mode_data = {
+	fire_rate = 0.2
+}
+self.x_maxim9.single = {
 	fire_rate = 0.2
 }
 
@@ -2702,7 +2752,7 @@ self.b92fs.AMMO_MAX = 150
 self.b92fs.stats.recoil = 19
 self.b92fs.kick = {
 standing = {
-	-0.2,
+	0.2,
 	0.4,
 	-1,
 	1
@@ -2903,6 +2953,9 @@ self.peacemaker.fire_mode_data.fire_rate = 0.2
 self.peacemaker.stats.damage = 200
 self.peacemaker.stats_modifiers = {damage = 2}
 self.peacemaker.AMMO_PICKUP = {2, 3}
+self.peacemaker.desc_id = "des_GEN_shotgun_push"
+self.peacemaker.has_description = true
+self.peacemaker.do_shotgun_push = true
 
 --Parabellum
 self.breech.fire_mode_data.fire_rate = 0.2
@@ -2949,25 +3002,40 @@ crouching = {
 self.new_raging_bull.AMMO_PICKUP = {2, 4}
 self.new_raging_bull.fire_mode_data.fire_rate = 0.33
 self.new_raging_bull.upgrade_blocks = nil
+self.new_raging_bull.do_shotgun_push = true
+self.new_raging_bull.desc_id = "des_GEN_shotgun_push"
+self.new_raging_bull.has_description = true
 
 --Castigo
 self.chinchilla.AMMO_PICKUP = {2, 3}
 self.chinchilla.fire_mode_data.fire_rate = 0.3
 self.chinchilla.upgrade_blocks = nil
+self.chinchilla.do_shotgun_push = true
+self.chinchilla.desc_id = "des_GEN_shotgun_push"
+self.chinchilla.has_description = true
 
 --Matever
 self.mateba.AMMO_PICKUP = {3, 5}
 self.mateba.fire_mode_data.fire_rate = 0.33
 self.mateba.upgrade_blocks = nil
+self.mateba.do_shotgun_push = true
+self.mateba.desc_id = "des_GEN_shotgun_push"
+self.mateba.has_description = true
 
 --Model 87
 self.model3.AMMO_MAX = 66
 self.model3.upgrade_blocks = nil
 self.model3.AMMO_PICKUP = {3, 5}
 self.model3.fire_mode_data.fire_rate = 0.33
+self.model3.do_shotgun_push = true
+self.model3.desc_id = "des_GEN_shotgun_push"
+self.model3.has_description = true
 self.x_model3.AMMO_MAX = 66
 self.x_model3.upgrade_blocks = nil
 self.x_model3.AMMO_PICKUP = {3, 5}
+self.x_model3.do_shotgun_push = true
+self.x_model3.desc_id = "des_GEN_shotgun_push"
+self.model3.has_description = true
 
 --Crosskill Guard
 self.shrew.stats.damage = 59
@@ -3228,6 +3296,8 @@ self.x_deagle.stats.recoil = 3
 self.x_deagle.stats.damage = 145
 self.x_deagle.AMMO_MAX = 70
 self.x_deagle.AMMO_PICKUP = self.deagle.AMMO_PICKUP
+self.x_deagle.desc_id = "des_GEN_shotgun_push"
+self.x_deagle.do_shotgun_push = true
 
 --Broomstick
 self.x_c96.AMMO_MAX = 110

@@ -1,3 +1,6 @@
+PlayerCarry.target_tilt = 0
+PlayerCarry.throw_limit_t = 0.2
+
 function PlayerCarry:_update_check_actions(t, dt)
 	local input = self:_get_input(t, dt)
 

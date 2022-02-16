@@ -636,7 +636,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_sprinter_beta"] = "High Vigour",
 			["menu_sprinter_beta_desc"] = "BASIC: ##$basic##\nYour stamina regenerates ##25%## faster.\n\nACE: ##$pro##\nYou gain ##+10## ##Dodge##. ##Dodge## gives you a random chance to ##completely negate damage##.\n\nUpon successfully ##dodging## an attack, regain ##5## stamina.",
 			
-			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nWhen tased, the effect has a ##25%## chance to ##backfire## on the Taser, knocking them back.\n\nACE: ##$pro##\nWhen tased, you are able to ##free yourself from the Taser## by looking at the Taser and pressing your interact key within ##0.4## seconds of getting tased.",
+			["menu_insulation_beta"] = "The Rubber",
+			["menu_insulation_beta_desc"] = "BASIC: ##$basic##\nYou ##no longer uncontrollably fire your weapons## while being electrocuted. Your camera shake while being electrocuted is reduced by ##50%##.\n\nACE: ##$pro##\nYou can now move while being electrocuted at ##20%## of your normal movement speed. Your weapon's Accuracy and Stability ##are no longer affected by electrocution##.\n\n##Never engage without protection.##",
 			
 			--BASIC: When tased, you can now withstand being ##shocked## ##2## more times before you explode with electricity.
 			--ACED: When tased, ##you can now free yourself from the Taser## by completing a ##Quick Time Event##.\n\nPressing the Interact key just as a Taser ##shocks## you three times in a row will free you.\n\nFailing to press the Interact key or pressing it at the wrong time cancels the skill.
@@ -688,6 +689,9 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			-- weapon stuff below
 			["bm_GEN_speed_strap"] = "Gonzalez Magazine",
 			["bm_GEN_decorative_strap"] = "Adds a useless decorative thingymajig to your weapon for style purposes! Makes you FEEL like you're reloading faster!",--bye bye power creep
+			["bm_GEN_fmg9_speed_strap"] = "Celebrity X9 Magazine",
+			["bm_GEN_fmg9_speed_strap_desc"] = "Used by famous celebrity rapper X9 during a stage performance before he was arrested, Makes you FEEL like you're reloading faster!",
+			
 			["bm_wp_g3_b_short"] = "Short Barrel",
 			["bm_wp_g3_b_sniper"] = "Long Barrel",
 			
@@ -716,6 +720,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["bm_w_fal_desc"] = "AP Rounds that pierce Body Armor!",
 			["des_m16"] = "AP Rounds that pierce Body Armor!",
 			["bm_w_m16_desc"] = "AP Rounds that pierce Body Armor!",
+			
+			["des_GEN_shotgun_push"] = "This weapon has shotgun push functionality.",
 
 			
 			--DMR KITS

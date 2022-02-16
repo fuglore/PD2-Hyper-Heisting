@@ -741,6 +741,20 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	}
 	
+	self.values.player.move_while_tased = {
+		true
+	}
+	
+	self.definitions.player_move_while_tased = {
+		name_id = "menu_move_while_tased",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "move_while_tased",
+			category = "player"
+		}
+	}
+	
 	--Sneakier Bastard ACED
 	self.values.player.sneakier_aced = {
 		true

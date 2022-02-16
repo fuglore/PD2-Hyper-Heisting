@@ -106,7 +106,7 @@ function CopActionShoot:init(action_desc, common_data)
 	
 	if not self._fireline_t then
 		local suppressive = weap_base.suppression and weap_base.suppression >= 2 or nil
-		self._fireline_t = suppressive and 1 or 0.5
+		self._fireline_t = suppressive and 7 or 2
 	end
 
 	if char_tweak.use_lotus_effect then
@@ -775,7 +775,7 @@ function CopActionShoot:update(t)
 
 					if not shooting_husk or not self._next_vis_ray_t or self._next_vis_ray_t < t then
 						if shooting_husk then
-							self._next_vis_ray_t = t + 2
+							self._next_vis_ray_t = t + 1
 						end
 
 						local fire_line_is_obstructed = self._unit:raycast("ray", shoot_from_pos, target_pos, "slot_mask", managers.slot:get_mask("AI_visibility"), "ray_type", "ai_vision")

@@ -334,6 +334,10 @@ function PlayerStandard:_get_max_walk_speed(t, force_run)
 		end
 	end
 	
+	if not force_run and self.tased then
+		multiplier = multiplier * 0.2
+	end
+	
 	local final_speed = movement_speed * multiplier
 	
 	if self._fall_damage_slow_t then
@@ -1041,20 +1045,13 @@ function PlayerStandard:_update_reload_timers(t, dt, input)
 
 			if self._equipped_unit:base():reload_exit_expire_t() then
 				local speed_multiplier = self._equipped_unit:base():reload_speed_multiplier()
-
-				if self._equipped_unit:base():started_reload_empty() then
-					self._state_data.reload_exit_expire_t = t + self._equipped_unit:base():reload_exit_expire_t() / speed_multiplier
-
-					self._ext_camera:play_redirect(self:get_animation("reload_exit"), speed_multiplier)
-					self._equipped_unit:base():tweak_data_anim_play("reload_exit", speed_multiplier)
-				else
-					self._state_data.reload_exit_expire_t = t + self._equipped_unit:base():reload_not_empty_exit_expire_t() / speed_multiplier
-
-					self._ext_camera:play_redirect(self:get_animation("reload_not_empty_exit"), speed_multiplier)
-					self._equipped_unit:base():tweak_data_anim_play("reload_not_empty_exit", speed_multiplier)
-				end
+				local is_reload_not_empty = not self._equipped_unit:base():started_reload_empty()
+				local animation_name = is_reload_not_empty and "reload_not_empty_exit" or "reload_exit"
+				local animation = self:get_animation(animation_name)
+				self._state_data.reload_exit_expire_t = t + self._equipped_unit:base():reload_exit_expire_t(is_reload_not_empty) / speed_multiplier
+				local result = self._ext_camera:play_redirect(animation, speed_multiplier)
 				
-
+				self._equipped_unit:base():tweak_data_anim_play(animation_name, speed_multiplier)
 			elseif self._equipped_unit then
 				if not interupt then
 					self._equipped_unit:base():on_reload()
@@ -2370,19 +2367,6 @@ function PlayerStandard:update(t, dt)
 	managers.hud:_update_crosshair_offset(t, dt)
 	self:_update_omniscience(t, dt)
 	self:_upd_stance_switch_delay(t, dt)
-
-	if self._last_equipped then
-		if self._last_equipped ~= self._equipped_unit then
-			self._equipped_visibility_timer = t + 0.1
-		end
-
-		if self._equipped_visibility_timer and self._equipped_visibility_timer < t and alive(self._equipped_unit) then
-			self._equipped_visibility_timer = nil
-			self._equipped_unit:base():set_visibility_state(true)
-		end
-	end
-
-	self._last_equipped = self._equipped_unit
 end
 
 function PlayerStandard:_update_check_actions(t, dt, paused)

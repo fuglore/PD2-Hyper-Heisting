@@ -255,10 +255,6 @@ function CopBrain:is_converted_chk()
 	end
 end
 
-function CopBrain:clbk_pathing_results(search_id, path)
-    self:_add_pathing_result(search_id, path)
-end
-
 function CopBrain:is_available_for_assignment(objective)
 	return self._current_logic.is_available_for_assignment(self._logic_data, objective)
 end

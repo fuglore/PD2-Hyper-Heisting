@@ -156,10 +156,10 @@ local mvec_to = Vector3()
 local mvec_spread_direction = Vector3()
 local mvec1 = Vector3()
 
-function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_assist, autohit_override_data)
+function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_assist, autohit_override_data, spread_mul)
 	local autohit = use_aim_assist and self._aim_assist_data or self._autohit_data
 	autohit = autohit_override_data or autohit
-	local autohit_constant_angle = autohit.min_angle
+	local autohit_constant_angle = autohit.min_angle / (spread_mul or 1)
 	local autohit_near_angle = autohit.near_angle
 	local autohit_far_angle = autohit.far_angle
 	local far_dis = autohit.far_dis
@@ -280,6 +280,7 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 	local theta = math.random() * 360
 	local ax = math.sin(theta) * math.random() * spread_x * (spread_mul or 1)
 	local ay = math.cos(theta) * math.random() * spread_y * (spread_mul or 1)
+	local overall_spread = spread_x * (spread_mul or 1)
 
 	mvector3.set(mvec_spread_direction, direction)
 	mvector3.add(mvec_spread_direction, right * math.rad(ax))
@@ -295,7 +296,7 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 	if self._autoaim then
 		local weight = 0.1
 		
-		local auto_hit_candidate, ignore_rng = not hit_enemy and self:check_autoaim(from_pos, direction)
+		local auto_hit_candidate, ignore_rng = not hit_enemy and self:check_autoaim(from_pos, direction, nil, nil, nil, overall_spread)
 		
 		--log(tostring(self._autohit_current))
 		
@@ -558,7 +559,7 @@ function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage,
 	local result = nil
 	
 	local damage_lerp = math.clamp(damage, 2.4, 40) / 40
-	local push_multiplier = math.lerp(1, 8, damage_lerp)
+	local push_multiplier = math.lerp(0.166, 4, damage_lerp)
 
 	if alive(weapon_unit) and hit_unit:character_damage() and hit_unit:character_damage().damage_bullet then
 		local is_alive = not hit_unit:character_damage():dead()
@@ -1231,3 +1232,7 @@ end
 	--2.currently in gadget override such as underbarrel mode
 	--3.minigun and mg42 will have a silent fire sound if not blacklisted
 	--4. is NPC. Not sure why this started crashing now though, since that was fixed in v1 of AFSF2
+
+function RaycastWeaponBase:_get_anim_start_offset(anim)
+	return false
+end

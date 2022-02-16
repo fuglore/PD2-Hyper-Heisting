@@ -265,7 +265,7 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 		return
 	end
 	
-	if not data.attention_obj or not data.attention_obj.verified and data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT then
+	if not data.attention_obj or data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and not my_data.moving_to_cover and not my_data.in_cover then
 		local slot_mask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
 		local raycast = data.unit:raycast("ray", movement_ext:m_head_pos(), follow_unit_mov_ext:m_head_pos(), "slot_mask", slot_mask, "ignore_unit", follow_unit, "report")
 		
