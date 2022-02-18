@@ -4028,7 +4028,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 					end
 					
 					if spawned_unit:base()._tweak_table == "tank_mini" or spawned_unit:base()._tweak_table == "tank_medic" then
-						self._spawned_megatank_t = self._t + 30
+						self._spawned_megatank_t = self._t + 15
 					end
 					
 					spawned_unit:brain():set_spawn_entry(spawn_entry, u_data.tactics_map)

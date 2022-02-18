@@ -160,6 +160,19 @@ self.parts.wpn_fps_upg_a_piercing.custom_stats = {
 self.parts.wpn_fps_upg_a_piercing.stats.total_ammo_mod = -5
 self.parts.wpn_fps_upg_a_piercing.stats.damage = -50
 
+self.parts.wpn_fps_upg_ns_duck.stats = {
+	value = 1,
+	spread = 2,
+	recoil = 1,
+	damage = 2,
+	concealment = -2,
+	spread_multi = {
+		2.25,
+		0.5
+	}
+}
+
+
 self.wpn_fps_shot_serbu.override = {
 	wpn_fps_upg_a_slug = {
 		desc_id = "bm_wp_upg_a_slug2_desc",

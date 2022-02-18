@@ -724,17 +724,15 @@ function GroupAIStateBase:_claculate_drama_value(t, dt)
 		drama_data.pulse = false
 		
 		if not self._too_drama then
-			if task_data.phase == "sustain" or self._hunt_mode then
-				local mul = 1.5
-				
-				if self._danger_state then
-					mul = 1
-				end
-				
-				local decay_period = drama_data.decay_period * mul
-				
-				adj = dt / decay_period
+			local mul = 1.5
+			
+			if self._danger_state then
+				mul = 1
 			end
+			
+			local decay_period = drama_data.decay_period * mul
+			
+			adj = dt / decay_period
 		end
 	end
 	
