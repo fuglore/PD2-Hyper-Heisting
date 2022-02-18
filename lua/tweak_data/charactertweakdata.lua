@@ -3333,10 +3333,10 @@ function CharacterTweakData:_presets(tweak_data)
 	}	
 	presets.weapon.civil.is_rifle = {
 		aim_delay = {
-			0.7,
-			0.7
+			0.5,
+			0.5
 		},
-		focus_delay = 1.25, 
+		focus_delay = 1, 
 		focus_dis = 100,
 		spread = 28, 
 		miss_dis = 40, 
@@ -3367,12 +3367,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 400,
 				acc = { 
-					0,
-					0.9
+					0.9,
+					1
 				},
-				recoil = { 
-					0.2,
-					0.2
+				recoil = {
+					0.4,
+					0.8
 				},
 				mode = { --full auto
 					0,
@@ -3388,9 +3388,9 @@ function CharacterTweakData:_presets(tweak_data)
 					0,
 					0.9
 				},
-				recoil = { 
-					0.25,
-					0.3
+				recoil = {
+					0.4,
+					0.8
 				},
 				mode = {
 					0,
@@ -3407,8 +3407,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.7
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.4,
+					0.8
 				},
 				mode = {
 					0,
@@ -3425,8 +3425,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.5
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.6,
+					1
 				},
 				mode = {
 					0,
@@ -3440,11 +3440,11 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 4000,
 				acc = {
 					0,
-					0.05
+					0.1
 				},
 				recoil = {
-					0.4,
-					0.6
+					0.8,
+					1.2
 				},
 				mode = {
 					0,
@@ -4246,10 +4246,10 @@ function CharacterTweakData:_presets(tweak_data)
 	}	
 	presets.weapon.complex.is_rifle = {
 		aim_delay = {
-			0.6,
-			0.6
+			0.5,
+			0.5
 		},
-		focus_delay = 1.25,
+		focus_delay = 1,
 		focus_dis = 100,
 		spread = 20, 
 		miss_dis = 20,
@@ -4280,12 +4280,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4.5,
 				r = 400,
 				acc = { 
-					0,
-					0.9
+					0.9,
+					1
 				},
-				recoil = { 
-					0.2,
-					0.2
+				recoil = {
+					0.4,
+					0.8
 				},
 				mode = { --full auto
 					0,
@@ -4298,12 +4298,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 3,
 				r = 800,
 				acc = { 
-					0,
+					0.2,
 					0.9
 				},
-				recoil = { 
-					0.25,
-					0.3
+				recoil = {
+					0.4,
+					0.8
 				},
 				mode = {
 					0,
@@ -4320,8 +4320,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.7
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.4,
+					0.8
 				},
 				mode = {
 					0,
@@ -4338,8 +4338,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.5
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.6,
+					1
 				},
 				mode = {
 					0,
@@ -4356,8 +4356,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.3
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.6,
+					1
 				},
 				mode = {
 					0,
@@ -4371,11 +4371,11 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 4000,
 				acc = {
 					0,
-					0.05
+					0.1
 				},
 				recoil = {
-					0.4,
-					0.6
+					0.8,
+					1.2
 				},
 				mode = {
 					0,
@@ -5283,12 +5283,12 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 6,
 				r = 400,
 				acc = { 
-					0.3,
-					0.9
+					0.9,
+					1
 				},
 				recoil = { --increased recoil a tiiiiny bit to make sure it doesn't get too ballistic
-					0.2,
-					0.2
+					0.4,
+					0.8
 				},
 				mode = { --full auto
 					0,
@@ -5298,15 +5298,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 5, --light falloff, just enough to count 5 hits on ICTV armor
+				dmg_mul = 5,
 				r = 800,
 				acc = { 
-					0,
+					0.3,
 					0.9
 				},
 				recoil = { 
-					0.25,
-					0.3 --slightly decreased from civil, from 0.35 to 0.3
+					0.4,
+					0.8
 				},
 				mode = {
 					0,
@@ -5316,15 +5316,15 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 4,
+				dmg_mul = 5,
 				r = 1200,
 				acc = {
 					0,
 					0.7
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.4,
+					0.8
 				},
 				mode = {
 					0,
@@ -5341,8 +5341,8 @@ function CharacterTweakData:_presets(tweak_data)
 					0.5
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.6,
+					1
 				},
 				mode = {
 					0,
@@ -5356,11 +5356,11 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 3000,
 				acc = {
 					0,
-					0.3
+					0.4
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.6,
+					1
 				},
 				mode = {
 					0,
@@ -5374,11 +5374,11 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 4000,
 				acc = {
 					0,
-					0.1
+					0.4
 				},
 				recoil = {
-					0.25,
-					0.35
+					0.6,
+					1
 				},
 				mode = {
 					0,
@@ -5392,11 +5392,11 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 5000,
 				acc = {
 					0,
-					0.05
+					0.1
 				},
 				recoil = {
-					0.4,
-					0.6
+					0.6,
+					1
 				},
 				mode = {
 					0,
@@ -5414,7 +5414,7 @@ function CharacterTweakData:_presets(tweak_data)
 			0.7
 		},
 		focus_delay = 0.8, --focus delay change here.
-		focus_dis = 100, --focus delay only starts past 5m
+		focus_dis = 100,
 		spread = 15,
 		miss_dis = 20,
 		RELOAD_SPEED = 1.4, --HOW? ARE THEY JUST PILING ALL THE SHELLS ON THEIR HAND AND JUST SHOVING IT IN THERE LIKE CANDY INTO A BOWL???? either way, quite powerful
@@ -5807,7 +5807,7 @@ function CharacterTweakData:_presets(tweak_data)
 				r = 3000,
 				acc = {
 					0,
-					0.25 --slightly increased from civil from 0.2 to 0.25
+					0.25
 				},
 				recoil = {
 					1,
@@ -6417,7 +6417,7 @@ function CharacterTweakData:_presets(tweak_data)
 				},
 				recoil = { 
 					0.25,
-					0.3 --slightly decreased from civil, from 0.35 to 0.3
+					0.3 
 				},
 				mode = {
 					0,

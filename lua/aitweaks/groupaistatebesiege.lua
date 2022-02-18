@@ -751,7 +751,7 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 			elseif grp_objective.area and not group.in_place_t then
 				group.in_place_t = self._t
 			end
-			
+
 			self:_set_assault_objective_to_group(group, phase)
 		end
 	end
@@ -2113,23 +2113,24 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 			if not used_event then
 				if not anticipation or self._hunt_mode then
-					self:_try_use_task_spawn_event(t, primary_target_area, "assault")
+					used_event = self:_try_use_task_spawn_event(t, primary_target_area, "assault")
 				end
 				
-				
-				--local max_dis = self._street and 6000 or 12000
-				local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, nil)
+				if not used_event and not self._activeassaultbreak then
+					--local max_dis = self._street and 6000 or 12000
+					local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, anticipation and callback(self, self, "_verify_anticipation_spawn_point") or nil)
 
-				if spawn_group then
-					local grp_objective = {
-						attitude = self._street and "avoid" or anticipation and "avoid" or "engage",
-						stance = "hos",
-						pose = anticipation and "crouch" or "stand",
-						type = "assault_area",
-						area = primary_target_area
-					}
+					if spawn_group then
+						local grp_objective = {
+							attitude = self._street and "avoid" or anticipation and "avoid" or "engage",
+							stance = "hos",
+							pose = anticipation and "crouch" or "stand",
+							type = "assault_area",
+							area = self:get_area_from_nav_seg_id(spawn_group.nav_seg)
+						}
 
-					self:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, task_data)
+						self:_spawn_in_group(spawn_group, spawn_group_type, grp_objective, task_data)
+					end
 				end
 			end
 		end
@@ -2946,10 +2947,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			objective_area = obstructed_area
 			
 			open_fire = true
-				
-			if self._street and group.in_place_t and self._t - group.in_place_t > 10 or group.in_place_t and group.in_place_t > 2 then
-				push = true
-			end
 		end
 	elseif current_objective.moving_in then
 		if phase_is_anticipation then
@@ -2957,13 +2954,11 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		elseif not current_objective.area or not next(current_objective.area.criminal.units) then --if theres suddenly no criminals in the area, start approaching instead
 			if self._street then
 				pull_back = true
-			elseif not tactics_map or not tactics_map.flank or math_random() > 0.25 then
-				push = true
 			else
-				pull_back = true
+				push = true
 			end
 		end
-	else
+	elseif group.in_place_t or not current_objective.area then
 		local obstructed_path_index = nil
 		local forwardmost_i_nav_point = nil
 		local area_to_chk = nil
@@ -3008,10 +3003,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				pull_back = true
 			else
 				open_fire = true
-					
-				if self._street and group.in_place_t and self._t - group.in_place_t > 10 or group.in_place_t and group.in_place_t > 2 then
-					push = true
-				end
 			end
 		elseif phase_is_anticipation and current_objective.open_fire then --if we were aggressive one update ago, start backing up away from the current objective area
 			pull_back = true
@@ -3019,13 +3010,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if not phase_is_anticipation then
 				if self._street then --street behavior, stay in place a bit before pushes 
 					if group.in_place_t and self._t - group.in_place_t > 8 then 
-						if not tactics_map or not tactics_map.ranged_fire and not tactics_map.elite_ranged_fire then
-							objective_area = has_criminals_close
-							push = true
-						else
-							objective_area = area_to_chk
-							open_fire = true
-						end
+						objective_area = has_criminals_close
+						push = true
 					else
 						open_fire = true
 						objective_area = area_to_chk
@@ -3035,9 +3021,9 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					push = true
 				end
 			end
-		elseif not current_objective.running or group.in_place_t and self._t - group.in_place_t > 2 then
+		elseif not current_objective.running then
 			push = true
-		elseif phase_is_anticipation or tactics_map and tactics_map.flank then
+		else
 			approach = true --continue approaching if none of the conditions above apply
 		end
 	end
@@ -3061,7 +3047,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			open_fire = true,
 			tactic = current_objective.tactic,
 			area = obstructed_area or objective_area,
-			moving_in = push
+			moving_in = true
 		}
 
 		group.is_chasing = nil
@@ -3847,16 +3833,17 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 			if self._spawn_group_timers[id] and time < self._spawn_group_timers[id] then
 				valid_spawn_groups[id] = nil
 				valid_spawn_group_distances[id] = nil
+				spawn_group_number = spawn_group_number - 1
 			end
 		end
 	end
 	
-	local delays = {10, 20}
+	local delays = {10, 15}
 	
 	if spawn_group_number > 3 and spawn_group_number < 6 then
-		delays = {7.5, 15}
+		delays = {7.5, 12.5}
 	elseif spawn_group_number < 3 then
-		delays = {5, 10}
+		delays = {5, 7.5}
 	end
 	
 	if Global.game_settings.one_down then --LET'S GIVE INTO PAAAAAAIN
@@ -4065,11 +4052,6 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 					if spawn_task.ai_task then
 						spawn_task.ai_task.force_spawned = spawn_task.ai_task.force_spawned + 1
 						spawned_unit:brain()._logic_data.spawned_in_phase = spawn_task.ai_task.phase
-					end
-					
-					if sp_data.interval < 0.5 then
-						--log("ah, cuck")
-						sp_data.interval = 1
 					end
 					
 					sp_data.delay_t = self._t + sp_data.interval

@@ -366,3 +366,101 @@ function NewRaycastWeaponBase:_update_stats_values(disallow_replenish)
 		self:replenish()
 	end
 end
+
+function NewRaycastWeaponBase:clbk_assembly_complete(clbk, parts, blueprint)
+	self._assembly_complete = true
+	self._parts = parts
+	self._blueprint = blueprint
+
+	self:_update_fire_object()
+	self:_update_stats_values()
+	self:_refresh_gadget_list()
+
+	if self._setup and self._setup.timer then
+		self:set_timer(self._setup.timer)
+	end
+
+	local bullet_object_parts = {
+		"magazine",
+		"ammo",
+		"underbarrel"
+	}
+	self._bullet_objects = {}
+
+	for _, type in ipairs(bullet_object_parts) do
+		local type_part = managers.weapon_factory:get_part_from_weapon_by_type(type, self._parts)
+
+		if type_part then
+			local bullet_objects = managers.weapon_factory:get_part_data_type_from_weapon_by_type(type, "bullet_objects", self._parts)
+
+			if bullet_objects then
+				local prefix = bullet_objects.prefix
+
+				for i = 1, bullet_objects.amount do
+					local object = type_part.unit:get_object(Idstring(prefix .. i))
+
+					if object then
+						self._bullet_objects[i] = self._bullet_objects[i] or {}
+
+						table.insert(self._bullet_objects[i], {
+							object,
+							type_part.unit
+						})
+					end
+				end
+			end
+		end
+	end
+
+	self._ammo_objects = nil
+
+	if tweak_data.weapon[self._name_id].use_ammo_objects then
+		self._ammo_objects = self._bullet_objects
+		self._bullet_objects = nil
+	end
+
+	self:setup_underbarrel_data()
+	self:_apply_cosmetics(clbk or function ()
+	end)
+	self:apply_texture_switches()
+	self:apply_material_parameters()
+	self:configure_scope()
+	self:check_npc()
+	self:_set_parts_enabled(self._enabled)
+
+	if self._second_sight_data then
+		self._second_sight_data.unit = self._parts[self._second_sight_data.part_id].unit
+	end
+
+	local category = tweak_data.weapon[self._name_id].use_data.selection_index == 2 and "primaries" or "secondaries"
+	local slot = managers.blackmarket:equipped_weapon_slot(category)
+
+	for _, part_id in ipairs(blueprint) do
+		local colors = managers.blackmarket:get_part_custom_colors(category, slot, part_id, true)
+
+		if colors then
+			local mod_td = tweak_data.weapon.factory.parts[part_id]
+			local part_data = parts[part_id]
+
+			if colors[mod_td.sub_type] then
+				part_data.unit:base():set_color(colors[mod_td.sub_type]:with_alpha(0.4))
+			end
+
+			if mod_td.adds then
+				for _, add_part_id in ipairs(mod_td.adds) do
+					if self._parts[add_part_id] and self._parts[add_part_id].unit:base() then
+						local sub_type = tweak_data.weapon.factory.parts[add_part_id].sub_type
+
+						self._parts[add_part_id].unit:base():set_color(colors[sub_type]:with_alpha(0.4))
+					end
+				end
+			end
+		end
+	end
+
+	if self._setup and self._setup.user_unit then
+		self:_chk_has_charms(self._parts, self._setup)
+	end
+
+	clbk()
+end
