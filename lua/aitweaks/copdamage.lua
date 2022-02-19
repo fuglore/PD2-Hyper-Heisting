@@ -108,11 +108,11 @@ function CopDamage:_get_damage_receive_mul(attack_data)
 	end
 	
 	if self._punk_effect then
-		mul = mul * 0.25
+		mul = mul * 0.05
 	end
 	
 	if self._invulnerability_t and self._invulnerability_t > TimerManager:game():time()  then
-		mul = mul * 0.1
+		mul = mul * 0.05
 	end
 
 	return mul
@@ -136,11 +136,11 @@ function CopDamage:_apply_damage_reduction(damage, attack_data)
 	end
 	
 	if self._punk_effect then
-		damage = damage * 0.25
+		damage = damage * 0.05
 	end
 	
 	if self._invulnerability_t and self._invulnerability_t > TimerManager:game():time()  then
-		damage = damage * 0.1
+		damage = damage * 0.05
 	end
 
 	return damage

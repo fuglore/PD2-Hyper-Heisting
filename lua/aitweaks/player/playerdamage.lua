@@ -1542,13 +1542,14 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	local health_subtracted = 0
 	local death_prevented = nil
 	health_subtracted = self:get_real_health()
-	local revive_reasons = self._phoenix_down_t or self._docbag_token or self._jackpot_token
+	local revive_reasons = self._phoenix_down_t or self._jackpot_token
 	
 	if revive_reasons and self:get_real_health() - attack_data.damage <= 0 then
 		death_prevented = true
-	else
-		self:change_health(-attack_data.damage)
+		attack_data.damage = health_subtracted - 1
 	end
+	
+	self:change_health(-attack_data.damage)
 	
 	if self:is_regenerating_armor() then
 		self._took_damage_while_regenerating = true
@@ -1598,24 +1599,12 @@ function PlayerDamage:_calc_health_damage(attack_data)
 		end
 	end
 	
-	if death_prevented then 
-		if self._phoenix_down_t then
-			self._unit:sound():play("pickup_fak_skill")
-			return 0
-		elseif self._docbag_token then
-			self._docbag_token = nil
-			self._unit:sound():play("pickup_fak_skill")
-			--log("WOO")
-			return 0
-		elseif self._jackpot_token then
-			self._jackpot_token = nil
-			self._unit:sound():play("pickup_fak_skill")
-			--log("Jackpot just saved you!")
-			return 0
-		end
-	else
-		return health_subtracted
+	if death_prevented then
+		self._jackpot_token = nil
+		self._unit:sound():play("pickup_fak_skill")
 	end
+
+	return health_subtracted
 end
 
 function PlayerDamage:is_friendly_fire(unit)
@@ -2132,7 +2121,7 @@ function PlayerDamage:revive(silent)
 	end
 	
 	if managers.player:has_category_upgrade("player", "comeback") then
-		 managers.player:do_comeback_blast() --DON'T CALL IT A COMEBACK!!!
+		managers.player:do_comeback_blast() --DON'T CALL IT A COMEBACK!!!
 	end
 
 	if managers.player:has_inactivate_temporary_upgrade("temporary", "revived_damage_resist") then
@@ -2222,7 +2211,7 @@ function PlayerDamage:restore_health(health_restored, is_static, chk_health_rati
 	
 	if not heat_bonus then
 		if managers.player:has_category_upgrade("player", "antilethal_meds") then
-			health_restored = health_restored * 1.5
+			health_restored = health_restored * 1.25
 		end
 	end
 

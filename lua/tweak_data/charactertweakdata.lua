@@ -33,38 +33,38 @@ function CharacterTweakData:_presets(tweak_data)
 				0
 			},
 			brown_point = {
-				3,
-				3
+				1,
+				1
 			}
 		},
 		hard_def = {
 			panic_chance_mul = 0.7,
 			duration = {
-				2.5,
-				5
+				7.5,
+				15
 			},
 			react_point = {
 				1,
 				1
 			},
 			brown_point = {
-				3,
-				3
+				2,
+				2
 			}
 		},
 		hard_agg = {
 			panic_chance_mul = 0.7,
 			duration = {
-				2.5,
-				5
+				7.5,
+				15
 			},
 			react_point = {
-				3,
-				3
+				2,
+				2
 			},
 			brown_point = {
-				4,
-				4
+				3,
+				3
 			}
 		},
 		no_supress = {
@@ -3737,11 +3737,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.5,
-				r = 3000,
+				dmg_mul = 1,
+				r = 2000,
 				acc = {
 					0,
-					0.025
+					0.2
 				},
 				recoil = {
 					0.2,
@@ -4686,11 +4686,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 0.5, -- no longer a threat, gun stops working
+				dmg_mul = 1,
 				r = 3000,
 				acc = {
 					0,
-					0.05
+					0.2
 				},
 				recoil = {
 					0.2,
@@ -5725,11 +5725,11 @@ function CharacterTweakData:_presets(tweak_data)
 				}
 			},
 			{
-				dmg_mul = 1, -- no longer a threat, gun stops working
+				dmg_mul = 1,
 				r = 3000,
 				acc = {
 					0,
-					0.1
+					0.2
 				},
 				recoil = {
 					0.2,
