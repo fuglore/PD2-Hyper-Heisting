@@ -1002,6 +1002,7 @@ end
 function CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, my_pos, enemy_pos)
 	local fwd = data.unit:movement():m_rot():y()
 	local target_vec = enemy_pos - my_pos
+	mvec3_set_z(target_vec, 0) --not really sure if this will be doing anything, but if my guess is right, z variations might be causing enemies to try to turn when they don't need to...? which would be weird
 	local error_spin = target_vec:to_polar_with_reference(fwd, math_up).spin
 
 	if math_abs(error_spin) > 27 then
@@ -1905,66 +1906,12 @@ function CopLogicAttack._upd_aim(data, my_data)
 						end
 					end
 				end
-
-				if not shoot then
-					if not focus_enemy.last_verified_pos or time_since_verification and time_since_verification > 5 then
-						expected_pos = CopLogicAttack._get_expected_attention_position(data, my_data)
-
-						if expected_pos then
-							if running then
-								local walk_to_pos = data.unit:movement():get_walk_to_pos()
-								
-								if walk_to_pos then
-									expected_pos = mvec3_cpy(expected_pos)
-									local watch_dir = temp_vec1
-
-									mvec3_set(watch_dir, expected_pos)
-									mvec3_sub(watch_dir, data.m_pos)
-									mvec3_set_z(watch_dir, 0)
-
-									local watch_pos_dis = mvec3_norm(watch_dir)
-									local walk_vec = temp_vec2
-
-									mvec3_set(walk_vec, walk_to_pos)
-									mvec3_sub(walk_vec, data.m_pos)
-									mvec3_set_z(walk_vec, 0)
-									mvec3_norm(walk_vec)
-
-									local watch_walk_dot = mvec3_dot(watch_dir, walk_vec)
-
-									if watch_pos_dis < 500 or watch_pos_dis < 1000 and watch_walk_dot > 0.85 then
-										aim = true
-									end
-								else
-									aim = true
-								end
-								
-							else
-								aim = true
-							end
-							
-							my_data.expected_pos = expected_pos
-						end
-					end
-				end
 			end
 		end
 
 		if not aim and data.char_tweak.always_face_enemy and REACT_COMBAT <= focus_enemy.reaction then
 			aim = true
-		end
-
-		if data.logic.chk_should_turn(data, my_data) then
-			local enemy_pos = nil
-
-			if focus_enemy.verified or focus_enemy.nearly_visible or data.char_tweak.always_face_enemy then
-				enemy_pos = focus_enemy.m_pos
-			else
-				enemy_pos = my_data.expected_pos or focus_enemy.last_verified_pos or focus_enemy.verified_pos
-			end
-
-			CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
-		end
+		end		
 	end
 	
 	local is_moving = my_data.advancing or my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover or data.unit:anim_data().run or data.unit:anim_data().move
@@ -1989,34 +1936,14 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 			
 			if data.logic.chk_should_turn(data, my_data) then
-				local enemy_pos = focus_enemy.m_pos
+				local enemy_pos = focus_enemy.m_head_pos
 				CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
 			end
 		else
 			local look_pos = nil
 			
 			if time_since_verification and time_since_verification <= 7 or focus_enemy.dis < 400 then
-				look_pos = focus_enemy.verified_pos or my_data.expected_pos
-			end
-
-			if not look_pos then
-				local coarse_path = my_data.coarse_path
-				local nav_index = my_data.coarse_path_index
-				
-				if coarse_path and nav_index and #coarse_path >= nav_index + 1 then
-					local total_nav_points = #coarse_path
-					local index = nav_index + 1
-					local seg = coarse_path[index][1]
-					local pos = managers.navigation:find_random_position_in_segment(seg)
-					
-					if mvec3_dis_sq(data.m_pos, pos) > 360000 then
-						if math_abs(data.unit:movement():m_head_pos().z - pos.z) < 250 then
-							mvec3_set_z(pos, data.unit:movement():m_head_pos().z)
-						end
-						
-						look_pos = pos
-					end
-				end
+				look_pos = focus_enemy.last_verified_pos or focus_enemy.verified_pos
 			end
 			
 			if look_pos then
@@ -2115,7 +2042,40 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 
-		if my_data.attention_unit then
+		if focus_enemy then
+			local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
+			
+			if focus_enemy.verified or focus_enemy.nearly_visible then
+				if my_data.attention_unit ~= focus_enemy.u_key then
+					CopLogicBase._set_attention(data, focus_enemy)
+
+					my_data.attention_unit = focus_enemy.u_key
+				end
+				
+				if data.logic.chk_should_turn(data, my_data) then
+					local enemy_pos = focus_enemy.m_head_pos
+					CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
+				end
+			elseif time_since_verification and time_since_verification <= 7 or focus_enemy.dis < 400 then
+				local look_pos = focus_enemy.last_verified_pos or focus_enemy.verified_pos
+				
+				if look_pos then
+					if my_data.attention_unit ~= look_pos then
+						CopLogicBase._set_attention_on_pos(data, mvec3_cpy(look_pos))
+
+						my_data.attention_unit = mvec3_cpy(look_pos)
+					end
+					
+					if data.logic.chk_should_turn(data, my_data) then
+						CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, look_pos)
+					end
+				end
+			elseif my_data.attention_unit then
+				CopLogicBase._reset_attention(data)
+
+				my_data.attention_unit = nil
+			end
+		elseif my_data.attention_unit then
 			CopLogicBase._reset_attention(data)
 
 			my_data.attention_unit = nil
