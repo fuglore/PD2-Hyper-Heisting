@@ -348,7 +348,7 @@ function ShieldLogicAttack.update(data)
 
 	ShieldLogicAttack._process_pathing_results(data, my_data)
 
-	local enemy_visible = focus_enemy.verified
+	local enemy_visible = focus_enemy and focus_enemy.verified
 	local engage = my_data.attitude == "engage"
 	local action_taken = my_data.turning or data.unit:movement():chk_action_forbidden("walk") or my_data.walking_to_optimal_pos
 
@@ -362,7 +362,7 @@ function ShieldLogicAttack.update(data)
 				-- Nothing
 			elseif my_data.optimal_path then
 				ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data)
-			elseif my_data.optimal_pos and focus_enemy.nav_tracker then
+			elseif my_data.optimal_pos and focus_enemy and focus_enemy.nav_tracker then
 				local to_pos = my_data.optimal_pos
 				my_data.optimal_pos = nil
 				local ray_params = {
