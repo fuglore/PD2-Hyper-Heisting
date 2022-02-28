@@ -794,3 +794,94 @@ function CopBrain:on_intimidated(amount, aggressor_unit)
 		self._current_logic.on_intimidated(self._logic_data, amount, aggressor_unit)
 	end
 end
+
+function CopBrain:search_for_path_to_cover(search_id, cover, offset_pos, access_neg)
+	local params = {
+		tracker_from = self._unit:movement():nav_tracker(),
+		tracker_to = cover[3],
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		access_pos = self._SO_access,
+		access_neg = access_neg
+	}
+	params.prio = self:get_pathing_prio(self._logic_data)
+	
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
+function CopBrain:search_for_path(search_id, to_pos, prio, access_neg, nav_segs)
+	local params = {
+		tracker_from = self._unit:movement():nav_tracker(),
+		pos_to = to_pos,
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		prio = prio,
+		access_pos = self._SO_access,
+		access_neg = access_neg,
+		nav_segs = nav_segs
+	}
+	params.prio = params.prio or self:get_pathing_prio(self._logic_data)
+	
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
+function CopBrain:search_for_path_from_pos(search_id, from_pos, to_pos, prio, access_neg, nav_segs)
+	local params = {
+		pos_from = from_pos,
+		pos_to = to_pos,
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		prio = prio,
+		access_pos = self._SO_access,
+		access_neg = access_neg,
+		nav_segs = nav_segs
+	}
+	params.prio = params.prio or self:get_pathing_prio(self._logic_data)
+	
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
+function CopBrain:get_pathing_prio(data)
+	local prio = nil
+	local objective = data.objective
+
+	if objective then
+		prio = 0 --disable if it ends up hindering performance (since it makes the search faster, but without being prioritized over the other ones below)
+
+		if objective.type == "phalanx" then
+			prio = 4
+		elseif objective.follow_unit then
+			if objective.follow_unit:base().is_local_player or objective.follow_unit:base().is_husk_player or managers.groupai:state():is_unit_team_AI(objective.follow_unit) then
+				prio = 4
+			end
+		end
+	end
+
+	if data.is_converted or data.unit:in_slot(16) or data.internal_data.criminal then
+		prio = prio or 0
+
+		prio = prio + 3
+	elseif data.team.id == tweak_data.levels:get_default_team_ID("player") then
+		prio = prio or 0
+
+		prio = prio + 2
+	elseif data.important then
+		prio = prio or 0
+
+		prio = prio + 1
+	end
+
+	return prio
+end

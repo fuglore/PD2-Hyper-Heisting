@@ -1337,7 +1337,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 			local threat_pos, max_dist = nil
 			follow_pos = objective.follow_unit:movement():nav_tracker():field_position()
 
-			if data.attention_obj and data.attention_obj.nav_tracker and REACT_COMBAT <= data.attention_obj.reaction then
+			if data.attention_obj and data.attention_obj.unit and alive(data.attention_obj.unit) and data.attention_obj.nav_tracker and REACT_COMBAT <= data.attention_obj.reaction then
 				threat_pos = data.attention_obj.nav_tracker:field_position()
 			end
 
@@ -2192,10 +2192,12 @@ function CopLogicTravel.get_pathing_prio(data)
 	if data.is_converted or data.unit:in_slot(16) or data.internal_data.criminal then
 		prio = prio or 0
 
-		prio = prio + 2
+		prio = prio + 3
 	elseif data.team.id == tweak_data.levels:get_default_team_ID("player") then
 		prio = prio or 0
 
+		prio = prio + 2
+	elseif data.important then
 		prio = prio + 1
 	end
 
