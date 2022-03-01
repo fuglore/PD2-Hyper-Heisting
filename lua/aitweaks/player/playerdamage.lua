@@ -723,6 +723,8 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 		if not self._check_berserker_done or not can_activate_berserker then
 			if not ignore_reduce_revive then
 				self._revives = Application:digest_value(Application:digest_value(self._revives, false) - 1, true)
+				
+				self:_send_set_revives()
 			end
 
 			self._check_berserker_done = nil
@@ -1115,6 +1117,9 @@ function PlayerDamage:_regenerated(no_messiah)
 
 	self._said_hurt = false
 	self._revives = Application:digest_value(self._lives_init + managers.player:upgrade_value("player", "additional_lives", 0), true)
+	
+	self:_send_set_revives(true)
+	
 	self._revive_health_i = 1
 
 	managers.environment_controller:set_last_life(false)

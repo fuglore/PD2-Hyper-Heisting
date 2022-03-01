@@ -6759,7 +6759,7 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4.2,
 				r = 400,
 				acc = {
-					20,
+					60,
 					6
 				},
 				recoil = {
@@ -6777,7 +6777,7 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4.2,
 				r = 1000,
 				acc = {
-					20,
+					60,
 					6
 				},
 				recoil = {
@@ -6795,8 +6795,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4.2,
 				r = 2000,
 				acc = {
-					20,
-					10
+					60,
+					20
 				},
 				recoil = {
 					2.5,
@@ -6813,8 +6813,8 @@ function CharacterTweakData:_presets(tweak_data)
 				dmg_mul = 4.2,
 				r = 3000,
 				acc = {
-					20,
-					10
+					80,
+					35
 				},
 				recoil = {
 					2.5,
@@ -10080,7 +10080,8 @@ function CharacterTweakData:character_map()
 			"ene_bex_ninja_m4",
 			"ene_bex_ninja_c45",
 			"ene_policia_punk_bronco",
-			"ene_policia_03"			
+			"ene_policia_03",
+			"ene_tazer_1"
 		}
 	}
 	char_map.beatpricks = {

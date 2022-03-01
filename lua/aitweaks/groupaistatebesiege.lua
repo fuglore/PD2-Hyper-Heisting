@@ -685,22 +685,13 @@ function GroupAIStateBesiege:_chk_group_area_presence(group, area_to_chk)
 	
 	local id = area_to_chk.id
 	
-	local objective = group.objective
-	local occupied_areas = {}
-
 	for u_key, u_data in pairs(group.units) do
 		local nav_seg = u_data.tracker:nav_segment()
+		local my_area = self:get_area_from_nav_seg_id(nav_seg)
 
-		for area_id, area in pairs(self._area_data) do
-			if area.nav_segs[nav_seg] then
-				occupied_areas[area_id] = area
-			end
-		end
-	end
-
-	for area_id, area in pairs(occupied_areas) do
-		if area_id == id then
-			return area
+		if my_area.id == id then
+			--log("bingus")
+			return my_area
 		end
 	end
 end
@@ -712,6 +703,7 @@ function GroupAIStateBesiege:_set_objective_to_enemy_group(group, grp_objective)
 		if grp_objective.type == "retire" or not self:_chk_group_area_presence(group, grp_objective.area) then
 			grp_objective.moving_out = true
 		else
+			group.in_place = true
 			grp_objective.moving_out = nil
 		end
 
@@ -734,22 +726,39 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 		local grp_objective = group.objective
 		if group.has_spawned and grp_objective.type == "assault_area" then
 			if grp_objective.area and grp_objective.moving_out then
-				local done_moving = self:_chk_group_area_presence(group, grp_objective.area)
+				local done_moving = nil
+				
+				for u_key, u_data in pairs(group.units) do
+					local objective = u_data.unit:brain():objective()
+
+					if objective then
+						if objective.grp_objective ~= group.objective then
+							-- Nothing
+						elseif objective.in_place then
+							done_moving = true
+							
+							break
+						end
+					end
+				end
 
 				if done_moving then
-					grp_objective.moving_out = nil
+					group.objective.moving_out = nil
 					group.in_place_t = self._t
+					group.in_place = true
 					
 					if not grp_objective.moving_in then
 						self:_voice_move_complete(group)
 					end
 					
-					grp_objective.moving_in = nil
+					group.objective.moving_in = nil
 				else
 					group.in_place_t = nil
+					group.in_place = nil
 				end
 			elseif grp_objective.area and not group.in_place_t then
 				group.in_place_t = self._t
+				group.in_place = true
 			end
 
 			self:_set_assault_objective_to_group(group, phase)
@@ -1542,16 +1551,40 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_reenforce()
 		if group.has_spawned and grp_objective.type == "reenforce_area" then
 			local locked_up_in_area = nil
 			
-			if grp_objective.moving_out then
-				local done_moving = true
+			if grp_objective.area and grp_objective.moving_out then
+				local done_moving = nil
+				
+				for u_key, u_data in pairs(group.units) do
+					local objective = u_data.unit:brain():objective()
+
+					if objective then
+						if objective.grp_objective ~= group.objective then
+							-- Nothing
+						elseif objective.in_place then
+							done_moving = true
+							
+							break
+						end
+					end
+				end
 
 				if done_moving then
 					group.objective.moving_out = nil
 					group.in_place_t = self._t
+					group.in_place = true
+					
+					if not grp_objective.moving_in then
+						self:_voice_move_complete(group)
+					end
+					
 					group.objective.moving_in = nil
-
-					self:_voice_move_complete(group)
+				else
+					group.in_place_t = nil
+					group.in_place = nil
 				end
+			elseif grp_objective.area and not group.in_place_t then
+				group.in_place_t = self._t
+				group.in_place = true
 			end
 
 			if not group.objective.moving_in then
@@ -1571,7 +1604,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 	local current_objective = group.objective
 
 	if current_objective.target_area then
-		if current_objective.moving_out and not current_objective.moving_in then
+		if not group.in_place and not current_objective.moving_in then
 			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
 
 			if forwardmost_i_nav_point then
@@ -1601,7 +1634,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 			end
 		end
 
-		if not current_objective.moving_out and not current_objective.area.neighbours[current_objective.target_area.id] then
+		if group.in_place and not current_objective.area.neighbours[current_objective.target_area.id] then
 			local search_params = {
 				id = "GroupAI_reenforce",
 				from_seg = current_objective.area.pos_nav_seg,
@@ -1630,7 +1663,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 			end
 		end
 
-		if not current_objective.moving_out and current_objective.area.neighbours[current_objective.target_area.id] and not next(current_objective.target_area.criminal.units) then
+		if group.in_place and current_objective.area.neighbours[current_objective.target_area.id] and not next(current_objective.target_area.criminal.units) then
 			local grp_objective = {
 				stance = "hos",
 				scan = true,
@@ -2197,6 +2230,225 @@ function GroupAIStateBesiege:_upd_recon_tasks()
 	end
 end
 
+function GroupAIStateBesiege:_assign_enemy_groups_to_recon()
+	for group_id, group in pairs(self._groups) do
+		if group.has_spawned and group.objective.type == "recon_area" then
+			if group.objective.moving_out then
+				local done_moving = nil
+				
+				for u_key, u_data in pairs(group.units) do
+					local objective = u_data.unit:brain():objective()
+
+					if objective then
+						if objective.grp_objective ~= group.objective then
+							-- Nothing
+						elseif objective.in_place then
+							done_moving = true
+							
+							break
+						end
+					end
+				end
+				
+				if done_moving then
+					if group.objective.moved_in then
+						group.visited_areas = group.visited_areas or {}
+						group.visited_areas[group.objective.area] = true
+					end
+
+					group.objective.moving_out = nil
+					group.in_place_t = self._t
+					group.in_place = true
+					group.objective.moving_in = nil
+
+					self:_voice_move_complete(group)
+				end
+			end
+
+			if not group.objective.moving_in then
+				self:_set_recon_objective_to_group(group)
+			end
+		end
+	end
+end
+
+function GroupAIStateBesiege:_set_recon_objective_to_group(group)
+	local current_objective = group.objective
+	local target_area = current_objective.target_area or current_objective.area
+
+	if not target_area.loot and not target_area.hostages or not group.in_place and current_objective.moved_in and group.in_place_t and self._t - group.in_place_t > 15 then
+		local recon_area = nil
+		local to_search_areas = {
+			current_objective.area
+		}
+		local found_areas = {
+			[current_objective.area] = "init"
+		}
+
+		repeat
+			local search_area = table.remove(to_search_areas, 1)
+
+			if search_area.loot or search_area.hostages then
+				local occupied = nil
+
+				for test_group_id, test_group in pairs(self._groups) do
+					if test_group ~= group and (test_group.objective.target_area == search_area or test_group.objective.area == search_area) then
+						occupied = true
+
+						break
+					end
+				end
+
+				if not occupied and group.visited_areas and group.visited_areas[search_area] then
+					occupied = true
+				end
+
+				if not occupied then
+					local is_area_safe = not next(search_area.criminal.units)
+
+					if is_area_safe then
+						recon_area = search_area
+
+						break
+					else
+						recon_area = recon_area or search_area
+					end
+				end
+			end
+
+			if not next(search_area.criminal.units) then
+				for other_area_id, other_area in pairs(search_area.neighbours) do
+					if not found_areas[other_area] then
+						table.insert(to_search_areas, other_area)
+
+						found_areas[other_area] = search_area
+					end
+				end
+			end
+		until #to_search_areas == 0
+
+		if recon_area then
+			local coarse_path = {
+				{
+					recon_area.pos_nav_seg,
+					recon_area.pos
+				}
+			}
+			local last_added_area = recon_area
+
+			while found_areas[last_added_area] ~= "init" do
+				last_added_area = found_areas[last_added_area]
+
+				table.insert(coarse_path, 1, {
+					last_added_area.pos_nav_seg,
+					last_added_area.pos
+				})
+			end
+
+			local grp_objective = {
+				scan = true,
+				pose = "stand",
+				type = "recon_area",
+				stance = "hos",
+				attitude = "avoid",
+				area = current_objective.area,
+				target_area = recon_area,
+				coarse_path = coarse_path
+			}
+
+			self:_set_objective_to_enemy_group(group, grp_objective)
+
+			current_objective = group.objective
+		end
+	end
+
+	if current_objective.target_area then
+		if not group.in_place and not current_objective.moving_in and current_objective.coarse_path then
+			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
+
+			if forwardmost_i_nav_point and forwardmost_i_nav_point > 1 then
+				for i = forwardmost_i_nav_point + 1, #current_objective.coarse_path do
+					local nav_point = current_objective.coarse_path[forwardmost_i_nav_point]
+
+					if not self:is_nav_seg_safe(nav_point[1]) then
+						for i = 0, #current_objective.coarse_path - forwardmost_i_nav_point do
+							table.remove(current_objective.coarse_path)
+						end
+
+						local grp_objective = {
+							attitude = "avoid",
+							scan = true,
+							pose = "stand",
+							type = "recon_area",
+							stance = "hos",
+							area = self:get_area_from_nav_seg_id(current_objective.coarse_path[#current_objective.coarse_path][1]),
+							target_area = current_objective.target_area
+						}
+
+						self:_set_objective_to_enemy_group(group, grp_objective)
+
+						return
+					end
+				end
+			end
+		end
+
+		if group.in_place and not current_objective.area.neighbours[current_objective.target_area.id] then
+			local search_params = {
+				id = "GroupAI_recon",
+				from_seg = current_objective.area.pos_nav_seg,
+				to_seg = current_objective.target_area.pos_nav_seg,
+				access_pos = self._get_group_acces_mask(group),
+				verify_clbk = callback(self, self, "is_nav_seg_safe")
+			}
+			local coarse_path = managers.navigation:search_coarse(search_params)
+
+			if coarse_path then
+				self:_merge_coarse_path_by_area(coarse_path)
+				table.remove(coarse_path)
+
+				local grp_objective = {
+					scan = true,
+					pose = "stand",
+					type = "recon_area",
+					stance = "hos",
+					attitude = "avoid",
+					area = self:get_area_from_nav_seg_id(coarse_path[#coarse_path][1]),
+					target_area = current_objective.target_area,
+					coarse_path = coarse_path
+				}
+
+				self:_set_objective_to_enemy_group(group, grp_objective)
+			end
+		end
+
+		if group.in_place and current_objective.area.neighbours[current_objective.target_area.id] then
+			local grp_objective = {
+				stance = "hos",
+				scan = true,
+				pose = "crouch",
+				type = "recon_area",
+				attitude = "avoid",
+				area = current_objective.target_area
+			}
+
+			self:_set_objective_to_enemy_group(group, grp_objective)
+
+			group.objective.moving_in = true
+			group.objective.moved_in = true
+
+			if next(current_objective.target_area.criminal.units) then
+				self:_chk_group_use_smoke_grenade(group, {
+					use_smoke = true,
+					target_areas = {
+						grp_objective.area
+					}
+				})
+			end
+		end
+	end
+end
+
 function GroupAIStateBesiege:_assign_group_to_retire(group)
 	local retire_area, retire_pos = nil
 	local start_area = group.objective.area
@@ -2477,7 +2729,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 	local current_objective = group.objective
 
 	if current_objective.target_area then
-		if current_objective.moving_out and not current_objective.moving_in then
+		if not group.in_place and not current_objective.moving_in then
 			local forwardmost_i_nav_point = self:_get_group_forwardmost_coarse_path_index(group)
 
 			if forwardmost_i_nav_point then
@@ -2507,7 +2759,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 			end
 		end
 
-		if not current_objective.moving_out and not current_objective.area.neighbours[current_objective.target_area.id] then
+		if group.in_place and not current_objective.area.neighbours[current_objective.target_area.id] then
 			local search_params = {
 				id = "GroupAI_reenforce",
 				from_seg = current_objective.area.pos_nav_seg,
@@ -2536,7 +2788,7 @@ function GroupAIStateBesiege:_set_reenforce_objective_to_group(group)
 			end
 		end
 
-		if not current_objective.moving_out and current_objective.area.neighbours[current_objective.target_area.id] then
+		if group.in_place and current_objective.area.neighbours[current_objective.target_area.id] then
 			local grp_objective = {
 				stance = "cbt",
 				scan = true,
@@ -2944,6 +3196,16 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if phase_is_anticipation then 
 			pull_back = true
 		else
+			if group.in_place and self._t - group.in_place_t > 2 then
+				for criminal_key, criminal_data in pairs(self._player_criminals) do
+					self:criminal_spotted(criminal_data.unit)
+
+					for u_key, u_data in pairs(group.units) do
+						u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
+					end
+				end
+			end
+		
 			objective_area = obstructed_area
 			
 			open_fire = true
@@ -3002,6 +3264,16 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if phase_is_anticipation then
 				pull_back = true
 			else
+				if group.in_place and self._t - group.in_place_t > 2 then
+					for criminal_key, criminal_data in pairs(self._player_criminals) do
+						self:criminal_spotted(criminal_data.unit)
+
+						for u_key, u_data in pairs(group.units) do
+							u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
+						end
+					end
+				end
+			
 				open_fire = true
 			end
 		elseif phase_is_anticipation and current_objective.open_fire then --if we were aggressive one update ago, start backing up away from the current objective area
@@ -3021,21 +3293,23 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 					push = true
 				end
 			end
-		elseif not current_objective.running then
-			push = true
-		else
-			approach = true --continue approaching if none of the conditions above apply
+		elseif group.in_place or not current_objective.area then
+			if phase_is_anticipation then
+				approach = true
+			else
+				push = true
+			end
 		end
 	end
 	
-	objective_area = objective_area or current_objective.area or group_leader_u_data and self:get_area_from_nav_seg_id(group_leader_u_data.tracker:nav_segment()) or self._task_data.assault.target_areas[1]
+	objective_area = objective_area or self._task_data.assault.target_areas[1]
 	
 	if not objective_area then
 		return
 	end
 	
 	if not current_objective.area then
-		current_objective.area = group_leader_u_data and self:get_area_from_nav_seg_id(group_leader_u_data.tracker:nav_segment()) or objective_area
+		current_objective.area = group_leader_u_data and self:get_area_from_nav_seg_id(group_leader_u_data.tracker:nav_segment())
 	end
 
 	if open_fire then
@@ -3046,71 +3320,34 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			stance = "hos",
 			open_fire = true,
 			tactic = current_objective.tactic,
-			area = obstructed_area or objective_area,
-			moving_in = true
+			area = obstructed_area or objective_area
 		}
 
 		group.is_chasing = nil
 		
 		if not current_objective.open_fire then
 			self:_voice_open_fire_start(group)
-		elseif grp_objective.moving_in then
-			if not current_objective.moving_in then
-				self:_voice_push_in(group)
-			end
 		end
 		
 		self:_set_objective_to_enemy_group(group, grp_objective)
 		
 	elseif approach or push then
 		local assault_area, alternate_assault_area, alternate_assault_area_from, assault_path, alternate_assault_path = nil
-		local to_search_areas = {
-			objective_area
-		}
-		local found_areas = {
-			[objective_area] = "init"
-		}
 		
-		repeat
-			local search_area = table_remove(to_search_areas, 1)
+		local search_params = {
+			id = "GroupAI_assault",
+			from_seg = current_objective.area.pos_nav_seg,
+			to_seg = objective_area.pos_nav_seg,
+			access_pos = self._get_group_acces_mask(group),
+			long_path = tactics_map and tactics_map.flank and true or nil
+		}
+		assault_path = managers.navigation:search_coarse(search_params)
+
+		if assault_path then
+			--log("YOOOOOOOOOOOOOOOOOOOOOOOOO")
+			assault_area = objective_area
 			
-			if next(search_area.criminal.units) then
-				local assault_from_here = true
-				
-				if assault_from_here then
-					local search_params = {
-						id = "GroupAI_assault",
-						from_seg = current_objective.area.pos_nav_seg,
-						to_seg = search_area.pos_nav_seg,
-						access_pos = self._get_group_acces_mask(group),
-						long_path = tactics_map and tactics_map.flank and true or nil
-					}
-					assault_path = managers.navigation:search_coarse(search_params)
-
-					if assault_path then
-						--log("YOOOOOOOOOOOOOOOOOOOOOOOOO")
-						self:_merge_coarse_path_by_area(assault_path)
-
-						assault_area = search_area
-
-						break
-					end
-				end
-			else
-				for other_area_id, other_area in pairs_g(search_area.neighbours) do
-					if not found_areas[other_area] then
-						table_insert(to_search_areas, other_area)
-
-						found_areas[other_area] = search_area
-					end
-				end
-			end
-		until #to_search_areas == 0
-
-		if not assault_area and alternate_assault_area then
-			assault_area = alternate_assault_area
-			found_areas[assault_area] = alternate_assault_area_from
-			assault_path = alternate_assault_path
+			self:_merge_coarse_path_by_area(assault_path)
 		end
 
 		if assault_area and assault_path then	
@@ -3134,12 +3371,9 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 			
-			if assault_path and #assault_path > 2 and assault_area.nav_segs[assault_path[#assault_path - 1][1]] then
-				table_remove(assault_path, #assault_path)
-			end
-			
 			if not push and assault_path and #assault_path > 2 then
 				table_remove(assault_path, #assault_path)
+				objective_area = self:get_area_from_nav_seg_id(assault_path[#assault_path][1])
 			end
 
 			local grp_objective = {

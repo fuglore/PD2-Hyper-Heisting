@@ -409,7 +409,7 @@ function CopLogicAttack._upd_combat_movement(data)
 				move_to_cover = true
 			end
 		else
-			if data.objective and data.objective.grp_objective and data.objective.grp_objective.moving_in or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown") then
+			if data.objective and data.objective.grp_objective and data.objective.grp_objective.open_fire or valid_harass or data.unit:base().has_tag and data.unit:base():has_tag("takedown") then
 				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 2 then
 					if my_data.charge_path then
 						local path = my_data.charge_path
@@ -424,7 +424,7 @@ function CopLogicAttack._upd_combat_movement(data)
 						if not tactics or tactics.flank then
 							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, engage_range) --charge to a position that would put the unit in a flanking position, not a flanking path
 						else
-							my_data.charge_pos = CopLogicTravel._find_near_free_pos(focus_enemy.nav_tracker:field_position(), engage_range, 2, data.pos_rsrv_id)
+							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), engage_range, 45, nil, data.pos_rsrv_id)
 						end
 
 						--my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.optimal, 45, nil, data.pos_rsrv_id)
@@ -1801,7 +1801,6 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 		if tase and data.unit:base():has_tag("taser") then
 			shoot = true
-			--log("fuck")
 		elseif REACT_AIM <= focus_enemy.reaction then
 			local running = my_data.advancing and not my_data.advancing:stopping() and my_data.advancing:haste() == "run"
 			

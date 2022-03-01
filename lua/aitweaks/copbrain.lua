@@ -866,6 +866,8 @@ function CopBrain:get_pathing_prio(data)
 			if objective.follow_unit:base().is_local_player or objective.follow_unit:base().is_husk_player or managers.groupai:state():is_unit_team_AI(objective.follow_unit) then
 				prio = 4
 			end
+		elseif self._logic_data.name == "attack" then
+			prio = 1
 		end
 	end
 
