@@ -3272,19 +3272,31 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
 						end
 					end
+					
+					push = true
+				elseif current_objective.moving_in then
+					open_fire = true
 				end
-			
-				open_fire = true
 			end
 		elseif phase_is_anticipation and current_objective.open_fire then --if we were aggressive one update ago, start backing up away from the current objective area
 			pull_back = true
 		elseif has_criminals_close then
 			if not phase_is_anticipation then
+				if group.in_place and self._t - group.in_place_t > 2 then
+					for criminal_key, criminal_data in pairs(self._player_criminals) do
+						self:criminal_spotted(criminal_data.unit)
+
+						for u_key, u_data in pairs(group.units) do
+							u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
+						end
+					end
+				end
+			
 				if self._street then --street behavior, stay in place a bit before pushes 
 					if group.in_place_t and self._t - group.in_place_t > 8 then 
 						objective_area = has_criminals_close
 						push = true
-					else
+					elseif not current_objective.open_fire then
 						open_fire = true
 						objective_area = area_to_chk
 					end
@@ -3352,7 +3364,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 
 		if assault_area and assault_path then	
 			local used_grenade = nil
-	
+			local objective_pos = nil
+			
 			if push then
 				if current_objective.area.id == assault_area.id or current_objective.area.neighbours[assault_area] then
 					if math_random() < 0.5 then
@@ -3368,6 +3381,31 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							used_grenade = self:_chk_group_use_flash_grenade(group, self._task_data.assault, detonate_pos, assault_area)
 						end
 					end
+				end
+				
+				
+				local best_dis, best_pos
+				local assault_area_pos = assault_area.pos
+				
+				for criminal_key, criminal_data in pairs(self._char_criminals) do
+					if alive(criminal_data.unit) then
+						local c_nav_tracker = criminal_data.tracker
+						local crim_nav_seg = c_nav_tracker:nav_segment()
+
+						if assault_area.nav_segs[crim_nav_seg] then
+							local c_pos = c_nav_tracker:field_position()
+							local c_dis = mvec3_dis_sq(c_pos, assault_area_pos)
+							
+							if not best_dis or best_dis > c_dis then
+								best_dis = c_dis
+								best_pos = c_pos
+							end
+						end
+					end
+				end
+				
+				if best_pos then
+					objective_pos = best_pos
 				end
 			end
 			
@@ -3387,6 +3425,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				open_fire = push,
 				pushed = push,
 				charge = push,
+				pos = objective_pos,
 				interrupt_dis = nil
 			}
 			--group.is_chasing = group.is_chasing or push
