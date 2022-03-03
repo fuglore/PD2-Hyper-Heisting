@@ -3426,6 +3426,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				pushed = push,
 				charge = push,
 				pos = objective_pos,
+				pos_optional = true,
+				distance = 400,
 				interrupt_dis = nil
 			}
 			--group.is_chasing = group.is_chasing or push
@@ -3639,9 +3641,9 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		if grp_objective.follow_unit then
 			objective.type = "follow"
 			objective.follow_unit = grp_objective.follow_unit
-			objective.distance = grp_objective.distance
 		end
 		
+		objective.distance = grp_objective.distance
 		objective.no_arrest = true
 		objective.stance = "hos"
 		objective.pose = "stand"

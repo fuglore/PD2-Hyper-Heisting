@@ -41,6 +41,11 @@ local ids_func = Idstring
 local left_hand_str = ids_func("LeftHandMiddle2")
 local ids_movement = ids_func("movement")
 
+CopMovement._NET_EVENTS = {
+	dark_bomb_enemy = 2,
+	dark_bomb = 1
+}
+
 local action_variants = {
 	security = {
 		idle = CopActionIdle,
@@ -210,6 +215,71 @@ end
 
 function CopMovement:is_taser_attack_allowed() --lol
 	return
+end
+
+function CopMovement:_detonate_dark_bomb(enemy)
+	local dmg_ext = self._unit:character_damage()
+
+	dmg_ext:damage_mission({damage = 99999})
+	
+	local full_body_action = self._active_actions and self._active_actions[1]
+
+	if full_body_action and full_body_action:type() == "hurt" then
+		full_body_action:force_ragdoll(true)
+	end
+	
+	local pos = self:m_com()
+	local normal = math.UP
+	local range = 600
+	local slot_mask = managers.slot:get_mask("explosion_targets")
+	
+	if enemy then
+		managers.explosion:give_local_player_dmg(pos, range, 20)
+	end
+	
+	local params = {
+		camera_shake_max_mul = enemy and 4 or 1,
+		sound_muffle_effect = enemy,
+		effect = "effects/payday2/particles/explosions/dynamite_explosion",
+		sound_event = "gl_explode",
+		feedback_range = enemy and 1200 or 600
+	}
+	
+	managers.explosion:play_sound_and_effects(pos, normal, range, params)
+	
+	if not enemy then
+		managers.explosion:detect_and_give_dmg({
+			player_damage = 0,
+			hit_pos = pos,
+			range = range,
+			collision_slotmask = slot_mask,
+			curve_pow = 0.3,
+			damage = 90,
+			ignore_unit = self._unit,
+			alert_radius = 5000,
+			user = self._unit,
+			owner = self._ext_inventory:equipped_unit()
+		})
+	end
+end
+
+function CopMovement:_detonate_dark_bomb_client(enemy)
+	local params = {
+		camera_shake_max_mul = enemy and 4 or 1,
+		sound_muffle_effect = enemy,
+		effect = "effects/payday2/particles/explosions/dynamite_explosion",
+		sound_event = "gl_explode",
+		feedback_range = enemy and 1200 or 600
+	}
+	
+	local pos = self:m_com()
+	local normal = math.UP
+
+	if enemy then
+		managers.explosion:give_local_player_dmg(pos, range, 20)
+	else
+		managers.explosion:explode_on_client(pos, math.UP, nil, 90, range, 0.3, params)
+	end
 end
 
 function CopMovement:_chk_play_equip_weapon()

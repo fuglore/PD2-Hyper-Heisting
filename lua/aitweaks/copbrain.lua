@@ -445,6 +445,7 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 	weapon_unit:base():add_damage_multiplier(damage_multiplier)
 	self._logic_data.objective_complete_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_criminal_objective_complete")
 	self._logic_data.objective_failed_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_criminal_objective_failed")
+	--self._logic_data.wants_to_dark_bomb = true
 	local objective = managers.groupai:state():_determine_objective_for_criminal_AI(self._unit)
 	self:set_objective(objective)
 	self:set_logic("idle", nil)
@@ -793,6 +794,26 @@ function CopBrain:on_intimidated(amount, aggressor_unit)
 	
 		self._current_logic.on_intimidated(self._logic_data, amount, aggressor_unit)
 	end
+end
+
+function CopBrain:search_for_path_to_unit(search_id, other_unit, access_neg)
+	local enemy_tracker = other_unit:movement():nav_tracker()
+	local pos_to = enemy_tracker:field_position()
+	local params = {
+		tracker_from = self._unit:movement():nav_tracker(),
+		tracker_to = enemy_tracker,
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		access_pos = self._SO_access,
+		access_neg = access_neg
+	}
+	params.prio = self:get_pathing_prio(self._logic_data)
+	
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
 end
 
 function CopBrain:search_for_path_to_cover(search_id, cover, offset_pos, access_neg)
