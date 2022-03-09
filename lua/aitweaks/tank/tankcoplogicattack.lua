@@ -71,9 +71,12 @@ function TankCopLogicAttack.enter(data, new_logic_name, enter_params)
 	end
 	
 	local key_str = tostring(data.key)
-	my_data.detection_task_key = "TankLogicAttack._upd_enemy_detection" .. key_str
+	
+	if not data.extreme_ai_priority then
+		my_data.detection_task_key = "TankLogicAttack._upd_enemy_detection" .. key_str
 
-	CopLogicBase.queue_task(my_data, my_data.detection_task_key, TankCopLogicAttack._upd_enemy_detection, data, data.t, true)
+		CopLogicBase.queue_task(my_data, my_data.detection_task_key, TankCopLogicAttack._upd_enemy_detection, data, data.t, true)
+	end
 
 	CopLogicIdle._chk_has_old_action(data, my_data)
 
@@ -154,6 +157,36 @@ function TankCopLogicAttack.update(data)
 	end
 end
 
+function TankCopLogicAttack._upd_enemy_detection_high_def(data, is_synchronous)
+	data.t = TimerManager:game():time()
+	local my_data = data.internal_data
+	local min_reaction = REACT_AIM
+	local delay = CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
+	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
+	local old_att_obj = data.attention_obj
+
+	CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
+	data.logic._chk_exit_attack_logic(data, new_reaction)
+
+	if my_data ~= data.internal_data then
+		return
+	end
+
+	if not new_attention and old_att_obj then
+		TankCopLogicAttack._cancel_chase_attempt(data, my_data)
+	end
+
+	CopLogicBase._chk_call_the_police(data)
+
+	if my_data ~= data.internal_data then
+		return
+	end
+
+	CopLogicAttack._upd_aim(data, my_data)
+
+	CopLogicBase._report_detections(data.detected_attention_objects)
+end
+
 function TankCopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
@@ -183,7 +216,7 @@ function TankCopLogicAttack._upd_enemy_detection(data, is_synchronous)
 
 	CopLogicAttack._upd_aim(data, my_data)
 
-	if not is_synchronous then
+	if not is_synchronous and my_data.detection_task_key then
 		CopLogicBase.queue_task(my_data, my_data.detection_task_key, TankCopLogicAttack._upd_enemy_detection, data, data.t + delay, data.important and true)
 	end
 

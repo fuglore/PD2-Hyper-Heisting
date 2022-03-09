@@ -41,9 +41,6 @@ function SentryGunWeapon:_fire_raycast(from_pos, direction, shoot_player, target
 			local damage = self:_apply_dmg_mul(self._damage, col_ray or player_ray_data, from_pos)
 			
 			InstantBulletBase:on_hit_player(col_ray or player_ray_data, self._unit, self._unit, damage)
-			if target_unit and target_unit:character_damage() and target_unit:character_damage().build_suppression then
-				target_unit:character_damage():build_suppression(self._suppression)
-			end
 		end
 	end
 

@@ -61,6 +61,8 @@ function CopBrain:post_init()
 	CopBrain._logic_variants.shield.attack = ShieldLogicAttack
 	CopBrain._logic_variants.akuma = clone(security_variant)
 	CopBrain._logic_variants.akuma.attack = CopLogicAttack
+	CopBrain._logic_variants.triad_boss = clone(security_variant)
+	CopBrain._logic_variants.triad_boss.attack = TankCopLogicAttack
 	
 	
 	old_init(self)
@@ -281,6 +283,10 @@ function CopBrain:_reset_logic_data()
 		objective_failed_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_objective_failed")
 	}
 	
+	if self._logic_data.char_tweak.extreme_ai_priority then
+		self._logic_data.extreme_ai_priority = true
+	end
+	
 	if self._logic_data.char_tweak.buddy then
 		self._logic_data.buddypalchum = true
 		
@@ -300,6 +306,23 @@ function CopBrain:set_update_enabled_state(state)
 		self._logic_data.brain_updating = state
 	end
 end
+
+function CopBrain:update(unit, t, dt)
+	local logic = self._current_logic
+
+	if logic.update then
+		local l_data = self._logic_data
+		l_data.t = t
+		l_data.dt = dt
+		
+		if l_data.extreme_ai_priority and logic._upd_enemy_detection_high_def then
+			logic._upd_enemy_detection_high_def(l_data)
+		end
+		
+		logic.update(l_data)
+	end
+end
+
 
 function CopBrain:set_objective(new_objective, params)
 	local old_objective = self._logic_data.objective
@@ -445,6 +468,7 @@ function CopBrain:convert_to_criminal(mastermind_criminal)
 	weapon_unit:base():add_damage_multiplier(damage_multiplier)
 	self._logic_data.objective_complete_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_criminal_objective_complete")
 	self._logic_data.objective_failed_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_criminal_objective_failed")
+	--self._logic_data.wants_to_dark_bomb = true
 	local objective = managers.groupai:state():_determine_objective_for_criminal_AI(self._unit)
 	self:set_objective(objective)
 	self:set_logic("idle", nil)
@@ -793,4 +817,117 @@ function CopBrain:on_intimidated(amount, aggressor_unit)
 	
 		self._current_logic.on_intimidated(self._logic_data, amount, aggressor_unit)
 	end
+end
+
+function CopBrain:search_for_path_to_unit(search_id, other_unit, access_neg)
+	local enemy_tracker = other_unit:movement():nav_tracker()
+	local pos_to = enemy_tracker:field_position()
+	local params = {
+		tracker_from = self._unit:movement():nav_tracker(),
+		tracker_to = enemy_tracker,
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		access_pos = self._SO_access,
+		access_neg = access_neg
+	}
+	params.prio = self:get_pathing_prio(self._logic_data)
+	
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
+function CopBrain:search_for_path_to_cover(search_id, cover, offset_pos, access_neg)
+	local params = {
+		tracker_from = self._unit:movement():nav_tracker(),
+		tracker_to = cover[3],
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		access_pos = self._SO_access,
+		access_neg = access_neg
+	}
+	params.prio = self:get_pathing_prio(self._logic_data)
+	
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
+function CopBrain:search_for_path(search_id, to_pos, prio, access_neg, nav_segs)
+	local params = {
+		tracker_from = self._unit:movement():nav_tracker(),
+		pos_to = to_pos,
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		prio = prio,
+		access_pos = self._SO_access,
+		access_neg = access_neg,
+		nav_segs = nav_segs
+	}
+	params.prio = params.prio or self:get_pathing_prio(self._logic_data)
+	
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
+function CopBrain:search_for_path_from_pos(search_id, from_pos, to_pos, prio, access_neg, nav_segs)
+	local params = {
+		pos_from = from_pos,
+		pos_to = to_pos,
+		result_clbk = callback(self, self, "clbk_pathing_results", search_id),
+		id = search_id,
+		prio = prio,
+		access_pos = self._SO_access,
+		access_neg = access_neg,
+		nav_segs = nav_segs
+	}
+	params.prio = params.prio or self:get_pathing_prio(self._logic_data)
+	
+	self._logic_data.active_searches[search_id] = true
+
+	managers.navigation:search_pos_to_pos(params)
+
+	return true
+end
+
+function CopBrain:get_pathing_prio(data)
+	local prio = nil
+	local objective = data.objective
+
+	if objective then
+		prio = 0 --disable if it ends up hindering performance (since it makes the search faster, but without being prioritized over the other ones below)
+
+		if objective.type == "phalanx" then
+			prio = 4
+		elseif objective.follow_unit then
+			if objective.follow_unit:base().is_local_player or objective.follow_unit:base().is_husk_player or managers.groupai:state():is_unit_team_AI(objective.follow_unit) then
+				prio = 4
+			end
+		elseif self._logic_data.name == "attack" then
+			prio = 1
+		end
+	end
+
+	if data.is_converted or data.unit:in_slot(16) or data.internal_data.criminal then
+		prio = prio or 0
+
+		prio = prio + 3
+	elseif data.team.id == tweak_data.levels:get_default_team_ID("player") then
+		prio = prio or 0
+
+		prio = prio + 2
+	elseif data.important then
+		prio = prio or 0
+
+		prio = prio + 1
+	end
+
+	return prio
 end

@@ -759,9 +759,9 @@ function PlayerManager:update(t, dt)
 end
 
 function PlayerManager:activate_heal_upgrades(token, syringebasic, syringeaced)
-	if not self._docbag_token then
+	if token then
 		local player_unit = self:player_unit()
-		player_unit:character_damage():activate_docbag_token()
+		player_unit:character_damage():activate_jackpot_token()
 	end
 	
 	if syringebasic then
@@ -830,7 +830,7 @@ function PlayerManager:on_headshot_dealt()
 
 	if damage_ext and regen_armor_bonus > 0 and regen_armor_t_chk then
 		damage_ext:restore_armor(regen_armor_bonus)
-		self._on_headshot_dealt_t = t + 5
+		self._on_headshot_dealt_t = t + 10
 	end
 	
 	if damage_ext and self:has_category_upgrade("player", "jackpot_safety") and not damage_ext:has_jackpot_token() and player_unit:movement() then	
@@ -840,7 +840,7 @@ function PlayerManager:on_headshot_dealt()
 		if state_chk then
 			if not self._safety_headshot_t or self._safety_headshot_t and self._safety_headshot_t < t then
 				damage_ext:activate_jackpot_token()
-				self._safety_headshot_t = t + 5
+				self._safety_headshot_t = t + 10
 			end
 		end
 	end

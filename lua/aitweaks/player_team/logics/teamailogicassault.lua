@@ -440,8 +440,6 @@ function TeamAILogicAssault._upd_spotting(data, my_data)
 		my_data.mark_special_chk_t = data.t + 0.75
 
 		if not data.mark_special_t or data.t > data.mark_special_t then
-			
-		
 			local nmy = TeamAILogicAssault.find_enemy_to_mark(data)
 
 			if nmy then
@@ -463,9 +461,12 @@ function TeamAILogicAssault.find_enemy_to_mark(data)
 	local my_look_vec = data.unit:movement():m_rot():y()
 	local max_marking_angle = 90
 	local best_nmy, best_nmy_wgt = nil
-	local attention_objects = data.detected_attention_objects
+	local use_non_att_obj_mark = nil
 	
-	for key, attention_info in pairs(attention_objects) do
+	if data.attention_obj and data.attention_obj.unit and alive(data.attention_obj.unit) then
+		local attention_info = data.attention_obj
+		local key = attention_info.unit:key()
+	
 		local att_contour_ext = attention_info.unit:contour()
 
 		if att_contour_ext and attention_info.identified and attention_info.is_alive then
@@ -514,9 +515,71 @@ function TeamAILogicAssault.find_enemy_to_mark(data)
 								end
 
 								if mark then
-									if not best_nmy_wgt or attention_info.dis < best_nmy_wgt then
-										best_nmy_wgt = attention_info.dis
-										best_nmy = attention_info.unit
+									best_nmy = attention_info.unit
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	elseif use_non_att_obj_mark then
+	
+		local attention_objects = data.detected_attention_objects
+
+		for key, attention_info in pairs(attention_objects) do
+			local att_contour_ext = attention_info.unit:contour()
+
+			if att_contour_ext and attention_info.identified and attention_info.is_alive then
+				if attention_info.verified or attention_info.nearly_visible then
+					if attention_info.reaction and REACT_COMBAT <= attention_info.reaction then
+						if attention_info.is_deployable or attention_info.is_person and attention_info.char_tweak and attention_info.char_tweak.priority_shout then
+							local in_range = nil
+
+							if attention_info.is_deployable then
+								local turret_tweak = attention_info.unit:brain() and attention_info.unit:brain()._tweak_data
+
+								if turret_tweak then
+									local actual_range = math_min(turret_tweak.FIRE_RANGE, turret_tweak.DETECTION_RANGE)
+
+									if attention_info.dis < actual_range then
+										in_range = true
+									end
+								end
+							elseif attention_info.char_tweak.priority_shout_max_dis then
+								if attention_info.dis < attention_info.char_tweak.priority_shout_max_dis then
+									in_range = true
+								end
+							elseif attention_info.dis < 3000 then
+								in_range = true
+							end
+
+							if in_range then
+								local vec = attention_info.m_head_pos - my_head_pos
+								local angle = vec:normalized():angle(my_look_vec)
+
+								if angle < max_marking_angle then
+									local mark = nil
+
+									if not att_contour_ext._contour_list then
+										mark = true
+									else
+										local has_id_func = att_contour_ext.has_id
+
+										if attention_info.is_deployable then
+											if not has_id_func(att_contour_ext, "mark_unit_dangerous") and not has_id_func(att_contour_ext, "mark_unit_dangerous_damage_bonus") and not has_id_func(att_contour_ext, "mark_unit_dangerous_damage_bonus_distance") then
+												mark = true
+											end
+										elseif not has_id_func(att_contour_ext, "mark_enemy") and not has_id_func(att_contour_ext, "mark_enemy_damage_bonus") and not has_id_func(att_contour_ext, "mark_enemy_damage_bonus_distance") then
+											mark = true
+										end
+									end
+
+									if mark then
+										if not best_nmy_wgt or attention_info.dis < best_nmy_wgt then
+											best_nmy_wgt = attention_info.dis
+											best_nmy = attention_info.unit
+										end
 									end
 								end
 							end
@@ -526,7 +589,7 @@ function TeamAILogicAssault.find_enemy_to_mark(data)
 			end
 		end
 	end
-
+	
 	return best_nmy
 end
 

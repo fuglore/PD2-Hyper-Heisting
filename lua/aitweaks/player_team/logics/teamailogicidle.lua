@@ -626,29 +626,6 @@ function TeamAILogicIdle._get_priority_attention(data, attention_objects, reacti
 							end
 
 							if target_priority_slot ~= 0 and reaction >= AIAttentionObject.REACT_COMBAT then
-								if not is_medic and att_unit:character_damage().check_medic_heal and not t_cont(tweak_data.medic.disabled_units, att_base._tweak_table) then
-									if not att_unit:anim_data() or not att_unit:anim_data().act then
-										local team = att_unit:brain() and att_unit:brain()._logic_data and att_unit:brain()._logic_data.team
-										local proceed = true
-
-										if team and team.id ~= "law1" then
-											if not team.friends or not team.friends.law1 then
-												proceed = nil
-											end
-										end
-
-										if proceed then
-											local nearby_medic = managers.enemy:get_nearby_medic(att_unit)
-
-											if nearby_medic then
-												if not data.unit:raycast("ray", data.unit:movement():m_head_pos(), nearby_medic:movement():m_head_pos(), "slot_mask", TeamAILogicIdle._vis_check_slotmask, "ray_type", "ai_vision", "report") then
-													target_priority_slot = 0
-												end
-											end
-										end
-									end
-								end
-
 								local my_weapon_usage = data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage
 
 								if my_weapon_usage == "is_shotgun_mag" or my_weapon_usage == "is_lmg" then

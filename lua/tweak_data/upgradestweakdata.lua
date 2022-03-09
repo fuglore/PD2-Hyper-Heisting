@@ -2,12 +2,12 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 	self.values.player.body_armor = {
 		armor = {
 			0,
+			2,
+			3,
 			4,
-			5.5,
-			7,
-			11.5,
-			13,
-			15
+			9,
+			10,
+			11
 		},
 		movement = {
 			1,

@@ -464,13 +464,17 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 	local my_data = data.internal_data
 	local tase_length = data.internal_data.tase_distance or 1500
 
-	if reaction < AIAttentionObject.REACT_SHOOT or not attention_data.criminal_record or not attention_data.is_person then
+	if reaction < AIAttentionObject.REACT_COMBAT or not attention_data.criminal_record or not attention_data.is_person then
 		--log("augh1")
 		return reaction
 	end
 
 	if attention_data.verified and attention_data.verified_dis <= tase_length then
-		if not data.internal_data.tasing or data.internal_data.tasing.target_u_key ~= attention_data.u_key then
+		if my_data.attitude ~= "engage" and attention_data.criminal_record and attention_data.criminal_record.assault_t and data.t - attention_data.criminal_record.assault_t > 4 then
+			return AIAttentionObject.REACT_COMBAT
+		end
+	
+		if not my_data.tasing or my_data.tasing.target_u_key ~= attention_data.u_key then
 			if attention_data.unit:movement().tased and attention_data.unit:movement():tased() then
 				--log("augh2")
 				return AIAttentionObject.REACT_COMBAT
@@ -487,19 +491,12 @@ function TaserLogicAttack._chk_reaction_to_attention_object(data, attention_data
 			return AIAttentionObject.REACT_COMBAT
 		end
 		
-		if my_data.last_available_tase_t then
-			if data.t - my_data.last_available_tase_t < 4 then
-				return AIAttentionObject.REACT_SPECIAL_ATTACK
-			end
-		end
-		
 		local obstructed = data.unit:raycast("ray", data.unit:movement():m_head_pos(), attention_data.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "sphere_cast_radius", 10, "report")
 
 		if obstructed then
 			--log("augh5")
 			return AIAttentionObject.REACT_COMBAT
 		else
-			my_data.last_available_tase_t = data.t
 			return AIAttentionObject.REACT_SPECIAL_ATTACK
 		end
 	end

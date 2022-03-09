@@ -2177,17 +2177,17 @@ function CopLogicIdle._chk_objective_needs_travel(data, new_objective)
 	local objective_pos = new_objective.pos
 
 	if objective_pos then
-		--[[if mvec3_equal(data.m_pos, objective_pos) or mvec3_dis(data.m_pos, objective_pos) < 10 then ----
-			data.unit:movement():set_position(objective_pos)
-
-			if new_objective.rot then
-				data.unit:movement():set_rotation(new_objective.rot)
+		if not new_objective.grp_objective or not new_objective.grp_objective.pos_optional then
+			return true
+		elseif new_objective.distance then
+			local obj_dis_sq = new_objective.distance * new_objective.distance
+			
+			if mvec3_dis_sq(data.m_pos, objective_pos) > obj_dis_sq then
+				return true
+			elseif not CopLogicTravel._check_path_is_straight_line(data.m_pos, objective_pos, data) then
+				return true
 			end
-
-			CopLogicTravel._on_destination_reached(data)
-		end]]
-
-		return true
+		end
 	end
 
 	if new_objective.area and new_objective.area.nav_segs[data.unit:movement():nav_tracker():nav_segment()] then

@@ -723,6 +723,8 @@ function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_s
 		if not self._check_berserker_done or not can_activate_berserker then
 			if not ignore_reduce_revive then
 				self._revives = Application:digest_value(Application:digest_value(self._revives, false) - 1, true)
+				
+				self:_send_set_revives()
 			end
 
 			self._check_berserker_done = nil
@@ -853,6 +855,10 @@ function PlayerDamage:play_melee_hit_sound_and_effects(attack_data, sound_type, 
 end
 
 function PlayerDamage:damage_fire(attack_data)
+	if attack_data.is_hit then
+		return self:damage_fire_hit(attack_data)
+	end
+
 	if not self:_chk_can_take_dmg() or self:incapacitated() then
 		return
 	end
@@ -1043,23 +1049,6 @@ function PlayerDamage:damage_explosion(attack_data)
 	self:_call_listeners(damage_info)
 end
 
-function PlayerDamage:clbk_kill_taunt(attack_data) -- just a nice little detail
-	if attack_data.attacker_unit and attack_data.attacker_unit:alive() then
-		if not attack_data.attacker_unit:base()._tweak_table then
-			return
-		end
-		
-		self._kill_taunt_clbk_id = nil
-		if attack_data.attacker_unit:base():has_tag("tank") then
-			attack_data.attacker_unit:sound():say("post_kill_taunt")
-		elseif attack_data.attacker_unit:base():has_tag("law") and not attack_data.attacker_unit:base():has_tag("special") then	
-			attack_data.attacker_unit:sound():say("i03")
-		else
-			--nothing
-		end
-	end
-end
-
 function PlayerDamage:damage_tase(attack_data)
 	if self._god_mode then
 		return
@@ -1115,6 +1104,9 @@ function PlayerDamage:_regenerated(no_messiah)
 
 	self._said_hurt = false
 	self._revives = Application:digest_value(self._lives_init + managers.player:upgrade_value("player", "additional_lives", 0), true)
+	
+	self:_send_set_revives(true)
+	
 	self._revive_health_i = 1
 
 	managers.environment_controller:set_last_life(false)
@@ -1443,6 +1435,8 @@ function PlayerDamage:damage_bullet(attack_data)
 		if health_subtracted > 0 then
 			self:_send_damage_drama(attack_data, health_subtracted)
 		end
+	else
+		self:chk_queue_taunt_line(attack_data)
 	end
 	
 	if shake_multiplier then
@@ -1542,13 +1536,14 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	local health_subtracted = 0
 	local death_prevented = nil
 	health_subtracted = self:get_real_health()
-	local revive_reasons = self._phoenix_down_t or self._docbag_token or self._jackpot_token
+	local revive_reasons = self._phoenix_down_t or self._jackpot_token
 	
 	if revive_reasons and self:get_real_health() - attack_data.damage <= 0 then
 		death_prevented = true
-	else
-		self:change_health(-attack_data.damage)
+		attack_data.damage = health_subtracted - 1
 	end
+	
+	self:change_health(-attack_data.damage)
 	
 	if self:is_regenerating_armor() then
 		self._took_damage_while_regenerating = true
@@ -1598,24 +1593,12 @@ function PlayerDamage:_calc_health_damage(attack_data)
 		end
 	end
 	
-	if death_prevented then 
-		if self._phoenix_down_t then
-			self._unit:sound():play("pickup_fak_skill")
-			return 0
-		elseif self._docbag_token then
-			self._docbag_token = nil
-			self._unit:sound():play("pickup_fak_skill")
-			--log("WOO")
-			return 0
-		elseif self._jackpot_token then
-			self._jackpot_token = nil
-			self._unit:sound():play("pickup_fak_skill")
-			--log("Jackpot just saved you!")
-			return 0
-		end
-	else
-		return health_subtracted
+	if death_prevented then
+		self._jackpot_token = nil
+		self._unit:sound():play("pickup_fak_skill")
 	end
+
+	return health_subtracted
 end
 
 function PlayerDamage:is_friendly_fire(unit)
@@ -2132,7 +2115,7 @@ function PlayerDamage:revive(silent)
 	end
 	
 	if managers.player:has_category_upgrade("player", "comeback") then
-		 managers.player:do_comeback_blast() --DON'T CALL IT A COMEBACK!!!
+		managers.player:do_comeback_blast() --DON'T CALL IT A COMEBACK!!!
 	end
 
 	if managers.player:has_inactivate_temporary_upgrade("temporary", "revived_damage_resist") then
@@ -2222,7 +2205,7 @@ function PlayerDamage:restore_health(health_restored, is_static, chk_health_rati
 	
 	if not heat_bonus then
 		if managers.player:has_category_upgrade("player", "antilethal_meds") then
-			health_restored = health_restored * 1.5
+			health_restored = health_restored * 1.25
 		end
 	end
 

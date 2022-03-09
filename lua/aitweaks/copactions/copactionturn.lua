@@ -21,6 +21,10 @@ function CopActionTurn:init(action_desc, common_data)
 	self._machine = machine
 
 	local turn_speed_mul = 1
+	
+	if ext_mov._active_actions[3] and ext_mov._active_actions[3]:type() == "tase" then
+		turn_speed_mul = 4
+	end
 
 	if machine:get_global("shield") == 1 then
 		self._shield_turning = true

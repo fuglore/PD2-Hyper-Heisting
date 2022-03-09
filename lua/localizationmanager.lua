@@ -130,8 +130,9 @@
 		["hud_assault_FG_cover120"] = "WHY OH YOU ARE LOVE",
 		["hud_assault_FG_cover121"] = "ROB BEARS WITH ATTITUDE",
 		["hud_assault_FG_cover122"] = "ROB BEERS WITH ATTITUDE",
-		["hud_assault_FG_cover123"] = "BRING IT ON YOU BASTARDS!",
+		["hud_assault_FG_cover123"] = "BRING IT ON YOU BASTARDS",
 		["hud_assault_FG_cover124"] = "THROW ALL YOUR GRENADES",
+		["hud_assault_FG_cover125"] = "WASH AWAY THE ANGER",
 		["hud_assault_faction_nightmare"] = "VS. ???",
 		["hud_assault_faction_sbz"] = "VS. SBZ OPERATORS",
 		["hud_assault_faction_ovk"] = "VS. OVERKILL MODERATORS",
@@ -216,6 +217,7 @@
 		["hud_assault_FG_danger60"] = "!!! IT IS INEVITABLE !!!",
 		["hud_assault_FG_danger61"] = "!!! WE'RE GOING HOME ALIVE, LIAR, LIAR !!!",
 		["hud_assault_FG_danger62"] = "!!! TRY THROWING MORE GRENADES !!!",
+		["hud_assault_FG_danger63"] = "!!! YOUR MEMES END HERE !!!",
 		["hud_assault_heat"] = "HEAT BONUS",
 		["hud_heat_common"] = "BREAK TIME!",
 		["hud_heat_1"] = "ANARCHY REIGNS!",
@@ -266,6 +268,7 @@
 		["hud_heat_46"] = "BONE CHILLING!",
 		["hud_heat_47"] = "HORROR SHOW!",
 		["hud_heat_48"] = "SHRIEKIFIED!",
+		["hud_heat_49"] = "RULES OF NATURE!",
 		["hud_heat_gameplay"] = "YOU HAVE PUSHED BACK THE HORDE MOMENTARILY",
 		["hud_assault_cover"] = "STAY IN COVER",
 		["hud_assault_cover_blma"] = "stya cover she set u up godamn bitch",		
@@ -576,7 +579,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_tea_cookies_beta_desc"] = "BASIC: ##$basic##\nYou gain ##2## extra First Aid Kits.\n\nACE: ##$pro##\nYou gain ##2## more extra First Aid Kits.\n\nYour deployed First Aid Kits will be automatically used if a player is downed within a ##5## meter radius of the First Aid Kit.\n\nThis cannot occur more than once every ##60## seconds.",
 			
 			["menu_medic_2x_beta"] = "Vitamins",
-			["menu_medic_2x_beta_desc"] = "BASIC: ##$basic##\nYour doctor bags now have ##2## charges.\n\nACE: ##$pro##\nYou receive ##+50%## healing from all sources.\n\nYour Doctor Bags now grant the user the ability to resist one instance of ##lethal damage##.\n\nNOTE: This stacks with ##Jackpot Aced##.\n\n##The container's label has very visible quotation marks.##",
+			["menu_medic_2x_beta_desc"] = "BASIC: ##$basic##\nYour doctor bags now have ##2## charges.\n\nACE: ##$pro##\nYou receive ##+25%## healing from all sources.\n\nYour Doctor Bags now grant the user the ability to resist one instance of ##lethal damage##.\n\n##The container's label has very visible quotation marks.##",
 			
 			["menu_inspire_beta_desc"] = "BASIC: ##$basic##\nYou revive crew members ##100%## faster. Shouting at your teammates will increase both their movement and reload speed by ##30%## and enable them to resist suppression for ##10## seconds. \n\nACE: ##$pro##\nThere is a ##100%## chance that you can revive crew members at a distance of up to ##9## meters by shouting at them. This cannot occur more than once every ##30## seconds.",
 			
@@ -653,7 +656,7 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			["menu_oppressor_beta_desc"] = "BASIC: ##$basic##\nThe duration of the visual effect caused by flashbangs is reduced by ##25%##.\n\nACE: ##$pro##\nYour armor recovery rate is increased by ##15%##.",
 			
 			["menu_prison_wife_beta"] = "Jackpot",
-			["menu_prison_wife_beta_desc"] = "BASIC: ##$basic##\nYou regenerate ##5## armor for each successful headshot. This effect cannot occur more than once every ##5## seconds.\n\nACE: ##$pro##\nUpon killing an enemy with a headshot, you gain the ability to resist one instance of ##lethal damage##. This does not apply multiple times, and can only be activated every ##5## seconds.\n\n##Let's rock, baby!##",
+			["menu_prison_wife_beta_desc"] = "BASIC: ##$basic##\nYou regenerate ##5## armor for each successful headshot. This effect cannot occur more than once every ##10## seconds.\n\nACE: ##$pro##\nUpon killing an enemy with a headshot, you gain the ability to resist one instance of ##lethal damage##. This does not apply multiple times, and can only be activated every ##10## seconds.\n\n##Let's rock, baby!##",
 			
 			["menu_show_of_force_beta"] = "Cool Headed",
 			["menu_show_of_force_beta_desc"] = "BASIC: ##$basic##\nYou gain ##+50%## resistance to suppression while interacting with objects.\n\nACE: ##$pro##\nYou gain ##+50%## resistance to damage while performing interactions.\n\n##Phew, good thing I'm indestructible.##",

@@ -31,6 +31,14 @@
                     <key t="0.79864639043808" v="0 127 127"/>
                 </color_keys>
             </billboard>
+			<light per_particle_age="false" shadow_caster="false" specular="true" color_input="constant" color="0 234 255" multiplier_input="keys" far_range_input="constant" far_range="250">
+                <multiplier_keys loop="false">
+                    <key t="0" v="0.0040000001899898"/>
+                    <key t="0.30481284856796" v="0"/>
+                    <key t="0.54812836647034" v="0.0040000001899898"/>
+                    <key t="0.79000002145767" v="0"/>
+                </multiplier_keys>
+            </light>
         </visualizerstack>
     </atom>
 </effect>

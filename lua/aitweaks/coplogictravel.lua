@@ -715,7 +715,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 		local update_immediately = nil
 
 		if action_expired and my_data.advancing and not my_data.old_action_advancing and not my_data.has_old_action and not my_data.starting_advance_action and my_data.coarse_path_index then
-			my_data.coarse_path_index = my_data.coarse_path_index + 1
+			my_data.coarse_path_index = my_data.coarse_path_index + 1	
 
 			if my_data.coarse_path_index > #my_data.coarse_path then
 				--debug_pause_unit(data.unit, "[CopLogicTravel.action_complete_clbk] invalid coarse path index increment", data.unit, inspect(my_data.coarse_path), my_data.coarse_path_index)
@@ -1284,7 +1284,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 			local dest_nav_seg_id = my_data.coarse_path[#my_data.coarse_path][1]
 			local dest_area = managers.groupai:state():get_area_from_nav_seg_id(dest_nav_seg_id)
 			local should_take_cover = my_data.want_to_take_cover or CopLogicTravel._needs_cover_at_destination(data, dest_area)
-			local cover = should_take_cover and CopLogicTravel._find_cover(data, dest_nav_seg_id)
+			local cover = should_take_cover and CopLogicTravel._find_cover(data, dest_nav_seg_id, near_pos)
 
 			if cover then
 				local cover_entry = {
@@ -1337,7 +1337,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 			local threat_pos, max_dist = nil
 			follow_pos = objective.follow_unit:movement():nav_tracker():field_position()
 
-			if data.attention_obj and data.attention_obj.nav_tracker and REACT_COMBAT <= data.attention_obj.reaction then
+			if data.attention_obj and data.attention_obj.unit and alive(data.attention_obj.unit) and data.attention_obj.nav_tracker and REACT_COMBAT <= data.attention_obj.reaction then
 				threat_pos = data.attention_obj.nav_tracker:field_position()
 			end
 
@@ -2150,6 +2150,12 @@ function CopLogicTravel._check_start_path_ahead(data)
 	
 	if not from_pos then
 		return
+	else
+		local from_pos_seg = managers.navigation:get_nav_seg_from_pos(from_pos, true)
+		
+		if coarse_path[next_index][1] == from_pos_seg then
+			return
+		end
 	end
 	
 	local to_pos = data.logic._get_exact_move_pos(data, next_index)
@@ -2192,10 +2198,12 @@ function CopLogicTravel.get_pathing_prio(data)
 	if data.is_converted or data.unit:in_slot(16) or data.internal_data.criminal then
 		prio = prio or 0
 
-		prio = prio + 2
+		prio = prio + 3
 	elseif data.team.id == tweak_data.levels:get_default_team_ID("player") then
 		prio = prio or 0
 
+		prio = prio + 2
+	elseif data.important then
 		prio = prio + 1
 	end
 
@@ -2306,11 +2314,12 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 	else
 		local nav_seg = coarse_path[nav_index][1]
 		local area = managers.groupai:state():get_area_from_nav_seg_id(nav_seg)
-		local cover = my_data.want_to_take_cover or CopLogicTravel._needs_cover_at_destination(data, area) 
+		local cover = my_data.want_to_take_cover or CopLogicTravel._needs_cover_at_destination(data, area)
+		local near_pos = cover and CopLogicTravel.find_door_pos_nearest_to_next_nav_seg(data, coarse_path, nav_index, nav_seg)
 
 		if cover then
 			cover = nil
-			cover = CopLogicTravel._find_cover(data, nav_seg)
+			cover = CopLogicTravel._find_cover(data, nav_seg, near_pos)
 		end
 
 		if my_data.moving_to_cover then
@@ -2333,7 +2342,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 				cover
 			}
 		else
-			to_pos = coarse_path[nav_index][2]
+			to_pos = near_pos or coarse_path[nav_index][2]
 			local pos_rsrv_id = data.pos_rsrv_id
 			local rsrv_desc = {
 				position = to_pos,
@@ -2357,6 +2366,41 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 	end
 
 	return to_pos
+end
+
+function CopLogicTravel.find_door_pos_nearest_to_next_nav_seg(data, coarse_path, nav_index, nav_seg)
+	local doors = managers.navigation:find_segment_doors(nav_seg)
+	
+	if not next(doors) then
+		return
+	end
+	
+	local next_pos = coarse_path[nav_index + 1][2]
+	local best_dis, best_pos
+	
+	for other_seg, door_list in ipairs(doors) do
+		for i = 1, #door_list do
+			local pos = nil
+			local door_id = door_list[i]
+			
+			if type(door_id) == "number" then
+				pos = managers.navigation._room_doors[door_id].center
+			else
+				pos = door_id:script_data().element:nav_link_end_pos()
+			end
+			
+			local dis = mvec3_dis_sq(pos, next_pos)
+			
+			if not best_dis or dis < best_dis then
+				best_pos = pos
+				best_dis = dis
+			end
+		end
+	end
+	
+	if best_pos then
+		return best_pos
+	end
 end
 
 function CopLogicTravel._needs_cover_at_destination(data, dest_area)

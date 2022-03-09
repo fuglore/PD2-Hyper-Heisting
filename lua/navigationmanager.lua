@@ -71,6 +71,29 @@ NavigationManager.ACCESS_FLAGS = {
 }
 NavigationManager.ACCESS_FLAGS_OLD = {}
 
+function NavigationManager:draw_coarse_path(path, alt_color)
+	if not path then
+		return
+	end
+	
+	local all_nav_segs = self._nav_segments
+	
+	local line1 = Draw:brush(Color.red:with_alpha(0.5), 5)
+	local line2 = Draw:brush(Color.blue:with_alpha(0.5), 5)
+	
+	if alt_color then
+		for path_i = 1, #path do
+			local seg_pos = all_nav_segs[path[path_i][1]].pos
+			line2:cylinder(seg_pos, seg_pos + math_up * 185, 20)
+		end
+	else
+		for path_i = 1, #path do
+			local seg_pos = all_nav_segs[path[path_i][1]].pos
+			line1:cylinder(seg_pos, seg_pos + math_up * 185, 20)
+		end
+	end
+end
+
 function NavigationManager:shorten_coarse_through_dis(path)
 	do return path end
 	
@@ -388,12 +411,6 @@ function NavigationManager:_sort_nav_segs_after_pos(to_pos, i_seg, ignore_seg, v
 				elseif not i_door:is_obstructed() and i_door:delay_time() < TimerManager:game():time() and i_door:check_access(access_pos, access_neg) then
 					local end_pos = i_door:script_data().element:nav_link_end_pos()
 					local my_weight = mvec3_dis_sq(end_pos, to_pos)
-					
-					if long_path then
-						my_weight = my_weight * 1.1 --prioritize slightly
-					else
-						my_weight = my_weight * 0.9 --prioritize slightly
-					end
 
 					if found_segs then
 						if found_segs[neighbour_seg_id] then

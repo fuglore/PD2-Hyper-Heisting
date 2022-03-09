@@ -42,7 +42,6 @@ function HUDAssaultCorner:init(hud, full_hud, tweak_hud)
 		self._vip_assault_color = Color(255, 255, 133, 225) / 255
 	end
 
-
 	self._assault_survived_color = Color(1, 0.12549019607843137, 0.9019607843137255, 0.12549019607843137)
 	self._current_assault_color = self._regular_assault_color
 	self._assault_color = self._current_assault_color
@@ -331,9 +330,9 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local level = Global.level_data and Global.level_data.level_id
 	local cover_line_to_use = "hud_assault_cover"
 	local danger_line_to_use = "hud_assault_danger"
-	local FG_chance = math.random(1, 325)
-	local danger_chance = math.random(1, 63)
-	local heat_chance = math.random(1, 48)
+	local FG_chance = math.random(1, 326)
+	local danger_chance = math.random(1, 64)
+	local heat_chance = math.random(1, 49)
 	local versusline = "hud_assault_faction_swat"
 	
 	local faction = tweak_data.levels:get_ai_group_type()
@@ -524,7 +523,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end			
 	end
 	
-	if FG_chance <= 124 then
+	if FG_chance <= 125 then
 		cover_line_to_use = "hud_assault_FG_cover" .. FG_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
@@ -540,7 +539,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if danger_chance <= 62 then
+	if danger_chance <= 63 then
 		danger_line_to_use = "hud_assault_FG_danger" .. danger_chance
 	else
 		if managers.groupai and managers.groupai:state()._in_mexico or level == "mex_cooking" or faction == "federales" then
@@ -548,7 +547,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if heat_chance <= 48 then
+	if heat_chance <= 49 then
 		heatbonus_line_to_use = "hud_heat_" .. heat_chance
 	end
 	

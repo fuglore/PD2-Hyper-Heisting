@@ -78,6 +78,37 @@ function CopDamage:init(...)
 	end
 end
 
+function CopDamage:chk_has_player_health_scaling(char_tweak)
+	local mul = char_tweak.player_health_scaling_mul
+
+	if not mul then
+		return
+	end
+
+	local session = managers.network:session()
+
+	if not session then
+		return
+	end
+	
+	local nr_other_players = 0
+	
+	if managers.groupai:state():team_ai_enabled() then
+		nr_other_players = 3
+	else
+		local local_peer_id = session:local_peer():id()
+
+		for peer_id, peer in pairs(session:all_peers()) do
+			if peer_id ~= local_peer_id then
+				nr_other_players = nr_other_players + 3
+			end
+		end
+	end
+
+	mul = 1 + (mul - 1) * nr_other_players
+	self._HEALTH_INIT = self._HEALTH_INIT * mul
+end
+
 function CopDamage:is_immune_to_shield_knockback()
 	if self._immune_to_knockback then
 		return true
@@ -108,11 +139,11 @@ function CopDamage:_get_damage_receive_mul(attack_data)
 	end
 	
 	if self._punk_effect then
-		mul = mul * 0.25
+		mul = mul * 0.05
 	end
 	
 	if self._invulnerability_t and self._invulnerability_t > TimerManager:game():time()  then
-		mul = mul * 0.1
+		mul = mul * 0.05
 	end
 
 	return mul
@@ -136,11 +167,11 @@ function CopDamage:_apply_damage_reduction(damage, attack_data)
 	end
 	
 	if self._punk_effect then
-		damage = damage * 0.25
+		damage = damage * 0.05
 	end
 	
 	if self._invulnerability_t and self._invulnerability_t > TimerManager:game():time()  then
-		damage = damage * 0.1
+		damage = damage * 0.05
 	end
 
 	return damage
@@ -763,18 +794,23 @@ function CopDamage:build_suppression(amount, panic_chance, was_saw)
 end
 
 function CopDamage:_on_damage_received(damage_info)
+	self:chk_health_sequences()
 	self:_call_listeners(damage_info)
 	CopDamage._notify_listeners("on_damage", damage_info)
 	
 	if damage_info.result.type == "death" then
 		managers.enemy:on_enemy_died(self._unit, damage_info)
-		
+		self:chk_disable_aoe_damage()
 		
 		for c_key, c_data in pairs(managers.groupai:state():all_char_criminals()) do
 			if c_data.engaged[self._unit:key()] then
 				debug_pause_unit(self._unit:key(), "dead AI engaging player", self._unit, c_data.unit)
 			end
 		end
+	end
+	
+	if not self._dead then
+		self:_chk_unique_death_requirements(damage_info, false)
 	end
 
 	if self._dead and self._unit:movement():attention() then
@@ -1151,6 +1187,10 @@ end
 
 function CopDamage:damage_melee(attack_data)
 	if self._dead or self._invulnerable then
+		return
+	end
+	
+	if self:chk_immune_to_attacker(attack_data.attacker_unit) then
 		return
 	end
 
@@ -1671,9 +1711,11 @@ function CopDamage:damage_bullet(attack_data) --the bullshit i am required to do
 	local result = nil
 	local body_index = self._unit:get_body_index(attack_data.col_ray.body:name())
 	local head = self._head_body_name and not self._unit:in_slot(16) and not self._char_tweak.ignore_headshot and attack_data.col_ray.body and attack_data.col_ray.body:name() == self._ids_head_body_name
+	
+	local protected = self._char_tweak.bullet_damage_only_from_front or self._unit:base():has_tag("protected")
 
 	--prevent headshots against these units unless shot from the front, used for bulldozers
-	if head and self._unit:base():has_tag("protected") and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_shield then
+	if head and protected and not attack_data.weapon_unit:base().thrower_unit and not attack_data.weapon_unit:base()._can_shoot_through_shield then
 		mvec3_set(mvec_1, attack_data.col_ray.body:position())
 		mvec3_sub(mvec_1, attack_data.attacker_unit:position())
 		mvec3_norm(mvec_1)
@@ -2278,6 +2320,10 @@ function CopDamage:damage_simple(attack_data)
 	if self._dead or self._invulnerable then
 		return
 	end
+	
+	if self:chk_immune_to_attacker(attack_data.attacker_unit) then
+		return
+	end
 
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 	local result = nil
@@ -2528,6 +2574,10 @@ function CopDamage:stun_hit(attack_data)
 		return
 	end
 
+	if self:chk_immune_to_attacker(attack_data.attacker_unit) then
+		return
+	end
+
 	local is_civilian = CopDamage.is_civilian(self._unit:base()._tweak_table)
 	local attacker = attack_data.attacker_unit
 	local valid_attacker = attacker and alive(attacker) and attacker.base and attacker:base() and attacker.movement and attacker:movement() --with how user/owner assigning works with grenades, just gotta make sure
@@ -2604,6 +2654,10 @@ end
 
 function CopDamage:damage_fire(attack_data)
 	if self._dead or self._invulnerable then
+		return
+	end
+	
+	if self:chk_immune_to_attacker(attack_data.attacker_unit) then
 		return
 	end
 
@@ -2820,28 +2874,28 @@ function CopDamage:damage_fire(attack_data)
 					end
 				end
 			end
-		end
-
-		local start_dot_damage_roll = math.random(1, 100)
-		local start_dot_dance_antimation = false
-
-		if flammable and not attack_data.is_fire_dot_damage and distance < fire_dot_max_distance and start_dot_damage_roll <= fire_dot_trigger_chance then
-			managers.fire:add_doted_enemy(self._unit, TimerManager:game():time(), attack_data.weapon_unit, fire_dot_data.dot_length, dot_damage, attack_data.attacker_unit, attack_data.is_molotov)
 			
-			local can_do_fire_dance = char_tweak.use_animation_on_fire_damage ~= false
-			
-			if attack_data.result.type == "fire_hurt" and can_do_fire_dance then --i already calculate the result before this
-				start_dot_dance_antimation = true
+			local start_dot_damage_roll = math.random(1, 100)
+			local start_dot_dance_antimation = false
+
+			if flammable and not attack_data.is_fire_dot_damage and distance < fire_dot_max_distance and start_dot_damage_roll <= fire_dot_trigger_chance then
+				managers.fire:add_doted_enemy(self._unit, TimerManager:game():time(), attack_data.weapon_unit, fire_dot_data.dot_length, dot_damage, attack_data.attacker_unit, attack_data.is_molotov)
+				
+				local can_do_fire_dance = char_tweak.use_animation_on_fire_damage ~= false
+				
+				if attack_data.result.type == "fire_hurt" and can_do_fire_dance then --i already calculate the result before this
+					start_dot_dance_antimation = true
+				end
 			end
-		end
 
-		if fire_dot_data then
-			fire_dot_data.start_dot_dance_antimation = start_dot_dance_antimation
-			attack_data.fire_dot_data = fire_dot_data
-		end
+			if fire_dot_data then
+				fire_dot_data.start_dot_dance_antimation = start_dot_dance_antimation
+				attack_data.fire_dot_data = fire_dot_data
+			end
 
-		if attack_data.result.type == "fire_hurt" and not start_dot_dance_antimation then --prevent fire_hurt from micro-stunning enemies when the dance animation isn't proced
-			attack_data.result.type = "dmg_rcv"
+			if attack_data.result.type == "fire_hurt" and not start_dot_dance_antimation then --prevent fire_hurt from micro-stunning enemies when the dance animation isn't proced
+				attack_data.result.type = "dmg_rcv"
+			end
 		end
 	else	
 		if attack_data.result.type == "fire_hurt" then --DoT never triggers an animation so it shouldn't constantly micro-stun enemies that are vulnerable to fire
@@ -3384,6 +3438,10 @@ function CopDamage:damage_dot(attack_data)
 	if self._dead or self._invulnerable then
 		return
 	end
+	
+	if self:chk_immune_to_attacker(attack_data.attacker_unit) then
+		return
+	end
 
 	local valid_attacker = attack_data.attacker_unit and alive(attack_data.attacker_unit)
 
@@ -3573,6 +3631,10 @@ end
 
 function CopDamage:damage_tase(attack_data)
 	if self._dead or self._invulnerable then
+		return
+	end
+	
+	if self:chk_immune_to_attacker(attack_data.attacker_unit) then
 		return
 	end
 
