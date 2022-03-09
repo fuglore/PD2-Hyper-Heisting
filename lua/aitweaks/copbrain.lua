@@ -61,6 +61,8 @@ function CopBrain:post_init()
 	CopBrain._logic_variants.shield.attack = ShieldLogicAttack
 	CopBrain._logic_variants.akuma = clone(security_variant)
 	CopBrain._logic_variants.akuma.attack = CopLogicAttack
+	CopBrain._logic_variants.triad_boss = clone(security_variant)
+	CopBrain._logic_variants.triad_boss.attack = TankCopLogicAttack
 	
 	
 	old_init(self)
@@ -281,6 +283,10 @@ function CopBrain:_reset_logic_data()
 		objective_failed_clbk = callback(managers.groupai:state(), managers.groupai:state(), "on_objective_failed")
 	}
 	
+	if self._logic_data.char_tweak.extreme_ai_priority then
+		self._logic_data.extreme_ai_priority = true
+	end
+	
 	if self._logic_data.char_tweak.buddy then
 		self._logic_data.buddypalchum = true
 		
@@ -300,6 +306,23 @@ function CopBrain:set_update_enabled_state(state)
 		self._logic_data.brain_updating = state
 	end
 end
+
+function CopBrain:update(unit, t, dt)
+	local logic = self._current_logic
+
+	if logic.update then
+		local l_data = self._logic_data
+		l_data.t = t
+		l_data.dt = dt
+		
+		if l_data.extreme_ai_priority and logic._upd_enemy_detection_high_def then
+			logic._upd_enemy_detection_high_def(l_data)
+		end
+		
+		logic.update(l_data)
+	end
+end
+
 
 function CopBrain:set_objective(new_objective, params)
 	local old_objective = self._logic_data.objective

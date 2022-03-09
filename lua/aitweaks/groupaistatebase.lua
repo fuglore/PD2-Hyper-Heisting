@@ -1345,6 +1345,35 @@ function GroupAIStateBase:on_enemy_weapons_hot(is_delayed_callback)
 	end
 end
 
+function GroupAIStateBase:_clbk_switch_enemies_to_not_cool()
+	for u_key, unit_data in pairs(self._police) do
+		if unit_data.unit:movement():cool() and unit_data.assigned_area then
+			unit_data.unit:movement():set_cool(false)
+
+			if unit_data.unit:brain():is_available_for_assignment() then
+				local new_objective = {
+					is_default = true,
+					attitude = "avoid",
+					type = "free"
+				}
+
+				unit_data.unit:brain():set_objective(new_objective)
+			end
+
+			managers.enemy:add_delayed_clbk(self._switch_to_not_cool_clbk_id, callback(self, self, "_clbk_switch_enemies_to_not_cool"), self._t + math.random() * 1)
+
+			return
+		end
+	end
+
+	self:propagate_alert({
+		"vo_cbt",
+		[4] = self._unit_type_filter.civilian
+	})
+
+	self._switch_to_not_cool_clbk_id = nil
+end
+
 function GroupAIStateBase:set_whisper_mode(enabled)
 	enabled = enabled and true or false
 

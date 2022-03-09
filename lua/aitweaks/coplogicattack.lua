@@ -9,7 +9,7 @@ local mvec3_dir = mvector3.direction
 local mvec3_dot = mvector3.dot
 local mvec3_dis = mvector3.distance
 local mvec3_dis_sq = mvector3.distance_sq
---local mvec3_lerp = mvector3.lerp
+local mvec3_lerp = mvector3.lerp
 local mvec3_norm = mvector3.normalize
 local mvec3_add = mvector3.add
 local mvec3_mul = mvector3.multiply
@@ -1636,7 +1636,9 @@ function CopLogicAttack._upd_enemy_detection(data, is_synchronous)
 	
 	if data.wants_to_dark_bomb then
 		if data.attention_obj.verified and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.dis < 300 then
-			data.unit:movement():_detonate_dark_bomb(not data.is_converted) --i'll work more on this later i guess, currently causes crashes
+			data.unit:movement():_detonate_dark_bomb(not data.is_converted) --i'll work more on this later i guess, currently causes crashes}
+			
+			return
 		end
 	end
 
@@ -1840,6 +1842,83 @@ function CopLogicAttack.action_complete_clbk(data, action)
 	end
 end
 
+function CopLogicAttack._chk_use_throwable(data, my_data, focus)
+	local throwable = data.char_tweak.throwable
+
+	if not throwable then
+		return
+	end
+
+	if not focus.criminal_record or focus.is_deployable then
+		return
+	end
+
+	if not focus.last_verified_pos then
+		return
+	end
+
+	if data.used_throwable_t and data.t < data.used_throwable_t then
+		return
+	end
+
+	local time_since_verification = focus.verified_t
+
+	if not time_since_verification then
+		return
+	end
+
+	time_since_verification = data.t - time_since_verification
+
+	if time_since_verification > 5 then
+		return
+	end
+
+	local mov_ext = data.unit:movement()
+
+	if mov_ext:chk_action_forbidden("action") then
+		return
+	end
+
+	local head_pos = mov_ext:m_head_pos()
+	local throw_dis = focus.verified_dis
+
+	if throw_dis < 400 then
+		return
+	end
+
+	if throw_dis > 2000 then
+		return
+	end
+
+	local throw_from = head_pos + mov_ext:m_head_rot():y() * 50
+	local last_seen_pos = focus.last_verified_pos
+	local slotmask = managers.slot:get_mask("world_geometry")
+	local obstructed = data.unit:raycast("ray", throw_from, last_seen_pos, "sphere_cast_radius", 15, "slot_mask", slotmask, "report")
+
+	if obstructed then
+		return
+	end
+
+	local throw_dir = Vector3()
+
+	mvec3_lerp(throw_dir, throw_from, last_seen_pos, 0.3)
+	mvec3_sub(throw_dir, throw_from)
+
+	local dis_lerp = math_clamp((throw_dis - 1000) / 1000, 0, 1)
+	local compensation = math_lerp(0, 300, dis_lerp)
+
+	mvec3_set_z(throw_dir, throw_dir.z + compensation)
+	mvec3_norm(throw_dir)
+
+	data.used_throwable_t = data.t + 10
+
+	if mov_ext:play_redirect("throw_grenade") then
+		managers.network:session():send_to_peers_synched("play_distance_interact_redirect", data.unit, "throw_grenade")
+	end
+
+	ProjectileBase.throw_projectile_npc(throwable, throw_from, throw_dir, data.unit)
+end
+
 function CopLogicAttack._upd_aim(data, my_data)
 	data.t = TimerManager:game():time()
 
@@ -1958,7 +2037,9 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 		if not aim and data.char_tweak.always_face_enemy and REACT_COMBAT <= focus_enemy.reaction then
 			aim = true
-		end		
+		end
+		
+		CopLogicAttack._chk_use_throwable(data, my_data, focus_enemy) --AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 	end
 	
 	local is_moving = my_data.advancing or my_data.walking_to_cover_shoot_pos or my_data.moving_to_cover or data.unit:anim_data().run or data.unit:anim_data().move

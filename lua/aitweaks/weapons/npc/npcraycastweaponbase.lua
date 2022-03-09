@@ -230,18 +230,31 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 
 	result.hit_enemy = char_hit
 	local fhover600ornohitormiss = furthest_hit and furthest_hit.distance > 600 or not furthest_hit or result.guaranteed_miss
+
 	if fhover600ornohitormiss and alive(self._obj_fire) then
 		local num_rays = (tweak_data.weapon[self._name_id] or {}).rays or 1
 		local trail_direction = furthest_hit and furthest_hit.ray or direction
-
+	
 		for i = 1, num_rays do
 			mvector3.set(mvec_spread, trail_direction)
-
+			
+			local distance = nil
+			
 			if i > 1 then
 				mvector3.spread(mvec_spread, self:_get_spread(user_unit))
+			elseif not furthest_hit and player_hit then
+				local unit = managers.player:player_unit()
+				
+				if unit then
+					distance = mvector3.distance(from_pos, unit:movement():m_head_pos())
+				end
 			end
-
-			self:_spawn_trail_effect(mvec_spread, furthest_hit)
+			
+			if furthest_hit then
+				self:_spawn_trail_effect(mvec_spread, distance or furthest_hit.distance)
+			else
+				self:_spawn_trail_effect(mvec_spread, distance)
+			end
 		end
 	end
 
@@ -252,4 +265,15 @@ function NPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_
 	self:_cleanup_smoke_shot()
 
 	return result
+end
+
+function NPCRaycastWeaponBase:_spawn_trail_effect(direction, distance)
+	self._obj_fire:m_position(self._trail_effect_table.position)
+	mvector3.set(self._trail_effect_table.normal, direction)
+
+	local trail = World:effect_manager():spawn(self._trail_effect_table)
+
+	if distance then
+		World:effect_manager():set_remaining_lifetime(trail, math.clamp((distance - 600) / 10000, 0, distance))
+	end
 end

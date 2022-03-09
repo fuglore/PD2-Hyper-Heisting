@@ -2940,6 +2940,84 @@ function GroupAIStateBase:is_area_safe_charge(area)
 	return true
 end
 
+function GroupAIStateBesiege:on_objective_complete(unit, objective)
+	local new_objective, so_element = nil
+
+	if objective.followup_objective then
+		if not objective.followup_objective.trigger_on then
+			new_objective = objective.followup_objective
+		else
+			new_objective = {
+				type = "free",
+				followup_objective = objective.followup_objective,
+				interrupt_dis = objective.interrupt_dis,
+				interrupt_health = objective.interrupt_health
+			}
+		end
+	elseif objective.followup_SO then
+		local current_SO_element = objective.followup_SO
+		so_element = current_SO_element:choose_followup_SO(unit)
+		new_objective = so_element and so_element:get_objective(unit)
+	end
+
+	if new_objective then
+		if new_objective.nav_seg then
+			local u_key = unit:key()
+			local u_data = self._police[u_key]
+
+			if u_data and u_data.assigned_area then
+				self:set_enemy_assigned(self._area_data[new_objective.nav_seg], u_key)
+			end
+		end
+	else
+		local seg = unit:movement():nav_tracker():nav_segment()
+		local area_data = self:get_area_from_nav_seg_id(seg)
+
+		if tweak_data.character[unit:base()._tweak_table].rescue_hostages then
+			for u_key, u_data in pairs(managers.enemy:all_civilians()) do
+				if seg == u_data.tracker:nav_segment() then
+					local so_id = u_data.unit:brain():wants_rescue()
+
+					if so_id then
+						local so = self._special_objectives[so_id]
+						local so_data = so.data
+						local so_objective = so_data.objective
+						new_objective = self.clone_objective(so_objective)
+
+						if so_data.admin_clbk then
+							so_data.admin_clbk(unit)
+						end
+
+						self:remove_special_objective(so_id)
+
+						break
+					end
+				end
+			end
+		end
+
+		if not new_objective and objective.type == "free" then
+			new_objective = {
+				is_default = true,
+				type = "free",
+				attitude = objective.attitude
+			}
+		end
+	end
+
+	objective.fail_clbk = nil
+
+	unit:brain():set_objective(new_objective)
+
+	if objective.complete_clbk then
+		objective.complete_clbk(unit)
+	end
+
+	if so_element then
+		so_element:clbk_objective_administered(unit)
+	end
+end
+
 function GroupAIStateBase:is_nav_seg_flank_route(nav_seg)
 	local area = self:get_area_from_nav_seg_id(nav_seg)
 
@@ -3204,11 +3282,13 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 						u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
 					end
 				end
+				
+				push = true
+			else
+				open_fire = true
 			end
 		
 			objective_area = obstructed_area
-			
-			open_fire = true
 		end
 	elseif current_objective.moving_in then
 		if phase_is_anticipation then
@@ -3346,14 +3426,42 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	elseif approach or push then
 		local assault_area, alternate_assault_area, alternate_assault_area_from, assault_path, alternate_assault_path = nil
 		
-		local search_params = {
-			id = "GroupAI_assault",
-			from_seg = current_objective.area.pos_nav_seg,
-			to_seg = objective_area.pos_nav_seg,
-			access_pos = self._get_group_acces_mask(group),
-			long_path = tactics_map and tactics_map.flank and true or nil
-		}
-		assault_path = managers.navigation:search_coarse(search_params)
+		if tactics_map and tactics_map.flank then
+			local all_nav_segs = managers.navigation._nav_segments
+			local assault_to_seg = all_nav_segs[objective_area.pos_nav_seg]
+			
+			local neighbour_list = {}
+			
+			for neighbour_nav_seg_id, door_list in pairs(assault_to_seg.neighbours) do
+				neighbour_list[#neighbour_list + 1] = neighbour_nav_seg_id
+			end
+			
+			local assault_to_seg = neighbour_list[math_random(#neighbour_list)]
+		
+			local search_params = {
+				id = "GroupAI_assault",
+				from_seg = current_objective.area.pos_nav_seg,
+				to_seg = assault_to_seg,
+				access_pos = self._get_group_acces_mask(group),
+				long_path = math_random() < 0.5 and true,
+				verify_clbk = approach and callback(self, self, "is_nav_seg_safe") or nil
+			}
+			assault_path = managers.navigation:search_coarse(search_params)
+			
+			if assault_path then
+				assault_path[#assault_path + 1] = {objective_area.pos_nav_seg, all_nav_segs[objective_area.pos_nav_seg].pos}
+			end
+		else
+			local search_params = {
+				id = "GroupAI_assault",
+				from_seg = current_objective.area.pos_nav_seg,
+				to_seg = objective_area.pos_nav_seg,
+				access_pos = self._get_group_acces_mask(group),
+				long_path = math_random() < 0.5 and true,
+				verify_clbk = approach and callback(self, self, "is_nav_seg_safe") or nil
+			}
+			assault_path = managers.navigation:search_coarse(search_params)
+		end
 
 		if assault_path then
 			--log("YOOOOOOOOOOOOOOOOOOOOOOOOO")

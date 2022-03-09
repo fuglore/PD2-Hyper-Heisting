@@ -3173,6 +3173,106 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+	presets.weapon.simple.is_flamethrower = {
+		aim_delay = {
+			0.5,
+			0.5
+		},
+		focus_delay = 0,
+		focus_dis = 300,
+		spread = 0,
+		miss_dis = 40,
+		RELOAD_SPEED = 0.6,
+		melee_speed = 1,
+		melee_dmg = 2,
+		melee_retry_delay = {
+			1,
+			2
+		},
+		range = {
+			optimal = 400,
+			far = 1700,
+			close = 1400
+		},
+		autofire_rounds = {
+			20,
+			40
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 8,
+				r = 400,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.45,
+					0.65
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 4,
+				r = 1000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 2,
+				r = 2000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 3000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			}
+		}
+	}
 	
 	--civil begins here, noteworthy change being increases in attack rate along with less falloff, plus the increase of focus delay minimum starting range
 	presets.weapon.civil.is_pistol = {
@@ -4049,6 +4149,107 @@ function CharacterTweakData:_presets(tweak_data)
 			}
 		}
 	}
+	presets.weapon.civil.is_flamethrower = {
+		aim_delay = {
+			0.5,
+			0.5
+		},
+		focus_delay = 0,
+		focus_dis = 300,
+		spread = 0,
+		miss_dis = 40,
+		RELOAD_SPEED = 0.6,
+		melee_speed = 1,
+		melee_dmg = 2,
+		melee_retry_delay = {
+			1,
+			2
+		},
+		range = {
+			optimal = 400,
+			far = 1700,
+			close = 1400
+		},
+		autofire_rounds = {
+			20,
+			40
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 8,
+				r = 400,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.45,
+					0.65
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 4,
+				r = 1000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 2,
+				r = 2000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 3000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			}
+		}
+	}
+	
 	
 	--complex begins here, focus delay, recoil and reloads get reduced, there are tweaks to autofire and falloff as well, enemy damage is not changed, worthwhile changes will be done in weapontweakdata to increase firing frequency and such
 	
@@ -5006,6 +5207,106 @@ function CharacterTweakData:_presets(tweak_data)
 				recoil = {
 					0.8,
 					0.8
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			}
+		}
+	}
+	presets.weapon.complex.is_flamethrower = {
+		aim_delay = {
+			0.5,
+			0.5
+		},
+		focus_delay = 0,
+		focus_dis = 300,
+		spread = 0,
+		miss_dis = 40,
+		RELOAD_SPEED = 0.6,
+		melee_speed = 1,
+		melee_dmg = 2,
+		melee_retry_delay = {
+			1,
+			2
+		},
+		range = {
+			optimal = 400,
+			far = 1700,
+			close = 1400
+		},
+		autofire_rounds = {
+			20,
+			40
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 8,
+				r = 400,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.45,
+					0.65
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 6,
+				r = 1000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 2,
+				r = 2000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 3000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
 				},
 				mode = {
 					0,
@@ -6063,6 +6364,106 @@ function CharacterTweakData:_presets(tweak_data)
 				recoil = {
 					2,
 					3
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			}
+		}
+	}
+	presets.weapon.anarchy.is_flamethrower = {
+		aim_delay = {
+			0.5,
+			0.5
+		},
+		focus_delay = 0,
+		focus_dis = 300,
+		spread = 0,
+		miss_dis = 40,
+		RELOAD_SPEED = 0.6,
+		melee_speed = 1,
+		melee_dmg = 2,
+		melee_retry_delay = {
+			1,
+			2
+		},
+		range = {
+			optimal = 400,
+			far = 1700,
+			close = 1400
+		},
+		autofire_rounds = {
+			20,
+			40
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 12,
+				r = 400,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.45,
+					0.65
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 6,
+				r = 1000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 2,
+				r = 2000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
+				},
+				mode = {
+					0,
+					0,
+					0,
+					1
+				}
+			},
+			{
+				dmg_mul = 1,
+				r = 3000,
+				acc = {
+					1,
+					1
+				},
+				recoil = {
+					0.75,
+					1
 				},
 				mode = {
 					0,
@@ -8582,6 +8983,115 @@ Hooks:PostHook(CharacterTweakData, "_init_drug_lord_boss", "hhpost_dboss", funct
 	self.drug_lord_boss.damage.hurt_severity = presets.hurt_severities.no_hurts_no_tase
 end)
 
+function CharacterTweakData:_init_triad_boss(presets)
+	self.triad_boss = deep_clone(presets.base)
+	self.triad_boss.experience = {}
+	self.triad_boss.weapon = deep_clone(presets.weapon.civil)
+	self.triad_boss.weapon.is_flamethrower.melee_speed = nil
+	self.triad_boss.weapon.is_flamethrower.melee_dmg = nil
+	self.triad_boss.weapon.is_flamethrower.melee_retry_delay = nil
+	self.triad_boss.detection = presets.detection.normal
+	self.triad_boss.extreme_ai_priority = true
+	self.triad_boss.HEALTH_INIT = 270
+	self.triad_boss.headshot_dmg_mul = 1
+	self.triad_boss.damage.hurt_severity = presets.hurt_severities.no_hurts
+	self.triad_boss.damage.explosion_damage_mul = 0.5
+	self.triad_boss.can_be_tased = false
+	self.triad_boss.suppression = nil
+	self.triad_boss.move_speed = presets.move_speed.slow
+	self.triad_boss.allowed_stances = {
+		cbt = true
+	}
+	self.triad_boss.allowed_poses = {
+		stand = true
+	}
+	self.triad_boss.crouch_move = false
+	self.triad_boss.no_run_start = true
+	self.triad_boss.no_run_stop = true
+	self.triad_boss.no_retreat = true
+	self.triad_boss.no_arrest = true
+	self.triad_boss.surrender = nil
+	self.triad_boss.ecm_vulnerability = 0
+	self.triad_boss.ecm_hurts = {
+		ears = {
+			max_duration = 0,
+			min_duration = 0
+		}
+	}
+	self.triad_boss.weapon_voice = "3"
+	self.triad_boss.experience.cable_tie = "tie_swat"
+	self.triad_boss.access = "gangster"
+	self.triad_boss.speech_prefix_p1 = "bb"
+	self.triad_boss.speech_prefix_p2 = "n"
+	self.triad_boss.speech_prefix_count = 1
+	self.triad_boss.die_sound_event = "Play_yuw_pent_death"
+	self.triad_boss.rescue_hostages = false
+	self.triad_boss.melee_weapon_dmg_multiplier = 2.5
+	self.triad_boss.steal_loot = nil
+	self.triad_boss.calls_in = nil
+	self.triad_boss.chatter = presets.enemy_chatter.no_chatter
+	self.triad_boss.use_radio = nil
+	self.triad_boss.use_animation_on_fire_damage = false
+	self.triad_boss.flammable = false
+	self.triad_boss.immune_to_knock_down = true
+	self.triad_boss.immune_to_concussion = true
+	self.triad_boss.can_reload_while_moving_tmp = true
+	self.triad_boss.no_headshot_add_mul = true
+	self.triad_boss.bullet_damage_only_from_front = true
+	self.triad_boss.player_health_scaling_mul = 1.5
+	self.triad_boss.throwable = "molotov"
+	self.triad_boss.aoe_damage_data = {
+		verification_delay = 0.3,
+		activation_range = 300,
+		activation_delay = 1,
+		env_tweak_name = "triad_boss_aoe_fire",
+		play_voiceline = true,
+		check_player = true,
+		check_npc_slotmask = {
+			"criminals",
+			-2,
+			-3
+		}
+	}
+	self.triad_boss.invulnerable_to_slotmask = {
+		"enemies",
+		17
+	}
+
+	table.insert(self._enemy_list, "triad_boss")
+
+	self.triad_boss_no_armor = deep_clone(self.gangster)
+	self.triad_boss_no_armor.suspicious = nil
+	self.triad_boss_no_armor.detection = presets.detection.normal
+	self.triad_boss_no_armor.damage.hurt_severity = presets.hurt_severities.no_hurts
+	self.triad_boss_no_armor.move_speed = presets.move_speed.very_fast
+	self.triad_boss_no_armor.dodge = presets.dodge.athletic
+	self.triad_boss_no_armor.crouch_move = nil
+	self.triad_boss_no_armor.suppression = nil
+	self.triad_boss_no_armor.can_be_tased = false
+	self.triad_boss_no_armor.no_retreat = true
+	self.triad_boss_no_armor.no_arrest = true
+	self.triad_boss_no_armor.surrender = nil
+	self.triad_boss_no_armor.ecm_vulnerability = 0
+	self.triad_boss_no_armor.ecm_hurts = {
+		ears = {
+			max_duration = 0,
+			min_duration = 0
+		}
+	}
+	self.triad_boss_no_armor.rescue_hostages = false
+	self.triad_boss_no_armor.steal_loot = nil
+	self.triad_boss_no_armor.calls_in = nil
+	self.triad_boss_no_armor.chatter = presets.enemy_chatter.no_chatter
+	self.triad_boss_no_armor.use_radio = nil
+	self.triad_boss_no_armor.radio_prefix = "fri_"
+	self.triad_boss_no_armor.use_animation_on_fire_damage = false
+	self.triad_boss_no_armor.immune_to_knock_down = true
+	self.triad_boss_no_armor.immune_to_concussion = true
+
+	table.insert(self._enemy_list, "triad_boss_no_armor")
+end
+
 --LANDMARK: WITCH
 
 --difficulty tweaks begin here.
@@ -9990,7 +10500,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"degle",
 		"m60",
 		"m37",
-		"chernobog"
+		"chernobog",
+		"flamethrower"
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -10044,7 +10555,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/payday2/weapons/wpn_npc_degle/wpn_npc_degle"),
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60"),
 		Idstring("units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"),
-		Idstring("units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog")
+		Idstring("units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"),
+		Idstring("units/pd2_dlc_pent/weapons/wpn_npc_flamethrower/wpn_npc_flamethrower")
 	}
 end
 
@@ -10348,6 +10860,8 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	--misc
 	self.drug_lord_boss.HEALTH_INIT = self.drug_lord_boss.HEALTH_INIT * hp_mul
 	self.drug_lord_boss_stealth.HEALTH_INIT = self.drug_lord_boss_stealth.HEALTH_INIT * hp_mul
+	self.triad_boss.HEALTH_INIT = self.triad_boss.HEALTH_INIT * hp_mul
+	self.triad_boss_no_armor.HEALTH_INIT = self.triad_boss_no_armor.HEALTH_INIT * hp_mul
 	
 	self.sniper.HEALTH_INIT = self.sniper.HEALTH_INIT * hp_mul
 	self.armored_sniper.HEALTH_INIT = self.armored_sniper.HEALTH_INIT * hp_mul
@@ -10381,7 +10895,6 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.cop.headshot_dmg_mul = self.security.headshot_dmg_mul
 	self.cop_moss.headshot_dmg_mul = self.security.headshot_dmg_mul
 	self.cop_scared.headshot_dmg_mul = self.security.headshot_dmg_mul
-	
 	
 	--ninjas
 	self.fbi.headshot_dmg_mul = self.fbi.headshot_dmg_mul * hs_mul
@@ -10464,6 +10977,10 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 
 	if self.drug_lord_boss.headshot_dmg_mul then
 		self.drug_lord_boss.headshot_dmg_mul = self.drug_lord_boss.headshot_dmg_mul * hs_mul
+	end
+	
+	if self.triad_boss_no_armor.headshot_dmg_mul then
+		self.triad_boss_no_armor.headshot_dmg_mul = self.triad_boss_no_armor.headshot_dmg_mul * hs_mul
 	end
 
 	self.sniper.headshot_dmg_mul = self.sniper.headshot_dmg_mul * hs_mul

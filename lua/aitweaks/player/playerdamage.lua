@@ -855,6 +855,10 @@ function PlayerDamage:play_melee_hit_sound_and_effects(attack_data, sound_type, 
 end
 
 function PlayerDamage:damage_fire(attack_data)
+	if attack_data.is_hit then
+		return self:damage_fire_hit(attack_data)
+	end
+
 	if not self:_chk_can_take_dmg() or self:incapacitated() then
 		return
 	end
@@ -1043,23 +1047,6 @@ function PlayerDamage:damage_explosion(attack_data)
 
 	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
 	self:_call_listeners(damage_info)
-end
-
-function PlayerDamage:clbk_kill_taunt(attack_data) -- just a nice little detail
-	if attack_data.attacker_unit and attack_data.attacker_unit:alive() then
-		if not attack_data.attacker_unit:base()._tweak_table then
-			return
-		end
-		
-		self._kill_taunt_clbk_id = nil
-		if attack_data.attacker_unit:base():has_tag("tank") then
-			attack_data.attacker_unit:sound():say("post_kill_taunt")
-		elseif attack_data.attacker_unit:base():has_tag("law") and not attack_data.attacker_unit:base():has_tag("special") then	
-			attack_data.attacker_unit:sound():say("i03")
-		else
-			--nothing
-		end
-	end
 end
 
 function PlayerDamage:damage_tase(attack_data)
@@ -1448,6 +1435,8 @@ function PlayerDamage:damage_bullet(attack_data)
 		if health_subtracted > 0 then
 			self:_send_damage_drama(attack_data, health_subtracted)
 		end
+	else
+		self:chk_queue_taunt_line(attack_data)
 	end
 	
 	if shake_multiplier then

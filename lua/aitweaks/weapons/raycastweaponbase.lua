@@ -264,7 +264,7 @@ function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_
 		end
 	end
 
-	return closest_ray, ignore_rng
+	return closest_ray, ignore_rng, enemies_in_cone
 end
 
 function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul)
