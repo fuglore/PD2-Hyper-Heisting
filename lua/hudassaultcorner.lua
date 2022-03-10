@@ -777,9 +777,16 @@ function HUDAssaultCorner:_start_assault(text_list)
 		self._wave_bg_box:animate(callback(self, self, "_animate_wave_started"), self)
 	end
 
-	if managers.skirmish:is_skirmish() and started_now then
+	if self._bosses and self._bosses > 0 then
+		self:_popup_boss_incoming()
+	elseif managers.skirmish:is_skirmish() and started_now then
 		self:_popup_wave_started()
 	end
+end
+
+function HUDAssaultCorner:_popup_boss_incoming()
+	local boss_string = managers.localization:to_upper_text("hud_assault_boss_incoming")
+	self:_popup_wave(boss_string, self._clutch_color)
 end
 
 function HUDAssaultCorner:sync_set_assault_mode(mode)

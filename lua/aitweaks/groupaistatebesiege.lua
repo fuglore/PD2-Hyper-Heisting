@@ -3401,7 +3401,19 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	end
 	
 	if not current_objective.area then
-		current_objective.area = group_leader_u_data and self:get_area_from_nav_seg_id(group_leader_u_data.tracker:nav_segment())
+		current_objective.area = group_leader_u_data and self:get_area_from_nav_seg_id(group_leader_u_data.tracker:nav_segment()) 
+		
+		if not current_objective.area then
+			local all_nav_segs = managers.navigation._nav_segments
+			local nav_seg_pos = all_nav_segs[objective_area.pos_nav_seg].pos
+			local closest_u_id, closest_u_data, closest_u_dis_sq = self._get_closest_group_unit_to_pos(nav_seg_pos, group.units)
+			
+			current_objective.area = closest_u_data and self:get_area_from_nav_seg_id(closest_u_data.tracker:nav_segment())
+			
+			if not current_objective.area then
+				return
+			end
+		end
 	end
 
 	if open_fire then
