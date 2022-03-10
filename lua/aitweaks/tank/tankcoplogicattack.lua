@@ -56,6 +56,11 @@ function TankCopLogicAttack.enter(data, new_logic_name, enter_params)
 	local objective = data.objective
 
 	my_data.attitude = objective and objective.attitude or "avoid"
+	
+	if not data.unit:base():has_tag("law") then
+		my_data.attitude = "engage"
+	end
+	
 	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range
 	
 	if data.tactics and data.tactics.flank then
