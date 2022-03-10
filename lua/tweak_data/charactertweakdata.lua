@@ -8985,6 +8985,9 @@ end)
 
 function CharacterTweakData:_init_triad_boss(presets)
 	self.triad_boss = deep_clone(presets.base)
+	self.triad_boss.tags = {
+		"takedown"
+	}
 	self.triad_boss.experience = {}
 	self.triad_boss.weapon = deep_clone(presets.weapon.civil)
 	self.triad_boss.weapon.is_flamethrower.melee_speed = nil
@@ -8992,6 +8995,7 @@ function CharacterTweakData:_init_triad_boss(presets)
 	self.triad_boss.weapon.is_flamethrower.melee_retry_delay = nil
 	self.triad_boss.detection = presets.detection.normal
 	self.triad_boss.extreme_ai_priority = true
+	self.triad_boss.true_boss = true
 	self.triad_boss.HEALTH_INIT = 270
 	self.triad_boss.headshot_dmg_mul = 1
 	self.triad_boss.damage.hurt_severity = presets.hurt_severities.no_hurts

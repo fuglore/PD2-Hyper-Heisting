@@ -661,6 +661,10 @@ function CopDamage:die(attack_data)
 			debug_pause_unit(self._unit, "[CopDamage:die] does not have death sequence", self._death_sequence, self._unit)
 		end
 	end
+	
+	if self._char_tweak.true_boss then
+		managers.groupai:state():on_boss_death(self._unit)
+	end
 
 	self:_on_death()
 	managers.mutators:notify(Message.OnCopDamageDeath, self, attack_data)

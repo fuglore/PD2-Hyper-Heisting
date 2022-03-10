@@ -340,7 +340,6 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local assaultline = "hud_assault_assault"
 	local heatbonus_line_to_use = "hud_heat_common"
 	
-	
 	if level == "haunted" then
 		assaultline = "hud_assault_assault_nightmare"
 		cover_line_to_use = "hud_assault_cover_nightmare"
@@ -554,7 +553,41 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	if self._assault_mode == "normal" then
 		local ids_risk = Idstring("risk")
 		
-		if self._assault_state == "danger" or self._assault_state == "lastcrimstanding" then
+		if self._bosses and self._bosses > 0 then
+			local boss_line = "hud_assault_boss"
+			
+			if self._bosses > 1 then
+				boss_line = boss_line .. "es"
+			end
+		
+			if managers.job:current_difficulty_stars() > 0 then
+				return {
+					boss_line,
+					"hud_assault_end_line",
+					cover_line_to_use,
+					"hud_assault_end_line",
+					ids_risk,
+					"hud_assault_end_line",
+					boss_line,
+					"hud_assault_end_line",
+					cover_line_to_use,
+					"hud_assault_end_line",
+					ids_risk,
+					"hud_assault_end_line",
+				}
+			else
+				return {
+					boss_line,
+					"hud_assault_end_line",
+					cover_line_to_use,
+					"hud_assault_end_line",
+					boss_line,
+					"hud_assault_end_line",
+					cover_line_to_use,
+					"hud_assault_end_line"
+				}
+			end
+		elseif self._assault_state == "danger" or self._assault_state == "lastcrimstanding" then
 			if managers.job:current_difficulty_stars() > 0 then
 				return {
 					assaultline,
@@ -744,9 +777,16 @@ function HUDAssaultCorner:_start_assault(text_list)
 		self._wave_bg_box:animate(callback(self, self, "_animate_wave_started"), self)
 	end
 
-	if managers.skirmish:is_skirmish() and started_now then
+	if self._bosses and self._bosses > 0 then
+		self:_popup_boss_incoming()
+	elseif managers.skirmish:is_skirmish() and started_now then
 		self:_popup_wave_started()
 	end
+end
+
+function HUDAssaultCorner:_popup_boss_incoming()
+	local boss_string = managers.localization:to_upper_text("hud_assault_boss_incoming")
+	self:_popup_wave(boss_string, self._clutch_color)
 end
 
 function HUDAssaultCorner:sync_set_assault_mode(mode)

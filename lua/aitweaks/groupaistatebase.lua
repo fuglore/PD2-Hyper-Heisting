@@ -73,6 +73,7 @@ function GroupAIStateBase:_init_misc_data(...)
 		spooc = true,
 		fbi = true
 	}
+	self._bosses = {}
 	self._current_objective_pos = nil
 	self._registered_escorts = {}
 	
@@ -417,6 +418,73 @@ function GroupAIStateBase:chk_area_leads_to_enemy(start_nav_seg_id, test_nav_seg
 	until #to_search_nav_segs == 0
 end
 
+function GroupAIStateBase:on_boss_spawned(unit)
+	local u_key = unit:key()
+	
+	if self._bosses[u_key] then
+		return
+	end
+	
+	self._bosses[u_key] = true
+	
+	if Network:is_server() then
+		if not self._hunt_mode then
+			self:set_wave_mode("hunt")
+			self._danger_state = "boss"
+		end
+	end
+	
+	if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
+		local nr_bosses = table_size(self._bosses)
+		
+		if nr_bosses ~= managers.hud._hud_assault_corner._bosses then
+			managers.hud._hud_assault_corner._bosses = nr_bosses
+		end
+	end
+end
+
+function GroupAIStateBase:on_boss_death(unit) 
+	local u_key = unit:key()
+	
+	if not self._bosses[u_key] then
+		if Network:is_server() then
+			if not next(self._bosses) then
+				self:set_wave_mode("besiege")
+				self._danger_state = true
+				self:force_end_assault_phase()
+			end
+		end
+		
+		if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
+			local nr_bosses = table_size(self._bosses)
+			
+			if nr_bosses ~= managers.hud._hud_assault_corner._bosses then
+				managers.hud._hud_assault_corner._bosses = nr_bosses
+			end
+		end
+		
+		return
+	end
+	
+	self._bosses[u_key] = nil
+	
+	if Network:is_server() then
+		if not next(self._bosses) then
+			self:set_wave_mode("besiege")
+			self._danger_state = true
+			self:force_end_assault_phase()
+		end
+	end
+	
+	if PD2THHSHIN and PD2THHSHIN:IsFlavorAssaultEnabled() then
+		local nr_bosses = table_size(self._bosses)
+		
+		if nr_bosses ~= managers.hud._hud_assault_corner._bosses then
+			managers.hud._hud_assault_corner._bosses = nr_bosses
+		end
+	end
+end
+
 function GroupAIStateBase:get_assault_hud_state()
 	local nr_players = 0
 	local nr_players_alive = 0
@@ -456,7 +524,7 @@ function GroupAIStateBase:get_assault_hud_state()
 			self._commented_on_danger = nil
 		end
 		
-		if self._danger_state and self._danger_state ~= "forced" then
+		if self._danger_state and self._danger_state == true then
 			self._danger_state = nil
 		end
 	elseif nr_people < 3 or nr_people_alive < nr_people then
@@ -484,16 +552,14 @@ function GroupAIStateBase:get_assault_hud_state()
 			self._commented_on_danger = nil
 		end
 		
-		if self._danger_state and self._danger_state ~= "forced" then
+		if self._danger_state and self._danger_state == true then
 			self._danger_state = nil
 		end
 		
 		if self._celebrated_heat then
 			self._celebrated_heat = nil
 		end
-		
 	end
-	
 end
 
 function GroupAIStateBase:on_wgt_report_empty(u_key)

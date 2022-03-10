@@ -6,6 +6,10 @@
 		["hhmenu_staticrecoil_help"] = "Disables the automatic recoil compensation, making you have to manually pull down on the mouse to adjust your aim after you stop firing.",
 		["hhmenu_holdtofire"] = "HOLD TO FIRE SINGLE-FIRE WEAPONS",
 		["hhmenu_holdtofire_help"] = "Allows players to fire single-fire weapons at their maximum firerate by Fire button.",
+		
+		["hud_assault_boss_incoming"] = "/// WARNING: BOSS INCOMING ///",
+		["hud_assault_boss"] = "DEFEAT THE BOSS TO END THE ASSAULT",
+		["hud_assault_bosses"] = "DEFEAT ALL BOSSES TO END THE ASSAULT",
 	
 		["hud_assault_FG_cover1"] = "KILL EACHOTHER, BUT IT'S GOOD INVERSES",
 		["hud_assault_FG_cover2"] = "UNADULTERATED MADNESS",
