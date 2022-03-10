@@ -1705,15 +1705,14 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	local anticipation_duration = self:_get_anticipation_duration(self._tweak_data.assault.anticipation_duration, assault_task.is_first)
 	
 	if self._hunt_mode then
-		assault_task.phase = "sustain"
-		assault_task.phase_end_t = self._t
-	else
-		assault_task.phase = "anticipation"
-		assault_task.phase_end_t = self._t + anticipation_duration
-		
-		managers.hud:setup_anticipation(anticipation_duration)
-		managers.hud:start_anticipation()
+		anticipation_duration = 0
 	end
+
+	assault_task.phase = "anticipation"
+	assault_task.phase_end_t = self._t + anticipation_duration
+	
+	managers.hud:setup_anticipation(anticipation_duration)
+	managers.hud:start_anticipation()
 	
 	assault_task.start_t = self._t
 	
@@ -2131,9 +2130,10 @@ function GroupAIStateBesiege:_upd_assault_task()
 
 	self:detonate_queued_smoke_grenades()
 	
+	local enemies_wanted = next(self._bosses) and 16 or task_data.force
 	local enemy_count = self:_count_police_force("assault")	
 	
-	local nr_wanted = task_data.force - self:_count_police_force("assault")
+	local nr_wanted = enemies_wanted - enemy_count
 	--local enemies_wanted = task_data.force * 0.25
 	
 	local low_carnage = self:_count_criminals_engaged_force(4) <= 8

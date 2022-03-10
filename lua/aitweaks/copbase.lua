@@ -61,6 +61,10 @@ function CopBase:init(unit)
 	self:play_voiceline(nil, nil)
 	
 	old_init(self, unit)
+	
+	if self._char_tweak.true_boss then
+		managers.groupai:state():on_boss_spawned(self._unit)
+	end
 end
 
 function CopBase:set_visibility_state(stage)

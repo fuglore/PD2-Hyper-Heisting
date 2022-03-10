@@ -7,6 +7,9 @@
 		["hhmenu_holdtofire"] = "HOLD TO FIRE SINGLE-FIRE WEAPONS",
 		["hhmenu_holdtofire_help"] = "Allows players to fire single-fire weapons at their maximum firerate by Fire button.",
 	
+		["hud_assault_boss"] = "DEFEAT THE BOSS TO END THE ASSAULT",
+		["hud_assault_bosses"] = "DEFEAT ALL BOSSES TO END THE ASSAULT",
+	
 		["hud_assault_FG_cover1"] = "KILL EACHOTHER, BUT IT'S GOOD INVERSES",
 		["hud_assault_FG_cover2"] = "UNADULTERATED MADNESS",
 		["hud_assault_FG_cover3"] = "THUGGERY AT THE FULLEST OF DISPLAYS",
