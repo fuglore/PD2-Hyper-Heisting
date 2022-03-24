@@ -7,7 +7,7 @@ function FPCameraPlayerBase:recoil_kick(up, down, left, right)
 		self._recoil_kick.h.accumulated = ((self._recoil_kick.h.accumulated or 0) + h)
 	else
 	
-		local max_recoil = 5
+		local max_recoil = 10
 		local equipped_weapon = self._parent_unit:inventory():equipped_unit()
 
 		if alive(equipped_weapon) and equipped_weapon:base() then
@@ -66,7 +66,7 @@ function FPCameraPlayerBase:_vertical_recoil_kick(t, dt)
 	end
 
 	if self._recoil_kick.current and self._episilon < self._recoil_kick.accumulated - self._recoil_kick.current then
-		local n = math.step(self._recoil_kick.current, self._recoil_kick.accumulated, 40 * dt_with_mul)
+		local n = math.step(self._recoil_kick.current, self._recoil_kick.accumulated, 80 * dt)
 		r_value = n - self._recoil_kick.current
 		self._recoil_kick.current = n
 	elseif self._recoil_kick.to_reduce then
@@ -101,7 +101,7 @@ function FPCameraPlayerBase:_horizonatal_recoil_kick(t, dt)
 	end
 
 	if self._recoil_kick.h.current and self._episilon < math.abs(self._recoil_kick.h.accumulated - self._recoil_kick.h.current) then
-		local n = math.step(self._recoil_kick.h.current, self._recoil_kick.h.accumulated, 80 * dt_with_mul)
+		local n = math.step(self._recoil_kick.h.current, self._recoil_kick.h.accumulated, 80 * dt)
 		r_value = n - self._recoil_kick.h.current
 		self._recoil_kick.h.current = n
 	elseif self._recoil_kick.h.to_reduce then

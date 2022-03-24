@@ -439,6 +439,7 @@ function GroupAIStateBase:on_boss_spawned(unit)
 		
 		if nr_bosses ~= managers.hud._hud_assault_corner._bosses then
 			managers.hud._hud_assault_corner._bosses = nr_bosses
+			managers.hud._hud_assault_corner:_popup_boss_incoming()
 		end
 	end
 end
@@ -1588,7 +1589,7 @@ function GroupAIStateBase:update(t, dt)
 		self:whisper_chatter_clbk()
 	end
 	
-	--self:_draw_enemy_importancies()
+	---self:_draw_enemy_importancies()
 
 	self:_upd_criminal_suspicion_progress()
 	

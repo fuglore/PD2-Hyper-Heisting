@@ -777,9 +777,7 @@ function HUDAssaultCorner:_start_assault(text_list)
 		self._wave_bg_box:animate(callback(self, self, "_animate_wave_started"), self)
 	end
 
-	if self._bosses and self._bosses > 0 then
-		self:_popup_boss_incoming()
-	elseif managers.skirmish:is_skirmish() and started_now then
+	if managers.skirmish:is_skirmish() and started_now then
 		self:_popup_wave_started()
 	end
 end

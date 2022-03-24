@@ -262,7 +262,7 @@ function CopActionTase:_get_target_pos(shoot_from_pos, attention)
 	return target_pos, target_vec, target_dis, autotarget
 end
 
-function CopActionShoot:_get_transition_target_pos(shoot_from_pos, attention, t)
+function CopActionTase:_get_transition_target_pos(shoot_from_pos, attention, t)
 	local transition = self._aim_transition
 	local prog = (t - transition.start_t) / transition.duration
 

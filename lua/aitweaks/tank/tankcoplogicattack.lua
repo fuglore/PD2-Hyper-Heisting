@@ -155,6 +155,7 @@ function TankCopLogicAttack.update(data)
 	TankCopLogicAttack._process_pathing_results(data, my_data)
 
 	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+		my_data.attitude = data.objective and data.objective.attitude or "avoid"
 		--my_data.want_to_move_back = TankCopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		TankCopLogicAttack._upd_combat_movement(data)
 	else

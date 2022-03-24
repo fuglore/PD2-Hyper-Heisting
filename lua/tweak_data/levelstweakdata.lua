@@ -193,6 +193,10 @@ function LevelsTweakData:init()
 	end
 	
 	--Meatgrinder Maps
+	self.jewelry_store.meatgrinder = true
+	self.ukrainian_job.meatgrinder = true
+	self.four_stores.meatgrinder = true
+	self.nightclub.meatgrinder = true
 	self.sah.meatgrinder = true
 	self.born.meatgrinder = true
 	self.chew.meatgrinder = true

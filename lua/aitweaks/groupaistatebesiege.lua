@@ -1022,48 +1022,6 @@ function GroupAIStateBesiege:update(t, dt)
 	end
 end
 
--- Fix for the bug when there is too many dozers/specials thank you andole im sorry
-local fixed = false
-local origfunc2 = GroupAIStateBesiege._get_special_unit_type_count
-function GroupAIStateBesiege:_get_special_unit_type_count(special_type, ...)
-	
-	if special_type == 'tank' then
-		local res1 = origfunc2(self, 'tank', ...) or 0
-		res1 = res1 + (origfunc2(self, 'tank_mini', ...) or 0)
-		res1 = res1 + (origfunc2(self, 'tank_medic', ...) or 0)
-		res1 = res1 + (origfunc2(self, 'tank_ftsu', ...) or 0)
-		res1 = res1 + (origfunc2(self, 'tank_hw', ...) or 0)
-		return res1
-	end
-	
-	if special_type == 'spooc' then
-		local res2 = origfunc2(self, 'spooc', ...) or 0
-		res2 = res2 + (origfunc2(self, 'spooc_heavy', ...) or 0)
-		return res2
-	end
-	
-	if special_type == 'shield' then 
-		local res3 = origfunc2(self, 'shield', ...) or 0
-		res3 = res3 + (origfunc2(self, 'phalanx_minion', ...) or 0)
-		res3 = res3 + (origfunc2(self, 'akuma', ...) or 0)
-		return res3
-	end
-	
-	if special_type == 'ninja' then
-		local res4 = origfunc2(self, 'fbi', ...) or 0
-		res4 = res4 + (origfunc2(self, 'fbi_xc45', ...) or 0)
-		return res4
-	end
-	
-	if special_type == 'medic' then
-		local res5 = origfunc2(self, 'medic', ...) or 0
-		res5 = res5 + (origfunc2(self, 'tank_medic', ...) or 0)
-		return res5
-	end
-	
-	return origfunc2(self, special_type, ...)
-end
-
 function GroupAIStateBesiege:chk_assault_number()
 	if not self._assault_number then
 		return 1
@@ -2556,16 +2514,12 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 			local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
 		
 			if self._spawned_megatank_t and cat_data.special_type == "tank" and self._spawned_megatank_t > self._t then
-				--log("dick")
-				spawn_group.delay_t = self._t + 2
-				
-				return
-			elseif spawn_limit > self:_get_special_unit_type_count(cat_data.special_type) + (spawn_entry.amount_min or 0) then
+				i = i + 1
+			elseif spawn_limit >= self:_get_special_unit_type_count(cat_data.special_type) + (spawn_entry.amount_min or 0) then
 				total_wgt = total_wgt + spawn_entry.freq
 				i = i + 1
 			else
-				spawn_group.delay_t = self._t + 2
-				return
+				i = i + 1
 			end
 		else
 			total_wgt = total_wgt + spawn_entry.freq
@@ -2614,7 +2568,13 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 			if cat_data.special_type then
 				local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
 				
-				if spawn_limit > self:_get_special_unit_type_count(cat_data.special_type) + spawn_amount_mine then
+				if self._spawned_megatank_t and cat_data.special_type == "tank" and self._spawned_megatank_t > self._t then
+					table.remove(valid_unit_types, i)
+
+					total_wgt = total_wgt - spawn_entry.freq
+
+					return true
+				elseif spawn_limit < self:_get_special_unit_type_count(cat_data.special_type) + spawn_amount_mine then
 					table.remove(valid_unit_types, i)
 
 					total_wgt = total_wgt - spawn_entry.freq
@@ -2642,7 +2602,13 @@ function GroupAIStateBesiege:_spawn_in_group(spawn_group, spawn_group_type, grp_
 			if cat_data.special_type then
 				local spawn_limit = managers.job:current_spawn_limit(cat_data.special_type)
 				
-				if spawn_limit > self:_get_special_unit_type_count(cat_data.special_type) + spawn_amount_mine then
+				if self._spawned_megatank_t and cat_data.special_type == "tank" and self._spawned_megatank_t > self._t then
+					table.remove(valid_unit_types, i)
+
+					total_wgt = total_wgt - spawn_entry.freq
+
+					return true
+				elseif spawn_limit < self:_get_special_unit_type_count(cat_data.special_type) + spawn_amount_mine then
 					table.remove(valid_unit_types, i)
 
 					total_wgt = total_wgt - spawn_entry.freq
@@ -3634,7 +3600,7 @@ function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, deto
 		local duration = tweak_data.group_ai.smoke_grenade_lifetime
 
 		for u_key, u_data in pairs(group.units) do
-			if u_data.tactics_map and u_data.tactics_map.smoke_grenade then
+			if u_data.tactics_map and (u_data.tactics_map.flash_grenade or u_data.tactics_map.smoke_grenade) then
 				if not detonate_pos then
 					local nav_seg_id = u_data.tracker:nav_segment()
 					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
@@ -3684,7 +3650,7 @@ function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, deto
 		local duration = tweak_data.group_ai.flash_grenade_lifetime
 
 		for u_key, u_data in pairs(group.units) do
-			if u_data.tactics_map and u_data.tactics_map.flash_grenade then
+			if u_data.tactics_map and (u_data.tactics_map.flash_grenade or u_data.tactics_map.smoke_grenade) then
 				if not detonate_pos then
 					local nav_seg_id = u_data.tracker:nav_segment()
 					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
@@ -4280,6 +4246,10 @@ function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types
 			local group_tweak = tweak_data.group_ai.enemy_spawn_groups[group_type]
 			local special_type, spawn_limit, current_count = nil
 			local cat_weights = allowed_groups[group_type]
+			
+			if self._previous_chosen_type == group_type then
+				cat_weights = false
+			end
 
 			if cat_weights then
 				if group_tweak.special then
@@ -4290,7 +4260,16 @@ function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types
 			
 				if not special_type or spawn_limit >= current_count + 1 then
 					local cat_weight = cat_weights[1]
+					
+					if current_count then
+						local cat_weight_mul = 1 + spawn_limit - current_count
 
+						cat_weight = cat_weight * cat_weight_mul
+						
+						--log("special_type: " .. special_type)
+						--log("category weight: " .. tostring(cat_weight) .. "")
+					end
+					
 					table.insert(best_groups, {
 						group = group,
 						group_type = group_type,
@@ -4298,6 +4277,8 @@ function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types
 						cat_weight = cat_weight,
 						dis_weight = cat_weight
 					})
+					
+					self._previous_chosen_type = group_type
 
 					total_weight = total_weight + cat_weight
 				end
@@ -4423,7 +4404,7 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 					end
 					
 					if spawned_unit:base()._tweak_table == "tank_mini" or spawned_unit:base()._tweak_table == "tank_medic" then
-						self._spawned_megatank_t = self._t + 15
+						self._spawned_megatank_t = self._t + 60
 					end
 					
 					spawned_unit:brain():set_spawn_entry(spawn_entry, u_data.tactics_map)
