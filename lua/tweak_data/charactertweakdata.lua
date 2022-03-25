@@ -33,8 +33,8 @@ function CharacterTweakData:_presets(tweak_data)
 				0
 			},
 			brown_point = {
-				1,
-				1
+				0.5,
+				0.5
 			}
 		},
 		hard_def = {

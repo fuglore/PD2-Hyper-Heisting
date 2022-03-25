@@ -409,26 +409,38 @@ function ShieldLogicAttack.update(data)
 				end
 
 				if do_move then
-					my_data.pathing_to_optimal_pos = true
-					my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
-					local reservation = managers.navigation:reserve_pos(nil, nil, to_pos, callback(ShieldLogicAttack, ShieldLogicAttack, "_reserve_pos_step_clbk", {
-						unit_pos = data.m_pos
-					}), 70, data.pos_rsrv_id)
-
-					if reservation then
-						to_pos = reservation.position
-					else
-						reservation = {
-							radius = 60,
-							position = mvector3.copy(to_pos),
-							filter = data.pos_rsrv_id
+					local my_pos = data.unit:movement():nav_tracker():field_position()
+					local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, to_pos, data)
+					
+					if unobstructed_line then
+						my_data.optimal_path = {
+							mvec3_cpy(my_pos),
+							to_pos
 						}
+						
+						ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data)
+					else
+						my_data.pathing_to_optimal_pos = true
+						my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
+						local reservation = managers.navigation:reserve_pos(nil, nil, to_pos, callback(ShieldLogicAttack, ShieldLogicAttack, "_reserve_pos_step_clbk", {
+							unit_pos = data.m_pos
+						}), 70, data.pos_rsrv_id)
 
-						managers.navigation:add_pos_reservation(reservation)
+						if reservation then
+							to_pos = reservation.position
+						else
+							reservation = {
+								radius = 60,
+								position = mvector3.copy(to_pos),
+								filter = data.pos_rsrv_id
+							}
+
+							managers.navigation:add_pos_reservation(reservation)
+						end
+
+						data.brain:set_pos_rsrv("path", reservation)
+						data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
 					end
-
-					data.brain:set_pos_rsrv("path", reservation)
-					data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
 				end
 			end
 		end
@@ -464,10 +476,6 @@ function ShieldLogicAttack.queued_update(data)
 
 	local focus_enemy = data.attention_obj
 	local action_taken = my_data.turning or data.unit:movement():chk_action_forbidden("walk") or my_data.walking_to_shoot_pos
-
-	if not action_taken and unit:anim_data().stand then
-		action_taken = CopLogicAttack._chk_request_action_crouch(data)
-	end
 
 	ShieldLogicAttack._process_pathing_results(data, my_data)
 
@@ -620,6 +628,8 @@ function ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data
 			type = "walk",
 			body_part = 2,
 			variant = "walk",
+			pose = "crouch",
+			end_pose = "crouch",
 			nav_path = my_data.optimal_path,
 			end_rot = end_rot
 		}
@@ -628,10 +638,45 @@ function ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data
 
 		if my_data.walking_to_optimal_pos then
 			data.brain:rem_pos_rsrv("path")
-			
-			if data.group and data.group.leader_key == data.key and data.char_tweak.chatter.follow_me and mvector3.distance(new_action_data.nav_path[#new_action_data.nav_path], data.m_pos) > 800 and not data.unit:sound():speaking(data.t) then
-				managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "follow_me")
+		end
+	end
+end
+
+function ShieldLogicAttack.action_complete_clbk(data, action)
+	local my_data = data.internal_data
+	local action_type = action:type()
+
+	if action_type == "walk" then
+		my_data.advancing = nil
+
+		if my_data.walking_to_optimal_pos then
+			my_data.walking_to_optimal_pos = nil
+		end
+		
+		if action:expired() then
+			if data.unit:anim_data().stand then
+				CopLogicAttack._chk_request_action_crouch(data)
 			end
+		end
+	elseif action_type == "shoot" then
+		my_data.shooting = nil
+	elseif action_type == "turn" then
+		my_data.turning = nil
+	elseif action_type == "act" then
+		if my_data.gesture_arrest then
+			my_data.gesture_arrest = nil
+		elseif my_data.starting_idle_action_from_act or action:expired() then
+			ShieldLogicAttack._upd_aim(data, my_data)
+		
+			if data.unit:anim_data().stand then
+				CopLogicAttack._chk_request_action_crouch(data)
+			end
+		end
+	elseif action_type == "hurt" and action:expired() then
+		ShieldLogicAttack._upd_aim(data, my_data)
+		
+		if data.unit:anim_data().stand then
+			CopLogicAttack._chk_request_action_crouch(data)
 		end
 	end
 end

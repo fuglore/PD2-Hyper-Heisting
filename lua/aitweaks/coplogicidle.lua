@@ -324,6 +324,11 @@ function CopLogicIdle._upd_enemy_detection(data)
 		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, objective, nil, new_attention)
 
 		if allow_trans then
+			if objective and objective.stop_on_trans then
+				objective.pos = nil
+				objective.in_place = true
+			end
+			
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data)
 
 			if wanted_state and wanted_state ~= data.name then
@@ -640,6 +645,15 @@ function CopLogicIdle.on_new_objective(data, old_objective)
 	local my_data = data.internal_data
 
 	if new_objective then
+		local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, new_objective, nil, data.attention_obj)
+		
+		if allow_trans then
+			if new_objective.stop_on_trans then
+				new_objective.pos = nil
+				new_objective.in_place = true
+			end
+		end
+		
 		local objective_type = new_objective.type
 
 		if CopLogicIdle._chk_objective_needs_travel(data, new_objective) then
@@ -2188,6 +2202,15 @@ function CopLogicIdle._chk_objective_needs_travel(data, new_objective)
 				return true
 			end
 		end
+		
+		local pos_nav_seg = managers.navigation:get_nav_seg_from_pos(objective_pos, true)
+		local nav_seg_area = managers.groupai:state():get_area_from_nav_seg_id(pos_nav_seg)
+		
+		if nav_seg_area.nav_segs[data.unit:movement():nav_tracker():nav_segment()] then
+			new_objective.in_place = true
+
+			return
+		end
 	end
 
 	if new_objective.area and new_objective.area.nav_segs[data.unit:movement():nav_tracker():nav_segment()] then
@@ -2381,7 +2404,7 @@ end
 
 function CopLogicIdle._upd_stop_old_action(data, my_data, objective)
 	if my_data.advancing then
-		if not data.unit:movement():chk_action_forbidden("idle") then
+		if not data.unit:movement():chk_action_forbidden("walk") then
 			data.brain:action_request({
 				body_part = 2,
 				type = "idle"

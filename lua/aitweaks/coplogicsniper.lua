@@ -50,11 +50,11 @@ function CopLogicSniper._upd_aim(data, my_data)
 			end
 		elseif my_data.wanted_stance == "cbt" then
 			aim = true
-		elseif focus_enemy.verified_t and data.t - focus_enemy.verified_t < 20 then
+		elseif focus_enemy.verified_t and data.t - focus_enemy.verified_t < 50 then
 			aim = true
 		end
 
-		if aim and not shoot and my_data.firing and focus_enemy.verified_t and data.t - focus_enemy.verified_t < 2 then
+		if aim and not shoot and my_data.firing and focus_enemy.verified_t and data.t - focus_enemy.verified_t < 10 then
 			shoot = true
 		end
 	end
@@ -116,11 +116,14 @@ function CopLogicSniper._upd_aim(data, my_data)
 				CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, focus_enemy.m_pos)
 			end
 		elseif my_data.last_criminal_nav_seen then
-			local look_pos = managers.navigation:find_random_position_in_segment(my_data.last_criminal_nav_seen)
-		
+			local look_pos = nil		
 			
 			if not look_pos and focus_enemy and time_since_verification and time_since_verification <= 2 or focus_enemy.dis < 400 then
 				look_pos =  focus_enemy.last_verified_pos or focus_enemy.verified_pos
+			end
+			
+			if not look_pos then
+				look_pos = managers.navigation:find_random_position_in_segment(my_data.last_criminal_nav_seen)
 			end
 			
 			if look_pos then

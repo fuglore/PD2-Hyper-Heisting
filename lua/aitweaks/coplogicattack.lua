@@ -61,6 +61,7 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 		my_data.firing = old_internal_data.firing
 		my_data.shooting = old_internal_data.shooting
 		my_data.attention_unit = old_internal_data.attention_unit
+		my_data.advancing = old_internal_data.advancing
 
 		CopLogicAttack._set_best_cover(data, my_data, old_internal_data.best_cover)
 	end
@@ -447,6 +448,7 @@ function CopLogicAttack._upd_combat_movement(data)
 							my_data.cover_test_step = my_data.cover_test_step + 1
 							
 							if my_data.cover_test_step > 2 then
+								move_to_cover = true
 								want_flank_cover = true
 							end
 						end
@@ -633,7 +635,7 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 	
-	action_taken = action_taken or CopLogicAttack._upd_pose(data, my_data)
+	action_taken = action_taken
 end
 
 function CopLogicAttack._chk_start_action_move_back(data, my_data, focus_enemy, vis_required) --keep testing, modify, might want to revert back to vanilla
@@ -1806,30 +1808,37 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			my_data.at_cover_shoot_pos = true
 		end
 
-		if action:expired() and data.important then
-			CopLogicAttack._upd_pose(data, my_data)
-			CopLogicAttack._update_cover(data)
-			
-			if my_data.in_cover then
-				my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
-			end
+		if action:expired() and data.important then	
+			if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+				my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
+				CopLogicAttack._update_cover(data)
+				
+				if my_data.in_cover then
+					my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
+				end
 
-			data.logic._upd_combat_movement(data)
+				data.logic._upd_combat_movement(data)
+			end
 		end
 	elseif action_type == "act" then
 		if my_data.gesture_arrest then
 			my_data.gesture_arrest = nil
 		elseif my_data.starting_idle_action_from_act or action:expired() then
 			data.logic._upd_aim(data, my_data)
-			CopLogicAttack._update_cover(data)
 			
-			if my_data.in_cover then
-				my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
-			end
+			if data.important then
+				if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+					my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
+					CopLogicAttack._update_cover(data)
+					
+					if my_data.in_cover then
+						my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
+					end
 
-			data.logic._upd_combat_movement(data)
-		
-			data.logic._upd_aim(data, my_data)
+					data.logic._upd_combat_movement(data)
+				end
+			end
+			
 			my_data.old_action_started = nil
 		end
 	elseif action_type == "shoot" then
@@ -1855,15 +1864,16 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			data.logic._upd_aim(data, my_data)
 			
 			if data.important then
-				CopLogicAttack._update_cover(data)
-				
-				if my_data.in_cover then
-					my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
-				end
+				if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+					my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
+					CopLogicAttack._update_cover(data)
+					
+					if my_data.in_cover then
+						my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
+					end
 
-				data.logic._upd_combat_movement(data)
-				
-				CopLogicAttack._upd_pose(data, my_data)
+					data.logic._upd_combat_movement(data)
+				end
 			end
 		end
 	elseif action_type == "dodge" then
@@ -1879,15 +1889,16 @@ function CopLogicAttack.action_complete_clbk(data, action)
 			data.logic._upd_aim(data, my_data)
 			
 			if data.important then
-				CopLogicAttack._update_cover(data)
-				
-				if my_data.in_cover then
-					my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
-				end
+				if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+					my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
+					CopLogicAttack._update_cover(data)
+					
+					if my_data.in_cover then
+						my_data.in_cover[3], my_data.in_cover[4] = CopLogicAttack._chk_covered(data, data.m_pos, data.attention_obj.m_head_pos, data.visibility_slotmask)
+					end
 
-				data.logic._upd_combat_movement(data)
-				
-				CopLogicAttack._upd_pose(data, my_data)
+					data.logic._upd_combat_movement(data)
+				end
 			end
 		end
 	end
@@ -1993,32 +2004,38 @@ function CopLogicAttack._upd_aim(data, my_data)
 				firing_range = 1000
 			end
 			
-			if focus_enemy.verified or focus_enemy.nearly_visible then
-				if running and not data.char_tweak.always_face_enemy and firing_range < focus_enemy.dis then ----check always_face_enemy
-					local walk_to_pos = data.unit:movement():get_walk_to_pos()
+			if running and not data.char_tweak.always_face_enemy and firing_range < focus_enemy.dis then ----check always_face_enemy
+				local walk_to_pos = data.unit:movement():get_walk_to_pos()
 
-					if walk_to_pos then
-						mvec3_dir(temp_vec1, data.m_pos, walk_to_pos)
-						mvec3_dir(temp_vec2, data.m_pos, focus_enemy.m_pos)
+				if walk_to_pos then
+					mvec3_dir(temp_vec1, data.m_pos, walk_to_pos)
+					mvec3_dir(temp_vec2, data.m_pos, focus_enemy.m_pos)
 
-						local dot = mvec3_dot(temp_vec1, temp_vec2)
+					local dot = mvec3_dot(temp_vec1, temp_vec2)
 
-						if dot < 0.6 then
-							shoot = false
-							aim = false
-						end
+					if dot < 0.6 then
+						shoot = false
+						aim = false
 					end
 				end
-
-				if aim == nil then
+			end
+			
+			if focus_enemy.verified or focus_enemy.nearly_visible then
+				if aim == nil or firing_range < focus_enemy.dis then
 					if REACT_SHOOT <= focus_enemy.reaction then
 						if REACT_SHOOT == focus_enemy.reaction then
 							shoot = true
 						end
-					
-						if focus_enemy.verified_dis < firing_range then
+						
+						if not shoot and my_data.attitude == "engage" then
+							shoot = true
+						end
+						
+						if not shoot then
 							if data.unit:base():has_tag("law") and not data.is_converted then
 								if focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 4 then
+									shoot = true
+								elseif focus_enemy.criminal_record and focus_enemy.dis < 300 then
 									shoot = true
 								else
 									aim = true
@@ -2028,27 +2045,9 @@ function CopLogicAttack._upd_aim(data, my_data)
 							end
 						end
 
-						if not shoot and my_data.attitude == "engage" then
-							if focus_enemy.verified then
-								shoot = true
-							else
-								local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
-
-								if my_data.firing and time_since_verification and time_since_verification < 7 then
-									shoot = true
-								end
-							end
-						end
-
 						aim = aim or shoot
 					else
 						aim = true
-					end
-				elseif firing_range < focus_enemy.dis then
-					aim = true
-					
-					if my_data.firing and REACT_SHOOT <= focus_enemy.reaction then
-						shoot = true
 					end
 				end
 			else
@@ -2068,16 +2067,24 @@ function CopLogicAttack._upd_aim(data, my_data)
 					end
 
 					if aim then
-						if REACT_SHOOT <= focus_enemy.reaction then
+						if REACT_SHOOT == focus_enemy.reaction then
+							shoot = true
+						end
+						
+						if not shoot and my_data.attitude == "engage" then
+							shoot = true
+						end
+						
+						if not shoot then
 							if data.unit:base():has_tag("law") and not data.is_converted then
 								if focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 4 then
 									shoot = true
-								end	
+								elseif focus_enemy.criminal_record and focus_enemy.dis < 300 then
+									shoot = true
+								else
+									aim = true
+								end
 							else
-								shoot = true
-							end
-
-							if not shoot and my_data.attitude == "engage" then
 								shoot = true
 							end
 						end
@@ -2228,7 +2235,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 		end
 
-		if focus_enemy then
+		if focus_enemy and aim == nil then
 			local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
 			
 			if focus_enemy.verified or focus_enemy.nearly_visible then
@@ -2242,7 +2249,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 					local enemy_pos = focus_enemy.m_head_pos
 					CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
 				end
-			elseif time_since_verification and time_since_verification <= 7 or focus_enemy.dis < 400 then
+			elseif time_since_verification and time_since_verification <= 7 or focus_enemy.dis <= 1000 and focus_enemy.alert_t and data.t - focus_enemy.alert_t < 7 then
 				local look_pos = focus_enemy.last_verified_pos or focus_enemy.verified_pos
 				
 				if look_pos then
@@ -2280,7 +2287,7 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 
 			if not data.unit:in_slot(16) and not data.is_converted and data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.aggressive then
 				if not data.unit:base():has_tag("special") and data.unit:base():has_tag("law") and not data.unit:base()._tweak_table == "gensec" and not data.unit:base()._tweak_table == "security" then
-					if focus_enemy.verified and focus_enemy.verified_dis <= 500 then
+					if focus_enemy.verified and focus_enemy.verified_dis <= 300 then
 						if managers.groupai:state():chk_assault_active_atm() then
 							local roll = math.random(1, 100)
 						
@@ -2312,8 +2319,8 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
 					elseif data.unit:base():has_tag("shield") then
 						local shield_knock_cooldown = math.random(3, 6)
-						if not my_data.shield_knock_cooldown or my_data.shield_knock_cooldown < data.t then
-							my_data.shield_knock_cooldown = data.t + shield_knock_cooldown
+						if not data.attack_sound_t or data.t - data.attack_sound_t > 10 then
+							data.attack_sound_t = data.t
 									
 							if data.unit:base()._tweak_table == "phalanx_minion" or data.unit:base()._tweak_table == "phalanx_minion_assault" then
 								data.unit:sound():say("use_gas", true, nil, true)
@@ -2506,6 +2513,14 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		return
 	end
 	
+	if data.unit:base():has_tag("tank") then
+		if my_data.attitude == "engage" and data.attention_obj.dis < 1400 then
+			return true
+		end
+		
+		return
+	end
+	
 	if Global.game_settings.one_down then
 		return
 	end
@@ -2536,7 +2551,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		return true
 	end
 	
-	if my_data.moving_to_cover then 
+	if data.name == "attack" and my_data.moving_to_cover then 
 		return true
 	end
 	
@@ -2547,7 +2562,7 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 	local diff_index = my_data.attitude == "avoid" and 0 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") and 8 or tweak_data:difficulty_to_index(Global.game_settings.difficulty)
 	
 	if diff_index < 7 then
-		if data.attention_obj.dmg_t and data.t - data.attention_obj.dmg_t < 1 then
+		if data.attention_obj.dmg_t and data.t - data.attention_obj.dmg_t < 2 then
 			return true
 		end
 	end
@@ -2556,11 +2571,17 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		local last_sup_t = data.unit:character_damage():last_suppression_t()
 		
 		if last_sup_t then
-			if data.t - last_sup_t < 1 then
+			if data.t - last_sup_t < 2 then
 				return true
 			end
 		end
-	end	
+	end
+	
+	if diff_index < 2 then
+		if my_data.firing then
+			return true
+		end
+	end
 	
 	if groupai:chk_heat_bonus_retreat() then
 		return true
@@ -2619,7 +2640,7 @@ function CopLogicAttack.on_new_objective(data, old_objective)
 end
 
 function CopLogicAttack.queue_update(data, my_data)
-	local delay = data.important and 0 or 0.5
+	local delay = data.important and 0 or 0.2
 
 	CopLogicBase.queue_task(my_data, my_data.update_queue_id, data.logic.queued_update, data, data.t + delay, data.important and true)
 end
@@ -2785,6 +2806,11 @@ function CopLogicAttack._chk_exit_attack_logic(data, new_reaction)
 			local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, data.attention_obj)
 
 			if allow_trans then
+				if data.objective and data.objective.stop_on_trans then
+					data.objective.pos = nil
+					data.objective.in_place = true
+				end
+			
 				if obj_failed then
 					data.objective_failed_clbk(data.unit, data.objective)
 				elseif wanted_state ~= "idle" or not managers.groupai:state():on_cop_jobless(data.unit) then
@@ -2819,46 +2845,6 @@ function CopLogicAttack._upd_stop_old_action(data, my_data)
 	end
 
 	CopLogicIdle._chk_has_old_action(data, my_data)
-end
-
-function CopLogicAttack._upd_pose(data, my_data)
-	local allowed_poses = data.char_tweak.allowed_poses
-
-	if allowed_poses then
-		local unit_can_stand = allowed_poses.stand
-		local unit_can_crouch = allowed_poses.crouch
-
-		if not unit_can_stand and unit_can_crouch then
-			if not data.unit:anim_data().crouch then
-				return CopLogicAttack._chk_request_action_crouch(data)
-			end
-		elseif not unit_can_crouch and unit_can_stand then
-			if data.unit:anim_data().crouch then
-				return CopLogicAttack._chk_request_action_stand(data)
-			end
-		end
-
-		return
-	end
-
-	local objective_pose = data.objective and data.objective.pose
-	local need_cover = nil
-
-	if my_data.want_to_take_cover then
-		if not my_data.in_cover or not my_data.in_cover[3] then
-			need_cover = true
-		end
-	end
-
-	if data.is_suppressed or need_cover or objective_pose == "crouch" then
-		if not data.unit:anim_data().crouch then
-			return CopLogicAttack._chk_request_action_crouch(data)
-		end
-	elseif not data.attention_obj or not data.attention_obj.aimed_at or objective_pose == "stand" then
-		if data.unit:anim_data().crouch then
-			return CopLogicAttack._chk_request_action_stand(data)
-		end
-	end
 end
 
 function CopLogicAttack._chk_exit_non_walkable_area(data)

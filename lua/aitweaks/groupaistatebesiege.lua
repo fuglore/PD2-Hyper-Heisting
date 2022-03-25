@@ -1865,6 +1865,20 @@ function GroupAIStateBesiege:_upd_assault_task()
 		self._enemies_killed_sustain_guaranteed_break = nil
 	end
 	
+	if not task_data.last_ID_t or t - task_data.last_ID_t > 2 then
+		for criminal_key, criminal_data in pairs(self._player_criminals) do
+			self:criminal_spotted(criminal_data.unit)
+			
+			for group_id, group in pairs(self._groups) do
+				for u_key, u_data in pairs(group.units) do
+					u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
+				end
+			end
+		end
+		
+		task_data.last_ID_t = t
+	end
+	
 	local task_spawn_allowance = force_pool - enemies_spawned
 	
 	if task_data.phase == "anticipation" then
@@ -3241,14 +3255,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			pull_back = true
 		else
 			if group.in_place and self._t - group.in_place_t > 2 then
-				for criminal_key, criminal_data in pairs(self._player_criminals) do
-					self:criminal_spotted(criminal_data.unit)
-
-					for u_key, u_data in pairs(group.units) do
-						u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
-					end
-				end
-				
 				push = true
 			else
 				open_fire = true
@@ -3310,15 +3316,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			if phase_is_anticipation then
 				pull_back = true
 			else
-				if group.in_place and self._t - group.in_place_t > 2 then
-					for criminal_key, criminal_data in pairs(self._player_criminals) do
-						self:criminal_spotted(criminal_data.unit)
-
-						for u_key, u_data in pairs(group.units) do
-							u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
-						end
-					end
-					
+				if group.in_place and self._t - group.in_place_t > 2 then					
 					push = true
 				elseif current_objective.moving_in then
 					open_fire = true
@@ -3327,17 +3325,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		elseif phase_is_anticipation and current_objective.open_fire then --if we were aggressive one update ago, start backing up away from the current objective area
 			pull_back = true
 		elseif has_criminals_close then
-			if not phase_is_anticipation then
-				if group.in_place and self._t - group.in_place_t > 2 then
-					for criminal_key, criminal_data in pairs(self._player_criminals) do
-						self:criminal_spotted(criminal_data.unit)
-
-						for u_key, u_data in pairs(group.units) do
-							u_data.unit:brain():clbk_group_member_attention_identified(nil, criminal_key)
-						end
-					end
-				end
-			
+			if not phase_is_anticipation then			
 				if self._street then --street behavior, stay in place a bit before pushes 
 					if group.in_place_t and self._t - group.in_place_t > 8 then 
 						objective_area = has_criminals_close
@@ -3414,7 +3402,11 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				neighbour_list[#neighbour_list + 1] = neighbour_nav_seg_id
 			end
 			
-			local assault_to_seg = neighbour_list[math_random(#neighbour_list)]
+			assault_to_seg = neighbour_list[math_random(#neighbour_list)]
+			
+			if not assault_to_seg then
+				assault_to_seg = objective_area.pos_nav_seg
+			end
 		
 			local search_params = {
 				id = "GroupAI_assault",
@@ -3501,6 +3493,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 			end
 
 			local grp_objective = {
+				distance = 400,
 				type = "assault_area",
 				stance = "hos",
 				area = assault_area,
@@ -3513,7 +3506,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				charge = push,
 				pos = objective_pos,
 				pos_optional = true,
-				distance = 400,
 				interrupt_dis = nil
 			}
 			--group.is_chasing = group.is_chasing or push
@@ -3736,6 +3728,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.scan = true
 		objective.interrupt_dis = nil
 		objective.interrupt_suppression = nil
+		objective.stop_on_trans = not grp_objective.running
 	elseif grp_objective.type == "create_phalanx" then
 		objective.type = "phalanx"
 		objective.stance = "hos"
@@ -3764,6 +3757,8 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 			objective.hostagejob = true
 		end
 	end
+	
+	objective.pos_optional = grp_objective.pos_optional
 	
 	objective.nav_seg = grp_objective.nav_seg or objective.area.pos_nav_seg
 	objective.attitude = grp_objective.attitude or objective.attitude

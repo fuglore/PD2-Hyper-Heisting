@@ -155,8 +155,11 @@ function TankCopLogicAttack.update(data)
 	TankCopLogicAttack._process_pathing_results(data, my_data)
 
 	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
-		my_data.attitude = data.objective and data.objective.attitude or "avoid"
-		--my_data.want_to_move_back = TankCopLogicAttack._chk_wants_to_take_cover(data, my_data)
+		if data.unit:base():has_tag("law") then
+			my_data.attitude = data.objective and data.objective.attitude or "avoid"
+		end
+		
+		my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		TankCopLogicAttack._upd_combat_movement(data)
 	else
 		TankCopLogicAttack._cancel_chase_attempt(data, my_data)
@@ -394,7 +397,7 @@ function TankCopLogicAttack._upd_combat_movement(data)
 		if engage then
 			should_try_chase = height_diff > 300 or not enemy_visible or enemy_dis > 300
 		else
-			should_try_chase = enemy_visible or focus_enemy.verified_t and t - focus_enemy.verified_t > 4
+			should_try_chase = enemy_visible or focus_enemy.verified_t and t - focus_enemy.verified_t < 4
 			
 			if should_try_chase then
 				if not no_run then
@@ -404,6 +407,8 @@ function TankCopLogicAttack._upd_combat_movement(data)
 				end
 				
 				should_try_chase = height_diff < 300 and enemy_dis < 600
+			else
+				should_try_chase = nil
 			end
 		end
 		
@@ -471,7 +476,7 @@ function TankCopLogicAttack._upd_combat_movement(data)
 				end
 			end
 		elseif not action_taken then
-			if data.important or focus_enemy.aimed_at then
+			if focus_enemy.aimed_at then
 				action_taken = TankCopLogicAttack._walk_around_menacingly(data, my_data)
 			end
 		end
@@ -566,10 +571,11 @@ function TankCopLogicAttack.action_complete_clbk(data, action)
 
 		if my_data.menacing then
 			my_data.menacing = nil
-			if action:expired() then
-				if data.important and data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
-					TankCopLogicAttack._upd_combat_movement(data)
-				end
+		end
+		
+		if action:expired() then
+			if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+				TankCopLogicAttack._upd_combat_movement(data)
 			end
 		end
 	elseif action_type == "shoot" then

@@ -484,6 +484,11 @@ function CopLogicTravel._upd_enemy_detection(data)
 	
 	if not objective or not my_data.criminal or objective.type ~= "follow" then		
 		if allow_trans then
+			if objective and objective.stop_on_trans then
+				objective.pos = nil
+				objective.in_place = true
+			end
+		
 			local wanted_state = CopLogicBase._get_logic_state_from_reaction(data, new_reaction)
 
 			if wanted_state and wanted_state ~= data.name then
@@ -1685,7 +1690,7 @@ function CopLogicTravel.update(data)
 end
 
 function CopLogicTravel.queue_update(data, my_data, delay)
-	delay = data.important and 0 or delay or 0
+	delay = data.important and 0 or delay
 	
 	CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicTravel.queued_update, data, data.t + delay, data.important and true)
 end
@@ -2578,17 +2583,15 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 		haste = "run"
 	end
 
-	local pose = data.is_suppressed and "crouch" or objective and objective.pose or "stand"
+	local pose = my_data.want_to_take_cover and "crouch" or objective and objective.pose or "stand"
 
 	if pose == "crouch" then
 		if not data.char_tweak.crouch_move then
 			pose = "stand"
-		elseif not data.is_suppressed then
-			pose = "stand"
 		end
 	end
 
-	local end_pose = my_data.moving_to_cover and "crouch"
+	local end_pose = my_data.moving_to_cover and "crouch" or my_data.want_to_take_cover and "crouch"
 
 	if data.char_tweak.allowed_poses then
 		if not data.char_tweak.allowed_poses.crouch then

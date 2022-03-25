@@ -1589,7 +1589,7 @@ function GroupAIStateBase:update(t, dt)
 		self:whisper_chatter_clbk()
 	end
 	
-	---self:_draw_enemy_importancies()
+	--self:_draw_enemy_importancies()
 
 	self:_upd_criminal_suspicion_progress()
 	
@@ -1600,7 +1600,7 @@ function GroupAIStateBase:update(t, dt)
 		self:_update_HH_stealth(t, dt)
 	end
 	
-	--self:_draw_current_logics()
+	self:_draw_current_logics()
 	
 	if Network:is_server() then
 		if not Global.game_settings.single_player then
