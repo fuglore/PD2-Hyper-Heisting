@@ -1600,7 +1600,7 @@ function GroupAIStateBase:update(t, dt)
 		self:_update_HH_stealth(t, dt)
 	end
 	
-	self:_draw_current_logics()
+	--self:_draw_current_logics()
 	
 	if Network:is_server() then
 		if not Global.game_settings.single_player then
