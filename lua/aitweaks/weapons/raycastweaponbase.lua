@@ -684,16 +684,12 @@ function RaycastWeaponBase:_suppress_units(from_pos, direction, distance, slotma
 		if #enemies_to_suppress > 0 then
 			for i = 1, #enemies_to_suppress do
 				enemy = enemies_in_cone[i]
-				
-				local enemy_distance = mvec3_dis(from_pos, enemy:movement():m_com())
-				local dis_lerp_value = math_clamp(enemy_distance, 0, 3000) / 3000
+
 				local total_suppression = self._suppression
 
 				if suppr_mul then
 					total_suppression = total_suppression * suppr_mul
 				end
-
-				total_suppression = math_lerp(total_suppression, 0, dis_lerp_value)
 
 				if total_suppression > 0 then
 					if mark_suppressed_enemies and enemy:contour() then

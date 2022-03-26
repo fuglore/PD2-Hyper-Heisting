@@ -1690,7 +1690,7 @@ function CopLogicTravel.update(data)
 end
 
 function CopLogicTravel.queue_update(data, my_data, delay)
-	delay = data.important and 0 or delay
+	delay = data.important and 0.2 or delay
 	
 	CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicTravel.queued_update, data, data.t + delay, data.important and true)
 end
