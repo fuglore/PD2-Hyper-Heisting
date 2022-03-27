@@ -339,7 +339,6 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 		end
 	end
 	
-	
 	local is_stealth = use_metal_gear_detection and groupai_state_manager:whisper_mode()
 	local all_attention_objects = groupai_state_manager:get_AI_attention_objects_by_filter(data.SO_access_str, data.team)
 	local is_detection_persistent = groupai_state_manager:is_detection_persistent()
@@ -441,7 +440,7 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 		end
 	end
 
-	local delay = within_any_acquire_range and 0 or data.important and 0 or 2
+	local delay = within_any_acquire_range and 0 or data.important and 0.5 or data.brain_updating and 0.2 or 1
 
 	for u_key, attention_info in pairs_g(detected_obj) do
 		local can_detect = true
@@ -722,9 +721,11 @@ function CopLogicBase._upd_attention_obj_detection(data, min_reaction, max_react
 
 							if is_detection_persistent then-- and attention_info.criminal_record then
 								attention_info.release_t = nil
-
-								delay = math_min(0.2, delay)
-								attention_info.next_verify_t = math_min(0.2, attention_info.next_verify_t)
+								
+								if attention_info.verified_t and t - attention_info.verified_t < 7 then
+									delay = math_min(0.2, delay)
+									attention_info.next_verify_t = math_min(0.2, attention_info.next_verify_t)
+								end
 
 								mvec3_set(attention_info.verified_pos, attention_pos)
 
@@ -1687,15 +1688,6 @@ end
 function CopLogicBase.identify_attention_obj_instant(data, att_u_key)
 	local att_obj_data = data.detected_attention_objects[att_u_key]
 	local is_new = not att_obj_data
-	local player_importance_wgt = nil
-	
-	if not data.brain_updating then
-		if data.internal_data and not data.internal_data.is_hostage then
-			if data.unit:in_slot(managers.slot:get_mask("enemies")) and managers.groupai:state()._police[data.key] then
-				player_importance_wgt = {}
-			end
-		end
-	end
 	
 	if att_obj_data then
 		local detect_pos = att_obj_data.m_head_pos
@@ -1719,47 +1711,6 @@ function CopLogicBase.identify_attention_obj_instant(data, att_u_key)
 
 			att_obj_data.unit:movement():on_suspicion(data.unit, false)
 		end
-		
-		if att_obj_data.is_human_player then
-			if player_importance_wgt then
-				local my_pos = data.m_pos
-				
-				mvec3_set(tmp_vec1, att_obj_data.m_head_pos)
-				mvec3_sub(tmp_vec1, my_pos)
-				
-				local dis_weight = mvec3_len_sq(tmp_vec1)
-				mvec3_norm(tmp_vec1)
-
-				local e_fwd = nil
-
-				if att_obj_data.is_husk_player then
-					e_fwd = att_obj_data.unit:movement():detect_look_dir()
-				else
-					e_fwd = att_obj_data.unit:movement():m_head_rot():y()
-				end 
-
-				if data.unit:base():has_tag("special") then --special enemy, generally higher priority than commons
-					dis_weight = dis_weight * 0.9
-				end
-
-				if data.internal_data.processing_cover_path then --needs cover, desperately most likely
-					dis_weight = dis_weight * 0.5
-				elseif next(data.active_searches) then --has active pathing searches, needs a fast update asap
-					dis_weight = dis_weight * 0.75
-				elseif data.internal_data.want_to_take_cover and data.internal_data.in_cover then --is going to stay still for a few updates, lower priority
-					dis_weight = dis_weight * 1.25
-				end
-
-				local dot = mvec3_dot(e_fwd, tmp_vec1)
-				local weight_mul = 1 + dot
-				local weight = dis_weight * weight_mul
-
-				table_insert(player_importance_wgt, att_u_key)
-				table_insert(player_importance_wgt, weight)
-			end
-		
-			managers.groupai:state():set_importance_weight(data.key, player_importance_wgt)
-		end
 	else
 		local attention_info = managers.groupai:state():get_AI_attention_objects_by_filter(data.SO_access_str)[att_u_key]
 
@@ -1780,48 +1731,7 @@ function CopLogicBase.identify_attention_obj_instant(data, att_u_key)
 				end
 
 				data.detected_attention_objects[att_u_key] = att_obj_data
-				
-				if att_obj_data.is_human_player then
-					if player_importance_wgt then
-						local my_pos = data.m_pos
-						
-						mvec3_set(tmp_vec1, att_obj_data.m_head_pos)
-						mvec3_sub(tmp_vec1, my_pos)
-						
-						local dis_weight = mvec3_len_sq(tmp_vec1)
-						mvec3_norm(tmp_vec1)
-
-						local e_fwd = nil
-
-						if att_obj_data.is_husk_player then
-							e_fwd = att_obj_data.unit:movement():detect_look_dir()
-						else
-							e_fwd = att_obj_data.unit:movement():m_head_rot():y()
-						end 
-
-						if data.unit:base():has_tag("special") then --special enemy, generally higher priority than commons
-							dis_weight = dis_weight * 0.9
-						end
-
-						if data.internal_data.processing_cover_path then --needs cover, desperately most likely
-							dis_weight = dis_weight * 0.5
-						elseif next(data.active_searches) then --has active pathing searches, needs a fast update asap
-							dis_weight = dis_weight * 0.75
-						elseif data.internal_data.want_to_take_cover and data.internal_data.in_cover then --is going to stay still for a few updates, lower priority
-							dis_weight = dis_weight * 1.25
-						end
-
-						local dot = mvec3_dot(e_fwd, tmp_vec1)
-						local weight_mul = 1 + dot
-						local weight = dis_weight * weight_mul
-
-						table_insert(player_importance_wgt, att_u_key)
-						table_insert(player_importance_wgt, weight)
-					end
-				
-					managers.groupai:state():set_importance_weight(data.key, player_importance_wgt)
-				end
-				
+		
 				data.logic.on_attention_obj_identified(data, att_u_key, att_obj_data)
 			end
 		end
