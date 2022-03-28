@@ -682,16 +682,13 @@ function GroupAIStateBesiege:_chk_group_area_presence(group, area_to_chk)
 	if not area_to_chk then
 		return
 	end
-	
-	local id = area_to_chk.id
-	
+
 	for u_key, u_data in pairs(group.units) do
 		local nav_seg = u_data.tracker:nav_segment()
-		local my_area = self:get_area_from_nav_seg_id(nav_seg)
 
-		if my_area.id == id then
+		if area_to_chk.nav_segs[nav_seg] then
 			--log("bingus")
-			return my_area
+			return area_to_chk
 		end
 	end
 end
@@ -702,8 +699,9 @@ function GroupAIStateBesiege:_set_objective_to_enemy_group(group, grp_objective)
 	if grp_objective.area then
 		if grp_objective.type == "retire" or not self:_chk_group_area_presence(group, grp_objective.area) then
 			grp_objective.moving_out = true
-		else
+		elseif not group.in_place then
 			group.in_place = true
+			group.in_place_t = self._t
 			grp_objective.moving_out = nil
 		end
 
@@ -752,13 +750,7 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 					end
 					
 					group.objective.moving_in = nil
-				else
-					group.in_place_t = nil
-					group.in_place = nil
 				end
-			elseif grp_objective.area and not group.in_place_t then
-				group.in_place_t = self._t
-				group.in_place = true
 			end
 
 			self:_set_assault_objective_to_group(group, phase)
@@ -3728,7 +3720,7 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.scan = true
 		objective.interrupt_dis = nil
 		objective.interrupt_suppression = nil
-		objective.stop_on_trans = not grp_objective.running
+		--objective.stop_on_trans = not grp_objective.running
 	elseif grp_objective.type == "create_phalanx" then
 		objective.type = "phalanx"
 		objective.stance = "hos"
