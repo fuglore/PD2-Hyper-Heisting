@@ -4,6 +4,7 @@ local table_size = table.size
 local table_contains = table.contains
 local math_min = math.min
 local math_max = math.max
+local math_lerp = math.lerp
 local world_g = World
 local mvec3_norm = mvector3.normalize
 local mvec3_set = mvector3.set
@@ -745,12 +746,38 @@ function CopDamage:build_suppression(amount, panic_chance, was_saw)
 	if self._suppression_data then
 		self._suppression_data.value = math.min(self._suppression_data.brown_point or self._suppression_data.react_point, self._suppression_data.value + amount_val)
 		self._suppression_data.last_build_t = t
-		self._suppression_data.decay_t = t + self._suppression_data.duration
+		
+		local decay_t = nil
+		
+		if self._suppression_data.brown_point then
+			local lerp = self._suppression_data.value / self._suppression_data.brown_point
+			
+			decay_t = math_lerp(0, self._suppression_data.duration, lerp)
+		else
+			local lerp = self._suppression_data.value / self._suppression_data.react_point
+			
+			decay_t = math_lerp(0, self._suppression_data.duration, lerp)
+		end
+		
+		self._suppression_data.decay_t = t + decay_t
 
 		managers.enemy:reschedule_delayed_clbk(self._suppression_data.decay_clbk_id, self._suppression_data.decay_t)
 	else
 		local duration = math.lerp(sup_tweak.duration[1], sup_tweak.duration[2], math.random())
-		local decay_t = t + duration
+		local decay_t = nil
+		local react_point = sup_tweak.react_point and math.lerp(sup_tweak.react_point[1], sup_tweak.react_point[2], math.random())
+		local brown_point = sup_tweak.brown_point and math.lerp(sup_tweak.brown_point[1], sup_tweak.brown_point[2], math.random())
+
+		if brown_point then
+			local lerp = amount_val / brown_point
+			
+			decay_t = t + math_lerp(0, duration, lerp)
+		else
+			local lerp = amount_val / react_point
+			
+			decay_t = t + math_lerp(0, duration, lerp)
+		end
+
 		self._suppression_data = {
 			value = amount_val,
 			last_build_t = t,

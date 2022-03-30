@@ -26,45 +26,45 @@ function CharacterTweakData:_presets(tweak_data)
 			panic_chance_mul = 1,
 			duration = {
 				5,
-				7.5
+				10
 			},
 			react_point = {
-				0,
-				0
+				2,
+				2
 			},
 			brown_point = {
-				0.5,
-				0.5
+				6,
+				6
 			}
 		},
 		hard_def = {
 			panic_chance_mul = 0.7,
 			duration = {
-				7.5,
-				15
+				5,
+				10
 			},
 			react_point = {
-				1,
-				1
+				6,
+				6
 			},
 			brown_point = {
-				2,
-				2
+				12,
+				12
 			}
 		},
 		hard_agg = {
 			panic_chance_mul = 0.7,
 			duration = {
-				7.5,
-				15
+				2.5,
+				5
 			},
 			react_point = {
-				2,
-				2
+				12,
+				12
 			},
 			brown_point = {
-				3,
-				3
+				24,
+				24
 			}
 		},
 		no_supress = {
@@ -7906,7 +7906,7 @@ function CharacterTweakData:_init_tank(presets) --TODO: Nothing yet. Note: Can't
 	self.tank.critical_hits = nil
 	self.tank.die_sound_event = "bdz_x02a_any_3p"
 	self.tank.damage.doom_hurt_type = "doomzer"
-	self.tank.damage.hurt_severity = presets.hurt_severities.no_hurts
+	self.tank.damage.hurt_severity = presets.hurt_severities.no_hurts_no_tase
 	self.tank.chatter = presets.enemy_chatter.bulldozer
 	self.tank.announce_incomming = "incomming_tank"
 	self.tank.steal_loot = nil
@@ -8175,6 +8175,7 @@ Hooks:PostHook(CharacterTweakData, "_init_shield", "hhpost_shield", function(sel
 	self.shield.experience = {}
 	self.shield.weapon = presets.weapon.simple
 	self.shield.detection = presets.detection.enemymook
+	self.shield.damage.hurt_severity = presets.hurt_severities.no_hurts_no_tase
 	self.shield.HEALTH_INIT = 6
 	self.shield.headshot_dmg_mul = 6
 	self.shield.speed_mul = 0.85
@@ -8716,7 +8717,7 @@ Hooks:PostHook(CharacterTweakData, "_init_sniper", "hhpost_sniper", function(sel
 	self.armored_sniper.headshot_dmg_mul = 6
 	self.armored_sniper.dodge = presets.dodge.heavy
 	self.armored_sniper.move_speed = presets.move_speed.simple_consistency
-	self.armored_sniper.damage.hurt_severity = presets.hurt_severities.heavyhordemook
+	self.armored_sniper.damage.hurt_severity = presets.hurt_severities.no_hurts
 	table.insert(self._enemy_list, "armored_sniper")
 	
 	self.assault_sniper = deep_clone(self.sniper)

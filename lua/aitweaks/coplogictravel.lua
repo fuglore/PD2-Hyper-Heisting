@@ -2046,8 +2046,14 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 			end
 		end
 	end
+	
+	local cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, nil, near_pos, threat_pos)
+	
+	if not cover then
+		cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, nil, nil, threat_pos)
+	end
 
-	return managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
+	return cover
 end
 
 function CopLogicTravel._get_allowed_travel_nav_segs(data, my_data, to_pos)
@@ -2321,11 +2327,11 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 		local nav_seg = coarse_path[nav_index][1]
 		local area = managers.groupai:state():get_area_from_nav_seg_id(nav_seg)
 		local cover = my_data.want_to_take_cover or CopLogicTravel._needs_cover_at_destination(data, area)
-		local near_pos = cover and CopLogicTravel.find_door_pos_nearest_to_next_nav_seg(data, coarse_path, nav_index, nav_seg)
 
 		if cover then
 			cover = nil
-			cover = CopLogicTravel._find_cover(data, nav_seg, near_pos)
+			local door_pos = CopLogicTravel.find_door_pos_nearest_to_next_nav_seg(data, coarse_path, nav_index, nav_seg)	
+			cover = CopLogicTravel._find_cover(data, nav_seg, door_pos)
 		end
 
 		if my_data.moving_to_cover then
@@ -2348,7 +2354,7 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 				cover
 			}
 		else
-			to_pos = near_pos or coarse_path[nav_index][2]
+			to_pos = managers.navigation:find_random_position_in_segment(nav_seg)
 			local pos_rsrv_id = data.pos_rsrv_id
 			local rsrv_desc = {
 				position = to_pos,
@@ -2375,36 +2381,36 @@ function CopLogicTravel._get_exact_move_pos(data, nav_index)
 end
 
 function CopLogicTravel.find_door_pos_nearest_to_next_nav_seg(data, coarse_path, nav_index, nav_seg)
-	local doors = managers.navigation:find_segment_doors(nav_seg)
-	
-	if not next(doors) then
-		return
-	end
+	local nav_seg = managers.navigation._nav_segments[nav_seg]
 	
 	local next_pos = coarse_path[nav_index + 1][2]
 	local best_dis, best_pos
 	
-	for other_seg, door_list in ipairs(doors) do
-		for i = 1, #door_list do
-			local pos = nil
-			local door_id = door_list[i]
+	for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
+		if neighbour_nav_seg_id == coarse_path[nav_index + 1][1] then
+			--log("aaaaaa")
+			for i = 1, #door_list do
+				local pos = nil
+				local door_id = door_list[i]
+				
+				if type(door_id) == "number" then
+					pos = managers.navigation._room_doors[door_id].center
+				else
+					pos = door_id:script_data().element:nav_link_end_pos()
+				end
+				
+				local dis = mvec3_dis_sq(pos, next_pos)
 			
-			if type(door_id) == "number" then
-				pos = managers.navigation._room_doors[door_id].center
-			else
-				pos = door_id:script_data().element:nav_link_end_pos()
-			end
-			
-			local dis = mvec3_dis_sq(pos, next_pos)
-			
-			if not best_dis or dis < best_dis then
-				best_pos = pos
-				best_dis = dis
+				if not best_dis or dis < best_dis then
+					best_pos = pos
+					best_dis = dis
+				end
 			end
 		end
 	end
 	
 	if best_pos then
+		--log("nnngh")
 		return best_pos
 	end
 end
