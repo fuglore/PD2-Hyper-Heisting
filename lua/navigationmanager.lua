@@ -83,6 +83,20 @@ function NavigationManager:update(t, dt)
 	self:_commence_coarce_searches(t)
 end
 
+function NavigationManager:_clamp_pos_to_field(pos, allow_disabled)
+	if not pos then
+		return
+	end
+	
+	local pos_tracker = self:create_nav_tracker(pos, allow_disabled)
+	
+	local clamped_pos = mvec3_cpy(pos_tracker:field_position())
+	
+	self:destroy_nav_tracker(pos_tracker)
+	
+	return clamped_pos
+end
+
 function NavigationManager:register_cover_units(please)
 	if not please and not self:is_data_ready() then
 		return

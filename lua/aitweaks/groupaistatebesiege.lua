@@ -3305,7 +3305,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		if phase_is_anticipation then 
 			pull_back = true
 		else
-			if charge then
+			if group.in_place_t and self._t - group.in_place_t > 2 then
 				push = true
 			else
 				open_fire = true

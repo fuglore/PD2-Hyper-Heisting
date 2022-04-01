@@ -148,16 +148,8 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 	my_data.attitude = objective.attitude or "avoid"
 	my_data.weapon_range = clone_g(data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range)
 	
-	if data.tactics then
-		if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
-			
-			if my_data.weapon_range.aggressive then
-				my_data.weapon_range.aggressive = my_data.weapon_range.aggressive * 1.5
-			end
-			
-			my_data.weapon_range.close = my_data.weapon_range.close * 2
-			my_data.weapon_range.optimal = my_data.weapon_range.optimal * 1.5
-		end
+	if not data.team then
+		data.unit:movement():set_team(managers.groupai:state()._teams["law1"]) --yuck.
 	end
 
 	my_data.path_safely = not data.cool and data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area"
@@ -571,6 +563,16 @@ function CopLogicTravel._upd_enemy_detection(data)
 	return delay
 end
 
+function CopLogicTravel._pathing_complete_clbk(data)
+	local my_data = data.internal_data
+
+	if not my_data.exiting then
+		if my_data.processing_advance_path or my_data.processing_coarse_path then
+			CopLogicTravel.upd_advance(data)
+		end
+	end
+end
+
 function CopLogicTravel._upd_pathing(data, my_data)
 	if data.pathing_results then
 		local pathing_results = data.pathing_results
@@ -605,12 +607,6 @@ function CopLogicTravel._upd_pathing(data, my_data)
 			my_data.processing_coarse_path = nil
 
 			if path ~= "failed" then
-				local should_shorten = data.objective.type ~= "follow" and not my_data.path_safely and not data.objective.pos or nil
-				
-				if should_shorten then
-					path = managers.navigation:shorten_coarse_through_dis(path)
-				end
-				
 				my_data.coarse_path = path
 				my_data.coarse_path_index = 1
 				data.path_fail_t = nil
@@ -744,8 +740,15 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				my_data.best_cover = my_data.moving_to_cover
 
 				CopLogicBase.chk_cancel_delayed_clbk(my_data, my_data.cover_update_task_key)
-
-				local high_ray = CopLogicTravel._chk_cover_height(data, my_data.best_cover[1], data.visibility_slotmask)
+				
+				local threat_pos = data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.m_head_pos
+				local low_ray, high_ray = nil
+				
+				if threat_pos then
+					low_ray, high_ray = CopLogicAttack._chk_covered(data, my_data.best_cover[1][1], threat_pos, data.visibility_slotmask)				
+				end
+				
+				my_data.best_cover[3] = low_ray
 				my_data.best_cover[4] = high_ray
 				my_data.in_cover = true
 
@@ -1935,21 +1938,25 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	if not my_objective.grp_objective then
 		return true
 	end
-
-	local my_dis = mvec3_dis(my_objective.area.pos, data.m_pos)
-
-	if my_dis > 1200 then
+	
+	if not my_objective.area then
 		return true
 	end
 
-	my_dis = my_dis * 1.2
+	local my_dis = mvec3_dis_sq(my_objective.area.pos, data.m_pos)
+	
+	if my_dis > 2000 * 2000 then --this should really only matter in maps like Goat Sim or whatever
+		return true
+	end
+
+	my_dis = my_dis * 1.15 * 1.15
 
 	for u_key, u_data in pairs_g(data.group.units) do
 		if u_key ~= data.key then
 			local teammate_obj = u_data.unit:brain():objective()
 
 			if teammate_obj and teammate_obj.grp_objective == my_objective.grp_objective and not teammate_obj.in_place then
-				local teammate_dis_to_obj = mvec3_dis(teammate_obj.area.pos, u_data.m_pos)
+				local teammate_dis_to_obj = mvec3_dis_sq(teammate_obj.area.pos, u_data.m_pos)
 
 				if my_dis < teammate_dis_to_obj then
 					return false
@@ -1964,7 +1971,16 @@ end
 function CopLogicTravel.apply_wall_offset_to_cover(data, my_data, cover, wall_fwd_offset)
 	local to_pos_fwd = tmp_vec1
 
-	mvec3_set(to_pos_fwd, cover[2])
+	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+		local threat_dir = tmp_vec3
+		mvec3_set(threat_dir, data.m_pos, data.attention_obj.m_pos)
+		
+		mvec3_set(to_pos_fwd, threat_dir)
+	else
+		mvec3_set(to_pos_fwd, cover[2])
+	end
+	
+	
 	mvec3_mul(to_pos_fwd, wall_fwd_offset)
 	mvec3_add(to_pos_fwd, cover[1])
 
@@ -2578,6 +2594,10 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	if data.unit:movement():chk_action_forbidden("walk") then
 		return
 	end
+	
+	if not CopLogicTravel.chk_group_ready_to_move(data, my_data) then
+		return
+	end
 
 	local objective = data.objective
 	local haste = nil
@@ -2683,26 +2703,6 @@ function CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 			objective.in_place = true
 
 			data.logic.on_new_objective(data)
-		end
-	end
-end
-
-function CopLogicTravel._chk_target_area(data, my_data) ----eventually try reenabling
-	local objective = data.objective
-
-	if objective and objective.type == "defend_area" and objective.grp_objective then
-		if objective.grp_objective.type == "assault_area" or objective.grp_objective.type == "defend_area" then
-			if CopLogicTravel._chk_close_to_criminal(data, my_data) then
-				--data.objective_failed_clbk(data.unit, data.objective)
-				local my_seg = data.unit:movement():nav_tracker():nav_segment()
-				local my_area = managers.groupai:state():get_area_from_nav_seg_id(my_seg)
-				objective.in_place = true
-				objective.nav_seg = my_seg
-				objective.area = my_area
-				objective.pos = nil
-
-				return true
-			end
 		end
 	end
 end
