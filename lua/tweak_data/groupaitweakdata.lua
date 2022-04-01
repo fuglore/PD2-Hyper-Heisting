@@ -544,7 +544,7 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.sabotagehostages = {
 		radius = 2000,
-	    max_nr = 40,
+	    max_nr = 1,
 	    duration = {1, 1},
 	    interval = {8, 16},
 	    group_min = 1,
@@ -552,7 +552,7 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.hostagepanic1 = {
 		radius = 2000,
-	    max_nr = 40,
+	    max_nr = 1,
 	    duration = {1, 1},
 	    interval = {8, 12},
 	    group_min = 1,
@@ -560,7 +560,7 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.hostagepanic2 = {
 		radius = 2000,
-	    max_nr = 40,
+	    max_nr = 1,
 	    duration = {1, 1},
 	    interval = {8, 12},
 	    group_min = 1,
@@ -568,7 +568,7 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.hostagepanic3 = {
 		radius = 2000,
-	    max_nr = 40,
+	    max_nr = 1,
 	    duration = {1, 1},
 	    interval = {8, 12},
 	    group_min = 1,
@@ -576,7 +576,7 @@ function GroupAITweakData:_init_chatter_data()
 	}
 	self.enemy_chatter.civilianpanic = {
 		radius = 2000,
-	    max_nr = 40,
+	    max_nr = 1,
 	    duration = {1, 1},
 	    interval = {6, 8},
 	    group_min = 1,
