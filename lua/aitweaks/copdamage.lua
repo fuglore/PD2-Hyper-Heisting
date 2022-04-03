@@ -626,7 +626,7 @@ function CopDamage:die(attack_data)
 	variant = variant or "bullet"
 	self._health = 0
 	self._health_ratio = 0
-	self._dead = true
+	
 
 	self:set_mover_collision_state(false)
 	
@@ -654,6 +654,8 @@ function CopDamage:die(attack_data)
 		self._unit:base().looping_voice:close()
 		self._unit:base().looping_voice = nil
 	end
+	
+	self._dead = true
 	
 	if self._death_sequence then
 		if self._unit:damage() and self._unit:damage():has_sequence(self._death_sequence) then

@@ -1686,14 +1686,14 @@ function GroupAIStateBesiege:_begin_assault_task(assault_areas)
 	
 	if managers.skirmish:is_skirmish() then
 		local force_table = {
+			32,
 			40,
 			48,
+			56,
 			64,
 			64,
 			64,
 			64,
-			64,
-			68,
 			72,
 			84
 		}

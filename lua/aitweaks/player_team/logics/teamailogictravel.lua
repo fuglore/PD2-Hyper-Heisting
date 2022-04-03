@@ -9,6 +9,8 @@ local REACT_SURPRISED = AIAttentionObject.REACT_SURPRISED
 local REACT_CURIOUS = AIAttentionObject.REACT_CURIOUS
 local REACT_AIM = AIAttentionObject.REACT_AIM
 
+TeamAILogicTravel._pathing_complete_clbk = CopLogicTravel._pathing_complete_clbk
+
 function TeamAILogicTravel.enter(data, new_logic_name, enter_params)
 	CopLogicBase.enter(data, new_logic_name, enter_params)
 	data.brain:cancel_all_pathing_searches()

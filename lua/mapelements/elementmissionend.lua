@@ -14,7 +14,23 @@ function ElementMissionEnd:on_executed(instigator)
 					personal_win = alive(managers.player:player_unit())
 				})
 			else
-				managers.enemy:add_delayed_clbk("hh_mission_ended", callback(managers.game_play_central, managers.game_play_central, "end_heist", num_winners), Application:time() + 4)
+				if alive(managers.player:player_unit()) then
+					if managers.player:player_unit():sound():speaking() then
+						managers.enemy:add_delayed_clbk("hh_mission_ended", callback(managers.game_play_central, managers.game_play_central, "end_heist", num_winners), Application:time() + 1)
+					else
+						managers.network:session():send_to_peers("mission_ended", true, num_winners)
+						game_state_machine:change_state_by_name("victoryscreen", {
+							num_winners = num_winners,
+							personal_win = alive(managers.player:player_unit())
+						})
+					end
+				else
+					managers.network:session():send_to_peers("mission_ended", true, num_winners)
+					game_state_machine:change_state_by_name("victoryscreen", {
+						num_winners = num_winners,
+						personal_win = alive(managers.player:player_unit())
+					})
+				end
 			end
 			
 		elseif self._values.state == "failed" then

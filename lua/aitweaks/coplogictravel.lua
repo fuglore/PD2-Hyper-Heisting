@@ -328,7 +328,10 @@ function CopLogicTravel.queued_update(data)
 		return
 	end
 	
-	CopLogicAttack.check_chatter(data, my_data, data.objective)
+	if data.important then
+		CopLogicAttack.check_chatter(data, my_data, data.objective)
+	end
+	
 	CopLogicTravel.upd_advance(data)
 
 	if data.internal_data ~= my_data then

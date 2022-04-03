@@ -1336,12 +1336,13 @@ function PlayerStandard:_update_foley(t, input)
 
 		self._state_data.in_air = false
 		self._is_jumping = nil
-		
-		if t - self._state_data.in_air_enter_t > 0.02 then
+
+		if t - self._state_data.in_air_enter_t > 0.1 then
 			local from = self._pos + math.UP * 10
 			local to = self._pos - math.UP * 60
 			local material_name, pos, norm = World:pick_decal_material(from, to, self._slotmask_bullet_impact_targets)
 			local height = self._state_data.enter_air_pos_z - self._pos.z
+			
 			self._unit:sound():play_land(material_name)
 			
 			if self._unit:character_damage():damage_fall({

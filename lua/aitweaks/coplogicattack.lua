@@ -237,7 +237,9 @@ function CopLogicAttack.update(data)
 	CopLogicAttack._process_pathing_results(data, my_data)
 	
 	if not my_data.tasing then
-		CopLogicAttack.check_chatter(data, my_data, data.objective)
+		if data.important then
+			CopLogicAttack.check_chatter(data, my_data, data.objective)
+		end
 		
 		local action_taken = data.logic.action_taken(data, my_data)
 		
@@ -406,7 +408,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local action_taken = nil
 	local want_to_take_cover = my_data.want_to_take_cover	
 	
-	if not my_data.moving_to_cover and not my_data.at_cover_shoot_pos and not my_data.charge_path then
+	if not my_data.moving_to_cover and not my_data.at_cover_shoot_pos then
 		if not my_data.surprised and data.important and focus_enemy.verified and not my_data.turning and CopLogicAttack._can_move(data) and not unit:movement():chk_action_forbidden("walk") then
 			if not my_data.in_cover then
 				if data.is_suppressed and t - unit:character_damage():last_suppression_t() < 0.7 then
@@ -483,7 +485,7 @@ function CopLogicAttack._upd_combat_movement(data)
 	local remove_stay_out_time = nil
 
 	if my_data.stay_out_time then
-		if not my_data.charging and enemy_visible_soft or not my_data.at_cover_shoot_pos and not my_data.walking_to_cover_shoot_pos then
+		if not my_data.charging and enemy_visible_soft or not my_data.at_cover_shoot_pos and not my_data.walking_to_cover_shoot_pos or want_to_take_cover then
 			remove_stay_out_time = true
 		end
 	end
@@ -519,8 +521,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "reload")
 		end
 	end
-	
-	local want_to_charge = my_data.attitude == "engage" and not want_to_take_cover or valid_harass
+
 	local in_cover = my_data.in_cover
 	local best_cover = my_data.best_cover
 	local want_flank_cover = my_data.flank_cover and not my_data.flank_cover.failed
@@ -541,12 +542,12 @@ function CopLogicAttack._upd_combat_movement(data)
 		
 		if my_data.attitude ~= "engage" and not in_cover then
 			move_to_cover = true
-		elseif want_to_charge then
-			--nothing, they want to charge, let them
 		elseif not my_data.flank_cover or not my_data.flank_cover.failed then
 			if my_data.at_cover_shoot_pos then
 				if not my_data.stay_out_time or my_data.stay_out_time < t then
-					move_to_cover = true
+					if want_to_take_cover then
+						move_to_cover = true
+					end
 					
 					if my_data.cover_test_step > 2 or math_random() < 0.5 then
 						want_flank_cover = true
@@ -583,7 +584,7 @@ function CopLogicAttack._upd_combat_movement(data)
 						want_flank_cover = true
 					end
 				end
-			elseif best_cover and not in_cover then
+			elseif best_cover and want_to_take_cover and not in_cover then
 				move_to_cover = true
 			end
 		end
@@ -602,7 +603,7 @@ function CopLogicAttack._upd_combat_movement(data)
 			my_data.flank_cover = nil
 		end
 		
-		if not action_taken and want_to_charge and my_data.attitude == "engage" then
+		if not action_taken and not move_to_cover and not want_to_take_cover and my_data.attitude == "engage" then
 			if not data.is_converted and my_data.flank_cover and my_data.flank_cover.failed then
 				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 2 then --not gonna bother renaming and adding stuff to be used as flank_path as well, so I'm sharing the name even though they're kinda different
 					if not my_data.charge_path_search_id and focus_enemy.nav_tracker then
@@ -645,51 +646,49 @@ function CopLogicAttack._upd_combat_movement(data)
 				end
 			end
 			
-			if not my_data.flank_cover then
-				local can_charge = not tactics or not tactics.ranged_fire and not tactics.elite_ranged_fire
+			local can_charge = not tactics or not tactics.ranged_fire and not tactics.elite_ranged_fire
 			
-				if can_charge or valid_harass then
-					if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 2 then
-						if not my_data.charge_path_search_id and focus_enemy.nav_tracker then
-							if not tactics or tactics.flank then
-								my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, engage_range) --charge to a position that would put the unit in a flanking position, not a flanking path
+			if can_charge or valid_harass then
+				if data.important or not my_data.charge_path_failed_t or t - my_data.charge_path_failed_t > 2 then
+					if not my_data.charge_path_search_id and focus_enemy.nav_tracker then
+						if not tactics or tactics.flank then
+							my_data.charge_pos = CopLogicAttack._find_flank_pos(data, my_data, focus_enemy.nav_tracker, engage_range) --charge to a position that would put the unit in a flanking position, not a flanking path
+						else
+							my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), engage_range, 45, nil, data.pos_rsrv_id)
+						end
+
+						--my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.optimal, 45, nil, data.pos_rsrv_id)
+
+						if my_data.charge_pos then
+							local my_pos = data.unit:movement():nav_tracker():field_position()
+							local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, my_data.charge_pos, data)
+
+							if unobstructed_line then
+								local path = {
+									mvec3_cpy(my_pos),
+									my_data.charge_pos
+								}
+								
+								my_data.charging = not tactics or not tactics.hitnrun
+								
+								--[[local line = Draw:brush(Color.blue:with_alpha(0.5), 5)
+								line:cylinder(my_pos, my_data.charge_pos, 25)]]
+
+								action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
 							else
-								my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), engage_range, 45, nil, data.pos_rsrv_id)
+								data.brain:add_pos_rsrv("path", {
+									radius = 60,
+									position = mvec3_cpy(my_data.charge_pos)
+								})
+
+								my_data.charge_path_search_id = "charge" .. tostring(data.key)
+
+								data.brain:search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
 							end
+						else
+							--debug_pause_unit(unit, "failed to find charge_pos", unit)
 
-							--my_data.charge_pos = CopLogicTravel._get_pos_on_wall(focus_enemy.nav_tracker:field_position(), my_data.weapon_range.optimal, 45, nil, data.pos_rsrv_id)
-
-							if my_data.charge_pos then
-								local my_pos = data.unit:movement():nav_tracker():field_position()
-								local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, my_data.charge_pos, data)
-
-								if unobstructed_line then
-									local path = {
-										mvec3_cpy(my_pos),
-										my_data.charge_pos
-									}
-									
-									my_data.charging = not tactics or not tactics.hitnrun
-									
-									--[[local line = Draw:brush(Color.blue:with_alpha(0.5), 5)
-									line:cylinder(my_pos, my_data.charge_pos, 25)]]
-
-									action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
-								else
-									data.brain:add_pos_rsrv("path", {
-										radius = 60,
-										position = mvec3_cpy(my_data.charge_pos)
-									})
-
-									my_data.charge_path_search_id = "charge" .. tostring(data.key)
-
-									data.brain:search_for_path(my_data.charge_path_search_id, my_data.charge_pos, nil, nil, nil)
-								end
-							else
-								--debug_pause_unit(unit, "failed to find charge_pos", unit)
-
-								my_data.charge_path_failed_t = t
-							end
+							my_data.charge_path_failed_t = t
 						end
 					end
 				end
@@ -1732,14 +1731,58 @@ function CopLogicAttack._pathing_complete_clbk(data)
 			my_data.attitude = data.objective and data.objective.attitude or "avoid"
 			
 			my_data.want_to_take_cover = data.logic._chk_wants_to_take_cover(data, my_data)
-	
-			data.logic._update_cover(data)
-
+			
 			if not action_taken then
-				action_taken = data.logic._upd_combat_movement(data)
+				CopLogicAttack._upd_combat_movement_no_searches(data)
 			end
 		end
 	end
+end
+
+function CopLogicAttack._upd_combat_movement_no_searches(data)
+	local my_data = data.internal_data
+	local t = data.t
+	local unit = data.unit
+	local action_taken = nil
+	local want_to_take_cover = my_data.want_to_take_cover
+
+	local move_to_cover = nil
+	local valid_harass = nil
+
+	local in_cover = my_data.in_cover
+	local best_cover = my_data.best_cover
+	local want_flank_cover = my_data.flank_cover and not my_data.flank_cover.failed
+
+	if not action_taken then
+		if my_data.attitude == "engage" and my_data.charge_path then
+			local path = my_data.charge_path
+			my_data.charge_path = nil
+			my_data.charging = not tactics or not tactics.hitnrun
+			my_data.flank_cover = nil
+
+			action_taken = CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
+		end
+		
+		if not action_taken then 
+			if my_data.attitude ~= "engage" and not in_cover then
+				move_to_cover = true
+			elseif not my_data.flank_cover or not my_data.flank_cover.failed then
+				if my_data.at_cover_shoot_pos then
+					if not my_data.stay_out_time or my_data.stay_out_time < t then
+						move_to_cover = true
+					end
+				elseif best_cover and not in_cover then
+					move_to_cover = true
+				end
+			end
+		end
+		
+		if not action_taken and not in_cover and move_to_cover and my_data.cover_path then
+			action_taken = CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
+		end
+	end
+
+	return action_taken
 end
 
 function CopLogicAttack._process_pathing_results(data, my_data)
@@ -2437,59 +2480,6 @@ function CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 			data.unit:movement():set_allow_fire(true)
 
 			my_data.firing = true
-
-			if not data.unit:in_slot(16) and not data.is_converted and data.char_tweak and data.char_tweak.chatter and data.char_tweak.chatter.aggressive then
-				if not data.unit:base():has_tag("special") and data.unit:base():has_tag("law") and not data.unit:base()._tweak_table == "gensec" and not data.unit:base()._tweak_table == "security" then
-					if focus_enemy.verified and focus_enemy.verified_dis <= 300 then
-						if managers.groupai:state():chk_assault_active_atm() then
-							local roll = math.random(1, 100)
-						
-							if roll < 33 then
-								managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressivecontrolsurprised1")
-							elseif roll < 66 and roll > 33 then
-								managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressivecontrolsurprised2")
-							else
-								managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "open_fire")
-							end
-						else
-							local roll = math.random(1, 100)
-						
-							if roll <= chance_heeeeelpp then
-								managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressivecontrolsurprised1")
-							else --hopefully some variety here now
-								managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressivecontrolsurprised2")
-							end	
-						end
-					else
-						if managers.groupai:state():chk_assault_active_atm() then
-							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "open_fire")
-						else
-							managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressivecontrol")
-						end
-					end
-				elseif data.unit:base():has_tag("special") then
-					if not data.unit:base():has_tag("tank") and data.unit:base():has_tag("medic") then
-						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
-					elseif data.unit:base():has_tag("shield") then
-						local shield_knock_cooldown = math.random(3, 6)
-						if not data.attack_sound_t or data.t - data.attack_sound_t > 10 then
-							data.attack_sound_t = data.t
-									
-							if data.unit:base()._tweak_table == "phalanx_minion" or data.unit:base()._tweak_table == "phalanx_minion_assault" then
-								data.unit:sound():say("use_gas", true, nil, true)
-							else
-								data.unit:sound():play("shield_identification", nil, true)
-							end
-						end
-					else
-						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "contact")
-					end
-				elseif data.unit:base()._tweak_table == "security" or data.unit:base()._tweak_table == "gensec" or data.unit:base()._tweak_table == "city_swat_guard" or data.unit:base()._tweak_table == "spring" or data.unit:base()._tweak_table == "phalanx_vip" then
-				    data.unit:sound():say("a01", true)
-				else
-					managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "contact")
-				end
-			end
 		end
 	elseif my_data.firing then
 		data.unit:movement():set_allow_fire(false)

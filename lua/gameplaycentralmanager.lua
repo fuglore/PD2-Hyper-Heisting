@@ -2,12 +2,24 @@ function GamePlayCentralManager:end_heist(num_winners)
 	if not num_winners then
 		num_winners = 1
 	end
-
-	managers.network:session():send_to_peers("mission_ended", true, num_winners)
-	game_state_machine:change_state_by_name("victoryscreen", {
-		num_winners = num_winners,
-		personal_win = alive(managers.player:player_unit())
-	})
+	
+	if alive(managers.player:player_unit()) then
+		if managers.player:player_unit():sound():speaking() then
+			managers.enemy:add_delayed_clbk("hh_mission_ended", callback(self, self, "end_heist", num_winners), Application:time() + 1)
+		else
+			managers.network:session():send_to_peers("mission_ended", true, num_winners)
+			game_state_machine:change_state_by_name("victoryscreen", {
+				num_winners = num_winners,
+				personal_win = alive(managers.player:player_unit())
+			})
+		end
+	else
+		managers.network:session():send_to_peers("mission_ended", true, num_winners)
+		game_state_machine:change_state_by_name("victoryscreen", {
+			num_winners = num_winners,
+			personal_win = alive(managers.player:player_unit())
+		})
+	end
 end
 
 function GamePlayCentralManager:do_shotgun_push(unit, hit_pos, dir, distance, attacker)
