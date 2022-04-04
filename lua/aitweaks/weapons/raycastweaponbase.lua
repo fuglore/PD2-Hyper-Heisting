@@ -159,7 +159,14 @@ local mvec1 = Vector3()
 function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_assist, autohit_override_data, spread_mul)
 	local autohit = use_aim_assist and self._aim_assist_data or self._autohit_data
 	autohit = autohit_override_data or autohit
-	local autohit_constant_angle = autohit.min_angle / (spread_mul or 1)
+	local autohit_constant_angle = nil
+	
+	if autohit.min_angle then
+		autohit_constant_angle = autohit.min_angle / (spread_mul or 1)
+	else
+		autohit_constant_angle = autohit.near_angle / (spread_mul or 1)
+	end
+	
 	local autohit_near_angle = autohit.near_angle
 	local autohit_far_angle = autohit.far_angle
 	local far_dis = autohit.far_dis
@@ -913,113 +920,102 @@ function RaycastWeaponBase:_check_alert(rays, fire_pos, direction, user_unit)
 	end
 end
 
-if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
+function RaycastWeaponBase:fire(from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
+	if managers.player:has_activate_temporary_upgrade("temporary", "no_ammo_cost_buff") then
+		managers.player:deactivate_temporary_upgrade("temporary", "no_ammo_cost_buff")
 
-	function RaycastWeaponBase:fire(from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
-		if managers.player:has_activate_temporary_upgrade("temporary", "no_ammo_cost_buff") then
-			managers.player:deactivate_temporary_upgrade("temporary", "no_ammo_cost_buff")
-
-			if managers.player:has_category_upgrade("temporary", "no_ammo_cost") then
-				managers.player:activate_temporary_upgrade("temporary", "no_ammo_cost")
-			end
+		if managers.player:has_category_upgrade("temporary", "no_ammo_cost") then
+			managers.player:activate_temporary_upgrade("temporary", "no_ammo_cost")
 		end
+	end
 
-		if self._bullets_fired then
-		--i've commented and preserved the vanilla code that caused the need for this AFSF2 update:
-		--the game plays starts the firesound when firing, in addition to calling _fire_sound()
-		--this causes some firesounds to play twice, while also not playing the correct fire sound.
-		--so U200 both broke AutoFireSoundFix, made the existing problem worse, and then added a new problem on top of that
-	
+	if self._bullets_fired then
+	--i've commented and preserved the vanilla code that caused the need for this AFSF2 update:
+	--the game plays starts the firesound when firing, in addition to calling _fire_sound()
+	--this causes some firesounds to play twice, while also not playing the correct fire sound.
+	--so U200 both broke AutoFireSoundFix, made the existing problem worse, and then added a new problem on top of that
+
 --		if self._bullets_fired == 1 and self:weapon_tweak_data().sounds.fire_single then
 --			self:play_tweak_data_sound("stop_fire")
 --			self:play_tweak_data_sound("fire_auto", "fire")
 --		end
 
-		self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single,"fire_single")
-		
-		self._bullets_fired = self._bullets_fired + 1
-	end
+	self:play_tweak_data_sound(self:weapon_tweak_data().sounds.fire_single,"fire_single")
+	
+	self._bullets_fired = self._bullets_fired + 1
+end
 
-		local is_player = self._setup.user_unit == managers.player:player_unit()
-		local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
+	local is_player = self._setup.user_unit == managers.player:player_unit()
+	local consume_ammo = not managers.player:has_active_temporary_property("bullet_storm") and (not managers.player:has_activate_temporary_upgrade("temporary", "berserker_damage_multiplier") or not managers.player:has_category_upgrade("player", "berserker_no_ammo_cost")) or not is_player
 
-		if consume_ammo and (is_player or Network:is_server()) then
-			local base = self:ammo_base()
+	if consume_ammo and (is_player or Network:is_server()) then
+		local base = self:ammo_base()
 
-			if base:get_ammo_remaining_in_clip() == 0 then
-				return
-			end
+		if base:get_ammo_remaining_in_clip() == 0 then
+			return
+		end
 
-			local ammo_usage = 1
+		local ammo_usage = 1
 
-			if is_player then
-				for _, category in ipairs(self:weapon_tweak_data().categories) do
-					if managers.player:has_category_upgrade(category, "consume_no_ammo_chance") then
-						local roll = math.rand(1)
-						local chance = managers.player:upgrade_value(category, "consume_no_ammo_chance", 0)
+		if is_player then
+			for _, category in ipairs(self:weapon_tweak_data().categories) do
+				if managers.player:has_category_upgrade(category, "consume_no_ammo_chance") then
+					local roll = math.rand(1)
+					local chance = managers.player:upgrade_value(category, "consume_no_ammo_chance", 0)
 
-						if roll < chance then
-							ammo_usage = 0
+					if roll < chance then
+						ammo_usage = 0
 
-							print("NO AMMO COST")
-						end
+						print("NO AMMO COST")
 					end
 				end
 			end
+		end
 
-			local mag = base:get_ammo_remaining_in_clip()
-			local remaining_ammo = mag - ammo_usage
+		local mag = base:get_ammo_remaining_in_clip()
+		local remaining_ammo = mag - ammo_usage
 
-			if mag > 0 and remaining_ammo <= (self.AKIMBO and 1 or 0) then
-				local w_td = self:weapon_tweak_data()
+		if mag > 0 and remaining_ammo <= (self.AKIMBO and 1 or 0) then
+			local w_td = self:weapon_tweak_data()
 
-				if w_td.animations and w_td.animations.magazine_empty then
-					self:tweak_data_anim_play("magazine_empty")
-				end
-
-				if w_td.sounds and w_td.sounds.magazine_empty then
-					self:play_tweak_data_sound("magazine_empty")
-				end
-
-				if w_td.effects and w_td.effects.magazine_empty then
-					self:_spawn_tweak_data_effect("magazine_empty")
-				end
-
-				self:set_magazine_empty(true)
+			if w_td.animations and w_td.animations.magazine_empty then
+				self:tweak_data_anim_play("magazine_empty")
 			end
 
-			base:set_ammo_remaining_in_clip(base:get_ammo_remaining_in_clip() - ammo_usage)
-			self:use_ammo(base, ammo_usage)
-		end
-
-		local user_unit = self._setup.user_unit
-
-		self:_check_ammo_total(user_unit)
-
-		if alive(self._obj_fire) then
-			self:_spawn_muzzle_effect(from_pos, direction)
-		end
-
-		self:_spawn_shell_eject_effect()
-
-		local ray_res = self:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
-
-		if self._alert_events and ray_res.rays then
-			self:_check_alert(ray_res.rays, from_pos, direction, user_unit)
-		end
-
-		if ray_res.enemies_in_cone then
-			for enemy_data, dis_error in pairs(ray_res.enemies_in_cone) do
-				if not enemy_data.unit:movement():cool() then
-					enemy_data.unit:character_damage():build_suppression(suppr_mul * dis_error * self._suppression, nil, nil)
-				end
+			if w_td.sounds and w_td.sounds.magazine_empty then
+				self:play_tweak_data_sound("magazine_empty")
 			end
+
+			if w_td.effects and w_td.effects.magazine_empty then
+				self:_spawn_tweak_data_effect("magazine_empty")
+			end
+
+			self:set_magazine_empty(true)
 		end
 
-		managers.player:send_message(Message.OnWeaponFired, nil, self._unit, ray_res)
-
-		return ray_res
+		base:set_ammo_remaining_in_clip(base:get_ammo_remaining_in_clip() - ammo_usage)
+		self:use_ammo(base, ammo_usage)
 	end
+
+	local user_unit = self._setup.user_unit
+
+	self:_check_ammo_total(user_unit)
+
+	if alive(self._obj_fire) then
+		self:_spawn_muzzle_effect(from_pos, direction)
+	end
+
+	self:_spawn_shell_eject_effect()
+
+	local ray_res = self:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoot_player, spread_mul, autohit_mul, suppr_mul, target_unit)
+
+	if self._alert_events and ray_res.rays then
+		self:_check_alert(ray_res.rays, from_pos, direction, user_unit)
+	end
+
+	managers.player:send_message(Message.OnWeaponFired, nil, self._unit, ray_res)
+
+	return ray_res
 end
 
 function RaycastWeaponBase:get_aim_assist(from_pos, direction, max_dist, use_aim_assist)

@@ -518,6 +518,10 @@ function CopBrain:end_alarm_pager()
 end
 
 function CopBrain:set_can_do_alarm_pager(state)
+	if not self._unit:unit_data().has_alarm_pager then
+		return
+	end
+
 	if managers.groupai:state():whisper_mode() then
 		self._can_do_alarm_pager = state
 		
