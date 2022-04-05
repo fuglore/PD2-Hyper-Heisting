@@ -458,6 +458,10 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		end
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
+	elseif action_type == "reload" or action_type == "heal" then
+		if action:expired() then
+			data.logic._upd_aim(data, my_data)
+		end
 	elseif action_type == "turn" then
 		my_data.turning = nil
 	elseif action_type == "spooc" then

@@ -1,6 +1,5 @@
-local trail_func = NPCRaycastWeaponBase.init
-
 local ids_func = Idstring
+
 local trails = {
 	ids_func("effects/particles/weapons/weapon_trail"),
 	ids_func("effects/pd2_mod_hh/particles/weapons/genstreaks/hivis_streak"),
@@ -11,8 +10,7 @@ local trails = {
 	ids_func("effects/pd2_mod_hh/particles/weapons/genstreaks/healstop_streak")
 }
 
-function NPCRaycastWeaponBase:init(...)
-	trail_func(self, ...)
+Hooks:PostHook(NPCRaycastWeaponBase, "init", "hhpost_trails", function(self, ...)
 	self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(22)
 	self.low_prio = true
 	
@@ -55,11 +53,9 @@ function NPCRaycastWeaponBase:init(...)
 	if self._flashlight_data then
 		self:set_flashlight_enabled(true)
 	end
-end
+end)
 
-local setup_func = NPCRaycastWeaponBase.setup
-function NPCRaycastWeaponBase:setup(setup_data, ...)
-	setup_func(self, setup_data, ...)
+Hooks:PostHook(NPCRaycastWeaponBase, "setup", "hhpost_sets", function(self, setup_data, ...)
 	self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(22) --removes a certain specific slotmask type related to bullet-impacts for enemies
 	self._enemy_slotmask = managers.slot:get_mask("criminals")
 	local user_unit = setup_data.user_unit
@@ -73,7 +69,7 @@ function NPCRaycastWeaponBase:setup(setup_data, ...)
 	if self._flashlight_data then
 		self:set_flashlight_enabled(true)
 	end
-end
+end)
 
 function NPCRaycastWeaponBase:flashlight_state_changed()
 	if not self._flashlight_data then

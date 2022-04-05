@@ -1962,6 +1962,7 @@ function CharacterTweakData:_presets(tweak_data)
 	presets.weapon.rhythmsniper.is_rifle.autofire_rounds = nil	
 	presets.weapon.rhythmsniper.is_rifle.focus_delay = 0.8
 	presets.weapon.rhythmsniper.is_rifle.fireline_t = 3 --how long it takes for enemies to reset their focus and aim delay.
+	presets.weapon.rhythmsniper.is_rifle.tracking_speed = 400
 	presets.weapon.rhythmsniper.is_rifle.aim_delay = {
 		0,
 		0
@@ -3287,6 +3288,7 @@ function CharacterTweakData:_presets(tweak_data)
 		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
+		tracking_speed = 900,
 		melee_retry_delay = {
 			1,
 			1
@@ -3365,6 +3367,7 @@ function CharacterTweakData:_presets(tweak_data)
 		RELOAD_SPEED = 1.25,
 		melee_speed = 0.5,
 		melee_dmg = 10,
+		tracking_speed = 900,
 		melee_retry_delay = {
 			1,
 			1
@@ -3447,6 +3450,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
+		tracking_speed = 900,
 		tase_distance = 1500,
 		aim_delay_tase = {
 			0,
@@ -3572,6 +3576,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
+		tracking_speed = 500,
 		range = {
 			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
@@ -3688,6 +3693,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			2
 		},
+		tracking_speed = 700,
 		range = {
 			optimal = 2500,
 			far = 4000,
@@ -3790,6 +3796,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
+		tracking_speed = 1100,
 		range = {
 			optimal = 3500,
 			far = 4000,
@@ -3872,6 +3879,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			2
 		},
+		tracking_speed = 800,
 		range = { --leave untouched, long range weapon
 			optimal = 2000,
 			far = 5000,
@@ -3951,6 +3959,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			2
 		},
+		tracking_speed = 400,
 		range = {
 			optimal = 1500, --overall short range, but continues shooting often
 			far = 10000,
@@ -4055,6 +4064,7 @@ function CharacterTweakData:_presets(tweak_data)
 			close = 1000,
 			aggressive = 500
 		},
+		tracking_speed = 800,
 		autofire_rounds = {80, 140}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
 			{
@@ -4174,6 +4184,7 @@ function CharacterTweakData:_presets(tweak_data)
 			20,
 			40
 		},
+		tracking_speed = 700,
 		FALLOFF = {
 			{
 				dmg_mul = 8,
@@ -4269,6 +4280,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
+		tracking_speed = presets.weapon.civil.is_pistol.tracking_speed,
 		range = {
 			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
@@ -4365,6 +4377,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
+		tracking_speed = presets.weapon.civil.akimbo_pistol.tracking_speed,
 		range = {
 			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
@@ -4472,6 +4485,7 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 4000, 
 			close = 1600
 		},
+		tracking_speed = presets.weapon.civil.is_rifle.tracking_speed,
 		autofire_rounds = { --yes.
 			30,
 			60
@@ -4610,6 +4624,7 @@ function CharacterTweakData:_presets(tweak_data)
 			close = 1200,
 			aggressive = 600
 		},
+		tracking_speed = presets.weapon.civil.is_shotgun_pump.tracking_speed,
 		FALLOFF = {
 			{
 				dmg_mul = 3,
@@ -4726,6 +4741,7 @@ function CharacterTweakData:_presets(tweak_data)
 			close = 1000,
 			aggressive = 400
 		},
+		tracking_speed = presets.weapon.civil.is_shotgun_mag.tracking_speed,
 		autofire_rounds = { --not used anymore
 			16,
 			32
@@ -4827,6 +4843,7 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 4000,
 			close = 1000 --light weight weapon, allows run'n gun, shortened since cloakers exist, will revise later per difficulty
 		},
+		tracking_speed = presets.weapon.civil.is_smg.tracking_speed,
 		autofire_rounds = { --extended mags a ton, pretty hazardous and continuous
 			32,
 			60
@@ -4927,6 +4944,7 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 5000,
 			close = 1000
 		},
+		tracking_speed = presets.weapon.civil.is_revolver.tracking_speed,
 		FALLOFF = {
 			{
 				dmg_mul = 3, --120, range remains excellent.
@@ -5019,6 +5037,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			2
 		},
+		tracking_speed = presets.weapon.civil.mini.tracking_speed,
 		range = {
 			optimal = 1500, --overall short range, but continues shooting often
 			far = 10000,
@@ -5123,6 +5142,7 @@ function CharacterTweakData:_presets(tweak_data)
 			close = 1000,
 			aggressive = 500
 		},
+		tracking_speed = presets.weapon.civil.is_lmg.tracking_speed,
 		autofire_rounds = {80, 140}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
 			{
@@ -5242,6 +5262,7 @@ function CharacterTweakData:_presets(tweak_data)
 			20,
 			40
 		},
+		tracking_speed = presets.weapon.civil.is_flamethrower.tracking_speed,
 		FALLOFF = {
 			{
 				dmg_mul = 8,
@@ -5336,6 +5357,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
+		tracking_speed = presets.weapon.civil.is_pistol.tracking_speed,
 		range = {
 			optimal = 2000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
@@ -5450,6 +5472,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
+		tracking_speed = presets.weapon.civil.akimbo_pistol.tracking_speed,
 		range = {
 			optimal = 4000, --cant walk and shoot past this range
 			far = 4000, --40m cut off range.
@@ -5575,6 +5598,7 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 4000, 
 			close = 2000
 		},
+		tracking_speed = presets.weapon.civil.is_rifle.tracking_speed,
 		autofire_rounds = { --yes.
 			30,
 			60
@@ -5725,6 +5749,7 @@ function CharacterTweakData:_presets(tweak_data)
 			1,
 			1
 		},
+		tracking_speed = presets.weapon.civil.is_shotgun_pump.tracking_speed,
 		range = {
 			optimal = 2000, --unchanged, run'n gun remains
 			far = 3000,
@@ -5865,6 +5890,7 @@ function CharacterTweakData:_presets(tweak_data)
 			close = 1000,
 			aggressive = 400
 		},
+		tracking_speed = presets.weapon.civil.is_shotgun_mag.tracking_speed,
 		autofire_rounds = { --not used anymore
 			16,
 			32
@@ -5966,6 +5992,7 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 4000,
 			close = 1000 --light weight weapon, allows run'n gun, shortened since cloakers exist, will revise later per difficulty
 		},
+		tracking_speed = presets.weapon.civil.is_smg.tracking_speed,
 		autofire_rounds = { --extended mags a ton, pretty hazardous and continuous
 			32,
 			60
@@ -6066,6 +6093,7 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 5000,
 			close = 2000
 		},
+		tracking_speed = presets.weapon.civil.is_revolver.tracking_speed,
 		FALLOFF = {
 			{
 				dmg_mul = 3, --120, range remains excellent.
@@ -6163,6 +6191,7 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 10000,
 			close = 1000
 		},
+		tracking_speed = presets.weapon.civil.mini.tracking_speed,
 		autofire_rounds = { --absolutely in awe of the size of this lad, absolute unit
 			100,
 			100
@@ -6262,6 +6291,7 @@ function CharacterTweakData:_presets(tweak_data)
 			close = 1000,
 			aggressive = 500
 		},
+		tracking_speed = presets.weapon.civil.is_lmg.tracking_speed,
 		autofire_rounds = {100, 200}, --bullet hose, kinda scary, fires in random, long bursts though
 		FALLOFF = {
 			{
@@ -6395,6 +6425,7 @@ function CharacterTweakData:_presets(tweak_data)
 			far = 1700,
 			close = 1400
 		},
+		tracking_speed = presets.weapon.civil.is_flamethrower.tracking_speed,
 		autofire_rounds = {
 			20,
 			40

@@ -157,7 +157,7 @@ function SkirmishTweakData:_init_special_unit_spawn_limits()
 			shield = 4,
 			medic = 4,
 			taser = 2,
-			tank = 1,
+			tank = 0,
 			spooc = 2,
 			ninja = 4
 		},

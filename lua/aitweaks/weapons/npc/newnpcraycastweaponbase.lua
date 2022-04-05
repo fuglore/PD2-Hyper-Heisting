@@ -1,3 +1,7 @@
+if BLT.Mods:GetModByName("WeaponLib") then
+	return
+end
+
 local mvec_to = Vector3()
 local mvec_spread = Vector3()
 

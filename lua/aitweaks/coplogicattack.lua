@@ -2209,7 +2209,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 
 					local dot = mvec3_dot(temp_vec1, temp_vec2)
 
-					if dot < 0.6 then
+					if dot <= 0.5 then
 						shoot = false
 						aim = false
 					end
@@ -2217,7 +2217,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 			
 			if focus_enemy.verified or focus_enemy.nearly_visible then
-				if aim == nil or firing_range < focus_enemy.dis then
+				if aim == nil or focus_enemy.dis < firing_range then
 					if REACT_SHOOT <= focus_enemy.reaction then
 						if REACT_SHOOT == focus_enemy.reaction then
 							shoot = true
@@ -2256,7 +2256,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 						if time_since_verification < math_lerp(0.5, 3.5, dis_lerp) then
 							aim = true
 						end
-					elseif firing_range < focus_enemy.dis then
+					elseif focus_enemy.dis < firing_range then
 						if time_since_verification < 7 then
 							aim = true
 						end
@@ -2311,16 +2311,30 @@ function CopLogicAttack._upd_aim(data, my_data)
 		local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
 		
 		if not tase then
-			if focus_enemy.verified or focus_enemy.nearly_visible then
+			if my_data.shooting or data.unit:anim_data().reload then
+				local shoot_action = data.unit:movement()._active_actions[3]
+				
+				if shoot_action and type(shoot_action) ~= "boolean" and shoot_action._last_target_pos then
+					local shoot_pos = shoot_action._last_target_pos
+
+					if data.logic.chk_should_turn(data, my_data) then
+						CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, shoot_pos)
+					end
+				end
+			end
+			
+			if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification < 1 then
 				if my_data.attention_unit ~= focus_enemy.u_key then
 					CopLogicBase._set_attention(data, focus_enemy)
 
 					my_data.attention_unit = focus_enemy.u_key
 				end
 				
-				if data.logic.chk_should_turn(data, my_data) then
-					local enemy_pos = focus_enemy.m_head_pos
-					CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
+				if not my_data.shooting then
+					if data.logic.chk_should_turn(data, my_data) then
+						local enemy_pos = focus_enemy.m_head_pos
+						CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
+					end
 				end
 			else
 				local look_pos = nil
@@ -2336,8 +2350,10 @@ function CopLogicAttack._upd_aim(data, my_data)
 						my_data.attention_unit = mvec3_cpy(look_pos)
 					end
 					
-					if data.logic.chk_should_turn(data, my_data) then
-						CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, look_pos)
+					if not my_data.shooting then
+						if data.logic.chk_should_turn(data, my_data) then
+							CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, look_pos)
+						end
 					end
 				end
 			end
@@ -2389,6 +2405,11 @@ function CopLogicAttack._upd_aim(data, my_data)
 					body_part = 3,
 					type = "shoot"
 				}
+				
+				if my_data.last_target_pos then
+					shoot_action.target_pos = mvec3_cpy(my_data.last_target_pos)
+					my_data.last_target_pos = nil
+				end
 
 				if data.brain:action_request(shoot_action) then
 					my_data.shooting = true
@@ -2434,7 +2455,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 		if focus_enemy and aim == nil then
 			local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
 			
-			if focus_enemy.verified or focus_enemy.nearly_visible then
+			if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification < 2 then
 				if my_data.attention_unit ~= focus_enemy.u_key then
 					CopLogicBase._set_attention(data, focus_enemy)
 
@@ -2446,7 +2467,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 					CopLogicAttack._chk_request_action_turn_to_enemy(data, my_data, data.m_pos, enemy_pos)
 				end
 			elseif time_since_verification and time_since_verification <= 7 or focus_enemy.dis <= 1000 and focus_enemy.alert_t and data.t - focus_enemy.alert_t < 7 then
-				local look_pos = focus_enemy.last_verified_pos or focus_enemy.verified_pos
+				local look_pos = focus_enemy.last_verified_pos
 				
 				if look_pos then
 					if my_data.attention_unit ~= look_pos then
@@ -2470,6 +2491,8 @@ function CopLogicAttack._upd_aim(data, my_data)
 			my_data.attention_unit = nil
 		end
 	end
+	
+	my_data.last_target_pos = nil
 
 	CopLogicAttack.aim_allow_fire(shoot, aim, data, my_data)
 end

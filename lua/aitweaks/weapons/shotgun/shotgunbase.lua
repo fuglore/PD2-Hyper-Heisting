@@ -46,6 +46,8 @@ function ShotgunBase:get_damage_falloff(damage, col_ray, user_unit)
 	return new_damage
 end
 
+if not BLT.Mods:GetModByName("WeaponLib") then
+
 local pairs_g = pairs
 local type_g = type
 
@@ -341,4 +343,6 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 	end
 
 	return result
+end
+
 end

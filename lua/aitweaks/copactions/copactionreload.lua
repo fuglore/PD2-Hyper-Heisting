@@ -7,6 +7,10 @@ local mvec3_dir = mvector3.direction
 local mvec3_dot = mvector3.dot
 local mvec3_lerp = mvector3.lerp
 local mvec3_copy = mvector3.copy
+local mvec3_step = mvector3.step
+local mvec3_dis = mvector3.distance
+local mvec3_mul = mvector3.multiply
+local mvec3_add = mvector3.add
 local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 local temp_vec3 = Vector3()
@@ -59,6 +63,8 @@ function CopActionReload:init(action_desc, common_data)
 	self._w_usage_tweak = weapon_usage_tweak
 	self._is_looped = weap_tweak.reload == "looped" and true or nil
 	self._reload_speed = weapon_usage_tweak.RELOAD_SPEED or 1
+	self._tracking_speed = weapon_usage_tweak.tracking_speed or 3000
+	self._last_target_pos = action_desc.target_pos
 	
 	if self._weap_tweak.reload_speed_mul then
 		local reload_mul = self._weap_tweak.reload_speed_mul
@@ -66,6 +72,8 @@ function CopActionReload:init(action_desc, common_data)
 	end
 
 	self._is_server = Network:is_server()
+	self._timer = TimerManager:game()
+	self._last_upd_t = self._timer:time() - 0.001
 
 	local t = TimerManager:game():time()
 	local anim_multiplier = self._reload_speed
@@ -104,18 +112,6 @@ function CopActionReload:init(action_desc, common_data)
 	else
 		self._turn_allowed = true
 		self._turn_speed = nil
-
-		local difficulty_index = tweak_data:difficulty_to_index(Global.game_settings.difficulty)
-
-		if not self._ext_movement._anim_global == "tank" then
-			if difficulty_index == 8 then
-				self._turn_speed = 1.75
-			elseif difficulty_index == 6 or difficulty_index == 7 then
-				self._turn_speed = 1.5
-			else
-				self._turn_speed = 1.25
-			end
-		end
 	end
 
 	self._converted_chk = self._unit:brain().is_converted_chk and self._unit:brain():is_converted_chk() and true or nil
@@ -213,7 +209,6 @@ function CopActionReload:update(t)
 							local new_action_data = {
 								body_part = 2,
 								type = "turn",
-								speed = self._turn_speed,
 								angle = spin
 							}
 
@@ -300,19 +295,6 @@ function CopActionReload:on_attention(attention)
 
 		local vis_state = self._ext_base:lod_stage()
 
-		if vis_state and vis_state < 3 and self[self._ik_preset.get_blend](self) > 0 then
-			local t = TimerManager:game():time()
-			self._aim_transition = {
-				duration = 0.333,
-				start_t = t,
-				start_vec = mvec3_copy(self._common_data.look_vec)
-			}
-			self._get_target_pos = self._get_transition_target_pos
-		else
-			self._aim_transition = nil
-			self._get_target_pos = nil
-		end
-
 		self._mod_enable_t = TimerManager:game():time() + 0.5
 	else
 		self[self._ik_preset.stop](self)
@@ -382,23 +364,48 @@ function CopActionReload:_get_transition_target_pos(shoot_from_pos, attention, t
 	return target_pos, target_vec
 end
 
-function CopActionReload:_get_target_pos(shoot_from_pos, attention)
+function CopActionReload:_get_target_pos(shoot_from_pos, attention, t)
 	local target_pos, target_vec = nil
 
 	if attention.handler then
 		target_pos = temp_vec1
 
-		mvec3_set(target_pos, attention.handler:get_attention_m_pos())
+		mvector3.set(target_pos, attention.handler:get_attention_m_pos())
 	elseif attention.unit then
 		target_pos = temp_vec1
 
 		attention.unit:character_damage():shoot_pos_mid(target_pos)
 	else
-		target_pos = attention.pos
+		target_pos = mvec3_copy(attention.pos)
 	end
-
-	target_vec = temp_vec3
-	mvec3_dir(target_vec, shoot_from_pos, target_pos)
+	
+	target_dis = mvec3_dis(shoot_from_pos, target_pos)
+	
+	if not self._last_target_pos then
+		self._last_target_pos = Vector3()
+		mvec3_set(self._last_target_pos, self._common_data.look_vec)
+		mvec3_mul(self._last_target_pos, target_dis)
+		mvec3_add(self._last_target_pos, shoot_from_pos)
+		mvec3_set_z(self._last_target_pos, target_pos.z)
+	end
+	
+	if mvector3.equal(target_pos, self._last_target_pos) then
+		target_vec = temp_vec3
+		mvec3_dir(target_vec, shoot_from_pos, target_pos)
+	else
+		local dt = t - self._last_upd_t
+		self._last_upd_t = self._timer:time()
+		local wanted_target_pos = Vector3()
+		
+		mvec3_step(wanted_target_pos, self._last_target_pos, target_pos, self._tracking_speed * dt)
+		--mvec3_set_z(wanted_target_pos, target_pos.z)
+		
+		target_pos = wanted_target_pos
+		self._last_target_pos = target_pos
+		
+		target_vec = temp_vec3
+		mvec3_dir(target_vec, shoot_from_pos, target_pos)
+	end
 
 	return target_pos, target_vec
 end

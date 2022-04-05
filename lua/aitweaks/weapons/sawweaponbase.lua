@@ -1,3 +1,7 @@
+if BLT.Mods:GetModByName("WeaponLib") then
+	return
+end
+
 if PD2THHSHIN and PD2THHSHIN:IsOverhaulEnabled() then
 	
 	local mvec3_set = mvector3.set

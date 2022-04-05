@@ -105,7 +105,7 @@ function CopLogicSniper._upd_aim(data, my_data)
 	if aim or shoot then
 		local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
 		
-		if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification <= 0.3 then
+		if focus_enemy.verified or focus_enemy.nearly_visible or time_since_verification and time_since_verification <= 1 then
 			if my_data.attention_unit ~= focus_enemy.u_key then
 				CopLogicBase._set_attention(data, focus_enemy)
 
@@ -118,8 +118,8 @@ function CopLogicSniper._upd_aim(data, my_data)
 		elseif my_data.last_criminal_nav_seen then
 			local look_pos = nil		
 			
-			if not look_pos and focus_enemy and time_since_verification and time_since_verification <= 2 or focus_enemy.dis < 400 then
-				look_pos =  focus_enemy.last_verified_pos or focus_enemy.verified_pos
+			if not look_pos and focus_enemy and time_since_verification and time_since_verification <= 7 or focus_enemy.dis < 400 then
+				look_pos = focus_enemy.last_verified_pos or focus_enemy.verified_pos
 			end
 			
 			if not look_pos then

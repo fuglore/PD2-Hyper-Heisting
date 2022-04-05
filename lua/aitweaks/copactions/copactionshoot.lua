@@ -12,9 +12,11 @@ local mvec3_cross = mvector3.cross
 local mvec3_rot = mvector3.rotate_with
 local mvec3_rand_orth = mvector3.random_orthogonal
 local mvec3_lerp = mvector3.lerp
+local mvec3_step = mvector3.step
 local mvec3_copy = mvector3.copy
 local mvec3_spread = mvector3.spread
 
+local temp_vec1 = Vector3()
 local temp_vec2 = Vector3()
 local temp_vec3 = Vector3()
 local temp_vec4 = Vector3()
@@ -48,7 +50,6 @@ function CopActionShoot:init(action_desc, common_data)
 	end
 
 	self._weapon_unit = weapon_unit
-
 	self._common_data = common_data
 	self._ext_inventory = inventory_ext
 	self._ext_movement = common_data.ext_movement
@@ -59,6 +60,7 @@ function CopActionShoot:init(action_desc, common_data)
 	self._unit = common_data.unit
 	self._body_part = action_desc.body_part
 	self._variant = action_desc.variant
+	self._last_target_pos = action_desc.target_pos
 
 	local weap_base = weapon_unit:base()
 	self._weapon_base = weap_base
@@ -77,6 +79,7 @@ function CopActionShoot:init(action_desc, common_data)
 	self._spread = weapon_usage_tweak.spread or 20
 	self._miss_dis = weapon_usage_tweak.miss_dis or 30
 	self._automatic_weap = weap_tweak.auto and weapon_usage_tweak.autofire_rounds and true or nil
+	self._tracking_speed = weapon_usage_tweak.tracking_speed or 3000
 	self._falloff = weapon_usage_tweak.FALLOFF or {
 		{
 			dmg_mul = 1,
@@ -101,6 +104,7 @@ function CopActionShoot:init(action_desc, common_data)
 	self._shoot_t = 0
 	self._melee_timeout_t = 0
 	self._timer = TimerManager:game()
+	self._last_upd_t = self._timer:time() - 0.001
 	
 	self._fireline_t = weapon_usage_tweak.fireline_t
 	
@@ -307,6 +311,89 @@ function CopActionShoot:on_exit()
 	end
 end
 
+function CopActionShoot:_get_static_target_pos(shoot_from_pos, attention)
+	local target_pos, target_vec, target_dis, autotarget = nil
+
+	if attention.handler then
+		target_pos = temp_vec1
+
+		mvector3.set(target_pos, attention.handler:get_attention_m_pos())
+
+		if self._shooting_player then
+			autotarget = true
+		end
+	elseif attention.unit then
+		if self._shooting_player then
+			autotarget = true
+		end
+
+		target_pos = temp_vec1
+
+		attention.unit:character_damage():shoot_pos_mid(target_pos)
+	else
+		target_pos = attention.pos
+	end
+
+	target_vec = temp_vec3
+	target_dis = mvec3_dir(target_vec, shoot_from_pos, target_pos)
+
+	return target_pos, target_vec, target_dis, autotarget
+end
+
+function CopActionShoot:_get_target_pos(shoot_from_pos, attention, t)
+	local target_pos, target_vec, target_dis, autotarget = nil
+
+	if attention.handler then
+		target_pos = temp_vec1
+
+		mvector3.set(target_pos, attention.handler:get_attention_m_pos())
+
+		if self._shooting_player then
+			autotarget = true
+		end
+	elseif attention.unit then
+		if self._shooting_player then
+			autotarget = true
+		end
+
+		target_pos = temp_vec1
+
+		attention.unit:character_damage():shoot_pos_mid(target_pos)
+	else
+		target_pos = mvec3_copy(attention.pos)
+	end
+	
+	target_dis = mvec3_dis(shoot_from_pos, target_pos)
+	
+	if not self._last_target_pos then
+		self._last_target_pos = Vector3()
+		mvec3_set(self._last_target_pos, self._common_data.look_vec)
+		mvec3_mul(self._last_target_pos, target_dis)
+		mvec3_add(self._last_target_pos, shoot_from_pos)
+		mvec3_set_z(self._last_target_pos, target_pos.z)
+	end
+	
+	if mvector3.equal(target_pos, self._last_target_pos) then
+		target_vec = temp_vec3
+		mvec3_dir(target_vec, shoot_from_pos, target_pos)
+	else
+		local dt = t - self._last_upd_t
+		self._last_upd_t = self._timer:time()
+		local wanted_target_pos = Vector3()
+		
+		mvec3_step(wanted_target_pos, self._last_target_pos, target_pos, self._tracking_speed * dt)
+		--mvec3_set_z(wanted_target_pos, target_pos.z)
+		
+		target_pos = wanted_target_pos
+		self._last_target_pos = target_pos
+		
+		target_vec = temp_vec3
+		mvec3_dir(target_vec, shoot_from_pos, target_pos)
+	end
+
+	return target_pos, target_vec, target_dis, autotarget
+end
+
 function CopActionShoot:on_attention(attention, old_attention)
 	if self._shooting_player and old_attention and alive(old_attention.unit) then
 		old_attention.unit:movement():on_targetted_for_attack(false, self._common_data.unit)
@@ -335,17 +422,7 @@ function CopActionShoot:on_attention(attention, old_attention)
 
 		local vis_state = self._ext_base:lod_stage()
 
-		if vis_state and vis_state < 3 and self[self._ik_preset.get_blend](self) > 0 then
-			self._aim_transition = {
-				duration = 0.333,
-				start_t = t,
-				start_vec = mvec3_copy(self._common_data.look_vec)
-			}
-			self._get_target_pos = self._get_transition_target_pos
-		else
-			self._aim_transition = nil
-			self._get_target_pos = nil
-		end
+		self._aim_transition = nil
 
 		self._mod_enable_t = t + 0.5
 		local ding = nil
@@ -380,7 +457,7 @@ function CopActionShoot:on_attention(attention, old_attention)
 				self._shooting_husk_unit = true
 			end
 
-			local target_pos, _, target_dis = CopActionShoot._get_target_pos(self, self._shoot_from_pos, attention)
+			local target_pos, _, target_dis = CopActionShoot._get_target_pos(self, self._shoot_from_pos, attention, t)
 			local usage_tweak = self._w_usage_tweak
 			local shoot_hist = self._shoot_history
 			local aim_delay = 0
@@ -489,11 +566,6 @@ function CopActionShoot:on_attention(attention, old_attention)
 		end
 	else
 		self[self._ik_preset.stop](self)
-
-		if self._aim_transition then
-			self._aim_transition = nil
-			self._get_target_pos = nil
-		end
 
 		if self._mindcontrol_effect then
 			world_g:effect_manager():kill(self._mindcontrol_effect)
@@ -624,7 +696,8 @@ function CopActionShoot:update(t)
 
 				local reload_action = {
 					body_part = 3,
-					type = "reload"
+					type = "reload",
+					target_pos = target_pos
 				}
 
 				self._ext_movement:action_request(reload_action)
@@ -1182,7 +1255,8 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 			if not att_mov_ext or not att_mov_ext.m_com then
 				mvec3_set(enemy_vec, pos)
 			else
-				mvec3_set(enemy_vec, att_mov_ext:m_com())
+				local m_com_z = att_mov_ext:m_com().z
+				mvec3_set(enemy_vec, pos:with_z(m_com_z))
 			end
 		end
 
