@@ -237,53 +237,7 @@ function CopLogicAttack.update(data)
 	CopLogicAttack._process_pathing_results(data, my_data)
 	
 	if not my_data.tasing then
-		if data.important then
-			CopLogicAttack.check_chatter(data, my_data, data.objective)
-		end
-		
-		local action_taken = data.logic.action_taken(data, my_data)
-		
-		if not action_taken then
-			action_taken = CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
-		end
-		
-		action_taken = action_taken or CopLogicAttack._upd_pose(data, my_data)
-	
-		if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
-			my_data.attitude = data.objective and data.objective.attitude or "avoid"
-			
-			my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
-	
-			CopLogicAttack._update_cover(data)
-			
-			--[[uncomment to draw cover stuff or whatever
-			
-			if my_data.moving_to_cover then
-				local height = my_data.best_cover[4] and 165 or 82.5
-				local line = Draw:brush(Color.blue:with_alpha(0.5), 0.2)
-				line:cylinder(data.m_pos, my_data.moving_to_cover[1][1], 5)
-				line:cylinder(my_data.moving_to_cover[1][1], my_data.moving_to_cover[1][1] + math_up * height, 5)
-			elseif my_data.best_cover then
-				local height = my_data.best_cover[4] and 165 or 82.5
-				local line = Draw:brush(Color.green:with_alpha(0.5), 0.2)
-				line:cylinder(data.m_pos, my_data.best_cover[1][1], 5)
-				line:cylinder(my_data.best_cover[1][1], my_data.best_cover[1][1] + math_up * height, 5)
-			end
-				
-			if my_data.in_cover then
-				local height = my_data.best_cover[4] and 165 or 82.5
-				local line = Draw:brush(Color.red:with_alpha(0.5), 0.2)
-				line:cylinder(my_data.best_cover[1][1], my_data.best_cover[1][1] + math_up * height, 100)
-			end]]
-			
-			if not action_taken then
-				action_taken = CopLogicAttack._upd_combat_movement(data)
-			end
-			
-			if not data.char_tweak.cannot_throw_grenades and not data.is_converted and data.unit:base().has_tag and data.unit:base():has_tag("law") and groupai:is_smoke_grenade_active() then 
-				CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
-			end
-		end
+		CopLogicAttack._chk_chatter_and_movement(data, my_data)
 	end
 
 	if not my_data.use_brain and not my_data.update_queue_id then
@@ -292,6 +246,81 @@ function CopLogicAttack.update(data)
 		my_data.update_queue_id = "CopLogicAttack.queued_update" .. tostring(data.key)
 
 		CopLogicAttack.queue_update(data, my_data)
+	end
+end
+
+function CopLogicAttack._chk_chatter_and_movement(data, my_data)
+	if data.important then
+		CopLogicAttack.check_chatter(data, my_data, data.objective)
+	end
+	
+	local action_taken = data.logic.action_taken(data, my_data)
+	
+	if not action_taken then
+		action_taken = CopLogicAttack._move_back_into_field_position(data, my_data)
+	end
+	
+	if not action_taken then
+		action_taken = CopLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
+	end
+	
+	action_taken = action_taken or CopLogicAttack._upd_pose(data, my_data)
+
+	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+		my_data.attitude = data.objective and data.objective.attitude or "avoid"
+		
+		my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
+
+		CopLogicAttack._update_cover(data)
+		
+		--[[uncomment to draw cover stuff or whatever
+		
+		if my_data.moving_to_cover then
+			local height = my_data.best_cover[4] and 165 or 82.5
+			local line = Draw:brush(Color.blue:with_alpha(0.5), 0.2)
+			line:cylinder(data.m_pos, my_data.moving_to_cover[1][1], 5)
+			line:cylinder(my_data.moving_to_cover[1][1], my_data.moving_to_cover[1][1] + math_up * height, 5)
+		elseif my_data.best_cover then
+			local height = my_data.best_cover[4] and 165 or 82.5
+			local line = Draw:brush(Color.green:with_alpha(0.5), 0.2)
+			line:cylinder(data.m_pos, my_data.best_cover[1][1], 5)
+			line:cylinder(my_data.best_cover[1][1], my_data.best_cover[1][1] + math_up * height, 5)
+		end
+			
+		if my_data.in_cover then
+			local height = my_data.best_cover[4] and 165 or 82.5
+			local line = Draw:brush(Color.red:with_alpha(0.5), 0.2)
+			line:cylinder(my_data.best_cover[1][1], my_data.best_cover[1][1] + math_up * height, 100)
+		end]]
+		
+		if not action_taken then
+			action_taken = CopLogicAttack._upd_combat_movement(data)
+		end
+		
+		local groupai = managers.groupai:state()
+		
+		if not data.char_tweak.cannot_throw_grenades and not data.is_converted and data.unit:base().has_tag and data.unit:base():has_tag("law") and groupai:is_smoke_grenade_active() then 
+			CopLogicBase.do_smart_grenade(data, my_data, data.attention_obj)
+		end
+	end
+end
+
+function CopLogicAttack._move_back_into_field_position(data, my_data)
+	local my_tracker = data.unit:movement():nav_tracker()
+	
+	if my_tracker:lost() then
+		local field_position = my_tracker:field_position()
+		
+		if mvec3_dis_sq(data.m_pos, field_position) > 3600 then
+			local path = {
+				mvec3_cpy(data.m_pos),
+				field_position
+			}
+			
+			--log("ugh")
+			
+			return CopLogicAttack._chk_request_action_walk_to_cover_shoot_pos(data, my_data, path, "run")
+		end
 	end
 end
 

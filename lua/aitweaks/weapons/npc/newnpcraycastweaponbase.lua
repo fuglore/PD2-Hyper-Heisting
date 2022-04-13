@@ -1,7 +1,3 @@
-if BLT.Mods:GetModByName("WeaponLib") then
-	return
-end
-
 local mvec_to = Vector3()
 local mvec_spread = Vector3()
 
@@ -18,6 +14,12 @@ local mvec3_set = mvector3.set
 local mvec3_add = mvector3.add
 local mvec3_mul = mvector3.multiply
 local mvec3_cpy = mvector3.copy
+
+local mto = Vector3()
+local mfrom = Vector3()
+local mspread = Vector3()
+
+if not BLT.Mods:GetModByName("WeaponLib") then
 
 function NewNPCRaycastWeaponBase:init(unit)
 	NewRaycastWeaponBase.super.super.init(self, unit, false)
@@ -128,10 +130,6 @@ function NewNPCRaycastWeaponBase:setup(setup_data)
 	end
 end
 
-local mto = Vector3()
-local mfrom = Vector3()
-local mspread = Vector3()
-
 function NewNPCRaycastWeaponBase:_spawn_trail_effect(direction, col_ray)
 	if not alive(self._obj_fire) then
 		return
@@ -149,6 +147,8 @@ end
 
 function NewNPCRaycastWeaponBase:_spawn_muzzle_effect(from_pos, direction)
 	self._effect_manager:spawn(self._muzzle_effect_table)
+end
+
 end
 
 function NewNPCRaycastWeaponBase:auto_fire_blank(direction, impact, sub_ids, override_direction)
@@ -481,11 +481,13 @@ function NewNPCRaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, d
 			end
 		end
 	end
+	
+	if not BLT.Mods:GetModByName("WeaponLib") then
+		if self._suppression then
+			local suppression_slot_mask = user_unit:in_slot(16) and managers.slot:get_mask("enemies") or managers.slot:get_mask("players", "criminals")
 
-	if self._suppression then
-		local suppression_slot_mask = user_unit:in_slot(16) and managers.slot:get_mask("enemies") or managers.slot:get_mask("players", "criminals")
-
-		self:_suppress_units(mvec3_cpy(from_pos), mvec3_cpy(direction), ray_distance, suppression_slot_mask, user_unit, nil)
+			self:_suppress_units(mvec3_cpy(from_pos), mvec3_cpy(direction), ray_distance, suppression_slot_mask, user_unit, nil)
+		end
 	end
 
 	if self._alert_events then

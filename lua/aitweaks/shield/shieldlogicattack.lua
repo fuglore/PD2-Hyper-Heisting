@@ -3,6 +3,7 @@ local mvec3_cpy = mvector3.copy
 local REACT_AIM = AIAttentionObject.REACT_AIM
 local REACT_COMBAT = AIAttentionObject.REACT_COMBAT
 local REACT_SHOOT = AIAttentionObject.REACT_SHOOT
+local mvec3_dis_sq = mvector3.distance_sq
 
 function ShieldLogicAttack.enter(data, new_logic_name, enter_params)
 	local old_internal_data = data.internal_data
@@ -370,107 +371,7 @@ function ShieldLogicAttack.update(data)
 
 	ShieldLogicAttack._process_pathing_results(data, my_data)
 
-	local enemy_visible = focus_enemy and focus_enemy.verified
-	local engage = my_data.attitude == "engage"
-	local action_taken = my_data.turning or data.unit:movement():chk_action_forbidden("walk") or my_data.walking_to_optimal_pos
-
-	if not action_taken then
-		if unit:anim_data().stand then
-			action_taken = CopLogicAttack._chk_request_action_crouch(data)
-		end
-
-		if not action_taken then
-			if my_data.pathing_to_optimal_pos then
-				-- Nothing
-			elseif my_data.optimal_path then
-				ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data)
-			elseif my_data.optimal_pos and focus_enemy and focus_enemy.nav_tracker then
-				local to_pos = my_data.optimal_pos
-				my_data.optimal_pos = nil
-				local ray_params = {
-					trace = true,
-					tracker_from = unit:movement():nav_tracker(),
-					pos_to = to_pos
-				}
-				local ray_res = managers.navigation:raycast(ray_params)
-				to_pos = ray_params.trace[1]
-
-				if ray_res then
-					local vec = data.m_pos - to_pos
-
-					mvector3.normalize(vec)
-
-					local fwd = unit:movement():m_fwd()
-					local fwd_dot = fwd:dot(vec)
-
-					if fwd_dot > 0 then
-						local enemy_tracker = focus_enemy.nav_tracker
-
-						if enemy_tracker:lost() then
-							ray_params.tracker_from = nil
-							ray_params.pos_from = enemy_tracker:field_position()
-						else
-							ray_params.tracker_from = enemy_tracker
-						end
-
-						ray_res = managers.navigation:raycast(ray_params)
-						to_pos = ray_params.trace[1]
-					end
-				end
-
-				local fwd_bump = nil
-				to_pos, fwd_bump = ShieldLogicAttack.chk_wall_distance(data, my_data, to_pos)
-				local do_move = mvector3.distance_sq(to_pos, data.m_pos) > 10000
-
-				if not do_move then
-					local to_pos_current, fwd_bump_current = ShieldLogicAttack.chk_wall_distance(data, my_data, data.m_pos)
-
-					if fwd_bump_current then
-						do_move = true
-					end
-				end
-
-				if do_move then
-					local my_pos = data.unit:movement():nav_tracker():field_position()
-					local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, to_pos, data)
-					
-					if unobstructed_line then
-						my_data.optimal_path = {
-							mvec3_cpy(my_pos),
-							to_pos
-						}
-						
-						ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data)
-					else
-						my_data.pathing_to_optimal_pos = true
-						my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
-						local reservation = managers.navigation:reserve_pos(nil, nil, to_pos, callback(ShieldLogicAttack, ShieldLogicAttack, "_reserve_pos_step_clbk", {
-							unit_pos = data.m_pos
-						}), 70, data.pos_rsrv_id)
-
-						if reservation then
-							to_pos = reservation.position
-						else
-							reservation = {
-								radius = 60,
-								position = mvector3.copy(to_pos),
-								filter = data.pos_rsrv_id
-							}
-
-							managers.navigation:add_pos_reservation(reservation)
-						end
-
-						data.brain:set_pos_rsrv("path", reservation)
-						data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
-					end
-				end
-			end
-		end
-		
-		if not action_taken then
-			ShieldLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
-		end
-	end
+	ShieldLogicAttack._chk_chatter_and_movement(data, my_data)
 end
 
 function ShieldLogicAttack.queued_update(data)
@@ -595,6 +496,156 @@ function ShieldLogicAttack.queued_update(data)
 	CopLogicBase._report_detections(data.detected_attention_objects)
 end
 
+function ShieldLogicAttack._chk_chatter_and_movement(data, my_data)
+	local unit = data.unit
+	local action_taken = my_data.turning or data.unit:movement():chk_action_forbidden("walk") or my_data.walking_to_optimal_pos
+
+	if data.important then
+		CopLogicAttack.check_chatter(data, my_data, data.objective)
+	end
+	
+	if data.char_tweak.allowed_stances and not data.char_tweak.allowed_stances[unit:anim_data().stance] then
+		for stance_name, state in pairs(data.char_tweak.allowed_stances) do
+			if state then
+				unit:movement():set_stance(stance_name)
+
+				break
+			end
+		end
+	end
+	
+	if not action_taken and unit:anim_data().stand then
+		action_taken = CopLogicAttack._chk_request_action_crouch(data)
+	end
+	
+	if not action_taken then
+		action_taken = ShieldLogicAttack._move_back_into_field_position(data, my_data)
+	end
+	
+	if not action_taken then
+		action_taken = ShieldLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
+	end
+
+	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+		my_data.attitude = data.objective and data.objective.attitude or "avoid"
+		
+		my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
+		
+		local focus_enemy = data.attention_obj
+		local enemy_visible = focus_enemy and focus_enemy.verified
+		local engage = my_data.attitude == "engage"
+		
+		if not action_taken then
+			if my_data.pathing_to_optimal_pos then
+				-- Nothing
+			elseif my_data.optimal_path then
+				action_taken = ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data)
+			elseif my_data.optimal_pos and focus_enemy and focus_enemy.nav_tracker then
+				local to_pos = my_data.optimal_pos
+				my_data.optimal_pos = nil
+				local ray_params = {
+					trace = true,
+					tracker_from = unit:movement():nav_tracker(),
+					pos_to = to_pos
+				}
+				local ray_res = managers.navigation:raycast(ray_params)
+				to_pos = ray_params.trace[1]
+
+				if ray_res then
+					local vec = data.m_pos - to_pos
+
+					mvector3.normalize(vec)
+
+					local fwd = unit:movement():m_fwd()
+					local fwd_dot = fwd:dot(vec)
+
+					if fwd_dot > 0 then
+						local enemy_tracker = focus_enemy.nav_tracker
+
+						if enemy_tracker:lost() then
+							ray_params.tracker_from = nil
+							ray_params.pos_from = enemy_tracker:field_position()
+						else
+							ray_params.tracker_from = enemy_tracker
+						end
+
+						ray_res = managers.navigation:raycast(ray_params)
+						to_pos = ray_params.trace[1]
+					end
+				end
+
+				local fwd_bump = nil
+				to_pos, fwd_bump = ShieldLogicAttack.chk_wall_distance(data, my_data, to_pos)
+				local do_move = mvector3.distance_sq(to_pos, data.m_pos) > 10000
+
+				if not do_move then
+					local to_pos_current, fwd_bump_current = ShieldLogicAttack.chk_wall_distance(data, my_data, data.m_pos)
+
+					if fwd_bump_current then
+						do_move = true
+					end
+				end
+
+				if do_move then
+					local my_pos = data.unit:movement():nav_tracker():field_position()
+					local unobstructed_line = CopLogicTravel._check_path_is_straight_line(my_pos, to_pos, data)
+					
+					if unobstructed_line then
+						my_data.optimal_path = {
+							mvec3_cpy(my_pos),
+							to_pos
+						}
+						
+						action_taken = ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data)
+					else
+						my_data.pathing_to_optimal_pos = true
+						my_data.optimal_path_search_id = tostring(unit:key()) .. "optimal"
+						local reservation = managers.navigation:reserve_pos(nil, nil, to_pos, callback(ShieldLogicAttack, ShieldLogicAttack, "_reserve_pos_step_clbk", {
+							unit_pos = data.m_pos
+						}), 70, data.pos_rsrv_id)
+
+						if reservation then
+							to_pos = reservation.position
+						else
+							reservation = {
+								radius = 60,
+								position = mvector3.copy(to_pos),
+								filter = data.pos_rsrv_id
+							}
+
+							managers.navigation:add_pos_reservation(reservation)
+						end
+
+						data.brain:set_pos_rsrv("path", reservation)
+						data.brain:search_for_path(my_data.optimal_path_search_id, to_pos)
+					end
+				end
+			end
+		end
+	end
+end
+
+function ShieldLogicAttack._move_back_into_field_position(data, my_data)
+	local my_tracker = data.unit:movement():nav_tracker()
+	
+	if my_tracker:lost() then
+		local field_position = my_tracker:field_position()
+		
+		if mvec3_dis_sq(data.m_pos, field_position) > 3600 then
+			local path = {
+				mvec3_cpy(data.m_pos),
+				to_pos
+			}
+			
+			my_data.optimal_path = path
+			my_data.optimal_pos = to_pos
+			my_data.pathing_to_optimal_pos = nil
+			
+			return ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data)
+		end
+	end
+end
+
 function ShieldLogicAttack._chk_start_action_move_out_of_the_way(data, my_data)
 	local reservation = {
 		radius = 30,
@@ -660,6 +711,8 @@ function ShieldLogicAttack._chk_request_action_walk_to_optimal_pos(data, my_data
 
 		if my_data.walking_to_optimal_pos then
 			data.brain:rem_pos_rsrv("path")
+			
+			return true
 		end
 	end
 end
@@ -676,9 +729,7 @@ function ShieldLogicAttack.action_complete_clbk(data, action)
 		end
 		
 		if action:expired() then
-			if data.unit:anim_data().stand then
-				CopLogicAttack._chk_request_action_crouch(data)
-			end
+			ShieldLogicAttack._chk_chatter_and_movement(data, my_data)
 		end
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
