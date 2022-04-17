@@ -612,6 +612,19 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	}
 	
+	self.values.player.blood_boom = { -- Destructive Criticism
+		true
+	}
+	self.definitions.player_blood_boom = {
+		name_id = "menu_blood_boom",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "blood_boom",
+			category = "player"
+		}
+	}
+	
 	self.values.player.muscle_memory_basic = { --muscle memory basic
 		1.5
 	}

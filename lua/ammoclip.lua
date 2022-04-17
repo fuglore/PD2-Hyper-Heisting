@@ -57,6 +57,10 @@ function AmmoClip:_pickup(unit)
 				if id then
 					local chance = tweak_data:get_raw_value("blackmarket", "projectiles", id, "pickup_chance") or -1
 					--log("chance is " .. tostring(chance) .. "")
+					if player_manager:has_category_upgrade("player", "blood_boom") then
+						chance = chance * 2
+					end
+					
 					if not player_manager:got_max_grenades() and math.random() <= chance then
 						managers.player:add_grenade_amount(1)
 					end

@@ -593,6 +593,16 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 		end
 	end
 	
+	local grenade_cooldown = tweak_data.blackmarket.projectiles[managers.blackmarket:equipped_grenade()].base_cooldown
+	
+	if grenade_cooldown then
+		if self:has_category_upgrade("player", "blood_boom") then
+			local time_reduction = grenade_cooldown * 0.02
+		
+			self:speed_up_grenade_cooldown(time_reduction)
+		end
+	end
+	
 	if self:has_category_upgrade("player", "dark_metamorphosis_aced") then
 		damage_ext:restore_health(0.5, true)
 	elseif self:has_category_upgrade("player", "dark_metamorphosis_basic") then

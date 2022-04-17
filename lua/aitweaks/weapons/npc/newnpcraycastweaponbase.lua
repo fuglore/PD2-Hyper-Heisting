@@ -199,14 +199,14 @@ function NewNPCRaycastWeaponBase:auto_fire_blank(direction, impact, sub_ids, ove
 			local trail = nil
 
 			if not self:weapon_tweak_data().no_trail then
-				trail = alive(self._obj_fire) and (not col_ray or col_ray.distance > 650) and self._effect_manager:spawn(self._trail_effect_table) or nil
+				trail = alive(self._obj_fire) and (not col_ray or col_ray.distance > 650) and world_g:effect_manager():spawn(self._trail_effect_table) or nil
 			end
 
 			if col_ray then
 				InstantBulletBase:on_collision(col_ray, self._unit, user_unit, self._damage, true)
 
 				if trail then
-					self._effect_manager:set_remaining_lifetime(trail, math_clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
+					world_g:effect_manager():set_remaining_lifetime(trail, math_clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
 				end
 			end
 		end
@@ -281,14 +281,14 @@ function NewNPCRaycastWeaponBase:fire_blank(direction, impact, sub_id, override_
 			local trail = nil
 
 			if not self:weapon_tweak_data().no_trail then
-				trail = alive(self._obj_fire) and (not col_ray or col_ray.distance > 650) and self._effect_manager:spawn(self._trail_effect_table) or nil
+				trail = alive(self._obj_fire) and (not col_ray or col_ray.distance > 650) and world_g:effect_manager():spawn(self._trail_effect_table) or nil
 			end
 
 			if col_ray then
 				InstantBulletBase:on_collision(col_ray, self._unit, user_unit, self._damage, true)
 
 				if trail then
-					self._effect_manager:set_remaining_lifetime(trail, math_clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
+					world_g:effect_manager():set_remaining_lifetime(trail, math_clamp((col_ray.distance - 600) / 10000, 0, col_ray.distance))
 				end
 			end
 		end

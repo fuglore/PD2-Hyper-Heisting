@@ -51,6 +51,29 @@ function SkillTreeTweakData:init()
 		}
 	}
 	
+	self.skills.bandoliers = {
+		{
+			upgrades = {
+				"extra_ammo_multiplier1",
+				"player_pick_up_ammo_multiplier",
+				"player_pick_up_ammo_multiplier_2"
+			},
+			cost = self.costs.hightier
+		},
+		{
+			upgrades = {
+				"player_blood_boom"
+			},
+			cost = self.costs.hightierpro
+		},
+		name_id = "menu_bandoliers_beta",
+		desc_id = "menu_bandoliers_beta_desc",
+		icon_xy = {
+			3,
+			0
+		}
+	}
+	
 	self.skills.second_chances[2].upgrades = {"player_pick_lock_easy_speed_multiplier_2", "player_pick_lock_hard"}
 	
 	self.skills.juggernaut[2].upgrades = {"player_health_increase"}

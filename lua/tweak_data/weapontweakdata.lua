@@ -1615,13 +1615,13 @@ self.x_olympic.kick.steelsight = self.new_mp5.kick.standing
 -- Patchett
 self.sterling.stats.damage = 128
 self.sterling.stats.spread = 16
-self.sterling.AMMO_PICKUP = {3, 4}
+self.sterling.AMMO_PICKUP = {4, 6}
 self.sterling.AMMO_MAX = 60
 self.sterling.kick = self.akm.kick
 
 self.x_sterling.stats.damage = 128
 self.x_sterling.stats.spread = 16
-self.x_sterling.AMMO_PICKUP = {3, 4}
+self.x_sterling.AMMO_PICKUP = {4, 6}
 self.x_sterling.AMMO_MAX = 50
 self.x_sterling.kick = self.sterling.kick
 self.x_sterling.kick.crouching = self.sterling.kick.standing
@@ -3688,6 +3688,38 @@ crouching = {
 	-0.5,
 	0.5
 }}
+end
+
+--Super Shorty
+
+if self.littlest then
+	self.littlest.stats.damage = 200
+	self.littlest.stats_modifiers = {damage = 4}
+	self.littlest.fire_mode_data.fire_rate = 0.2
+	self.littlest.damage_near = 250
+	self.littlest.damage_far = 800
+	self.littlest.rays = 16
+	self.littlest.kick = {
+		standing = {
+				4,
+				5,
+				-1,
+				1
+		},
+		steelsight = {
+				3,
+				3.5,
+				-1,
+				1
+		},
+		crouching = {
+				3,
+				3.5,
+				-1,
+				1
+		}
+	}
+
 end
 
 --Flamethrower
