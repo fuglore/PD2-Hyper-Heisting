@@ -144,19 +144,20 @@ function GroupAIStateBase:upd_team_AI_distance()
 
 	local teleport_distance = tweak_data.team_ai.stop_action.teleport_distance * tweak_data.team_ai.stop_action.teleport_distance
 	local nav_manager = managers.navigation
-	local find_cover_f = nav_manager.find_cover_in_nav_seg_3
+	local find_cover_f = nav_manager._find_cover_through_lua_quick
 	local search_coarse_f = nav_manager.search_coarse
 
 	for ai_key, ai in pairs_g(ai_criminals) do
 		local unit = ai.unit
 		local ai_mov_ext = unit:movement()
-
+		local desperately_needs_teleport = alive(ai_mov_ext:nav_tracker()) and ai_mov_ext:nav_tracker():obstructed()
+		
 		if not ai_mov_ext:cool() then
 			local objective = unit:brain():objective()
 			local has_warp_objective = nil
 
 			if objective then
-				if objective.path_style == "warp" or teleport_SO_anims[objective.action]then
+				if objective.path_style == "warp" or teleport_SO_anims[objective.action] then
 					has_warp_objective = true
 				else
 					local followup = objective.followup_objective
@@ -178,7 +179,7 @@ function GroupAIStateBase:upd_team_AI_distance()
 						if player.status ~= "dead" then
 							local distance = mvec3_dis_sq(bot_pos, player.m_pos)
 
-							if distance > teleport_distance then
+							if desperately_needs_teleport or distance > teleport_distance then
 								valid_players[#valid_players + 1] = {player, distance}
 							else
 								valid_players = {}
@@ -215,19 +216,23 @@ function GroupAIStateBase:upd_team_AI_distance()
 										local distance = valid_players[i][2]
 
 										if not closest_distance or distance < closest_distance then
-											local params = {
-												from_tracker = ai_tracker,
-												to_seg = tracker:nav_segment(),
-												access = {
-													"walk"
-												},
-												id = "warp_coarse_check" .. tostring_g(ai_key),
-												access_pos = ai_access
-											}
+											local can_path = nil
+											
+											if not desperately_needs_teleport then
+												local params = {
+													from_tracker = ai_tracker,
+													to_seg = tracker:nav_segment(),
+													access = {
+														"walk"
+													},
+													id = "warp_coarse_check" .. tostring_g(ai_key),
+													access_pos = ai_access
+												}
 
-											local can_path = search_coarse_f(nav_manager, params) and true
+												can_path = search_coarse_f(nav_manager, params) and true
+											end
 
-											if can_path then
+											if desperately_needs_teleport or can_path then
 												closest_distance = distance
 												closest_player = player
 												closest_tracker = tracker
@@ -240,7 +245,7 @@ function GroupAIStateBase:upd_team_AI_distance()
 					end
 
 					if closest_player then
-						local near_cover_point = find_cover_f(nav_manager, closest_tracker:nav_segment(), 1200, closest_tracker:field_position())
+						local near_cover_point = find_cover_f(nav_manager, closest_tracker:field_position(), 1200, ai_access)
 						local position = near_cover_point and near_cover_point[1] or closest_player.m_pos
 						local action_desc = {
 							body_part = 1,

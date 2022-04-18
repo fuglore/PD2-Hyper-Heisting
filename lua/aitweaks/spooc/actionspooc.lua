@@ -395,7 +395,7 @@ function ActionSpooc:_send_stop()
 		if not self._expired then
 			local field_pos = self._my_tracker:field_position()
 			local below_pos = field_pos + math_down * 500
-			local nav_clamp_ray = self._unit:raycast("ray", field_pos, below_pos, "slot_mask", managers.slot:get_mask("AI_graph_obstacle_check"), "ray_type", "walk")
+			local nav_clamp_ray = self._unit:raycast("ray", field_pos, below_pos, "slot_mask", managers.slot:get_mask("AI_graph_obstacle_check"), "ray_type", "body mover")
 
 			sync_pos = nav_clamp_ray and nav_clamp_ray.position or field_pos
 		else
@@ -2356,14 +2356,14 @@ function ActionSpooc.chk_can_start_flying_strike(unit, target_unit)
 	ray_to = ray_to:with_z(ray_to.z + 50)
 
 	local sphere_radius, slot_mask = 25, managers.slot:get_mask("AI_graph_obstacle_check")
-	local ray = unit:raycast("ray", ray_from, ray_to, "sphere_cast_radius", sphere_radius, "bundle", 5, "slot_mask", slot_mask, "ray_type", "walk", "report")
+	local ray = unit:raycast("ray", ray_from, ray_to, "sphere_cast_radius", sphere_radius, "bundle", 5, "slot_mask", slot_mask, "ray_type", "body mover", "report")
 
 	if ray then
 		return
 	end
 
 	ray_from = target_pos:with_z(target_pos.z + 160)
-	ray = unit:raycast("ray", ray_from, ray_to, "sphere_cast_radius", sphere_radius, "bundle", 5, "slot_mask", slot_mask, "ray_type", "walk", "report")
+	ray = unit:raycast("ray", ray_from, ray_to, "sphere_cast_radius", sphere_radius, "bundle", 5, "slot_mask", slot_mask, "ray_type", "body mover", "report")
 
 	if ray then
 		return

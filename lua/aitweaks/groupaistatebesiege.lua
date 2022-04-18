@@ -3368,6 +3368,12 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				end
 			end
 		end
+		
+		--literally the order of actions:
+		--pull back if moving in and i shouldn't be
+		--approach
+		--open fire to announce opening fire if not anticipation
+		--push in, chase forever
 
 		if has_criminals_closer then --open fire when enemies are in the current area we are in
 			if phase_is_anticipation then

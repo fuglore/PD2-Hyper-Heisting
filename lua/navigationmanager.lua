@@ -719,3 +719,54 @@ function NavigationManager:_find_cover_through_lua(threat_pos, threat_vis_pos, n
 	
 	return best_cover
 end
+
+function NavigationManager:_find_cover_through_lua_quick(near_pos, max_dis, access_pos) --meant for quick searches, find cover nearest to a pos
+	local v3_dis_sq = mvec3_dis_sq
+	local world_g = World
+
+	max_dis = max_dis and max_dis * max_dis or 490000
+	
+	local function _f_check_dis(cover, near_pos, max_dis) --checking if the cover is further than our max search distance.
+		local dis_sq = v3_dis_sq
+		local cover_dis = dis_sq(cover[1], near_pos)
+		
+		if math.abs(cover[1].z - near_pos.z) > 250 then
+			return
+		end
+		
+		if cover_dis > max_dis then
+			return
+		else
+			return true
+		end
+	end
+
+	local best_cover
+	local pos_tracker = self:create_nav_tracker(near_pos)
+
+	for i = 1, #self._covers do
+		local cover = self._covers[i]
+
+		if not cover[self.COVER_RESERVED] then
+			if _f_check_dis(cover, near_pos, max_dis) then
+				local coarse_params = {
+					access_pos = access_pos or "swat",
+					from_tracker = pos_tracker,
+					to_tracker = cover[3],
+					id = "cover" .. tostring(i)
+				}
+				local path = self:search_coarse(coarse_params)
+				
+				if path then
+					best_cover = cover
+				end
+				
+				break
+			end
+		end
+	end
+	
+	self:destroy_nav_tracker(pos_tracker)
+	
+	return best_cover
+end
