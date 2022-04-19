@@ -1,33 +1,14 @@
 <table name="wwh_hh">
-	<level ai_group_type="america" briefing_dialog="Play_pln_wwh_brf" cube="cube_apply_heist_bank" drop_pickups_to_ground="true" id="wwh_hh" intro_event="Play_loc_wwh_intro" max_bags="13" music="heist" outro_event="Play_pln_wwh_end" name_id="heist_wwh_hl" player_style="winter_suit" brief_id = "heist_wwh_briefing">
+	<level ai_group_type="america" brief_id="heist_wwh_briefing" briefing_dialog="Play_pln_wwh_brf" cube="cube_apply_heist_bank" drop_pickups_to_ground="true" id="wwh_hh" intro_event="Play_loc_wwh_intro" max_bags="13" music="heist" name_id="heist_wwh_hl" outro_event="Play_pln_wwh_end" player_style="winter_suit">
 		<add file="levels/wwh_hh/add.xml"/>
 		<assets>
 			<asset name="ammo_bag"/>
-            <asset name="health_bag"/>
-            <asset name="grenade_crate"/>
+			<asset name="health_bag"/>
+			<asset name="grenade_crate"/>
 		</assets>
 		<environment_effects>
 			<value_node value="snow"/>
 		</environment_effects>
-		<include directory="levels/wwh_hh">
-			<file file="nav_manager_data.nav_data" type="binary"/>
-			<file file="world.world" type="binary"/>
-			<file file="continents.continents" type="binary"/>
-			<file file="mission.mission" type="binary"/>
-			<file file="world_sounds.world_sounds" type="binary"/>
-			<file file="world_cameras.world_cameras" type="binary"/>
-			<file file="collision/collision.continent" type="binary"/>
-			<file file="collision/collision.mission" type="binary"/>
-			<file file="world/world.continent" type="binary"/>
-			<file file="world/world.mission" type="binary"/>
-			<file file="mkp/mkp.continent" type="binary"/>
-			<file file="mkp/mkp.mission" type="binary"/>
-			<file file="art1/art1.continent" type="binary"/>
-			<file file="art1/art1.mission" type="binary"/>
-			<file file="editor_only/editor_only.continent" type="binary"/>
-			<file file="editor_only/editor_only.mission" type="binary"/>
-			<file file="cover_data.cover_data" type="binary"/>
-		</include>
 		<packages>
 			<value_node value="packages/lvl_wwh"/>
 			<value_node value="levels/narratives/locke/wwh/world"/>
@@ -44,7 +25,7 @@
 			</mod>
 		</script_data_mods>
 	</level>
-	<narrative briefing_event="Play_loc_wwh_cbf_01" contact="locke" icon="guis/dlcs/bro/textures/pd2/crimenet/lockeload" id="wwh" jc="30" load_screen="guis/dlcs/pic/textures/loading/job_lockeload" name_id="heist_wwh" region="street" brief_id = "heist_wwh_crimenet">
+	<narrative brief_id="heist_wwh_crimenet" briefing_event="Play_loc_wwh_cbf_01" contact="locke" icon="guis/dlcs/bro/textures/pd2/crimenet/lockeload" id="wwh" jc="30" load_screen="guis/dlcs/pic/textures/loading/job_lockeload" name_id="heist_wwh" region="street">
 		<chain>
 			<table level_id="wwh_hh" type="d" type_id="heist_type_assault"/>
 		</chain>
