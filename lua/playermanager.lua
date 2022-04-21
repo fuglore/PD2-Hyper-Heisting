@@ -1,3 +1,8 @@
+PlayerManager._style_data = {}
+PlayerManager._style_points = 0
+PlayerManager._style_tier = 0
+PlayerManager._style_pause = nil
+
 local world_g = World
 local temp_vec1 = Vector3()
 local mvec3_norm = mvector3.normalize
@@ -27,6 +32,57 @@ function PlayerManager:clbk_copr_ability_ended()
 	end
 	
 	managers.hud:set_copr_indicator(false)
+end
+
+function PlayerManager:on_enter_custody(_player, already_dead)
+	local player = _player or self:player_unit()
+
+	if not player then
+		Application:error("[PlayerManager:on_enter_custody] Unable to get player")
+
+		return
+	end
+
+	if player == self:player_unit() then
+		local equipped_grenade = managers.blackmarket:equipped_grenade()
+
+		if equipped_grenade and tweak_data.blackmarket.projectiles[equipped_grenade] and tweak_data.blackmarket.projectiles[equipped_grenade].ability then
+			self:reset_ability_hud()
+		end
+
+		self:set_property("copr_risen_cooldown_added", nil)
+		
+		self._style_data = {}
+		self._style_points = 0
+		self._style_tier = 0
+		self._style_pause = nil
+	end
+
+	managers.mission:call_global_event("player_in_custody")
+
+	local peer_id = managers.network:session():local_peer():id()
+
+	if self._super_syndrome_count and self._super_syndrome_count > 0 and not self._action_mgr:is_running("stockholm_syndrome_trade") then
+		self._action_mgr:add_action("stockholm_syndrome_trade", StockholmSyndromeTradeAction:new(player:position(), peer_id))
+	end
+
+	self:force_drop_carry()
+	managers.statistics:downed({
+		death = true
+	})
+
+	if not already_dead then
+		player:network():send("sync_player_movement_state", "dead", player:character_damage():down_time(), player:id())
+		managers.groupai:state():on_player_criminal_death(peer_id)
+	end
+
+	self._listener_holder:call(self._custody_state, player)
+	game_state_machine:change_state_by_name("ingame_waiting_for_respawn")
+	player:character_damage():set_invulnerable(true)
+	player:character_damage():set_health(0)
+	player:base():_unregister()
+	World:delete_unit(player)
+	managers.hud:remove_interact()
 end
 
 function PlayerManager:_attempt_copr_ability()
@@ -384,6 +440,8 @@ function PlayerManager:on_killshot(killed_unit, variant, headshot, weapon_id)
 	if CopDamage.is_civilian(killed_unit:base()._tweak_table) then
 		return
 	end
+	
+	self:add_style("kill")
 
 	local weapon_melee = weapon_id and tweak_data.blackmarket and tweak_data.blackmarket.melee_weapons and tweak_data.blackmarket.melee_weapons[weapon_id] and true
 
@@ -730,6 +788,10 @@ function PlayerManager:update(t, dt)
 	
 	
 	if alive(self:player_unit()) then
+		if not managers.groupai:state():whisper_mode() then
+			self:upd_style(t, dt)
+		end
+	
 		if self:has_category_upgrade("player", "pop_pop") then
 			self:upd_pop_pop(t)
 		end
@@ -766,6 +828,114 @@ function PlayerManager:update(t, dt)
 	end
 
 	self:update_smoke_screens(t, dt)
+end
+
+function PlayerManager:upd_style(t, dt)
+	if self._style_pause then
+		self._style_pause = self._style_pause - dt
+		
+		if self._style_pause > 0 then
+			return
+		end
+	end
+	
+	self._style_pause = nil
+
+	if self._style_tier > 0 then
+		local player_unit = self:player_unit()
+		local player_mov_ext = player_unit:movement()
+		local player_dmg_ext = player_unit:character_damage()
+		
+		local tier_mul = 1 * self._style_tier / 2
+		local drain = 0.066
+		
+		if not player_mov_ext._attackers or not next(player_mov_ext._attackers) then
+			drain = drain * 2
+		end
+		
+		if player_dmg_ext._supperssion_data.value then
+			drain = drain * 0.75
+		end
+		
+		drain = drain * tier_mul
+		
+		self._style_points = self._style_points - drain * dt
+		
+		if self._style_points <= 0 then
+			self._style_points = 0
+			self._style_tier = 0
+		else
+			self._style_points = math.clamp(self._style_points, 0, 6.99)
+			self._style_tier = math.ceil(self._style_points)
+		end
+	end
+end
+
+function PlayerManager:pause_style(time)
+	if managers.groupai:state():whisper_mode() then
+		return
+	end
+
+	if self._style_pause then
+		self._style_pause = self._style_pause + time
+	else
+		self._style_pause = time
+	end
+end
+
+function PlayerManager:add_style(event)
+	if managers.groupai:state():whisper_mode() then
+		return
+	end
+
+	local style_tweak = tweak_data.style_meter_events[event]
+	
+	if not style_tweak then
+		log("you're a bingus")
+		return
+	end
+	
+	local t = Application:time()
+	local event_data = self._style_data[event]
+	local amount = style_tweak.amount
+	
+	if event_data then
+		if event_data.expire_t < t then
+			event_data.stale_value = 1 
+			event_data.expire_t = t
+		end
+	
+		if style_tweak.amount_min_mul and event_data.stale_value == style_tweak.stale_max then
+			amount = style_tweak.amount_min_mul
+		else
+			amount = amount / event_data.stale_value
+			
+			if style_tweak.style_pause_t then
+				if self._style_pause then
+					self._style_pause = self._style_pause + style_tweak.style_pause_t
+				else
+					self._style_pause = style_tweak.style_pause_t
+				end
+			end
+		end
+		
+		local stale_factor = style_tweak.stale_add
+		local stale_expire_t = style_tweak.stale_expire_t
+		
+		if event_data.stale_value < style_tweak.stale_max then
+			event_data.stale_value = self._style_data[event].stale_value + stale_factor
+		end
+		
+		event_data.expire_t = event_data.expire_t + stale_expire_t
+	else
+		local stale_factor = style_tweak.stale_add
+		local stale_expire_t = style_tweak.stale_expire_t
+		
+		self._style_data[event] = {stale_value = stale_factor, expire_t = t + stale_expire_t}
+	end
+
+	self._style_points = self._style_points + amount
+	self._style_tier = math.ceil(self._style_points)
 end
 
 function PlayerManager:activate_heal_upgrades(token, syringebasic, syringeaced)

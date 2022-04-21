@@ -10,6 +10,16 @@ Hooks:PostHook(PlayerTweakData, "init", "hhplayertweakbullshit", function(self, 
 	self.movement_state.standard.gravity = 982
 	self.movement_state.standard.terminal_velocity = 7000
 	
+	self.style_multipliers = {
+		1,
+		1.08,
+		1.166,
+		1.333,
+		1.5,
+		1.833,
+		2
+	}
+	
 	self.alarm_pager = {
 		first_call_delay = {
 			2,

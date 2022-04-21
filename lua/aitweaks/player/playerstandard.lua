@@ -1,3 +1,4 @@
+PlayerStandard._style_meter_multiplier = 1
 local temp_vec1 = Vector3()
 
 local mvec3_dis_sq = mvector3.distance_sq
@@ -14,6 +15,36 @@ Hooks:PostHook(PlayerStandard, "_calculate_standard_variables", "HH__calculate_s
 	self._setting_hold_to_fire = managers.user:get_setting("holdtofire")
 end)
 
+function PlayerStandard:_stance_entered(unequipped)
+	local stance_standard = tweak_data.player.stances.default[managers.player:current_state()] or tweak_data.player.stances.default.standard
+	local head_stance = self._state_data.ducking and tweak_data.player.stances.default.crouched.head or stance_standard.head
+	local stance_id = nil
+	local stance_mod = {
+		translation = Vector3(0, 0, 0)
+	}
+
+	if not unequipped then
+		stance_id = self._equipped_unit:base():get_stance_id()
+
+		if self._state_data.in_steelsight and self._equipped_unit:base().stance_mod then
+			stance_mod = self._equipped_unit:base():stance_mod() or stance_mod
+		end
+	end
+
+	local stances = nil
+	stances = (self:_is_meleeing() or self:_is_throwing_projectile()) and tweak_data.player.stances.default or tweak_data.player.stances[stance_id] or tweak_data.player.stances.default
+	local misc_attribs = stances.standard
+	misc_attribs = (not self:_is_using_bipod() or self:_is_throwing_projectile() or stances.bipod) and (self._state_data.in_steelsight and stances.steelsight or self._state_data.ducking and stances.crouched or stances.standard)
+	local duration = tweak_data.player.TRANSITION_DURATION + (self._equipped_unit:base():transition_duration() or 0)
+	local duration_multiplier = self._state_data.in_steelsight and 1 / self._equipped_unit:base():enter_steelsight_speed_multiplier() or 1
+	
+	duration_multiplier = duration_multiplier / self._style_meter_multiplier
+	
+	local new_fov = self:get_zoom_fov(misc_attribs) + 0
+
+	self._camera_unit:base():clbk_stance_entered(misc_attribs.shoulders, head_stance, misc_attribs.vel_overshot, new_fov, misc_attribs.shakers, stance_mod, duration_multiplier, duration)
+	managers.menu:set_mouse_sensitivity(self:in_steelsight())
+end
 
 function PlayerStandard:_find_pickups(t)
 	local pickups = World:find_units_quick("sphere", self._unit:movement():m_pos(), self._pickup_area, self._slotmask_pickups)
@@ -41,6 +72,8 @@ function PlayerStandard:on_melee_stun(t, timer)
 	if self:_is_meleeing() and managers.player:has_category_upgrade("player", "beatemup_aced") then
 		return
 	end
+	
+	timer = timer / self._style_meter_multiplier
 
 	self._melee_stunned_expire_t = t + timer
 	self._melee_stunned = true
@@ -1351,6 +1384,12 @@ function PlayerStandard:_update_foley(t, input)
 				local fall_distance_lerp = math.min(5, height / 400)
 				--self._running_wanted = false
 				
+				local slow_t = 1
+				
+				if self._style_meter_multiplier then
+					slow_t = slow_t / self._style_meter_multiplier
+				end
+				
 				self._fall_damage_slow_t = t + 1
 				managers.rumble:play("hard_land")
 				self._ext_camera:play_shaker("player_fall_damage", fall_distance_lerp)
@@ -1483,7 +1522,10 @@ end
 
 function PlayerStandard:_end_action_running(t)
 	if not self._end_running_expire_t then
+		local style_mul = self._style_meter_multiplier
 		local speed_multiplier = self._equipped_unit:base():exit_run_speed_multiplier()
+		speed_multiplier = speed_multiplier * style_mul
+		
 		self._end_running_expire_t = t + 0.4 / speed_multiplier
 		local stop_running = not self._equipped_unit:base():run_and_shoot_allowed() and (not self.RUN_AND_RELOAD or not self:_is_reloading()) and not self:_is_meleeing()
 
@@ -1601,9 +1643,11 @@ function PlayerStandard:_check_action_deploy_underbarrel(t, input)
 
 					self:set_animation_state("standard")
 				end
+				
+				switch_delay = switch_delay / self._style_meter_multiplier
 
 				if anim_ids then
-					self._ext_camera:play_redirect(anim_ids, 1)
+					self._ext_camera:play_redirect(anim_ids, self._style_meter_multiplier)
 				end
 
 				self:set_animation_weapon_hold(nil)
@@ -2151,6 +2195,25 @@ function PlayerStandard:_check_action_throw_projectile(t, input)
 	return true
 end
 
+function PlayerStandard:_do_action_throw_projectile(t, input, drop_projectile)
+	local current_state_name = self._camera_unit:anim_state_machine():segment_state(self:get_animation("base"))
+	self._state_data.throwing_projectile = nil
+	local projectile_entry = managers.blackmarket:equipped_projectile()
+	local projectile_data = tweak_data.blackmarket.projectiles[projectile_entry]
+	local style_mul = self._style_meter_multiplier
+	
+	self._state_data.projectile_expire_t = t + projectile_data.expire_t / style_mul
+	self._state_data.projectile_repeat_expire_t = t + math.min(projectile_data.repeat_expire_t, projectile_data.expire_t) / style_mul
+
+	managers.network:session():send_to_peers_synched("play_distance_interact_redirect", self._unit, "throw_grenade")
+
+	self._state_data.projectile_global_value = projectile_data.anim_global_param or "projectile_frag"
+
+	self._camera_unit:anim_state_machine():set_global(self._state_data.projectile_global_value, 1)
+	self._ext_camera:play_redirect(self:get_animation("projectile_throw"), style_mul)
+	self:_stance_entered()
+end
+
 function PlayerStandard:_check_action_interact(t, input)
 	local keyboard = self._controller.TYPE == "pc" or managers.controller:get_default_wrapper_type() == "pc"
 	local new_action, timer, interact_object = nil
@@ -2245,12 +2308,17 @@ function PlayerStandard:_start_action_throw_grenade(t, input)
 	end
 
 	local delay = self:_get_projectile_throw_offset()
+	local style_mul = self._style_meter_multiplier
 
 	managers.network:session():send_to_peers_synched("play_distance_interact_redirect_delay", self._unit, "throw_grenade", delay)
-	self._ext_camera:play_redirect(Idstring(projectile_tweak.animation or "throw_grenade"))
+	self._ext_camera:play_redirect(Idstring(projectile_tweak.animation or "throw_grenade"), style_mul)
 
 	local projectile_data = tweak_data.blackmarket.projectiles[equipped_grenade]
-	self._state_data.throw_grenade_expire_t = t + (projectile_data.expire_t or 1.1)
+	local expire_t = projectile_data.expire_t or 1.1
+	
+	expire_t = expire_t / style_mul
+
+	self._state_data.throw_grenade_expire_t = t + expire_t
 
 	self:_stance_entered()
 end
@@ -2341,6 +2409,12 @@ end
 
 function PlayerStandard:update(t, dt)
 	PlayerMovementState.update(self, t, dt)
+	
+	if managers.player._style_tier then
+		local tier_clamped = math.clamp(managers.player._style_tier, 1, 7)
+		self._style_meter_multiplier = tweak_data.player.style_multipliers[tier_clamped]
+	end
+	
 	self:_calculate_standard_variables(t, dt)
 	
 	local vel_z = 1

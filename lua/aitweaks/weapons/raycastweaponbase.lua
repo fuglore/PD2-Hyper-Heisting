@@ -482,6 +482,75 @@ end
 
 end
 
+function RaycastWeaponBase:damage_player(col_ray, from_pos, direction, params)
+	local player_man = managers.player
+	local unit = player_man:player_unit()
+
+	if not unit then
+		return
+	end
+
+	local ray_data = {
+		ray = direction,
+		normal = -direction
+	}
+	local head_pos = unit:movement():m_head_pos()
+	local head_dir = tmp_vec1
+	local head_dis = mvec3_dir(head_dir, from_pos, head_pos)
+	local shoot_dir = tmp_vec2
+
+	mvec3_set(shoot_dir, col_ray and col_ray.ray or direction)
+
+	local cos_f = mvec3_dot(shoot_dir, head_dir)
+
+	if not col_ray then
+		local max_range = self._weapon_range or self._range or 20000
+
+		if head_dis > max_range then
+			return
+		end
+	end
+
+	if cos_f <= 0.1 then
+		return
+	end
+
+	local b = head_dis / cos_f
+
+	if not col_ray or b < col_ray.distance then
+		if col_ray and b - col_ray.distance < 60 then
+			unit:character_damage():build_suppression(self._suppression)
+			player_man:add_style("dodge")
+		end
+
+		mvec3_set_l(shoot_dir, b)
+		mvec3_mul(head_dir, head_dis)
+		mvec3_sub(shoot_dir, head_dir)
+
+		local proj_len = mvec3_len(shoot_dir)
+		ray_data.position = head_pos + shoot_dir
+
+		if not col_ray and proj_len < 60 then
+			unit:character_damage():build_suppression(self._suppression)
+			player_man:add_style("dodge")
+		end
+
+		if proj_len < 30 and (not params or not params.guaranteed_miss) then
+			if World:raycast("ray", from_pos, head_pos, "slot_mask", self._bullet_slotmask, "ignore_unit", self._setup.ignore_units, "report") then
+				return nil, ray_data
+			else
+				return true, ray_data
+			end
+		elseif proj_len < 100 and b > 500 then
+			unit:character_damage():play_whizby(ray_data.position)
+		end
+	elseif b - col_ray.distance < 60 then
+		unit:character_damage():build_suppression(self._suppression)
+	end
+
+	return nil, ray_data
+end
+
 --Fix for duplicated bullets below, thank you Hoxi <3
 function InstantBulletBase:on_collision(col_ray, weapon_unit, user_unit, damage, blank, no_sound)
 	if Network:is_client() and not blank and user_unit ~= managers.player:player_unit() then

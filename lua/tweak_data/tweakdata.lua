@@ -15,6 +15,35 @@ if not tweak_data then
 	return 
 end
 
+tweak_data.style_meter_events = {
+	kill = {
+		amount = 0.2,
+		stale_add = 1,
+		stale_max = 4,
+		stale_expire_t = 0.25,
+		style_pause_t = 0.048
+	},
+	dodge = {
+		amount = 0.1,
+		stale_add = 1,
+		stale_max = 8,
+		stale_expire_t = 0.5
+	},
+	gate = {
+		amount = 0.5,
+		stale_add = 1,
+		stale_max = 4,
+		stale_expire_t = 4.6
+	},
+	exposure = {
+		amount = 0.01,
+		amount_min_mul = 0,
+		stale_add = 1,
+		stale_max = 4,
+		stale_expire_t = 1
+	}
+}
+
 tweak_data.projectiles.cs_grenade_quick = {
 	radius = 300,
 	radius_blurzone_multiplier = 0,

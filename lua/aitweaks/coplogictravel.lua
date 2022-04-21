@@ -2016,16 +2016,24 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	end
 
 	local search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
-	local threat_pos = data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.nav_tracker:field_position()
+	local threat_pos = nil
 	
-	if near_pos then
-		near_pos = managers.navigation:_clamp_pos_to_field(near_pos)
-	else
-		near_pos = data.unit:movement():nav_tracker():field_position()
+	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 7 then
+		threat_pos = data.attention_obj.m_pos
 	end
 	
-	local cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, nil, near_pos, threat_pos)
+	near_pos = near_pos or data.m_pos
 	
+	local optimal_threat_dis = nil
+		
+	if data.objective and data.objective.attitude == "engage" then
+		optimal_threat_dis = data.internal_data.weapon_range.aggressive or data.internal_data.weapon_range.close
+	else
+		optimal_threat_dis = data.internal_data.weapon_range.optimal
+	end
+	
+	cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
+
 	if not cover then
 		local threat_vis_pos = threat_pos and data.attention_obj.m_head_pos
 		local access_pos = data.char_tweak.access

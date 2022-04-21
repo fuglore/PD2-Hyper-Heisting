@@ -1756,6 +1756,7 @@ function PlayerDamage:_regenerate_armor(no_sound, is_replenish)
 	self._regenerate_speed = nil
 	
 	if not is_replenish and not self._took_damage_while_regenerating then
+		managers.player:add_style("gate")
 		local max_armor = self:_max_armor()
 		local current_armor = self:get_real_armor()
 		local regenerated_armor = max_armor - current_armor
