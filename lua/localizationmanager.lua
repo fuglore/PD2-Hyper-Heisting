@@ -280,6 +280,12 @@
 		["hud_heat_49"] = "RULES OF NATURE!",
 		["hud_heat_50"] = "BLAMMO!",
 		["hud_heat_51"] = "A VICTORY, YES, BUT THERE IS ALWAYS ANOTHER BATTLE!",
+		["hud_heat_52"] = "HOORAY FOR VIOLENCE!",
+		["hud_heat_53"] = "BLOOD, SO MUCH BLOOD!",
+		["hud_heat_54"] = "YOU HAVE BEEN SUCCESSFULLY CELEBRATED BY THE ASSAULT BANNER!",
+		["hud_heat_55"] = "YAY!",
+		["hud_heat_56"] = "SMASHING!",
+		["hud_heat_57"] = "EXCLAMATION MARK!",
 		["hud_heat_gameplay"] = "YOU HAVE PUSHED BACK THE HORDE MOMENTARILY",
 		["hud_assault_cover"] = "STAY IN COVER",
 		["hud_assault_cover_blma"] = "stya cover she set u up godamn bitch",		
@@ -412,7 +418,7 @@
 		["shin_toggle_screenFX_desc"] = "Adds various visual adjustments and additions to screen effects that are present in Vanilla! Note: Not recommended to those prone to epilepsy.",
 		
 		["shin_toggle_suppression_title"] = "X-treme Visible Suppression!",
-		["shin_toggle_suppression_desc"] = "Adds a unique visual effect to your screen for when you are being suppressed by enemies! (Looks more fancy if you have Chromatic Aberration on!)",
+		["shin_toggle_suppression_desc"] = "Adds a unique visual effect to your screen for when you are being suppressed by enemies!",
 		
 		["shin_toggle_health_effect_title"] = "Low Health Visuals!",
 		["shin_toggle_health_effect_desc"] = "Adds a bloody screen border effect to indicate how low your health is! NOTE: Requires a heist restart to apply changes.",

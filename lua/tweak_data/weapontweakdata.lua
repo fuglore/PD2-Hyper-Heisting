@@ -269,8 +269,7 @@ Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
 	self.mossberg_npc.DAMAGE = 3
 	self.mossberg_npc.spread = 1
 	self.mossberg_npc.CLIP_AMMO_MAX = 2
-	
-	self.mini_npc.rays = 2
+
 	self.mini_npc.auto.fire_rate = 0.08
 	self.mini_npc.CLIP_AMMO_MAX = 100000 --new minigun dozer buff setup
 	self.mini_npc.NR_CLIPS_MAX = 1

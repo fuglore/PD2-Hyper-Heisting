@@ -2,6 +2,7 @@ local mvec3_dot = mvector3.dot
 local mvec3_dist_sq = mvector3.distance_sq
 local mvec3_dist = mvector3.distance
 local mvec3_norm = mvector3.normalize
+local mvec3_cpy = mvector3.copy
 local math_abs = math.abs
 local math_max = math.max
 local math_min = math.min
@@ -230,22 +231,25 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 	if data.cool and managers.groupai:state():whisper_mode() then
 		return
 	end
-
+	
 	local follow_unit = objective.follow_unit
 	local movement_ext = data.unit:movement()
 	local m_field_pos = movement_ext:nav_tracker():field_position()
 	local follow_unit_mov_ext = follow_unit:movement()
 	local follow_unit_field_pos = follow_unit_mov_ext:nav_tracker():field_position()
+	
 	local max_allowed_dis_xy = 700 * 700
 	local max_allowed_dis_z = 200
-
+	local dis = nil
 	local too_far = nil
 
 	if math_abs(m_field_pos.z - follow_unit_field_pos.z) > max_allowed_dis_z then --this is more or less going to check for different floors since field pos doesnt have that much height before it gets clamped
 		too_far = true
 		--log("no")
-	else	
-		local dis = mvec3_dist_sq(m_field_pos, follow_unit_field_pos)
+	end
+	
+	if not too_far then
+		dis = mvec3_dist_sq(m_field_pos, follow_unit_field_pos)
 
 		if max_allowed_dis_xy < dis then
 			--log("yes")
@@ -255,24 +259,6 @@ function TeamAILogicIdle._check_should_relocate(data, my_data, objective)
 
 	if too_far then
 		return true
-	end
-	
-	local my_nav_seg_id = movement_ext:nav_tracker():nav_segment()
-	local follow_unit_nav_seg_id = follow_unit_mov_ext:nav_tracker():nav_segment()
-	
-	if my_nav_seg_id == follow_unit_nav_seg_id then
-		--log("they're in my area")
-		return
-	end
-	
-	if not data.attention_obj or data.attention_obj.reaction >= AIAttentionObject.REACT_COMBAT and not my_data.moving_to_cover and not my_data.in_cover then
-		local slot_mask = managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check")
-		local raycast = data.unit:raycast("ray", movement_ext:m_head_pos(), follow_unit_mov_ext:m_head_pos(), "slot_mask", slot_mask, "ignore_unit", follow_unit, "report")
-		
-		if raycast then
-			--log("no los")
-			return true
-		end
 	end
 end
 

@@ -11,8 +11,16 @@ local temp_vec_2 = Vector3()
 
 Hooks:PostHook(CoreEnvironmentControllerManager, "init", "hhpost_env", function(self)
 	self._effect_manager = World:effect_manager()
-	self._base_chromatic_amount = -0.4
-	self._current_chrom = -0.4
+	
+	if self._chromatic_enabled then
+		self._base_chromatic_amount = -0.4
+		self._current_chrom = -0.4
+	else
+		self._base_chromatic_amount = 0
+		self._current_chrom = 0
+	end
+	
+	
 	self._chrom_lerp = 0
 	self._contrast_lerp = 0
 	self._extra_exposure = 0
@@ -430,7 +438,10 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 		chrom = chrom * -1
 		self._material:set_variable(Idstring("chromatic_amount"), chrom)
 	else
-		self._material:set_variable(Idstring("chromatic_amount"), 0)
+		local chrom = math.abs(self._current_chrom)
+		chrom = chrom * -1
+	
+		self._material:set_variable(Idstring("chromatic_amount"), chrom)
 	end
 
 	self:_update_dof(t, dt)
@@ -502,7 +513,7 @@ function CoreEnvironmentControllerManager:set_post_composite(t, dt)
 		end
 	end
 	
-	local lerp_to_use = self._chromatic_enabled and self._chrom_lerp or self._contrast_lerp
+	local lerp_to_use = self._chrom_lerp
 	local exposure = self._extra_exposure + math.clamp(hit_some_mod * 2, 0, 1) * 0.25 + blur_zone_val * 0.15 + (math.abs(lerp_to_use) * 0.05)
 
 	if self._last_life then
@@ -634,10 +645,12 @@ function CoreEnvironmentControllerManager:set_chromatic_enabled(enabled)
 
 	if self._material then
 		if self._chromatic_enabled then
-			self._material:set_variable(Idstring("chromatic_amount"), self._base_chromatic_amount)
+			self._base_chromatic_amount = -0.4
 		else
-			self._material:set_variable(Idstring("chromatic_amount"), 0)
+			self._base_chromatic_amount = 0
 		end
+		
+		self._material:set_variable(Idstring("chromatic_amount"), self._base_chromatic_amount)
 	end
 end
 
@@ -653,12 +666,7 @@ function CoreEnvironmentControllerManager:set_contrast_value_lerp(lerp_value)
 	end
 
 	if self._material then
-		local high_contrast = lerp_value >= 0.9 and math.lerp(0.5, 0.6, math.random()) or 0.5
-		
-		if self._chromatic_enabled then
-			high_contrast = high_contrast * 0.5
-		end
-		
+		local high_contrast = lerp_value >= 0.9 and math.lerp(0.25, 0.3, math.random()) or 0.25
 		local lerp_value = lerp_value + math.lerp(0.01, -0.01, math.random())
 		local new_contrast_value = math.lerp(0, high_contrast, lerp_value)
 		self._current_contrast = new_contrast_value
@@ -670,21 +678,14 @@ function CoreEnvironmentControllerManager:set_chromatic_value_lerp(lerp_value)
 	if not lerp_value then
 		return
 	end
-	
-	if not self._chromatic_enabled then
-		return
-	end
 
 	if self._material then
-		if self._chromatic_enabled then
-			--log("nice")
-			local high_chrom = lerp_value >= 0.9 and math.lerp(-0.85, -1.4, math.random()) or -0.85
-			high_chrom = high_chrom - self._base_chromatic_amount
-			local lerp_value = lerp_value + math.lerp(0.01, -0.01, math.random())
-			local new_chrom_value = math.lerp(self._base_chromatic_amount, high_chrom, lerp_value)
-			self._chrom_lerp = lerp_value
-			self._current_chrom = new_chrom_value
-		end
+		local high_chrom = lerp_value >= 0.9 and math.lerp(-0.85, -1.4, math.random()) or -0.85
+		high_chrom = high_chrom - self._base_chromatic_amount
+		local lerp_value = lerp_value + math.lerp(0.01, -0.01, math.random())
+		local new_chrom_value = math.lerp(self._base_chromatic_amount, high_chrom, lerp_value)
+		self._chrom_lerp = lerp_value
+		self._current_chrom = new_chrom_value
 	end
 end
 

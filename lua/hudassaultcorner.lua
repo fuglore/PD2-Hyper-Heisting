@@ -332,7 +332,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 	local danger_line_to_use = "hud_assault_danger"
 	local FG_chance = math.random(1, 331)
 	local danger_chance = math.random(1, 64)
-	local heat_chance = math.random(1, 51)
+	local heat_chance = math.random(1, 57)
 	local versusline = "hud_assault_faction_swat"
 	
 	local faction = tweak_data.levels:get_ai_group_type()
@@ -546,7 +546,7 @@ Hooks:PostHook(HUDAssaultCorner, "_get_assault_strings", "post_FG", function(sel
 		end
 	end
 	
-	if heat_chance <= 51 then
+	if heat_chance <= 57 then
 		heatbonus_line_to_use = "hud_heat_" .. heat_chance
 	end
 	

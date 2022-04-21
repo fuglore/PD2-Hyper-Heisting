@@ -344,6 +344,8 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 			local lerp = weight / (1 + weight)
 			local add = math.lerp(self._autohit_data.MIN_RATIO, self._autohit_data.MAX_RATIO, lerp)
 			self._autohit_current = self._autohit_current + add
+		else
+			self._autohit_current = self._autohit_data.MIN_RATIO
 		end
 	end
 

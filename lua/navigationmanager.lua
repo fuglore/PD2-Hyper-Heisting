@@ -595,6 +595,82 @@ function NavigationManager:_strip_nav_field_for_gameplay()
 	self._builder = nil
 end
 
+function NavigationManager:_find_cover_in_seg_through_lua(threat_vis_pos, near_pos, slotmask, access_pos, desired_segs)
+	local v3_dis_sq = mvec3_dis_sq
+	local world_g = World
+	local nav_segs = desired_segs
+	local nav_seg = nil
+	
+	--log(tostring(max_dis) .. ":" .. tostring(min_dis) .. ":" .. tostring(optimal_dis))
+	
+	if type(desired_segs) ~= "table" then
+		nav_seg = desired_segs
+		nav_segs = nil
+	end
+	
+	local function _f_check_cover_dis(cover, near_pos) --checking the distance of the cover to the near_pos
+		local dis_sq = v3_dis_sq
+		local cover_dis = dis_sq(cover[1], near_pos)
+		
+		return cover_dis
+	end
+	
+	local function _f_check_cover_rays(cover, threat_vis_pos, slotmask) --this is a visibility check. first checking for crouching positions, then standing.
+		local cover_pos = cover[1]
+		local ray_from = temp_vec1
+
+		mvec3_set(ray_from, math_up)
+		mvec3_mul(ray_from, 82)
+		mvec3_add(ray_from, cover_pos)
+
+		local ray_to_pos = threat_vis_pos
+
+		local low_ray = world_g:raycast("ray", ray_from, ray_to_pos, "slot_mask", slotmask, "ray_type", "ai_vision", "report")
+		local high_ray = nil
+
+		if low_ray then
+			mvec3_set_z(ray_from, ray_from.z + 82)
+
+			high_ray = world_g:raycast("ray", ray_from, ray_to_pos, "slot_mask", slotmask, "ray_type", "ai_vision", "report")
+		end
+
+		return low_ray, high_ray
+	end
+	
+	local best_cover, best_cover_dis, best_cover_low_ray, best_cover_high_ray
+
+	for i = 1, #self._covers do
+		local cover = self._covers[i]
+		
+		if not cover[self.COVER_RESERVED] then
+			if nav_segs and nav_segs[cover[3]:nav_segment()] or nav_seg == cover[3]:nav_segment() then
+				if near_pos then
+					cover_dis = _f_check_cover_dis(cover, near_pos)
+				end
+				
+				if not best_cover_dis or cover_dis < best_cover_dis then
+					local cover_low_ray, cover_high_ray
+					
+					if threat_vis_pos then
+						cover_low_ray, cover_high_ray = _f_check_cover_rays(cover, threat_vis_pos, slotmask)
+					end
+							
+					if not best_cover_low_ray or cover_low_ray then
+						if not best_cover_high_ray or cover_high_ray then
+							best_cover = cover
+							best_cover_dis = cover_dis
+							best_cover_low_ray = cover_low_ray
+							best_cover_high_ray = cover_high_ray
+						end
+					end
+				end
+			end
+		end
+	end
+	
+	return best_cover
+end
+
 function NavigationManager:_find_cover_through_lua(threat_pos, threat_vis_pos, near_pos, max_dis, min_dis, optimal_dis, slotmask, access_pos, unit_nav_tracker)
 	local v3_dis_sq = mvec3_dis_sq
 	local world_g = World

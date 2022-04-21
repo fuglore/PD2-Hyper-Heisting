@@ -786,6 +786,10 @@ end
 function TeamAILogicAssault._chk_exit_assault_logic(data, new_reaction)
 	if data.unit:movement()._should_stay or not data.unit:movement():chk_action_forbidden("walk") then
 		local wanted_state = TeamAILogicBase._get_logic_state_from_reaction(data, new_reaction)
+		
+		if wanted_state == "idle" and managers.groupai:state():chk_assault_active_atm() then
+			return
+		end
 
 		if wanted_state ~= data.name then
 			local allow_trans, obj_failed = CopLogicBase.is_obstructed(data, data.objective, nil, nil)

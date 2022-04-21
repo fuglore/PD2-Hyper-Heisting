@@ -2936,7 +2936,8 @@ function GroupAIStateBase:_determine_objective_for_criminal_AI(unit)
 			scan = true,
 			is_default = true,
 			type = "follow",
-			follow_unit = closest_player.unit
+			follow_unit = closest_player.unit,
+			distance = 700
 		}
 	end
 

@@ -762,7 +762,7 @@ function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		self._police_upd_task_queued = true
 		
-		managers.enemy:add_delayed_clbk("GroupAIStateBesiege._upd_police_activity", callback(self, self, "_upd_police_activity"), self._t + (next(self._spawning_groups) and 0.4 or 2))
+		managers.enemy:add_delayed_clbk("GroupAIStateBesiege._upd_police_activity", callback(self, self, "_upd_police_activity"), self._t + (next(self._spawning_groups) and 0.2 or 2))
 	end
 end
 
@@ -4298,8 +4298,15 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 		name = true,
 		spawn_ai = {}
 	}
+	
+	--if use_last then 
+		--force = true
+	--end
+	
 	local group_ai_tweak = tweak_data.group_ai
 	local spawn_points = spawn_task.spawn_group.spawn_pts
+	local current_unit_type = tweak_data.levels:get_ai_group_type()
+	local try_hh = current_unit_type == "bo"
 
 	local function _try_spawn_unit(u_type_name, spawn_entry)
 		if GroupAIStateBesiege._MAX_SIMULTANEOUS_SPAWNS <= nr_units_spawned and not force then
@@ -4307,8 +4314,6 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 		end
 
 		local hopeless = true
-		local current_unit_type = tweak_data.levels:get_ai_group_type()
-		local try_hh = current_unit_type == "bo"
 		
 		for i = 1, #spawn_points do
 			local sp_data = spawn_points[i]

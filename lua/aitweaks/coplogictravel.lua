@@ -201,10 +201,6 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 			my_data.detection = data.char_tweak.detection.recon
 		end
 
-		if data.unit:base().has_tag and data.unit:base():has_tag("special") then
-			my_data.detection_uses_aim_react_or_higher = true
-		end
-
 		data.brain:set_attention_settings({
 			cbt = true
 		})
@@ -460,7 +456,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 	local min_reaction = nil
 
 	if not is_cool then
-		min_reaction = my_data.aim_react_or_higher and REACT_AIM or REACT_CURIOUS
+		min_reaction = REACT_AIM
 	end
 
 	local delay = CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
@@ -1697,8 +1693,6 @@ function CopLogicTravel.update(data)
 end
 
 function CopLogicTravel.queue_update(data, my_data, delay)
-	delay = data.important and 0.2 or delay
-	
 	CopLogicBase.queue_task(my_data, my_data.upd_task_key, CopLogicTravel.queued_update, data, data.t + delay, data.important and true)
 end
 
@@ -2021,55 +2015,21 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 		return
 	end
 
-	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
-
-	if not allied_with_criminals then
-		local player_team = tweak_data.levels:get_default_team_ID("player")
-
-		if data.team.id == player_team or data.team.friends[player_team] then
-			allied_with_criminals = true
-		end
-	end
-
 	local search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
-	local optimal_threat_dis, threat_pos = nil
-
-	if data.objective and data.objective.attitude == "engage" then
-		optimal_threat_dis = data.internal_data.weapon_range.aggressive or data.internal_data.weapon_range.close
+	local threat_pos = data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.nav_tracker:field_position()
+	
+	if near_pos then
+		near_pos = managers.navigation:_clamp_pos_to_field(near_pos)
 	else
-		optimal_threat_dis = data.internal_data.weapon_range.optimal
-	end
-
-	near_pos = near_pos or data.m_pos
-
-	if not allied_with_criminals then
-		local groupai_manager = managers.groupai:state()
-		local all_criminals = groupai_manager:all_char_criminals()
-		local get_area_func = groupai_manager.get_area_from_nav_seg_id
-		local closest_crim_u_data, closest_crim_dis = nil
-
-		for u_key, u_data in pairs_g(all_criminals) do
-			local crim_area = get_area_func(groupai_manager, u_data.tracker:nav_segment())
-
-			if crim_area == search_area then
-				threat_pos = u_data.m_pos
-
-				break
-			else
-				local crim_dis = mvec3_dis_sq(near_pos, u_data.m_pos)
-
-				if not closest_crim_dis or crim_dis < closest_crim_dis then
-					threat_pos = u_data.m_pos
-					closest_crim_dis = crim_dis
-				end
-			end
-		end
+		near_pos = data.unit:movement():nav_tracker():field_position()
 	end
 	
 	local cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, nil, near_pos, threat_pos)
 	
 	if not cover then
-		cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, nil, nil, threat_pos)
+		local threat_vis_pos = threat_pos and data.attention_obj.m_head_pos
+		local access_pos = data.char_tweak.access
+		cover = managers.navigation:_find_cover_in_seg_through_lua(threat_vis_pos, near_pos, data.visibility_slotmask, access_pos, search_area.nav_segs)
 	end
 
 	return cover

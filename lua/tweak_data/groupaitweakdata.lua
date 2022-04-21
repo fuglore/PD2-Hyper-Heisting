@@ -7769,31 +7769,11 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	}
 	self.besiege.recon.interval_variation = 10
 	
-	if self.small_map then
-		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-			self.besiege.recon.force = {
-				0.5,
-				0.5,
-				0.5
-			}
-		elseif difficulty_index <= 7 then
-			self.besiege.recon.force = {
-				0.5,
-				0.5,
-				0.5
-			}
-		else
-			self.besiege.recon.force = {
-				0.5,
-				0.5,
-				0.5
-			}
-		end
-	elseif managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
+	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 		self.besiege.recon.force = {
-			6,
-			6,
-			6
+			4,
+			4,
+			4
 		}
 	elseif difficulty_index < 6 then
 		self.besiege.recon.force = {
@@ -7803,9 +7783,9 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		}
 	else
 		self.besiege.recon.force = {
-			6,
-			6,
-			6
+			4,
+			4,
+			4
 		}
 	end
 	
