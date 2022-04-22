@@ -286,14 +286,14 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 	local ray_distance = self:weapon_range()
 	local right = direction:cross(Vector3(0, 0, 1)):normalized()
 	local up = direction:cross(right):normalized()
+	local r = math.random()
 	local theta = math.random() * 360
-	local ax = math.sin(theta) * math.random() * spread_x * (spread_mul or 1)
-	local ay = math.cos(theta) * math.random() * spread_y * (spread_mul or 1)
-	local overall_spread = spread_x * (spread_mul or 1)
+	local ax = math.tan(r * spread_x * (spread_mul or 1)) * math.cos(theta)
+	local ay = math.tan(r * spread_y * (spread_mul or 1)) * math.sin(theta) * -1
 
 	mvector3.set(mvec_spread_direction, direction)
-	mvector3.add(mvec_spread_direction, right * math.rad(ax))
-	mvector3.add(mvec_spread_direction, up * math.rad(ay))
+	mvector3.add(mvec_spread_direction, right * ax)
+	mvector3.add(mvec_spread_direction, up * ay)
 	mvector3.set(mvec_to, mvec_spread_direction)
 	mvector3.multiply(mvec_to, ray_distance)
 	mvector3.add(mvec_to, from_pos)
@@ -305,7 +305,7 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 	if self._autoaim then
 		local weight = 0.1
 		
-		local auto_hit_candidate, ignore_rng = not hit_enemy and self:check_autoaim(from_pos, direction, nil, nil, nil, overall_spread)
+		local auto_hit_candidate, ignore_rng = not hit_enemy and self:check_autoaim(from_pos, direction, nil, nil, nil, spread_mul)
 		
 		--log(tostring(self._autohit_current))
 		

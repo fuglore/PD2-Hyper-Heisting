@@ -6,6 +6,7 @@ local math_sin = math.sin
 local math_cos = math.cos
 local math_rad = math.rad
 local math_clamp = math.clamp
+local math_tan = math.tan
 
 local mvec3_dis = mvector3.distance
 local mvec3_dis_sq = mvector3.distance_sq
@@ -116,13 +117,14 @@ function ShotgunBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul, shoo
 	mvec3_set(mvec_direction, direction)
 
 	for i = 1, shoot_through_data and 1 or self._rays do
+		local r = math_random()
 		local theta = math_random() * 360
-		local ax = math_sin(theta) * math_random() * spread_x * (spread_mul or 1)
-		local ay = math_cos(theta) * math_random() * spread_y * (spread_mul or 1)
+		local ax = math_tan(r * spread_x * (spread_mul or 1)) * math_cos(theta)
+		local ay = math_tan(r * spread_y * (spread_mul or 1)) * math_sin(theta) * -1
 
 		mvec3_set(mvec_spread_direction, mvec_direction)
-		mvec3_add(mvec_spread_direction, right * math_rad(ax))
-		mvec3_add(mvec_spread_direction, up * math_rad(ay))
+		mvec3_add(mvec_spread_direction, right * ax)
+		mvec3_add(mvec_spread_direction, up * ay)
 		mvec3_set(mvec_to, mvec_spread_direction)
 		mvec3_mul(mvec_to, 20000)
 		mvec3_add(mvec_to, from_pos)
