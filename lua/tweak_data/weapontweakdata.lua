@@ -1039,81 +1039,75 @@ function WeaponTweakData:_init_data_npc_melee()
 	}
 end
 
---OVERHAUL STUFF
-
-local old_new_weps_init = WeaponTweakData._init_new_weapons
-
-function WeaponTweakData:_init_new_weapons(weapon_data)
-	weapon_data.autohit_rifle_default = {
-		INIT_RATIO = 0,
-		MAX_RATIO = 0.4,
-		far_angle = 3,
-		far_dis = 2500,
-		MIN_RATIO = 0,
-		min_angle = 0.7,
-		near_angle = 0
-	}
-	weapon_data.autohit_pistol_default = {
-		INIT_RATIO = 0,
-		MAX_RATIO = 0.6,
-		far_angle = 4,
-		far_dis = 2000,
-		MIN_RATIO = 0,
-		min_angle = 1,
-		near_angle = 0.6
-	}
-	weapon_data.autohit_shotgun_default = {
-		INIT_RATIO = 0,
-		MAX_RATIO = 0,
-		far_angle = 6,
-		far_dis = 5000,
-		MIN_RATIO = 0,
-		min_angle = 0.2,
-		near_angle = 0
-	}
-	weapon_data.autohit_lmg_default = {
-		INIT_RATIO = 0,
-		MAX_RATIO = 0.01,
-		far_angle = 3,
-		far_dis = 5000,
-		MIN_RATIO = 0,
-		min_angle = 0.6,
-		near_angle = 0
-	}
-	weapon_data.autohit_snp_default = {
-		INIT_RATIO = 0,
-		MAX_RATIO = 0.4,
-		far_angle = 4,
-		far_dis = 4000,
-		MIN_RATIO = 0,
-		min_angle = 1,
-		near_angle = 0
-	}
-	weapon_data.autohit_smg_default = {
-		INIT_RATIO = 0,
-		MAX_RATIO = 0.2,
-		far_angle = 3,
-		far_dis = 2500,
-		MIN_RATIO = 0,
-		min_angle = 0.7,
-		near_angle = 0
-	}
-	weapon_data.autohit_minigun_default = {
-		INIT_RATIO = 0,
-		MAX_RATIO = 0.005,
-		far_angle = 3,
-		far_dis = 6000,
-		MIN_RATIO = 0,
-		min_angle = 0.2,
-		near_angle = 0
-	}
-
-	old_new_weps_init(self, weapon_data)
-end
-
 local FALLOFF_TEMPLATE = WeaponFalloffTemplate.setup_weapon_falloff_templates()
 
-Hooks:PostHook(WeaponTweakData, "init", "gambyt_weapons", function(self)
+Hooks:PostHook(WeaponTweakData, "_init_new_weapons", "gambyt_weapons", function(self, weapon_data)
+
+weapon_data.autohit_rifle_default = {
+	INIT_RATIO = 0,
+	MAX_RATIO = 0.4,
+	far_angle = 6,
+	far_dis = 2500,
+	MIN_RATIO = 0,
+	min_angle = 1.4,
+	near_angle = 0
+}
+weapon_data.autohit_pistol_default = {
+	INIT_RATIO = 0,
+	MAX_RATIO = 0.6,
+	far_angle = 8,
+	far_dis = 2000,
+	MIN_RATIO = 0,
+	min_angle = 2,
+	near_angle = 1.2
+}
+weapon_data.autohit_shotgun_default = {
+	INIT_RATIO = 0,
+	MAX_RATIO = 0,
+	far_angle = 12,
+	far_dis = 5000,
+	MIN_RATIO = 0,
+	min_angle = 0.4,
+	near_angle = 0
+}
+weapon_data.autohit_lmg_default = {
+	INIT_RATIO = 0,
+	MAX_RATIO = 0.01,
+	far_angle = 6,
+	far_dis = 5000,
+	MIN_RATIO = 0,
+	min_angle = 0.6,
+	near_angle = 0
+}
+weapon_data.autohit_snp_default = {
+	INIT_RATIO = 0,
+	MAX_RATIO = 0.4,
+	far_angle = 4,
+	far_dis = 4000,
+	MIN_RATIO = 0,
+	min_angle = 1,
+	near_angle = 0
+}
+weapon_data.autohit_smg_default = {
+	INIT_RATIO = 0,
+	MAX_RATIO = 0.2,
+	far_angle = 6,
+	far_dis = 2500,
+	MIN_RATIO = 0,
+	min_angle = 1.4,
+	near_angle = 0
+}
+weapon_data.autohit_minigun_default = {
+	INIT_RATIO = 0,
+	MAX_RATIO = 0.005,
+	far_angle = 3,
+	far_dis = 6000,
+	MIN_RATIO = 0,
+	min_angle = 0.2,
+	near_angle = 0
+}
+
+
 --RIFLES--
 
 --AMCAR
@@ -1438,6 +1432,7 @@ self.galil.CLIP_AMMO_MAX = 25
 self.galil.damage_falloff = FALLOFF_TEMPLATE.ASSAULT_FALL_HIGH
 
 --M308
+self.new_m14.autohit = weapon_data.autohit_snp_default
 self.new_m14.AMMO_PICKUP = {1, 2.7}
 self.new_m14.AMMO_MAX = 60
 self.new_m14.fire_mode_data.fire_rate = 0.2
@@ -1468,6 +1463,7 @@ self.new_m14.kick = {
 self.new_m14.stats.damage = 120
 
 --Galant
+self.ching.autohit = weapon_data.autohit_snp_default
 self.ching.has_description = true
 self.ching.fire_mode_data.fire_rate = 0.24
 self.ching.single.fire_rate = 0.24
@@ -1488,6 +1484,7 @@ self.ching.timers = {
 }
 
 --Cavity
+self.sub2000.autohit = weapon_data.autohit_snp_default
 self.sub2000.fire_mode_data.fire_rate = 0.2
 self.sub2000.single.fire_rate = .2
 self.sub2000.AMMO_PICKUP = {1, 3}
@@ -3822,6 +3819,35 @@ self.stats.recoil = {
 	1.08,
 	1.04,
 	1
+}
+
+self.stats.target_acquisition = {
+	4,
+	3.825,
+	3.672,
+	3.519,
+	3.366,
+	3.213,
+	3.06,
+	2.907,
+	2.754,
+	2.601,
+	2.448,
+	2.295,
+	2.142,
+	1.989,
+	1.836,
+	1.683,
+	1.53,
+	1.377,
+	1.224,
+	1,
+	0.918,
+	0.765,
+	0.612,
+	0.459,
+	0.306,
+	0.15
 }
 
 --Thank you for all your work, Gambyt!

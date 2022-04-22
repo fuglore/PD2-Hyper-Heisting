@@ -159,18 +159,21 @@ local mvec1 = Vector3()
 if not BLT.Mods:GetModByName("WeaponLib") then
 
 function RaycastWeaponBase:check_autoaim(from_pos, direction, max_dist, use_aim_assist, autohit_override_data, spread_mul)
+	local spread_index = self._current_stats_indices and self._current_stats_indices.spread or 1
+	local autohit_mul = tweak_data.weapon.stats.target_acquisition[spread_index]
+
 	local autohit = use_aim_assist and self._aim_assist_data or self._autohit_data
 	autohit = autohit_override_data or autohit
 	local autohit_constant_angle = nil
 	
 	if autohit.min_angle then
-		autohit_constant_angle = autohit.min_angle / (spread_mul or 1)
+		autohit_constant_angle = autohit.min_angle / autohit_mul
 	else
-		autohit_constant_angle = autohit.near_angle / (spread_mul or 1)
+		autohit_constant_angle = autohit.near_angle / autohit_mul
 	end
 	
-	local autohit_near_angle = autohit.near_angle
-	local autohit_far_angle = autohit.far_angle
+	local autohit_near_angle = autohit.near_angle / autohit_mul
+	local autohit_far_angle = autohit.far_angle / autohit_mul
 	local far_dis = autohit.far_dis
 	local closest_error, closest_ray = nil
 	local tar_vec = tmp_vec1
