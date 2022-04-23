@@ -680,7 +680,14 @@ function CoreEnvironmentControllerManager:set_chromatic_value_lerp(lerp_value)
 	end
 
 	if self._material then
-		local high_chrom = lerp_value >= 0.9 and math.lerp(-0.85, -1.4, math.random()) or -0.85
+		local high_chrom = nil
+		
+		if self._chromatic_enabled then
+			high_chrom = lerp_value >= 0.9 and math.lerp(-0.85, -1.4, math.random()) or -0.85
+		else
+			high_chrom = lerp_value >= 0.9 and math.lerp(-0.25, -0.7, math.random()) or -0.25
+		end
+		
 		high_chrom = high_chrom - self._base_chromatic_amount
 		local lerp_value = lerp_value + math.lerp(0.01, -0.01, math.random())
 		local new_chrom_value = math.lerp(self._base_chromatic_amount, high_chrom, lerp_value)

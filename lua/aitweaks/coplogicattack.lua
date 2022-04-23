@@ -2267,9 +2267,9 @@ function CopLogicAttack._upd_aim(data, my_data)
 						
 						if not shoot then
 							if data.unit:base():has_tag("law") and not data.is_converted then
-								if focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 4 then
+								if focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 7 then
 									shoot = true
-								elseif focus_enemy.criminal_record and focus_enemy.dis < 300 then
+								elseif (focus_enemy.aimed_at and 1200 or 800) > focus_enemy.dis then
 									shoot = true
 								else
 									aim = true
@@ -2313,7 +2313,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 							if data.unit:base():has_tag("law") and not data.is_converted then
 								if focus_enemy.criminal_record and focus_enemy.criminal_record.assault_t and data.t - focus_enemy.criminal_record.assault_t < 4 then
 									shoot = true
-								elseif focus_enemy.criminal_record and focus_enemy.dis < 300 then
+								elseif focus_enemy.criminal_record and focus_enemy.dis < 600 then
 									shoot = true
 								else
 									aim = true

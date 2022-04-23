@@ -15,6 +15,74 @@ Hooks:PostHook(PlayerStandard, "_calculate_standard_variables", "HH__calculate_s
 	self._setting_hold_to_fire = managers.user:get_setting("holdtofire")
 end)
 
+function PlayerStandard:enter(state_data, enter_data)
+	PlayerMovementState.enter(self, state_data, enter_data)
+	tweak_data:add_reload_callback(self, self.tweak_data_clbk_reload)
+
+	self._state_data = state_data
+	self._state_data.using_bipod = managers.player:current_state() == "bipod"
+	self._equipped_unit = self._ext_inventory:equipped_unit()
+	local weapon = self._ext_inventory:equipped_unit()
+	self._weapon_hold = weapon and weapon:base().weapon_hold and weapon:base():weapon_hold() or weapon and weapon:base().get_name_id and weapon:base():get_name_id()
+
+	self:inventory_clbk_listener(self._unit, "equip")
+	self:_enter(enter_data)
+	self:_update_ground_ray()
+
+	self._controller = self._unit:base():controller()
+
+	if not self._unit:mover() then
+		self:_activate_mover(PlayerStandard.MOVER_STAND)
+	end
+
+	if not _G.IS_VR and (enter_data and enter_data.wants_crouch or not self:_can_stand()) and not self._state_data.ducking then
+		self:_start_action_ducking(managers.player:player_timer():time())
+	end
+
+	self._ext_camera:clbk_fp_enter(self._unit:rotation():y())
+
+	if self._ext_movement:nav_tracker() then
+		self._pos_reservation = {
+			radius = 100,
+			position = self._ext_movement:m_pos(),
+			filter = self._ext_movement:pos_rsrv_id()
+		}
+		self._pos_reservation_slow = {
+			radius = 100,
+			position = mvector3.copy(self._ext_movement:m_pos()),
+			filter = self._ext_movement:pos_rsrv_id()
+		}
+
+		managers.navigation:add_pos_reservation(self._pos_reservation)
+		managers.navigation:add_pos_reservation(self._pos_reservation_slow)
+	end
+
+	for _, data in ipairs(self._ext_inventory._available_selections) do
+		local unit = data.unit
+
+		managers.hud:set_ammo_amount(unit:base():selection_index(), unit:base():ammo_info())
+	end
+
+	if enter_data and enter_data.equip_weapon then
+		self:_start_action_unequip_weapon(managers.player:player_timer():time(), {
+			selection_wanted = enter_data.equip_weapon
+		})
+	end
+
+	if enter_data then
+		self._change_weapon_data = enter_data.change_weapon_data or self._change_weapon_data
+		self._unequip_weapon_expire_t = enter_data.unequip_weapon_expire_t or self._unequip_weapon_expire_t
+		self._equip_weapon_expire_t = enter_data.equip_weapon_expire_t or self._equip_weapon_expire_t
+	end
+
+	self:_reset_delay_action()
+
+	self._last_velocity_xy = Vector3()
+	self._last_sent_pos_t = enter_data and enter_data.last_sent_pos_t or managers.player:player_timer():time()
+	self._last_sent_pos = enter_data and enter_data.last_sent_pos or mvector3.copy(self._pos)
+	self._gnd_ray = true
+end
+
 function PlayerStandard:_stance_entered(unequipped)
 	local stance_standard = tweak_data.player.stances.default[managers.player:current_state()] or tweak_data.player.stances.default.standard
 	local head_stance = self._state_data.ducking and tweak_data.player.stances.default.crouched.head or stance_standard.head
