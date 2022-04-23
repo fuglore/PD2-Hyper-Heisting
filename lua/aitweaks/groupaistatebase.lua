@@ -3034,7 +3034,7 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 	end
 
 	chatter_type_hist.cooldown_t = t + math_lerp(chatter_tweak.interval[1], chatter_tweak.interval[2], math_random())
-	chatter_type_events.global_cooldown_t = t + math_lerp(chatter_tweak.duration[1], chatter_tweak.duration[2], math_random())
+	chatter_type_events.global_cooldown_t = t + math_lerp(chatter_tweak.interval[1], chatter_tweak.interval[2], math_random())
 	
 	local new_event = {
 		epicenter = mvec3_cpy(unit_pos),

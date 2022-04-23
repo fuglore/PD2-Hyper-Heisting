@@ -1594,6 +1594,22 @@ function PlayerDamage:_calc_health_damage(attack_data)
 	return health_subtracted
 end
 
+function PlayerDamage:change_armor(change)
+	self:_check_update_max_armor()
+	
+	local current_armor = self:get_real_armor()
+	
+	if self:is_regenerating_armor() then
+		if not self._took_damage_while_regenerating then
+			if current_armor + change > current_armor then
+				managers.player:add_style("gate")
+			end
+		end
+	end
+	
+	self:set_armor(self:get_real_armor() + change)
+end
+
 function PlayerDamage:is_friendly_fire(unit)
 	if not alive_g(unit) or not unit:movement() or unit:base().is_grenade then
 		return false

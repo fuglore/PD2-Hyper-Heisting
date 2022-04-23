@@ -887,6 +887,12 @@ function CopLogicAttack.check_chatter(data, my_data, objective)
 	if not objective then
 		return
 	end
+	
+	if not data.last_chatter_t or data.t - data.last_chatter_t < 4 then
+		return
+	end
+
+	data.last_chatter_t = data.t
 
 	local said_something = nil
 	local hostage_count = managers.groupai:state():get_hostage_count_for_chatter() --check current hostage count
@@ -1449,16 +1455,18 @@ function CopLogicAttack._update_cover(data)
 			if my_data.friend_pos then
 				local near_pos = my_data.friend_pos
 				
-				if not best_cover or not CopLogicAttack._verify_follow_cover(best_cover, near_pos, threat_pos, nil, 200) then
+				if not best_cover or not CopLogicAttack._verify_follow_cover(best_cover, near_pos, threat_pos, nil, 400) then
 					local nav_seg = managers.navigation:get_nav_seg_from_pos(near_pos)
 					local area = managers.groupai:state():get_area_from_nav_seg_id(nav_seg)
 					
 					local found_cover = managers.navigation:find_cover_in_nav_seg_3(area.nav_segs, nil, near_pos, threat_pos)
 					
-					if not found_cover and not my_data.failed_to_find_cover then 
+					if not found_cover and not my_data.failed_to_find_cover then
+						local threat_vis_pos = threat_pos and data.attention_obj.m_head_pos
 						local access_pos = data.char_tweak.access
-						found_cover = managers.navigation:_find_cover_through_lua(threat_pos, focus_enemy.m_head_pos, near_pos, 200, nil, nil, data.visibility_slotmask, access_pos, data.unit:movement():nav_tracker())
+						cover = managers.navigation:_find_cover_in_seg_through_lua(threat_vis_pos, near_pos, data.visibility_slotmask, access_pos, area.nav_segs)
 					end
+
 
 					if found_cover then
 						local better_cover = {
@@ -1498,9 +1506,10 @@ function CopLogicAttack._update_cover(data)
 					
 					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or nil, near_pos, threat_pos)
 					
-					if not found_cover and not my_data.failed_to_find_cover then 
+					if not found_cover and not my_data.failed_to_find_cover then
+						local threat_vis_pos = threat_pos and data.attention_obj.m_head_pos
 						local access_pos = data.char_tweak.access
-						found_cover = managers.navigation:_find_cover_through_lua(threat_pos, focus_enemy.m_head_pos, near_pos, data.objective.distance and data.objective.distance * 0.9 or nil, nil, nil, data.visibility_slotmask, access_pos, data.unit:movement():nav_tracker())
+						cover = managers.navigation:_find_cover_in_seg_through_lua(threat_vis_pos, near_pos, data.visibility_slotmask, access_pos, follow_unit_area.nav_segs)
 					end
 
 					if found_cover then

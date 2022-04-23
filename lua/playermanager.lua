@@ -846,11 +846,15 @@ function PlayerManager:upd_style(t, dt)
 		local player_mov_ext = player_unit:movement()
 		local player_dmg_ext = player_unit:character_damage()
 		
-		local tier_mul = 1 * self._style_tier / 2
+		local tier_mul = 0.5 + self._style_tier / 2
 		local drain = 0.066
 		
 		if not player_mov_ext._attackers or not next(player_mov_ext._attackers) then
 			drain = drain * 2
+		end
+		
+		if managers.groupai:state():chk_heat_bonus_retreat() then
+			drain = drain * 0.25
 		end
 		
 		if player_dmg_ext._supperssion_data.value then
@@ -898,6 +902,10 @@ function PlayerManager:add_style(event)
 	local t = Application:time()
 	local event_data = self._style_data[event]
 	local amount = style_tweak.amount
+	
+	if managers.groupai:state():chk_heat_bonus_retreat() then
+		amount = amount * 2
+	end
 	
 	if event_data then
 		if event_data.expire_t < t then

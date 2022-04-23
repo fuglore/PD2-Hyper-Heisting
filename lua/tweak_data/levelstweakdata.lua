@@ -232,9 +232,14 @@ function LevelsTweakData:init()
 	self.mallcrasher.meatgrinder = true
 	self.moon.meatgrinder = true
 	self.cane.meatgrinder = true
+	self.flat.meatgrinder = true
 	
 	if self.nmh_hyper then
 		self.nmh_hyper.meatgrinder = true
+	end
+	
+	if self.flat_hh then
+		self.flat_hh.meatgrinder = true
 	end
 	
 	if self.physics_tower then
