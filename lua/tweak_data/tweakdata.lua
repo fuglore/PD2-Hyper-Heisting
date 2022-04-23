@@ -19,7 +19,7 @@ tweak_data.style_meter_events = {
 	kill = {
 		amount = 0.2,
 		stale_add = 1,
-		stale_max = 4,
+		stale_max = 2,
 		stale_expire_t = 0.25,
 		style_pause_t = 0.048
 	},
@@ -33,7 +33,8 @@ tweak_data.style_meter_events = {
 		amount = 0.5,
 		stale_add = 1,
 		stale_max = 4,
-		stale_expire_t = 4.6
+		stale_expire_t = 4.6,
+		style_pause_t = 0.2
 	},
 	exposure = {
 		amount = 0.01,
