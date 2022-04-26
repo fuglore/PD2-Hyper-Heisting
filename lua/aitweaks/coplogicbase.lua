@@ -1254,9 +1254,17 @@ function CopLogicBase._set_attention_obj(data, new_att_obj, new_reaction)
 			end
 		end]]
 
-		if contact_chatter_time_ok and data.char_tweak.chatter.contact and new_att_obj.is_person and new_att_obj.verified and REACT_SHOOT <= new_reaction then
-			if data.unit:anim_data().idle or data.unit:anim_data().move then
-				data.unit:sound():say("c01", true)
+		if new_att_obj.is_person and new_att_obj.verified and REACT_SHOOT <= new_reaction then
+			if managers.groupai:state():register_chatter_event(data.unit, data.m_pos, "contact") then
+				if data.char_tweak.chatter.announce_weapon then
+					data.unit:sound():say("a01", true)
+				elseif data.char_tweak.chatter.contact then
+					if managers.groupai:state():whisper_mode() then
+						data.unit:sound():say("a08", true)
+					else
+						data.unit:sound():say("c01", true)
+					end
+				end
 			end
 		end
 	elseif old_att_obj then

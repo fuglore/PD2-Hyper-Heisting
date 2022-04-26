@@ -7660,101 +7660,56 @@ function CharacterTweakData:_presets(tweak_data)
 		no_chatter = {},
 		security = {
 			aggressive = true,
-			contact = true,
-			clear_whisper = true,
-			ecm = true,
-			saw = true,
-			trip_mines = true,
-			sentry = true,
-			suppress = true,
-			dodge = true,
-			cuffed = true
+			go_go = true,
+			announce_criminal = true,
+			suppress = true
 		},
 		cop = {
 			entry = true,
-			aggressive = true,
-			enemyidlepanic = true,
-			controlpanic = true,
-			retreat = true,
-			contact = true,
-			clear = true,
-			clear_whisper = true,
-			go_go = true,
+			idlechatter = true,
 			push = true,
-			reload = true,
-			look_for_angle = true,
-			ecm = true,
-			saw = true,
-			trip_mines = true,
-			sentry = true,
 			ready = true,
+			retreat = true,
 			smoke = true,
 			flash_grenade = true,
-			follow_me = true,
-			deathguard = true,
-			open_fire = true,
-			suppress = true,
-			dodge = true,
-			cuffed = true
+			aggressive = true,
+			go_go = true,
+			contact = true,
+			suppress = true
 		},
 		swat = {
 			entry = true,
-			aggressive = true,
-			enemyidlepanic = true,
-			controlpanic = true,
-			retreat = true,
-			contact = true,
-			clear = true,
-			clear_whisper = true,
-			go_go = true,
+			idlechatter = true,
 			push = true,
-			reload = true,
-			look_for_angle = true,
-			ecm = true,
-			saw = true,
-			trip_mines = true,
-			sentry = true,
+			clear = true,
 			ready = true,
+			contact = true,
+			suppress = true,
 			smoke = true,
 			flash_grenade = true,
-			follow_me = true,
-			deathguard = true,
-			open_fire = true,
-			suppress = true,
-			dodge = true,
-			cuffed = true
+			retreat = true,
+			go_go = true,
+			aggressive = true,
+			follow_me = true
 		},
 		shield = {
-			entry = true,
-			aggressive = true,
-			enemyidlepanic = true,
-			controlpanic = true,
-			retreat = true,
-			contact = true,
-			clear = true,
-			clear_whisper = true,
-			go_go = true,
+			idlechatter = true,
 			push = true,
-			reload = true,
-			look_for_angle = true,
-			ecm = true,
-			saw = true,
-			trip_mines = true,
-			sentry = true,
+			clear = true,
 			ready = true,
+			contact = true,
+			suppress = true,
 			smoke = true,
 			flash_grenade = true,
-			follow_me = true,
-			deathguard = true,
-			open_fire = true,
-			suppress = true,
-			dodge = true,
-			cuffed = true
+			retreat = true,
+			go_go = true,
+			aggressive = true,
+			follow_me = true
         },
 		bulldozer = {
+			tankgeneral = true,
 			contact = true,
 			aggressive = true,
-			retreat = true,
 			approachingspecial = true
 			
 		},
@@ -7764,14 +7719,14 @@ function CharacterTweakData:_presets(tweak_data)
 			approachingspecial = true		
 		},
 		taser = {
+			tasergeneral = true,
 			contact = true,
 			aggressive = true,
 			retreat = true,
 			approachingspecial = true
 		},
 		medic = {
-			aggressive = true,
-			contact = true
+			imamedicionlyhaveliketwovoicelineshaha = true
 		},
 		spooc = {
 			cloakercontact = true,
@@ -8674,6 +8629,7 @@ Hooks:PostHook(CharacterTweakData, "_init_city_swat", "hhpost_cswat", function(s
 	self.city_swat.weapon = presets.weapon.civil
 	self.city_swat.detection = presets.detection.enemymook
 	self.city_swat.HEALTH_INIT = 6
+	self.city_swat.no_arrest = true
 	self.city_swat.headshot_dmg_mul = 4
 	self.city_swat.ecm_vulnerability = 1
 	self.city_swat.ecm_hurts = {
@@ -9864,15 +9820,6 @@ function CharacterTweakData:_set_easy_wish()
 		0.35,
 		0.35
 	}
-	--STEALTH CHANGES WOO
-	self.city_swat.no_arrest = true
-	self.security.no_arrest = true
-	self.security_mex.no_arrest = true	
-	self.security_undominatable.no_arrest = true		
-	self.mute_security_undominatable.no_arrest = true
-	self.fbi_girl.no_arrest = true
-	self.cop.no_arrest = true
-	self.gensec.no_arrest = true
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.athletic_complex
 	self.fbi.move_speed = self.presets.move_speed.complex_consistency
@@ -10060,16 +10007,6 @@ function CharacterTweakData:_set_overkill_290()
 		0.35,
 		0.35
 	}
-	
-	--STEALTH CHANGES WOO
-	self.city_swat.no_arrest = true
-	self.security.no_arrest = true
-	self.security_mex.no_arrest = true	
-	self.security_undominatable.no_arrest = true		
-	self.mute_security_undominatable.no_arrest = true
-	self.fbi_girl.no_arrest = true
-	self.cop.no_arrest = true
-	self.gensec.no_arrest = true
 	
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.ninja_complex
@@ -10263,16 +10200,6 @@ function CharacterTweakData:_set_sm_wish()
 		0.35,
 		0.35
 	}
-	
-	--STEALTH CHANGES WOO
-	self.city_swat.no_arrest = true
-	self.security.no_arrest = true
-	self.security_mex.no_arrest = true	
-	self.security_undominatable.no_arrest = true		
-	self.mute_security_undominatable.no_arrest = true
-	self.fbi_girl.no_arrest = true
-	self.cop.no_arrest = true
-	self.gensec.no_arrest = true
 	
 	--fbi setup
 	self.fbi.dodge = self.presets.dodge.ninja_complex

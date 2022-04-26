@@ -153,7 +153,18 @@ function GroupAIStateBase:upd_team_AI_distance()
 		local desperately_needs_teleport = alive(ai_mov_ext:nav_tracker()) and ai_mov_ext:nav_tracker():obstructed()
 		
 		if not ai_mov_ext:cool() then
-			local objective = unit:brain():objective()
+			local unit_brain = unit:brain()
+			
+			if not desperately_needs_teleport then
+				if unit_brain._logic_data and unit_brain._logic_data.stuck_t then
+					if self._t - unit_brain._logic_data.stuck_t > 0 then
+						desperately_needs_teleport = true
+						unit_brain._logic_data.stuck_t = nil
+					end
+				end
+			end
+			
+			local objective = unit_brain:objective()
 			local has_warp_objective = nil
 
 			if objective then
@@ -245,7 +256,7 @@ function GroupAIStateBase:upd_team_AI_distance()
 					end
 
 					if closest_player then
-						local near_cover_point = find_cover_f(nav_manager, closest_tracker:field_position(), 1200, ai_access)
+						local near_cover_point = find_cover_f(nav_manager, closest_tracker:field_position(), 400, ai_access)
 						local position = near_cover_point and near_cover_point[1] or closest_player.m_pos
 						local action_desc = {
 							body_part = 1,
@@ -2971,22 +2982,14 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 	end
 
 	local chatter_tweak = tweak_data.group_ai.enemy_chatter[chatter_type]
-	local chatter_type_hist = unit:sound()._chatter[chatter_type]
-	local chatter_type_events = self._enemy_chatter[chatter_type]
+	local chatter_type_hist = self._enemy_chatter[chatter_type]
 
 	if not chatter_type_hist then
 		chatter_type_hist = {
-			cooldown_t = 0
+			cooldown_t = 0,
+			events = {}
 		}
-		unit:sound()._chatter[chatter_type] = chatter_type_hist
-	end
-	
-	if not chatter_type_events then
-		chatter_type_events = {
-			events = {},
-			global_cooldown_t = 0
-		}
-		self._enemy_chatter[chatter_type] = chatter_type_events
+		self._enemy_chatter[chatter_type] = chatter_type_hist
 	end
 
 	local t = self._t
@@ -2994,18 +2997,14 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 	if t < chatter_type_hist.cooldown_t then
 		return
 	end
-	
-	if t < chatter_type_events.global_cooldown_t then
-		return
-	end
-	
+
 	local nr_events_in_area = 0
 
-	for i_event, event_data in pairs_g(chatter_type_events.events) do
+	for i_event, event_data in pairs(chatter_type_hist.events) do
 		if event_data.expire_t < t then
 			chatter_type_hist[i_event] = nil
-		elseif mvec3_dis(unit_pos, event_data.epicenter) < chatter_tweak.radius then
-			if nr_events_in_area == chatter_tweak.max_nr - 1 then
+		elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
+			if nr_events_in_area + 1 > chatter_tweak.max_nr then
 				return
 			else
 				nr_events_in_area = nr_events_in_area + 1
@@ -3017,11 +3016,6 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 
 	if group_requirement and group_requirement > 1 then
 		local u_data = self._police[unit:key()]
-		
-		if not u_data then --fix for a weird as fuck edge-case relating to scripted unit spawns *sigh*
-			return
-		end
-		
 		local nr_in_group = 1
 
 		if u_data.group then
@@ -3033,16 +3027,135 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 		end
 	end
 
-	chatter_type_hist.cooldown_t = t + math_lerp(chatter_tweak.interval[1], chatter_tweak.interval[2], math_random())
-	chatter_type_events.global_cooldown_t = t + math_lerp(chatter_tweak.interval[1], chatter_tweak.interval[2], math_random())
-	
+	chatter_type_hist.cooldown_t = t + math.lerp(chatter_tweak.interval[1], chatter_tweak.interval[2], math.random())
 	local new_event = {
-		epicenter = mvec3_cpy(unit_pos),
-		expire_t = chatter_type_hist.cooldown_t
+		epicenter = mvector3.copy(unit_pos),
+		expire_t = t + math.lerp(chatter_tweak.duration[1], chatter_tweak.duration[2], math.random())
 	}
-	table.insert(chatter_type_events.events, new_event)
 
+	table.insert(chatter_type_hist.events, new_event)
 	unit:sound():say(chatter_tweak.queue, true)
+
+	return true
+end
+
+function GroupAIStateBase:register_chatter_event(unit, unit_pos, chatter_type)
+	local chatter_tweak = tweak_data.group_ai.enemy_chatter[chatter_type]
+	local chatter_type_hist = self._enemy_chatter[chatter_type]
+
+	if not chatter_type_hist then
+		chatter_type_hist = {
+			cooldown_t = 0,
+			events = {}
+		}
+		self._enemy_chatter[chatter_type] = chatter_type_hist
+	end
+
+	local t = self._t
+
+	if t < chatter_type_hist.cooldown_t then
+		return
+	end
+
+	local nr_events_in_area = 0
+
+	for i_event, event_data in pairs(chatter_type_hist.events) do
+		if event_data.expire_t < t then
+			chatter_type_hist[i_event] = nil
+		elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
+			if nr_events_in_area + 1 > chatter_tweak.max_nr then
+				return
+			else
+				nr_events_in_area = nr_events_in_area + 1
+			end
+		end
+	end
+
+	local group_requirement = chatter_tweak.group_min
+
+	if group_requirement and group_requirement > 1 then
+		local u_data = self._police[unit:key()]
+		local nr_in_group = 1
+
+		if u_data.group then
+			nr_in_group = u_data.group.size
+		end
+
+		if nr_in_group < group_requirement then
+			return
+		end
+	end
+
+	chatter_type_hist.cooldown_t = t + math.lerp(chatter_tweak.interval[1], chatter_tweak.interval[2], math.random())
+	local new_event = {
+		epicenter = mvector3.copy(unit_pos),
+		expire_t = t + math.lerp(chatter_tweak.duration[1], chatter_tweak.duration[2], math.random())
+	}
+
+	table.insert(chatter_type_hist.events, new_event)
+	
+	return true
+end
+
+function GroupAIStateBase:chk_say_enemy_standardized_chatter(unit, unit_pos, voiceline, chatter_type)
+	if unit:sound():speaking(self._t) then
+		return
+	end
+
+	local chatter_tweak = tweak_data.group_ai.enemy_chatter[chatter_type]
+	local chatter_type_hist = self._enemy_chatter[chatter_type]
+
+	if not chatter_type_hist then
+		chatter_type_hist = {
+			cooldown_t = 0,
+			events = {}
+		}
+		self._enemy_chatter[chatter_type] = chatter_type_hist
+	end
+
+	local t = self._t
+
+	if t < chatter_type_hist.cooldown_t then
+		return
+	end
+
+	local nr_events_in_area = 0
+
+	for i_event, event_data in pairs(chatter_type_hist.events) do
+		if event_data.expire_t < t then
+			chatter_type_hist[i_event] = nil
+		elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
+			if nr_events_in_area + 1 > chatter_tweak.max_nr then
+				return
+			else
+				nr_events_in_area = nr_events_in_area + 1
+			end
+		end
+	end
+
+	local group_requirement = chatter_tweak.group_min
+
+	if group_requirement and group_requirement > 1 then
+		local u_data = self._police[unit:key()]
+		local nr_in_group = 1
+
+		if u_data.group then
+			nr_in_group = u_data.group.size
+		end
+
+		if nr_in_group < group_requirement then
+			return
+		end
+	end
+
+	chatter_type_hist.cooldown_t = t + math.lerp(chatter_tweak.interval[1], chatter_tweak.interval[2], math.random())
+	local new_event = {
+		epicenter = mvector3.copy(unit_pos),
+		expire_t = t + math.lerp(chatter_tweak.duration[1], chatter_tweak.duration[2], math.random())
+	}
+
+	table.insert(chatter_type_hist.events, new_event)
+	unit:sound():say(voiceline, true)
 
 	return true
 end

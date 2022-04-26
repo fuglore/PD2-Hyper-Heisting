@@ -182,6 +182,12 @@ function TankCopLogicAttack.update(data)
 		
 		my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		TankCopLogicAttack._upd_combat_movement(data)
+		
+		if data.char_tweak.chatter.aggressive then
+			if my_data.walking_to_chase_pos or my_data.firing then
+				managers.groupai:state():chk_say_enemy_standardized_chatter(data.unit, data.m_pos, "g90", "tankgeneral")
+			end
+		end
 	else
 		TankCopLogicAttack._cancel_chase_attempt(data, my_data)
 	end
@@ -232,10 +238,6 @@ function TankCopLogicAttack._upd_enemy_detection(data, is_synchronous)
 
 	if my_data ~= data.internal_data then
 		return
-	end
-
-	if not new_attention and old_att_obj then
-		TankCopLogicAttack._cancel_chase_attempt(data, my_data)
 	end
 
 	CopLogicBase._chk_call_the_police(data)
@@ -441,6 +443,10 @@ function TankCopLogicAttack._upd_combat_movement(data)
 				
 				if my_data.chase_path then
 					action_taken = TankCopLogicAttack._chk_request_action_walk_to_chase_pos(data, my_data, speed)
+					
+					if action_taken then
+						managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
+					end
 				elseif not my_data.chase_path_search_id and focus_enemy.nav_tracker then
 					my_data.chase_pos = nil
 
@@ -481,6 +487,10 @@ function TankCopLogicAttack._upd_combat_movement(data)
 							line:cylinder(my_pos, my_data.chase_pos, 25)]]
 
 							action_taken = TankCopLogicAttack._chk_request_action_walk_to_chase_pos(data, my_data, speed)
+							
+							if action_taken then
+								managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "aggressive")
+							end
 						else
 							my_data.chase_path_search_id = tostring(data.unit:key()) .. "chase"
 							my_data.pathing_to_chase_pos = true

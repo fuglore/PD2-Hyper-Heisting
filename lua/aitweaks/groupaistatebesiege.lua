@@ -734,8 +734,8 @@ function GroupAIStateBesiege:_assign_enemy_groups_to_assault(phase)
 							-- Nothing
 						elseif objective.in_place then
 							done_moving = true
-							
-							break
+						else
+							done_moving = false
 						end
 					end
 				end
@@ -3058,10 +3058,10 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		return
 	end
 
-	local phase_is_anticipation = nil
+	local phase_is_anticipation = self._activeassaultbreak
 	
 	if not self._fake_assault_mode then
-		phase_is_anticipation = self._activeassaultbreak or self:chk_anticipation()
+		phase_is_anticipation = phase_is_anticipation or self:chk_anticipation()
 	end
 	
 	local phase_is_sustain = nil
@@ -3272,7 +3272,7 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 							group.is_chasing = true
 
 							self:_set_objective_to_enemy_group(group, grp_objective)
-							self:_voice_deathguard_start(group)
+							--self:_voice_deathguard_start(group)
 
 							return
 						end
@@ -3326,8 +3326,8 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	elseif current_objective.moving_in then
 		if phase_is_anticipation then
 			pull_back = true
-		elseif not current_objective.area or not next(current_objective.area.criminal.units) then --if theres suddenly no criminals in the area, start approaching instead
-			pull_back = true
+		elseif not current_objective.area or not next(current_objective.area.criminal.units) then
+			push = true
 		end
 	elseif group.in_place_t or not current_objective.area then
 		local obstructed_path_index = nil
@@ -3348,20 +3348,25 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 		local has_criminals_close = nil
 		
 		--check up to two nav areas away, but first check the current area in case obstructed_area didn't proc
+
 		if area_to_chk then
 			if next(area_to_chk.criminal.units) then
 				has_criminals_close = true
 				has_criminals_closer = true
 			else
+				local dis_to_chk = 1200 * 1200
+			
 				for area_id, neighbour_area in pairs_g(area_to_chk.neighbours) do
 					if next(neighbour_area.criminal.units) then					
 						has_criminals_close = neighbour_area
 						break
 					else
 						for alt_area_id, alt_area in pairs_g(neighbour_area.neighbours) do
-							if next(alt_area.criminal.units) then
-								has_criminals_close = alt_area
-								break
+							if mvec3_dis_sq(alt_area.pos, area_to_chk.pos) <= dis_to_chk then
+								if next(alt_area.criminal.units) then
+									has_criminals_close = alt_area
+									break
+								end
 							end
 						end
 					end
@@ -3900,7 +3905,7 @@ end
 	
 function GroupAIStateBesiege:_voice_deathguard_start(group)
 	for u_key, unit_data in pairs(group.units) do
-		if unit_data.char_tweak.chatter.ready and self:chk_say_enemy_chatter(unit_data.unit, unit_data.m_pos, "deathguard") then
+		if unit_data.char_tweak.chatter.ready and self:chk_say_enemy_chatter(unit_data.unit, unit_data.m_pos, "go_go") then
 			else
 		end
 	end

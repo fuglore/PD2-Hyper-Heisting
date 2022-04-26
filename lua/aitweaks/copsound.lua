@@ -423,11 +423,42 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 		self._unit:network():send("say", event_id)
 	end
 
-	self._last_speech = self:_play(full_sound or event_id)
+	self._last_speech = self:_play(full_sound or event_id, nil, self.stop_speaking_clbk)
 
 	if not self._last_speech then
 		return
 	end
 
 	self._speak_expire_t = TimerManager:game():time() + 2
+end
+
+function CopSound:_play(sound_name, source_name, clbk)
+	local source = nil
+
+	if source_name then
+		source = Idstring(source_name)
+	end
+
+	local event = nil
+
+	if clbk then
+		event = self._unit:sound_source(source):post_event(sound_name, clbk, self._unit, "marker", "end_of_event")
+	else
+		event = self._unit:sound_source(source):post_event(sound_name)
+	end
+
+	return event
+end
+
+function CopSound:stop_speaking_clbk(instance, event_type, unit, sound_source, label, identifier, position)
+	if not alive(unit) then
+		return
+	end
+
+	unit:sound()._last_speech = nil
+	unit:sound()._speak_expire_t = TimerManager:game():time()
+end
+
+function CopSound:speaking(t)
+	return self._last_speech
 end

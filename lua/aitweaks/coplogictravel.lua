@@ -152,7 +152,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 		data.unit:movement():set_team(managers.groupai:state()._teams["law1"]) --yuck.
 	end
 
-	my_data.path_safely = not data.cool and data.objective and data.objective.grp_objective and data.objective.grp_objective.type == "recon_area"
+	my_data.path_safely = not data.cool and not allied_with_criminals and my_data.attitude ~= "engage"
 	my_data.path_ahead = data.cool or objective.path_ahead or data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player")
 	local key_str = tostring(data.key)
 	
@@ -324,9 +324,7 @@ function CopLogicTravel.queued_update(data)
 		return
 	end
 	
-	if data.important then
-		CopLogicAttack.check_chatter(data, my_data, data.objective)
-	end
+	CopLogicAttack.check_chatter(data, my_data, data.objective)
 	
 	CopLogicTravel.upd_advance(data)
 
@@ -547,7 +545,7 @@ function CopLogicTravel._upd_enemy_detection(data)
 		CopLogicAttack._upd_aim(data, my_data)
 
 		if not data.entrance and new_attention and data.char_tweak.chatter and data.char_tweak.chatter.entrance then
-			if new_attention.criminal_record and new_reaction >= REACT_COMBAT and new_attention.dis < 1500 and math_abs(data.m_pos.z - new_attention.m_pos.z) < 250 then
+			if new_attention.criminal_record and new_reaction >= REACT_COMBAT and new_attention.dis < 1200 and math_abs(data.m_pos.z - new_attention.m_pos.z) < 250 then
 				local voiceline = data.brain.entrance_chatter_cue or data.char_tweak.spawn_sound_event or "entrance"
 
 				data.unit:sound():say(voiceline, true, nil)
@@ -584,6 +582,7 @@ function CopLogicTravel._upd_pathing(data, my_data)
 			if path ~= "failed" then
 				my_data.advance_path = path
 				data.path_fail_t = nil
+				data.stuck_t = nil
 				--my_data.pathing_to_pos = nil
 			else
 				if data.objective and data.objective.type == "revive" then
@@ -592,6 +591,10 @@ function CopLogicTravel._upd_pathing(data, my_data)
 					CopLogicTravel._on_revive_destination_reached_by_warp(data, my_data, true)
 				else
 					data.path_fail_t = data.t
+					
+					if not data.stuck_t then
+						data.stuck_t = data.t
+					end
 
 					data.objective_failed_clbk(data.unit, data.objective)
 				end
@@ -609,6 +612,7 @@ function CopLogicTravel._upd_pathing(data, my_data)
 				my_data.coarse_path = path
 				my_data.coarse_path_index = 1
 				data.path_fail_t = nil
+				data.stuck_t = nil
 
 				if my_data.was_pathing_safely then
 					my_data.path_safely = true
@@ -621,7 +625,11 @@ function CopLogicTravel._upd_pathing(data, my_data)
 				CopLogicTravel._on_revive_destination_reached_by_warp(data, my_data, true)
 			else
 				data.path_fail_t = data.t
-
+				
+				if not data.stuck_t then
+					data.stuck_t = data.t
+				end
+				
 				data.objective_failed_clbk(data.unit, data.objective)
 			end
 		end
@@ -739,16 +747,7 @@ function CopLogicTravel.action_complete_clbk(data, action)
 				my_data.best_cover = my_data.moving_to_cover
 
 				CopLogicBase.chk_cancel_delayed_clbk(my_data, my_data.cover_update_task_key)
-				
-				local threat_pos = data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.m_head_pos
-				local low_ray, high_ray = nil
-				
-				if threat_pos then
-					low_ray, high_ray = CopLogicAttack._chk_covered(data, my_data.best_cover[1][1], threat_pos, data.visibility_slotmask)				
-				end
-				
-				my_data.best_cover[3] = low_ray
-				my_data.best_cover[4] = high_ray
+
 				my_data.in_cover = true
 
 				if my_data.coarse_path_index ~= #my_data.coarse_path then
@@ -1946,13 +1945,11 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 		return true
 	end
 
-	my_dis = my_dis * 1.15 * 1.15
-
 	for u_key, u_data in pairs_g(data.group.units) do
 		if u_key ~= data.key then
 			local teammate_obj = u_data.unit:brain():objective()
 
-			if teammate_obj and teammate_obj.grp_objective == my_objective.grp_objective and not teammate_obj.in_place then
+			if teammate_obj and teammate_obj.grp_objective == my_objective.grp_objective and not teammate_obj.in_place and teammate_obj.area then
 				local teammate_dis_to_obj = mvec3_dis_sq(teammate_obj.area.pos, u_data.m_pos)
 
 				if my_dis < teammate_dis_to_obj then
@@ -2016,29 +2013,18 @@ function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
 	end
 
 	local search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
-	local threat_pos = nil
+	local threat_vis_pos = nil
 	
-	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 7 then
-		threat_pos = data.attention_obj.m_pos
+	if data.important then
+		if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 7 then
+			threat_vis_pos = data.attention_obj.m_head_pos
+		end
 	end
 	
 	near_pos = near_pos or data.m_pos
-	
-	local optimal_threat_dis = nil
-		
-	if data.objective and data.objective.attitude == "engage" then
-		optimal_threat_dis = data.internal_data.weapon_range.aggressive or data.internal_data.weapon_range.close
-	else
-		optimal_threat_dis = data.internal_data.weapon_range.optimal
-	end
-	
-	cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
 
-	if not cover then
-		local threat_vis_pos = threat_pos and data.attention_obj.m_head_pos
-		local access_pos = data.char_tweak.access
-		cover = managers.navigation:_find_cover_in_seg_through_lua(threat_vis_pos, near_pos, data.visibility_slotmask, access_pos, search_area.nav_segs)
-	end
+	local access_pos = data.char_tweak.access
+	cover = managers.navigation:_find_cover_in_seg_through_lua(threat_vis_pos, near_pos, data.visibility_slotmask, access_pos, search_area.nav_segs, data.pos_rsrv_id)
 
 	return cover
 end

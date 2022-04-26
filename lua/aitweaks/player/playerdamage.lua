@@ -1166,7 +1166,6 @@ function PlayerDamage:damage_bullet(attack_data)
 	if self:is_friendly_fire(attack_data.attacker_unit) then		
 		return
 	else
-		
 		shake_multiplier = math.clamp(attack_data.damage, 1, 20) * 0.025		
 		
 		if self._invulnerable or self._mission_damage_blockers.invulnerable then

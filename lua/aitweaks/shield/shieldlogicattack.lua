@@ -500,9 +500,7 @@ function ShieldLogicAttack._chk_chatter_and_movement(data, my_data)
 	local unit = data.unit
 	local action_taken = my_data.turning or data.unit:movement():chk_action_forbidden("walk") or my_data.walking_to_optimal_pos
 
-	if data.important then
-		CopLogicAttack.check_chatter(data, my_data, data.objective)
-	end
+	CopLogicAttack.check_chatter(data, my_data, data.objective)
 	
 	if data.char_tweak.allowed_stances and not data.char_tweak.allowed_stances[unit:anim_data().stance] then
 		for stance_name, state in pairs(data.char_tweak.allowed_stances) do
