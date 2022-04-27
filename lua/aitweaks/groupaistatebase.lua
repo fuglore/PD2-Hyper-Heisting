@@ -2999,15 +2999,17 @@ function GroupAIStateBase:chk_say_enemy_chatter(unit, unit_pos, chatter_type)
 	end
 
 	local nr_events_in_area = 0
-
-	for i_event, event_data in pairs(chatter_type_hist.events) do
-		if event_data.expire_t < t then
-			chatter_type_hist[i_event] = nil
-		elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
-			if nr_events_in_area + 1 > chatter_tweak.max_nr then
-				return
-			else
-				nr_events_in_area = nr_events_in_area + 1
+	
+	if chatter_tweak.max_nr and chatter_tweak.max_nr > 0 then
+		for i_event, event_data in pairs(chatter_type_hist.events) do
+			if event_data.expire_t < t then
+				chatter_type_hist[i_event] = nil
+			elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
+				if nr_events_in_area + 1 > chatter_tweak.max_nr then
+					return
+				else
+					nr_events_in_area = nr_events_in_area + 1
+				end
 			end
 		end
 	end
@@ -3059,14 +3061,16 @@ function GroupAIStateBase:register_chatter_event(unit, unit_pos, chatter_type)
 
 	local nr_events_in_area = 0
 
-	for i_event, event_data in pairs(chatter_type_hist.events) do
-		if event_data.expire_t < t then
-			chatter_type_hist[i_event] = nil
-		elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
-			if nr_events_in_area + 1 > chatter_tweak.max_nr then
-				return
-			else
-				nr_events_in_area = nr_events_in_area + 1
+	if chatter_tweak.max_nr and chatter_tweak.max_nr > 0 then
+		for i_event, event_data in pairs(chatter_type_hist.events) do
+			if event_data.expire_t < t then
+				chatter_type_hist[i_event] = nil
+			elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
+				if nr_events_in_area + 1 > chatter_tweak.max_nr then
+					return
+				else
+					nr_events_in_area = nr_events_in_area + 1
+				end
 			end
 		end
 	end
@@ -3121,14 +3125,16 @@ function GroupAIStateBase:chk_say_enemy_standardized_chatter(unit, unit_pos, voi
 
 	local nr_events_in_area = 0
 
-	for i_event, event_data in pairs(chatter_type_hist.events) do
-		if event_data.expire_t < t then
-			chatter_type_hist[i_event] = nil
-		elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
-			if nr_events_in_area + 1 > chatter_tweak.max_nr then
-				return
-			else
-				nr_events_in_area = nr_events_in_area + 1
+	if chatter_tweak.max_nr and chatter_tweak.max_nr > 0 then
+		for i_event, event_data in pairs(chatter_type_hist.events) do
+			if event_data.expire_t < t then
+				chatter_type_hist[i_event] = nil
+			elseif mvector3.distance(unit_pos, event_data.epicenter) < chatter_tweak.radius then
+				if nr_events_in_area + 1 > chatter_tweak.max_nr then
+					return
+				else
+					nr_events_in_area = nr_events_in_area + 1
+				end
 			end
 		end
 	end
@@ -3161,16 +3167,15 @@ function GroupAIStateBase:chk_say_enemy_standardized_chatter(unit, unit_pos, voi
 end
 
 function GroupAIStateBase:_try_use_task_spawn_event(t, target_area, task_type, target_pos, force)
-	local max_dis = 8000
-	local min_dis = 1000
-	local mvec3_dis = mvec3_dis
+	local max_dis = 8000 * 8000
+	local mvec3_dis_sq = mvec3_dis_sq
 	target_pos = target_pos or target_area.pos
 
 	for event_id, event_data in pairs_g(self._spawn_events) do
 		if event_data.task_type == task_type or event_data.task_type == "any" then
-			local dis = mvec3_dis(target_pos, event_data.pos)
+			local dis = mvec3_dis_sq(target_pos, event_data.pos)
 
-			if dis > min_dis and dis < max_dis then
+			if dis < max_dis then
 				if force or math_random() < event_data.chance then
 					self._anticipated_police_force = self._anticipated_police_force + event_data.amount
 					self._police_force = self._police_force + event_data.amount
