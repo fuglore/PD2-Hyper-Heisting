@@ -288,10 +288,6 @@ function SpoocLogicAttack._upd_spooc_attack(data, my_data)
 		if focus_enemy.unit:movement().chk_action_forbidden and focus_enemy.unit:movement():chk_action_forbidden("hurt") then
 			return true
 		end
-		
-		if focus_enemy.verified and focus_enemy.verified_dis <= 2500 then
-			managers.groupai:state():chk_say_enemy_chatter( data.unit, data.m_pos, "cloakercontact" )
-		end
 
 		if focus_enemy.verified and focus_enemy.verified_dis <= 2500 and ActionSpooc.chk_can_start_spooc_sprint(data.unit, focus_enemy.unit) and not data.unit:raycast("ray", data.unit:movement():m_head_pos(), focus_enemy.m_head_pos, "slot_mask", managers.slot:get_mask("world_geometry", "vehicles", "enemy_shield_check"), "ignore_unit", focus_enemy.unit, "report") then
 			if my_data.attention_unit ~= focus_enemy.u_key then
@@ -410,7 +406,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 	elseif action_type == "turn" then
 		my_data.turning = nil
 	elseif action_type == "spooc" then
-		data.spooc_attack_timeout_t = data.t + 5
+		data.spooc_attack_timeout_t = data.t + 7
 		
 		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math.random() <= data.char_tweak.spooc_attack_use_smoke_chance and managers.groupai:state():is_smoke_grenade_active() then
 			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)

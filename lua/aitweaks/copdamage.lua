@@ -916,9 +916,9 @@ function CopDamage:_on_damage_received(damage_info)
 
 						if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
 							if money then
-								self._unit:sound():say("moneythrower_hurt", nil, true, nil, nil)
+								self._unit:sound():say("moneythrower_hurt", nil, true, true, nil)
 							else
-								self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+								self._unit:sound():say("burnhurt", nil, nil, true, nil)
 							end
 							self._next_allowed_burnhurt_t = t + 3
 							self._next_allowed_hurt_t = t + math.random(1, 2)
@@ -928,7 +928,7 @@ function CopDamage:_on_damage_received(damage_info)
 						if self._unit:base():has_tag("tank") then
 							--shut up. STOP PLAYING PDTH PAIN NOISES.
 						else
-							self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+							self._unit:sound():say("x01a_any_3p", nil, nil, true, nil)
 						end
 					end
 				else
@@ -946,9 +946,9 @@ function CopDamage:_on_damage_received(damage_info)
 					
 						if self._next_allowed_burnhurt_t and self._next_allowed_burnhurt_t < t or not self._next_allowed_burnhurt_t then
 							if money then
-								self._unit:sound():say("moneythrower_hurt", nil, true, nil, nil)
+								self._unit:sound():say("moneythrower_hurt", nil, true, true, nil)
 							else
-								self._unit:sound():say("burnhurt", nil, nil, nil, nil)
+								self._unit:sound():say("burnhurt", nil, nil, true, nil)
 							end
 							
 							self._next_allowed_burnhurt_t = t + 1
@@ -958,7 +958,7 @@ function CopDamage:_on_damage_received(damage_info)
 						if self._unit:base():has_tag("tank") then
 							--shut up. STOP PLAYING PDTH PAIN NOISES.
 						else
-							self._unit:sound():say("x01a_any_3p", nil, nil, nil, nil)
+							self._unit:sound():say("x01a_any_3p", nil, nil, true, nil)
 						end
 					end
 				end

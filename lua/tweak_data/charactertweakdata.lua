@@ -7729,6 +7729,7 @@ function CharacterTweakData:_presets(tweak_data)
 			imamedicionlyhaveliketwovoicelineshaha = true
 		},
 		spooc = {
+			cloakergeneral = true,
 			cloakercontact = true,
 			go_go = true, --only used for russian cloaker
 			cloakeravoidance = true --only used for russian cloaker

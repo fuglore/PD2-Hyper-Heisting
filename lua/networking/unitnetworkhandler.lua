@@ -1,3 +1,29 @@
+function UnitNetworkHandler:set_health(unit, percent, max_mul, sender)
+	if not alive(unit) or not self._verify_gamestate(self._gamestate_filter.any_ingame) or not self._verify_sender(sender) then
+		return
+	end
+
+	local peer = self._verify_sender(sender)
+	local peer_id = peer:id()
+	local character_data = managers.criminals:character_data_by_peer_id(peer_id)
+
+	if character_data and character_data.panel_id then
+		unit:character_damage()._health_ratio = percent / 100
+		managers.hud:set_teammate_health(character_data.panel_id, {
+			current = percent * max_mul,
+			total = 100 * max_mul,
+			max = 100 * max_mul
+		})
+	else
+		unit:character_damage()._health_ratio = percent / 100
+		managers.hud:set_mugshot_health(unit:unit_data().mugshot_id, percent / 100)
+	end
+
+	if percent ~= 100 then
+		managers.mission:call_global_event("player_damaged")
+	end
+end
+
 function UnitNetworkHandler:send_drama(drama, sender)
 	if not self._verify_gamestate(self._gamestate_filter.any_ingame) then
 		return

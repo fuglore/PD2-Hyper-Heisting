@@ -1,17 +1,25 @@
 local world_g = World
+local mvec3_cpy = mvector3.copy
 
-function TeamAIMovement:on_SPOOCed(enemy_unit)
-	local push_vec = Vector3()
-	local distance = mvector3.direction(push_vec, enemy_unit:movement():m_head_pos(), self._unit:movement():m_pos())
-	mvector3.normalize(push_vec)
-	mvector3.set_z(push_vec, 200)
+function TeamAIMovement:on_SPOOCed(enemy_unit, kick_type)
+	local from_pos = kick_type == "flying_strike" and enemy_unit:movement():m_head_pos() or enemy_unit:movement():m_com()
+	local target_com = self:m_com()
+	local attack_dir = target_com - from_pos
+
 	local attack_data = {
+		damage = 12,
+		damage_effect = 12,
+		variant = "melee",
 		attacker_unit = enemy_unit,
+		attack_dir = attack_dir,
+		col_ray = {
+			position = mvec3_cpy(target_com),
+			body = self._unit:body("body"),
+			ray = attack_dir
+		},
 		is_cloaker_kick = true,
 		melee_armor_piercing = true,
-		damage = 12.5, --die
-		pos = self._unit:movement():m_pos(),
-		push_vel = push_vec * 2000
+		pos = self:m_com()
 	}
 	self._unit:character_damage():damage_melee(attack_data)
 	

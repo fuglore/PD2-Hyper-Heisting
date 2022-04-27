@@ -627,7 +627,7 @@ function PlayerDamage:damage_melee(attack_data)
 	pm:send_message(Message.OnPlayerDamage, nil, attack_data)
 	self:_call_listeners(damage_info)
 
-	return
+	return true
 end
 
 function PlayerDamage:_check_bleed_out(can_activate_berserker, ignore_movement_state, is_special_attack, attack_data, ignore_reduce_revive)

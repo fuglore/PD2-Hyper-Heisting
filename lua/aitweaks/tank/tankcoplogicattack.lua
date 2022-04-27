@@ -55,12 +55,8 @@ function TankCopLogicAttack.enter(data, new_logic_name, enter_params)
 
 	local objective = data.objective
 
-	my_data.attitude = objective and objective.attitude or "avoid"
-	
-	if not data.unit:base():has_tag("law") then
-		my_data.attitude = "engage"
-	end
-	
+	my_data.attitude = objective and objective.attitude or "engage"
+
 	my_data.weapon_range = data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range
 	
 	if data.tactics and data.tactics.flank then
@@ -125,7 +121,7 @@ function TankCopLogicAttack._pathing_complete_clbk(data)
 	
 	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
 		if data.unit:base():has_tag("law") then
-			my_data.attitude = data.objective and data.objective.attitude or "avoid"
+			my_data.attitude = data.objective and data.objective.attitude or "engage"
 		end
 		
 		my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)

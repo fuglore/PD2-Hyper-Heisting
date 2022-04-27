@@ -170,7 +170,7 @@ function ActionSpooc:init(action_desc, common_data)
 
 	self._vanish = char_tweak.spooc_vanish
 
-	local beating_time = 4
+	local beating_time = math_lerp(7.5, 10, math_random())
 	self._beating_time = beating_time
 
 	local stroke_t = action_desc.stroke_t and tonumber_g(action_desc.stroke_t)
@@ -431,7 +431,8 @@ function ActionSpooc:on_exit()
 			if taa_sound and not my_unit:sound():speaking(self._timer:time()) then
 				local strike_unit = self._strike_unit
 
-				if alive_g(strike_unit) and not self:_chk_invalid_beating_unit_status(strike_unit) then
+				if not alive_g(strike_unit) or not self:_chk_invalid_beating_unit_status(strike_unit) then
+					managers.groupai:state():register_chatter_event(self._unit, ext_mov:m_pos(), "cloakergeneral")
 					my_unit:sound():say(taa_sound, true, true)
 				end
 			end
@@ -1678,6 +1679,7 @@ function ActionSpooc:_upd_striking(t)
 		local tda_sound = self._taunt_during_assault
 
 		if tda_sound then
+			managers.groupai:state():register_chatter_event(self._unit, ext_mov:m_pos(), "cloakergeneral")
 			self._unit:sound():say(tda_sound, true, true)
 		end
 	end
@@ -2037,7 +2039,7 @@ function ActionSpooc:anim_act_clbk(anim_act)
 
 		local dif_z = math_abs(mvec3_z(fuckingpos))
 		
-		if mvec3_len_sq(fuckingpos) > 78400 or dif_z > 150 then --the hitbox is 280 square centimeters big but i have no idea what the fuck that is so whatever
+		if mvec3_len_sq(fuckingpos) > 78400 or dif_z > 180 then --the hitbox is 280 square centimeters big but i have no idea what the fuck that is so whatever
 			return
 		end
 	end
@@ -2242,6 +2244,7 @@ function ActionSpooc:anim_act_clbk(anim_act)
 			local taa_sound = self._taunt_after_assault
 
 			if taa_sound then
+				managers.groupai:state():register_chatter_event(self._unit, ext_mov:m_pos(), "cloakergeneral")
 				my_unit:sound():say(taa_sound, true, true)
 			end
 		end

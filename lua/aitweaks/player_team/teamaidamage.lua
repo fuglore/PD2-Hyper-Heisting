@@ -219,14 +219,27 @@ function TeamAIDamage:damage_melee(attack_data)
 	if self._invulnerable or self._dead or self._fatal or self._arrested_timer then
 		return
 	end
+	
+	local result = {
+		type = "none",
+		variant = "bullet"
+	}
+	attack_data.result = result
+	
+	if PlayerDamage._chk_dmg_too_soon(self, attack_data.damage) and not attack_data.is_cloaker_kick then
+		self:_call_listeners(attack_data)
+
+		return
+	end
 
 	if PlayerDamage.is_friendly_fire(self, attack_data.attacker_unit) then
 		return
 	end
+	
+	if attack_data.is_cloaker_kick then
+		attack_data.damage = self._HEALTH_INIT / 2
+	end
 
-	local result = {
-		variant = "melee"
-	}
 	local damage_percent, health_subtracted = self:_apply_damage(attack_data, result)
 	local t = TimerManager:game():time()
 	self._next_allowed_dmg_t = t + self._dmg_interval
@@ -266,10 +279,12 @@ function TeamAIDamage:_apply_damage(attack_data, result)
 	attack_data.pos = attack_data.pos or attack_data.col_ray.position
 	attack_data.result = result
 
-	if dodged or self._unit:anim_data().dodge then
-		attack_data.result.type = "none"
+	if not attack_data.is_cloaker_kick and not attack_data.is_taser_shock then
+		if dodged or self._unit:anim_data().dodge then
+			attack_data.result.type = "none"
 
-		return 0, 0
+			return 0, 0
+		end
 	end
 
 	local health_subtracted = nil
@@ -299,7 +314,14 @@ function TeamAIDamage:_apply_damage(attack_data, result)
 			self._health_ratio = 1
 		else
 			health_subtracted = damage
-			attack_data.result.type = self:get_damage_type(damage_percent, "bullet") or "none"
+			
+			if attack_data.is_taser_shock then
+				attack_data.result.type = "hurt"
+			elseif attack_data.is_cloaker_kick then
+				attack_data.result.type = "heavy_hurt"
+			else
+				attack_data.result.type = self:get_damage_type(damage_percent, "bullet") or "none"
+			end
 
 			self:_on_hurt()
 

@@ -897,14 +897,39 @@ function CopLogicAttack.check_chatter(data, my_data, objective)
 		return
 	end
 	
+	if data.char_tweak.chatter.cloakergeneral then
+		if not data.cloakertauntvc then
+			local ai_type = tweak_data.levels:get_ai_group_type()
+			local level_types = LevelsTweakData.LevelType
+			local r = level_types.Russia
+			local f = level_types.Federales
+
+			if ai_type == r then
+				data.cloakertauntvc = "rcloaker_taunt_during_assault"
+			elseif ai_type == f then
+				data.cloakertauntvc = "mcloaker_taunt_during_assault"
+			else
+				data.cloakertauntvc = "cloaker_taunt_during_assault"
+			end
+		end
+	
+		if data.attention_obj and not data.attention_obj.verified and REACT_SHOOT <= data.attention_obj.reaction and my_data.moving_to_cover and data.attention_obj.dis < 1200 then
+			local dmg_ext = data.attention_obj.unit:character_damage()
+			
+			if dmg_ext.health_ratio and dmg_ext:health_ratio() < 0.6 then
+				if managers.groupai:state():register_chatter_event(data.unit, data.m_pos, "cloakergeneral") then
+					data.unit:sound():say(data.cloakertauntvc, true, true)
+				end
+			end
+		end
+		
+		return
+	end
+	
 	if data.char_tweak.chatter.imamedicionlyhaveliketwovoicelineshaha then
-		if data.attention_obj then
+		if data.attention_obj and REACT_SHOOT <= data.attention_obj.reaction then
 			if data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 15 then
 				managers.groupai:state():chk_say_enemy_standardized_chatter(data.unit, data.m_pos, "g90", "medicgeneral")
-			else
-				local voiceline = data.brain.entrance_chatter_cue or data.char_tweak.spawn_sound_event or "entrance"
-				
-				managers.groupai:state():chk_say_enemy_standardized_chatter(data.unit, data.m_pos, voiceline, "medicgeneral")
 			end
 		end
 		
@@ -995,7 +1020,7 @@ function CopLogicAttack.check_chatter(data, my_data, objective)
 		else
 			if my_data.flank_cover and math_random() > 0.6 then
 				managers.groupai:state():chk_say_enemy_standardized_chatter(data.unit, data.m_pos, "t01", "assaultidle")
-			elseif objective.grp_objective and objective.grp_objective.open_fire and my_data.firing then
+			elseif objective.grp_objective and objective.grp_objective.open_fire and my_data.firing and math_random() < 0.5 then
 				managers.groupai:state():chk_say_enemy_standardized_chatter(data.unit, data.m_pos, "att", "assaultidle")
 			elseif objective.grp_objective and objective.grp_objective.moving_in then
 				managers.groupai:state():chk_say_enemy_standardized_chatter(data.unit, data.m_pos, "pus", "assaultidle")
@@ -2699,8 +2724,22 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 		return
 	end
 	
+	local groupai = managers.groupai:state()
+	
 	if data.unit:base():has_tag("tank") then
 		if my_data.attitude == "engage" and data.attention_obj.dis < 1400 then
+			return true
+		end
+		
+		return
+	end
+	
+	if data.unit:base():has_tag("spooc") then
+		if data.spooc_attack_timeout_t and data.t < data.spooc_attack_timeout_t then
+			return true
+		end
+		
+		if groupai:chk_heat_bonus_retreat() then
 			return true
 		end
 		
@@ -2710,8 +2749,6 @@ function CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 	if Global.game_settings.one_down then
 		return
 	end
-	
-	local groupai = managers.groupai:state()
 	
 	if groupai._drama_data.zone == "high" then
 		return

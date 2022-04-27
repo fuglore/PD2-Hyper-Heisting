@@ -156,20 +156,20 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 	}
 	
 	--Special Stuff
-	self.enemy_chatter.cloakercontact = {
-		radius = 0,
+	self.enemy_chatter.cloakergeneral = {
+		radius = 1200,
 		max_nr = 1,
-		duration = {0, 0},
-		interval = {0, 0},
+		interval = {8, 16}, --global chatter cooldown, prevents spam
+		duration = {8, 16},	--local chatter cooldown
 		group_min = 0,
-		queue = "c01x_plu"
+		queue = "I BET YOU WEAR THAT SHIT IN YOUR PANTS PROUDLY LIKE A BADGE OF HONOR"
 	}
 	self.enemy_chatter.medicgeneral = {
 		radius = 400, --chatter event epicenter, units check against this to add to the nr
 		max_nr = 3, --how many chatter events before the local chatter cooldown kicks in
 		interval = {2, 4}, --global chatter cooldown, prevents spam
 		duration = {4, 8},	--local chatter cooldown
-		group_min = 3, --minimum units in the group in order for the chatter to play
+		group_min = 0, --minimum units in the group in order for the chatter to play
 		queue = "g90"
 	}
 	self.enemy_chatter.tasergeneral = {
@@ -177,7 +177,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 3, 
 		interval = {2, 4}, 
 		duration = {4, 8},	
-		group_min = 3,
+		group_min = 0,
 		queue = "g90"
 	}
 	self.enemy_chatter.tankgeneral = {
@@ -185,7 +185,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 3, 
 		interval = {2, 4}, 
 		duration = {4, 8},	
-		group_min = 3,
+		group_min = 0,
 		queue = "g90"
 	}
 	

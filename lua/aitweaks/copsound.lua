@@ -235,7 +235,11 @@ function CopSound:say(sound_name, sync, skip_prefix, important, callback)
 	end
 
 	if self._last_speech then
-		self._last_speech:stop()
+		if important then
+			self._last_speech:stop()
+		else
+			return
+		end
 	end
 
 	local full_sound = nil
