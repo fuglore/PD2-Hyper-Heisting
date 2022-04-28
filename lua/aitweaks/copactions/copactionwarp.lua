@@ -2,6 +2,8 @@ local mvec3_cpy = mvector3.copy
 
 local m_rot_yaw = mrotation.yaw
 
+local world_g = World
+
 local math_ceil = math.ceil
 
 function CopActionWarp:init(action_desc, common_data)
@@ -34,12 +36,33 @@ function CopActionWarp:init(action_desc, common_data)
 	--else, it needs to happen in the next frame
 	if #dynamic_bodies == 0 then
 		if warp_pos then
+			if self._unit:base():has_tag("spooc") then
+				local sound_source = SoundDevice:create_source("poof_source")
+
+				sound_source:set_position(mvec3_cpy(ext_mov:m_com()))
+				sound_source:post_event("hlp_poof_big")
+			
+				world_g:effect_manager():spawn({
+					effect = Idstring("effects/pd2_mod_hh/particles/character/spooc_bye"),
+					position = ext_mov:m_com(),
+					normal = math.UP
+				})
+				
+				world_g:effect_manager():spawn({
+					effect = Idstring("effects/pd2_mod_hh/particles/character/spooc_bye"),
+					position = warp_pos + math.UP * 65,
+					normal = math.UP
+				})
+			end
+		
 			ext_mov:set_position(warp_pos)
 		end
 
 		if warp_rot then
 			ext_mov:set_rotation(warp_rot)
 		end
+		
+		self._expired = true
 	else
 		self._dynamic_bodies = dynamic_bodies
 
@@ -96,6 +119,25 @@ function CopActionWarp:update(t)
 		local ext_mov = self._ext_movement
 
 		if warp_pos then
+			if self._unit:base():has_tag("spooc") then
+				local sound_source = SoundDevice:create_source("poof_source")
+
+				sound_source:set_position(mvec3_cpy(ext_mov:m_com()))
+				sound_source:post_event("hlp_poof_big")
+			
+				world_g:effect_manager():spawn({
+					effect = Idstring("effects/pd2_mod_hh/particles/character/spooc_bye"),
+					position = ext_mov:m_com(),
+					normal = math.UP
+				})
+				
+				world_g:effect_manager():spawn({
+					effect = Idstring("effects/pd2_mod_hh/particles/character/spooc_bye"),
+					position = warp_pos + math.UP * 65,
+					normal = math.UP
+				})
+			end
+		
 			ext_mov:set_position(warp_pos)
 
 			self._warp_pos = nil

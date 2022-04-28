@@ -160,7 +160,10 @@ function CopActionWalk:init(action_desc, common_data)
 	if self._haste ~= "walk" and not common_data.ext_damage:dead() then
 		if common_data.unit:damage():has_sequence("turn_on_spook_lights") then
 			common_data.unit:damage():run_sequence_simple("turn_on_spook_lights")
-			self._unit:sound():play("c01x_plu")
+			
+			if common_data.char_tweak.play_spooc_noise then
+				self._unit:sound():play("clk_c01x_plu")
+			end
 		end
 	end
 

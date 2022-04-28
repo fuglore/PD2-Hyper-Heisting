@@ -2406,7 +2406,8 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 					use_smoke = true,
 					target_areas = {
 						grp_objective.area
-					}
+					},
+					grp_objective.area
 				})
 			end
 		end
@@ -3936,6 +3937,146 @@ function GroupAIStateBesiege:_voice_dont_delay_assault(group)
 		end
 	end
 	return false
+end
+
+
+function GroupAIStateBesiege:_chk_group_use_smoke_grenade(group, task_data, detonate_pos, assault_area)
+	if task_data.use_smoke and self:is_smoke_grenade_active() then
+		local shooter_pos, shooter_u_data = nil
+		local duration = tweak_data.group_ai.smoke_grenade_lifetime
+
+		for u_key, u_data in pairs(group.units) do
+			if u_data.tactics_map and not u_data.char_tweak.cannot_throw_grenades then
+				if not detonate_pos then
+					local nav_seg_id = u_data.tracker:nav_segment()
+					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
+					local unit_pos = u_data.m_pos
+
+					for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
+						local area = self:get_area_from_nav_seg_id(neighbour_nav_seg_id)
+
+						if assault_area.nav_segs[neighbour_nav_seg_id] or next(area.criminal.units) then
+							
+							local best_dis, best_attempted_det_pos, attempted_det_pos, attempt_dis
+							
+							for i = 1, #door_list do
+								local random_door_id = door_list[i]
+								
+								if type(random_door_id) == "number" then
+									attempted_det_pos = managers.navigation._room_doors[random_door_id].center
+								else
+									attempted_det_pos = random_door_id:script_data().element:nav_link_end_pos()
+								end
+								
+								attempt_dis = mvec3_dis_sq(attempted_det_pos, unit_pos)
+								
+								if not best_dis or attempt_dis < best_dis then
+									best_dis = attempt_dis
+									best_attempted_det_pos = attempted_det_pos
+								end
+							end
+							
+							detonate_pos = best_attempted_det_pos
+
+							shooter_pos = mvec3_cpy(unit_pos)
+							shooter_u_data = u_data
+
+							break
+						end
+					end
+				end
+
+				if detonate_pos and shooter_u_data then
+					self:detonate_smoke_grenade(detonate_pos, shooter_pos, duration, false)
+
+					self:apply_grenade_cooldown()
+
+					if shooter_u_data.char_tweak.chatter.smoke and not shooter_u_data.unit:sound():speaking(self._t) then
+						self:chk_say_enemy_chatter(shooter_u_data.unit, shooter_u_data.m_pos, "smoke")
+					end
+					
+					if not shooter_u_data.unit:movement():chk_action_forbidden("action") and not shooter_u_data.char_tweak.no_grenade_anim then
+						local redir_name = "throw_grenade"
+
+						if shooter_u_data.unit:movement():play_redirect(redir_name) then
+							managers.network:session():send_to_peers_synched("play_distance_interact_redirect", shooter_u_data.unit, redir_name)
+						end
+					end
+
+					return true
+				end
+			end
+		end
+	end
+end
+
+function GroupAIStateBesiege:_chk_group_use_flash_grenade(group, task_data, detonate_pos, assault_area)
+	if task_data.use_smoke and self:is_smoke_grenade_active() then
+		local shooter_pos, shooter_u_data = nil
+		local duration = tweak_data.group_ai.flash_grenade_lifetime
+
+		for u_key, u_data in pairs(group.units) do
+			if u_data.tactics_map and not u_data.char_tweak.cannot_throw_grenades then
+				if not detonate_pos then
+					local nav_seg_id = u_data.tracker:nav_segment()
+					local nav_seg = managers.navigation._nav_segments[nav_seg_id]
+					local unit_pos = u_data.m_pos
+
+					for neighbour_nav_seg_id, door_list in pairs(nav_seg.neighbours) do
+						local area = self:get_area_from_nav_seg_id(neighbour_nav_seg_id)
+
+						if assault_area.nav_segs[neighbour_nav_seg_id] or next(area.criminal.units) then
+							local best_dis, best_attempted_det_pos, attempted_det_pos, attempt_dis
+							
+							for i = 1, #door_list do
+								local random_door_id = door_list[i]
+								
+								if type(random_door_id) == "number" then
+									attempted_det_pos = managers.navigation._room_doors[random_door_id].center
+								else
+									attempted_det_pos = random_door_id:script_data().element:nav_link_end_pos()
+								end
+								
+								attempt_dis = mvec3_dis_sq(attempted_det_pos, unit_pos)
+								
+								if not best_dis or attempt_dis < best_dis then
+									best_dis = attempt_dis
+									best_attempted_det_pos = attempted_det_pos
+								end
+							end
+							
+							detonate_pos = best_attempted_det_pos
+
+							shooter_pos = mvec3_cpy(unit_pos)
+							shooter_u_data = u_data
+
+							break
+						end
+					end
+				end
+
+				if detonate_pos and shooter_u_data then
+					self:detonate_smoke_grenade(detonate_pos, shooter_pos, duration, true)
+
+					self:apply_grenade_cooldown(true)
+
+					if shooter_u_data.char_tweak.chatter.flash_grenade and not shooter_u_data.unit:sound():speaking(self._t) then
+						self:chk_say_enemy_chatter(shooter_u_data.unit, shooter_u_data.m_pos, "flash_grenade")
+					end
+					
+					if not shooter_u_data.unit:movement():chk_action_forbidden("action") and not shooter_u_data.char_tweak.no_grenade_anim then
+						local redir_name = "throw_grenade"
+
+						if shooter_u_data.unit:movement():play_redirect(redir_name) then
+							managers.network:session():send_to_peers_synched("play_distance_interact_redirect", shooter_u_data.unit, redir_name)
+						end
+					end
+
+					return true
+				end
+			end
+		end
+	end
 end
 
 function GroupAIStateBesiege:apply_grenade_cooldown(flash)

@@ -377,25 +377,17 @@ end
 function SpoocLogicAttack.action_complete_clbk(data, action)
 	local action_type = action:type()
 	local my_data = data.internal_data
-
+	
 	if action_type == "walk" then
 		my_data.advancing = nil
 
 		if my_data.surprised then
-			my_data.surprised = false
+			my_data.surprised = nil
 		elseif my_data.moving_to_cover then
-			if action:expired() then
-				my_data.in_cover = my_data.moving_to_cover
-
-				CopLogicAttack._set_nearest_cover(my_data, my_data.in_cover)
-
-				my_data.cover_enter_t = data.t
-				my_data.cover_sideways_chk = nil
-			end
-
 			my_data.moving_to_cover = nil
 		elseif my_data.walking_to_cover_shoot_pos then
 			my_data.walking_to_cover_shoot_pos = nil
+			my_data.at_cover_shoot_pos = true
 		end
 	elseif action_type == "shoot" then
 		my_data.shooting = nil
@@ -407,6 +399,7 @@ function SpoocLogicAttack.action_complete_clbk(data, action)
 		my_data.turning = nil
 	elseif action_type == "spooc" then
 		data.spooc_attack_timeout_t = data.t + 7
+		data.spooc_warped = nil
 		
 		if action:complete() and data.char_tweak.spooc_attack_use_smoke_chance > 0 and math.random() <= data.char_tweak.spooc_attack_use_smoke_chance and managers.groupai:state():is_smoke_grenade_active() then
 			managers.groupai:state():detonate_smoke_grenade(data.m_pos + math.UP * 10, data.unit:movement():m_head_pos(), math.lerp(15, 30, math.random()), false)

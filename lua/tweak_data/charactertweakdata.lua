@@ -8039,6 +8039,7 @@ function CharacterTweakData:_init_spooc(presets) --Can't make this into a post h
 		3
 	}
 	self.spooc.spooc_attack_use_smoke_chance = 0 --lol stop
+	self.spooc.play_spooc_noise = true
 	self.spooc.weapon_voice = "3"
 	self.spooc.experience.cable_tie = "tie_swat"
 	self.spooc.speech_prefix_p1 = self._prefix_data_p1.cloaker()
@@ -8139,12 +8140,15 @@ Hooks:PostHook(CharacterTweakData, "_init_shadow_spooc", "hhpost_s_spooc", funct
 	}
 	self.shadow_swat = deep_clone(self.shadow_spooc)
 	self.shadow_swat.health = 5
-	self.shadow_swat.headshot_dmg_mul = 1
+	self.shadow_swat.headshot_dmg_mul = 4
 	self.shadow_swat.spawn_sound_event = nil
 	self.shadow_swat.die_sound_event = nil
 	self.shadow_swat.move_speed = presets.move_speed.anarchy_consistency
 	
 	self.shadow_taser = deep_clone(self.shadow_swat)
+	self.shadow_taser.tags = {"taser"}
+	self.shadow_taser.HEALTH_INIT = 20
+	self.shadow_taser.headshot_dmg_mul = 2
 	
 	table.insert(self._enemy_list, "shadow_swat")
 	table.insert(self._enemy_list, "shadow_taser")
@@ -10830,8 +10834,8 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.sniper.HEALTH_INIT = self.sniper.HEALTH_INIT * hp_mul
 	self.armored_sniper.HEALTH_INIT = self.armored_sniper.HEALTH_INIT * hp_mul
 	self.shadow_spooc.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT * hp_mul
-	self.shadow_taser.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT
-	self.shadow_swat.HEALTH_INIT = self.shadow_spooc.HEALTH_INIT
+	self.shadow_taser.HEALTH_INIT = self.shadow_taser.HEALTH_INIT * hp_mul
+	self.shadow_swat.HEALTH_INIT = self.shadow_swat.HEALTH_INIT * hp_mul
 
 	--HEADSHOT MULS
 
@@ -10950,9 +10954,7 @@ function CharacterTweakData:_multiply_all_hp(hp_mul, hs_mul)
 	self.sniper.headshot_dmg_mul = self.sniper.headshot_dmg_mul * hs_mul
 	self.armored_sniper.headshot_dmg_mul = self.armored_sniper.headshot_dmg_mul * hs_mul
 	
-	if self.shadow_spooc.headshot_dmg_mul then
-		self.shadow_spooc.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul * hs_mul
-		self.shadow_swat.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul
-		self.shadow_taser.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul
-	end
+	self.shadow_spooc.headshot_dmg_mul = self.shadow_spooc.headshot_dmg_mul * hs_mul
+	self.shadow_swat.headshot_dmg_mul = self.shadow_swat.headshot_dmg_mul * hs_mul
+	self.shadow_taser.headshot_dmg_mul = self.shadow_taser.headshot_dmg_mul * hs_mul
 end

@@ -2,10 +2,64 @@ local world_g = World
 local mvec3_set = mvector3.set
 local mvec3_mul = mvector3.multiply
 local mvec3_add = mvector3.add
+local mvec3_dis_sq = mvector3.distance_sq
 
 function PlayerMovement:clbk_attention_notice_sneak(observer_unit, status, local_client_detection)
 	if alive(observer_unit) then
 		self:on_suspicion(observer_unit, status, local_client_detection)
+	end
+end
+
+function PlayerMovement:on_targetted_for_attack(state, attacker_unit)
+	if state then
+		self._attackers = self._attackers or {}
+		self._attackers[attacker_unit:key()] = attacker_unit
+	elseif self._attackers then
+		self._attackers[attacker_unit:key()] = nil
+
+		if not next(self._attackers) then
+			self._attackers = nil
+		end
+	end
+	
+	if state then
+		if not managers.groupai:state():whisper_mode() then
+			local t = TimerManager:game():time()
+		
+			if not self._next_special_callout_t or self._next_special_callout_t < t then
+				local att_unit_base = attacker_unit:base()
+				
+				local timewaste = {
+					shield = true
+				}
+				
+				if not timewaste[att_unit_base._tweak_table] then
+					if att_unit_base.sentry_gun or attacker_unit:in_slot(managers.slot:get_mask("persons")) and att_unit_base:char_tweak() and att_unit_base:char_tweak().priority_shout then
+						local callout = att_unit_base.sentry_gun and "f44x_any" or att_unit_base:char_tweak().priority_shout
+						
+						if callout ~= self._previous_call then
+							if mvec3_dis_sq(attacker_unit:movement():m_pos(), self:m_pos()) < 1960000 then
+								local m_head_pos = self:m_head_pos()
+								local vec = attacker_unit:movement():m_head_pos() - m_head_pos
+								local camera_fwd = self:current_state():get_fire_weapon_direction()
+								local angle = vec:normalized():angle(camera_fwd)
+								
+								if angle <= 65 then
+									if att_unit_base.sentry_gun  then
+										self._unit:sound():say(callout, true)
+									else
+										self._unit:sound():say(callout .. "x_any", true)
+									end
+									
+									self._previous_call = callout
+									self._next_special_callout_t = t + math.lerp(15, 45, math.random())
+								end
+							end
+						end
+					end		
+				end
+			end
+		end
 	end
 end
 
@@ -235,7 +289,11 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 		damage = 23.75,
 		push_vel = push_vec * push_mul
 	}
-	self._unit:character_damage():damage_melee(attack_data)
+	local successful = self._unit:character_damage():damage_melee(attack_data)
+		
+	if successful then
+		self._spooked_t = TimerManager:game():time()
+	end
 	
 	local state = managers.modifiers:modify_value("PlayerMovement:OnSpooked")
 	
@@ -245,5 +303,5 @@ function PlayerMovement:on_SPOOCed(enemy_unit)
 		end
 	end
 		
-	return true
+	return successful
 end

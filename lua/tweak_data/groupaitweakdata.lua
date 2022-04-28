@@ -167,7 +167,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 	self.enemy_chatter.medicgeneral = {
 		radius = 400, --chatter event epicenter, units check against this to add to the nr
 		max_nr = 3, --how many chatter events before the local chatter cooldown kicks in
-		interval = {2, 4}, --global chatter cooldown, prevents spam
+		interval = {4, 8}, --global chatter cooldown, prevents spam
 		duration = {4, 8},	--local chatter cooldown
 		group_min = 0, --minimum units in the group in order for the chatter to play
 		queue = "g90"
@@ -175,7 +175,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 	self.enemy_chatter.tasergeneral = {
 		radius = 400, 
 		max_nr = 3, 
-		interval = {2, 4}, 
+		interval = {4, 8}, 
 		duration = {4, 8},	
 		group_min = 0,
 		queue = "g90"
@@ -183,7 +183,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 	self.enemy_chatter.tankgeneral = {
 		radius = 400, 
 		max_nr = 3, 
-		interval = {2, 4}, 
+		interval = {4, 8}, 
 		duration = {4, 8},	
 		group_min = 0,
 		queue = "g90"

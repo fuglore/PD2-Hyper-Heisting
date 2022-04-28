@@ -4,7 +4,7 @@ function QuickSmokeGrenade:_play_sound_and_effects()
 		local sound_source = SoundDevice:create_source("grenade_fire_source")
 
 		sound_source:set_position(self._shoot_position)
-		sound_source:post_event("grenade_gas_npc_fire")
+		sound_source:post_event("clk_baton_swing")
 	elseif self._state == 2 then
 		local bounce_point = Vector3()
 

@@ -674,7 +674,7 @@ function ActionSpooc:_upd_strike_first_frame(t)
 	end
 
 	if redir_result then
-		local speed = self._already_kicked_after_landing and 1.25 or 1.75
+		local speed = 1.75
 	
 		self._machine:set_speed(redir_result, speed)
 		if skipped_item_spawning then
@@ -2043,7 +2043,9 @@ function ActionSpooc:anim_act_clbk(anim_act)
 			return
 		end
 	end
-
+	
+	self._hit = true
+	
 	local spooc_res = nil
 	local target_base_ext = target_unit:base()
 	local target_dmg_ext = target_unit:character_damage()
@@ -2631,7 +2633,7 @@ function ActionSpooc:_upd_flying_strike(t)
 					end
 				end
 
-				if target_unit and self:_chk_invalid_beating_unit_status(target_unit) then
+				if not self._hit and target_unit and self:_chk_invalid_beating_unit_status(target_unit) then
 					mvec3_set(self._last_pos, new_pos)
 
 					ext_mov:set_position(new_pos)

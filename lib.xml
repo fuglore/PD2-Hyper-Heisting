@@ -180,6 +180,7 @@
 		<post :script_path="huskcopmovement.lua" :hook_id="cop/huskcopmovement"/>
 		<post :script_path="huskcopdamage.lua" :hook_id="cop/huskcopdamage"/>
 		<post :script_path="medicdamage.lua" :hook_id="medic/medicdamage"/>
+		<post :script_path="copactions/copactionwarp.lua" :hook_id="cop/actions/full_body/copactionwarp"/>
 		<post :script_path="copactions/copactionact.lua" :hook_id="cop/actions/full_body/copactionact"/>
 		<post :script_path="copactions/copactionhurt.lua" :hook_id="cop/actions/full_body/copactionhurt"/>
 		<post :script_path="copactions/copactiondodge.lua" :hook_id="cop/actions/full_body/copactiondodge"/>

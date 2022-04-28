@@ -855,11 +855,11 @@ function WeaponTweakData:_set_overkill_290()
 	--self:_set_characters_weapon_preset(8, 6, 8, 20) --setting enemy weapon spread, unbased
 	
 	--sniper tweak
-	self.m14_sniper_npc.suppression = 40 --They'll lock your armor regen down after breaking it for a little while, but can't pierce your armor anymore.
+	self.m14_sniper_npc.suppression = 16
 	self.m14_sniper_npc.CLIP_AMMO_MAX = 24
-	self.svd_snp_npc.suppression = 40
+	self.svd_snp_npc.suppression = 16
 	self.svd_snp_npc.CLIP_AMMO_MAX = 24
-	self.svdsil_snp_npc.suppression = 40
+	self.svdsil_snp_npc.suppression = 16
 	self.svdsil_snp_npc.CLIP_AMMO_MAX = 24
 	self.heavy_snp_npc.DAMAGE = 1
 	self.heavy_snp_npc.suppression = 16
@@ -947,11 +947,11 @@ function WeaponTweakData:_set_sm_wish()
 	--self:_set_characters_weapon_preset(4, 2, 4, 10) --setting enemy weapon spread, uncringed
 	
 	--sniper tweak
-	self.m14_sniper_npc.suppression = 40 --They'll lock your armor regen down after breaking it for a little while, but can't pierce your armor anymore.
+	self.m14_sniper_npc.suppression = 16 --They'll lock your armor regen down after breaking it for a little while, but can't pierce your armor anymore.
 	self.m14_sniper_npc.CLIP_AMMO_MAX = 24
-	self.svd_snp_npc.suppression = 40
+	self.svd_snp_npc.suppression = 16
 	self.svd_snp_npc.CLIP_AMMO_MAX = 24
-	self.svdsil_snp_npc.suppression = 40
+	self.svdsil_snp_npc.suppression = 16
 	self.svdsil_snp_npc.CLIP_AMMO_MAX = 24
 	self.heavy_snp_npc.DAMAGE = 1
 	self.heavy_snp_npc.suppression = 16

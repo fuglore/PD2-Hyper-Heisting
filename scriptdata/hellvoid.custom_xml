@@ -20,19 +20,19 @@
 					<apply_ambient>
 						<param key="ambient_scale" value="0"/>
 						<param key="sky_bottom_color" value="0.14509804546833 0 0"/>
-						<param key="fog_start_color" value="0.015686275437474 0 0"/>
+						<param key="fog_start_color" value="0 0 0"/>
 						<param key="effect_light_scale" value="1.5141307115555"/>
 						<param key="fog_far_low_color" value="0.015686275437474 0 0"/>
 						<param key="ambient_falloff_scale" value="0"/>
 						<param key="sky_bottom_color_scale" value="0.20000000298023"/>
-						<param key="ambient_color_scale" value="0.22599999606609"/>
-						<param key="ambient_color" value="0.070588238537312 0.054901961237192 0.054901961237192"/>
-						<param key="fog_max_range" value="2800"/>
+						<param key="ambient_color_scale" value="0.6"/>
+						<param key="ambient_color" value="0.12 0.09 0.09"/>
+						<param key="fog_max_range" value="3400"/>
 						<param key="bloom_threshold" value="0.5373682975769"/>
 						<param key="sky_top_color_scale" value="0.10000000149012"/>
 						<param key="sky_top_color" value="0.21568627655506 0 0"/>
 						<param key="fog_min_range" value="0"/>
-						<param key="fog_max_density" value="0.7"/>
+						<param key="fog_max_density" value="1"/>
 					</apply_ambient>
 				</deferred_lighting>
 			</deferred>

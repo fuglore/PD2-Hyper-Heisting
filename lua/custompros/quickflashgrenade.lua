@@ -1,3 +1,13 @@
+function QuickFlashGrenade:_state_launched()
+	self._unit:damage():run_sequence_simple("insert")
+
+	local sound_source = SoundDevice:create_source("grenade_fire_source")
+
+	sound_source:set_position(self._shoot_position)
+	sound_source:post_event("clk_baton_swing")
+end
+
+
 BouncerNade = BouncerNade or class(QuickFlashGrenade)
 
 BouncerNade.States = {
@@ -146,11 +156,6 @@ end
 
 function BouncerNade:_state_launched()
 	self._unit:damage():run_sequence_simple("insert")
-	
-	local sound_source = SoundDevice:create_source("grenade_fire_source")
-
-	sound_source:set_position(self._unit:position())
-	sound_source:post_event("grenade_gas_npc_fire")
 end
 
 function BouncerNade:_state_bounced()
