@@ -1,21 +1,5 @@
-require("lib/units/enemies/cop/logics/CopLogicBase")
-require("lib/units/enemies/cop/logics/CopLogicInactive")
-require("lib/units/enemies/cop/logics/CopLogicIdle")
-require("lib/units/enemies/cop/logics/CopLogicAttack")
-require("lib/units/enemies/cop/logics/CopLogicIntimidated")
-require("lib/units/enemies/cop/logics/CopLogicTravel")
-require("lib/units/enemies/cop/logics/CopLogicArrest")
-require("lib/units/enemies/cop/logics/CopLogicGuard")
-require("lib/units/enemies/cop/logics/CopLogicFlee")
-require("lib/units/enemies/cop/logics/CopLogicSniper")
-require("lib/units/enemies/cop/logics/CopLogicTrade")
-require("lib/units/enemies/cop/logics/CopLogicPhalanxMinion")
-require("lib/units/enemies/cop/logics/CopLogicPhalanxVip")
-require("lib/units/enemies/tank/logics/TankCopLogicAttack")
-require("lib/units/enemies/shield/logics/ShieldLogicAttack")
-require("lib/units/enemies/spooc/logics/SpoocLogicIdle")
-require("lib/units/enemies/spooc/logics/SpoocLogicAttack")
-require("lib/units/enemies/taser/logics/TaserLogicAttack")
+local mvec3_cpy = mvector3.copy
+
 local old_init = CopBrain.post_init
 local logic_variants = {
 	security = {
@@ -583,7 +567,7 @@ function CopBrain:clbk_pathing_results(search_id, path)
 
 		self._nav_links_to_check = dead_nav_links
 	end
-
+	
 	self:_add_pathing_result(search_id, path)
 end
 
@@ -844,9 +828,17 @@ function CopBrain:search_for_path_to_unit(search_id, other_unit, access_neg)
 	}
 	params.prio = self:get_pathing_prio(self._logic_data)
 	
-	self._logic_data.active_searches[search_id] = true
+	if CopLogicTravel._check_path_is_straight_line(params.tracker_from:field_position(), pos_to, self._logic_data) then
+		local path = {
+			mvec3_cpy(params.tracker_from:field_position()),
+			mvec3_cpy(pos_to)
+		}
+		self:clbk_pathing_results(search_id, path)
+	else
+		self._logic_data.active_searches[search_id] = true
 
-	managers.navigation:search_pos_to_pos(params)
+		managers.navigation:search_pos_to_pos(params)
+	end
 
 	return true
 end
@@ -862,9 +854,18 @@ function CopBrain:search_for_path_to_cover(search_id, cover, offset_pos, access_
 	}
 	params.prio = self:get_pathing_prio(self._logic_data)
 	
-	self._logic_data.active_searches[search_id] = true
+	if CopLogicTravel._check_path_is_straight_line(params.tracker_from:field_position(), cover[3]:field_position(), self._logic_data) then
+		local path = {
+			mvec3_cpy(params.tracker_from:field_position()),
+			mvec3_cpy(cover[3]:field_position())
+		}
+	
+		self:clbk_pathing_results(search_id, path)
+	else
+		self._logic_data.active_searches[search_id] = true
 
-	managers.navigation:search_pos_to_pos(params)
+		managers.navigation:search_pos_to_pos(params)
+	end
 
 	return true
 end
@@ -882,9 +883,18 @@ function CopBrain:search_for_path(search_id, to_pos, prio, access_neg, nav_segs)
 	}
 	params.prio = params.prio or self:get_pathing_prio(self._logic_data)
 	
-	self._logic_data.active_searches[search_id] = true
+	if CopLogicTravel._check_path_is_straight_line(params.tracker_from:field_position(), to_pos, self._logic_data) then
+		local path = {
+			mvec3_cpy(params.tracker_from:field_position()),
+			mvec3_cpy(to_pos)
+		}
+		
+		self:clbk_pathing_results(search_id, path)
+	else
+		self._logic_data.active_searches[search_id] = true
 
-	managers.navigation:search_pos_to_pos(params)
+		managers.navigation:search_pos_to_pos(params)
+	end
 
 	return true
 end
@@ -902,9 +912,18 @@ function CopBrain:search_for_path_from_pos(search_id, from_pos, to_pos, prio, ac
 	}
 	params.prio = params.prio or self:get_pathing_prio(self._logic_data)
 	
-	self._logic_data.active_searches[search_id] = true
+	if CopLogicTravel._check_path_is_straight_line(from_pos, to_pos, self._logic_data) then
+		local path = {
+			mvec3_cpy(from_pos),
+			mvec3_cpy(pos_to)
+		}
+	
+		self:clbk_pathing_results(search_id, path)
+	else
+		self._logic_data.active_searches[search_id] = true
 
-	managers.navigation:search_pos_to_pos(params)
+		managers.navigation:search_pos_to_pos(params)
+	end
 
 	return true
 end

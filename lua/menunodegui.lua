@@ -20,15 +20,6 @@ Hooks:PostHook(MenuNodeGui,"_setup_item_rows","shin_mememode_safety_notif",funct
     end
 	
     if has_any then 
-        QuickMenu:new(
-            title,
-            desc,
-            {
-                {
-                    text = "ok fine mom GOD",
-                    is_cancel_button = true
-                }
-            }
-        ,true)
+        QuickMenu:new(title, desc, nil, true)
     end
 end)

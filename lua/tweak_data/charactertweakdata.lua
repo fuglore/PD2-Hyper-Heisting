@@ -441,7 +441,7 @@ function CharacterTweakData:_presets(tweak_data)
 			speed = 1.3,
 			occasions = {
 				hit = {
-					chance = 0.9,
+					chance = 1,
 					check_timeout = {
 						0.6,
 						0.6
@@ -473,7 +473,7 @@ function CharacterTweakData:_presets(tweak_data)
 					}
 				},
 				preemptive = {
-					chance = 0.9,
+					chance = 1,
 					check_timeout = {
 						0.6,
 						0.6

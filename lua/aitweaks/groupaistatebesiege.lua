@@ -45,6 +45,11 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	--log(tostring(self._small_map))
 	
+	self._previous_chosen_types = {
+		assault = {},
+		recon = {},
+		reenforce = {}
+	}
 	self._spawn_group_timers = {}
 	self._graph_distance_cache = {}
 	self._enemy_speed_mul = 1
@@ -62,6 +67,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._activeassaultnextbreak_t = nil
 	self._stopassaultbreak_t = nil
 	self._MAX_SIMULTANEOUS_SPAWNS = 3
+	
 	
 	if Network:is_server() and managers.navigation:is_data_ready() then
 		self:_queue_police_upd_task()
@@ -1213,7 +1219,7 @@ function GroupAIStateBesiege:_upd_reenforce_tasks()
 					if next(self._spawning_groups) then
 						spawning_groups = true
 					else
-						local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(task_data.target_area, self._tweak_data.reenforce.groups, nil, 6000, nil)
+						local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(task_data.target_area, self._tweak_data.reenforce.groups, nil, 6000, nil, "reenforce")
 
 						if spawn_group then
 							local grp_objective = {
@@ -2115,7 +2121,7 @@ function GroupAIStateBesiege:_upd_assault_task()
 				
 				if not used_event and not self._activeassaultbreak then
 					--local max_dis = self._street and 6000 or 12000
-					local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, anticipation and callback(self, self, "_verify_anticipation_spawn_point") or nil)
+					local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(primary_target_area, self._tweak_data.assault.groups, primary_target_area.pos, 12000, anticipation and callback(self, self, "_verify_anticipation_spawn_point") or nil, "assault")
 
 					if spawn_group then
 						local grp_objective = {
@@ -2169,7 +2175,7 @@ function GroupAIStateBesiege:_upd_recon_tasks()
 	if next(self._spawning_groups) then
 		used_group = true
 	else
-		local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(task_data.target_area, self._tweak_data.recon.groups, nil, nil, nil)
+		local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(task_data.target_area, self._tweak_data.recon.groups, nil, nil, nil, "recon")
 
 		if spawn_group then
 			local grp_objective = {
@@ -3718,6 +3724,10 @@ function GroupAIStateBesiege._create_objective_from_group_objective(grp_objectiv
 		objective.scan = true
 		objective.interrupt_dis = 200
 	end
+	
+	if objective.type == "defend_area" then
+		objective.interrupt_on_contact = true
+	end
 
 	objective.stance = grp_objective.stance or objective.stance
 	objective.pose = grp_objective.pose or objective.pose
@@ -4196,7 +4206,7 @@ local function spawn_group_id(spawn_group)
 	return spawn_group.mission_element:id()
 end
 
-function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_groups, target_pos, max_dis, verify_clbk)
+function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_groups, target_pos, max_dis, verify_clbk, task_data)
 	local all_areas = self._area_data
 	
 	max_dis = max_dis and max_dis * max_dis
@@ -4334,7 +4344,7 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 		local my_spawn_group = valid_spawn_groups[i]
 		local my_group_types = my_spawn_group.mission_element:spawn_groups()
 		my_spawn_group.distance = dis
-		total_weight = total_weight + self:_choose_best_groups(candidate_groups, my_spawn_group, my_group_types, allowed_groups)
+		total_weight = total_weight + self:_choose_best_groups(candidate_groups, my_spawn_group, my_group_types, allowed_groups, task_data)
 	end
 
 	if total_weight == 0 then
@@ -4345,10 +4355,10 @@ function GroupAIStateBesiege:_find_spawn_group_near_area(target_area, allowed_gr
 		table_insert(self._debug_weights, clone(group))
 	end]]
 
-	return self:_choose_best_group(candidate_groups, total_weight, delays)
+	return self:_choose_best_group(candidate_groups, total_weight, delays, task_data)
 end
 
-function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types, allowed_groups)
+function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types, allowed_groups, task_data)
 	local total_weight = 0
 
 	for _, group_type in ipairs(group_types) do
@@ -4357,7 +4367,8 @@ function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types
 			local special_type, spawn_limit, current_count = nil
 			local cat_weights = allowed_groups[group_type]
 			
-			if self._previous_chosen_type == group_type then
+			if self._previous_chosen_types[task_data] and self._previous_chosen_types[task_data][group_type] then
+				--log("bingus in progress")
 				cat_weights = false
 			end
 
@@ -4387,8 +4398,6 @@ function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types
 						cat_weight = cat_weight,
 						dis_weight = cat_weight
 					})
-					
-					self._previous_chosen_type = group_type
 
 					total_weight = total_weight + cat_weight
 				end
@@ -4396,10 +4405,14 @@ function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types
 		end
 	end
 
+	if total_weight == 0 then
+		self._previous_chosen_types[task_data] = {}
+	end
+
 	return total_weight
 end
 
-function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delays)
+function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delays, task_data)
 	local rand_wgt = total_weight * math_random()
 	local best_grp, best_grp_type = nil
 	
@@ -4425,6 +4438,8 @@ function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delay
 			
 			best_grp = candidate.group
 			best_grp_type = candidate.group_type
+			self._previous_chosen_types[task_data][best_grp_type] = true
+			
 			best_grp.delay_t = self._t + best_grp.interval
 
 			break

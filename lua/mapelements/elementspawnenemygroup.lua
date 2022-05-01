@@ -21,15 +21,27 @@ function ElementSpawnEnemyGroup:_finalize_values()
 		return
 	end
 	
+	local has_regular_enemies = true
+	local cloaker_allowed = true
+	
 	for name, name2 in pairs(self._values.preferred_spawn_groups) do
-		if name2 == "tac_swat_rifle" or name2 == "tac_swat_rifle_flank" or name2 == "tac_bull_rush" then --check for three vanilla enemy groups that might get inserted into the spawngroups, these three are frequent enough in both official maps and custom maps to basically work 90% of the time
-			--log("fuck yes")
-			has_regular_enemies = true
+		if name2 == "single_spooc" or name2 == "Phalanx" then
+			has_regular_enemies = nil
+			
+			if name2 == "phalanx" then
+				cloaker_allowed = nil
+			end
+			
+			break
 		end
 	end
 	
 	if not has_regular_enemies then
-		
+		if cloaker_allowed then
+			table.insert(preferreds, "FBI_spoocs")
+			
+			self._values.preferred_spawn_groups = preferreds
+		end
 	else
 		for cat_name, team in pairs(tweak_data.group_ai.enemy_spawn_groups) do
 			if cat_name ~= "Phalanx" then

@@ -2608,31 +2608,29 @@ function CopLogicTravel._chk_begin_advance(data, my_data)
 	CopLogicTravel._chk_request_action_walk_to_advance_pos(data, my_data, haste, end_rot, no_strafe, pose, end_pose)
 end
 
-function CopLogicTravel._check_path_is_straight_line(pos_from, to_pos, u_data)
-	if math_abs(pos_from.z - to_pos.z) < 40 then
-		local ray_params = {
-			allow_entry = false,
-			pos_from = pos_from,
-			pos_to = to_pos
-		}
+function CopLogicTravel._check_path_is_straight_line(pos_from, pos_to, u_data)
+	local ray_params = {
+		allow_entry = false,
+		pos_from = pos_from,
+		pos_to = pos_to
+	}
 
-		if not managers.navigation:raycast(ray_params) then
-			local slotmask = managers.slot:get_mask("world_geometry")
-			local ray_from = pos_from:with_z(pos_from.z + 30)
-			local ray_to = to_pos:with_z(to_pos.z + 30)
-			
-			if u_data then
-				if not u_data.unit:raycast("ray", ray_to, ray_from, "slot_mask", slotmask, "report") then					
-					return true
-				else
-					return
-				end
+	if not managers.navigation:raycast(ray_params) then
+		local slotmask = managers.slot:get_mask("world_geometry")
+		local ray_from = pos_from:with_z(pos_from.z + 31)
+		local ray_to = pos_to:with_z(pos_to.z + 31)
+		
+		if u_data then
+			if not u_data.unit:raycast("ray", ray_to, ray_from, "slot_mask", slotmask, "ray_type", "body mover", "sphere_cast_radius", 30, "bundle", 9, "report") then
+				return true
 			else
-				if not World:raycast("ray", ray_to, ray_from, "slot_mask", slotmask, "ray_type", "ai_vision", "report") then
-					return true
-				else
-					return
-				end
+				return
+			end
+		else
+			if not World:raycast("ray", ray_to, ray_from, "slot_mask", slotmask, "ray_type", "body mover", "sphere_cast_radius", 30, "bundle", 9, "report") then
+				return true
+			else
+				return
 			end
 		end
 	end
