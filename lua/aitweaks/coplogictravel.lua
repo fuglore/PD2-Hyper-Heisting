@@ -2001,7 +2001,7 @@ function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	local my_objective = data.objective
 	
 	if not my_objective then
-		return
+		return true
 	end
 
 	if not my_objective.grp_objective or not my_objective.area then

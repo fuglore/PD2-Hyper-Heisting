@@ -238,14 +238,6 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		group_min = 2,
 		queue = "m01"
 	}
-	self.enemy_chatter.follow_me = {
-		radius = 700,
-		max_nr = 1,
-		duration = {5, 10},
-		interval = {0.75, 1.5},
-		group_min = 2,
-		queue = "mov"
-	}
 	self.enemy_chatter.clear = {
 		radius = 700,
 		max_nr = 1,
