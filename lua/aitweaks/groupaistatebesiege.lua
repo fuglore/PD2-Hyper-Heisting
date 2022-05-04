@@ -45,11 +45,35 @@ function GroupAIStateBesiege:init(group_ai_state)
 	
 	--log(tostring(self._small_map))
 	
-	self._previous_chosen_types = {
-		assault = {},
-		recon = {},
-		reenforce = {}
+	self._group_type_order = {
+		assault = {group_types = {}, index = 1},
+		recon = {group_types = {}, index = 1},
+		reenforce = {group_types = {}, index = 1},
+		cloaker = {group_types = {}, index = 1}
 	}
+		
+	for group_name, info_table in pairs(self._tweak_data.assault.groups) do
+		if tweak_data.group_ai.enemy_spawn_groups[group_name] and info_table[1] > 0 then
+			table_insert(self._group_type_order.assault.group_types, tostring(group_name))
+		end
+	end
+	
+	for group_name, info_table in pairs(self._tweak_data.recon.groups) do
+		if tweak_data.group_ai.enemy_spawn_groups[group_name] and info_table[1] > 0 then
+			table_insert(self._group_type_order.recon.group_types, tostring(group_name))
+		end
+	end
+	
+	for group_name, info_table in pairs(self._tweak_data.reenforce.groups) do
+		if tweak_data.group_ai.enemy_spawn_groups[group_name] and info_table[1] > 0 then
+			table_insert(self._group_type_order.recon.group_types, tostring(group_name))
+		end
+	end
+	
+	self._group_type_order.assault.index = math_random(#self._group_type_order.assault.group_types)
+	self._group_type_order.recon.index = math_random(#self._group_type_order.recon.group_types)
+	self._group_type_order.reenforce.index = math_random(#self._group_type_order.reenforce.group_types)
+	
 	self._spawn_group_timers = {}
 	self._graph_distance_cache = {}
 	self._enemy_speed_mul = 1
@@ -72,6 +96,37 @@ function GroupAIStateBesiege:init(group_ai_state)
 	if Network:is_server() and managers.navigation:is_data_ready() then
 		self:_queue_police_upd_task()
 	end
+end
+
+function GroupAIStateBesiege:update_group_type_order_tables()
+	self._group_type_order = {
+		assault = {group_types = {}, index = 1},
+		recon = {group_types = {}, index = 1},
+		reenforce = {group_types = {}, index = 1},
+		cloaker = {group_types = {}, index = 1}
+	}
+		
+	for group_name, info_table in pairs(self._tweak_data.assault.groups) do
+		if tweak_data.group_ai.enemy_spawn_groups[group_name] and info_table[1] > 0 then
+			table_insert(self._group_type_order.assault.group_types, tostring(group_name))
+		end
+	end
+	
+	for group_name, info_table in pairs(self._tweak_data.recon.groups) do
+		if tweak_data.group_ai.enemy_spawn_groups[group_name] and info_table[1] > 0 then
+			table_insert(self._group_type_order.recon.group_types, tostring(group_name))
+		end
+	end
+	
+	for group_name, info_table in pairs(self._tweak_data.reenforce.groups) do
+		if tweak_data.group_ai.enemy_spawn_groups[group_name] and info_table[1] > 0 then
+			table_insert(self._group_type_order.recon.group_types, tostring(group_name))
+		end
+	end
+	
+	self._group_type_order.assault.index = math_random(#self._group_type_order.assault.group_types)
+	self._group_type_order.recon.index = math_random(#self._group_type_order.recon.group_types)
+	self._group_type_order.reenforce.index = math_random(#self._group_type_order.reenforce.group_types)
 end
 
 function GroupAIStateBesiege:_draw_enemy_activity_client(t)
@@ -2420,6 +2475,30 @@ function GroupAIStateBesiege:_set_recon_objective_to_group(group)
 	end
 end
 
+function GroupAIStateBesiege:on_defend_travel_end(unit, objective)
+	local seg = objective.nav_seg
+	local area = self:get_area_from_nav_seg_id(seg)
+
+	if not area.is_safe then
+		area.is_safe = true
+
+		self:_on_area_safety_status(area, {
+			reason = "guard",
+			unit = unit
+		})
+	end
+	
+	local u_key = unit:key()
+	local unit_data = self._police[u_key]
+	
+	if unit_data and objective.grp_objective and objective.grp_objective.attitude == "avoid" and objective.grp_objective.type ~= "retire" then
+		if unit_data.char_tweak.chatter.ready then
+			self:chk_say_enemy_chatter(unit_data.unit, unit_data.m_pos, "in_pos")
+		end
+	end
+end
+
+
 function GroupAIStateBesiege:_assign_group_to_retire(group)
 	local retire_area, retire_pos = nil
 	local start_area = group.objective.area
@@ -4360,53 +4439,51 @@ end
 
 function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types, allowed_groups, task_data)
 	local total_weight = 0
+	local group_type_order, group_order_index, wanted_group
+	
+	if task_data then
+		group_type_order = self._group_type_order[task_data].group_types			
+		group_order_index = self._group_type_order[task_data].index
+		
+		self._group_type_order[task_data].index = self._group_type_order[task_data].index + 1
+		
+		wanted_group = group_type_order[group_order_index]
+	end
 
 	for _, group_type in ipairs(group_types) do
-		if tweak_data.group_ai.enemy_spawn_groups[group_type] then
-			local group_tweak = tweak_data.group_ai.enemy_spawn_groups[group_type]
-			local special_type, spawn_limit, current_count = nil
-			local cat_weights = allowed_groups[group_type]
-			
-			if self._previous_chosen_types[task_data] and self._previous_chosen_types[task_data][group_type] then
-				--log("bingus in progress")
-				cat_weights = false
-			end
+		if not wanted_group or wanted_group == group_type then
+			if tweak_data.group_ai.enemy_spawn_groups[group_type] then
+				local group_tweak = tweak_data.group_ai.enemy_spawn_groups[group_type]
+				local special_type, spawn_limit, current_count = nil
+				local cat_weights = allowed_groups[group_type]
 
-			if cat_weights then
-				if group_tweak.special then
-					special_type = group_tweak.special
-					current_count = self:_get_special_unit_type_count(special_type)
-					spawn_limit = managers.job:current_spawn_limit(special_type)
-				end
-			
-				if not special_type or spawn_limit >= current_count + 1 then
-					local cat_weight = cat_weights[1]
-					
-					if current_count then
-						local cat_weight_mul = 1 + spawn_limit - current_count
-
-						cat_weight = cat_weight * cat_weight_mul
-						
-						--log("special_type: " .. special_type)
-						--log("category weight: " .. tostring(cat_weight) .. "")
+				if cat_weights then
+					if group_tweak.special then
+						special_type = group_tweak.special
+						current_count = self:_get_special_unit_type_count(special_type)
+						spawn_limit = managers.job:current_spawn_limit(special_type)
 					end
-					
-					table.insert(best_groups, {
-						group = group,
-						group_type = group_type,
-						wght = cat_weight,
-						cat_weight = cat_weight,
-						dis_weight = cat_weight
-					})
+				
+					if not special_type or spawn_limit >= current_count + 1 then
+						local cat_weight = cat_weights[1]
+						
+						table.insert(best_groups, {
+							group = group,
+							group_type = group_type,
+							wght = cat_weight,
+							cat_weight = cat_weight,
+							dis_weight = cat_weight
+						})
 
-					total_weight = total_weight + cat_weight
+						total_weight = total_weight + cat_weight
+					end
 				end
-			end
+			end	
 		end
 	end
 
-	if total_weight == 0 then
-		self._previous_chosen_types[task_data] = {}
+	if group_type_order and self._group_type_order[task_data].index > #group_type_order then
+		self._group_type_order[task_data].index = 1
 	end
 
 	return total_weight
@@ -4438,7 +4515,6 @@ function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delay
 			
 			best_grp = candidate.group
 			best_grp_type = candidate.group_type
-			self._previous_chosen_types[task_data][best_grp_type] = true
 			
 			best_grp.delay_t = self._t + best_grp.interval
 

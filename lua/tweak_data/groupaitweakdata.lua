@@ -195,7 +195,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 3, --how many chatter events before the local chatter cooldown kicks in
 		interval = {1, 3}, --global chatter cooldown, prevents spam
 		duration = {2, 5},	--local chatter cooldown
-		group_min = 3, --minimum units in the group in order for the chatter to play
+		group_min = 2, --minimum units in the group in order for the chatter to play
 		queue = "g90"
 	}
 	self.enemy_chatter.reload = {
@@ -211,7 +211,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 4,
 		duration = {5, 10},
 		interval = {2.25, 3},
-		group_min = 0,
+		group_min = 2,
 		queue = "pus"
 	}
 	self.enemy_chatter.open_fire = {
@@ -219,7 +219,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 4,
 		duration = {5, 10},
 		interval = {2.25, 3},
-		group_min = 0,
+		group_min = 2,
 		queue = "att"
 	}
 	self.enemy_chatter.go_go = {
@@ -227,7 +227,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 4,
 		duration = {5, 10},
 		interval = {2.25, 3},
-		group_min = 0,
+		group_min = 2,
 		queue = "mov"
 	}
 	self.enemy_chatter.retreat = {
@@ -235,7 +235,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 2,
 		duration = {2, 4},
 		interval = {0.75, 1.5},
-		group_min = 3,
+		group_min = 2,
 		queue = "m01"
 	}
 	self.enemy_chatter.follow_me = {
@@ -251,7 +251,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 1,
 		duration = {5, 10},
 		interval = {2.25, 3},
-		group_min = 3,
+		group_min = 2,
 		queue = "clr"
 	}
 	self.enemy_chatter.go_go = {
@@ -259,7 +259,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 4,
 		duration = {5, 10},
 		interval = {2.25, 3},
-		group_min = 0,
+		group_min = 2,
 		queue = "mov"
 	}
 	self.enemy_chatter.ready = {
@@ -267,7 +267,7 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 4,
 		duration = {5, 10},
 		interval = {2.25, 3},
-		group_min = 3,
+		group_min = 2,
 		queue = "rdy"
 	}
 	self.enemy_chatter.smoke = {
@@ -291,8 +291,36 @@ Hooks:PostHook(GroupAITweakData, "_init_chatter_data", "hh_init_chatter_data", f
 		max_nr = 2,
 		duration = {5, 10},
 		interval = {1, 2},
-		group_min = 0,
+		group_min = 2,
 		queue = "t01"
+	}
+	self.enemy_chatter.follow_me = {
+		radius = 700,
+		max_nr = 2,
+		queue = "prm",
+		group_min = 2,
+		duration = {
+			5,
+			10
+		},
+		interval = {
+			1,
+			3
+		}
+	}
+	self.enemy_chatter.in_pos = {
+		radius = 700,
+		max_nr = 1,
+		queue = "pos",
+		group_min = 2,
+		duration = {
+			5,
+			10
+		},
+		interval = {
+			0.75,
+			1.2
+		}
 	}
 end)
 
@@ -7270,10 +7298,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 	elseif not self._party and self.small_map then
 		if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
 			self.besiege.assault.force_balance_mul = {
-				22,
-				28,
-				32,
-				32
+				16,
+				20,
+				24,
+				24
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
@@ -7283,10 +7311,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			}
 		elseif difficulty_index < 7 then
 			self.besiege.assault.force_balance_mul = {
+				12,
 				16,
 				20,
-				26,
-				26
+				20
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,
@@ -7296,10 +7324,10 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 			}
 		else
 			self.besiege.assault.force_balance_mul = {
-				22,
-				28,
-				32,
-				32
+				16,
+				20,
+				24,
+				24
 			}
 			self.besiege.assault.force_pool_balance_mul = {
 				1,

@@ -269,7 +269,7 @@ function CopLogicIdle.queued_update(data)
 		CopLogicIdle._chk_objective_needs_travel(data, data.objective)
 	end
 
-	if data.is_converted or data.check_crim_jobless then
+	if data.is_converted or data.check_crim_jobless or data.team.id == "criminal1" then
 		if not data.objective or data.objective.type == "free" then
 			if not data.path_fail_t or data.t - data.path_fail_t > 6 then
 				managers.groupai:state():on_criminal_jobless(data.unit)

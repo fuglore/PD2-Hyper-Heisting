@@ -7,5 +7,7 @@ function SkirmishManager:on_start_assault()
 		tweak_data:set_difficulty(Global.game_settings.difficulty)
 	end
 	
+	managers.groupai:state():update_group_type_order_tables()
+	
 	self:update_matchmake_attributes()
 end

@@ -145,15 +145,20 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 		end
 	end
 
-	my_data.attitude = objective.attitude or "avoid"
+	if data.unit:base():has_tag("medic") then
+		my_data.attitude = "avoid"
+	else
+		my_data.attitude = objective and objective.attitude or "avoid"
+	end
+	
 	my_data.weapon_range = clone_g(data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range)
 	
 	if not data.team then
 		data.unit:movement():set_team(managers.groupai:state()._teams["law1"]) --yuck.
 	end
 
-	my_data.path_safely = not data.cool and not allied_with_criminals and my_data.attitude ~= "engage"
-	my_data.path_ahead = data.cool or objective.path_ahead or data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player")
+	my_data.path_safely = not data.cool and not allied_with_criminals and (not objective or objective.attitude ~= "engage")
+	my_data.path_ahead = true
 	local key_str = tostring(data.key)
 	
 	local allied_with_criminals = data.is_converted or data.unit:in_slot(16) or data.team.id == tweak_data.levels:get_default_team_ID("player") or data.team.friends[tweak_data.levels:get_default_team_ID("player")] or data.buddypalchum
@@ -223,6 +228,15 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 					table_insert(path, mvec3_cpy(point.position))
 				end
 
+				if CopLogicTravel._path_is_straight_line(data.m_pos, #path, data) then
+					path = {
+						path[1],
+						path[#path]
+					}
+				else
+					path = CopLogicTravel._optimize_path(path, data)
+				end
+
 				my_data.advance_path = path
 				my_data.coarse_path_index = 1
 				local start_seg = data.unit:movement():nav_tracker():nav_segment()
@@ -239,23 +253,45 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 				}
 				my_data.path_is_precise = true
 			elseif path_style == "coarse" then
+				local m_tracker = data.unit:movement():nav_tracker()
 				local nav_manager = managers.navigation
 				local f_get_nav_seg = nav_manager.get_nav_seg_from_pos
-				local start_seg = data.unit:movement():nav_tracker():nav_segment()
+				local start_seg = m_tracker:nav_segment()
 				local path = {
 					{
 						start_seg
 					}
 				}
+				local points = path_data.points
+				
+				local target_pos = points[#path_data.points].position
+				local target_seg = managers.navigation:get_nav_seg_from_pos(target_pos)
+				
+				local alt_coarse_params = {
+					from_tracker = m_tracker,
+					to_seg = target_seg,
+					to_pos = target_pos,
+					access = {
+						"walk"
+					},
+					id = "CopLogicTravel.alt_coarse_search" .. tostring(data.key),
+					access_pos = data.char_tweak.access
+				}
+				
+				local alt_coarse = managers.navigation:search_coarse(alt_coarse_params)
 
-				for _, point in ipairs(path_data.points) do
-					local pos = mvec3_cpy(point.position)
-					local nav_seg = f_get_nav_seg(nav_manager, pos)
+				if alt_coarse and #alt_coarse < #points then
+					path = alt_coarse
+				else
+					for _, point in ipairs(path_data.points) do
+						local pos = mvector3.copy(point.position)
+						local nav_seg = f_get_nav_seg(nav_manager, pos)
 
-					table_insert(path, {
-						nav_seg,
-						pos
-					})
+						table.insert(path, {
+							nav_seg,
+							pos
+						})
+					end
 				end
 
 				my_data.coarse_path = path
@@ -272,6 +308,44 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 		CopLogicTravel.queued_update(data, my_data)
 		data.brain:set_update_enabled_state(false)
 	end
+end
+
+function CopLogicTravel._optimize_path(path, data)
+	if #path <= 2 then
+		return path
+	end
+
+	local opt_path = {}
+	local nav_path = {}
+	
+	for i = 1, #path do
+		local nav_point = path[i]
+
+		if nav_point.x then
+			nav_path[#nav_path + 1] = nav_point
+		elseif alive(nav_point) then
+			nav_path[#nav_path + 1] = {
+				element = nav_point:script_data().element,
+				c_class = nav_point
+			}
+		else
+			return path
+		end
+	end
+	
+	nav_path = CopActionWalk._calculate_simplified_path(path[1], nav_path, 2, true, true)
+	
+	for i = 1, #nav_path do
+		local nav_point = nav_path[i]
+		
+		if nav_point.c_class then
+			opt_path[#opt_path + 1] = nav_point.c_class
+		else
+			opt_path[#opt_path + 1] = nav_point
+		end
+	end
+
+	return opt_path
 end
 
 function CopLogicTravel.exit(data, new_logic_name, enter_params)
@@ -346,17 +420,9 @@ function CopLogicTravel.upd_advance(data)
 	local objective = data.objective
 
 	if my_data.has_old_action then
-		if data.buddypalchum then
-			--log("uuugh")
-		end 
-		
 		CopLogicAttack._upd_stop_old_action(data, my_data)
 		
 		if my_data.has_old_action then
-			if data.buddypalchum then
-				--log("margh")
-			end 
-			
 		 	return
 		end
 	end
@@ -372,9 +438,12 @@ function CopLogicTravel.upd_advance(data)
 		if data.unit:movement():action_request(action_desc) then
 			CopLogicTravel._on_destination_reached(data)
 		end
-	--elseif CopLogicTravel._chk_target_area(data, my_data) then
 	elseif my_data.advancing then
 		if not my_data.old_action_advancing and my_data.coarse_path then
+			if my_data.processing_advance_path then
+				CopLogicTravel._upd_pathing(data, my_data)
+			end
+
 			CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 
 			if my_data ~= data.internal_data then
@@ -1930,36 +1999,54 @@ end
 
 function CopLogicTravel.chk_group_ready_to_move(data, my_data)
 	local my_objective = data.objective
-
-	if not my_objective.grp_objective then
-		return true
-	end
 	
-	if not my_objective.area then
+	if not my_objective then
+		return
+	end
+
+	if not my_objective.grp_objective or not my_objective.area then
 		return true
 	end
 
-	local my_dis = mvec3_dis_sq(my_objective.area.pos, data.m_pos)
-	
-	if my_dis > 2000 * 2000 then --this should really only matter in maps like Goat Sim or whatever
+	local my_dis = mvector3.distance_sq(my_objective.area.pos, data.m_pos)
+
+	if my_dis > 4000000 then
 		return true
 	end
 
-	for u_key, u_data in pairs_g(data.group.units) do
+	my_dis = my_dis * 1.15 * 1.15
+
+	local can_continue = true
+
+	for u_key, u_data in pairs(data.group.units) do
 		if u_key ~= data.key then
-			local teammate_obj = u_data.unit:brain():objective()
+			local his_objective = u_data.unit:brain():objective()
 
-			if teammate_obj and teammate_obj.grp_objective == my_objective.grp_objective and not teammate_obj.in_place and teammate_obj.area then
-				local teammate_dis_to_obj = mvec3_dis_sq(teammate_obj.area.pos, u_data.m_pos)
+			if his_objective and his_objective.grp_objective == my_objective.grp_objective and not his_objective.in_place then
+				if his_objective.is_default then
+					can_continue = nil
+					
+					break
+				else
+					local his_dis = mvector3.distance_sq(his_objective.area.pos, u_data.m_pos)
 
-				if my_dis < teammate_dis_to_obj then
-					return false
+					if my_dis < his_dis then
+						can_continue = nil
+						
+						break
+					end
 				end
 			end
 		end
 	end
+	
+	if not can_continue then
+		if data.char_tweak.chatter.ready then
+			managers.groupai:state():chk_say_enemy_chatter(data.unit, data.m_pos, "follow_me")
+		end
+	end
 
-	return true
+	return can_continue
 end
 
 function CopLogicTravel.apply_wall_offset_to_cover(data, my_data, cover, wall_fwd_offset)
@@ -2638,6 +2725,10 @@ end
 
 function CopLogicTravel._chk_stop_for_follow_unit(data, my_data)
 	local objective = data.objective
+	
+	if not objective then
+		return
+	end
 
 	if objective.type ~= "follow" or data.unit:movement():chk_action_forbidden("walk") or data.unit:anim_data().act_idle then
 		return

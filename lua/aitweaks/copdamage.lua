@@ -892,7 +892,7 @@ function CopDamage:_on_damage_received(damage_info)
 
 					--punk rage buff will only apply on Death Sentence
 					if diff_index == 8 or managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy") then
-						self._unit:base():add_buff("base_damage", 2)
+						self._unit:base():add_buff("base_damage", 1.5)
 						self:activate_punk_visual_effect()
 					end
 				end

@@ -107,7 +107,11 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 	local key_str = tostring(data.key)
 	my_data.detection_task_key = "CopLogicAttack._upd_enemy_detection" .. key_str
 
-	my_data.attitude = objective and objective.attitude or "avoid"
+	if data.unit:base():has_tag("medic") then
+		my_data.attitude = "avoid"
+	else
+		my_data.attitude = objective and objective.attitude or "avoid"
+	end
 	my_data.weapon_range = clone_g(data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range)
 	
 	if data.tactics then
@@ -137,7 +141,6 @@ function CopLogicAttack.enter(data, new_logic_name, enter_params)
 			CopLogicBase.add_delayed_clbk(my_data, my_data.action_timeout_clbk_id, callback(CopLogicIdle, CopLogicIdle, "clbk_action_timeout", data), action_timeout_t)
 		end
 	end
-	
 	
 	if data.unit:base():has_tag("special") then
 		my_data.use_brain = true
@@ -210,7 +213,7 @@ function CopLogicAttack.update(data)
 
 	local groupai = managers.groupai:state()
 	
-	if data.is_converted or data.check_crim_jobless then
+	if data.is_converted or data.check_crim_jobless or data.team.id == "criminal1" then
 		if not data.objective or data.objective.type == "free" then
 			if not data.path_fail_t or data.t - data.path_fail_t > 6 then
 				groupai:on_criminal_jobless(data.unit)
@@ -309,7 +312,9 @@ function CopLogicAttack._chk_chatter_and_movement(data, my_data)
 	action_taken = action_taken or CopLogicAttack._upd_pose(data, my_data)
 
 	if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
-		my_data.attitude = data.objective and data.objective.attitude or "avoid"
+		if not data.unit:base():has_tag("medic") then
+			my_data.attitude = data.objective and data.objective.attitude or "avoid"
+		end
 		
 		my_data.want_to_take_cover = CopLogicAttack._chk_wants_to_take_cover(data, my_data)
 
@@ -1791,7 +1796,9 @@ function CopLogicAttack._pathing_complete_clbk(data)
 		if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
 			local action_taken = data.logic.action_taken(data, my_data)
 			
-			my_data.attitude = data.objective and data.objective.attitude or "avoid"
+			if not data.unit:base():has_tag("medic") then
+				my_data.attitude = data.objective and data.objective.attitude or "avoid"
+			end
 			
 			my_data.want_to_take_cover = data.logic._chk_wants_to_take_cover(data, my_data)
 			
