@@ -22,7 +22,9 @@ function PlayerMovement:on_targetted_for_attack(state, attacker_unit)
 		end
 	end
 	
-	if state then
+	local callouts = nil
+	
+	if state and callouts then
 		if not managers.groupai:state():whisper_mode() then
 			local t = TimerManager:game():time()
 		
