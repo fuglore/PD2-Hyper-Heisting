@@ -1064,10 +1064,10 @@ weapon_data.autohit_pistol_default = {
 weapon_data.autohit_shotgun_default = {
 	INIT_RATIO = 0,
 	MAX_RATIO = 0,
-	far_angle = 12,
+	far_angle = 2,
 	far_dis = 5000,
 	MIN_RATIO = 0,
-	min_angle = 0.4,
+	min_angle = 0.7,
 	near_angle = 0
 }
 weapon_data.autohit_lmg_default = {
@@ -3822,32 +3822,32 @@ self.stats.recoil = {
 }
 
 self.stats.target_acquisition = {
-	4,
-	3.825,
-	3.672,
-	3.519,
-	3.366,
-	3.213,
-	3.06,
-	2.907,
-	2.754,
-	2.601,
-	2.448,
-	2.295,
-	2.142,
-	1.989,
-	1.836,
-	1.683,
-	1.53,
-	1.377,
-	1.224,
+	2.4,
+	2.33,
+	2.2,
+	2.12,
+	2.04,
+	2,
+	1.96,
+	1.88,
+	1.8,
+	1.72,
+	1.64,
+	1.56,
+	1.48,
+	1.4,
+	1.32,
+	1.24,
+	1.16,
+	1.08,
 	1,
-	0.918,
-	0.765,
-	0.612,
-	0.459,
-	0.306,
-	0.15
+	0.96,
+	0.92,
+	0.88,
+	0.84,
+	0.8,
+	0.76,
+	0.72
 }
 
 --Thank you for all your work, Gambyt!
