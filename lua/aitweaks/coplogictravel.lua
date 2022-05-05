@@ -228,7 +228,7 @@ function CopLogicTravel.enter(data, new_logic_name, enter_params)
 					table_insert(path, mvec3_cpy(point.position))
 				end
 
-				if CopLogicTravel._path_is_straight_line(data.m_pos, #path, data) then
+				if CopLogicTravel._check_path_is_straight_line(data.m_pos, #path, data) then
 					path = {
 						path[1],
 						path[#path]

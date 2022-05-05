@@ -2302,7 +2302,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 			end
 			
 			if focus_enemy.verified or focus_enemy.nearly_visible then
-				if aim == nil or focus_enemy.dis < firing_range then
+				if aim == nil then
 					if REACT_SHOOT <= focus_enemy.reaction then
 						if REACT_SHOOT == focus_enemy.reaction then
 							shoot = true
@@ -2329,7 +2329,7 @@ function CopLogicAttack._upd_aim(data, my_data)
 						aim = true
 					end
 				end
-			else
+			elseif aim == nil then 
 				local time_since_verification = focus_enemy.verified_t and data.t - focus_enemy.verified_t
 				
 				if time_since_verification then

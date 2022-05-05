@@ -823,7 +823,7 @@ function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		self._police_upd_task_queued = true
 		
-		managers.enemy:add_delayed_clbk("GroupAIStateBesiege._upd_police_activity", callback(self, self, "_upd_police_activity"), self._t + (next(self._spawning_groups) and 0.2 or 2))
+		managers.enemy:add_delayed_clbk("GroupAIStateBesiege._upd_police_activity", callback(self, self, "_upd_police_activity"), self._t + (next(self._spawning_groups) and 1 or 2))
 	end
 end
 
@@ -1266,7 +1266,7 @@ function GroupAIStateBesiege:_upd_reenforce_tasks()
 			local undershot = force_required - force_occupied
 
 			if undershot > 0 and not self._task_data.regroup.active and self._task_data.assault.phase ~= "fade" and self._task_data.reenforce.next_dispatch_t < t and self:is_area_safe(task_data.target_area) then
-				self:_try_use_task_spawn_event(t, task_data.target_area, "reenforce")
+				local used_event = self:_try_use_task_spawn_event(t, task_data.target_area, "reenforce")
 
 				local used_group, spawning_groups = nil
 
@@ -2225,7 +2225,7 @@ function GroupAIStateBesiege:_upd_recon_tasks()
 		end
 	end
 
-	local used_group = nil
+	local used_group = used_event
 
 	if next(self._spawning_groups) then
 		used_group = true
@@ -2248,7 +2248,7 @@ function GroupAIStateBesiege:_upd_recon_tasks()
 		end
 	end
 
-	if used_event or used_spawn_points or reassigned then
+	if used_event or used_spawn_points or reassigned or used_group then
 		table.remove(self._task_data.recon.tasks, 1)
 
 		self._task_data.recon.next_dispatch_t = t + 10 * math.random()
@@ -4441,7 +4441,7 @@ function GroupAIStateBesiege:_choose_best_groups(best_groups, group, group_types
 	local total_weight = 0
 	local group_type_order, group_order_index, wanted_group
 	
-	if task_data then
+	if task_data and self._group_type_order[task_data] then
 		group_type_order = self._group_type_order[task_data].group_types			
 		group_order_index = self._group_type_order[task_data].index
 		
