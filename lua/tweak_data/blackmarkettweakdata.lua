@@ -34,6 +34,7 @@ Hooks:PostHook(BlackMarketTweakData, "_init_projectiles", "hhthrowable", functio
 		self.projectiles.fir_com.max_amount = 3
 		self.projectiles.concussion.base_cooldown = 53
 		self.projectiles.concussion.max_amount = 2
+		self.projectiles.poison_gas_grenade.base_cooldown = 75
 		self.projectiles.wpn_gre_electric.base_cooldown = 90
 
 		self.projectiles.wpn_prj_four.pickup_chance = 0.1

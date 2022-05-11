@@ -828,6 +828,7 @@ function PlayerManager:update(t, dt)
 	end
 
 	self:update_smoke_screens(t, dt)
+	self:update_poison_gas(t, dt)
 end
 
 function PlayerManager:upd_style(t, dt)
