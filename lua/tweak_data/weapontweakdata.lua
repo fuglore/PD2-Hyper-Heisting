@@ -3444,6 +3444,7 @@ self.long.AMMO_MAX = 30
 
 --Heavy Crossbow
 
+self.arblast.armor_piercing_chance = 1
 -- VANILLA MOD PACK
 
 --AMR12

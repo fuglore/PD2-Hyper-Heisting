@@ -1,5 +1,6 @@
 local mvec1 = Vector3()
 local mvec2 = Vector3()
+local mrot1 = Rotation()
 local ids_pickup = Idstring("pickup")
 
 local tmp_vec1 = Vector3()
@@ -347,7 +348,52 @@ function ArrowBase:update(unit, t, dt)
 		self._should_home_in = nil
 	end
 
-	ArrowBase.super.update(self, unit, t, dt)
+	if not self._simulated and not self._collided then
+		self._unit:m_position(mvec1)
+		mvector3.set(mvec2, self._velocity * dt)
+		mvector3.add(mvec1, mvec2)
+		self._unit:set_position(mvec1)
+
+		if self._orient_to_vel then
+			mrotation.set_look_at(mrot1, mvec2, math.UP)
+			self._unit:set_rotation(mrot1)
+		end
+
+		self._velocity = Vector3(self._velocity.x, self._velocity.y, self._velocity.z - 980 * dt)
+	end
+
+	if self._sweep_data and not self._collided then
+		self._unit:m_position(self._sweep_data.current_pos)
+
+		local ig_units = self._ignore_units
+		local col_ray = World:raycast("ray", self._sweep_data.last_pos, self._sweep_data.current_pos, "slot_mask", self._sweep_data.slot_mask, ig_units and "ignore_unit" or nil, ig_units or nil)
+
+		if self._draw_debug_trail then
+			Draw:brush(Color(1, 0, 0, 1), nil, 3):line(self._sweep_data.last_pos, self._sweep_data.current_pos)
+		end
+
+		if col_ray and col_ray.unit then
+			if self._draw_debug_impact then
+				Draw:brush(Color(0.5, 0, 0, 1), nil, 10):sphere(col_ray.position, 4)
+				Draw:brush(Color(0.5, 1, 0, 0), nil, 10):sphere(self._unit:position(), 3)
+			end
+			
+			col_ray.velocity = self._unit:velocity()
+			
+			self:_on_collision(col_ray)
+			
+			if self._col_ray then
+				mvector3.direction(mvec1, self._sweep_data.last_pos, self._sweep_data.current_pos)
+				mvector3.add(mvec1, col_ray.position)
+				self._unit:set_position(mvec1)
+				self._unit:set_position(mvec1)
+
+				self._collided = true
+			end
+		end
+
+		self._unit:m_position(self._sweep_data.last_pos)
+	end
 
 	if self._draw_debug_cone then
 		local tip = unit:position()
@@ -376,14 +422,73 @@ function ArrowBase:_on_collision(col_ray)
 		return
 	end
 	
-	self._unit:body("dynamic_body"):set_deactivate_tag(Idstring())
+	if not result or result.type ~= "death" or self._should_home_in then
+		self._unit:body("dynamic_body"):set_deactivate_tag(Idstring())
 
-	self._col_ray = col_ray
+		self._col_ray = col_ray
+			
+		if self._should_home_in then
+			world_g:stop_physic_effect(self._should_home_in)
+			self._should_home_in = nil
+		end
+
+		self:_attach_to_hit_unit(nil, loose_shoot)
+	elseif col_ray.unit then
+		if alive(col_ray.unit) then
+			self._ignore_units = self._ignore_units or {}
 		
-	if self._should_home_in then
-		world_g:stop_physic_effect(self._should_home_in)
-		self._should_home_in = nil
-	end
+			has_destroy_listener = false
+			listener_class = col_ray.unit:base()
 
-	self:_attach_to_hit_unit(nil, loose_shoot)
+			if listener_class and listener_class.add_destroy_listener then
+				has_destroy_listener = true
+			else
+				listener_class = col_ray.unit:unit_data()
+
+				if listener_class and listener_class.add_destroy_listener then
+					has_destroy_listener = true
+				end
+			end
+
+			if has_destroy_listener then
+				listener_class:add_destroy_listener(self._ignore_destroy_listener_key, callback(self, self, "_clbk_ignore_unit_destroyed"))
+				table.insert(self._ignore_units, col_ray.unit)
+			else
+				log("i am inside your home :)")
+			end
+		end
+	end
+end
+
+function ArrowBase:clbk_impact(tag, unit, body, other_unit, other_body, position, normal, collision_velocity, velocity, other_velocity, new_velocity, direction, damage, ...)
+	if self._sweep_data and not self._collided then
+		mvector3.set(mvec2, position)
+		mvector3.subtract(mvec2, self._sweep_data.last_pos)
+		mvector3.multiply(mvec2, 2)
+		mvector3.add(mvec2, self._sweep_data.last_pos)
+
+		local ig_units = self._ignore_units
+		local col_ray = World:raycast("ray", self._sweep_data.last_pos, mvec2, "slot_mask", self._sweep_data.slot_mask, ig_units and "ignore_unit" or nil, ig_units or nil)
+
+		if col_ray and col_ray.unit then
+			if self._draw_debug_impact then
+				Draw:brush(Color(0.5, 0, 0, 1), nil, 10):sphere(col_ray.position, 4)
+				Draw:brush(Color(0.5, 1, 0, 0), nil, 10):sphere(self._unit:position(), 3)
+			end
+			
+			col_ray.velocity = velocity
+			
+			self:_on_collision(col_ray)
+			
+			if self._col_ray then
+				mvector3.direction(mvec1, self._sweep_data.last_pos, col_ray.position)
+				mvector3.add(mvec1, col_ray.position)
+				self._unit:set_position(mvec1)
+				self._unit:set_position(mvec1)
+
+				
+				self._collided = true
+			end
+		end
+	end
 end
