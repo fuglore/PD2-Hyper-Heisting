@@ -3,14 +3,7 @@
 	<!-- imagine being me and not fucking testing anything -->
 	
 	<pre :script_path="Corepre.lua" :hook_id="entry"/>
-	
-	<post :script_path="optifixes/scriptunitdata.lua" :hook_id="units/scriptunitdata"/>
-	<post :script_path="optifixes/dramaext.lua" :hook_id="units/dramaext"/>
-	<post :script_path="optifixes/maskext.lua" :hook_id="units/maskext"/>
-	<post :script_path="optifixes/syncunitdata.lua" :hook_id="units/syncunitdata"/>
-	<post :script_path="optifixes/unitbase.lua" :hook_id="units/unitbase"/>
-	<post :script_path="optifixes/vanskinext.lua" :hook_id="units/vanskinext"/>
-	
+		
 	<post :script_path="missionscriptelement.lua" :hook_id="managers/mission/missionscriptelement"/>
 	
 	<post :script_path="playerequipment/ecmjammerbase.lua" :hook_id="units/equipment/ecm_jammer/ecmjammerbase"/>

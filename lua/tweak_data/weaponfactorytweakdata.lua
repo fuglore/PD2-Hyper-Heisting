@@ -286,7 +286,7 @@ self.parts.wpn_fps_upg_ass_m4_b_beowulf.stats = {
 self.parts.wpn_fps_upg_ass_m4_b_beowulf.custom_stats = {
 	armor_piercing_add = 1,
 	can_shoot_through_enemy = true,
-	rof_mul = 0.7,
+	fire_rate_multiplier = 0.7,
 	ammo_pickup_max_mul = 0.6,
 	ammo_pickup_min_mul = 0.6
 }
@@ -307,7 +307,7 @@ self.wpn_fps_ass_m16.override = {
 			armor_piercing_add = 1,
 			can_shoot_through_enemy = true,
 			can_shoot_through_shield = true,
-			rof_mul = 0.5,
+			fire_rate_multiplier = 0.5,
 			ammo_pickup_max_mul = 0.8,
 			ammo_pickup_min_mul = 0.8
 		}
@@ -330,7 +330,7 @@ self.parts.wpn_fps_upg_ass_ak_b_zastava.custom_stats = {
 	can_shoot_through_wall = true,
 	can_shoot_through_enemy = true,
 	can_shoot_through_shield = true,
-	rof_mul = 0.4,
+	fire_rate_multiplier = 0.4,
 	ammo_pickup_max_mul = 0.4,
 	ammo_pickup_min_mul = 0.5
 }
@@ -349,7 +349,7 @@ self.wpn_fps_ass_74.override = {
 			armor_piercing_add = 1,
 			can_shoot_through_enemy = true,
 			can_shoot_through_shield = true,
-			rof_mul = 0.5,
+			fire_rate_multiplier = 0.5,
 			ammo_pickup_max_mul = 0.5,
 			ammo_pickup_min_mul = 0.5
 		}

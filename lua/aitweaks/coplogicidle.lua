@@ -314,8 +314,14 @@ function CopLogicIdle._upd_enemy_detection(data)
 	managers.groupai:state():on_unit_detection_updated(data.unit)
 
 	local my_data = data.internal_data
-	local delay = CopLogicBase._upd_attention_obj_detection(data, nil, nil)
+	CopLogicBase._upd_attention_obj_detection(data, nil, nil)
 	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects)
+
+	local delay = 0 --whisper mode updates need to be as CONSTANT as possible to keep units moving smoothly and predictably
+	
+	if not managers.groupai:state():whisper_mode() then
+		delay = data.important and 0.5 or 2 
+	end
 
 	CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
 

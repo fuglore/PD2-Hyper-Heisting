@@ -526,9 +526,15 @@ function CopLogicTravel._upd_enemy_detection(data)
 		min_reaction = REACT_AIM
 	end
 
-	local delay = CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
+	CopLogicBase._upd_attention_obj_detection(data, min_reaction, nil)
 	local new_attention, new_prio_slot, new_reaction = CopLogicIdle._get_priority_attention(data, data.detected_attention_objects, nil)
-
+	
+	local delay = managers.groupai:state():whisper_mode() and 0
+	
+	if not delay then
+		delay = data.important and 0.5 or 2
+	end
+	
 	CopLogicBase._set_attention_obj(data, new_attention, new_reaction)
 
 	if not is_cool then

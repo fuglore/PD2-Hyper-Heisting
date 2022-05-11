@@ -142,6 +142,7 @@
 		["hud_assault_FG_cover128"] = "LAW AHEAD THEREFORE TRY COVER",
 		["hud_assault_FG_cover129"] = "GUARD YOUR VALOR",
 		["hud_assault_FG_cover130"] = "BY SIGMAR, THEY COME IN NUMBER",
+		["hud_assault_FG_cover131"] = "WANTED: DEAD OR ALIVE",
 		["hud_assault_faction_nightmare"] = "VS. ???",
 		["hud_assault_faction_sbz"] = "VS. SBZ OPERATORS",
 		["hud_assault_faction_ovk"] = "VS. OVERKILL MODERATORS",
