@@ -1368,14 +1368,6 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 			
 			interrupt_dis = strictness_mul and interrupt_dis * strictness_mul or interrupt_dis
 			
-			if not attention.verified_t or data.t - attention.verified_t > 5 then
-				interrupt_dis = interrupt_dis * 0.5
-			end
-			
-			if objective.grp_objective and objective.grp_objective.push then
-				interrupt_dis = interrupt_dis * 0.5
-			end
-			
 			interrupt_dis = math.lerp(interrupt_dis, 0, z_diff / 400)
 
 			if enemy_dis < interrupt_dis then

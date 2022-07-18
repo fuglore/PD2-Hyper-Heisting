@@ -3435,6 +3435,8 @@ self.plainsrider.AMMO_MAX = 40
 
 --Light Crossbow
 
+self.frankish._can_shoot_through_shield = true
+
 --Longbow
 
 self.long.charge_data = {
@@ -3445,6 +3447,8 @@ self.long.AMMO_MAX = 30
 --Heavy Crossbow
 
 self.arblast.armor_piercing_chance = 1
+self.arblast._can_shoot_through_shield = true
+
 -- VANILLA MOD PACK
 
 --AMR12

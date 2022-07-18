@@ -334,7 +334,7 @@ function ArrowBase:update(unit, t, dt)
 
 				local speed = mvector3.normalize(tmp_vel)
 
-				mvec3_step(tmp_vel, tmp_vel, autohit_dir, dt * 0.3)
+				mvec3_step(tmp_vel, tmp_vel, autohit_dir, dt)
 				
 				local rot = Rotation(tmp_vel, math.UP)
 				

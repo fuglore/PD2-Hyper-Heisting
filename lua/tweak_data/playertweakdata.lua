@@ -8,7 +8,7 @@ Hooks:PostHook(PlayerTweakData, "init", "hhplayertweakbullshit", function(self, 
 	self.movement_state.standard.movement.speed.RUNNING_MAX = 862.50
 	self.movement_state.standard.movement.jump_velocity.xy.walk = self.movement_state.standard.movement.speed.STANDARD_MAX
 	self.movement_state.standard.gravity = 982
-	self.movement_state.standard.terminal_velocity = 7000
+	self.movement_state.standard.terminal_velocity = 5500
 	
 	self.style_multipliers = {
 		1,

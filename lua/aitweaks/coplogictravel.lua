@@ -2101,23 +2101,25 @@ function CopLogicTravel.apply_wall_offset_to_cover(data, my_data, cover, wall_fw
 end
 
 function CopLogicTravel._find_cover(data, search_nav_seg, near_pos)
-	if data.cool then
-		return
-	end
-
+	local cover = nil
 	local search_area = managers.groupai:state():get_area_from_nav_seg_id(search_nav_seg)
-	local threat_vis_pos = nil
-	
-	if data.important then
-		if data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction and data.attention_obj.verified_t and data.t - data.attention_obj.verified_t < 7 then
-			threat_vis_pos = data.attention_obj.m_head_pos
-		end
-	end
-	
-	near_pos = near_pos or data.m_pos
 
-	local access_pos = data.char_tweak.access
-	cover = managers.navigation:_find_cover_in_seg_through_lua(threat_vis_pos, near_pos, data.visibility_slotmask, access_pos, search_area.nav_segs, data.pos_rsrv_id)
+	if data.unit:movement():cool() then
+		return
+	elseif data.attention_obj and REACT_COMBAT <= data.attention_obj.reaction then
+		local optimal_threat_dis, threat_pos = nil
+
+		if data.objective.attitude == "engage" then
+			optimal_threat_dis = data.internal_data.weapon_range.optimal
+		else
+			optimal_threat_dis = data.internal_data.weapon_range.far
+		end
+
+		near_pos = near_pos or search_area.pos
+		threat_pos = data.attention_obj.m_pos
+
+		cover = managers.navigation:find_cover_from_threat(search_area.nav_segs, optimal_threat_dis, near_pos, threat_pos)
+	end
 
 	return cover
 end

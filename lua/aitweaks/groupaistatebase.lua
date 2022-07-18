@@ -307,7 +307,6 @@ function GroupAIStateBase:is_enemy_special(unit)
 			break
 		end
 	end
-	
 
 	if not category then
 		return false

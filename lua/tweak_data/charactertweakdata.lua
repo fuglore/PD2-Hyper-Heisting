@@ -10469,7 +10469,8 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		"m60",
 		"m37",
 		"chernobog",
-		"flamethrower"
+		"flamethrower",
+		"dmr"
 	}
 	self.weap_unit_names = {
 		Idstring("units/payday2/weapons/wpn_npc_beretta92/wpn_npc_beretta92"),
@@ -10524,7 +10525,9 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_m60/wpn_npc_m60"),
 		Idstring("units/pd2_dlc_drm/weapons/wpn_npc_m37/wpn_npc_m37"),
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"),
-		Idstring("units/pd2_dlc_pent/weapons/wpn_npc_flamethrower/wpn_npc_flamethrower")
+		Idstring("units/pd2_dlc_pent/weapons/wpn_npc_flamethrower/wpn_npc_flamethrower"),
+		Idstring("units/pd2_dlc_usm1/weapons/wpn_npc_dmr/wpn_npc_dmr")
+		
 	}
 end
 
