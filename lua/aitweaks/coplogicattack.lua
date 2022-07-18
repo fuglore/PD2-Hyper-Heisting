@@ -738,10 +738,10 @@ function CopLogicAttack._upd_combat_movement(data)
 		end
 	end
 	
-	if not action_taken and not in_cover and move_to_cover then
+	if not action_taken and not in_cover and move_to_cover and best_cover then
 		if not data.spooc_warped and data.spooc_attack_timeout_t then
 			data.spooc_warped = true
-			local to_cover_pos = my_data.best_cover[1][1]
+			local to_cover_pos = best_cover[1][1]
 			action_taken = CopLogicAttack._warp_to_pos(data, my_data, to_cover_pos)
 		elseif my_data.cover_path then
 			action_taken = CopLogicAttack._chk_request_action_walk_to_cover(data, my_data)
