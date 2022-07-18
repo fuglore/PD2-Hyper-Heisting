@@ -1518,7 +1518,8 @@ function CopLogicAttack._update_cover(data)
 				if not best_cover or not CopLogicAttack._verify_follow_cover(best_cover, near_pos, threat_pos, nil, 400) then
 					local nav_seg = managers.navigation:get_nav_seg_from_pos(near_pos)
 					local area = managers.groupai:state():get_area_from_nav_seg_id(nav_seg)
-					local found_cover = managers.navigation:find_cover_in_nav_seg_3(area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or 700, near_pos, threat_pos)
+					local dis = data.objective and data.objective.distance and data.objective.distance * 0.9 or 700
+					local found_cover = managers.navigation:find_cover_in_nav_seg_3(area.nav_segs, dis, near_pos, threat_pos)
 
 					if found_cover then
 						local better_cover = {
@@ -1552,8 +1553,9 @@ function CopLogicAttack._update_cover(data)
 
 				if not best_cover or not CopLogicAttack._verify_follow_cover(best_cover, near_pos, threat_pos, min_dis, max_near_dis, data.objective.distance) then
 					local follow_unit_area = managers.groupai:state():get_area_from_nav_seg_id(data.objective.follow_unit:movement():nav_tracker():nav_segment())
+					local dis = data.objective and data.objective.distance and data.objective.distance * 0.9 or 700
 
-					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, data.objective.distance and data.objective.distance * 0.9 or 700, near_pos, threat_pos)
+					local found_cover = managers.navigation:find_cover_in_nav_seg_3(follow_unit_area.nav_segs, dis, near_pos, threat_pos)
 
 					if found_cover then
 						local better_cover = {
