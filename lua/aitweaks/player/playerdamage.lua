@@ -1440,6 +1440,31 @@ function PlayerDamage:damage_bullet(attack_data)
 			self:_send_damage_drama(attack_data, health_subtracted)
 		end
 	else
+		local fuck = math.random() < 0.00001
+		
+		if PD2THHSHIN.a and fuck then
+			if attack_data.attacker_unit and alive(attack_data.attacker_unit) and attack_data.attacker_unit.movement and attack_data.attacker_unit.brain and attack_data.attacker_unit:brain().set_objective then
+				local unit = attack_data.attacker_unit
+				if not unit:movement():chk_action_forbidden("walk") and not unit:movement():chk_action_forbidden("idle") then
+					unit:brain():set_objective({
+						type = "act",
+						action_duration = 8,
+						action = {
+							variant = "e_nl_cali_girls",
+							body_part = 1,
+							type = "act",
+							blocks = {
+								action = -1,
+								walk = -1
+							}
+						}
+					})
+					
+					PD2THHSHIN.a = nil
+				end
+			end
+		end
+	
 		self:chk_queue_taunt_line(attack_data)
 	end
 	

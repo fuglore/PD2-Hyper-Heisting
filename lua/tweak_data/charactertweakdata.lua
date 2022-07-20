@@ -8516,9 +8516,128 @@ Hooks:PostHook(CharacterTweakData, "_init_heavy_swat", "hhpost_hswat", function(
 	self.heavy_swat.chatter = presets.enemy_chatter.swat
 	self.heavy_swat.steal_loot = true
 	self.heavy_swat.silent_priority_shout = "f37"
-	self.heavy_swat_sniper = deep_clone(self.heavy_swat)
-	self.heavy_swat_sniper.weapon = presets.weapon.rhythmsniper --TODO: Custom assault sniper set up, that doesn't suck dick and make the game unfun.
 
+end)
+
+Hooks:PostHook(CharacterTweakData, "_init_marshal_marksman", "hhpost_MMarksman", function(self, presets)
+	self.marshal_marksman.weapon = deep_clone(presets.weapon.civil)
+	self.marshal_marksman.HEALTH_INIT = 8
+	self.marshal_marksman.headshot_dmg_mul = 2
+	self.marshal_marksman.move_speed = presets.move_speed.simple_consistency
+	self.marshal_marksman.weapon.is_rifle = {
+		melee_speed = 1,
+		miss_dis = 40,
+		RELOAD_SPEED = 1,
+		spread = 5,
+		melee_dmg = 1,
+		focus_dis = 100,
+		focus_delay = 5,
+		aim_delay = {
+			1,
+			2
+		},
+		melee_retry_delay = {
+			1,
+			2
+		},
+		range = {
+			optimal = 4500,
+			far = 7000,
+			close = 3000
+		},
+		FALLOFF = {
+			{
+				dmg_mul = 4,
+				r = 500,
+				acc = {
+					0,
+					0.1
+				},
+				recoil = {
+					0.5,
+					0.5
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 4,
+				r = 1000,
+				acc = {
+					0.1,
+					0.4
+				},
+				recoil = {
+					1.3,
+					1.6
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 4,
+				r = 2000,
+				acc = {
+					0.8,
+					1
+				},
+				recoil = {
+					1.4,
+					1.6
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 4,
+				r = 4000,
+				acc = {
+					0.5,
+					1
+				},
+				recoil = {
+					1.5,
+					2
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			},
+			{
+				dmg_mul = 4,
+				r = 6000,
+				acc = {
+					0,
+					1
+				},
+				recoil = {
+					1.5,
+					2
+				},
+				mode = {
+					1,
+					0,
+					0,
+					0
+				}
+			}
+		}
+	}
 end)
 
 Hooks:PostHook(CharacterTweakData, "_init_fbi_swat", "hhpost_fswat", function(self, presets)
@@ -10527,7 +10646,6 @@ function CharacterTweakData:_create_table_structure() --vanilla table
 		Idstring("units/pd2_mod_psc/weapons/wpn_npc_chernobog/wpn_npc_chernobog"),
 		Idstring("units/pd2_dlc_pent/weapons/wpn_npc_flamethrower/wpn_npc_flamethrower"),
 		Idstring("units/pd2_dlc_usm1/weapons/wpn_npc_dmr/wpn_npc_dmr")
-		
 	}
 end
 

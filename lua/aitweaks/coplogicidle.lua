@@ -158,18 +158,6 @@ function CopLogicIdle.enter(data, new_logic_name, enter_params)
 	my_data.attitude = objective and objective.attitude or "avoid"
 
 	my_data.weapon_range = clone_g(data.char_tweak.weapon[data.unit:inventory():equipped_unit():base():weapon_tweak_data().usage].range)
-	
-	if data.tactics then
-		if data.tactics.ranged_fire or data.tactics.elite_ranged_fire then
-			
-			if my_data.weapon_range.aggressive then
-				my_data.weapon_range.aggressive = my_data.weapon_range.aggressive * 1.5
-			end
-			
-			my_data.weapon_range.close = my_data.weapon_range.close * 2
-			my_data.weapon_range.optimal = my_data.weapon_range.optimal * 1.5
-		end
-	end
 
 	local key_str = tostring(data.key)
 

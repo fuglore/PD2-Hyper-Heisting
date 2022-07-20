@@ -14,29 +14,32 @@ Hooks:PostHook(NPCRaycastWeaponBase, "init", "hhpost_trails", function(self, ...
 	self._bullet_slotmask = self._bullet_slotmask - World:make_slot_mask(22)
 	self.low_prio = true
 	
-	local weapon_tweak = tweak_data.weapon[self._name_id]
-	local trail = trails[1]
-	
-	if weapon_tweak then
-		self._hivis = weapon_tweak.hivis
-		
-		if weapon_tweak.trail_i then
-			trail = trails[weapon_tweak.trail_i]
-		elseif self._hivis then
-			trail = trails[2]
-		end
-	else
-		self:lol_invalid_weapon_id()
-		trail = trails[69]
-	end
+	local weapon_tweak = self:weapon_tweak_data()
 	
 	self.mangle = weapon_tweak.mangle or nil
+	
+	if weapon_tweak and not weapon_tweak.trail then
+		local trail = trails[1]
 		
-	self._trail_effect_table = {
-		effect = trail,
-		position = Vector3(),
-		normal = Vector3()
-	}
+		if weapon_tweak then
+			self._hivis = weapon_tweak.hivis
+			
+			if weapon_tweak.trail_i then
+				trail = trails[weapon_tweak.trail_i]
+			elseif self._hivis then
+				trail = trails[2]
+			end
+		else
+			self:lol_invalid_weapon_id()
+			trail = trails[69]
+		end
+
+		self._trail_effect_table = {
+			effect = trail,
+			position = Vector3(),
+			normal = Vector3()
+		}
+	end
 
 	--suppressor muzzleflash switch
 	if self:weapon_tweak_data().has_suppressor and self:weapon_tweak_data().muzzleflash_silenced then

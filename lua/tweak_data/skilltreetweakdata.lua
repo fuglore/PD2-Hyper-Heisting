@@ -54,7 +54,7 @@ function SkillTreeTweakData:init()
 	self.skills.bandoliers = {
 		{
 			upgrades = {
-				"extra_ammo_multiplier1",
+				"player_bloodboom_basic_extra_ammo",
 				"player_pick_up_ammo_multiplier",
 				"player_pick_up_ammo_multiplier_2"
 			},

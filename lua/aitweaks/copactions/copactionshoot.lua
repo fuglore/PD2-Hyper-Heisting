@@ -70,6 +70,14 @@ function CopActionShoot:init(action_desc, common_data)
 
 	local char_tweak = common_data.char_tweak
 	local weapon_usage_tweak = char_tweak.weapon[weap_tweak.usage]
+	self._miss_first_player_shot = char_tweak.misses_first_player_shot and not self._ext_movement.missed_first_shot
+	
+	self._glint_effect = weapon_unit:effect_spawner(Idstring("glint_scope"))
+
+	if self._glint_effect then
+		self._glint_effect:activate()
+	end
+	
 	self._w_usage_tweak = weapon_usage_tweak
 
 	self._spread_only = weapon_usage_tweak.spread_only and true
@@ -296,6 +304,10 @@ function CopActionShoot:on_exit()
 		world_g:effect_manager():kill(self._mindcontrol_effect)
 
 		self._mindcontrol_effect = nil
+	end
+	
+	if self._glint_effect then
+		self._glint_effect:kill_effect()
 	end
 
 	if self._autofiring then
@@ -1238,6 +1250,12 @@ function CopActionShoot:_get_unit_shoot_pos(t, pos, dis, falloff, i_range, shoot
 
 	if dmg_ext._punk_effect then
 		hit_chance = hit_chance * 3
+	end
+	
+	if self._miss_first_player_shot and (shooting_local_player or self._attention and self._attention.unit and self._attention.unit:base() and self._attention.unit:base().is_husk_player) then
+		self._miss_first_player_shot = nil
+		self._ext_movement.missed_first_shot = true
+		hit_chance = 0
 	end
 
 	--to add here later, smoke_shot accuracy modifier

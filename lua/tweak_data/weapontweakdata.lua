@@ -51,6 +51,11 @@ function WeaponTweakData:_set_characters_weapon_preset(rifle_spread, smg_spread,
 end
 
 Hooks:PostHook(WeaponTweakData, "init", "lore_init", function(self, tweakdata)
+
+	self.ranc_heavy_machine_gun.CLIP_AMMO_MAX = 200
+	self.ranc_heavy_machine_gun.AMMO_MAX = 200
+	self.ranc_heavy_machine_gun.stats.total_ammo_mod = 21
+	self.ranc_heavy_machine_gun.ignore_player_skills = true
 	
 	--begin new weapon setup
 	self.degle_npc = deep_clone(self.raging_bull_npc)

@@ -1,4 +1,6 @@
 ﻿<table directory="assets">
+	<animation path="anims/shared/special/e_nl_cali_girls" load="true" />
+
 	<!--New CGs-->
 	<dds path="core/textures/cg_rvsb"/>
 	

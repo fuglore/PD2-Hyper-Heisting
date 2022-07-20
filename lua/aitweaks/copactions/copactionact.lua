@@ -39,6 +39,7 @@ script_redirects[#script_redirects + 1] = "cmd_stop"
 script_redirects[#script_redirects + 1] = "cmd_down"
 script_redirects[#script_redirects + 1] = "cmd_gogo"
 script_redirects[#script_redirects + 1] = "cmd_point"
+script_redirects[#script_redirects + 1] = "e_nl_cali_girls"
 --need to change at least one of these to pissing later
 
 CopActionAct._act_redirects.script = script_redirects

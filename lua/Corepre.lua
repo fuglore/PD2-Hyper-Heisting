@@ -1,5 +1,7 @@
 _G.PD2THHSHIN = PD2THHSHIN or {}
 
+PD2THHSHIN.a = math.random() < 0.001
+
 PD2THHSHIN._mod_path = ModPath
 PD2THHSHIN._options_path = ModPath .. "menu/options.txt"
 PD2THHSHIN._save_path = SavePath .. "shin_settings.txt"

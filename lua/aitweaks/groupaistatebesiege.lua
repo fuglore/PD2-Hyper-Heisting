@@ -2168,11 +2168,15 @@ function GroupAIStateBesiege:_upd_assault_task()
 			local used_event = next(self._spawning_groups)
 			local phase = task_data.phase
 			local anticipation = self._activeassaultbreak or self:chk_anticipation()
+			
+			self:_check_spawn_timed_groups(primary_target_area, task_data)
 
 			if not used_event then
 				if not anticipation or self._hunt_mode then
 					used_event = self:_try_use_task_spawn_event(t, primary_target_area, "assault")
 				end
+				
+				
 				
 				if not used_event and not self._activeassaultbreak then
 					--local max_dis = self._street and 6000 or 12000
@@ -2218,7 +2222,9 @@ function GroupAIStateBesiege:_upd_recon_tasks()
 	end
 
 	local used_event, used_spawn_points, reassigned = nil
-
+	
+	
+	
 	if task_data.use_spawn_event then
 		if self:_try_use_task_spawn_event(t, task_data.target_area, "recon") then
 			used_event = true
@@ -2230,6 +2236,8 @@ function GroupAIStateBesiege:_upd_recon_tasks()
 	if next(self._spawning_groups) then
 		used_group = true
 	else
+		self:_check_spawn_timed_groups(task_data.target_area, task_data)
+	
 		local spawn_group, spawn_group_type = self:_find_spawn_group_near_area(task_data.target_area, self._tweak_data.recon.groups, nil, nil, nil, "recon")
 
 		if spawn_group then
@@ -3373,14 +3381,6 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 	if current_objective.tactic then
 		return
 	end
-	
-	local member_stuck_engaging_area = not obstructed_area and not charge
-	
-	if member_stuck_engaging_area then
-		member_stuck_engaging_area = group.in_place_t and self._t - group.in_place_t < 15 or current_objective.area and table.size(current_objective.area.police.units) > 16
-	end
-	
-	member_stuck_engaging_area = member_stuck_engaging_area and self:_chk_group_engaging_area(group, tactics_map) or nil
 
 	local objective_area = nil
 	
@@ -3440,21 +3440,11 @@ function GroupAIStateBesiege:_set_assault_objective_to_group(group, phase)
 				has_criminals_close = true
 				has_criminals_closer = true
 			else
-				local dis_to_chk = 1200 * 1200
-			
 				for area_id, neighbour_area in pairs_g(area_to_chk.neighbours) do
 					if next(neighbour_area.criminal.units) then					
 						has_criminals_close = neighbour_area
+						
 						break
-					else
-						for alt_area_id, alt_area in pairs_g(neighbour_area.neighbours) do
-							if mvec3_dis_sq(alt_area.pos, area_to_chk.pos) <= dis_to_chk then
-								if next(alt_area.criminal.units) then
-									has_criminals_close = alt_area
-									break
-								end
-							end
-						end
 					end
 				end
 			end
@@ -4510,7 +4500,7 @@ function GroupAIStateBesiege:_choose_best_group(best_groups, total_weight, delay
 			--log("CANDIDATE CHOSEN!")
 		
 			if delays then
-				self._spawn_group_timers[spawn_group_id(candidate.group)] = TimerManager:game():time() + math_lerp(delays[1], delays[2], math_random())
+				--self._spawn_group_timers[spawn_group_id(candidate.group)] = TimerManager:game():time() + math_lerp(delays[1], delays[2], math_random())
 			end
 			
 			best_grp = candidate.group
@@ -4699,4 +4689,42 @@ function GroupAIStateBesiege:_perform_group_spawning(spawn_task, force, use_last
 			self._groups[spawn_task.group.id] = nil
 		end
 	end
+end
+
+function GroupAIStateBesiege:assign_enemy_to_group_ai(unit, team_id)
+	local u_tracker = unit:movement():nav_tracker()
+	local seg = u_tracker:nav_segment()
+	local area = self:get_area_from_nav_seg_id(seg)
+	local current_unit_type = tweak_data.levels:get_ai_group_type()
+	local u_name = unit:name()
+
+	local group_desc = {
+		size = 1,
+		type = "custom"
+	}
+	local group = self:_create_group(group_desc)
+	group.team = self._teams[team_id]
+	local grp_objective = nil
+	local objective = unit:brain():objective()
+	local grp_obj_type = self._task_data.assault.active and "assault_area" or "recon_area"
+
+	if objective then
+		grp_objective = {
+			type = grp_obj_type,
+			area = objective.area or objective.nav_seg and self:get_area_from_nav_seg_id(objective.nav_seg) or area
+		}
+		objective.grp_objective = grp_objective
+	else
+		grp_objective = {
+			type = grp_obj_type,
+			area = area
+		}
+	end
+
+	grp_objective.moving_out = false
+	group.objective = grp_objective
+	group.has_spawned = true
+
+	self:_add_group_member(group, unit:key())
+	self:set_enemy_assigned(area, unit:key())
 end

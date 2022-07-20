@@ -383,6 +383,7 @@
 		["loading_hh_33"] = "In Hyper Heisting, when using Shotguns, raising your weapon's Accuracy above 50 grants you increased minimum damage at higher ranges!",
 		["loading_hh_34"] = "In Hyper Heisting, the continuous damage an enemy takes when burning is based on the weapon's damage stat! Both for Flamethrowers, and Dragon's Breath rounds on shotguns!",
 		["loading_hh_35"] = "A Flamethrower's damage over time will mostly always exceed the Dragon's Breath rounds' damage over time, but will also be much shorter!",
+		["loading_hh_36"] = "Move fast, baby, don't be slow! Enemies will have a harder time hitting you if you are moving around!",
 		
 		["loading_hs_1"] = "It's imperative that everything you say has an exclamation mark in front of it!",
 		["loading_hs_2"] = "If it doesn't die, shoot it harder!",

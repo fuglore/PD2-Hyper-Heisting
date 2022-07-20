@@ -1311,6 +1311,8 @@ function CopLogicBase._chk_nearly_visible_chk_needed(data, attention_info, u_key
 end
 
 function CopLogicBase.is_obstructed(data, objective, strictness, attention)
+	local my_data = data.internal_data
+
 	if not objective then
 		return true, false
 	end
@@ -1360,18 +1362,23 @@ function CopLogicBase.is_obstructed(data, objective, strictness, attention)
 	end
 
 	if objective.interrupt_on_contact then
-		if attention and AIAttentionObject.REACT_COMBAT <= attention.reaction then
-			local z_diff = math.abs(attention.m_pos.z - data.m_pos.z)
-			local enemy_dis = attention.dis
-			
-			local interrupt_dis = data.internal_data.weapon_range and data.internal_data.weapon_range.close or 2000
-			
-			interrupt_dis = strictness_mul and interrupt_dis * strictness_mul or interrupt_dis
-			
-			interrupt_dis = math.lerp(interrupt_dis, 0, z_diff / 400)
+		if attention and AIAttentionObject.REACT_COMBAT <= attention.reaction then			
+			if my_data.attitude == "engage" or attention.verified_t and data.t - attention.verified_t <= 15 then
+				local z_diff = math.abs(attention.m_pos.z - data.m_pos.z)
+				local enemy_dis = attention.dis
+				local interrupt_dis = my_data.weapon_range and my_data.weapon_range.close or 2000
+				
+				interrupt_dis = interrupt_dis * (not strictness and 1 or strictness_mul)
+				
+				if z_diff > 250 then
+					z_diff = z_diff - 250
+					
+					interrupt_dis = math.lerp(interrupt_dis, interrupt_dis * 0.25, z_diff / 250)
+				end
 
-			if enemy_dis < interrupt_dis then
-				return true, true
+				if enemy_dis < interrupt_dis then
+					return true, true
+				end
 			end
 		end
 	end
@@ -2301,14 +2308,11 @@ function CopLogicBase.chk_start_action_dodge(data, reason)
 			dodge = -1,
 			walk = -1,
 			action = body_part == 1 and -1 or nil,
-			aim = body_part == 1 and -1 or nil
+			aim = body_part == 1 and -1 or nil,
+			hurt = -1,
+			heavy_hurt = -1
 		}
 	}
-
-	if variation ~= "side_step" then
-		action_data.blocks.hurt = -1
-		action_data.blocks.heavy_hurt = -1
-	end
 
 	local action = data.unit:movement():action_request(action_data)
 

@@ -1379,7 +1379,7 @@ function CopLogicTravel._determine_destination_occupation(data, objective)
 					radius = objective.radius
 				}
 			else
-				near_pos = CopLogicTravel._find_near_free_pos(managers.navigation._nav_segments[objective.nav_seg].pos, 700, nil, data.pos_rsrv_id) ----
+				near_pos = CopLogicTravel._find_near_free_pos(near_pos or managers.navigation._nav_segments[objective.nav_seg].pos, 700, nil, data.pos_rsrv_id) ----
 				occupation = {
 					type = "defend",
 					seg = objective.nav_seg,

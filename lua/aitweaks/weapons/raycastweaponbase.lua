@@ -286,6 +286,11 @@ function RaycastWeaponBase:_fire_raycast(user_unit, from_pos, direction, dmg_mul
 
 	local result = {}
 	local spread_x, spread_y = self:_get_spread(user_unit)
+	
+	if not spread_y then
+		spread_y = spread_x
+	end
+	
 	local ray_distance = self:weapon_range()
 	local right = direction:cross(Vector3(0, 0, 1)):normalized()
 	local up = direction:cross(right):normalized()
@@ -1245,6 +1250,68 @@ function RaycastWeaponBase:on_bull_event(aced)
 			end
 		end
 	end
+end
+
+function RaycastWeaponBase:calculate_ammo_max_per_clip()
+	local ammo = tweak_data.weapon[self._name_id].CLIP_AMMO_MAX
+	
+	if self:weapon_tweak_data().ignore_player_skills then
+		return ammo
+	end
+	
+	ammo = ammo + managers.player:upgrade_value(self._name_id, "clip_ammo_increase")
+
+	if not self:upgrade_blocked("weapon", "clip_ammo_increase") then
+		ammo = ammo + managers.player:upgrade_value("weapon", "clip_ammo_increase", 0)
+	end
+
+	for _, category in ipairs(tweak_data.weapon[self._name_id].categories) do
+		if not self:upgrade_blocked(category, "clip_ammo_increase") then
+			ammo = ammo + managers.player:upgrade_value(category, "clip_ammo_increase", 0)
+		end
+	end
+
+	ammo = ammo + (self._extra_ammo or 0)
+
+	return ammo
+end
+
+function RaycastWeaponBase:replenish()
+	local ammo_max_per_clip = self:calculate_ammo_max_per_clip()
+	local ammo_max
+	
+	if self:weapon_tweak_data().ignore_player_skills then
+		ammo_max_multiplier = 1
+		ammo_max = tweak_data.weapon[self._name_id].AMMO_MAX
+	else
+		local ammo_max_multiplier = managers.player:upgrade_value("player", "extra_ammo_multiplier", 1)
+
+		for _, category in ipairs(self:weapon_tweak_data().categories) do
+			ammo_max_multiplier = ammo_max_multiplier + managers.player:upgrade_value(category, "extra_ammo_multiplier", 1)
+		end
+
+		ammo_max_multiplier = ammo_max_multiplier + ammo_max_multiplier * (self._total_ammo_mod or 0)
+
+		if managers.player:has_category_upgrade("player", "add_armor_stat_skill_ammo_mul") then
+			ammo_max_multiplier = ammo_max_multiplier * managers.player:body_armor_value("skill_ammo_mul", nil, 1)
+		end
+			
+		ammo_max_multiplier = managers.modifiers:modify_value("WeaponBase:GetMaxAmmoMultiplier", ammo_max_multiplier)
+		
+		ammo_max = math.round((tweak_data.weapon[self._name_id].AMMO_MAX + managers.player:upgrade_value(self._name_id, "clip_amount_increase") * ammo_max_per_clip) * ammo_max_multiplier)
+	end
+
+	ammo_max_per_clip = math.min(ammo_max_per_clip, ammo_max)
+
+	self:set_ammo_max_per_clip(ammo_max_per_clip)
+	self:set_ammo_max(ammo_max)
+	self:set_ammo_total(ammo_max)
+	self:set_ammo_remaining_in_clip(ammo_max_per_clip)
+
+
+	self._ammo_pickup = tweak_data.weapon[self._name_id].AMMO_PICKUP
+
+	self:update_damage()
 end
 
 if not BLT.Mods:GetModByName("WeaponLib") then

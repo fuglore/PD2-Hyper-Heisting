@@ -612,6 +612,16 @@ Hooks:PostHook(UpgradesTweakData, "init", "skillupgrades", function(self, tweak_
 		}
 	}
 	
+	self.definitions.player_bloodboom_basic_extra_ammo = {
+		name_id = "menu_player_more_ammo_max",
+		category = "feature",
+		upgrade = {
+			value = 1,
+			upgrade = "extra_ammo_multiplier",
+			category = "player"
+		}
+	}
+	
 	self.values.player.blood_boom = { -- Destructive Criticism
 		true
 	}

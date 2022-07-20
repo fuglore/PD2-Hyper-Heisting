@@ -425,8 +425,6 @@ Hooks:PostHook(GroupAITweakData, "_init_unit_categories", "cock_init_unit_catego
 		}
 	end
 
-	self.unit_categories = {}
-
 	if difficulty_index == 8 then
 		self.unit_categories.spooc = {
 			special_type = "spooc",
@@ -3066,10 +3064,13 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			"spoocavoidance",
 			--"lonewolf",
 			"harass"
+		},
+		marshal_marksman = {
+			"ranged_fire",
+			"flank"
 		}
 	}
-	self.enemy_spawn_groups = {}
-	
+
 	if managers.modifiers and managers.modifiers:check_boolean("TotalAnarchy")  then
 		self.enemy_spawn_groups.recon_squad_A = {
 			amount = {
@@ -6985,6 +6986,32 @@ Hooks:PostHook(GroupAITweakData, "_init_enemy_spawn_groups", "cock_init_enemy_sp
 			}
 		}
 	end
+	
+	if Global.game_settings and Global.game_settings.level_id == "ranc" then
+		self.enemy_spawn_groups.marshal_squad = {
+			spawn_cooldown = 60,
+			max_nr_simultaneous_groups = 3,
+			initial_spawn_delay = 0,
+			amount = {
+				4,
+				4
+			},
+			spawn = {
+				{
+					respawn_cooldown = 20,
+					amount_min = 4,
+					rank = 1,
+					freq = 1,
+					unit = "marshal_marksman",
+					tactics = self._tactics.marshal_marksman
+				}
+			},
+			spawn_point_chk_ref = table.list_to_set({
+				"tac_swat_rifle_flank",
+				"tac_swat_rifle"
+			})
+		}
+	end
 
 end)
 
@@ -7465,6 +7492,11 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		0,
 		0
 	}
+	self.besiege.assault.groups.marshal_squad = {
+		0,
+		0,
+		0
+	}
 	self.besiege.reenforce.interval = {
 		5,
 		5,
@@ -7666,11 +7698,28 @@ Hooks:PostHook(GroupAITweakData, "_init_task_data", "cock_init_task_data", funct
 		0,
 		0
 	}
+	self.besiege.recon.groups.marshal_squad = {
+		0,
+		0,
+		0
+	}
 	self.besiege.recon.groups.Phalanx = {
 		0,
 		0,
 		0
 	}
+	self.besiege.assault.groups.custom = {
+		0,
+		0,
+		0
+	}
+	self.besiege.recon.groups.custom = {
+		0,
+		0,
+		0
+	}
+	
+	
 	self.besiege.cloaker.groups = {
 		single_spooc = {
 			1,
