@@ -1069,7 +1069,7 @@ weapon_data.autohit_pistol_default = {
 weapon_data.autohit_shotgun_default = {
 	INIT_RATIO = 0,
 	MAX_RATIO = 0,
-	far_angle = 2,
+	far_angle = 1,
 	far_dis = 5000,
 	MIN_RATIO = 0,
 	min_angle = 0.7,
@@ -1896,8 +1896,8 @@ self.rota.damage_near = 300
 self.rota.damage_far = 800
 self.x_rota.damage_near = 300
 self.x_rota.damage_far = 800
-self.x_rota.AMMO_PICKUP = {2, 5}
-self.rota.AMMO_PICKUP = {2, 5}
+self.x_rota.AMMO_PICKUP = {3, 5}
+self.rota.AMMO_PICKUP = {3, 5}
 self.rota.kick = {
 standing = {
 		4.5,
@@ -1946,7 +1946,7 @@ self.r870.stats.damage = 110
 self.r870.stats.spread = 12
 self.r870.damage_near = 400
 self.r870.damage_far = 900
-self.r870.AMMO_PICKUP = {1.8, 2.9}
+self.r870.AMMO_PICKUP = {2, 4}
 self.r870.kick = {
 standing = {
 		3,
@@ -1973,7 +1973,7 @@ self.serbu.AMMO_MAX = 30
 self.serbu.stats.damage = 110
 self.serbu.damage_near = 350
 self.serbu.damage_far = 800
-self.serbu.AMMO_PICKUP = {1.8, 2.9}
+self.serbu.AMMO_PICKUP = {2, 4}
 self.serbu.fire_mode_data.fire_rate = 0.5
 self.serbu.kick = {
 standing = {
@@ -2002,7 +2002,7 @@ self.m1897.fire_mode_data.fire_rate = 0.5
 self.m1897.stats.damage = 110
 self.m1897.damage_near = 450
 self.m1897.damage_far = 1120
-self.m1897.AMMO_PICKUP = {1.8, 2.9}
+self.m1897.AMMO_PICKUP = {2, 4}
 self.m1897.kick = {
 standing = {
 		3,
@@ -2058,7 +2058,7 @@ self.spas12.stats.spread = 10
 self.spas12.stats.spread_moving = 10
 self.spas12.damage_near = 400
 self.spas12.damage_far = 1000
-self.spas12.AMMO_PICKUP = {2, 4}
+self.spas12.AMMO_PICKUP = {3, 5}
 self.spas12.fire_mode_data.fire_rate = 0.4
 self.spas12.AMMO_MAX = 30
 self.spas12.kick = {
@@ -2086,7 +2086,7 @@ crouching = {
 self.aa12.stats.damage = 80
 self.aa12.damage_near = 300
 self.aa12.damage_far = 800
-self.aa12.AMMO_PICKUP = {2, 5}
+self.aa12.AMMO_PICKUP = {3, 5}
 self.aa12.AMMO_MAX = 60
 self.aa12.kick = {
 standing = {
@@ -2114,7 +2114,7 @@ self.ksg.rays = 10
 self.ksg.stats.damage = 110
 self.ksg.damage_near = 500
 self.ksg.damage_far = 1100
-self.ksg.AMMO_PICKUP = {1.8, 2.9}
+self.ksg.AMMO_PICKUP = {2, 4}
 self.ksg.kick = {
 standing = {
 		3,
@@ -2143,7 +2143,7 @@ self.ultima.AMMO_MAX = 21
 self.ultima.fire_mode_data.fire_rate = 0.25
 self.ultima.damage_near = 350
 self.ultima.damage_far = 800
-self.ultima.AMMO_PICKUP = {1.8, 2.9}
+self.ultima.AMMO_PICKUP = {2, 4}
 
 --Grimm
 self.x_basset.AMMO_MAX = 50
@@ -2154,8 +2154,8 @@ self.basset.AMMO_MAX = 50
 self.basset.damage_far = 750
 self.x_basset.damage_near = 300
 self.x_basset.damage_far = 750
-self.basset.AMMO_PICKUP = {2, 5}
-self.x_basset.AMMO_PICKUP = {2, 5}
+self.basset.AMMO_PICKUP = {3, 5}
+self.x_basset.AMMO_PICKUP = {3, 5}
 self.basset.kick = {
 standing = {
 		4,
@@ -2202,7 +2202,7 @@ self.saiga.stats.damage = 80
 self.saiga.stats.spread = 12
 self.saiga.damage_near = 400
 self.saiga.damage_far = 1000
-self.saiga.AMMO_PICKUP = {2, 5}
+self.saiga.AMMO_PICKUP = {3, 5}
 self.saiga.AMMO_MAX = 60
 self.saiga.kick = {
 standing = {
@@ -2232,6 +2232,7 @@ self.coach.AMMO_MAX = 24
 self.coach.damage_near = 700
 self.coach.damage_far = 1600
 self.coach.fire_mode_data.fire_rate = 0.2
+self.coach.AMMO_PICKUP = {2, 4}
 self.coach.kick = {
 standing = {
 		4,
@@ -2259,6 +2260,7 @@ self.huntsman.stats_modifiers = {damage = 2}
 self.huntsman.fire_mode_data.fire_rate = 0.2
 self.huntsman.damage_near = 900
 self.huntsman.damage_far = 1800
+self.huntsman.AMMO_PICKUP = {2, 4}
 self.huntsman.rays = 16
 self.huntsman.kick = {
 standing = {
@@ -2287,6 +2289,7 @@ self.b682.stats_modifiers = {damage = 2}
 self.b682.damage_near = 1100
 self.b682.damage_far = 2000
 self.b682.fire_mode_data.fire_rate = 0.2
+self.b682.AMMO_PICKUP = {3, 5}
 self.b682.stats.spread = 18
 self.b682.stats.spread_moving = 18
 self.b682.timers = {
@@ -2318,6 +2321,9 @@ self.b682.kick = {
 }
 
 --Judge
+self.x_judge.autohit = weapon_data.autohit_shotgun_default
+self.x_judge.aim_assist = weapon_data.autohit_shotgun_default
+
 self.judge.fire_mode_data.fire_rate = 0.3
 self.x_judge.fire_mode_data.fire_rate = 0.3
 self.judge.stats.damage = 160
@@ -2326,10 +2332,10 @@ self.judge.damage_near = 300
 self.judge.damage_far = 800
 self.x_judge.damage_near = 300
 self.x_judge.damage_far = 800
-self.judge.AMMO_PICKUP = {0.5, 0.88}
+self.judge.AMMO_PICKUP = {2, 3}
 self.judge.AMMO_MAX = 25
 self.x_judge.AMMO_MAX = 35
-self.x_judge.AMMO_PICKUP = {0.5, 0.88}
+self.x_judge.AMMO_PICKUP = {2, 3}
 self.judge.kick = {
 standing = {
 		4,
@@ -2377,7 +2383,7 @@ self.boot.stats.damage = 160
 self.boot.damage_near = 400
 self.boot.damage_far = 1000
 self.boot.AMMO_MAX = 30
-self.boot.AMMO_PICKUP = {0.52, 1.12}
+self.boot.AMMO_PICKUP = {2, 3}
 self.boot.kick = {
 standing = {
 		4,
@@ -2404,7 +2410,7 @@ self.striker.has_magazine = true --balance issue
 self.striker.stats.damage = 60
 self.striker.damage_near = 550
 self.striker.damage_far = 1050
-self.striker.AMMO_PICKUP = {2, 5}
+self.striker.AMMO_PICKUP = {3, 5}
 self.striker.fire_mode_data.fire_rate = 0.25
 self.striker.AMMO_MAX = 36
 self.striker.kick = {
@@ -2435,6 +2441,7 @@ self.m37.AMMO_MAX = 24
 self.m37.stats.damage = 160
 self.m37.damage_near = 400
 self.m37.damage_far = 900
+self.m37.AMMO_PICKUP = {2, 3}
 self.m37.kick = {
 standing = {
 		4,
