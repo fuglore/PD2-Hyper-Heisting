@@ -724,6 +724,8 @@ Hooks:Add("LocalizationManagerPostInit", "HH_overhaul", function(loc)
 			
 			["bm_w_p90"] = "Kobus 90 Piercer Submachine Gun",
 			["bm_w_p90_desc"] = "Piercer Rounds that penetrate Walls, Enemies, Shields and Body Armor!",
+			["bm_w_x_p90"] = "Akimbo Kobus 90 Piercer Submachine Guns",
+			["bm_w_x_p90_desc"] = "Piercer Rounds that penetrate Walls, Enemies, Shields and Body Armor!",
 			["bm_w_asval"] = "Valkyria Piercer Rifle",
 			["bm_w_asval_desc"] = "Piercer Rounds that penetrate Walls, Enemies, Shields and Body Armor!",
 			["des_shak12"] = "Heavy Rounds that pierce Enemies and Body Armor!",
