@@ -691,7 +691,6 @@ function CopActionWalk:_chk_start_anim(next_pos)
 	end
 end
 
-
 function CopActionWalk._calculate_shortened_path(path)
 	local nav_point_pos_func = CopActionWalk._nav_point_pos
 	local chk_shortcut_func = CopActionWalk._chk_shortcut_pos_to_pos

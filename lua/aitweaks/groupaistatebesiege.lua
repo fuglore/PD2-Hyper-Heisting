@@ -31,7 +31,6 @@ local table_remove = table.remove
 
 function GroupAIStateBesiege:init(group_ai_state)
 	GroupAIStateBesiege.super.init(self)
-
 	--self:set_debug_draw_state(true)
 	--self:set_drama_draw_state(true)
 	
@@ -90,7 +89,7 @@ function GroupAIStateBesiege:init(group_ai_state)
 	self._activeassaultbreak = nil
 	self._activeassaultnextbreak_t = nil
 	self._stopassaultbreak_t = nil
-	self._MAX_SIMULTANEOUS_SPAWNS = 3
+	self._MAX_SIMULTANEOUS_SPAWNS = 2
 	
 	
 	if Network:is_server() and managers.navigation:is_data_ready() then
@@ -723,15 +722,29 @@ function GroupAIStateBesiege:_upd_police_activity()
 		self:_upd_hostage_task()
 
 		if self._enemy_weapons_hot then
+			local can_spawn_groups = not self._activeassaultbreak and not self._feddensityhigh
 			--self:_claculate_drama_value()
+			
+			local updated_group_spawning = nil
+			
+			
+			if can_spawn_groups and next(self._spawning_groups) then
+				self:_upd_group_spawning()
+				
+				updated_group_spawning = true
+			end
+			
+			
 			self:_upd_regroup_task()
 			self:_upd_reenforce_tasks()
 			self:_upd_recon_tasks()
 			self:_upd_assault_task()
 			self:_begin_new_tasks()
-			if not self._activeassaultbreak and not self._feddensityhigh then
+			
+			if can_spawn_groups and not updated_group_spawning then
 				self:_upd_group_spawning()
 			end
+			
 			self:_upd_groups()
 		end
 	end
@@ -823,7 +836,7 @@ function GroupAIStateBesiege:_queue_police_upd_task()
 	if not self._police_upd_task_queued then
 		self._police_upd_task_queued = true
 		
-		managers.enemy:add_delayed_clbk("GroupAIStateBesiege._upd_police_activity", callback(self, self, "_upd_police_activity"), self._t + (next(self._spawning_groups) and 1 or 2))
+		managers.enemy:add_delayed_clbk("GroupAIStateBesiege._upd_police_activity", callback(self, self, "_upd_police_activity"), self._t + 2)
 	end
 end
 

@@ -40,7 +40,7 @@ function CopDamage:init(...)
 		elseif not base_ext.has_tag or not base_ext:has_tag("fbi") then
 			local function f()
 				if alive(my_unit) then
-					my_unit:body("head"):set_sphere_radius(13)
+					my_unit:body("head"):set_sphere_radius(16)
 				end
 			end
 		
@@ -66,7 +66,7 @@ function CopDamage:init(...)
 			elseif not base_ext.has_tag or not base_ext:has_tag("fbi") then
 				local function f()
 					if alive(my_unit) then
-						my_unit:body("head"):set_sphere_radius(13)
+						my_unit:body("head"):set_sphere_radius(16)
 					end
 				end
 			
